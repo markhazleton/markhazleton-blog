@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <title>Mark Hazleton - Harnessing the Power of CancellationToken</title>
+        <meta name="description" content="Mark Hazleton - Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming" />
+        <meta name="author" content="Mark Hazleton" />
+        <link rel="canonical" href="https://markhazleton.controlorigins.com/cancellation-token.html" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="css/styles.css?version=1690562861636" />
+        <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+        <script>
+            (function (c, l, a, r, i, t, y) {
+                c[a] =
+                    c[a] ||
+                    function () {
+                        (c[a].q = c[a].q || []).push(arguments);
+                    };
+                t = l.createElement(r);
+                t.async = 1;
+                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+            })(window, document, 'clarity', 'script', 'd628hovv63');
+        </script>
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
+                <span class="d-block d-lg-none">Mark Hazleton</span>
+                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="assets/img/MarkHazleton.jpg" alt="..." /></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#skills">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#education">Education</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#interests">Interests</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Page Content-->
+        <div class="container-fluid p-0">
+            <section class="sidetracked-section sidetracked-section-background" id="post">
+                <div class="sidetracked-section-content">
+                    <h1 class="mb-0">Programming</h1>
+                    <div class="subheading mb-3">Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming</div>
+                    <h2>Cancellation Token</h2>
+                    <p>
+                        Asynchronous programming can be challenging, especially when it comes to managing long-running operations or dealing with unpredictable user interactions. It is crucial to handle cancellations gracefully to ensure that the application remains responsive and doesn't waste resources on abandoned work. One of the techniques for efficiently and safely managing these scenarios is the use of the
+                        <strong>'CancellationToken'</strong>
+                        class. By accepting a CancellationToken as a parameter, a method can be notified when the caller is no longer interested in the result and can gracefully cancel its work.
+                    </p>
+                    <p>
+                        A
+                        <strong>'CancellationToken'</strong>
+                        is an object that allows you to communicate the cancellation status to an asynchronous operation. It's a way of telling an operation to stop executing if it's no longer needed. For example, if a user cancels a search operation in a web application, you can use a
+                        <strong>'CancellationToken'</strong>
+                        instance to signal to the server to stop processing the request.
+                    </p>
+                    <p>
+                        One way to use a
+                        <strong>'CancellationToken'</strong>
+                        is with the Task class in C#. The Task class represents an asynchronous operation that can be cancelled using a
+                        <strong>'CancellationToken'</strong>
+                        . To use it, you simply pass a
+                        <strong>'CancellationToken'</strong>
+                        to the Task.Run method, which runs the operation asynchronously.
+                    </p>
+                    <p>
+                        The following code snippet shows how to use a
+                        <strong>'CancellationToken'</strong>
+                        with the Task class:
+                    </p>
+                    <pre class="code">
+public async Task DownloadFileAsync(string url,
+  string filename,
+  HttpClient client,
+  CancellationToken cancellationToken)
+{
+  await client.DownloadFileTaskAsync(url, filename, cancellationToken);
+}
+</pre
+                    >
+                    <p>
+                        In this example, the DownloadFileAsync method takes a URL and a filename as input, along with a
+                        <strong>'CancellationToken'</strong>
+                        . It accepts an instance of the HttpClient class, which is used to download the file. The DownloadFileTaskAsync method is called on the client object, passing in the URL, filename, and cancellationToken. If the
+                        <strong>'CancellationToken'</strong>
+                        is cancelled before the download is complete, the Task will be cancelled.
+                    </p>
+                    <p>
+                        By using a
+                        <strong>'CancellationToken'</strong>
+                        , you can make your code more responsive to the requestor. Most asynchronous libries allow for the passing of the
+                        <strong>'CancellationToken'</strong>
+                        in thier methods.
+                    </p>
+                    <h2>Checking For Cancellation</h2>
+                    <p>
+                        When you're writing asynchronous code, it's important to handle cancellation gracefully. This is especially true when you're dealing with long-running operations or unpredictable user interactions. One way to handle cancellation is by using a CancellationToken. A CancellationToken is an object that allows the requeting code to signal a cancellation an asynchronous operation. It's a way of telling an operation to stop executing if it's no longer needed. In your code, you can use a CancellationToken to signal to the server to stop processing the request. You can call the
+                        <strong>'ThrowIfCancellationRequested()'</strong>
+                        method to check if the CancellationToken has been cancelled and throw an exception if it has. Determining where in your business logic to place the call to
+                        <strong>'ThrowIfCancellationRequested()'</strong>
+                        can be a crucial decision to ensure efficient and safe asynchronous programming.
+                    </p>
+                    <p>First, you need to identify the points in your code where cancellation is allowed. This could include inside loops, I/O operations, and any long-running or expensive operations. Once you have identified these critical points, you should determine how you want to handle cancellation at each point. For example, you may choose to cancel and abort an operation immediately or allow it to complete gracefully.</p>
+                    <p>Next, you should consider the granularity of cancellation. It's important to strike a balance between being too granular and being too coarse. If you're too granular, you risk overhead from multiple cancellation requests that occur in quick succession. On the other hand, if you're too coarse, you may not be able to cancel the operation at the desired point.</p>
+                    <p>
+                        After deciding on the granularity of cancellation, you should then decide where in your business logic to place the call to
+                        <strong>'ThrowIfCancellationRequested()'</strong>
+                        . Ideally, you should place it in a way that ensures cancellation occurs as close to the critical point as possible while still providing sufficient time for cleanup and graceful shutdown.
+                    </p>
+                    <pre class="code">
+public async Task DownloadFileAsync(list&lt;string&gt; urls,
+  string filename,
+  HttpClient client,
+  CancellationToken cancellationToken)
+  {
+    try {
+      foreach (var url in urls)
+      {
+        // Check for cancellation before each download
+        cancellationToken.ThrowIfCancellationRequested();
+        await client.DownloadFileTaskAsync(url, filename, cancellationToken);
+      }
+    }
+    catch (TaskCanceledException ex)
+    {
+      // Handle cancellation thronw by client.DownloadFileTaskAsync() here
+    }
+    catch (OperationCanceledException ex)
+    {
+      // Handle cancellation thronw by ThrowIfCancellationRequested() here
+    }
+  }
+
+</pre
+                    >
+                    <p>
+                        Overall, careful consideration of where to place the call to
+                        <strong>'ThrowIfCancellationRequested()'</strong>
+                        in your business logic is critical to ensure efficient and safe asynchronous programming. Keep in mind that calling the
+                        <strong>'ThrowIfCancellationRequested()'</strong>
+                        method only checks if the cancellation has been requested and throws an exception of type OperationCanceledException if necessary. This method does not actually change the state of the cancellation token.
+                    </p>
+                    <p>It's also worth noting that if you need to check the state of the cancellation token without throwing an exception, you can use the IsCancellationRequested property. This property returns a boolean value indicating whether cancellation has been requested for the token.</p>
+                    <p>It is important to consider the consequences of cancellation, especially in long-running or expensive operations. You should ensure that any resources acquired during the operation are properly released and any partial results are correctly handled in the event of a cancellation.</p>
+                    <p>In general, it's important to understand the behavior of CancellationToken and related classes when writing asynchronous code. By following best practices like propagating cancellation tokens and handling cancellation exceptions properly, you can write robust and reliable asynchronous code that is able to respond appropriately to user or system requests for cancellation.</p>
+                    <p>If you're looking for more in-depth examples of how to use CancellationToken and other asynchronous techniques in .NET, you may want to check out the AsyncDemo repository on GitHub, which contains sample code and projects that demonstrate these concepts in action.</p>
+                    <p>Check for cancellation after the "point of no cancellation": If your method has already incurred side-effects that can't be reverted, it's essential to ensure that canceling the operation won't leave the application in an inconsistent state. If the cancellation token is signaled, you should only cancel the operation when you can do so, leaving objects in a valid state. This may require you to finish the large amount of work, undo previous work, or find a convenient place to stop before throwing OperationCanceledException.</p>
+                    <p>Pass the CancellationToken to all methods: Propagate the CancellationToken to all the methods you call that accept one, except after the point of no cancellation. This ensures that every method involved in the operation can respond appropriately to cancellation requests.</p>
+                    <p>Handle exceptions thrown when an operation or task is cancelled: When a cancellation is requested, the operation or task may throw an OperationCanceledException or TaskCanceledException. It's important to catch these exceptions and handle them appropriately. To ensure that you catch all cancellation exceptions, catch OperationCanceledException instead of TaskCanceledException.</p>
+                    <h2>Sample Code:</h2>
+                    <p>
+                        For more complete coding examples of asynchronous techniques in .NET, check out
+                        <a href="https://github.com/markhazleton/AsyncDemo" target="_blank" rel="noopener">AsyncDemo</a>
+                        repository on GitHub. This repository, developed by Mark Hazleton, provides a wide range of examples of how to use CancellationToken and other asynchronous programming techniques in a safe and efficient manner.
+                    </p>
+                    <h2>Conclusion:</h2>
+                    <p>By following best practices for handling cancellations in asynchronous programming, you can ensure that your application remains responsive, efficient, and free from errors caused by abandoned work. Use CancellationToken to gracefully handle cancellations, pass it to all methods involved in the operation, and handle exceptions thrown when an operation or task is canceled. With these practices in place, you can write reliable and efficient asynchronous code.</p>
+                    <h2>References:</h2>
+                    <ul>
+                        <li><a href="https://knowyourtoolset.com/2023/05/cancellation-tokens/" target="_blank" rel="noopener">Cancellation Tokens in ASP.NET APIs (Erik Dahl)</a></li>
+                        <li><a href="https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/" target="_blank" rel="noopener">Cancellation Tokens in MVC Core Controllers</a></li>
+                        <li><a href="https://medium.com/@mitesh_shah/a-deep-dive-into-c-s-cancellationtoken-44bc7664555f" target="_blank" rel="noopener">Deep Dive int C# Cancellation Tokens</a></li>
+                        <li><a href="https://devblogs.microsoft.com/premier-developer/recommended-patterns-for-cancellationtoken/" target="_blank" rel="noopener">Recommended Paterns for Cancellation Tokens</a></li>
+                        <li><a href="https://docs.microsoft.com/en-us/dotnet/standard/threading/cancellation-in-managed-threads" target="_blank" rel="noopener">Cancellation in Managed Threads</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
+<footer class="navbar-dark bg-primary">
+    <div class="row">
+        <div class="col-1"><br /></div>
+        <div class="col-8">
+            <br />
+            <script src="https://utteranc.es/client.js" repo="markhazleton/markhazleton-resume" issue-term="title" theme="github-dark-orange" crossorigin="anonymous" async=""></script>
+            <br />
+        </div>
+        <div class="col-3">
+            <br />
+            <div class="social-icons">
+                <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
