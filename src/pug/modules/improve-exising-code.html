@@ -1,0 +1,56 @@
+<pre class="code">
+    Can you help me refactor this code to make it more readable?
+    // This code defines a function that sorts an array of integers
+    public void QuickSort(int[] array)
+    {
+        if (array.Length <= 1) return;
+        int pivot = array[array.Length / 2];
+        int left = 0;
+        int right = array.Length - 1;
+        while (left <= right)
+        {
+            while (array[left] < pivot) left++;
+            while (array[right] > pivot
+        }
+    }
+</pre>
+<p>This is what Chat GPT returns:</p>
+<pre class="code">
+    <code class="!whitespace-pre-wrap hljs language-sql">public void QuickSort(<span class="hljs-type">int</span>[] <span class="hljs-keyword">array</span>)
+        {
+            if (array.Length <span class="hljs-operator">&lt;=</span> <span class="hljs-number">1</span>)
+            {
+                <span class="hljs-keyword">return</span>;
+            }
+
+            <span class="hljs-type">int</span> pivot <span class="hljs-operator">=</span> <span class="hljs-keyword">array</span>[array.Length <span class="hljs-operator">/</span> <span class="hljs-number">2</span>];
+            <span class="hljs-type">int</span> <span class="hljs-keyword">left</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+            <span class="hljs-type">int</span> <span class="hljs-keyword">right</span> <span class="hljs-operator">=</span> array.Length <span class="hljs-operator">-</span> <span class="hljs-number">1</span>;
+
+            while (<span class="hljs-keyword">left</span> <span class="hljs-operator">&lt;=</span> <span class="hljs-keyword">right</span>)
+            {
+                while (<span class="hljs-keyword">array</span>[<span class="hljs-keyword">left</span>] <span class="hljs-operator">&lt;</span> pivot)
+                {
+                    <span class="hljs-keyword">left</span><span class="hljs-operator">+</span><span class="hljs-operator">+</span>;
+                }
+
+                while (<span class="hljs-keyword">array</span>[<span class="hljs-keyword">right</span>] <span class="hljs-operator">&gt;</span> pivot)
+                {
+                    <span class="hljs-keyword">right</span><span class="hljs-comment">--;</span>
+                }
+
+                if (<span class="hljs-keyword">left</span> <span class="hljs-operator">&lt;=</span> <span class="hljs-keyword">right</span>)
+                {
+                    <span class="hljs-type">int</span> temp <span class="hljs-operator">=</span> <span class="hljs-keyword">array</span>[<span class="hljs-keyword">left</span>];
+                    <span class="hljs-keyword">array</span>[<span class="hljs-keyword">left</span>] <span class="hljs-operator">=</span> <span class="hljs-keyword">array</span>[<span class="hljs-keyword">right</span>];
+                    <span class="hljs-keyword">array</span>[<span class="hljs-keyword">right</span>] <span class="hljs-operator">=</span> temp;
+                    <span class="hljs-keyword">left</span><span class="hljs-operator">+</span><span class="hljs-operator">+</span>;
+                    <span class="hljs-keyword">right</span><span class="hljs-comment">--;</span>
+                }
+            }
+
+            QuickSort(array.Take(<span class="hljs-keyword">right</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span>).ToArray());
+            QuickSort(array.Skip(<span class="hljs-keyword">left</span>).ToArray());
+        }
+        </code>
+</pre>

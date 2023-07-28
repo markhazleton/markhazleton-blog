@@ -1,0 +1,28 @@
+<pre class="code">
+    <code class="!whitespace-pre-wrap hljs language-csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ApiClient</span>
+    {
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> HttpClient _httpClient;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ApiClient</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> baseUrl</span>)</span>
+        {
+            _httpClient = <span class="hljs-keyword">new</span> HttpClient
+            {
+                BaseAddress = <span class="hljs-keyword">new</span> Uri(baseUrl)
+            };
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> <span class="hljs-title">Task</span>&lt;<span class="hljs-title">T</span>&gt; <span class="hljs-title">GetAsync</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> url</span>)</span>
+        {
+            <span class="hljs-keyword">var</span> response = <span class="hljs-keyword">await</span> _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.Content.ReadAsAsync&lt;T&gt;();
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> <span class="hljs-title">Task</span>&lt;<span class="hljs-title">HttpResponseMessage</span>&gt; <span class="hljs-title">PostAsync</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> url, T data</span>)</span>
+        {
+            <span class="hljs-keyword">var</span> content = <span class="hljs-keyword">new</span> StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, <span class="hljs-string">"application/json"</span>);
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> _httpClient.PostAsync(url, content);
+        }
+    }
+    </code>
+</pre>

@@ -1,0 +1,32 @@
+<pre class="code">
+    <code class="!whitespace-pre-wrap hljs language-cpp">Write test cases <span class="hljs-keyword">for</span> the following C<span class="hljs-meta"># method that cover edge cases:</span>
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title">Factorial</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span>
+        </span>{
+            <span class="hljs-keyword">if</span> (n &lt; <span class="hljs-number">0</span>)
+            {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">ArgumentException</span>(<span class="hljs-string">"n must be non-negative"</span>);
+            }
+            <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span>)
+            {
+                <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+            }
+            <span class="hljs-keyword">return</span> n * <span class="hljs-built_in">Factorial</span>(n - <span class="hljs-number">1</span>);
+        }
+        </code>
+</pre>
+<p>This is what Chat GPT returns:</p>
+<pre class="code">
+<code class="!whitespace-pre-wrap hljs language-scss"><span class="hljs-selector-attr">[Test]</span>
+public void <span class="hljs-built_in">TestFactorialEdgeCases</span>()
+{
+    Assert<span class="hljs-selector-class">.Throws</span>&lt;ArgumentException&gt;(() =&gt; <span class="hljs-built_in">Factorial</span>(-<span class="hljs-number">1</span>));
+    Assert<span class="hljs-selector-class">.AreEqual</span>(<span class="hljs-number">1</span>, Factorial(<span class="hljs-number">0</span>));
+    Assert<span class="hljs-selector-class">.AreEqual</span>(<span class="hljs-number">1</span>, Factorial(<span class="hljs-number">1</span>));
+    Assert<span class="hljs-selector-class">.AreEqual</span>(<span class="hljs-number">2</span>, Factorial(<span class="hljs-number">2</span>));
+    Assert<span class="hljs-selector-class">.AreEqual</span>(<span class="hljs-number">6</span>, Factorial(<span class="hljs-number">3</span>));
+    Assert<span class="hljs-selector-class">.AreEqual</span>(<span class="hljs-number">40320</span>, Factorial(<span class="hljs-number">8</span>));
+}
+</code>
+
+</pre>
