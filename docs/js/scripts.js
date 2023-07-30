@@ -1,7 +1,7 @@
 /*!
-* Start Bootstrap - Resume v8.0.1 (https://github.com/MarkHazleton/markhazleton-resume)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/markhazleton-resume/blob/master/LICENSE)
+* Start Bootstrap - Mark Hazleton Blog v9.0.1 (https://github.com/controlorigins/markhazleton-blog)
+* Copyright 2013-2023 Mark Hazleton (https://markhazleton.controlorigins.com)
+* Licensed under MIT (https://github.com/StartBootstrap/markhazleton-blog/blob/master/LICENSE)
 */
 //
 // Scripts
