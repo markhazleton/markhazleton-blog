@@ -1,0 +1,17 @@
+mixin renderAccordion(links)
+  - let groupedLinks = {}
+  each link in links
+    - if (groupedLinks[link.Section])
+      - groupedLinks[link.Section].push(link)
+    - else
+      - groupedLinks[link.Section] = [link]
+
+  each sectionKey in Object.keys(groupedLinks)
+    - const section = sectionKey
+    - const links = groupedLinks[sectionKey]
+    div.col-12.col-lg-6.col-xl-4
+      h3.text-light= section
+      ul
+      each link in links
+        li
+          a.text-light(href=`/${link.slug}` target='_self' title=`${link.name}`) #{link.name}
