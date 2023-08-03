@@ -1,9 +1,14 @@
 'use strict';
+
 const fs = require('fs');
+const fse = require('fs');
 const upath = require('upath');
 const pug = require('pug');
 const sh = require('shelljs');
 const prettier = require('prettier');
+
+// Get List of Articles
+const articles = require('./../src/articles.json');
 
 module.exports = async function renderPug(filePath) {
     const destPath = filePath.replace(/src\/pug\//, 'docs/').replace(/\.pug$/, '.html');
@@ -13,7 +18,8 @@ module.exports = async function renderPug(filePath) {
     const html = pug.renderFile(filePath, {
         doctype: 'html',
         filename: filePath,
-        basedir: srcPath
+        basedir: srcPath,
+        articles: articles
     });
 
     const destPathDirname = upath.dirname(destPath);
