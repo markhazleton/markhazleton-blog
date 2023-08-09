@@ -14,15 +14,19 @@ block layout-content
       .subheading.mb-3 Adding Telemetry to HttpClient
       h2 Introduction
       p.
-        The Decorator Design Pattern is a structural design pattern that allows behavior to be added to an individual object,
+        The Decorator Design Pattern is a structural design pattern that allows
+        behavior to be added to an individual object,
         either statically or dynamically, without affecting the behavior of other objects from the same class.
-        This pattern works by dynamically wrapping objects in a series of decorator objects that add new functionality to the original object.
-        This pattern provides a flexible alternative to sub-classing, and is especially
+        This pattern works by dynamically wrapping objects in a series of decorator objects
+        that add new functionality to the original object.
+        This pattern provides a flexible alternative to sub-classing and is especially
         useful when you want to add a single feature to an object, rather than an entire hierarchy of features.
       p.
-        The decorator pattern involves creating a base class/interface that defines the basic behavior and then defining one or
-        more decorator classes that add additional behavior to the base class/interface. Each decorator class wraps an instance
-        of the base class/interface and provides its own implementation of the additional behavior.
+        The decorator pattern involves creating a base class/interface that defines the basic behavior
+        and then defining one or
+        more decorator classes that add additional behavior to the base class/interface.
+        Each decorator class wraps an instance
+        of the base class/interface and provides its implementation of the additional behavior.
 
       dl
         dt What is a Design Pattern?
@@ -54,15 +58,18 @@ block layout-content
         dt What is HttpClient Class?
         dd.
           'HttpClient' is a class in the System.Net.Http namespace that provides a high-level API for making HTTP requests.
-          It enables you to send HTTP requests and receive HTTP responses, and provides a number of features to make it easy to work
+          It enables you to send HTTP requests and receive HTTP responses
+          and provides several features to make it easy to work
           with HTTP-based services.  It provides methods for reading the response and processing the response data.
           The HttpClient wraps the lower-level functionality available on each platform where it runs.
-          This means that it provides a consistent, platform-independent implementation for processing HTTP requests,
-          while taking advantage of platform-specific features where available.
+          This means that it provides a consistent, platform-independent implementation
+          for processing HTTP requests while taking advantage of platform-specific features where available.
         dt What is Telemetry?
         dd.
-          Telemetry is the collection, transmission, and analysis of data related to the performance and usage of an application.
-          Telemetry helps us to monitor the performance of an application, and can be used to identify and troubleshoot issues,
+          Telemetry is the collection, transmission, and analysis of data related to the performance
+          and usage of an application.
+          Telemetry helps us to monitor the performance of an application and can be used to identify
+          and troubleshoot issues,
           as well as to understand how an application is being used.
 
       p.
@@ -80,8 +87,9 @@ block layout-content
 
       h2 The Interfaces
       p.
-        The deocrater pattern uses an Interface for both the concrete and deocrator classes.  For this example we will use
-        the follwing interfaces:
+        The decorator pattern uses an Interface for both the concrete and decorator classes.
+        For this example, we will use
+        the following interfaces:
 
       dl
         dt IHttpGetCallService
@@ -133,7 +141,7 @@ block layout-content
         The concrete implementation is the original implementation of the object that is being decorated.
         It provides the basic functionality and behavior of the object.
 
-      p   The concrete implemenation method is defined as follows:
+      p   The concrete implementation method is defined as follows:
       pre.code.
         /// &lt;summary&gt;
         /// Makes a GET request to the specified URL and returns the response.
@@ -183,8 +191,8 @@ block layout-content
         allows you to specify the type of the expected response data, T, at the time of making the GET request.
       p.
         By using a generic model, I can take advantage of compile-time type checking, which helps to ensure that
-        the code using the response data is correct, and to avoid unexpected runtime errors due to type mismatches.
-        This apporach will also improve the IntelliSense in Visual Studio making it easier to write and maintain the code.
+        the code using the response data is correct and to avoid unexpected runtime errors due to type mismatches.
+        This approach will also improve the IntelliSense in Visual Studio making it easier to write and maintain the code.
       p.
         For example, if you expect the response data to be a list of objects,
         you can define HttpGetCallResults&lt;List&lt;MyDataObject&gt;&gt;,
@@ -200,11 +208,14 @@ block layout-content
         and adds new behavior or functionality to it. The decorator implementation is responsible for
         forwarding calls to the original object and adding new functionality before or after the call.
       p.
-        To add telemetry to an HttpClient, we'll use the decorator pattern to wrap the concreate implementation in a decorator class that
-        adds the telemetry functionality. The decorator class will impment the same Interface and act as a wrapper arround the concreate
+        To add telemetry to an HttpClient, we'll use the decorator pattern to wrap the concrete implementation
+        in a decorator class that
+        adds the telemetry functionality. The decorator class will implement the same Interface
+        and act as a wrapper around the concrete
         implementation. This allows us to add the telemetry functionality without modifying the concrete implementation.
       p.
-        The decorator class is initialized with an existing implmentation of the interface.   When the decorater class is called, it will
+        The decorator class is initialized with an existing implementation of the interface.
+        When the decorator class is called, it will
         call the existing implementation and then add the telemetry functionality and pass the results back to the caller.
 
       pre.code.
@@ -235,7 +246,7 @@ block layout-content
 
       h2.mb-0 Putting it all together
       p.
-        Now that we have the implemenations defined, we can configure the decorator pattern in our program.cs file.
+        Now that we have the implementations defined, we can configure the decorator pattern in our program.cs file.
         The following code snippet shows how to configure the decorator pattern in the program.cs file.
 
       pre.code.
@@ -251,8 +262,8 @@ block layout-content
           client.DefaultRequestHeaders.Add("X-Request-Source", "HttpClientDecorator");
         });
 
-        // Register the decorator implementation with via dependency injection.
-        // Wrap the base (concrete) implementation with the Telemetry decorator implemenation.
+        // Register the decorator implementation via dependency injection.
+        // Wrap the base (concrete) implementation with the Telemetry decorator implementation.
         builder.Services.AddSingleton&lt;IHttpGetCallService&gt;(serviceProvider =&gt;
         {
           var logger = serviceProvider.GetRequiredService&lt;ILogger&lt;HttpGetCallService&gt;&gt;();
@@ -325,7 +336,7 @@ block layout-content
         }
       h2.mb-0 Additional Use Cases
       p.
-        In addition to this telementry decorator pattern implementation for the HTTP client,
+        In addition to this telemetry decorator pattern implementation for the HTTP client,
         there are several other common use cases for the decorator pattern in this context.
         Some of these include:
       dl
@@ -338,7 +349,8 @@ block layout-content
         dd.
           Adding caching to your HTTP client can improve performance by reducing the number of requests
           that need to be made to the server. A caching decorator can be used to automatically cache
-          responses and serve them from cache when possible, rather than making a new request to the server.
+          responses and serve them from the cache when possible,
+          rather than making a new request to the server.
         dt Retry calls via Polly:
         dd.
           In some cases, it may be desirable to automatically retry failed requests.
@@ -361,7 +373,8 @@ block layout-content
         By wrapping an HttpClient instance with telemetry-related decorators, we were able to easily collect data
         related to the performance and usage of the HTTP requests being made.
         By implementing two interfaces, IHttpGetCallService and IHttpGetCallResults, we were able to define the methods
-        for making an HTTP request to a URL and returning the response data, and also define the properties for the response from the HTTP call.
+        for making an HTTP request to a URL and returning the response data,
+        and also defining the properties for the response from the HTTP call.
 
       p.
         We also discussed the different types of implementations in the context of the decorator pattern,
