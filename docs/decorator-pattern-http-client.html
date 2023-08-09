@@ -15,7 +15,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="css/styles.css?version=1691518448320" />
+        <link rel="stylesheet" href="css/styles.css?version=1691601019730" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -53,6 +53,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#articles">Articles</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#skills">Skills</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
@@ -68,8 +69,8 @@
                     <h1 class="mb-0">Decorator Design Pattern:</h1>
                     <div class="subheading mb-3">Adding Telemetry to HttpClient</div>
                     <h2>Introduction</h2>
-                    <p>The Decorator Design Pattern is a structural design pattern that allows behavior to be added to an individual object, either statically or dynamically, without affecting the behavior of other objects from the same class. This pattern works by dynamically wrapping objects in a series of decorator objects that add new functionality to the original object. This pattern provides a flexible alternative to sub-classing, and is especially useful when you want to add a single feature to an object, rather than an entire hierarchy of features.</p>
-                    <p>The decorator pattern involves creating a base class/interface that defines the basic behavior and then defining one or more decorator classes that add additional behavior to the base class/interface. Each decorator class wraps an instance of the base class/interface and provides its own implementation of the additional behavior.</p>
+                    <p>The Decorator Design Pattern is a structural design pattern that allows behavior to be added to an individual object, either statically or dynamically, without affecting the behavior of other objects from the same class. This pattern works by dynamically wrapping objects in a series of decorator objects that add new functionality to the original object. This pattern provides a flexible alternative to sub-classing and is especially useful when you want to add a single feature to an object, rather than an entire hierarchy of features.</p>
+                    <p>The decorator pattern involves creating a base class/interface that defines the basic behavior and then defining one or more decorator classes that add additional behavior to the base class/interface. Each decorator class wraps an instance of the base class/interface and provides its implementation of the additional behavior.</p>
                     <dl>
                         <dt>What is a Design Pattern?</dt>
                         <dd>Design patterns are solutions to common software design problems that have been discovered, refined, and documented by experienced software developers over time. The concept of design patterns was first introduced in the book "Design Patterns: Elements of Reusable Object-Oriented Software" by the "Gang of Four" (Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides) in 1994. This book identified 23 design patterns that were widely used in object-oriented software development. Since then, many other design patterns have been discovered and documented by the software development community. The use of design patterns has become an important part of software engineering, enabling developers to write code that is more maintainable, reusable, and scalable.</dd>
@@ -78,9 +79,9 @@
                         <dt>What is an HTTP Client?</dt>
                         <dd>In basic terms, an HTTP client is a software component that allows your program to send HTTP requests to a server and receive HTTP responses from the server. It is used to interact with web-based applications and APIs that use the HTTP protocol.</dd>
                         <dt>What is HttpClient Class?</dt>
-                        <dd>'HttpClient' is a class in the System.Net.Http namespace that provides a high-level API for making HTTP requests. It enables you to send HTTP requests and receive HTTP responses, and provides a number of features to make it easy to work with HTTP-based services. It provides methods for reading the response and processing the response data. The HttpClient wraps the lower-level functionality available on each platform where it runs. This means that it provides a consistent, platform-independent implementation for processing HTTP requests, while taking advantage of platform-specific features where available.</dd>
+                        <dd>'HttpClient' is a class in the System.Net.Http namespace that provides a high-level API for making HTTP requests. It enables you to send HTTP requests and receive HTTP responses and provides several features to make it easy to work with HTTP-based services. It provides methods for reading the response and processing the response data. The HttpClient wraps the lower-level functionality available on each platform where it runs. This means that it provides a consistent, platform-independent implementation for processing HTTP requests while taking advantage of platform-specific features where available.</dd>
                         <dt>What is Telemetry?</dt>
-                        <dd>Telemetry is the collection, transmission, and analysis of data related to the performance and usage of an application. Telemetry helps us to monitor the performance of an application, and can be used to identify and troubleshoot issues, as well as to understand how an application is being used.</dd>
+                        <dd>Telemetry is the collection, transmission, and analysis of data related to the performance and usage of an application. Telemetry helps us to monitor the performance of an application and can be used to identify and troubleshoot issues, as well as to understand how an application is being used.</dd>
                     </dl>
                     <p>Let us explore how to use the decorator design pattern to add telemetry to an HttpClient in C#. By the end of this activity, you'll have a good understanding of the decorator pattern and how to use it to add telemetry to an HttpClient.</p>
                     <a href="https://github.com/markhazleton/samplemvccrud/" target="_blank" rel="noopener noreferrer"><img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-DecoratorPattern-Home.png" alt="DecoratorPattern Home Page" /></a>
@@ -89,7 +90,7 @@
                         <a href="https://github.com/markhazleton/HttpClientDecoratorPattern">DecoratorPatternHttpClient</a>
                     </p>
                     <h2>The Interfaces</h2>
-                    <p>The deocrater pattern uses an Interface for both the concrete and deocrator classes. For this example we will use the follwing interfaces:</p>
+                    <p>The decorator pattern uses an Interface for both the concrete and decorator classes. For this example, we will use the following interfaces:</p>
                     <dl>
                         <dt>IHttpGetCallService</dt>
                         <dd>
@@ -127,7 +128,7 @@ public interface IHttpGetCallResults&lt;T&gt;&gt;
                     <p>In other words, the concrete implementation provides the core functionality of the object, while the decorator implementation adds extra behavior and functionality to the object without changing its core functionality. The decorator implementation is interchangeable with the concrete implementation, meaning that both can be used interchangeably in the code, making it easier to extend the functionality of an object without having to modify the original implementation.</p>
                     <h3 class="mb-0">The Concrete Implementation</h3>
                     <p>The concrete implementation is the original implementation of the object that is being decorated. It provides the basic functionality and behavior of the object.</p>
-                    <p>The concrete implemenation method is defined as follows:</p>
+                    <p>The concrete implementation method is defined as follows:</p>
                     <pre class="code">
 /// &lt;summary&gt;
 /// Makes a GET request to the specified URL and returns the response.
@@ -174,13 +175,13 @@ public async Task&lt;HttpGetCallResults&gt; GetAsync&lt;T&gt;(HttpGetCallResults
 </pre
                     >
                     <p>The advantage of using a generic model of HttpGetCallResults&lt;T&gt; instead of HttpGetCallResults is that it allows you to specify the type of the expected response data, T, at the time of making the GET request.</p>
-                    <p>By using a generic model, I can take advantage of compile-time type checking, which helps to ensure that the code using the response data is correct, and to avoid unexpected runtime errors due to type mismatches. This apporach will also improve the IntelliSense in Visual Studio making it easier to write and maintain the code.</p>
+                    <p>By using a generic model, I can take advantage of compile-time type checking, which helps to ensure that the code using the response data is correct and to avoid unexpected runtime errors due to type mismatches. This approach will also improve the IntelliSense in Visual Studio making it easier to write and maintain the code.</p>
                     <p>For example, if you expect the response data to be a list of objects, you can define HttpGetCallResults&lt;List&lt;MyDataObject&gt;&gt;, and then access the response data as a strongly-typed list, rather than as a string or an object of an unknown type.</p>
                     <p>Overall, using a generic model of HttpGetCallResults&lt;T&gt; makes the code cleaner, more readable, and more maintainable, and reduces the likelihood of errors.</p>
                     <h3 class="mb-0">The Decorator Implementation</h3>
                     <p>The decorator implementation is an object that wraps the concrete implementation and adds new behavior or functionality to it. The decorator implementation is responsible for forwarding calls to the original object and adding new functionality before or after the call.</p>
-                    <p>To add telemetry to an HttpClient, we'll use the decorator pattern to wrap the concreate implementation in a decorator class that adds the telemetry functionality. The decorator class will impment the same Interface and act as a wrapper arround the concreate implementation. This allows us to add the telemetry functionality without modifying the concrete implementation.</p>
-                    <p>The decorator class is initialized with an existing implmentation of the interface. When the decorater class is called, it will call the existing implementation and then add the telemetry functionality and pass the results back to the caller.</p>
+                    <p>To add telemetry to an HttpClient, we'll use the decorator pattern to wrap the concrete implementation in a decorator class that adds the telemetry functionality. The decorator class will implement the same Interface and act as a wrapper around the concrete implementation. This allows us to add the telemetry functionality without modifying the concrete implementation.</p>
+                    <p>The decorator class is initialized with an existing implementation of the interface. When the decorator class is called, it will call the existing implementation and then add the telemetry functionality and pass the results back to the caller.</p>
                     <pre class="code">
 /// &lt;summary&gt;
 /// GetAsync performs a GET request and adds telemetry information to the response.
@@ -209,7 +210,7 @@ public async Task&lt;HttpGetCallResults&lt;T&gt;&gt; GetAsync&lt;T&gt;(HttpGetCa
 </pre
                     >
                     <h2 class="mb-0">Putting it all together</h2>
-                    <p>Now that we have the implemenations defined, we can configure the decorator pattern in our program.cs file. The following code snippet shows how to configure the decorator pattern in the program.cs file.</p>
+                    <p>Now that we have the implementations defined, we can configure the decorator pattern in our program.cs file. The following code snippet shows how to configure the decorator pattern in the program.cs file.</p>
                     <pre class="code">
 ... snip ...
 
@@ -223,8 +224,8 @@ builder.Services.AddHttpClient("HttpClientDecorator", client =&gt;
   client.DefaultRequestHeaders.Add("X-Request-Source", "HttpClientDecorator");
 });
 
-// Register the decorator implementation with via dependency injection.
-// Wrap the base (concrete) implementation with the Telemetry decorator implemenation.
+// Register the decorator implementation via dependency injection.
+// Wrap the base (concrete) implementation with the Telemetry decorator implementation.
 builder.Services.AddSingleton&lt;IHttpGetCallService&gt;(serviceProvider =&gt;
 {
   var logger = serviceProvider.GetRequiredService&lt;ILogger&lt;HttpGetCallService&gt;&gt;();
@@ -287,19 +288,19 @@ public async Task OnGet(CancellationToken ct = default)
 }</pre
                     >
                     <h2 class="mb-0">Additional Use Cases</h2>
-                    <p>In addition to this telementry decorator pattern implementation for the HTTP client, there are several other common use cases for the decorator pattern in this context. Some of these include:</p>
+                    <p>In addition to this telemetry decorator pattern implementation for the HTTP client, there are several other common use cases for the decorator pattern in this context. Some of these include:</p>
                     <dl>
                         <dt>Logging:</dt>
                         <dd>Adding logging to your HTTP client can be useful for debugging and auditing purposes. A logging decorator can be used to automatically log requests and responses, including details such as request/response headers, status codes, and payloads.</dd>
                         <dt>Caching:</dt>
-                        <dd>Adding caching to your HTTP client can improve performance by reducing the number of requests that need to be made to the server. A caching decorator can be used to automatically cache responses and serve them from cache when possible, rather than making a new request to the server.</dd>
+                        <dd>Adding caching to your HTTP client can improve performance by reducing the number of requests that need to be made to the server. A caching decorator can be used to automatically cache responses and serve them from the cache when possible, rather than making a new request to the server.</dd>
                         <dt>Retry calls via Polly:</dt>
                         <dd>In some cases, it may be desirable to automatically retry failed requests. The Polly library provides a convenient way to add retry logic to your HTTP client by wrapping the client in a decorator that uses a configurable policy to determine when and how to retry failed requests.</dd>
                     </dl>
                     <p>These additional decorator pattern implementations can be combined with the basic decorator pattern implementation described earlier to create a powerful and flexible HTTP client with a wide range of capabilities.</p>
                     <h2 class="mb-0">Conclusion</h2>
                     <p>The Decorator Design Pattern is a powerful pattern that provides a flexible and dynamic way to add behavior and functionality to individual objects without affecting the behavior of other objects from the same class. This pattern offers a more efficient alternative to sub-classing and is especially useful when you want to add a single feature to an object, rather than an entire hierarchy of features.</p>
-                    <p>In this article, we explored how to use the decorator pattern to add telemetry to an HttpClient in C#. By wrapping an HttpClient instance with telemetry-related decorators, we were able to easily collect data related to the performance and usage of the HTTP requests being made. By implementing two interfaces, IHttpGetCallService and IHttpGetCallResults, we were able to define the methods for making an HTTP request to a URL and returning the response data, and also define the properties for the response from the HTTP call.</p>
+                    <p>In this article, we explored how to use the decorator pattern to add telemetry to an HttpClient in C#. By wrapping an HttpClient instance with telemetry-related decorators, we were able to easily collect data related to the performance and usage of the HTTP requests being made. By implementing two interfaces, IHttpGetCallService and IHttpGetCallResults, we were able to define the methods for making an HTTP request to a URL and returning the response data, and also defining the properties for the response from the HTTP call.</p>
                     <p>We also discussed the different types of implementations in the context of the decorator pattern, including the concrete implementation and the decorator implementation. The concrete implementation provides the core functionality of the object, while the decorator implementation adds extra behavior and functionality to the object without changing its core functionality. The decorator implementation is interchangeable with the concrete implementation, making it easier to extend the functionality of an object without having to modify the original implementation.</p>
                     <p>Overall, the decorator pattern is a powerful tool for extending the functionality of objects, and it can be used in a wide range of scenarios. By applying the principles of the decorator pattern, you can create more efficient and effective applications that are better able to meet the needs of your users.</p>
                 </div>
@@ -329,7 +330,7 @@ public async Task OnGet(CancellationToken ct = default)
                     <ul></ul>
                     <li><a class="text-light" href="/sample-mvc-crud.html" target="_self" title="SampleMvcCRUD Project">SampleMvcCRUD Project</a></li>
                     <li><a class="text-light" href="/decorator-pattern-http-client.html" target="_self" title="The Decorator Pattern with Http Client">The Decorator Pattern with Http Client</a></li>
-                    <li><a class="text-light" href="/nuget-packages-pros-cons.html" target="_self" title="The Pros and Cons of Using NuGet Packages in Your Projects">The Pros and Cons of Using NuGet Packages in Your Projects</a></li>
+                    <li><a class="text-light" href="/nuget-packages-pros-cons.html" target="_self" title="NuGet Package Pros and Cons">NuGet Package Pros and Cons</a></li>
                     <li><a class="text-light" href="/git-organized.html" target="_self" title="Git Organized">Git Organized</a></li>
                     <li><a class="text-light" href="/web-project-mechanics.html" target="_self" title="Web Project Mechanics">Web Project Mechanics</a></li>
                     <li><a class="text-light" href="/data-analysis-demonstration.html" target="_self" title="Data Analysis Demonstration">Data Analysis Demonstration</a></li>
