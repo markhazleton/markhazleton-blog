@@ -1,7 +1,5 @@
 # Mark Hazleton Resume
 
-**[View Live Preview](https://markhazleton.github.io/markhazleton-resume/)**
-
 [Mark Hazleton Resume](https://markhazleton.controlorigins.com/) is the Mark Hazleton online resume/CV based on the theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/) with the following template [Start Bootstrap - Source Template](https://startbootstrap.com/theme/resume/)
 
 ## Status
