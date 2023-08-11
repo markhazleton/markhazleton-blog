@@ -22,8 +22,10 @@ block layout-content
         Caching is a technique that helps to mitigate the load on backend services,
         reducing response times and enhancing the user experience.
         One particular approach, the System Cached List, offers a smart and efficient way
-        to cache data and deliver it seamlessly to users. In this article, we'll delve
-        into the inner workings of a System Cached List and explore its advantages and disadvantages.
+        to cache data and deliver it seamlessly to users.
+        In this article, I will discuss the System Cached List and explore
+        its advantages and disadvantages.
+
       h2  Understanding the System Cached List
       p.
         The System Cached List is a caching mechanism that maintains a cached dataset,
@@ -31,7 +33,7 @@ block layout-content
         This technique employs the power of the MemoryCache class and a custom CachedData class
         to manage cached data efficiently.
       p.
-        I used a very basic minimal Api implementation to start this solution.  I then added a
+        I used a minimal Api sample project to start this solution.  I then added a
         generic implementation of caching a list of T using system memory as the caching mechanism.
         You can view the source for this article in my sandbox repository on GitHub.
         <a href='https://github.com/markhazleton/sandbox/tree/main/WebApiCache'>WebApiCache</a>
@@ -44,31 +46,64 @@ block layout-content
           improve performance by reducing the load on the backend.
           Instead of hitting the data source every time a request is made, cached data is provided,
           resulting in faster response times and a smoother user experience.
+
         dt Reduced Latency:
         dd.
           With cached data readily available, there's a notable reduction in latency.
           Users experience quicker load times, leading to higher satisfaction and engagement levels.
+
         dt Efficient Resource Usage:
         dd.
           By utilizing memory caching, the System Cached List optimizes resource usage.
           Cached data remains in memory, reducing the need for repeated database queries
           and subsequent resource consumption.
+
         dt Customizability:
-        dd The approach allows customization of cache expiration times. Different datasets might have varying levels of volatility, and the ability to set cache durations accordingly ensures freshness when needed while avoiding unnecessary updates.
+        dd.
+          The approach allows customization of cache expiration times.
+          Different datasets might have varying levels of volatility,
+          and the ability to set cache durations accordingly ensures freshness
+          when needed while avoiding unnecessary updates.
+
         dt Concurrency Handling:
-        dd The use of synchronization locks in the implementation prevents potential concurrency issues when updating the cache. This ensures that only one thread updates the cache at a time, maintaining data integrity.
+        dd.
+          The use of synchronization locks in the implementation prevents potential concurrency
+          issues when updating the cache. This ensures that only one thread updates the cache at a time,
+          maintaining data integrity.
+
         dt Graceful Update Process:
-        dd The System Cached List employs a smart update process. Instead of blocking the application during data update, it runs the update process asynchronously, thus avoiding any negative impact on user interactions.
+        dd.
+          The System Cached List employs a smart update process. Instead of blocking the application
+          during data update, it runs the update process asynchronously,
+          thus avoiding any negative impact on user interactions.
+
       h2 Disadvantages of the System Cached List
+
       dl
         dt Stale Data Risk:
-        dd Depending on the cache expiration settings, there's a risk of serving stale data to users if updates are infrequent or delayed. Careful consideration of cache expiration times is essential to strike the right balance between freshness and efficiency.
+        dd.
+            Depending on the cache expiration settings,
+            there's a risk of serving stale data to users if updates are infrequent or delayed.
+            Careful consideration of cache expiration times is essential to strike the right
+            balance between freshness and efficiency.
+
         dt Increased Complexity:
-        dd Implementing a System Cached List requires careful consideration of thread safety, cache management, and update scheduling. This complexity can sometimes lead to potential bugs or challenges in maintenance.
+        dd.
+            Implementing a System Cached List requires careful consideration of thread safety,
+            cache management, and update scheduling. This complexity can sometimes lead to potential bugs
+            or challenges in maintenance.
+
         dt Memory Usage:
-        dd While memory caching is efficient, it's essential to monitor memory consumption. Storing large datasets in memory can lead to increased memory usage, potentially affecting the overall system's performance.
+        dd.
+            While memory caching is efficient, it's essential to monitor memory consumption.
+            Storing large datasets in memory can lead to increased memory usage,
+            potentially affecting the overall system's performance.
+
         dt Cold Start Overhead:
-        dd When the application starts or the cache expires, there might be a slight overhead as the cache is repopulated. This initial delay could impact the user experience momentarily.
+        dd.
+            When the application starts or the cache expires,
+            there might be a slight overhead as the cache is repopulated.
+            This initial delay could impact the user experience momentarily.
 
       h2  Implementing the System Cached List
       p.
@@ -146,4 +181,9 @@ block layout-content
 
       h2 Conclusion
       p.
-        The System Cached List is a powerful approach to enhance the performance of web applications by intelligently managing and serving cached data. It combines the efficiency of memory caching with smart update strategies, ensuring users receive quick responses while reducing the load on backend resources. While it offers numerous advantages, it's crucial to carefully consider cache expiration times and handle potential complexities to reap the full benefits of this caching technique.
+        The System Cached List is one approach to enhance the performance of web applications by
+        managing and serving cached data. It combines the efficiency of memory caching with smart update
+        strategies, ensuring users receive quick responses while reducing the load on backend resources.
+        While it offers numerous advantages, it's crucial to carefully consider cache expiration times
+        and handle potential complexities to reap the full benefits of this caching technique.
+
