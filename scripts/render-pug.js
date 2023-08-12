@@ -9,6 +9,7 @@ const prettier = require('prettier');
 
 // Get List of Articles
 const articles = require('./../src/articles.json');
+const projects = require('./../src/projects.json');
 
 module.exports = async function renderPug(filePath) {
     const destPath = filePath.replace(/src\/pug\//, 'docs/').replace(/\.pug$/, '.html');
@@ -19,7 +20,8 @@ module.exports = async function renderPug(filePath) {
         doctype: 'html',
         filename: filePath,
         basedir: srcPath,
-        articles: articles
+        articles: articles,
+        projects: projects
     });
 
     const destPathDirname = upath.dirname(destPath);
