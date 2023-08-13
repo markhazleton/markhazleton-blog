@@ -12,10 +12,6 @@ block layout-content
     .sidetracked-section-content
       h1 A System Cache
       strong Enhancing Web API Performance with a System-Cached List
-      blockquote.
-        You have data that is required for your site that takes a long time to load.
-        You want to cache the data.
-
       p.
         In the world of web development, performance optimization is a critical aspect
         that directly influences user experience and overall system efficiency.
@@ -25,6 +21,45 @@ block layout-content
         to cache data and deliver it seamlessly to users.
         In this article, I will discuss the System Cached List and explore
         its advantages and disadvantages.
+
+      h2 The Challenge: Sub-Second Response Times for a Weather API
+      blockquote.
+        Imagine you're running a Web API that provides weather forecasts to a large number of users.
+        Each forecast request takes approximately 10 seconds to complete.
+        Your consumers expect near-instantaneous responses and your API is handling
+        thousands of hits every minute.
+        The current solution is causing frustration among consumers and overwhelming the backend weather service.
+
+      h2 Caching Strategy:
+      dl
+        dt Data Retrieval and Caching Initialization:
+        dd
+            ul
+                li.
+                    When a weather forecast request comes in, the API checks the cache for existing forecast data.
+                li.
+                    If cached data is present the API directly serves the cached data to the user.
+
+        dt Cache Miss:
+        dd
+            ul
+                li.
+                    If the cache is empty, the API initiates waits for the weather forecast data to be retrieved.
+                li.
+                    If the cache is past the refresh time, the API serves the stale data to ensure a quick response.
+                    and backend refresh is initiated.
+
+        dt Background Cache Refresh:
+        dd
+            ul
+                li.
+                    The API kicks off an asynchronous cache refresh process,
+                    updating the forecast data in the cache for future requests.
+                li.
+                    This refresh process does not block the main thread,
+                    ensuring the API remains responsive.
+                li.
+                    A static boolean is used to ensure only one refresh process is running at a time.
 
       h2  Understanding the System Cached List
       p.
