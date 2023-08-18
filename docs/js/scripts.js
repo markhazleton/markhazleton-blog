@@ -29,4 +29,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
             }
         });
     });
+
+    var myAccordion = new bootstrap.Collapse(document.getElementById('accordionArticles'), {
+        toggle: false // This prevents the default behavior of toggling an item when clicked
+      });
+
 });

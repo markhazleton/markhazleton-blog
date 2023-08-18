@@ -1,0 +1,23 @@
+mixin renderAccordion(links,filterSection)
+  - let groupedLinks = {}
+  each link in links
+    - if (groupedLinks[link.Section])
+      - groupedLinks[link.Section].push(link)
+    - else
+      - groupedLinks[link.Section] = [link]
+
+  each sectionKey in Object.keys(groupedLinks)
+    - if (!filterSection || filterSection === sectionKey)
+      - const section = sectionKey
+      - const links = groupedLinks[sectionKey]
+      - links.sort((a, b) => a.name.localeCompare(b.name))
+
+      #accordionArticles.card
+        h2#BusinessHeading.card-header= section
+          .card-body
+            ul
+            each link in links
+              li
+                a(href=`${link.slug}` target='_self' title=`${link.description}`) #{link.name}
+
++renderAccordion(articles,"Project Mechanics")
