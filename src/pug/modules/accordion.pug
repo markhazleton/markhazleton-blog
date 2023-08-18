@@ -6,20 +6,25 @@ mixin renderAccordion(links)
     - else
       - groupedLinks[link.Section] = [link]
 
-  each sectionKey in Object.keys(groupedLinks)
-    - const section = sectionKey
-    - const links = groupedLinks[sectionKey]
-    - links.sort((a, b) => a.name.localeCompare(b.name))
+  #accordionArticles.accordion
+    each sectionKey in Object.keys(groupedLinks)
+      - const section = sectionKey
+      - const links = groupedLinks[sectionKey]
+      - links.sort((a, b) => a.name.localeCompare(b.name))
 
-    #accordionArticles.accordion
+      //- Dynamic IDs with spaces removed
+      - const sectionCollapseId = `${section.replace(/\s+/g, '_')}Collapse`
+      - const sectionHeadingId = `${section.replace(/\s+/g, '_')}Heading`
+
       .accordion-item
-        h2#BusinessHeading.accordion-header
-          button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target='#BusinessCollapse' aria-expanded='true' aria-controls='BusinessCollapse')= section
-        #BusinessCollapse.accordion-collapse.show(aria-labelledby='BusinessHeading' )
+        strong.accordion-header
+          button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target=`#${sectionCollapseId}` aria-expanded='false' aria-controls=`${sectionCollapseId}`)= section
+        div(id=`${sectionCollapseId}` class='accordion-collapse collapse' aria-labelledby=`${sectionHeadingId}`)
           .accordion-body
             ul.list-group
-            each link in links
-              li.list-group-item.flex-fill
-                a(href=`${link.slug}` target='_self' title=`${link.description}`) #{link.name}
+              each link in links
+                li.list-group-item.flex-fill
+                  a(href=`${link.slug}` target='_self' title=`${link.description}`) #{link.name}
+
 
 +renderAccordion(articles)
