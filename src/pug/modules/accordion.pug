@@ -6,8 +6,10 @@ mixin renderAccordion(links)
     - else
       - groupedLinks[link.Section] = [link]
 
+  - const sortedSections = Object.keys(groupedLinks).sort()
+
   #accordionArticles.accordion
-    each sectionKey in Object.keys(groupedLinks)
+    each sectionKey in sortedSections
       - const section = sectionKey
       - const links = groupedLinks[sectionKey]
       - links.sort((a, b) => a.name.localeCompare(b.name))

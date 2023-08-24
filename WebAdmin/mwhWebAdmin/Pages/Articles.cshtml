@@ -2,18 +2,25 @@
 @model mwhWebAdmin.Pages.ArticlesModel
 @{
     ViewData["Title"] = "Articles";
+    var sortedSections = Model.Articles.Select(article => article.Section).Distinct().OrderBy(section => section);
 }
-    <h1>Articles</h1>
+
+<h1>Articles</h1>
+
+@foreach (var item in sortedSections)
+{
+    <h2>@item</h2>
     <table>
         <tr>
             <th>Name</th>
             <th>Description</th>
         </tr>
-        @foreach (var article in Model.Articles)
+        @foreach (var article in Model.Articles.Where(article => article.Section == item).OrderBy(article => article.Name))
         {
             <tr>
-            <td><a href="/ArticleEdit/@article.Id">@article.Name</a></td>
-            <td>@article.Description</td>
+                <td><a href="/ArticleEdit/@article.Id">@article.Name</a></td>
+                <td>@article.Description</td>
             </tr>
         }
     </table>
+}
