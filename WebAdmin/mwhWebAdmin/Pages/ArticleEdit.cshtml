@@ -1,0 +1,40 @@
+@page "{slug}"
+@model mwhWebAdmin.Pages.ArticleEditModel
+@{
+    ViewData["Title"] = "Article Edit";
+
+}
+
+<div class="container mt-5">
+    <h1>Edit Article</h1>
+
+    <form method="post">
+        <input type="hidden" asp-for="Article.Slug" />
+
+        <div class="mb-3">
+            <label for="Section" class="form-label">Section:</label>
+            <select class="form-control" asp-for="Article.Section">
+                @foreach (var item in Model.Sections.OrderBy(o=>0))
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Name:</label>
+            <input type="text" class="form-control" asp-for="Article.Name" />
+        </div>
+        <div class="mb-3">
+            <label for="Description" class="form-label">Description:</label>
+            <input type="text" class="form-control" asp-for="Article.Description" />
+        </div>
+        <div class="mb-3">
+            <label for="ImgSrc" class="form-label">Image Source:</label>
+            <input type="text" class="form-control" asp-for="Article.ImgSrc" />
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>

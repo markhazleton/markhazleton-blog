@@ -1,0 +1,68 @@
+extends layouts/layout
+
+block pagehead
+  title Mark Hazleton - Running Redis Locally with Docker
+  meta(name='description', content='Mark Hazleton - Running Redis Locally with Docker')
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.controlorigins.com/redis-local-instance.html')
+
+block layout-content
+
+  section#sidetracked.resume-section.resume-section-background
+    .resume-section-content
+      h1.mb-0 Redis Local Instance
+      strong A Quick Guide to Running Redis Locally with Docker
+      p.
+        Redis, an open-source in-memory data store, is a powerful tool for caching,
+        session management, and more. With Docker, setting up a local Redis
+        environment becomes a breeze.
+
+      h2 Getting Started: Setting Up Redis Docker Image
+
+      p.
+        To start, ensure you have Docker installed. Open your terminal and pull
+        the Redis image with the command:
+
+      code.docker docker pull redis
+
+      p.
+        fetches the latest Redis image from the Docker Hub repository.
+
+      h2 Running Redis Container
+
+      p Once the image is downloaded, create a Redis container using:
+
+      code.docker docker run --name my-redis-container -d redis
+
+      p.
+        This command names the container "my-redis-container" and runs it in the
+        background ("-d" flag). You can adjust the name and other options as needed.
+
+      h2 Configuration Options
+
+      p.
+        Redis offers configuration through command-line arguments or a
+        configuration file. To bind the container's port to your host, use:
+
+      code.docker docker run --name my-redis -d -p 6379:6379 redis
+
+      p.
+        This maps port 6379 from the container to your host machine, allowing
+        local access.
+
+      p To persist data beyond container removal, employ a volume:
+      code.docker docker run --name my-redis -d -p 6379:6379 -v redis_data:/data  redis
+      p.
+        Here, "redis_data" is the volume name, and "/data" is the mount point
+        inside the container.
+      h2 Interact with Redis
+      p Access the Redis container's shell with:
+      code.docker docker exec -it my-redis-container sh
+      p From the shell, you can launch the Redis CLI:
+      code.redis redis-cli
+      h2 Wrapping Up
+      p.
+        Redis simplifies in-memory data storage, and Docker makes its setup and
+        management convenient. With a few commands, you can have a local Redis
+        instance ready for development or testing.
+
