@@ -6,7 +6,9 @@ mixin renderFooter(links)
     - else
       - groupedLinks[link.Section] = [link]
 
-  each sectionKey in Object.keys(groupedLinks)
+  - const sortedSections = Object.keys(groupedLinks).sort()
+
+  each sectionKey in sortedSections
     - const section = sectionKey
     - const links = groupedLinks[sectionKey]
     - links.sort((a, b) => a.name.localeCompare(b.name))
