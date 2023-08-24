@@ -1,0 +1,36 @@
+<pre class="code"><code class="language-csharp">
+
+public async Task Make1000RestCallsAsync()
+{
+// Create a SemaphoreSlim with a maximum of 10 concurrent requests
+SemaphoreSlim semaphore = new SemaphoreSlim(10);
+
+// Create a list of tasks to make the 1000 REST calls
+List<task> tasks = new List<task>();
+for (int i = 0; i &lt; 1000; i++)
+{
+// Acquire the semaphore before making the request
+await semaphore.WaitAsync();
+
+// Create a task to make the request
+tasks.Add(Task.Run(async () =&gt;
+{
+try
+{
+// Make the REST call
+await MakeRestCallAsync();
+}
+finally
+{
+// Release the semaphore
+semaphore.Release();
+}
+}));
+}
+
+// Wait for all tasks to complete
+await Task.WhenAll(tasks);
+
+// Log a message when all calls are complete
+Console.WriteLine(&quot;All calls complete&quot;);
+}</task></task></code></pre>
