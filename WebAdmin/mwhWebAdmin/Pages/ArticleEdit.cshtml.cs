@@ -15,6 +15,18 @@ public class ArticleEditModel : PageModel
         "Project Mechanics Leadership",
 
     };
+
+    public List<string> ChangeFrequency { get; } = new List<string>
+    {
+        "always",
+        "hourly",
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly",
+        "never"
+    };
+
     [BindProperty]
     public ArticleModel Article { get; set; }
 
@@ -23,9 +35,10 @@ public class ArticleEditModel : PageModel
         _articleService = articleService;
     }
 
-    public IActionResult OnGet(string slug)
+    public IActionResult OnGet(string Id)
     {
-        Article = _articleService.GetArticleBySlug(slug);
+        int id = Convert.ToInt32(Id);
+        Article = _articleService.GetArticleById(id);
         if (Article == null)
         {
             return NotFound();

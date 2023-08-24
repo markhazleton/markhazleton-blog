@@ -1,4 +1,4 @@
-@page "{slug}"
+@page "{id}"
 @model mwhWebAdmin.Pages.ArticleEditModel
 @{
     ViewData["Title"] = "Article Edit";
@@ -9,7 +9,7 @@
     <h1>Edit Article</h1>
 
     <form method="post">
-        <input type="hidden" asp-for="Article.Slug" />
+        <input type="hidden" asp-for="Article.Id" />
 
         <div class="mb-3">
             <label for="Section" class="form-label">Section:</label>
@@ -29,8 +29,21 @@
             <input type="text" class="form-control" asp-for="Article.Description" />
         </div>
         <div class="mb-3">
+            <label for="Slug" class="form-label">Slug:</label>
+            <input type="text" class="form-control" asp-for="Article.Slug" />
+        </div>
+        <div class="mb-3">
             <label for="ImgSrc" class="form-label">Image Source:</label>
             <input type="text" class="form-control" asp-for="Article.ImgSrc" />
+        </div>
+        <div class="mb-3">
+            <label for="ChangeFrequency" class="form-label">Change Frequency:</label>
+            <select class="form-control" asp-for="Article.ChangeFrequency">
+                @foreach (var item in Model.ChangeFrequency.OrderBy(o => 0))
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
         </div>
 
         <div>

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("mwhWebAdmin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd7232dc29a44c5bf91b7f48602ab25a4fb9ca48")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2870f4fcb537db8c7972ed8f68fb769e1792b76c")]
 [assembly: System.Reflection.AssemblyProductAttribute("mwhWebAdmin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("mwhWebAdmin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
