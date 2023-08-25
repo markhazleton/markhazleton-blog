@@ -6,21 +6,27 @@
 }
 
 <h1>Articles</h1>
+<div class="accordion" id="accordionSections">
+    @foreach (var item in sortedSections)
+    {
+        var itemId = item.Replace(" ", "-"); // Replace spaces with hyphens
 
-@foreach (var item in sortedSections)
-{
-    <h2>@item</h2>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-        </tr>
-        @foreach (var article in Model.Articles.Where(article => article.Section == item).OrderBy(article => article.Name))
-        {
-            <tr>
-                <td><a href="/ArticleEdit/@article.Id">@article.Name</a></td>
-                <td>@article.Description</td>
-            </tr>
-        }
-    </table>
-}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id=@($"heading{itemId}")>
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target=@($"#collapse{itemId}") aria-expanded="true" aria-controls=@($"collapse{itemId}")>
+                    @item
+                </button>
+            </h2>
+            <div id=@($"collapse{itemId}") class="accordion-collapse collapse" aria-labelledby=@($"heading{itemId}") data-bs-parent="#accordionSections">
+                <div class="accordion-body">
+                    <ul>
+                        @foreach (var article in Model.Articles.Where(article => article.Section == item).OrderBy(article => article.Name))
+                        {
+                            <li><a href="/ArticleEdit/@article.Id">@article.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
