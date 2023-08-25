@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace mwhWebAdmin.Models;
 
 public class ArticleModel
@@ -15,6 +13,9 @@ public class ArticleModel
 
     [JsonPropertyName("name")]
     public string Name { get; set; }
+
+    [JsonPropertyName("content")]
+    public string ArticleContent { get; set; }
 
     [JsonPropertyName("description")]
     public string Description { get; set; }

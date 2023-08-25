@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
 using mwhWebAdmin.Models;
 
 namespace mwhWebAdmin.Pages;
 
-public class ArticleEditModel : PageModel
+public class ArticleAddModel : PageModel
 {
     private readonly ArticleService _articleService;
     public List<string> Sections { get; } = new List<string>
@@ -14,7 +14,6 @@ public class ArticleEditModel : PageModel
         "Project Mechanics",
         "Project Mechanics Leadership",
     };
-
     public List<string> ChangeFrequency { get; } = new List<string>
     {
         "always",
@@ -26,23 +25,14 @@ public class ArticleEditModel : PageModel
         "never"
     };
 
-    [BindProperty]
-    public ArticleModel Article { get; set; }
 
-    public ArticleEditModel(ArticleService articleService)
+    [BindProperty]
+    public ArticleModel NewArticle { get; set; }
+
+    public ArticleAddModel(ArticleService articleService)
     {
         _articleService = articleService;
-    }
-
-    public IActionResult OnGet(string Id)
-    {
-        int id = Convert.ToInt32(Id);
-        Article = _articleService.GetArticleById(id);
-        if (Article == null)
-        {
-            return NotFound();
-        }
-        return Page();
+        NewArticle = new ArticleModel();
     }
 
     public IActionResult OnPost()
@@ -52,7 +42,7 @@ public class ArticleEditModel : PageModel
             return Page();
         }
 
-        _articleService.UpdateArticle(Article);
+        _articleService.AddArticle(NewArticle);
         return RedirectToPage("Articles");
     }
 }

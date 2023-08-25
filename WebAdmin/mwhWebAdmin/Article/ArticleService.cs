@@ -1,17 +1,36 @@
-using System.Text.Json;
-using System.Xml;
-
 namespace mwhWebAdmin.Models;
 
 public class ArticleService
 {
-    private readonly string _filePath;
     private List<ArticleModel> _articles;
+    private readonly string _articlesDirectory;
+    private readonly string _filePath;
 
     public ArticleService(string filePath)
     {
         _filePath = filePath;
+        _articlesDirectory = Path.Combine(_filePath.Replace("articles.json", string.Empty), "pug", "articles");
         LoadArticles();
+    }
+
+    private string GeneratePugFileContent(ArticleModel article)
+    {
+        // Read the article-stub.pug template
+        string templateFilePath = Path.Combine(_articlesDirectory, "article-stub.pug");
+        string templateContent = File.ReadAllText(templateFilePath);
+
+        // Perform string replacements for template fields
+        string pugContent = templateContent
+            .Replace("{{name}}", article.Name)
+            .Replace("{{section}}", article.Section)
+            .Replace("{{slug}}", article.Slug)
+            .Replace("{{lastModified}}", article.LastModified)
+            .Replace("{{changeFrequency}}", article.ChangeFrequency)
+            .Replace("{{description}}", article.Description)
+            .Replace("{{content}}", article.ArticleContent);
+
+        return pugContent;
+
     }
 
     private void LoadArticles()
@@ -19,7 +38,7 @@ public class ArticleService
         string jsonContent = File.ReadAllText(_filePath);
         _articles = JsonSerializer.Deserialize<List<ArticleModel>>(jsonContent);
 
-        foreach (var article in _articles.OrderBy(o=>o.Name))
+        foreach (var article in _articles.OrderBy(o => o.Name))
         {
             article.Id = _articles.IndexOf(article);
         }
@@ -33,33 +52,29 @@ public class ArticleService
         }
         string jsonContent = JsonSerializer.Serialize(_articles, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(_filePath, jsonContent);
+        GenerateSiteMap();
     }
 
-    public List<ArticleModel> GetArticles()
+    public void AddArticle(ArticleModel newArticle)
     {
-        return _articles;
+        newArticle.Slug = "articles/" + GenerateSlug(newArticle.Name) + ".html";
+
+
+        newArticle.Id = _articles.Max(article => article.Id) + 1; // Assign a new ID
+        _articles.Add(newArticle);
+
+        string pugContent = GeneratePugFileContent(newArticle);
+        // Save the .pug file
+        string pugFilePath = Path.Combine(_articlesDirectory, $"{newArticle.Slug.Replace(".html", string.Empty).Replace("articles/", string.Empty)}.pug");
+        File.WriteAllText(pugFilePath, pugContent);
+
+
+
+        SaveArticles();
     }
 
-    public ArticleModel GetArticleById(int id)
-    {
-        var article = _articles.Where(w => w.Id== id).FirstOrDefault();
-        if (article == null)
-        {
-            return new ArticleModel() { };
-        }
-        return article;
-    }
 
-    public void UpdateArticle(ArticleModel updatedArticle)
-    {
-        int index = _articles.FindIndex(article => article.Id== updatedArticle.Id);
-        if (index != -1)
-        {
-            _articles[index] = updatedArticle;
-            SaveArticles();
-            GenerateSiteMap();
-        }
-    }
+
 
     public void GenerateSiteMap()
     {
@@ -81,13 +96,55 @@ public class ArticleService
                 writer.WriteElementString("loc", $"https://markhazleton.controlorigins.com/{article.Slug}");
                 writer.WriteElementString("lastmod", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
                 writer.WriteElementString("changefreq", article.ChangeFrequency);
-                writer.WriteEndElement(); 
+                writer.WriteEndElement();
             }
-            writer.WriteEndElement(); 
+            writer.WriteEndElement();
             writer.WriteEndDocument();
         }
     }
+    public static string GenerateSlug(string input)
+    {
+        // Convert to lowercase
+        string slug = input.ToLower();
 
+        // Replace spaces with hyphens
+        slug = Regex.Replace(slug, @"\s+", "-");
 
+        // Remove non-alphanumeric characters and hyphens
+        slug = Regex.Replace(slug, @"[^a-z0-9\-]", string.Empty);
+
+        // Remove multiple hyphens
+        slug = Regex.Replace(slug, @"-+", "-");
+
+        // Remove leading and trailing hyphens
+        slug = slug.Trim('-');
+
+        return slug;
+    }
+
+    public ArticleModel GetArticleById(int id)
+    {
+        var article = _articles.Where(w => w.Id == id).FirstOrDefault();
+        if (article == null)
+        {
+            return new ArticleModel() { };
+        }
+        return article;
+    }
+
+    public List<ArticleModel> GetArticles()
+    {
+        return _articles;
+    }
+
+    public void UpdateArticle(ArticleModel updatedArticle)
+    {
+        int index = _articles.FindIndex(article => article.Id == updatedArticle.Id);
+        if (index != -1)
+        {
+            _articles[index] = updatedArticle;
+            SaveArticles();
+        }
+    }
 }
 

@@ -1,0 +1,54 @@
+@page
+@model mwhWebAdmin.Pages.ArticleAddModel
+@{
+    ViewData["Title"] = "Article Add";
+}
+
+<div class="container mt-5">
+    <h1>Add Article</h1>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="Section" class="form-label">Section:</label>
+            <select class="form-control" asp-for="NewArticle.Section">
+                @foreach (var item in Model.Sections.OrderBy(o => 0))
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="Slug" class="form-label">Slug:</label>
+            <input type="text" class="form-control" asp-for="NewArticle.Slug" />
+        </div>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Name:</label>
+            <input type="text" class="form-control" asp-for="NewArticle.Name" />
+        </div>
+        <div class="mb-3">
+            <label for="Description" class="form-label">Description:</label>
+            <textarea class="form-control" asp-for="NewArticle.Description" rows="3" cols="50"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="ArticleContent" class="form-label">Article Content:</label>
+            <textarea class="form-control" asp-for="NewArticle.ArticleContent" rows="10" cols="50"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="ImgSrc" class="form-label">Image Source:</label>
+            <input type="text" class="form-control" asp-for="NewArticle.ImgSrc" />
+        </div>
+        <div class="mb-3">
+            <label for="ChangeFrequency" class="form-label">Change Frequency:</label>
+            <select class="form-control" asp-for="NewArticle.ChangeFrequency">
+                @foreach (var item in Model.ChangeFrequency.OrderBy(o => 0))
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</div>
