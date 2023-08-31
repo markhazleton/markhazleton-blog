@@ -1,7 +1,7 @@
 extends ../layouts/articles
 
 block pagehead
-  title Development - Building a Web Application to Manage Your Blog Articles
+  title Development - Building a Web Application to Manage My Blog
   meta(name='description', content='Development - Building a Web Application to Manage Your Blog Articles')
   meta(name='author', content='Mark Hazleton')
   link(rel='canonical', href='https://markhazleton.controlorigins.com/articles/building-a-web-application-to-manage-your-blog-articles.html')
@@ -10,7 +10,7 @@ block layout-content
 
   section#post.painteddesert-section.painteddesert-section-background
     .painteddesert-section-content
-      h2 Building a Web Application to Manage My Articles
+      h2 Building a Web Application to Manage My Blog
       strong A Journey into Web Content Management Systems
       p.
         Creating and managing a blog has become an essential part of sharing insights, experiences,
@@ -76,33 +76,170 @@ block layout-content
         managing the project data efficiently would be a bonus.
         Let's walk through the steps to create an interface that allows me to manage project data stored in a `projects.json` file.
         To get going quickly, I will utilize the power of ChatGPT prompts to generate code snippets along the way.
+      p.
+        To see the full Chat GPT log visit the shared
+        <a href='https://chat.openai.com/share/39e0c084-94b4-4d43-8362-a7dbf80cca72' target='_blank'>Chat GPT Session</a>
       dl
-        dt Requirements
-        dd.
-          Before we begin, make sure you have the following:
-          ul
-            li A JSON file named `projects.json` containing your project data.
-            li A pug mixin to read the project.json file and display the projects.
-        dt Step 1: Define the Project Model
-        dd.
+        dt Step 1: Create the Project Model and Service
+        dd
+          p.
             The first step is to create a C# model that represents a project.
             We'll create a `ProjectModel` class to hold project information.
+          p.
             We can use the ChatGPT prompt to help generate the code for this.
-        dt Step 2: Create a Project Service
-        dd.
-            Next, we need a service to handle the `projects.json` file.
-            Let's create a `ProjectService` class.
-            We'll use ChatGPT to generate the code for the service.
-        dt Step 3: Create a Razor Page for Managing Projects
-        dd.
+
+          blockquote.pre.
+            Create a model class called ProjectModel in C# for the following JSON file.
+            Create a Service to maintain the JSON file which consists of a list of the Project Model class. Here is the JSON for the projects.
+            [
+              {
+                "image": "assets/img/frogsfolly.png",
+                "p": "Frogsfolly",
+                "d": " My first website, setup to share photos with my family but is now a 'Kitchen Sink' of demos and test ideas. The site is built with  Web Project Mechanics CMS.",
+                "h": "https://frogsfolly.com"
+              },
+            }
+          p.
+            This returns the code for the Project Model.
+          pre.code.
+            // ProjectModel.cs
+            public class ProjectModel
+            {
+              public string Image { get; set; }
+              public string Title { get; set; }
+              public string Description { get; set; }
+              public string Link { get; set; }
+            }
+          p.
+            And the code for the Project Service.
+          pre.code.
+            // ProjectService.cs
+            using System.Collections.Generic;
+            using System.IO;
+            using Newtonsoft.Json;
+
+            public class ProjectService
+            {
+              private readonly string _jsonFilePath;
+              public ProjectService(string jsonFilePath)
+              {
+                _jsonFilePath = jsonFilePath;
+              }
+
+              public List&lt;ProjectModel&gt; GetProjects()
+              {
+                using (StreamReader reader = new StreamReader(_jsonFilePath))
+                {
+                  string json = reader.ReadToEnd();
+                  List&lt;ProjectModel&gt; projects = JsonConvert.DeserializeObject&lt;List&lt;ProjectModel&gt;&gt;(json);
+                  return projects;
+                }
+              }
+
+              public void SaveProjects(List&lt;ProjectModel&gt; projects)
+              {
+                string json = JsonConvert.SerializeObject(projects, Formatting.Indented);
+                File.WriteAllText(_jsonFilePath, json);
+              }
+            }
+
+        dt Step 2: Create a Razor Page for Managing Projects
+        dd
+          p.
             Now let's create a Razor Page to manage the projects.
             We'll use dependency injection to get the `ProjectService` instance.
-            The following code is generated with ChatGPT.
+            By continuing our session in ChatGPT, I don't have to re-enter the previous code or prompts.
+
+          blockquote.pre.
+            Create a Razor Page (Projects.cshtml and Projects.cshtml.cs) that gets the service through DI and displays all projects.
+
+          p.
+            This returns the code for the Razor page.
+
+          pre.code.
+            // Projects.cshtml
+            @page
+            @model ProjectsModel
+            @{
+              ViewData["Title"] = "Projects";
+            }
+            &lt;h1&gt;@ViewData[&quot;Title&quot;]&lt;/h1&gt;
+
+            &lt;table class=&quot;table&quot;&gt;
+              &lt;thead&gt;
+                &lt;tr&gt;
+                  &lt;th&gt;Image&lt;/th&gt;
+                  &lt;th&gt;Title&lt;/th&gt;
+                  &lt;th&gt;Description&lt;/th&gt;
+                  &lt;th&gt;Link&lt;/th&gt;
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody&gt;
+              @foreach (var project in Model.Projects)
+              {
+                &lt;tr&gt;
+                  &lt;td&gt;&lt;img src=&quot;@project.Image&quot; alt=&quot;@project.Title&quot; width=&quot;100&quot; /&gt;&lt;/td&gt;
+                  &lt;td&gt;@project.Title&lt;/td&gt;
+                  &lt;td&gt;@project.Description&lt;/td&gt;
+                  &lt;td&gt;&lt;a href=&quot;@project.Link&quot; target=&quot;_blank&quot;&gt;Visit&lt;/a&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+              }
+              &lt;/tbody&gt;
+              &lt;/table&gt;
+
+            // Projects.cshtml.cs
+            using Microsoft.AspNetCore.Mvc;
+            using Microsoft.AspNetCore.Mvc.RazorPages;
+            using System.Collections.Generic;
+
+            public class ProjectsModel : PageModel
+            {
+              private readonly ProjectService _projectService;
+              public ProjectsModel(ProjectService projectService)
+              {
+                _projectService = projectService;
+              }
+              public List&lt;ProjectModel&gt; Projects { get; private set; }
+              public void OnGet()
+              {
+                Projects = _projectService.GetProjects();
+              }
+            }
+        dt Step 3: Configure Project Service for Dependency Injection
+        dd
+          p.
+            Now that we have the service and Razor page, we can register the servive and point to the Projects.JSON file.
+        pre.code.
+          // Program.cs
+          // Register Services
+          builder.Services.AddSingleton&gt;ArticleService&lt;(provider =&gt;
+          {
+            return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")));
+          });
+          builder.Services.AddSingleton&gt;ProjectService&lt;(provider =>
+          {
+            return new ProjectService(Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json")));
+          });
+
+          // Add a Virtual Directory for our images
+          app.UseStaticFiles(new StaticFileOptions
+          {
+            FileProvider = new PhysicalFileProvider(Path.GetFullPath(Path.Combine("..", "..", "src", "assets", "img"))),
+            RequestPath = "/assets/img"
+          });
+
 
       p.
         And there you have it! You've successfully created an interface to manage projects in your personal blog using ASP.NET Core.
         With the power of ChatGPT prompts, you were able to quickly generate the necessary code snippets
         for the project model, service, and Razor Page. Now you can efficiently manage and showcase your projects on your blog.
+
+      .image-container
+        picture
+          img.text-center.img-fluid(src='/assets/img/MarkHazleton-ChatGPT-CMSProjectDisplay.png' alt='Display Projects')
+          h2.text-center Display Projects
+
+
       h3.
         Conclusion
       p.
@@ -111,6 +248,7 @@ block layout-content
         the journey is characterized by passion, creativity, and a commitment to improving workflows.  It is a variation
         on the addage "necessity is the mother of invention", in this case the necessity is the desire to create a
         better solution to a problem.
+
       p.
         Stay tuned for more articles on leveraging the capabilities of modern web development
         and AI-driven tools to enhance your projects and coding experience.
