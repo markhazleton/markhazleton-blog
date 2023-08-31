@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using mwhWebAdmin.Models;
 
 namespace mwhWebAdmin.Pages;
 
