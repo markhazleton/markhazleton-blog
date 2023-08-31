@@ -10,21 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-// Construct the relative path to articles.json
-string filePath = Path.Combine("..", "..", "src", "articles.json");
-string fullFilePath = Path.GetFullPath(filePath);
-
 builder.Services.AddSingleton<ArticleService>(provider =>
 {
-    return new ArticleService(fullFilePath);
+    return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")));
 });
 
-
-filePath = Path.Combine("..", "..", "src", "projects.json");
-fullFilePath = Path.GetFullPath(filePath);
 builder.Services.AddSingleton<ProjectService>(provider =>
 {
-    return new ProjectService(fullFilePath);
+    return new ProjectService(Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json")));
 });
 
 var app = builder.Build();
@@ -37,13 +30,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-// Serve files from the external folder
-var imagePath = Path.Combine("..", "..", "src", "assets", "img");
-var fullImagePath = Path.GetFullPath(imagePath);
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(fullImagePath),
+    FileProvider = new PhysicalFileProvider(Path.GetFullPath(Path.Combine("..", "..", "src", "assets", "img"))),
     RequestPath = "/assets/img"
 });
 
