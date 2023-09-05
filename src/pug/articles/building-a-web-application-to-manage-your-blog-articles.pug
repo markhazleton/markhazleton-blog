@@ -27,7 +27,7 @@ block layout-content
         Trying to keep the navigation, sitemap, and article constancy in sync is a tedious task.
         In the past, this has usually led to a journey of building their own CMS.
         So, I embarked on creating a quick application using the tools that I was familiar with.  In this case a Web Application with
-        razor pages. I think created a bespoke CMS to suit my unique needs on this blog.  The CMS is a web application that allows me to
+        razor pages. I created a bespoke CMS to suit my unique needs on this blog.  The CMS is a web application that allows me to
         manage the articles on this website and keep the sitemap, navigation, and footer links in sync with my new articles.
       p.
         My goal is to create a user-friendly solution to simplify my article management.
@@ -48,7 +48,9 @@ block layout-content
       h3.
         The Parallels
       p.
-        Web Project Mechanics Revisited For those familiar with the Web Project Mechanics (WPM) framework,
+        Web Project Mechanics Revisited For those familiar with the
+        <a href='/web-project-mechanics.html' target='_blank'>Web Project Mechanics</a>
+        (WPM) framework,
         The journey to build a blog management application may seem reminiscent of previous endeavors.
         Just as the WPM framework emerged from the need to streamline project management,
         this CMS venture arose from a passion for efficient content management.
@@ -150,14 +152,14 @@ block layout-content
                     using (StreamReader reader = new StreamReader(_jsonFilePath))
                     {
                         string json = reader.ReadToEnd();
-                        List&lt;ProjectModel&gt; projects = JsonConvert.DeserializeObject&lt;List&lt;ProjectModel&gt;&gt;(json);
-                        return projects;
+                        List&lt;ArticleModel&gt; articles = JsonConvert.DeserializeObject&lt;List&lt;ArticleModel&gt;&gt;(json);
+                        return articles;
                     }
               }
 
-              public void SaveProjects(List&lt;ProjectModel&gt; projects)
+              public void SaveArticles(List&lt;ArticleModel&gt; articles)
               {
-                string json = JsonConvert.SerializeObject(projects, Formatting.Indented);
+                string json = JsonConvert.SerializeObject(articles, Formatting.Indented);
                 File.WriteAllText(_jsonFilePath, json);
               }
             }
@@ -187,7 +189,6 @@ block layout-content
             &lt;table class=&quot;table&quot;&gt;
               &lt;thead&gt;
                 &lt;tr&gt;
-                  &lt;th&gt;Image&lt;/th&gt;
                   &lt;th&gt;Title&lt;/th&gt;
                   &lt;th&gt;Description&lt;/th&gt;
                   &lt;th&gt;Link&lt;/th&gt;
@@ -197,7 +198,6 @@ block layout-content
               @foreach (var Article in Model.Articles)
               {
                 &lt;tr&gt;
-                  &lt;td&gt;&lt;img src=&quot;@Article.Image&quot; alt=&quot;@Article.Title&quot; width=&quot;100&quot; /&gt;&lt;/td&gt;
                   &lt;td&gt;@Article.Title&lt;/td&gt;
                   &lt;td&gt;@Article.Description&lt;/td&gt;
                   &lt;td&gt;&lt;a href=&quot;@Article.Link&quot; target=&quot;_blank&quot;&gt;Visit&lt;/a&gt;&lt;/td&gt;

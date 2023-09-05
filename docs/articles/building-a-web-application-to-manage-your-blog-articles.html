@@ -16,7 +16,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1693906710706" />
+        <link rel="stylesheet" href="/css/styles.css?version=1693907180897" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -72,14 +72,18 @@
                     <p>Creating and managing a blog has become an essential part of sharing insights, experiences, and expertise with the world. For those who want to make it easier to write posts, having a Web Content Management System (CMS) to maintain their blog articles just makes sense.</p>
                     <p>This article explores my journey of developing a web application to manage the blog articles on this website. The article delves into the process and the parallels with the creation of the Web Project Mechanics (WPM) framework.</p>
                     <h3>The Quest for Better Web Content Management</h3>
-                    <p>As I add more articles, I increasingly have a desire to manage the articles in a more efficient and customized manner. Trying to keep the navigation, sitemap, and article constancy in sync is a tedious task. In the past, this has usually led to a journey of building their own CMS. So, I embarked on creating a quick application using the tools that I was familiar with. In this case a Web Application with razor pages. I think created a bespoke CMS to suit my unique needs on this blog. The CMS is a web application that allows me to manage the articles on this website and keep the sitemap, navigation, and footer links in sync with my new articles.</p>
+                    <p>As I add more articles, I increasingly have a desire to manage the articles in a more efficient and customized manner. Trying to keep the navigation, sitemap, and article constancy in sync is a tedious task. In the past, this has usually led to a journey of building their own CMS. So, I embarked on creating a quick application using the tools that I was familiar with. In this case a Web Application with razor pages. I created a bespoke CMS to suit my unique needs on this blog. The CMS is a web application that allows me to manage the articles on this website and keep the sitemap, navigation, and footer links in sync with my new articles.</p>
                     <p>My goal is to create a user-friendly solution to simplify my article management.</p>
                     <h3>From Vision to Reality</h3>
                     <p>Building the Blog Management Web Application The journey begins by architecting the web application. Drawing from previous experiences in web development, I choose to create a web application that employs the Model-View-Controller (MVC) pattern for a structured and organized codebase. With the vision set, the next step is to define the internal data structure, I wanted to keep the JSON file as my persistence layer for storing article information.</p>
                     <p>The heart of the application lies in the ArticleService, responsible for reading, updating, and adding articles. Leveraging the power of C# and ASP.NET Core, the service interacts with JSON files, handling article data with ease.</p>
                     <p>The service is more than just a simple data handler; it becomes the orchestrator of article-related actions, from CRUD operations to generating sitemap XML and even dynamically creating article templates.</p>
                     <h3>The Parallels</h3>
-                    <p>Web Project Mechanics Revisited For those familiar with the Web Project Mechanics (WPM) framework, The journey to build a blog management application may seem reminiscent of previous endeavors. Just as the WPM framework emerged from the need to streamline project management, this CMS venture arose from a passion for efficient content management.</p>
+                    <p>
+                        Web Project Mechanics Revisited For those familiar with the
+                        <a href="/web-project-mechanics.html" target="_blank">Web Project Mechanics</a>
+                        (WPM) framework, The journey to build a blog management application may seem reminiscent of previous endeavors. Just as the WPM framework emerged from the need to streamline project management, this CMS venture arose from a passion for efficient content management.
+                    </p>
                     <p>Just as WPM offers tools to simplify complex web development tasks, the CMS provides tools to streamline article creation, organization, and publication. The similarities between these projects highlight the author's affinity for crafting solutions that improve workflows and provide tailored experiences. Just as the WPM framework brought order to the chaos of web project management, this CMS tackles the challenges of blog management, empowering the author to create and share content effortlessly. Embracing the Journey As the journey unfolds, the parallels between creating a web application for blog management and crafting frameworks like WPM become apparent. The allure of transforming ideas into functional tools, refining workflows, and delivering value through technology is a driving force that propels developers forward. Just as master craftsman refines their skills over time, each project contributes to the developer's repertoire of expertise.</p>
                     <p>The adventure of building a CMS to manage blog articles is not merely a technical feat; it's a testament to the fusion of passion for writing and the art of coding. With every line of code, the author is not just creating software but crafting a tool that mirrors their values and enhance their capabilities.</p>
                     <h3>Creating an Interface to Manage Articles</h3>
@@ -137,14 +141,14 @@ public class ArticleService
         using (StreamReader reader = new StreamReader(_jsonFilePath))
         {
             string json = reader.ReadToEnd();
-            List&lt;ProjectModel&gt; projects = JsonConvert.DeserializeObject&lt;List&lt;ProjectModel&gt;&gt;(json);
-            return projects;
+            List&lt;ArticleModel&gt; articles = JsonConvert.DeserializeObject&lt;List&lt;ArticleModel&gt;&gt;(json);
+            return articles;
         }
   }
 
-  public void SaveProjects(List&lt;ProjectModel&gt; projects)
+  public void SaveArticles(List&lt;ArticleModel&gt; articles)
   {
-    string json = JsonConvert.SerializeObject(projects, Formatting.Indented);
+    string json = JsonConvert.SerializeObject(articles, Formatting.Indented);
     File.WriteAllText(_jsonFilePath, json);
   }
 }
@@ -168,7 +172,6 @@ public class ArticleService
 &lt;table class=&quot;table&quot;&gt;
   &lt;thead&gt;
     &lt;tr&gt;
-      &lt;th&gt;Image&lt;/th&gt;
       &lt;th&gt;Title&lt;/th&gt;
       &lt;th&gt;Description&lt;/th&gt;
       &lt;th&gt;Link&lt;/th&gt;
@@ -178,7 +181,6 @@ public class ArticleService
   @foreach (var Article in Model.Articles)
   {
     &lt;tr&gt;
-      &lt;td&gt;&lt;img src=&quot;@Article.Image&quot; alt=&quot;@Article.Title&quot; width=&quot;100&quot; /&gt;&lt;/td&gt;
       &lt;td&gt;@Article.Title&lt;/td&gt;
       &lt;td&gt;@Article.Description&lt;/td&gt;
       &lt;td&gt;&lt;a href=&quot;@Article.Link&quot; target=&quot;_blank&quot;&gt;Visit&lt;/a&gt;&lt;/td&gt;
