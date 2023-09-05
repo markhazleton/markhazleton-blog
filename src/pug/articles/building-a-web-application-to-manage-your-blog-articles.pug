@@ -15,17 +15,17 @@ block layout-content
       p.
         Creating and managing a blog has become an essential part of sharing insights, experiences,
         and expertise with the world.
-        For those who want to make it easier for writing posts, having a Web Content Management System (CMS)
+        For those who want to make it easier to write posts, having a Web Content Management System (CMS)
         to maintain their blog articles just makes sense.
       p.
         This article explores my journey of developing a web application to manage the blog articles on this website.
-        The article devles into the process and the parallels with the creation of the Web Project Mechanics (WPM) framework.
+        The article delves into the process and the parallels with the creation of the Web Project Mechanics (WPM) framework.
       h3.
         The Quest for Better Web Content Management
       p.
         As I add more articles, I increasingly have a desire to manage the articles in a more efficient and customized manner.
         Trying to keep the navigation, sitemap, and article constancy in sync is a tedious task.
-        In the past this has usually let to a journey of building their own CMS.
+        In the past, this has usually led to a journey of building their own CMS.
         So, I embarked on creating a quick application using the tools that I was familiar with.  In this case a Web Application with
         razor pages. I think created a bespoke CMS to suit my unique needs on this blog.  The CMS is a web application that allows me to
         manage the articles on this website and keep the sitemap, navigation, and footer links in sync with my new articles.
@@ -38,7 +38,7 @@ block layout-content
         Drawing from previous experiences in web development, I choose to create a web application that employs
         the Model-View-Controller (MVC) pattern for a structured and organized codebase. With the vision set,
         the next step is to define the internal data structure,
-        I wanted to keep the JSON file as my persitance layer for storing article information.
+        I wanted to keep the JSON file as my persistence layer for storing article information.
       p.
         The heart of the application lies in the ArticleService, responsible for reading, updating, and adding articles.
         Leveraging the power of C# and ASP.NET Core, the service interacts with JSON files, handling article data with ease.
@@ -49,9 +49,9 @@ block layout-content
         The Parallels
       p.
         Web Project Mechanics Revisited For those familiar with the Web Project Mechanics (WPM) framework,
-        the journey to build a blog management application may seem reminiscent of previous endeavors.
+        The journey to build a blog management application may seem reminiscent of previous endeavors.
         Just as the WPM framework emerged from the need to streamline project management,
-        this CMS venture arises from a passion for efficient content management.
+        this CMS venture arose from a passion for efficient content management.
       p.
         Just as WPM offers tools to simplify complex web development tasks,
         the CMS provides tools to streamline article creation, organization, and publication.
@@ -62,13 +62,201 @@ block layout-content
         Embracing the Journey As the journey unfolds, the parallels between creating a web application for
         blog management and crafting frameworks like WPM become apparent.
         The allure of transforming ideas into functional tools, refining workflows, and delivering value through technology
-        is a driving force that propels developers forward. Just as a master craftsman refines their skills over time,
+        is a driving force that propels developers forward. Just as master craftsman refines their skills over time,
         each project contributes to the developer's repertoire of expertise.
       p.
         The adventure of building a CMS to manage blog articles is not merely a technical feat; it's a
         testament to the fusion of passion for writing and the art of coding.
         With every line of code, the author is not just creating software but crafting a tool that mirrors
-        their values and enhances their capabilities.
+        their values and enhance their capabilities.
+
+      h3 Creating an Interface to Manage Articles
+      p.
+        I have a JSON file that lists all the articles that I have written for this site.   The article JSON file
+        is used to create navigation and a sitemap for the site.
+        Let's walk through the steps to create an interface that allows me to manage article data stored in a `articles.json` file.
+        To get going quickly, I will utilize the power of ChatGPT prompts to generate code snippets along the way.
+
+      dl
+        dt Step 1: Create the Article Model and Service
+        dd
+          p.
+            The first step is to create a C# model that represents a project.
+            We'll create an `ArticleModel` class to hold article metadata.
+          p.
+            We can use the ChatGPT prompt to help generate the code for this.
+
+          blockquote.pre.
+            Create a model class called ArticleModel in C# for the following JSON file.
+            Create a Service to maintain the JSON file which consists of a list of the Article Model class. Here is the JSON for the articles.
+            [
+              {
+                "id": 0,
+                "Section": "Personal Philosophy",
+                "slug": "sidetrackedbysizzle.html",
+                "name": "Sidetracked by Sizzle",
+                "content": null,
+                "description": "Description for Sidetracked by Sizzle",
+                "img_src": "assets/img/ArgostoliGreeceBeach.jpg",
+                "lastmod": "2023-09-05",
+                "changefreq": "daily"
+              },
+            }
+          p.
+            This returns the code for the Article Model.
+          pre.code.
+            // ArticleModel.cs
+            public class ArticleModel
+            {
+                [JsonPropertyName("id")]
+                public int Id { get; set; }
+
+                [JsonPropertyName("Section")]
+                public string Section { get; set; }
+
+                [JsonPropertyName("slug")]
+                public string Slug { get; set; }
+
+                [JsonPropertyName("name")]
+                public string Name { get; set; }
+
+                [JsonPropertyName("content")]
+                public string ArticleContent { get; set; }
+
+                [JsonPropertyName("description")]
+                public string Description { get; set; }
+
+                [JsonPropertyName("img_src")]
+                public string ImgSrc { get; set; }
+
+                [JsonPropertyName("lastmod")]
+                public string LastModified { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+
+                [JsonPropertyName("changefreq")]
+                public string ChangeFrequency { get; set; } = "monthly";
+            }
+          p.
+            And the code for the Article Service.
+          pre.code.
+            // ArticleService.cs
+            public class ArticleService
+            {
+                private List&lt;ArticleModel&gt; _articles;
+                private readonly string _articlesDirectory;
+                private readonly string _filePath;
+
+                public List&lt;ArticleModel&gt; GetArticles()
+                {
+                    using (StreamReader reader = new StreamReader(_jsonFilePath))
+                    {
+                        string json = reader.ReadToEnd();
+                        List&lt;ProjectModel&gt; projects = JsonConvert.DeserializeObject&lt;List&lt;ProjectModel&gt;&gt;(json);
+                        return projects;
+                    }
+              }
+
+              public void SaveProjects(List&lt;ProjectModel&gt; projects)
+              {
+                string json = JsonConvert.SerializeObject(projects, Formatting.Indented);
+                File.WriteAllText(_jsonFilePath, json);
+              }
+            }
+
+        dt Step 2: Create a Razor Page for Managing Articles
+        dd
+          p.
+            Now let's create a Razor Page to manage the Articles.
+            We'll use dependency injection to get the `ArticleService` instance.
+            By continuing our session in ChatGPT, I don't have to re-enter the previous code or prompts.
+
+          blockquote.pre.
+            Create a Razor Page (Articles.cshtml and Articles.cshtml.cs) that gets the service through DI and displays all Articles.
+
+          p.
+            This returns the code for the Razor page.
+
+          pre.code.
+            // Articles.cshtml
+            @page
+            @model ArticlesModel
+            @{
+              ViewData["Title"] = "Articles";
+            }
+            &lt;h1&gt;@ViewData[&quot;Title&quot;]&lt;/h1&gt;
+
+            &lt;table class=&quot;table&quot;&gt;
+              &lt;thead&gt;
+                &lt;tr&gt;
+                  &lt;th&gt;Image&lt;/th&gt;
+                  &lt;th&gt;Title&lt;/th&gt;
+                  &lt;th&gt;Description&lt;/th&gt;
+                  &lt;th&gt;Link&lt;/th&gt;
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody&gt;
+              @foreach (var Article in Model.Articles)
+              {
+                &lt;tr&gt;
+                  &lt;td&gt;&lt;img src=&quot;@Article.Image&quot; alt=&quot;@Article.Title&quot; width=&quot;100&quot; /&gt;&lt;/td&gt;
+                  &lt;td&gt;@Article.Title&lt;/td&gt;
+                  &lt;td&gt;@Article.Description&lt;/td&gt;
+                  &lt;td&gt;&lt;a href=&quot;@Article.Link&quot; target=&quot;_blank&quot;&gt;Visit&lt;/a&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+              }
+              &lt;/tbody&gt;
+              &lt;/table&gt;
+
+            // Articles.cshtml.cs
+            using Microsoft.AspNetCore.Mvc;
+            using Microsoft.AspNetCore.Mvc.RazorPages;
+            using System.Collections.Generic;
+
+            public class ArticlesModel : PageModel
+            {
+              private readonly ArticleService _ArticleService;
+              public ArticlesModel(ArticleService ArticleService)
+              {
+                _ArticleService = ArticleService;
+              }
+              public List&lt;ArticleModel&gt; Articles { get; private set; }
+              public void OnGet()
+              {
+                Articles = _ArticleService.GetArticles();
+              }
+            }
+        dt Step 3: Configure Article Service for Dependency Injection
+        dd
+          p.
+            Now that we have the service and Razor page, we can register the service and point to the Articles.JSON file.
+        pre.code.
+          // Program.cs
+          // Register Services
+          builder.Services.AddSingleton&gt;ArticleService&lt;(provider =&gt;
+          {
+            return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")));
+          });
+          builder.Services.AddSingleton&gt;ArticleService&lt;(provider =>
+          {
+            return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "Articles.json")));
+          });
+
+          // Add a Virtual Directory for our images
+          app.UseStaticFiles(new StaticFileOptions
+          {
+            FileProvider = new PhysicalFileProvider(Path.GetFullPath(Path.Combine("..", "..", "src", "assets", "img"))),
+            RequestPath = "/assets/img"
+          });
+
+      p.
+        And there you have it! I have created an interface to manage Articles in my blog using ASP.NET Core.
+        With the power of ChatGPT prompts, I was able to quickly generate the necessary code snippets
+        for the Article model, service, and Razor Page. Now I can efficiently manage Articles on my blog.
+
+      .image-container
+        picture
+          img.text-center.img-fluid(src='/assets/img/MarkHazleton-ChatGPT-CMSArticleEdit.png' alt='Edit Articles' title='Edit Articles' width='100%')
+
+
 
       h3 Creating an Interface to Manage Projects
       p.
@@ -236,8 +424,7 @@ block layout-content
 
       .image-container
         picture
-          img.text-center.img-fluid(src='/assets/img/MarkHazleton-ChatGPT-CMSProjectDisplay.png' alt='Display Projects')
-          h2.text-center Display Projects
+          img.text-center.img-fluid(src='/assets/img/MarkHazleton-ChatGPT-CMSProjectDisplay.png' alt='Display Projects' title='Display Projects' width='100%')
 
 
       h3.
