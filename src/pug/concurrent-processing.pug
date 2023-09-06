@@ -10,8 +10,9 @@ block layout-content
 
   section#post.painteddesert-section.painteddesert-section-background
     .painteddesert-section-content
-      h1 Learning Concurrent Processing Through Code
-      p.
+      h1.mb-0 Concurrent Processing
+      .subheading.mb-3 Learning Concurrent Processing Through Code
+      p.lead.
         As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques.
         Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.
       p.
@@ -19,7 +20,7 @@ block layout-content
         However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like
         race conditions and deadlocks.
         To dive into this topic, I decided to develop a C# console application that would allow me to experiment
-        and learn in a practical way.
+        and learn practically.
       p.
         Since this was a one-off project, I didn't want to spend too much time on the user interface.
         I used my sandbox repository to create a simple console application that would allow me to focus on the core functionality.
@@ -30,77 +31,73 @@ block layout-content
         Armed with this initial guidance, I started writing the code, excited about the possibilities ahead.
         Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.
 
-      pre.code
-        code.
+      pre.code.
 
-          const int maxConcurrency = 100; // Maximum concurrent tasks allowed
-          SemaphoreSlim semaphore = new(maxConcurrency);
-          List&lt;Task&gt; tasks = new();
-          int? taskId = 0;
-          while (taskId is not null)
+        const int maxConcurrency = 100; // Maximum concurrent tasks allowed
+        SemaphoreSlim semaphore = new(maxConcurrency);
+        List&lt;Task&gt; tasks = new();
+        int? taskId = 0;
+        while (taskId is not null)
+        {
+          Task task = ProcessAsync(taskId.Value, tasks.Count, await AwaitSemaphoreAsync(semaphore), semaphore);
+          tasks.Add(task);
+          taskId = GetNextTaskId(taskId);
+
+          if (tasks.Count >= maxConcurrency)
           {
-            Task task = ProcessAsync(taskId.Value, tasks.Count, await AwaitSemaphoreAsync(semaphore), semaphore);
-            tasks.Add(task);
-            taskId = GetNextTaskId(taskId);
-
-            if (tasks.Count >= maxConcurrency)
-            {
-              Task finishedTask = await Task.WhenAny(tasks);
-              tasks.Remove(finishedTask);
-            }
+            Task finishedTask = await Task.WhenAny(tasks);
+            tasks.Remove(finishedTask);
           }
-          await Task.WhenAll(tasks);
+        }
+        await Task.WhenAll(tasks);
 
       p.
         I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.
-      pre.code
-        code.
+      pre.code.
 
-          //  Wait for semaphore to be released so that next task can start
-          static async Task&lt;long&gt; AwaitSemaphoreAsync(SemaphoreSlim semaphore)
-          {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            await semaphore.WaitAsync();
-            stopwatch.Stop();
-            return stopwatch.ElapsedTicks;
-          }
+        //  Wait for semaphore to be released so that next task can start
+        static async Task&lt;long&gt; AwaitSemaphoreAsync(SemaphoreSlim semaphore)
+        {
+          Stopwatch stopwatch = Stopwatch.StartNew();
+          await semaphore.WaitAsync();
+          stopwatch.Stop();
+          return stopwatch.ElapsedTicks;
+        }
 
       p.
         I created a mock async processing method that simulates work by delaying for a random amount of time.
         I also added telemetry data so that I could track the task ID, task count, semaphore count, and wait time.
         I used the `Task.Delay` method to simulate work, but in a real-world application, this would be replaced with actual work.
-        The radom delay was added to simulate the dynamic nature of concurrent processing.
+        The random delay was added to simulate the dynamic nature of concurrent processing.
 
-      pre.code
-        code.
+      pre.code.
 
-          // Mock Async Task to simulate work
-          static async Task ProcessAsync(int taskId, int taskCount, long waitTicks, SemaphoreSlim semaphore)
+        // Mock Async Task to simulate work
+        static async Task ProcessAsync(int taskId, int taskCount, long waitTicks, SemaphoreSlim semaphore)
+        {
+          try
           {
-            try
-            {
-              await Task.Delay(TimeSpan.FromMilliseconds(new Random().Next(1, 500)));
-              Console.WriteLine($"Task:{taskId:D3} T:{taskCount} S:{semaphore.CurrentCount} W:{waitTicks}");
-            }
-            finally
-            {
-              semaphore.Release();
-            }
+            await Task.Delay(TimeSpan.FromMilliseconds(new Random().Next(1, 500)));
+            Console.WriteLine($"Task:{taskId:D3} T:{taskCount} S:{semaphore.CurrentCount} W:{waitTicks}");
           }
+          finally
+          {
+            semaphore.Release();
+          }
+        }
 
 
       p.
         Finally, I created a function to generate the next task ID.  This is how I controlled the number of tasks that were created.
 
-      pre.code
-        code.
+      pre.code.
 
-          // Get Next Task ID
-          static int? GetNextTaskId(int? taskId)
-          {
-            if (taskId &lt; 1000) return taskId + 1;
-            else return null;
-          }
+        // Get Next Task ID
+        static int? GetNextTaskId(int? taskId)
+        {
+          if (taskId &lt; 1000) return taskId + 1;
+          else return null;
+        }
 
       h2 Iterating and Learning
       p.
@@ -115,16 +112,15 @@ block layout-content
         With each iteration of the code, I ran the application and observed its behavior.
         The output of the program provided valuable insights into how tasks were being managed,
         the time each task spent waiting for a semaphore, and the overall concurrency control.
-      pre.code
-        code.
-          ...
-          Task:061 T:61 S:2 W:2
-          Task:070 T:70 S:0 W:4
-          Task:037 T:37 S:0 W:2
-          Task:018 T:18 S:3 W:2
-          Task:023 T:23 S:1 W:2
-          Task:026 T:26 S:2 W:3
-          ...
+      pre.code.
+        ...
+        Task:061 T:61 S:2 W:2
+        Task:070 T:70 S:0 W:4
+        Task:037 T:37 S:0 W:2
+        Task:018 T:18 S:3 W:2
+        Task:023 T:23 S:1 W:2
+        Task:026 T:26 S:2 W:3
+        ...
       p.
         The output highlighted the dynamic nature of concurrent processing,
         where tasks were processed and released in a controlled manner,
@@ -194,7 +190,7 @@ block layout-content
 
         dt Error Handling
         dd.
-          Implement robust error handling mechanisms for concurrent tasks.
+          Implement robust error-handling mechanisms for concurrent tasks.
           Unhandled exceptions in one task should not crash the entire application.
 
         dt Testing and Debugging
