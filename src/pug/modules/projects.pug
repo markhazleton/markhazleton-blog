@@ -2,9 +2,7 @@
 mixin carousel-caption(item)
   .carousel-caption
     unless !item.h1
-      h1 #{item.h1}
     unless !item.p
-      p #{item.p}
     unless !item.button
       p
         a.btn.btn-lg.btn-primary(href=item.button.url role="button") #{item.button.caption}
@@ -26,20 +24,24 @@ mixin carousel(id,items)
       each item,index in items
         if(index === 0)
           .carousel-item.active
-            .containter.text-center
-              h5
-                a(href=item.h target='_blank'  rel="noopener noreferrer" title=item.p )=item.p
-              .text-black=item.d
-              img.img-fluid(src=item.image title=item.h  alt=item.p)
-              +carousel-caption(item)
+            .card
+                .card-header.text-center
+                    a(href=item.h target='_blank'  rel="noopener noreferrer" title=item.p )=item.p
+                .card-body
+                    img.img-fluid(src=item.image title=item.h  alt=item.p)
+                    p.text-black=item.d
+                    p
+          +carousel-caption(item)
         else
           .carousel-item
-            .containter.text-center
-              h5
-                a(href=item.h  target='_blank'  rel="noopener noreferrer" title=item.p )=item.p
-              .text-black=item.d
-              img.img-fluid(src=item.image title=item.h alt=item.p)
-              +carousel-caption(item)
+            .card
+                .card-header.text-center
+                    a(href=item.h target='_blank'  rel="noopener noreferrer" title=item.p )=item.p
+                .card-body
+                    img.img-fluid(src=item.image title=item.h  alt=item.p)
+                    p.text-black=item.d
+                    p
+          +carousel-caption(item)
 
     //-  Controls
     button.carousel-control-prev(data-bs-target="#carousel-" + id, data-bs-slide="prev", type="button")
