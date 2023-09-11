@@ -1,0 +1,45 @@
+@page
+@model ProjectEditModel
+@{
+    ViewData["Title"] = "Edit Project";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="Title" class="form-control" value="@Model.Project.Title" />
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="Description" class="form-control">@Model.Project.Description</textarea>
+    </div>
+    <div class="form-group">
+        <label for="link">Link</label>
+        <input type="text" id="link" name="Link" class="form-control" value="@Model.Project.Link" />
+    </div>
+
+    <div class="form-group">
+    <label for="image">Image</label>
+    <select id="image" name="Image" class="form-control">
+        <option value="">Select an Image</option>
+        @foreach (var imagePath in Model.AvailableImages as List<string>)
+        {
+            if (imagePath == Model.Project.Image)
+            {
+                <option value="@imagePath" selected="selected">@imagePath</option>
+            }
+            else
+            {
+                <option value="@imagePath">@imagePath</option>
+            }
+        }
+    </select>
+</div>
+
+
+
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
