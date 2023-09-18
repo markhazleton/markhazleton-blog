@@ -16,7 +16,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1694460221862" />
+        <link rel="stylesheet" href="/css/styles.css?version=1695010830928" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -71,11 +71,36 @@
                     <div class="subheading mb-3">Learning Concurrent Processing Through Code</div>
                     <p class="lead">As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques. Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.</p>
                     <p>The idea of managing multiple tasks simultaneously has always fascinated me. However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like race conditions and deadlocks. To dive into this topic, I decided to develop a C# console application that would allow me to experiment and learn practically.</p>
+                    <h2>Considerations for Concurrent Processing</h2>
+                    <dl>
+                        <dt>Task Autonomy and Independence</dt>
+                        <dd>In order for multiple tasks to effectively run concurrently, each task must encapsulate an autonomous and self-contained unit of functionality. Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources. By embodying its own inputs, logic, and outputs, an autonomous task can be executed without hindrance, allowing it to be scheduled and managed alongside other tasks concurrently. This approach not only enhances the efficiency and responsiveness of the overall system but also minimizes the potential for contention and synchronization issues.</dd>
+                        <dt>Synchronization</dt>
+                        <dd>Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency among multiple threads or tasks. Techniques like locks, semaphores, and monitors can be used to control access to shared resources.</dd>
+                        <dt>Scalability</dt>
+                        <dd>Consider the scalability of your concurrent processing solution. Will it perform well as the number of concurrent tasks or threads increases? Design your system to handle increased load without degrading performance.</dd>
+                        <dt>Deadlocks and Livelocks</dt>
+                        <dd>Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release to prevent these issues.</dd>
+                        <dt>Resource Management</dt>
+                        <dd>Properly manage resources such as memory, file handles, and network connections. Failing to release resources can lead to resource exhaustion and degrade system performance.</dd>
+                        <dt>Thread Safety</dt>
+                        <dd>Ensure that your code is thread-safe. Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously. Use techniques like immutable data, synchronization, and thread-local storage.</dd>
+                        <dt>Load Balancing</dt>
+                        <dd>Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources. Load balancing helps prevent scenarios where some threads are idle while others are overloaded.</dd>
+                        <dt>Task Granularity</dt>
+                        <dd>Determine the appropriate level of task granularity. Too fine-grained tasks can lead to overhead due to thread management, while too coarse-grained tasks might not fully utilize available resources.</dd>
+                        <dt>Error Handling</dt>
+                        <dd>Implement robust error-handling mechanisms for concurrent tasks. Unhandled exceptions in one task should not crash the entire application.</dd>
+                        <dt>Testing and Debugging</dt>
+                        <dd>Testing concurrent code is challenging. Consider using techniques like stress testing and race condition detection tools to identify issues. Debugging concurrent issues can be complex, so use tools and techniques that help diagnose problems.</dd>
+                        <dt>Communication and Coordination</dt>
+                        <dd>Threads or tasks might need to communicate and coordinate with each other. Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.</dd>
+                    </dl>
                     <p>
                         Since this was a one-off project, I didn't want to spend too much time on the user interface. I used my sandbox repository to create a simple console application that would allow me to focus on the core functionality.
-                        <a href="https://github.com/markhazleton/sandbox/tree/main/ConcurrentProcessing" target="_blank" rel="noopener noreferrer">You can view the code on GitHub.</a>
+                        <a href="https://github.com/markhazleton/ConcurrentProcessing" target="_blank" rel="noopener noreferrer">You can view the code on GitHub.</a>
                     </p>
-                    <p>I started with a ChatGPT prompt that introduced me to the basics of concurrent processing. Armed with this initial guidance, I started writing the code, excited about the possibilities ahead. Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.</p>
+                    <p>I started with a ChatGPT prompt that introduced me to the basics of concurrent processing. Armed with this initial guidance, I started writing the code. Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.</p>
                     <pre class="code">
 const int maxConcurrency = 100; // Maximum concurrent tasks allowed
 SemaphoreSlim semaphore = new(maxConcurrency);
@@ -155,34 +180,9 @@ Task:026 T:26 S:2 W:3
                     <h2>Celebrating Success</h2>
                     <p>After several iterations, moments of frustration, and numerous debug sessions, I finally achieved my desired result. The application was now a well-functioning demonstration of concurrent processing, showcasing my newfound understanding of synchronization and resource management.</p>
                     <p>The journey was not just about the code; it was about the learning process itself. Developing this console application was a great learning tool that allowed me to grasp the intricacies of concurrent processing hands-on. It transformed abstract concepts into tangible knowledge.</p>
-                    <h2>Important Considerations for Concurrent Processing</h2>
-                    <dl>
-                        <dt>Task Autonomy and Independence</dt>
-                        <dd>In order for multiple tasks to effectively run concurrently, each task must encapsulate an autonomous and self-contained unit of functionality. Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources. By embodying its own inputs, logic, and outputs, an autonomous task can be executed without hindrance, allowing it to be scheduled and managed alongside other tasks concurrently. This approach not only enhances the efficiency and responsiveness of the overall system but also minimizes the potential for contention and synchronization issues.</dd>
-                        <dt>Synchronization</dt>
-                        <dd>Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency among multiple threads or tasks. Techniques like locks, semaphores, and monitors can be used to control access to shared resources.</dd>
-                        <dt>Scalability</dt>
-                        <dd>Consider the scalability of your concurrent processing solution. Will it perform well as the number of concurrent tasks or threads increases? Design your system to handle increased load without degrading performance.</dd>
-                        <dt>Deadlocks and Livelocks</dt>
-                        <dd>Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release to prevent these issues.</dd>
-                        <dt>Resource Management</dt>
-                        <dd>Properly manage resources such as memory, file handles, and network connections. Failing to release resources can lead to resource exhaustion and degrade system performance.</dd>
-                        <dt>Thread Safety</dt>
-                        <dd>Ensure that your code is thread-safe. Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously. Use techniques like immutable data, synchronization, and thread-local storage.</dd>
-                        <dt>Load Balancing</dt>
-                        <dd>Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources. Load balancing helps prevent scenarios where some threads are idle while others are overloaded.</dd>
-                        <dt>Task Granularity</dt>
-                        <dd>Determine the appropriate level of task granularity. Too fine-grained tasks can lead to overhead due to thread management, while too coarse-grained tasks might not fully utilize available resources.</dd>
-                        <dt>Error Handling</dt>
-                        <dd>Implement robust error-handling mechanisms for concurrent tasks. Unhandled exceptions in one task should not crash the entire application.</dd>
-                        <dt>Testing and Debugging</dt>
-                        <dd>Testing concurrent code is challenging. Consider using techniques like stress testing and race condition detection tools to identify issues. Debugging concurrent issues can be complex, so use tools and techniques that help diagnose problems.</dd>
-                        <dt>Communication and Coordination</dt>
-                        <dd>Threads or tasks might need to communicate and coordinate with each other. Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.</dd>
-                    </dl>
                     <h2>Conclusion</h2>
                     <p>The world of concurrent processing is complex and fascinating. Through the development of this C# console application, I gained valuable insights into managing multiple tasks simultaneously while avoiding common pitfalls. The iterative process of refining the code helped me internalize the concepts and apply them effectively.</p>
-                    <p>I encourage fellow developers to embark on similar journeys of learning through practical coding. It's one thing to read about a topic, but a whole different experience to see it in action and work through challenges firsthand. With the right resources, curiosity, and determination, you can turn any coding endeavor into a powerful learning tool.</p>
+                    <p>I encourage fellow developers to try learning through practical coding. It's one thing to read about a topic, but a whole different experience to see it in action and work through challenges firsthand. With the right resources, curiosity, and determination, you can turn any coding endeavor into a powerful learning tool.</p>
                     <p>Happy coding and exploring the world of concurrency!</p>
                 </div>
             </section>
