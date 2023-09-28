@@ -9,6 +9,7 @@ public class ArticleAddModel : PageModel
     private readonly ArticleService _articleService;
     public List<string> Sections { get; } = new List<string>
     {
+        "ChatGPT",
         "Development",
         "Personal Philosophy",
         "Project Mechanics",
