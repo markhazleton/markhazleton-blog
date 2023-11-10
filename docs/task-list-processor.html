@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Master Concurrent Async Tasks in .NET with TaskListProcessor</title>
+        <meta name="description" content="Learn to manage multiple async tasks in .NET with TaskListProcessor. Dive into error handling, telemetry, and scalability for robust applications." />
+        <meta name="keywords" content="TaskListProcessor, .NET concurrency, async tasks, error handling, task telemetry, application scalability, .NET async patterns, C# task management" />
+        <meta name="author" content="Mark Hazleton" />
+        <link rel="canonical" href="https://github.com/markhazleton/task-list-processor.html" />
+        <meta property="og:title" content="Master Concurrent Async Tasks in .NET with TaskListProcessor" />
+        <meta property="og:description" content="Step up your .NET game by mastering concurrent async tasks using TaskListProcessor. Perfect for building scalable and robust .NET applications." />
+        <meta property="og:url" content="https://github.com/markhazleton/TaskListProcessor" />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content="assets/img/Task-List-Processor-Dashboard.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Master Concurrent Async Tasks in .NET with TaskListProcessor" />
+        <meta name="twitter:description" content="Exclusive insights into managing async tasks in .NET with efficiency. Learn about TaskListProcessor's advanced error handling and performance tracking." />
+        <meta name="twitter:image" content="assets/img/Task-List-Processor-Dashboard.png" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="English" />
+        <meta name="revisit-after" content="7 days" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="/css/styles.css?version=1699574569841" />
+        <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+        <script>
+            (function (c, l, a, r, i, t, y) {
+                c[a] =
+                    c[a] ||
+                    function () {
+                        (c[a].q = c[a].q || []).push(arguments);
+                    };
+                t = l.createElement(r);
+                t.async = 1;
+                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+            })(window, document, 'clarity', 'script', 'd628hovv63');
+        </script>
+    </head>
+    <body class="sidetracked-body" id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
+                <span class="d-block d-lg-none">Mark Hazleton</span>
+                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#articles">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#education">Education</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Page Content-->
+        <div class="container-fluid p-0">
+            <section class="painteddesert-section painteddesert-section-background" id="post">
+                <div class="painteddesert-section-content">
+                    <h1 class="mb-0">Task List Processing</h1>
+                    <div class="subheading mb-3">Mastering Concurrent Operations in .NET with TaskListProcessor</div>
+                    <p class="lead">In application development, efficiency is not just a goal; it's a necessity. As .NET developers, we often encounter scenarios where we must juggle multiple operations simultaneously. The TaskListProcessor class addresses these issues with efficiency, handling multiple asynchronous operations with grace and precision. It offers a structured approach to running concurrent tasks, each potentially returning different types of results, which is a significant step towards writing scalable and maintainable code in .Net applications.</p>
+                    <dl>
+                        <dt>Issue: Diverse Return Types</dt>
+                        <dd>A common issue with concurrent async methods in .Net is the handling of different return types. Traditional approaches often lead to tangled code, where the management of various tasks becomes cumbersome and error-prone.</dd>
+                        <dt>Issue: Error Propagation</dt>
+                        <dd>Without proper structure, errors from individual tasks can propagate and cause widespread failures. This necessitates a robust mechanism to encapsulate errors and handle them without affecting the entire task set.</dd>
+                        <dt>Solution: TaskListProcessor</dt>
+                        <dd>The TaskListProcessor class addresses these issues head-on. It provides a cohesive way to manage a list of tasks, regardless of their return types, and includes built-in error handling to log exceptions and continue operation.</dd>
+                        <dt>Benefit: Enhanced Error Handling</dt>
+                        <dd>It features methods like WhenAllWithLoggingAsync, which waits for all tasks to complete and logs any occurring errors, thereby enhancing the standard Task.WhenAll with much-needed error oversight.</dd>
+                        <dt>Benefit: Flexibility and Scalability</dt>
+                        <dd>By using generics and encapsulating results in a TaskResult object, it offers flexibility and scalability, allowing for various tasks to be processed concurrently — a perfect match for the demands of modern software development.</dd>
+                    </dl>
+                    <h2>The WhenAllWithLoggingAsync Method</h2>
+                    <dl>
+                        <dt>Enhanced Error Handling</dt>
+                        <dd>The WhenAllWithLoggingAsync method improves upon Task.WhenAll by providing robust error handling. Instead of allowing exceptions to propagate and potentially crash the application, it catches exceptions and uses an ILogger to log them, ensuring that all task exceptions are noted and can be reviewed later for debugging and analysis.</dd>
+                        <dt>Consolidated Task Logging</dt>
+                        <dd>By taking an ILogger as a parameter, this method allows for centralized logging of task exceptions. This means that all errors across various tasks can be logged in a consistent manner, which is essential for maintaining a coherent log file format and integrating with centralized logging solutions or services.</dd>
+                        <dt>Non-Blocking Error Notification</dt>
+                        <dd>When a task within Task.WhenAll fails, it throws an AggregateException which can halt the execution flow if not handled properly. WhenAllWithLoggingAsync method, on the other hand, logs the error internally and allows the program to continue execution, which is particularly beneficial for non-critical tasks that should not block the overall process.</dd>
+                        <dt>Improved Debugging and Maintenance</dt>
+                        <dd>With detailed error information logged by WhenAllWithLoggingAsync, developers can more easily pinpoint the source of issues. This level of detail aids in faster debugging and simplifies maintenance, especially in complex systems with many concurrent tasks.</dd>
+                    </dl>
+                    <h2>The GetTaskResultAsync Method</h2>
+                    <dl>
+                        <dt>Method Signature</dt>
+                        <dd>The GetTaskResultAsync method enhances a simple async call by wrapping it with telemetry features. It utilizes a Stopwatch to measure and record the time taken for the task's execution, providing valuable performance metrics.</dd>
+                        <dt>Detail error checking and logging</dt>
+                        <dd>Error checking is robustly integrated into the method. It captures any exceptions thrown during the task's execution, logging the error along with the task's name and the elapsed time. This ensures that errors are not only caught but are also recorded for further analysis.</dd>
+                        <dt>Explain execution isolation</dt>
+                        <dd>Execution isolation is achieved by managing each task's execution in a separate logical block, allowing for independent handling. This means the failure of one task does not impede the execution of others, promoting better fault tolerance within the system.</dd>
+                        <dt>Discuss the result object flexibility</dt>
+                        <dd>The method is designed to be generic, enabling the return of various types of objects from different tasks within a single list. By encapsulating the result in a TaskResult object, it allows for heterogeneous task processing, making the method highly versatile.</dd>
+                    </dl>
+                    <h2>The WeatherService Class</h2>
+                    <dl>
+                        <dt>Simulation of Real-World Scenarios</dt>
+                        <dd>The WeatherService class is designed to mimic real-world external service calls by introducing artificial latency and potential failures. This is achieved through the use of the Random class, which adds a random delay to each call to simulate network or service latency.</dd>
+                        <dt>Randomized Error Injection</dt>
+                        <dd>By employing a conditional check against a randomly generated number, the WeatherService class can throw exceptions deliberately to simulate failures that might occur in an actual service environment. This feature allows developers to ensure that the consuming application handles intermittent failures gracefully.</dd>
+                        <dt>Adjustable Failure Rate</dt>
+                        <dd>The likelihood of a simulated failure is adjustable, providing flexibility in how often errors are introduced. This allows for thorough testing of the application's resilience and error handling mechanisms under various conditions of stress and instability.</dd>
+                        <dt>Realistic Testing Conditions</dt>
+                        <dd>By incorporating randomness in latency and failures, the WeatherService class provides a more realistic testing environment for developers. It ensures that applications consuming the WeatherService are not only coded to handle success scenarios but are also robust enough to cope with unexpected delays and errors.</dd>
+                    </dl>
+                    <h2>A Real-World Recipe Using `TaskListProcessor`</h2>
+                    <p>Let's roll up our sleeves and get coding. Here's a snippet that demonstrates fetching weather forecasts for several cities concurrently:</p>
+                    <img class="img-fluid d-block w-25" src="assets/img/Task-List-Processor-Dashboard.png" alt="Task List Processor Dashboard" />
+                    <dl>
+                        <dt>Real-World Dashboard Simulation</dt>
+                        <dd>The program.cs console application emulates a travel site dashboard by concurrently fetching weather data for multiple cities. Each city represents a section on the dashboard page, and their weather data is loaded simultaneously to enhance performance and user experience, reflecting the non-blocking nature of real-time dashboards.</dd>
+                        <dt>Concurrent Data Retrieval</dt>
+                        <dd>Utilizing asynchronous programming, the application makes non-blocking calls to the WeatherService for each city in the list. This concurrent approach demonstrates how a live site could efficiently load data in parallel, reducing the total wait time for all the information to display.</dd>
+                        <dt>Console Logging for Demonstration</dt>
+                        <dd>Console.WriteLine is used within the application to output the progress and results of each task, providing a clear and sequential log of events in the console. This visual representation in development mimics how a user would see the data loading on a web dashboard.</dd>
+                        <dt>Production Logging Considerations</dt>
+                        <dd>While console logging serves as a simple demonstration tool, a production environment would require a more sophisticated logging solution. In a live setting, the ILogger interface would be implemented to integrate with a logging framework that supports structured logging, log levels, and persistent storage, ensuring comprehensive monitoring and troubleshooting capabilities.</dd>
+                    </dl>
+                    <pre class="code">
+ Console.WriteLine(TimeProvider.System.GetLocalNow());
+ var loggerFactory &#x3D; LoggerFactory.Create(builder &#x3D;&gt; builder.AddConsole());
+ var logger &#x3D; loggerFactory.CreateLogger&lt;Program&gt;();
+
+ var weatherService &#x3D; new WeatherService();
+ var weatherCities &#x3D; new TaskListProcessing.TaskListProcessor();
+ var cities &#x3D; new List&lt;string&gt; { &quot;London&quot;, &quot;Paris&quot;, &quot;New York&quot;, &quot;Tokyo&quot;, &quot;Sydney&quot;,&quot;Chicago&quot;,&quot;Dallas&quot;,&quot;Wichita&quot; };
+ var tasks &#x3D; new List&lt;Task&gt;();
+ foreach (var city in cities)
+ {
+   tasks.Add(weatherCities.GetTaskResultAsync(city, weatherService.GetWeather(city)));
+ }
+ await TaskListProcessing.TaskListProcessor.WhenAllWithLoggingAsync(tasks, logger);
+
+ Console.WriteLine(&quot;All tasks completed\n\n&quot;);
+ Console.WriteLine(&quot;Telemetry:&quot;);
+ foreach (var cityTelemetry in weatherCities.Telemetry)
+ {
+   Console.WriteLine(cityTelemetry);
+ }
+
+ Console.WriteLine(&quot;\n\nResults:&quot;);
+ foreach (var city in weatherCities.TaskResults)
+ {
+   Console.WriteLine($&quot;{city.Name}:&quot;);
+   if (city.Data is not null)
+   {
+       foreach (var forecast in city.Data as IEnumerable&lt;WeatherForecast&gt;)
+       {
+           Console.WriteLine(forecast);
+       }
+   }
+   else
+   {
+       Console.WriteLine(&quot;No data&quot;);
+   }
+   Console.WriteLine();
+}
+
+Console.WriteLine(TimeProvider.System.GetLocalNow());
+Console.WriteLine();
+</pre
+                    >
+                    <h3>The Output</h3>
+                    <pre class="code">
+11&#x2F;9&#x2F;2023 4:56:36 PM -06:00
+All tasks completed
+
+
+Telemetry:
+Chicago: Task completed in 602 ms with ERROR Exception: Random failure occurred fetching weather data.
+Paris: Task completed in 723 ms with ERROR Exception: Random failure occurred fetching weather data.
+New York: Task completed in 818 ms with ERROR Exception: Random failure occurred fetching weather data.
+Dallas: Task completed in 1,009 ms
+Sydney: Task completed in 1,318 ms
+Tokyo: Task completed in 1,921 ms
+Wichita: Task completed in 2,672 ms with ERROR Exception: Random failure occurred fetching weather data.
+London: Task completed in 2,789 ms
+
+
+Results:
+Chicago:
+No data
+
+Paris:
+No data
+
+New York:
+No data
+
+Dallas:
+City: Dallas, Date: 2023-11-10, Temp (F): 40, Summary: Cool
+City: Dallas, Date: 2023-11-11, Temp (F): 87, Summary: Balmy
+City: Dallas, Date: 2023-11-12, Temp (F): 18, Summary: Chilly
+City: Dallas, Date: 2023-11-13, Temp (F): 31, Summary: Chilly
+City: Dallas, Date: 2023-11-14, Temp (F): 105, Summary: Sweltering
+
+Sydney:
+City: Sydney, Date: 2023-11-10, Temp (F): 116, Summary: Sweltering
+City: Sydney, Date: 2023-11-11, Temp (F): 49, Summary: Cool
+City: Sydney, Date: 2023-11-12, Temp (F): 123, Summary: Scorching
+City: Sydney, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
+City: Sydney, Date: 2023-11-14, Temp (F): -2, Summary: Bracing
+
+Tokyo:
+City: Tokyo, Date: 2023-11-10, Temp (F): 75, Summary: Warm
+City: Tokyo, Date: 2023-11-11, Temp (F): 120, Summary: Sweltering
+City: Tokyo, Date: 2023-11-12, Temp (F): 27, Summary: Chilly
+City: Tokyo, Date: 2023-11-13, Temp (F): 57, Summary: Mild
+City: Tokyo, Date: 2023-11-14, Temp (F): 7, Summary: Bracing
+
+Wichita:
+No data
+
+London:
+City: London, Date: 2023-11-10, Temp (F): 16, Summary: Chilly
+City: London, Date: 2023-11-11, Temp (F): -3, Summary: Freezing
+City: London, Date: 2023-11-12, Temp (F): 125, Summary: Scorching
+City: London, Date: 2023-11-13, Temp (F): 16, Summary: Chilly
+City: London, Date: 2023-11-14, Temp (F): 84, Summary: Warm
+
+11&#x2F;9&#x2F;2023 4:56:39 PM -06:00
+
+</pre
+                    >
+                    <h2>Take the TaskListProcessor for a Test Drive</h2>
+                    <p>IntroductionIn the realm of .Net, orchestrating concurrent asynchronous tasks is a common challenge with the potential to become a learning journey. The TaskListProcessor class emerges as a powerful tool to manage such diversity with elegance. It's a testament to the principle that the key to lifelong learning is to constantly challenge yourself with new techniques and paradigms. You can experience this first-hand by taking the code for a test drive, available for cloning at the GitHub repository.</p>
+                    <p>
+                        Test DriveTo truly grasp the power of the TaskListProcessor, I invite you to clone the GitHub repository at
+                        <a href="https://github.com/markhazleton/TaskListProcessor" target="_blank">https://github.com/markhazleton/TaskListProcessor</a>
+                        and take the code for a spin. It's a practical step in the lifelong learning journey for any .Net developer looking to master concurrent operations.
+                    </p>
+                </div>
+            </section>
+            <footer class="navbar-dark bg-primary">
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-8 text-left text-light">
+                        <br />
+                        <div class="row">
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">ChatGPT</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/crafting-chatgpt-prompt.html" target="_self" title="Explore the art of crafting effective ChatGPT prompts with Mark Hazleton. Discover the significance of context, learn prompt engineering techniques, and unlock the potential of ChatGPT for better AI-powered conversations and code generation.">Crafting ChatGPT Prompt</a></li>
+                                    <li><a class="text-light" href="/creating-a-php-website-with-chat-gpt.html" target="_self" title="Overcoming the Challenge of Unfamiliar Territory">Creating a PHP Website with ChatGPT</a></li>
+                                    <li><a class="text-light" href="/trivia-spark-development.html" target="_self" title="Trivia Spark: Igniting Creativity with ChatGPT">Trivia Spark With ChatGPT</a></li>
+                                    <li><a class="text-light" href="/using-chatgpt-for-developers.html" target="_self" title="Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.">Using ChatGPT for C# Development</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Development</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/cancellation-token.html" target="_self" title="Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming">CancellationToken</a></li>
+                                    <li><a class="text-light" href="/concurrent-processing.html" target="_self" title="Learning Concurrent Processing Through Code with ChatGPT">Concurrent Processing</a></li>
+                                    <li><a class="text-light" href="/data-analysis-demonstration.html" target="_self" title="Visualizing Data with the Data Analysis Demonstration">Data Analysis Demonstration</a></li>
+                                    <li><a class="text-light" href="/git-flow-rethink.html" target="_self" title="Revaluating the meaning of Continuous in CI/CD with Git Flow">Git Flow Rethink</a></li>
+                                    <li><a class="text-light" href="/git-organized.html" target="_self" title="Git Organized: A Guide to Organized Version Control">Git Organized</a></li>
+                                    <li><a class="text-light" href="/nuget-packages-pros-cons.html" target="_self" title="The Pros and Cons of Using NuGet Packages in Your Projects">NuGet Package Pros and Cons</a></li>
+                                    <li><a class="text-light" href="/redis-local-instance.html" target="_self" title="Redis Local Instance">Redis Local Instance</a></li>
+                                    <li><a class="text-light" href="/sample-mvc-crud.html" target="_self" title="Description for SampleMvcCRUD Project">SampleMvcCRUD Project</a></li>
+                                    <li><a class="text-light" href="/system-cache.html" target="_self" title="Enhancing Web API Performance with a System Cached List">System Cache</a></li>
+                                    <li><a class="text-light" href="/task-list-processor.html" target="_self" title="Discover how the TaskListProcessor class streamlines concurrent operations in .NET, enabling efficient asynchronous programming and performance monitoring.">Task List Processor</a></li>
+                                    <li><a class="text-light" href="/decorator-pattern-http-client.html" target="_self" title="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.">The Decorator Pattern with Http Client</a></li>
+                                    <li><a class="text-light" href="/articles/building-a-web-application-to-manage-your-blog-articles.html" target="_self" title="Building a Web Application to Manage Your Blog Articles: A Journey into Web Content Management Systems">Tools to Manage My Blog</a></li>
+                                    <li><a class="text-light" href="/web-project-mechanics.html" target="_self" title="Description for Web Project Mechanics">Web Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Personal Philosophy</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/lifelong-learning.html" target="_self" title="Reinventing Yourself: The Transformative Power of Lifelong Learning">Lifelong Learning</a></li>
+                                    <li><a class="text-light" href="/sidetrackedbysizzle.html" target="_self" title="Explore the concept of getting Sidetracked By Sizzle with Mark Hazleton. Understand how to stay focused and avoid the allure of superficial attractions.">Sidetracked by Sizzle</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/" target="_self" title="Change management is an important aspect of project management, as it helps to ensure that changes to the project are properly planned and implemented">Change Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/conflict-management/" target="_self" title="Learn effective conflict management strategies to enhance your project management skills. Discover how to navigate conflicts among team members, clients, and handle poor performance. Ensure project success with these expert tips.">Conflict Management for Project Managers</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/program-management-office.html" target="_self" title="The Program Management Office Role in Project Delivery">Program Management Office</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-life-cycle.html" target="_self" title="From Idea to Delivery the Project Life Cycle">Project Life Cycle</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/" target="_self" title="The Art and Science of Project Management">Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics Leadership</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/accountability-and-authority.html" target="_self" title="Finding Balance Between Accountability and Authority">Accountability and Authority</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/evolution-over-revolution.html" target="_self" title="Description for Evolution Over Revolution">Evolution Over Revolution</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/from-features-to-outcomes.html" target="_self" title="Focus on outcomes, not just features">From Features to Outcomes</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/" target="_self" title="Project Mechanics Leadership Overview">Leadership</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <br />
+                        <div class="social-icons">
+                            <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
+                            <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
+                            <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- Bootstrap core JS-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Core theme JS-->
+            <script src="/js/scripts.js"></script>
+        </div>
+    </body>
+</html>
