@@ -29,7 +29,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1699581043414" />
+        <link rel="stylesheet" href="/css/styles.css?version=1699626821282" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -214,7 +214,7 @@ public class TaskResult
                         <dt>Realistic Testing Conditions</dt>
                         <dd>By incorporating randomness in latency and failures, the WeatherService class provides a more realistic testing environment for developers. It ensures that applications consuming the WeatherService are not only coded to handle success scenarios but are also robust enough to cope with unexpected delays and errors.</dd>
                     </dl>
-                    <h2>A Real-World Recipe Using `TaskListProcessor`</h2>
+                    <h2>A Travel Dashbaord Using `TaskListProcessor`</h2>
                     <p>Let's roll up our sleeves and get coding. Here's a snippet that demonstrates fetching weather forecasts for several cities concurrently:</p>
                     <img class="img-fluid d-block w-25" src="assets/img/Task-List-Processor-Dashboard.png" alt="Task List Processor Dashboard" />
                     <dl>
@@ -340,6 +340,73 @@ City: London, Date: 2023-11-14, Temp (F): 84, Summary: Warm
                         <a href="https://github.com/markhazleton/TaskListProcessor" target="_blank">https://github.com/markhazleton/TaskListProcessor</a>
                         and take the code for a spin. It's a practical step in the lifelong learning journey for any .Net developer looking to master concurrent operations.
                     </p>
+                    <h1 class="mb-0">Update</h1>
+                    <div class="subheading mb-3">Adding the CityThingsToDo Service</div>
+                    <img class="img-fluid d-block w-25" src="assets/img/Task-List-Processor-Dashboard-Update.png" alt="Task List Processor Updated Dashboard" />
+                    <p>Our latest enhancement to the Task List Processor project is the introduction of the CityThingsToDo service. This new service showcases the power and flexibility of our existing architecture to seamlessly integrate different types of services and return types within the same framework. With a focus on expandability and practical use, the CityThingsToDo service provides a vivid example of how the TaskListProcessor can handle diverse data, reflecting real-world use cases like a travel site dashboard that provides both weather forecasts and activities for different cities.</p>
+                    <p>The new service aligns perfectly with the existing WeatherService, illustrating the processor's ability to manage asynchronous tasks concurrently for multiple cities. It demonstrates how a single class can orchestrate different services, each returning a different type of data from weather information to lists of recommended activities and process them with uniform error handling and telemetry.</p>
+                    <p>The updated console application code now calls upon the CityThingsToDo service to retrieve a curated list of activities for each city alongside the weather forecast. This simulates a real-world scenario where a user can view a comprehensive dashboard of information for planning their travel.</p>
+                    <p>With the Task List Processor at its core, the updated application reflects a robust, real-world application scenario, demonstrating the full potential of concurrent task processing in .NET. It's a leap forward in our journey to provide developers with a tool that not only simplifies complex operations but also enriches the end-user experience with a wealth of information at their fingertips.</p>
+                    <pre class="code">
+var thingsToDoService &#x3D; new CityThingsToDoService();
+var weatherService &#x3D; new WeatherService();
+var cityDashboards &#x3D; new TaskListProcessing.TaskListProcessor();
+var cities &#x3D; new List&lt;string&gt; { &quot;London&quot;, &quot;Paris&quot;, &quot;New York&quot;, &quot;Tokyo&quot;, &quot;Sydney&quot;, &quot;Chicago&quot;, &quot;Dallas&quot;, &quot;Wichita&quot; };
+var tasks &#x3D; new List&lt;Task&gt;();
+foreach (var city in cities)
+{
+  tasks.Add(cityDashboards.GetTaskResultAsync($&quot;{city} Weather&quot;, weatherService.GetWeather(city)));
+  tasks.Add(cityDashboards.GetTaskResultAsync($&quot;{city} Things To Do&quot;, thingsToDoService.GetThingsToDoAsync(city)));
+}
+await TaskListProcessing.TaskListProcessor.WhenAllWithLoggingAsync(tasks, logger);
+</pre
+                    >
+                    <h3>The Output</h3>
+                    <pre class="code">
+11/10/2023 8:28:47 AM -06:00
+All tasks completed
+
+Telemetry:
+Chicago Things To Do: Task completed in 963 ms
+Chicago Weather: Task completed in 2,263 ms
+Dallas Things To Do: Task completed in 969 ms
+Dallas Weather: Task completed in 2,163 ms with ERROR Exception: Random failure occurred fetching weather data.
+London Things To Do: Task completed in 497 ms
+London Weather: Task completed in 2,273 ms with ERROR Exception: Random failure occurred fetching weather data.
+
+
+Results:
+Chicago Things To Do:
+Visit the Art Institute of Chicago - $25.00
+Take an architecture river cruise - $40.00
+Stand on the Skydeck at Willis Tower - $23.00
+Explore Millennium Park - $0.00
+
+Chicago Weather:
+City: Chicago, Date: 2023-11-11, Temp (F): 2, Summary: Bracing
+City: Chicago, Date: 2023-11-12, Temp (F): 29, Summary: Chilly
+City: Chicago, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
+City: Chicago, Date: 2023-11-14, Temp (F): 93, Summary: Balmy
+City: Chicago, Date: 2023-11-15, Temp (F): 105, Summary: Sweltering
+
+Dallas Things To Do:
+Visit the Sixth Floor Museum at Dealey Plaza - $18.00
+Stroll through the Dallas Arboretum and Botanical Garden - $15.00
+Experience the Perot Museum of Nature and Science - $20.00
+Explore the Dallas World Aquarium - $25.00
+
+Dallas Weather:
+No data
+
+London Things To Do:
+Ride the London Eye - $30.00
+Tour the Tower of London - $25.00
+Visit the British Museum - $0.00
+Explore Camden Market - $0.00
+
+London Weather:
+No data</pre
+                    >
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">
