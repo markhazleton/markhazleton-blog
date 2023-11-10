@@ -62,6 +62,19 @@ block layout-content
           allowing for various tasks to be processed concurrently — a perfect match for the demands of modern software development.
 
       h2 The WhenAllWithLoggingAsync Method
+      pre.code.
+          public static async Task WhenAllWithLoggingAsync(IEnumerable&lt;Task&gt; tasks, ILogger logger)
+          {
+            ArgumentNullException.ThrowIfNull(logger);
+            try
+            {
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, &quot;TLP: An error occurred while executing one or more tasks.&quot;);
+            }
+          }
       dl
         dt Enhanced Error Handling
         dd.
@@ -87,6 +100,29 @@ block layout-content
           This level of detail aids in faster debugging and simplifies maintenance, especially in complex systems with many concurrent tasks.
 
       h2 The GetTaskResultAsync Method
+      pre.code.
+          public async Task GetTaskResultAsync&lt;T&gt;(string taskName, Task&lt;T&gt; task) where T : class
+          {
+            var sw &#x3D; new Stopwatch();
+            sw.Start();
+            var taskResult &#x3D; new TaskResult { Name &#x3D; taskName };
+            try
+            {
+                taskResult.Data &#x3D; await task;
+                sw.Stop();
+                Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds));
+            }
+            catch (Exception ex)
+            {
+                sw.Stop();
+                Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds, &quot;Exception&quot;, ex.Message));
+                taskResult.Data &#x3D; null;
+            }
+            finally
+            {
+                TaskResults.Add(taskResult);
+            }
+          }
       dl
         dt Method Signature
         dd.
@@ -105,6 +141,60 @@ block layout-content
         dd.
           The method is designed to be generic, enabling the return of various types of objects from different tasks within a single list.
           By encapsulating the result in a TaskResult object, it allows for heterogeneous task processing, making the method highly versatile.
+
+      h2 TaskResult Class Overview
+      p.
+        The TaskResult class is a cornerstone within the TaskListProcessor architecture, designed to encapsulate the outcome of asynchronous tasks. It provides a unified structure for storing the result data and metadata about the task's execution, such as the task's name, and whether it completed successfully or encountered errors.
+      pre.code.
+          public class TaskResult
+          {
+            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
+            &#x2F;&#x2F;&#x2F; Initializes a new instance of the TaskResult class with default values.
+            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
+            public TaskResult()
+            {
+                Name &#x3D; &quot;UNKNOWN&quot;;
+                Data &#x3D; null;
+            }
+
+            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
+            &#x2F;&#x2F;&#x2F; Initializes a new instance of the TaskResult class with the specified task name and data.
+            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
+            &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;name&quot;&gt;The name of the task.&lt;&#x2F;param&gt;
+            &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;data&quot;&gt;The result data of the task.&lt;&#x2F;param&gt;
+            public TaskResult(string name, object? data)
+            {
+                Name &#x3D; name;
+                Data &#x3D; data;
+            }
+
+            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
+            &#x2F;&#x2F;&#x2F; The result data of the task.
+            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
+            public object? Data { get; set; }
+
+            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
+            &#x2F;&#x2F;&#x2F; The name of the task.
+            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
+            public string Name { get; set; }
+          }
+
+
+      dl
+        dt Purpose
+        dd.
+          The primary goal of the TaskResult class is to offer a standardized object that can be used to represent the outcome of any task, regardless of its nature or the type of data it returns.
+        dt Flexibility
+        dd.
+          Thanks to its generic design, the TaskResult class can hold any type of result data, making it incredibly versatile. It can be used across different projects and scenarios, wherever task execution results need to be captured and processed.
+        dt Error Handling
+        dd.
+          In cases where a task fails, the TaskResult class can store the error details alongside the original task information. This makes it an invaluable tool for error tracking and debugging.
+        dt Telemetry and Logging
+        dd.
+          The TaskResult class can also be extended to include telemetry data, such as execution duration, which is crucial for performance monitoring and optimization efforts in complex systems.
+      p.
+        The TaskResult class is a testament to the thoughtful design of the TaskListProcessor, embodying the principles of robustness and scalability. It not only simplifies result management but also enhances the maintainability and readability of asynchronous task processing in .NET applications.
 
       h2 The WeatherService Class
       dl
@@ -262,11 +352,11 @@ block layout-content
 
 
       h2 Take the TaskListProcessor for a Test Drive
-      p Introduction
-        | In the realm of .Net, orchestrating concurrent asynchronous tasks is a common challenge with the potential to become a learning journey.
-        | The TaskListProcessor class emerges as a powerful tool to manage such diversity with elegance. It's a testament to the principle that
-        | the key to lifelong learning is to constantly challenge yourself with new techniques and paradigms. You can experience this first-hand
-        | by taking the code for a test drive, available for cloning at the GitHub repository.
+      p.lead.
+        In the realm of .Net, orchestrating concurrent asynchronous tasks is a common challenge with the potential to become a learning journey.
+        The TaskListProcessor class emerges as a powerful tool to manage such diversity with elegance. It's a testament to the principle that
+        the key to lifelong learning is to constantly challenge yourself with new techniques and paradigms. You can experience this first-hand
+        by taking the code for a test drive, available for cloning at the GitHub repository.
       p Test Drive
         | To truly grasp the power of the TaskListProcessor, I invite you to clone the GitHub repository at
         a(href="https://github.com/markhazleton/TaskListProcessor" target='_blank') https://github.com/markhazleton/TaskListProcessor
