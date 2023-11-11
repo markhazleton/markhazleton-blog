@@ -19,5 +19,6 @@ public class ArticlesModel : PageModel
     public void OnGet()
     {
         Articles = _articleService.GetArticles();
+        _articleService.GenerateSiteMap();
     }
 }
