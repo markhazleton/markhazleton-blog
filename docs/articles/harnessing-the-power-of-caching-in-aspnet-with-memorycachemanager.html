@@ -5,10 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <title>Mark Hazleton - Git Organized</title>
-        <meta name="description" content="Mark Hazleton - Git Organized: A Guide to Organized Version Control" />
+        <title>Harnessing the Power of Caching in ASP.NET with MemoryCacheManager</title>
+        <meta name="description" content="An in-depth look at the MemoryCacheManager class in ASP.NET and its application in web development." />
         <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.controlorigins.com/git-organized.html" />
+        <meta name="keywords" content="MemoryCacheManager, ASP.NET, Caching, Web Development, Performance Optimization" />
+        <link rel="canonical" href="https://markhazleton.controlorigins.com/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html" />
+        <meta property="og:title" content="Harnessing the Power of Caching in ASP.NET with MemoryCacheManager" />
+        <meta property="og:description" content="An in-depth look at the MemoryCacheManager class in ASP.NET and its application in web development." />
+        <meta property="og:image" content="/assets/img/Memory-Cache-Manager-Dashboard.png" />
+        <meta property="og:url" content="https://markhazleton.controlorigins.com/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html" />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Harnessing the Power of Caching in ASP.NET with MemoryCacheManager" />
+        <meta name="twitter:description" content="An in-depth look at the MemoryCacheManager class in ASP.NET and its application in web development." />
+        <meta name="twitter:image" content="/assets/img/Memory-Cache-Manager-Dashboard.png" />
+        <meta name="twitter:creator" content="@markhazleton" />
         <meta property="og:title" content="Mark Hazleton - Solutions Architect" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://markhazleton.controlorigins.com/" />
@@ -48,7 +59,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1700001650968" />
+        <link rel="stylesheet" href="/css/styles.css?version=1700003419889" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -98,86 +109,166 @@
         <div class="container-fluid p-0">
             <section class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <h1 class="mb-0">Git Good</h1>
-                    <div class="subheading mb-3">A Guide to Organized Version Control</div>
-                    <p class="lead">This article is a guide to help software developers improve their understanding of Git and its best practices. From version control basics to more advanced concepts like branching strategies and pull requests, this article aims to provide a good introduction to Git. Whether you are a beginner or an experienced Git user, you'll find valuable tips and insights to help you improve your productivity and collaboration with other developers. So get ready to "git" organized, improve your workflow, and "get good" at using Git.</p>
-                    <h2 class="mb-0">Get to Know Git</h2>
-                    <div class="subheading mb-3">An introduction to Git</div>
-                    <p>Git, the distributed version control system that has become ubiquitous in software development, was first created by Linus Torvalds in 2005. Torvalds was frustrated with the limitations of the centralized version control systems that were available at the time and wanted to create a system that would allow developers to collaborate on projects remotely. Git was the result of his efforts.</p>
-                    <p>In the years since its release, Git has continued to evolve and improve, with contributions from developers all over the world. Today, it is the go-to choice for version control in most software development projects and has become an essential tool for collaborating on code and managing complex software projects. Git's success is a testament to the power of open-source software, and to the passion and dedication of the many developers who have contributed to its development over the years.</p>
-                    <h2 class="mb-0">Get Distributed</h2>
-                    <div class="subheading mb-3">Distributed Version Control</div>
-                    <p>Git is a distributed version control system which means that every developer has a copy of the entire codebase on their local machine. Since each developer has a local copy of the codebase, they can make changes, commit them locally, and even switch between different branches of development without needing an internet connection. This is especially useful for developers who work in remote or disconnected environments, such as on a plane or in a location without reliable internet access. Once they're back online, they can push their changes to the remote repository. This makes it easy to collaborate on code and maintain version history.</p>
-                    <h2 class="mb-0">Get With the Flow</h2>
-                    <div class="subheading mb-3">Managing Mulitple Contributors</div>
-                    <p>As software development projects grow in size and complexity, it becomes increasingly important to have a well-defined branching strategy to manage code changes effectively. Without a proper strategy, it can be easy to introduce bugs, slow down development, and make it difficult to manage and maintain the codebase.</p>
-                    <p>
-                        The Git Flow branching strategy was created by Vincent Driessen, a Dutch software developer, in 2010 with the article:
-                        <a href="https://nvie.com/posts/a-successful-git-branching-model/" target="_blank">A successful Git branching model</a>
-                        . Git Flow solves the problem of having an unorganized and inconsistent branching strategy in software development projects. Before Git Flow, teams would often have their own ad hoc branching strategies that made it difficult for developers to understand what code was in which stage of development, and merge conflicts were common. Git Flow standardized a set of permanent and transitory branches for features and hotfixes, making it easier for developers to collaborate and manage changes.
+                    <h1>Memory Cache Manager</h1>
+                    <div class="subheading">Harnessing the Power of Caching in ASP.NET with MemoryCacheManager</div>
+                    <p class="lead">
+                        While working on the AsyncDemo project, I encountered a practical challenge: managing the request limits of the OpenWeather API. As most developers know, API request limits can be a tricky aspect, especially when working with limited resources. In search of a straightforward solution that wouldn't rely heavily on third-party libraries, I developed the MemoryCacheManager class. It's a no-fuss, efficient way to cache API calls – a simple yet effective tool that aligns well with the needs of a project like AsyncDemo. This article is a walk-through of how MemoryCacheManager fits into the picture, offering a modest peek into the world of caching in ASP.NET development.
+                        <a href="https://github.com/markhazleton/AsyncDemo">https://github.com/markhazleton/AsyncDemo</a>
+                        .
                     </p>
-                    <p>Git Flow is a branching strategy that defines a set of permanent and transitory branches for features, releases, and hotfixes. It provides a standard way of working with Git that makes it easier for teams to collaborate and manage changes to the codebase. The Git Flow model consists of two permanent branches: the MAIN branch, which contains the stable production code, and the DEVELOP branch, which contains the latest code changes that are being tested before being released.</p>
-                    <p>In addition to the permanent branches, Git Flow introduces a set of supporting branches to manage feature development, releases, and hotfixes. For example, when a new feature is being developed, a feature branch is created off of the develop branch. The feature branch is where all code changes related to the feature are made. Once the feature is complete and tested, it is merged back into the development branch. Similarly, hotfixes are made on a separate hotfix branch that is created off of the master branch. Once the hotfix is complete, it is merged back into both the master and develop branches. By standardizing these branches and the process for working with them, Git Flow helps teams manage code changes more efficiently and effectively.</p>
-                    <h2 class="mb-0">Get It Together</h2>
-                    <div class="subheading mb-3">How the Pull Request Protects the Codebase</div>
-                    <p>In modern software development, projects often have multiple contributors working on different features or fixes simultaneously. Pull Requests (PRs) help manage these contributions by allowing developers to propose changes to the codebase, and to have those changes reviewed and validated by other members of the team before they are merged into the main codebase.</p>
-                    <p>While PRs are not part of Git itself, they were introduced by systems that host Git repositories, such as GitHub, Azure DevOps, and others. They have become an essential part of the development process, particularly in agile and DevOps environments.</p>
-                    <p>A PR Gate is a mechanism used in DevOps to ensure that the merge code is validated with a build and unit tests before the PR is merged into the main codebase. This helps ensure that code quality is maintained and that no regressions or errors are introduced into the system.</p>
-                    <p>Other PR Gates can include requiring multiple approvers to review and approve the code changes before they can be merged, linking the PR to specific user stories or tasks in a project management system, and requiring an improvement in unit test coverage for any changes made in the codebase. All of these gates help ensure that code quality is maintained, and that changes to the codebase are thoroughly reviewed and validated before they are merged.</p>
-                    <h2 class="mb-0">Get Organized</h2>
-                    <div class="subheading mb-3">How to Keep Your Repositories from Going Rogue</div>
-                    <p>Do you ever feel like your code repositories have a mind of their own and are running rogue? Is your workspace more of a cluttered mess than a sleek and organized coding hub? Well, worry no more! In this article, we'll explore some top strategies for keeping your repositories in line.</p>
-                    <p>You have likely battled your fair share of rogue code on your hard drive. It's time to end this war once and for all! Let us explore some strategies to keep your repositories in line and prevent them from going rogue. Let's take control of our code clones before they turn to the dark side and start a war. Let's get your code under control and Git organized!</p>
-                    <p>You're hopefully familiar with Git and how it can help you manage your codebase. But when it comes to working with remote repositories like GitHub and Azure DevOps, there are some important file management strategies you should keep in mind to ensure that your work is organized and efficient.</p>
+                    <h2>WeatherServiceCachingDecorator:</h2>
+                    <div class="subheading">A Real-World Use Case for MemoryCacheManager</div>
+                    <div class="row">
+                        <div class="col-4"><img class="img-fluid d-block w-90 rounded wide-border" src="/assets/img/Memory-Cache-Manager-Dashboard.png" alt="Memory Cache Manager Dashboard" /></div>
+                        <div class="col-8">
+                            <dl>
+                                <dt>Purpose of WeatherServiceCachingDecorator</dt>
+                                <dd>Enhances an existing weather service with caching capabilities, providing optimized performance and reduced API calls.</dd>
+                                <dt>Caching Current Weather Data</dt>
+                                <dd>Unique cache keys are created for each location to store and retrieve weather data distinctly. The class first checks the cache before making external service calls.</dd>
+                                <dt>Storing and Retrieving Data</dt>
+                                <dd>If weather data for a location isn't in the cache, it's fetched from the weather service, logged, and stored in the cache with an expiration time.</dd>
+                                <dt>Caching Weather Forecast Data</dt>
+                                <dd>Follows a similar caching approach for weather forecasts, reducing service calls and improving response times.</dd>
+                                <dt>Benefits in a Web Application Context</dt>
+                                <dd>Offers reduced latency, decreased load on external services, and improved reliability by serving cached data.</dd>
+                                <dt>Conclusion</dt>
+                                <dd>Demonstrates the effectiveness of MemoryCacheManager in enhancing service performance and reliability in web applications.</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <h2>The Role of MemoryCacheManager</h2>
+                    <p>The MemoryCacheManager class serves as a robust solution for managing memory caches in ASP.NET applications, offering an efficient approach to data storage and retrieval. It's particularly valuable for applications that demand quick data access with minimal latency.</p>
                     <dl>
-                        <dt>Folder Structure</dt>
-                        <dd>When cloning a repository from either of these platforms, I recommend that you create a folder structure on your local machine that reflects the platform you're using. For example, you might create a folder on your C drive called "\GitHub\{username}\{repository}". Then you can easily see which repositories have been cloned. This helps me keep track of where code is stored and avoid cluttering the file system with unorganized code.</dd>
-                        <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-GitOrganized-FolderStructure.png" alt="Git Organized Folder Structure" />
-                        <br />
-                        <dt>Branching</dt>
+                        <dt>Concurrent Dictionary for Cache Keys</dt>
+                        <dd>Utilizes a thread-safe ConcurrentDictionary for storing cache keys, ensuring data integrity across multiple threads.</dd>
+                        <dt>Cancellation Token Support</dt>
+                        <dd>Implements CancellationTokenSource for managing cache lifespan and controlled cancellation of cache operations.</dd>
+                        <dt>Eviction Handling</dt>
+                        <dd>Intelligent handling of cache eviction with the PostEviction method, catering to different eviction reasons.</dd>
+                        <dt>Cache Entry Options Customization</dt>
+                        <dd>Offers customizable cache entry options, including expiration tokens and eviction callbacks.</dd>
+                        <dt>Clear and Dispose Functionality</dt>
+                        <dd>Features methods for clearing the cache and proper disposal of resources, essential for maintaining application health.</dd>
+                        <dt>Benefits</dt>
+                        <dd>By caching frequently accessed data, MemoryCacheManager enhances application performance through reduced data retrieval operations. It aids in scalability and ensures consistent data access in multi-threaded environments, common in modern web applications.</dd>
+                    </dl>
+                    <h2>Code Walkthrough of MemoryCacheManager</h2>
+                    <p>The MemoryCacheManager class is a finely-tuned component designed to enhance the performance of ASP.NET applications through efficient caching. Let's take a closer look at its core parts:</p>
+                    <h3>Initialization and Setup</h3>
+                    <p>
+                        The class initializes a static
+                        <code>ConcurrentDictionary</code>
+                        ,
+                        <code>_allKeys</code>
+                        , to keep track of cache keys. This ensures thread safety and efficient management of cache keys. Additionally, an instance of
+                        <code>IMemoryCache</code>
+                        , provided by ASP.NET Core, is used for actual caching operations.
+                    </p>
+                    <h3>Cache Operations</h3>
+                    <ul>
+                        <li>
+                            <strong>Adding to Cache:</strong>
+                            The
+                            <code>Set</code>
+                            method adds items to the cache. It handles key management and sets cache options, including expiration.
+                        </li>
+                        <li>
+                            <strong>Retrieving from Cache:</strong>
+                            The
+                            <code>Get</code>
+                            method fetches items, leveraging the cache-first strategy. If an item is not in cache, it’s loaded and then stored in cache for subsequent requests.
+                        </li>
+                        <li>
+                            <strong>Removing from Cache:</strong>
+                            The
+                            <code>Remove</code>
+                            method removes items from the cache and updates the key dictionary accordingly.
+                        </li>
+                    </ul>
+                    <h3>Eviction Policy</h3>
+                    <p>
+                        The class implements an eviction policy through the
+                        <code>PostEviction</code>
+                        callback. This method gets triggered when items are evicted from the cache, allowing for custom actions based on the eviction reason.
+                    </p>
+                    <h3>Cache Clearing and Disposal</h3>
+                    <ul>
+                        <li>
+                            <strong>Clearing the Cache:</strong>
+                            The
+                            <code>Clear</code>
+                            method iterates through all keys and removes each item from the cache, ensuring a clean state.
+                        </li>
+                        <li>
+                            <strong>Disposal Pattern:</strong>
+                            While the current implementation of
+                            <code>Dispose</code>
+                            method is empty, it provides a structure for resource cleanup if needed in the future.
+                        </li>
+                    </ul>
+                    <h3>Concurrency and Lock Management</h3>
+                    <p>
+                        A unique feature is the
+                        <code>PerformActionWithLock</code>
+                        method, which ensures that actions are performed with exclusive access, preventing race conditions in multi-threaded scenarios.
+                    </p>
+                    <p>
+                        This walkthrough provides a high-level understanding of the MemoryCacheManager class, emphasizing its role in efficient caching and application performance enhancement. To delve into the specifics, visit the demonstration code on GitHub.
+                        <a href="https://github.com/markhazleton/AsyncDemo">https://github.com/markhazleton/AsyncDemo</a>
+                    </p>
+                    <h3>CancellationTokenSource in MemoryCacheManager</h3>
+                    <p>
+                        There is an instance of the
+                        <code>CancellationTokenSource</code>
+                        <a href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource">https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource</a>
+                        within the MemoryCacheManager class which plays a role in managing the lifecycle of cache entries. Let's delve into its purpose and functionality:
+                    </p>
+                    <dl>
+                        <dt>Purpose of CancellationTokenSource</dt>
                         <dd>
-                            <div>
-                                <p>Once you've cloned a repository, it's important to create a feature branch and sync it with the remote repository, so that your remote repository is the source of truth for your code. This ensures that you always have a backup of your work, and can easily roll back changes if needed.</p>
-                                <p>When working with GitHub, it's common practice to first clone a repository to check it out, and then fork the repository if you plan on contributing to the project or making changes. By forking a repository, you create a copy of the original repository in your own GitHub account, which allows you to experiment and make changes without affecting the original project. It also makes it easier for you to submit pull requests back to the original project.</p>
-                                <p>When working with a forked repository, it's important to keep your fork up to date with the original repository by regularly pulling changes from the original repository into your fork. This ensures that you are working with the latest version of the code, and helps avoid conflicts when submitting pull requests.</p>
-                                <p>GitHub and Azure DevOps are not the only hosted Git repositories available. Other popular options include GitLab, Bitbucket, GitKraken, SourceForge, and AWS CodeCommit. Each platform has its own unique features and benefits, so it's important to evaluate your needs and choose the one that best fits your workflow and development process.</p>
-                            </div>
+                            The
+                            <code>CancellationTokenSource</code>
+                            is a powerful .NET construct used to signal cancellation in asynchronous and potentially long-running operations. In the context of the MemoryCacheManager, it serves to manage the expiration and clearing of cache entries.
                         </dd>
-                        <dt>Daily Activity</dt>
-                        <dd><div>When working with a remote repository, it's important to keep your local repository current with the develop branch of the remote repository. This makes sure you are not behind on work being done by others on the team. Keep your local repository current with the develop branch of the remote repository. This makes sure you are not behind on work being done by others on the team. Update your user/feature branch with develop at least once a day. This is to help limit the merge conflicts when you finish your work and try to do a pull request into develop. NEVER work on the develop branch in your local repository.</div></dd>
-                        <dt>Remove and Local Repository Prune</dt>
+                        <dt>Managing Cache Lifespan</dt>
                         <dd>
-                            <div>Keeping repositories (Origin/remote and local) in sync within Visual Studio can be confusing. Visual Studio does not always update all the remote branches when they are deleted. You can use the command line to make sure you are up to date with any branch changes.</div>
-                            <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-GitOrganized-VisualStudioSetting.png" alt="Git Organized Visual Studio Setting" />
-                            <div>You can also use the Git command line to make sure you are up to date with any branch changes. To prune deleted remote branches from your local repository, use the following command:</div>
-                            <code>$ git remote prune origin</code>
+                            When a cache entry is added using the
+                            <code>Set</code>
+                            method, the
+                            <code>CancellationTokenSource</code>
+                            is tied to the cache entry's options. This integration allows for controlled expiration of cache items based on specific conditions or time frames.
+                        </dd>
+                        <dt>Controlled Cache Invalidation</dt>
+                        <dd>
+                            In scenarios where there's a need to invalidate the cache prematurely, the
+                            <code>CancellationTokenSource</code>
+                        </dd>
+                        <dt>Recreating the Token After Clearing</dt>
+                        <dd>
+                            Upon invoking the can be used to cancel all associated cache entries. This mechanism is especially useful for implementing dynamic cache clearing strategies, where cache consistency is critical.
+                            <code>Clear</code>
+                            method, the
+                            <code>CancellationTokenSource</code>
+                            is canceled and disposed of, effectively clearing the cache. It’s then crucial to recreate the
+                            <code>CancellationTokenSource</code>
+                            to ensure that new cache entries can be added with their cancellation tokens, maintaining the integrity of cache management.
                         </dd>
                     </dl>
-                    <h2 class="mb-0">Branching Red Flags</h2>
-                    <p>Sometimes a quick review of your repository can help you identify potential issues that could cause headaches in the future. Here are some things to look for.</p>
+                    <p>Overall, the in MemoryCacheManager adds a layer of flexibility and control over how cache entries are managed, ensuring that they can be invalidated as per application requirements, contributing to both the efficiency and reliability of caching mechanisms.</p>
+                    <h2>Best Practices and Considerations</h2>
                     <dl>
-                        <dt>Improper Named Branches</dt>
-                        <dd>There should only be 2 branches at the root of the repository. "Develop" and "Master" (or Main). If you look at the branches in ADO Project you should just see 2 branches ((develop, master ) and folders (feature, hotfix or release,[Users] )</dd>
-                        <dt>Out of date Branches.</dt>
-                        <dd>The list of branches in ADO includes a column to show the number of commits behind and ahead of the default compare branch. We should only be comparing to master and develop branches. When a branch is more that 10-20 commits behind, there is a very high probability that we will have merge conflicts when we try to create a pull request to develop.</dd>
-                        <dt>Pull Requests for branches that are behind develop branch.</dt>
-                        <dd>All pull requests should be for branches that are 0 commits behind develop branch. That way we are never creating an untested state of code with the pull request.</dd>
-                        <dt>Multiple Release Branches</dt>
-                        <dd>Ideally, there should only be one deployment branch at a time. It could be a hotfix (a branch from master) or a release (a branch from develop). There are times when we may have both a hotfix and release branch at the same time, this should be very rare on short-lived. Once a deployment branch has been merged to Master and Develop it must be deleted from the repository.</dd>
-                        <dt>OLD Pull requests.</dt>
-                        <dd>The team should have an understanding of how long a pull request should take to complete. This can be several days, but not over a week. If a pull request is taking over a week, then that pull request can be abandoned. The feature branch can be updated and a new pull request created when the feature branch is ready for another review.</dd>
-                        <dt>Pull Requests without linked work item.</dt>
-                        <dd>It is a best practice to link at least one work item to each pull request. A little bit of pain now will make it easier to track the work later.</dd>
+                        <dt>Cache Invalidation Strategy:</dt>
+                        <dd>Implement an effective strategy for cache invalidation to maintain data consistency.</dd>
+                        <dt>Memory Management:</dt>
+                        <dd>Monitor memory usage to prevent potential leaks and optimize performance.</dd>
+                        <dt>Testing and Optimization:</dt>
+                        <dd>Regularly test and adjust the cache configuration to meet the specific needs of your application.</dd>
                     </dl>
-                    <p>By following these file management strategies and best practices, you can ensure that your work with remote repositories is organized and efficient, and you can easily collaborate with others and contribute to open-source projects.</p>
-                    <hr class="m-0" />
-                    <h2 class="mb-0">Conclusion:</h2>
-                    <p class="lead">Git is a powerful tool that allows developers to track changes in their code, collaborate with others, and manage projects efficiently. By following best practices, such as implementing a branching strategy like Git Flow, using pull requests, and adopting a code review process, teams can ensure that their code is organized, high-quality, and ready for deployment.</p>
-                    <p>using Git requires ongoing learning and practice. As you work with Git more and more, you will undoubtedly encounter new situations and challenges. Don't hesitate to ask questions, reach out to colleagues or seek help from online communities. With time and experience, you can become a Git master and streamline your development process like never before.</p>
-                    <p>Thank you for taking the time to read this article. I hope it has been informative and helpful in improving your Git practices.</p>
+                    <h2>Conclusion</h2>
+                    <p>The MemoryCacheManager class is an essential tool for ASP.NET developers aiming to enhance their application's performance. It offers a balance between simplicity and functionality, making it ideal for robust memory management in web applications.</p>
                 </div>
             </section>
-            <hr class="m-0" />
             <footer class="navbar-dark bg-primary">
                 <div class="row">
                     <div class="col-1"><br /></div>
