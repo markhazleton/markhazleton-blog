@@ -1,3 +1,24 @@
+mixin renderRecentArticles(articles)
+  - let groupedArticles = {}
+  each article in articles
+    - if (groupedArticles[article.Section])
+      - groupedArticles[article.Section].push(article)
+    - else
+      - groupedArticles[article.Section] = [article]
+
+  - let allArticles = []
+  each section in Object.values(groupedArticles)
+    - allArticles = allArticles.concat(section)
+
+  - allArticles.sort((a, b) => new Date(b.lastmod) - new Date(a.lastmod))
+  - let recentArticles = allArticles.slice(0, 3)
+
+    strong Recent Articles
+    ul
+      each article in recentArticles
+        li
+          a(href=`${article.slug}` target='_self' alt=`${article.description}` title=`${article.description}`) #{article.name}
+
 // About
 section#about.resume-section.resume-section-background
   .resume-section-content
@@ -12,6 +33,9 @@ section#about.resume-section.resume-section-background
       I have extensive experience developing solutions for both on-premises and cloud-based providers.
       From small business-to-consumer websites to large enterprise projects, I have worked with organizations of all sizes
       to deliver successful solutions.
+
+    +renderRecentArticles(articles)
+
 
 // Articles
 section#articles.resume-section
