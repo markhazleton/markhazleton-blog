@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace mwhWebAdmin.Models;
 
 public class ArticleService
@@ -28,7 +30,6 @@ public class ArticleService
             .Replace("{{changeFrequency}}", article.ChangeFrequency)
             .Replace("{{description}}", article.Description)
             .Replace("{{content}}", article.ArticleContent);
-
         return pugContent;
 
     }
@@ -48,7 +49,7 @@ public class ArticleService
     {
         foreach (var article in _articles)
         {
-            article.LastModified = DateTime.Now.ToString("yyyy-MM-dd");
+            article.LastModified = ConvertStringToDate(article.LastModified).ToString("yyyy-MM-dd");
         }
         string jsonContent = JsonSerializer.Serialize(_articles, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(_filePath, jsonContent);
@@ -58,23 +59,14 @@ public class ArticleService
     public void AddArticle(ArticleModel newArticle)
     {
         newArticle.Slug = "articles/" + GenerateSlug(newArticle.Name) + ".html";
-
-
         newArticle.Id = _articles.Max(article => article.Id) + 1; // Assign a new ID
         _articles.Add(newArticle);
-
         string pugContent = GeneratePugFileContent(newArticle);
         // Save the .pug file
         string pugFilePath = Path.Combine(_articlesDirectory, $"{newArticle.Slug.Replace(".html", string.Empty).Replace("articles/", string.Empty)}.pug");
         File.WriteAllText(pugFilePath, pugContent);
-
-
-
         SaveArticles();
     }
-
-
-
 
     public void GenerateSiteMap()
     {
@@ -94,7 +86,7 @@ public class ArticleService
             {
                 writer.WriteStartElement("url");
                 writer.WriteElementString("loc", $"https://markhazleton.controlorigins.com/{article.Slug}");
-                writer.WriteElementString("lastmod", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
+                writer.WriteElementString("lastmod", ConvertStringToDate(article.LastModified).ToString("yyyy-MM-ddTHH:mm:sszzz"));
                 writer.WriteElementString("changefreq", article.ChangeFrequency);
                 writer.WriteEndElement();
             }
@@ -102,6 +94,24 @@ public class ArticleService
             writer.WriteEndDocument();
         }
     }
+
+    public static DateTime ConvertStringToDate(string dateString)
+    {
+        DateTime dateValue;
+        if (DateTime.TryParse(dateString, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
+        {
+            // Conversion succeeded
+            return dateValue;
+        }
+        else
+        {
+            // Conversion failed
+            return DateTime.Now;
+        }
+    }
+
+
+
     public static string GenerateSlug(string input)
     {
         // Convert to lowercase
