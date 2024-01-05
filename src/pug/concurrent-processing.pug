@@ -11,7 +11,7 @@ block layout-content
 
   section#post.painteddesert-section.painteddesert-section-background
     .painteddesert-section-content
-      h1.mb-0 Concurrent Processing
+      h1.mb-0(id='top') Concurrent Processing
       .subheading.mb-3 Learning Concurrent Processing Through Code
       p.lead.
         As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques.
@@ -111,6 +111,7 @@ block layout-content
         I started with a ChatGPT prompt that introduced me to the basics of concurrent processing.
         Armed with this initial guidance, I started writing the code.
         Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.
+      a(href="#SemaphoreSlimClass") More on the SemaphoreSlim Class
 
       pre.code.
 
@@ -131,6 +132,7 @@ block layout-content
           }
         }
         await Task.WhenAll(tasks);
+
 
       p.
         I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.
@@ -231,3 +233,71 @@ block layout-content
         you can turn any coding endeavor into a powerful learning tool.
       p.
         Happy coding and exploring the world of concurrency!
+
+
+      .card
+        .card-header
+          h3.card-title(id="SemaphoreSlimClass") The SemaphoreSlim Class
+          a(href='#top') Back to Top
+        .card-body
+          p
+            | The
+            strong SemaphoreSlim
+            |  class in .NET presents a robust solution for fine-tuning resource utilization. This lightweight semaphore is designed for scenarios where wait times are expected to be short, making it ideal for controlling the number of tasks executing in parallel within a single process.
+          p
+            | The
+            strong SemaphoreSlim
+            | class offers a simple, yet effective way to limit the number of threads that can access a specific resource or a pool of resources concurrently. This is particularly useful in scenarios where you need to throttle the usage of resources like network bandwidth or CPU time, preventing the system from being overwhelmed.
+          p
+            | When integrating
+            strong SemaphoreSlim
+            | into the Task List Processor, it allows precise control over the number of tasks running simultaneously. By setting the maximum concurrent tasks, we ensure efficient execution without overloading the system, especially crucial in high-load situations.
+          p
+            | For more detailed information on
+            strong SemaphoreSlim
+            | , its usage, and examples, visit the
+            a(href='https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim') Microsoft Documentation on SemaphoreSlim
+            | .
+          h3.card-title Semaphore vs SemaphoreSlim in .NET
+          p.
+            Choose Semaphore when you need inter-process synchronization or when dealing with named
+            semaphores for system-wide visibility. Opt for SemaphoreSlim for more lightweight,
+            intra-process synchronization where performance and efficiency are key considerations
+          div.row
+            div.col-6
+                p.lead Semaphore
+                dl
+                    dt Nature
+                    dd A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.
+                    dt Usage
+                    dd Ideal for thread synchronization across multiple processes or for inter-process communication.
+                    dt Performance
+                    dd Slower and more resource-intensive, relying on the system's kernel mode.
+                    dt Functionality
+                    dd Supports system-wide visibility and waiting on multiple semaphores.
+                    dt Example
+                    dd Synchronizing resource access across different applications on the same system.
+                    dt Pros
+                    dd Visibility across processes, suitable for complex synchronization.
+                    dt Cons
+                    dd Heavier, slower, and suitable for long wait times. Involves kernel transitions.
+            div.col-6
+              p.lead SemaphoreSlim
+              dl
+                dt Nature
+                dd Lightweight and fast, designed for use within a single process.
+                dt Usage
+                dd Best for short wait times and scenarios confined to a single process.
+                dt Performance
+                dd More efficient in memory and speed, using CLR synchronization primitives.
+                dt Functionality
+                dd Does not support named semaphores or system-wide visibility.
+                dt Example
+                dd Limiting concurrent calls to an external service in a web server application.
+                dt Pros
+                dd Faster, more memory-efficient, suited for fine-grained control within an app.
+                dt Cons
+                dd Not suitable for inter-process communication, lacks system-wide visibility.
+
+        .card-footer
+
