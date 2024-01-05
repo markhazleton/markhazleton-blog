@@ -49,7 +49,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1704299330559" />
+        <link rel="stylesheet" href="/css/styles.css?version=1704489356214" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -99,7 +99,7 @@
         <div class="container-fluid p-0">
             <section class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <h1 class="mb-0">Concurrent Processing</h1>
+                    <h1 class="mb-0" id="top">Concurrent Processing</h1>
                     <div class="subheading mb-3">Learning Concurrent Processing Through Code</div>
                     <p class="lead">As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques. Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.</p>
                     <p>The idea of managing multiple tasks simultaneously has always fascinated me. However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like race conditions and deadlocks. To dive into this topic, I decided to develop a C# console application that would allow me to experiment and learn practically.</p>
@@ -143,6 +143,7 @@
                         <a href="https://github.com/markhazleton/ConcurrentProcessing" title="Concurrent Processing C# Project on GitHub by Mark Hazleton" target="_blank" rel="noopener noreferrer">View the Concurrent Processing C# Project on GitHub</a>
                     </p>
                     <p>I started with a ChatGPT prompt that introduced me to the basics of concurrent processing. Armed with this initial guidance, I started writing the code. Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.</p>
+                    <a href="#SemaphoreSlimClass">More on the SemaphoreSlim Class</a>
                     <pre class="code">
 const int maxConcurrency = 100; // Maximum concurrent tasks allowed
 SemaphoreSlim semaphore = new(maxConcurrency);
@@ -161,6 +162,7 @@ while (taskId is not null)
   }
 }
 await Task.WhenAll(tasks);
+
 </pre
                     >
                     <p>I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.</p>
@@ -226,6 +228,79 @@ Task:026 T:26 S:2 W:3
                     <p>The world of concurrent processing is complex and fascinating. Through the development of this C# console application, I gained valuable insights into managing multiple tasks simultaneously while avoiding common pitfalls. The iterative process of refining the code helped me internalize the concepts and apply them effectively.</p>
                     <p>I encourage fellow developers to try learning through practical coding. It's one thing to read about a topic, but a whole different experience to see it in action and work through challenges firsthand. With the right resources, curiosity, and determination, you can turn any coding endeavor into a powerful learning tool.</p>
                     <p>Happy coding and exploring the world of concurrency!</p>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" id="SemaphoreSlimClass">The SemaphoreSlim Class</h3>
+                            <a href="#top">Back to Top</a>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                The
+                                <strong>SemaphoreSlim</strong>
+                                class in .NET presents a robust solution for fine-tuning resource utilization. This lightweight semaphore is designed for scenarios where wait times are expected to be short, making it ideal for controlling the number of tasks executing in parallel within a single process.
+                            </p>
+                            <p>
+                                The
+                                <strong>SemaphoreSlim</strong>
+                                class offers a simple, yet effective way to limit the number of threads that can access a specific resource or a pool of resources concurrently. This is particularly useful in scenarios where you need to throttle the usage of resources like network bandwidth or CPU time, preventing the system from being overwhelmed.
+                            </p>
+                            <p>
+                                When integrating
+                                <strong>SemaphoreSlim</strong>
+                                into the Task List Processor, it allows precise control over the number of tasks running simultaneously. By setting the maximum concurrent tasks, we ensure efficient execution without overloading the system, especially crucial in high-load situations.
+                            </p>
+                            <p>
+                                For more detailed information on
+                                <strong>SemaphoreSlim</strong>
+                                , its usage, and examples, visit the
+                                <a href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim">Microsoft Documentation on SemaphoreSlim</a>
+                                .
+                            </p>
+                            <h3 class="card-title">Semaphore vs SemaphoreSlim in .NET</h3>
+                            <p>Choose Semaphore when you need inter-process synchronization or when dealing with named semaphores for system-wide visibility. Opt for SemaphoreSlim for more lightweight, intra-process synchronization where performance and efficiency are key considerations</p>
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="lead">Semaphore</p>
+                                    <dl>
+                                        <dt>Nature</dt>
+                                        <dd>A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.</dd>
+                                        <dt>Usage</dt>
+                                        <dd>Ideal for thread synchronization across multiple processes or for inter-process communication.</dd>
+                                        <dt>Performance</dt>
+                                        <dd>Slower and more resource-intensive, relying on the system's kernel mode.</dd>
+                                        <dt>Functionality</dt>
+                                        <dd>Supports system-wide visibility and waiting on multiple semaphores.</dd>
+                                        <dt>Example</dt>
+                                        <dd>Synchronizing resource access across different applications on the same system.</dd>
+                                        <dt>Pros</dt>
+                                        <dd>Visibility across processes, suitable for complex synchronization.</dd>
+                                        <dt>Cons</dt>
+                                        <dd>Heavier, slower, and suitable for long wait times. Involves kernel transitions.</dd>
+                                    </dl>
+                                </div>
+                                <div class="col-6">
+                                    <p class="lead">SemaphoreSlim</p>
+                                    <dl>
+                                        <dt>Nature</dt>
+                                        <dd>Lightweight and fast, designed for use within a single process.</dd>
+                                        <dt>Usage</dt>
+                                        <dd>Best for short wait times and scenarios confined to a single process.</dd>
+                                        <dt>Performance</dt>
+                                        <dd>More efficient in memory and speed, using CLR synchronization primitives.</dd>
+                                        <dt>Functionality</dt>
+                                        <dd>Does not support named semaphores or system-wide visibility.</dd>
+                                        <dt>Example</dt>
+                                        <dd>Limiting concurrent calls to an external service in a web server application.</dd>
+                                        <dt>Pros</dt>
+                                        <dd>Faster, more memory-efficient, suited for fine-grained control within an app.</dd>
+                                        <dt>Cons</dt>
+                                        <dd>Not suitable for inter-process communication, lacks system-wide visibility.</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer"></div>
+                    </div>
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">
