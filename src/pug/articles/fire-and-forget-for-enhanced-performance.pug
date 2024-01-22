@@ -29,22 +29,17 @@ block layout-content
   section#post.painteddesert-section.painteddesert-section-background
     .painteddesert-section-content
       h1 Fire and Forget
-      div.card.w-50.mx-auto.mb-5
-        div.card-header
-          h5.card-title Fire and Forget for Enhanced Performance
-        div.card-body
-          p.card-text.lead.mb-5
+      p.card-text.lead.mb-5
           | While working on a project, I encountered a practical challenge: how do I call an async method without waiting for it to process.
           | I decided to explore the use of Fire and Forget technique in my AsyncDemo project.
           a(href='https://github.com/markhazleton/AsyncDemo') https://github.com/markhazleton/AsyncDemo
           | .
-        div.card-footer
-          p.card-text
+          | Fire-and-forget is a programming approach where tasks are sent off to be processed independently,
+          | without the initiating program tracking or waiting for the results of these tasks.
 
       h2 The Risks Of Not Waiting
       p.
-        In the context of asynchronous programming,
-        the `Fire and Forget` pattern refers to the practice of calling an async method without awaiting its completion.
+        Fire-and-forget may call multiple methods without awaiting the completion of the methods.
         While this technique can be useful in certain scenarios, it can also lead to a number of issues, including:
       dl
         dt Unhandled Exceptions
@@ -61,18 +56,62 @@ block layout-content
           This action, while important, is not directly tied to the user's immediate experience.
           In such cases, a delayed or inefficient handling can inadvertently hamper the API's responsiveness, leading to a suboptimal user experience.
 
-
       h2 Benefits Of Fire And Forget
-      strong.lead Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.
+      strong.lead Let`s Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.
       p.
-        Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.
-      p In today's fast-paced digital landscape, API performance is not just a technical metric; it's a cornerstone of user experience and business efficiency. One pattern that's increasingly crucial in this realm is the "Fire and Forget" technique, particularly in scenarios where immediate response is key, but the task at hand is not critical to the user interaction.
+       In today's fast-paced consumer driven world,
+       API performance is vital for the user experience and business efficiency.
+       One pattern that can be used is the "Fire and Forget" technique,
+       particularly in scenarios where immediate response is key,
+       but their are other tasks that are not critical to the user interaction.
       p Take, for example, the process of updating a Service Bus topic upon user login. This action, while important, is not directly tied to the user's immediate experience. In such cases, a delayed or inefficient handling can inadvertently hamper the API's responsiveness, leading to a suboptimal user experience.
       p This is where a well-designed Fire and Forget class comes into play. By effectively decoupling non-critical tasks from the main execution thread, we ensure that our API remains swift and responsive. This approach not only enhances performance but also elevates the user experience, a factor that's increasingly becoming a differentiator in the digital marketplace.
       p Consider the scenario of a user logging into an application. Upon successful authentication, the system needs to update a Service Bus topic - an action that triggers other services to perform tasks like profile rebuilding or login history recording. While these tasks are important for maintaining system integrity and providing personalized experiences, they are not immediately critical to the user who is logging in.
       p Implementing a Fire and Forget class in this context allows these non-urgent tasks to be handled asynchronously. This means the API can swiftly return a response to the user, confirming a successful login, while the system quietly takes care of the updates in the background. It's an elegant solution that balances the need for efficiency and thoroughness.
       p Moreover, in a landscape where every millisecond counts, optimizing API performance with techniques like Fire and Forget is not just a technical consideration - it's a strategic one. By ensuring our systems are responsive and efficient, we're aligning technology more closely with business outcomes and user satisfaction.
       p In summary, the Fire and Forget pattern is more than a technical solution; it's a strategic tool that can significantly enhance the performance and user experience of APIs. It's an approach that aligns well with my philosophy of practical, business-driven technology solutions - ensuring that we deliver not only in terms of technical performance but also in terms of tangible business value.
+
+      div.card.w-50.mx-auto.mb-5
+        div.card-header
+          h5.card-title Example: Online Order Processing
+        div.card-body
+          p Let`s explore how the fire-and-forget pattern can be applied in a real-world scenario: online order processing. When a user places an order, immediate feedback is crucial for a good user experience. This is where our fire-and-forget method comes into play.
+          p We start by sending a quick response to the user, confirming receipt of the order. This is the 'fire' part. It's fast and gives immediate feedback.
+          p Behind the scenes, the system then processes several sub-tasks like validating the order, checking inventory, and calculating shipping. This is done asynchronously, without the user having to wait for each step to complete. The user can continue with other activities, while our system handles these tasks in the background.
+          p Finally, once all sub-tasks are complete, the system sends a detailed confirmation to the user. This might take a few minutes, but it doesn't hinder the user's experience as they have already moved on after the initial confirmation.
+          p.
+            Here are tasks that might be involved in the processing of an online order,
+            both from a customer-facing and a back-end perspective.
+            Some of these tasks are critical to the user experience, while others are not.
+            The fire-and-forget pattern can be used to handle the non-critical tasks,
+            ensuring that the user gets a swift response while the system quietly takes care of the rest.
+          dl
+            dt Inventory Check
+            dd Ensuring the ordered items are in stock.
+            dt Fraud Analysis
+            dd Assessing the order for potential fraud or security risks. Running fraud detection analysis on the order details.
+            dt Picking and Packing
+            dd Preparing the items in the warehouse for shipment.
+            dt Shipping Label Creation
+            dd Generating a shipping label with tracking information.
+            dt Automatic Reorder of Stock
+            dd Initiating a reorder if inventory levels are low.
+            dt Order Routing
+            dd Deciding the fulfillment center based on various factors.
+            dt Supplier Notification
+            dd Notifying suppliers for direct shipping or inventory replenishment.
+            dt Warehouse Management
+            dd Updating the warehouse system with order details.
+            dt Logistics Coordination
+            dd Coordinating with shipping partners for order delivery.
+            dt Data Analysis and Reporting
+            dd Updating and analyzing sales and inventory data.
+            dt CRM Update
+            dd Recording order details in the CRM system for future reference.
+
+        div.card-footer
+          p.card-text
+
 
       h2 Detailed Solution Breakdown
       dl
