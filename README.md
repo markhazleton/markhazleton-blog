@@ -2,6 +2,9 @@
 
 [Mark Hazleton Resume](https://markhazleton.controlorigins.com/) is the Mark Hazleton online resume/CV based on the theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/) with the following template [Start Bootstrap - Source Template](https://startbootstrap.com/theme/resume/)
 
+[![Azure Static Web Apps CI/CD](https://github.com/controlorigins/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml/badge.svg)](https://github.com/controlorigins/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml)
+
+
 ## Status
 
 ## Usage
