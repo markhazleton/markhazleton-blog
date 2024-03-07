@@ -1,0 +1,108 @@
+extends ../layouts/articles
+
+block pagehead
+  title Generating A Key Press Counter with Chat GPT
+  meta(name='description', content='Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights.')
+  meta(name='keywords', content='key press counter, mouse click tracker, user interaction, software development, ethical computing, Mark Hazleton')
+  meta(name='author', content='Mark Hazleton')
+  meta(property='og:title' content='Generating A Key Press Counter with Chat GPT')
+  meta(property='og:description' content='Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights.')
+  meta(property='og:image' content='/assets/img/Copilot-Mark-Studio-Generative-AI.png')
+  meta(property='og:url' content='https://markhazleton.controlorigins.com/articles/taking-microsoft-copilot-studio-for-a-test-drive.html')
+  meta(property='og:type' content='article')
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:title' content='Generating A Key Press Counter with Chat GPT')
+  meta(name='twitter:description' content='Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights.')
+  meta(name='twitter:image' content='/assets/img/Copilot-Mark-Studio-Generative-AI.png')
+  meta(name='twitter:creator' content='@markhazleton')
+
+  link(rel='canonical', href='https://markhazleton.controlorigins.com/articles/generating-a-key-press-counter-with-chatgpt.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Generating A Key Press Counter with Chat GPT
+      p.lead After a casual comment during one of my daily standups, I got the idea to write a counter program to see how many clicks I do on the computer in a given day.
+      p.fw-bold.text-primary.text-center.bg-primary.text-white
+        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/KeyPressCounter' target="_blank" title='The full source code for the key press counter is available on GitHub') The full source code for the key press counter is available on GitHub
+      p.
+        The journey into developing a utility to monitor key and mouse presses unfolded with a focus on user interaction patterns.
+        This post delves into the ethical considerations, the technical setup, and includes snippets of the essential code.
+      p.
+        Explore the development of a key press counter focusing on user interaction, ethical considerations, and technical insights.
+      hr
+      h2 Ethical Considerations and User Consent
+      p In exploring the development of a key press counter, ChatGPT proactively raised ethical considerations, emphasizing the paramount importance of user consent and privacy.
+      blockquote However, it's important to note that such applications can raise ethical and legal concerns, particularly if they're used without the consent of the person being monitored. Ensure that your application is used in a manner that respects privacy and complies with all relevant laws and guidelines.
+      p These warnings are a testament to ChatGPT's design, which is ingrained with ethical guidelines to ensure technology serves humanity responsibly. The model's ability to foreground these concerns illustrates its commitment to ethical computing, encouraging developers to prioritize transparency and adherence to privacy laws in their creations. This approach underlines the broader conversation about the responsible use of technology and the role of AI in guiding ethical decision-making in software development.
+      h2 Technical Setup and Code Snippets
+      p.lead Application Development Steps
+      dl
+        dt Step 1: Setup Your Development Environment
+        dd Install Visual Studio and ensure .NET Framework or .NET Core is set up. Create a new Windows Forms Application project.
+        dt Step 2: Implement Global Hooks
+        dd Use the `globalmousekeyhook` library to listen for system-wide keyboard and mouse events. Install it via NuGet Package Manager in Visual Studio.
+        dt Step 3: Create Event Handlers
+        dd Write methods to handle keyboard and mouse events. Increment counters for key presses and mouse clicks within these methods.
+        dt Step 4: Log the Activity
+        dd Store the counts in a file or database. Use `System.IO.File` methods for file operations, ensuring data is written periodically or upon certain triggers.
+        dt Step 5: Build and Test
+        dd Compile your project in Visual Studio, fix any errors, and run the application to ensure it tracks key presses and mouse clicks as expected.
+        dt Step 6: Ensure Ethical Use
+        dd Clearly communicate the application's functionality to users and obtain their consent before use. Consider privacy laws and ethical guidelines.
+
+      p We leveraged global hooks in .NET to monitor activities. Key aspects of the implementation include setting up hooks, event handling, and logging.
+      pre.code
+        code.
+          // Initialize global hooks
+          globalHook = Hook.GlobalEvents();
+          globalHook.KeyPress += GlobalHookKeyPress;
+          globalHook.MouseClick += GlobalHookMouseClick;
+
+          // Event handler for key presses
+          private void GlobalHookKeyPress(object sender, KeyPressEventArgs e)
+          {
+            keyPressCount++;
+          }
+
+          // Event handler for mouse clicks
+          private void GlobalHookMouseClick(object sender, MouseEventArgs e)
+          {
+            mouseClickCount++;
+          }
+
+      h3 Source Code
+      p The full source code for the key press counter is available on GitHub. Feel free to explore and adapt it for your projects.
+        a(href='https://github.com/markhazleton/KeyPressCounter') Key Press Counter on GitHub
+
+      h2 Reflecting on the Journey
+      p This tool serves as a testament to balancing innovation with ethical standards, highlighting the importance of thoughtful software development.
+      p Incorporating ChatGPT into coding projects not only adds a layer of technological interaction but also brings to light the platform's built-in measures to address ethical implications in its outputs. This aspect of our coding journey highlights the importance of ethical considerations in AI-assisted development, offering a deeper understanding of responsible AI use.
+
+      h2 Update: Creating a Tray Icon and Balloon Notifications
+      p After implementing the key press counter, I decided to enhance the user experience by adding a tray icon and balloon notifications on double click. This allows users to easily access the counter and receive notifications without the need to keep the application window open.
+      h3 Creating the Tray Icon and Balloon Notifications
+      p To create the tray icon, I used the `NotifyIcon` class from the `System.Windows.Forms` namespace.
+      p To display balloon notifications on double click, I utilized the `ShowBalloonTip` method of the `NotifyIcon` class.
+      p With these additions, users can now access the key press counter by double-clicking the tray icon and receive notifications about the counter's status.
+      p Here's how I achieved this functionality:
+      pre.code
+        code.
+          trayIcon &#x3D; new NotifyIcon()
+          {
+            Icon &#x3D; new Icon(&quot;favicon.ico&quot;), &#x2F;&#x2F; Set your icon here
+            ContextMenuStrip &#x3D; CreateContextMenu(), &#x2F;&#x2F; Optional: Set if you want a right-click menu
+            Visible &#x3D; true,
+            Text &#x3D; &quot;Double Click Icon for Stats&quot;
+          };
+          &#x2F;&#x2F; Optional: Handle double-click event
+          trayIcon.DoubleClick +&#x3D; TrayIcon_DoubleClick;
+
+          private void UpdateTrayIconText()
+          {
+             string log &#x3D; $&quot;\n Keystrokes: {keyPressCounter} \n Mouse Clicks: {mouseClickCounter}&quot;;
+             trayIcon.ShowBalloonTip(5000, &quot;KeyPressCounter Stats&quot;, $&quot;{log}&quot;, ToolTipIcon.Info);
+          }
+
+      p The integration of a tray icon and balloon notifications enhances the usability of the key press counter application. It provides a convenient way for users to access the counter and stay informed about their key press activity. By leveraging ChatGPT and the capabilities of the `NotifyIcon` class, I was able to create a more user-friendly experience.
