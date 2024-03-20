@@ -77,7 +77,7 @@ public class ArticleService
             writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
 
             writer.WriteStartElement("url");
-            writer.WriteElementString("loc", $"https://markhazleton.controlorigins.com/");
+            writer.WriteElementString("loc", $"https://markhazleton.com/");
             writer.WriteElementString("lastmod", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             writer.WriteElementString("changefreq", "weekly");
             writer.WriteEndElement();
@@ -85,7 +85,7 @@ public class ArticleService
             foreach (var article in _articles)
             {
                 writer.WriteStartElement("url");
-                writer.WriteElementString("loc", $"https://markhazleton.controlorigins.com/{article.Slug}");
+                writer.WriteElementString("loc", $"https://markhazleton.com/{article.Slug}");
                 writer.WriteElementString("lastmod", ConvertStringToDate(article.LastModified).ToString("yyyy-MM-ddTHH:mm:sszzz"));
                 writer.WriteElementString("changefreq", article.ChangeFrequency);
                 writer.WriteEndElement();
