@@ -1,9 +1,10 @@
 'use strict';
-const autoprefixer = require('autoprefixer')
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano'); // Add cssnano to your requirements
 const fs = require('fs');
 const packageJSON = require('../package.json');
 const upath = require('upath');
-const postcss = require('postcss')
+const postcss = require('postcss');
 const sass = require('sass');
 const sh = require('shelljs');
 
@@ -17,19 +18,20 @@ module.exports = function renderSCSS() {
         includePaths: [
             upath.resolve(upath.dirname(__filename), '../node_modules')
         ],
-      });
+    });
 
     const destPathDirname = upath.dirname(destPath);
     if (!sh.test('-e', destPathDirname)) {
         sh.mkdir('-p', destPathDirname);
     }
 
-    postcss([ autoprefixer ]).process(results.css, {from: 'styles.css', to: 'styles.css'}).then(result => {
+    // Include cssnano in the PostCSS process for minification
+    postcss([autoprefixer, cssnano]).process(results.css, {from: undefined}).then(result => {
         result.warnings().forEach(warn => {
-            console.warn(warn.toString())
-        })
+            console.warn(warn.toString());
+        });
         fs.writeFileSync(destPath, result.css.toString());
-    })
+    });
 
 };
 
