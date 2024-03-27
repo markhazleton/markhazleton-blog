@@ -7,23 +7,11 @@
         <meta name="robots" content="index, follow" />
         <meta http-equiv="X-Frame-Options" content="DENY" />
         <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'" />
-        <title>CancellationToken for Efficient Asynchronous Programming</title>
-        <meta name="description" content="Explore the effective use of CancellationToken in C# for managing asynchronous programming. Understand how to implement cancellations efficiently in .NET applications." />
-        <meta name="keywords" content="CancellationToken, Asynchronous Programming, C#, .NET, Task Cancellation, Efficient Coding, Software Development, .NET Asynchronous Techniques" />
+        <title>ChatGPT Meets Jeopardy</title>
+        <meta name="description" content="Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET" />
+        <meta name="keywords" content="ChatGPT, Jeopardy, C#, .NET, data analysis, trivia, CSV files, programming, software development, TriviaSpark, Data Analysis Demo" />
         <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.com/cancellation-token.html" />
-        <meta property="og:title" content="Harnessing the Power of CancellationToken for Efficient Asynchronous Programming" />
-        <meta property="og:description" content="Discover the nuances of CancellationToken in C# for optimal asynchronous programming. A comprehensive guide for .NET developers." />
-        <meta property="og:image" content="assets/img/Cancellation-Token.png" />
-        <meta property="og:url" content="https://markhazleton.com/cancellation-token.html" />
-        <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="Mark Hazleton" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Harnessing the Power of CancellationToken for Efficient Asynchronous Programming" />
-        <meta name="twitter:description" content="Explore CancellationToken in C# for managing asynchronous tasks effectively. Essential insights for .NET developers." />
-        <meta name="twitter:image" content="assets/img/Cancellation-Token.png" />
-        <meta name="twitter:site" content="@markhazleton" />
-        <meta name="twitter:creator" content="@markhazleton" />
+        <link rel="canonical" href="https://markhazleton.com/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html" />
         <meta property="og:title" content="Mark Hazleton - Solutions Architect" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://markhazleton.com/" />
@@ -63,7 +51,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1711510963003" />
+        <link rel="stylesheet" href="/css/styles.css?version=1711510962766" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -113,145 +101,37 @@
         <div class="container-fluid p-0">
             <section class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <h1 class="mb-0">Cancellation Token</h1>
-                    <div class="subheading mb-3">Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming</div>
-                    <p class="lead">
-                        Asynchronous programming can be challenging, especially when it comes to managing long-running operations or dealing with unpredictable user interactions. It is crucial to handle cancellations gracefully to ensure that the application remains responsive and doesn't waste resources on abandoned work. One of the techniques for efficiently and safely managing these scenarios is the use of the
-                        <strong>'CancellationToken'</strong>
-                        class. By accepting a CancellationToken as a parameter, a method can be notified when the caller is no longer interested in the result and can gracefully cancel its work.
-                    </p>
-                    <p>
-                        A
-                        <strong>'CancellationToken'</strong>
-                        is an object that allows you to communicate the cancellation status to an asynchronous operation. It's a way of telling an operation to stop executing if it's no longer needed. For example, if a user cancels a search operation in a web application, you can use a
-                        <strong>'CancellationToken'</strong>
-                        instance to signal to the server to stop processing the request.
-                    </p>
-                    <p>
-                        One way to use a
-                        <strong>'CancellationToken'</strong>
-                        is with the Task class in C#. The Task class represents an asynchronous operation that can be canceled using a
-                        <strong>'CancellationToken'</strong>
-                        . To use it, you simply pass a
-                        <strong>'CancellationToken'</strong>
-                        to the Task.Run method, which runs the operation asynchronously.
-                    </p>
-                    <p>
-                        The following code snippet shows how to use a
-                        <strong>'CancellationToken'</strong>
-                        with the Task class:
-                    </p>
-                    <pre class="code">
-public async Task DownloadFileAsync(string url,
-  string filename,
-  HttpClient client,
-  CancellationToken cancellationToken)
-{
-  await client.DownloadFileTaskAsync(url, filename, cancellationToken);
-}
-</pre
-                    >
-                    <p>
-                        In this example, the DownloadFileAsync method takes a URL and a filename as input, along with a
-                        <strong>'CancellationToken'</strong>
-                        . It accepts an instance of the HttpClient class, which is used to download the file. The DownloadFileTaskAsync method is called on the client object, passing in the URL, filename, and cancellationToken. If the
-                        <strong>'CancellationToken'</strong>
-                        is canceled before the download is complete, the Task will be canceled.
-                    </p>
-                    <p>
-                        By using a
-                        <strong>'CancellationToken'</strong>
-                        , you can make your code more responsive to the requestor. Most asynchronous libraries allow for the passing of the
-                        <strong>'CancellationToken'</strong>
-                        in their methods.
-                    </p>
-                    <h2>Checking For Cancellation</h2>
-                    <p>
-                        When you're writing asynchronous code, it's important to handle cancellation gracefully. This is especially true when you're dealing with long-running operations or unpredictable user interactions. One way to handle cancellation is by using a CancellationToken. A CancellationToken is an object that allows the requesting code to signal a cancellation of an asynchronous operation. It's a way of telling an operation to stop executing if it's no longer needed. In your code, you can use a CancellationToken to signal to the server to stop processing the request. You can call the
-                        <strong>'ThrowIfCancellationRequested()'</strong>
-                        method to check if the CancellationToken has been canceled and throw an exception if it has. Determining where in your business logic to place the call to
-                        <strong>'ThrowIfCancellationRequested()'</strong>
-                        can be a crucial decision to ensure efficient and safe asynchronous programming.
-                    </p>
-                    <p>First, you need to identify the points in your code where cancellation is allowed. This could include inside loops, I/O operations, and any long-running or expensive operations. Once you have identified these critical points, you should determine how you want to handle cancellation at each point. For example, you may choose to cancel and abort an operation immediately or allow it to complete gracefully.</p>
-                    <p>Next, you should consider the granularity of cancellation. It's important to strike a balance between being too granular and being too coarse. If you're too granular, you risk overhead from multiple cancellation requests that occur in quick succession. On the other hand, if you're too coarse, you may not be able to cancel the operation at the desired point.</p>
-                    <p>
-                        After deciding on the granularity of cancellation, you should then decide where in your business logic to place the call to
-                        <strong>'ThrowIfCancellationRequested()'</strong>
-                        . Ideally, you should place it in a way that ensures cancellation occurs as close to the critical point as possible while still providing sufficient time for cleanup and graceful shutdown.
-                    </p>
-                    <pre class="code">
-public async Task DownloadFileAsync(list&lt;string&gt; urls,
-  string filename,
-  HttpClient client,
-  CancellationToken cancellationToken)
-  {
-    try {
-      foreach (var url in urls)
-      {
-        // Check for cancellation before each download
-        cancellationToken.ThrowIfCancellationRequested();
-        await client.DownloadFileTaskAsync(url, filename, cancellationToken);
-      }
-    }
-    catch (TaskCanceledException ex)
-    {
-      // Handle cancellation thronw by client.DownloadFileTaskAsync() here
-    }
-    catch (OperationCanceledException ex)
-    {
-      // Handle cancellation thronw by ThrowIfCancellationRequested() here
-    }
-  }
-
-</pre
-                    >
-                    <p>
-                        Overall, careful consideration of where to place the call to
-                        <strong>'ThrowIfCancellationRequested()'</strong>
-                        in your business logic is critical to ensure efficient and safe asynchronous programming. Keep in mind that calling the
-                        <strong>'ThrowIfCancellationRequested()'</strong>
-                        method only checks if the cancellation has been requested and throws an exception of type OperationCanceledException if necessary. This method does not change the state of the cancellation token.
-                    </p>
-                    <p>It's also worth noting that if you need to check the state of the cancellation token without throwing an exception, you can use the IsCancellationRequested property. This property returns a boolean value indicating whether cancellation has been requested for the token.</p>
-                    <p>It is important to consider the consequences of cancellation, especially in long-running or expensive operations. You should ensure that any resources acquired during the operation are properly released and any partial results are correctly handled in the event of a cancellation.</p>
-                    <p>In general, it's important to understand the behavior of CancellationToken and related classes when writing asynchronous code. By following best practices like propagating cancellation tokens and handling cancellation exceptions properly, you can write robust and reliable asynchronous code that can respond appropriately to user or system requests for cancellation.</p>
-                    <p>If you're looking for more in-depth examples of how to use CancellationToken and other asynchronous techniques in .NET, you may want to check out the AsyncDemo repository on GitHub, which contains sample code and projects that demonstrate these concepts in action.</p>
-                    <p>Check for cancellation after the "point of no cancellation": If your method has already incurred side effects that can't be reverted, it's essential to ensure that canceling the operation won't leave the application in an inconsistent state. If the cancellation token is signaled, you should only cancel the operation when you can do so, leaving objects in a valid state. This may require you to finish a large amount of work, undo previous work, or find a convenient place to stop before throwing OperationCanceledException.</p>
-                    <p>Pass the CancellationToken to all methods: Propagate the CancellationToken to all the methods you call that accept one, except after the point of no cancellation. This ensures that every method involved in the operation can respond appropriately to cancellation requests.</p>
-                    <p>Handle exceptions thrown when an operation or task is canceled: When a cancellation is requested, the operation or task may throw an OperationCanceledException or TaskCanceledException. It's important to catch these exceptions and handle them appropriately. To ensure that you catch all cancellation exceptions, catch OperationCanceledException instead of TaskCanceledException.</p>
-                    <h2>Sample Code:</h2>
-                    <p>
-                        For more complete coding examples of asynchronous techniques in .NET, check out
-                        <a href="https://github.com/markhazleton/AsyncDemo" target="_blank" rel="noopener">AsyncDemo</a>
-                        repository on GitHub. This repository, developed by Mark Hazleton, provides a wide range of examples of how to use CancellationToken and other asynchronous programming techniques in a safe and efficient manner.
-                    </p>
-                    <h2>Conclusion:</h2>
-                    <p>By following best practices for handling cancellations in asynchronous programming, you can ensure that your application remains responsive, efficient, and free from errors caused by abandoned work. Use CancellationToken to gracefully handle cancellations, pass it to all methods involved in the operation, and handle exceptions thrown when an operation or task is canceled. With these practices in place, you can write reliable and efficient asynchronous code.</p>
-                    <h2 class="mb-0">Related Articles</h2>
-                    <ul>
-                        <li>
-                            <a href="https://markhazleton.com/decorator-pattern-http-client.html">Decorator Pattern with HttpClient</a>
-                            <p>Brief description of how CancellationToken is used with HttpClient and the Decorator Design Pattern.</p>
-                        </li>
-                        <li>
-                            <a href="https://knowyourtoolset.com/2023/05/cancellation-tokens/">Cancellation Tokens in ASP.NET APIs (Erik Dahl)</a>
-                            <p>Overview of implementing CancellationToken in ASP.NET APIs.</p>
-                        </li>
-                        <li>
-                            <a href="https://andrewlock.net/cancellation-tokens-in-mvc-core-controllers/">Cancellation Tokens in MVC Core Controllers</a>
-                            <p>Insights into the use of CancellationToken in MVC Core Controllers.</p>
-                        </li>
-                        <li>
-                            <a href="https://medium.com/deep-dive-into-csharp-cancellation-tokens">Deep Dive into C# Cancellation Tokens</a>
-                            <p>Comprehensive guide on Cancellation Tokens in C#.</p>
-                        </li>
-                        <li>
-                            <a href="https://devblogs.microsoft.com/recommended-patterns-for-cancellation-tokens/">Recommended Patterns for Cancellation Tokens</a>
-                            <p>Discussing best practices and patterns for effective use of CancellationToken.</p>
-                        </li>
-                        <li><a href="https://docs.microsoft.com/en-us/dotnet/standard/threading/cancellation-in-managed-threads" target="_blank" rel="noopener">Cancellation in Managed Threads</a></li>
-                    </ul>
+                    <h1>ChatGPT Meets Jeopardy</h1>
+                    <h2 class="subheading mb-3"><a>Solution for Trivia Aficionados</a></h2>
+                    <p class="lead">Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.</p>
+                    <p>As a developer passionate about trivia and data analysis, I've been exploring ways to blend my interests in a single, engaging project. My journey led me to a unique intersection: incorporating a vast dataset of Jeopardy questions into my existing applications, TriviaSpark and the Data Analysis Demo, using C# and .NET.</p>
+                    <h2>TriviaSpark: Engaging the Mind</h2>
+                    <p>TriviaSpark, my trivia application, has been a playground for trivia enthusiasts, offering a wide range of quizzes across various domains. Designed with C#, it's been a testament to the versatility and power of .NET in creating interactive, user-friendly applications.</p>
+                    <p>The TriviaSpark application represents the entertainment side of C#, offering a web-based trivia platform that's both engaging and informative. Through the integration of Jeopardy questions, TriviaSpark becomes more than just a game; it's a journey through a myriad of topics, challenging the intellect of trivia aficionados and casual players alike.</p>
+                    <p>Leveraging the capabilities of ChatGPT, TriviaSpark provides dynamic content that keeps the game fresh and exciting. The application demonstrates how AI can enhance user interaction, making each trivia session unique and tailored to the player's preferences.</p>
+                    <h2>Data Analysis Unleashed</h2>
+                    <p>In my Data Analysis Demo, I delve into CSV files to unearth patterns, insights, and stories hidden within the data. This C#-powered project showcases the potential of .NET in processing and visualizing complex datasets, making data analysis accessible and insightful.</p>
+                    <p>On the flip side, the Data Analysis Demo showcases the analytical prowess of C# and .NET, focusing on the dissection and visualization of CSV file data. This demo illuminates the process of turning raw data into meaningful insights, exemplifying how complex datasets can be made accessible and interpretable.</p>
+                    <p>Through the innovative use of data analysis libraries, the demo offers a glimpse into the world of data science, inviting users to explore data in ways they may have never considered before. It's a testament to the power of C# in bridging the gap between data and decision-making.</p>
+                    <h2>A Serendipitous Discovery</h2>
+                    <p>On a quest for intriguing CSV datasets, I stumbled upon a goldmine: a comprehensive CSV file of Jeopardy questions. This serendipitous find seemed like the perfect bridge between TriviaSpark and the analytical depth of the Data Analysis Demo, promising a fusion of trivia and data analytics.</p>
+                    <p>This find represented the perfect fusion of TriviaSpark's engaging gameplay and the Data Analysis Demo's insightful exploration, bringing together the best of both worlds in a C# application that entertains as much as it informs.</p>
+                    <h2>Crafting the Solution</h2>
+                    <p>With the Jeopardy dataset in hand, I embarked on integrating it into a C# application. This endeavor was not just about importing data; it was about breathing life into the numbers and texts, turning them into an interactive trivia experience enriched with the analytical prowess of C# and .NET.</p>
+                    <dl>
+                        <dt>Step 1: Define Data Model</dt>
+                        <dd>Define a class to match the JSON structure.</dd>
+                        <dt>Step 2: Deserialize JSON</dt>
+                        <dd>Use `System.Text.Json` to convert the JSON file into a list of objects.</dd>
+                        <dt>Step 3: Select Random Category</dt>
+                        <dd>Use LINQ to query for a random category from the list.</dd>
+                        <dt>Step 4: Retrieve Questions</dt>
+                        <dd>Select 5 questions from the chosen category.</dd>
+                        <dt>Step 5: Display in Console</dt>
+                        <dd>Output the show number, air date, category, and answers, asking for the questions.</dd>
+                    </dl>
+                    <h2>Conclusion</h2>
+                    <p>This integration marks a milestone in my journey as a developer. It symbolizes the confluence of trivia, data analysis, and software development, illustrating how diverse interests can converge into a single, cohesive project. With ChatGPT's insights and C#'s flexibility, the Jeopardy project stands as a testament to the endless possibilities in the realm of software development.</p>
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">
