@@ -51,7 +51,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1711510962766" />
+        <link rel="stylesheet" href="/css/styles.css?version=1711511846257" />
         <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
@@ -120,15 +120,123 @@
                     <p>With the Jeopardy dataset in hand, I embarked on integrating it into a C# application. This endeavor was not just about importing data; it was about breathing life into the numbers and texts, turning them into an interactive trivia experience enriched with the analytical prowess of C# and .NET.</p>
                     <dl>
                         <dt>Step 1: Define Data Model</dt>
-                        <dd>Define a class to match the JSON structure.</dd>
+                        <dd>
+                            <p>Define a class to match the JSON structure.</p>
+                            <pre class="code">
+public class JeopardyQuestion
+{
+    public required string Category { get; set; }
+    [JsonPropertyName("air_date")]
+    public required string AirDate { get; set; }
+    public required string Question { get; set; }
+    public required string Value { get; set; }
+    public required string Answer { get; set; }
+    public required string Round { get; set; }
+    [JsonPropertyName("show_number")] // Maps "show_number" in JSON to this property
+    public required string ShowNumber { get; set; }
+}
+
+public class JeopardyQuestions : List&#60;JeopardyQuestion&#62;
+{
+
+}
+</pre
+                            >
+                        </dd>
                         <dt>Step 2: Deserialize JSON</dt>
-                        <dd>Use `System.Text.Json` to convert the JSON file into a list of objects.</dd>
+                        <dd>
+                            <p>Use `System.Text.Json` to convert the JSON file into a list of objects.</p>
+                            <pre class="code">
+string jsonFilePath = "JEOPARDY_QUESTIONS.json";
+string json = File.ReadAllText(jsonFilePath);
+var options = new JsonSerializerOptions
+{
+  PropertyNameCaseInsensitive = true
+};
+var questions = JsonSerializer.Deserialize&#60;JeopardyQuestions&#62;(json, options);
+</pre
+                            >
+                        </dd>
                         <dt>Step 3: Select Random Category</dt>
-                        <dd>Use LINQ to query for a random category from the list.</dd>
+                        <dd>
+                            <p>Use LINQ to query for a random category from the list.</p>
+                            <pre class="code">
+// Group questions by category, air date, and round, then select a random group
+var random = new Random();
+var groupedQuestions = this
+  .GroupBy(q => new { q.Category, q.AirDate, q.Round })
+  .ToList();
+if (groupedQuestions.Count == 0)
+{
+  Console.WriteLine("No groups of questions available.");
+  return;
+}
+
+var randomGroup = groupedQuestions[random.Next(groupedQuestions.Count)];
+
+
+</pre
+                            >
+                        </dd>
                         <dt>Step 4: Retrieve Questions</dt>
-                        <dd>Select 5 questions from the chosen category.</dd>
+                        <dd>
+                            <p>Select 5 questions from the chosen category.</p>
+                            <pre class="code">
+var randomGroup = groupedQuestions[random.Next(groupedQuestions.Count)];
+var selectedQuestions = randomGroup.Take(5).ToList(); // Take up to 5 questions from the selected group
+
+// Displaying the details of the questions from the selected group
+if (selectedQuestions.Any())
+{
+  Console.WriteLine($"Selected Category: {selectedQuestions.First().Category}");
+  Console.WriteLine($"Air Date: {selectedQuestions.First().AirDate}");
+  Console.WriteLine($"Round: {selectedQuestions.First().Round}");
+
+  foreach (var question in selectedQuestions)
+  {
+    Console.WriteLine($"----------");
+    Console.WriteLine($"Question: {question.Question}");
+    Console.WriteLine($"Value: {question.Value}");
+    Console.WriteLine($"Answer: {question.Answer}");
+  }
+}
+else
+{
+  Console.WriteLine("No questions found in the selected group.");
+}
+</pre
+                            >
+                        </dd>
                         <dt>Step 5: Display in Console</dt>
-                        <dd>Output the show number, air date, category, and answers, asking for the questions.</dd>
+                        <dd>
+                            <p>Output the show number, air date, category, and answers, asking for the questions.</p>
+                            <pre class="code">
+Selected Category: ALL A DREAM
+Air Date: 2011-04-19
+Round: Double Jeopardy!
+----------
+Question: 'Add 3 letters to reve, French for "dream", & you'll have this word for a daydream'
+Value: $400
+Answer: reverie
+----------
+Question: 'Eat that 11 p.m. quesadilla & you might have a pesadilla, Spanish for this'
+Value: $800
+Answer: a nightmare
+----------
+Question: 'In 1899 he wrote of hypermnesic dreams, in which memories, inaccessible by day, turn up in the dream'
+Value: $1200
+Answer: Freud
+----------
+Question: 'Misty thoughts while smoking opium are the origin of the expression this type of dream'
+Value: $7,000
+Answer: pipe dreams
+----------
+Question: 'You might have surreal dreams when you try to sleep when your temperature is 102, defined as this 5-letter condition'
+Value: $2000
+Answer: fever
+</pre
+                            >
+                        </dd>
                     </dl>
                     <h2>Conclusion</h2>
                     <p>This integration marks a milestone in my journey as a developer. It symbolizes the confluence of trivia, data analysis, and software development, illustrating how diverse interests can converge into a single, cohesive project. With ChatGPT's insights and C#'s flexibility, the Jeopardy project stands as a testament to the endless possibilities in the realm of software development.</p>
