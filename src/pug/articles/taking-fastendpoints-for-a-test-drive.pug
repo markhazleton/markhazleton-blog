@@ -1,0 +1,283 @@
+extends ../layouts/articles
+
+block pagehead
+  title Case Studies - Taking FastEndpoints for a Test Drive
+  meta(name='description', content='Case Studies - Taking FastEndpoints for a Test Drive')
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/taking-fastendpoints-for-a-test-drive.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      p.fw-bold.text-primary.text-center.bg-primary.text-white
+        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/FastEndpointApi' target="_blank" title='The full source code for the Fast Endpoints Demo is available on GitHub') The full source code for the Fast Endpoints Demo is available on GitHub
+      h1 Taking FastEndpoints for a Test Drive
+      .row.justify-content-center
+        h2 Introduction
+        p
+          | FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance
+          | and productivity. By embracing the REPR (Request-Endpoint-Response) pattern, it offers an
+          | alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.
+        h2 Minimal APIs
+        p.
+          Minimal APIs in .NET have marked a significant shift in the way developers approach API development within the ASP.NET Core framework.
+          These APIs offer a streamlined, more efficient method for building HTTP APIs, requiring minimal code and configuration while still allowing
+          for the fully functioning REST endpoints necessary for modern web applications.
+        p.
+          Introduced in .NET 6, Minimal APIs were designed to reduce the overhead and boilerplate code traditionally associated
+          with setting up new API endpoints in ASP.NET Core. By simplifying the API development process, they enable developers
+          to focus more on the business logic rather than the scaffolding required to set up controllers and actions in a typical MVC application.
+        p.
+          One of the core features of Minimal APIs is the ability to define endpoints with concise lambda expressions directly within the Program.cs file,
+          doing away with the need for a separate Startup.cs. This approach not only simplifies the project structure but also improves the readability
+          and maintainability of the codebase
+        p.
+          Model binding and dependency injection are also integral parts of Minimal APIs,
+          allowing developers to work with complex data types and services seamlessly.
+          Model binding in Minimal APIs is designed to be straightforward,
+          primarily relying on the deserialization of JSON request bodies to POCO (Plain Old CLR Objects) types.
+          Dependency injection is built on ASP.NET Core's robust DI system, enabling the injection of services
+          directly into endpoint definitions, thus promoting cleaner and more modular code
+        p.
+          Despite their simplicity, Minimal APIs are not just for basic CRUD operations;
+          they are fully capable of supporting complex applications.
+          Features like model validation, middleware integration, and custom response types can be easily implemented,
+          making Minimal APIs suitable for production-grade applications.
+        p.
+          The introduction and rapid adoption of Minimal APIs reflect a broader industry trend towards more lightweight, performant,
+          and modular web frameworks. They offer an attractive alternative for developers looking to build APIs in a .NET environment,
+          providing the necessary tools and flexibility for both small-scale projects and complex applications.
+          The future of API development in ASP.NET Core looks promising with Minimal APIs,
+          as they continue to evolve and integrate more features with each new .NET release.
+        h2 The REPR Pattern
+        p.
+          While looking at FastEndpoints, I read up on the REPR pattern.
+          REPR, standing for Request, Endpoint, Response, encapsulates a streamlined approach for structuring APIs
+          that's not only intuitive but also aligns with the minimalist ethos of .NET's minimal APIs.
+        p.
+          The REPR pattern simplifies the process of creating and managing endpoints by breaking them down into three core components.
+          The Request part defines the incoming data structure, capturing client inputs in a structured format.
+          The Endpoint acts as the core where the business logic resides, processing requests and preparing responses.
+          Finally, the Response component deals with sending back the processed data to the client.
+        p.
+          This pattern was notably implemented and extended in my FastEndpoints project.
+          By adopting the REPR pattern, I was able to create a clear separation of concerns within the API,
+          making endpoints more understandable and easier to maintain.
+          This approach also facilitated a cleaner integration with services like PersonService,
+          allowing us to focus on implementing business logic without the overhead of managing the API plumbing.
+        p.
+          Frameworks like Reaper and Reprise have further embraced and extended the REPR pattern,
+          offering developers additional tools and methodologies for building efficient and maintainable APIs within the ASP.NET Core ecosystem.
+          Reaper, for instance, is designed with performance and simplicity in mind, providing a middle ground between the barebones minimal APIs
+          and the more feature-rich FastEndpoints. On the other hand, Reprise introduces the REPR pattern into ASP.NET Core Minimal APIs,
+          aiming to provide a thin layer of abstractions that encourages the creation of modular and convention-based implementations.
+        p.
+          The adoption of the REPR pattern, coupled with FastEndpoints, represents a significant leap towards more efficient,
+          maintainable, and scalable API development in .NET. It showcases the power of minimalism in API design,
+          proving that simplicity does not necessarily come at the expense of functionality or performance.
+        h2 The Problem Set
+        .container
+          p For our demo, I am addressing a common but crucial problem set in the realm of web APIs: managing a simple database of entities—in this case, Person entities—via a web interface. This involves creating a CRUD (Create, Read, Update, Delete) API, a foundational component in many web applications, allowing users to interact with a database in a structured way.
+          p The core of our problem set revolves around managing Person entities, each representing an individual with properties such as name, age, and email. The API will need to provide functionality to:
+          ol.mt-3.mb-3.pl-4
+            li.mb-2 Create a new Person: Add a new entry to our database with the provided details.
+            li.mb-2 Read/Retrieve Persons: Fetch one or more Person entries from the database, either all at once or based on specific criteria like ID.
+            li.mb-2 Update an existing Person: Modify the details of an existing Person entry.
+            li.mb-2 Delete a Person: Remove an entry from the database.
+          p This CRUD functionality forms the backbone of many web services, from social networks to e-commerce platforms, making it an essential skill set for developers.
+          h3 The Person Class
+          p The Person class is a simple data model representing individuals in the system. Here's what I created for our Person entity:
+          pre.code.
+            public class Person
+            {
+              public Guid Id { get; set; } // A unique identifier for each person
+              public string FirstName { get; set; } // The person's first name
+              public string LastName { get; set; } // The person's last name
+              public int Age { get; set; } // The person's age
+              public string Email { get; set; } // The person's email address
+            }
+          P.
+            Each Person has a unique Id, along with basic information like FirstName, LastName, Age, and Email.
+            This class structure is straightforward yet flexible enough to be expanded for more complex applications.
+          P.
+            For the full CRUD API, this Person class will be central to the operations created with Fast Endpoints.
+            When creating a new Person, the API will accept details like name, age, and email to construct a Person object to be stored.
+            For reading, the API will fetch and return Person objects, either individually by Id or as a collection.
+            Updating will involve modifying the properties of an existing Person, and deleting will remove a Person from our storage based on their Id.
+          P.
+            This demo demonstrates not just the mechanics of building a CRUD API with FastEndpoints
+            but also the underlying principles of web API development, such as RESTful design, HTTP methods, status codes, and more,
+            providing a solid foundation for tackling more complex problem sets in the future.
+          .card
+            .card-header GUIDs vs Auto-Incrementing Integers
+            .card-body
+              p.
+                Choosing between GUIDs and auto-incrementing integers for primary keys is a common decision in database design.
+                While both have their advantages and drawbacks, the choice often depends on the specific requirements of the application.
+                For scenarios where global uniqueness is essential, such as distributed systems or disconnected data creation,
+                GUIDs offer a robust solution.
+                On the other hand, auto-incrementing integers provide better performance and simplicity,
+                making them suitable for large databases with predictable access patterns.
+                When faced with this decision, developers should carefully evaluate the trade-offs and select the option that best aligns with their project's needs.
+              p.
+                For the Person entity, I opted to use GUIDs as the primary key. This choice was driven by the need of keeping the active items in memory and not wanting
+                to relay on a system to create auto-incremented integers.
+              .row
+                .col-md-6
+                  strong Using GUID
+                  dl
+                    dt Pros
+                    dd
+                      ul
+                        li They are globally unique without the need for a centralized authority to manage key allocation.
+                        li They are useful in scenarios where data needs to be created offline and then synchronized with a central database, as they eliminate the risk of key collisions.
+                    dt Cons
+                    dd
+                      ul
+                        li Larger size may impact database performance and increase index size.
+                        li Alphanumeric nature can complicate debugging and data analysis.
+                .col-md-6
+                  strong Using Auto-Incrementing Integers
+                  dl
+                    dt Pros
+                    dd
+                      ul
+                        li Better performance and smaller index size, beneficial for large databases.
+                        li Simplicity and predictability can enhance user experience.
+                    dt Cons
+                    dd
+                      ul
+                        li Potential security risks, as sequential patterns can be exploited.
+                        li Can complicate data integration in distributed database environments.
+
+        h2 Setting Up
+        p
+          | Starting with a basic setup, I added FastEndpoints to a new .NET project and configured the necessary
+          | services in `Program.cs`. The ease of getting started was impressive, immediately making
+          | the development process smoother.
+        pre.code.
+          using FastEndpointApi.services.person;
+          using FastEndpoints;
+          var builder = WebApplication.CreateBuilder(args);
+          builder.Services.AddFastEndpoints();
+          builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
+          var app = builder.Build();
+          app.UseFastEndpoints();
+          app.Run();
+
+        h2 Creating the Person Service
+        P The `PersonService` class encapsulated the business logic for managing Person entities. By
+          | abstracting the data layer from the API endpoints, we achieved a clean separation of concerns,
+          | promoting code reusability and maintainability.  Here is the interface for the `PersonService` class.
+        pre.code.
+          public interface IPersonService
+          {
+            PersonEntity CreatePerson(PersonEntity person);
+            void DeletePerson(Guid id);
+            PersonEntity ReadPerson(Guid id);
+            List&lt;PersonEntity&gt; ReadPersons();
+            PersonEntity UpdatePerson(Guid id, PersonEntity updatedPerson);
+          }
+          public class PersonService : IPersonService
+          {
+            private readonly List&lt;PersonEntity&gt; _people = new();  // In-memory storage for Person entities
+            public PersonEntity CreatePerson(PersonEntity person)
+            {
+              person.Id = Guid.NewGuid();
+              _people.Add(person);
+              return person;
+            }
+
+        p
+          | Integrating the `PersonService` through dependency injection demonstrated FastEndpoints'
+          | seamless integration with ASP.NET's core features. This allowed us to focus on business logic
+          | without worrying about the plumbing.  Here is the code to register the service in the `Program.cs` file.
+        pre.code.
+          builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
+
+        h2 Separate concerns with PersonMapper
+        p.
+          The introduction of a `PersonMapper` class streamlined the transformation between our entities
+          and DTOs. This pattern of separating the data layer from the API responses ensured clean and
+          maintainable code.
+        pre.code.
+          public static PersonEntity ToEntity(CreatePersonRequest request)
+          {
+            return new PersonEntity
+            {
+              FirstName = request.FirstName,
+              LastName = request.LastName,
+              Age = request.Age,
+              Email = request.Email
+            };
+          }
+          public static PersonResponse ToPersonResponse(PersonEntity entity)
+          {
+            return new PersonResponse
+            {
+              Id = entity.Id,
+              FullName = $"{entity.FirstName} {entity.LastName}",
+              IsOver18 = entity.Age > 18
+            };
+          }
+
+        h2 My First Fast Endpoint
+        p.
+          Time to put it all together.  I created my first Fast Endpoint for the Create Person method.
+          The `CreatePersonEndpoint`, was succinct yet expressive, showcasing FastEndpoints'
+          capability to handle complex scenarios with minimal fuss.
+        pre.code.
+          public class CreatePersonEndpoint : FastEndpoint&lt;CreatePersonRequest, PersonResponse&gt;
+          {
+            private readonly IPersonService _personService;
+            public CreatePersonEndpoint(IPersonService personService)
+            {
+            _personService = personService;
+            }
+            public override void Configure()
+            {
+              Post("/api/person/create");
+              AllowAnonymous();
+            }
+            public override Task&lt;PersonResponse&gt; HandleAsync(CreatePersonRequest request)
+            {
+            var person = PersonMapper.ToEntity(request);
+            var createdPerson = _personService.CreatePerson(person);
+            return Task.FromResult(PersonMapper.ToPersonResponse(createdPerson));
+            }
+          }
+
+        h2 Next Steps and Conclusion
+        p.
+          The next steps was to finish out the CRUD operations for the Person entity.
+          I created the Read, Update, and Delete endpoints, each following the same pattern as the Create endpoint.
+          The result was a clean, efficient API that showcased the power of FastEndpoints and the REPR pattern.
+        p.
+          I also added support for Swagger, enabling interactive documentation for the API.
+        p.
+          Taking FastEndpoints for a test drive was a fun project to quickly get an understanding of the Fast Endpoint libary.
+          Its adherence to the REPR pattern, combined with ASP.NET's robust ecosystem, presents a compelling approach to
+          API development. Whether you're building a complex system or a simple microservice,
+          FastEndpoints offers the tools and flexibility needed to deliver high-quality APIs efficiently.
+        p.
+          FastEndpoints shines in its simplicity and effectiveness. The project we embarked on
+          served as a practical demonstration of how quickly one can get up and running with
+          high-performing APIs in .NET. For developers looking to streamline their API development
+          process, taking FastEndpoints for a test drive might just be the answer.
+
+      .container
+        h5 References
+        p.
+          I could not have completed this project without the help of many teachers and mentors both in person and online.
+          Here are some of the resources I used to complete this project.
+        ul.list-group
+          li.list-group-item
+            a(href='https://fast-endpoints.com/', target='_blank') https://fast-endpoints.com/
+            span The fast-endpoints.com project website
+          li.list-group-item
+            a(href='https://github.com/markhazleton/FastEndpointApi', target='_blank') https://github.com/markhazleton/FastEndpointApi
+            span The full source code for the Fast Endpoints Demo is available on GitHub
+          li.list-group-item
+            a(href='https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/', target='_blank') https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/
+            span MVC Controllers are Dinosaurs. Embrace API Endpoints an opinion piece by Steve Smith (aka Ardalis)
