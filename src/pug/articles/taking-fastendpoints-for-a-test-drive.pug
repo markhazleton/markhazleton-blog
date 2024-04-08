@@ -122,48 +122,6 @@ block layout-content
             This demo demonstrates not just the mechanics of building a CRUD API with FastEndpoints
             but also the underlying principles of web API development, such as RESTful design, HTTP methods, status codes, and more,
             providing a solid foundation for tackling more complex problem sets in the future.
-          .card
-            .card-header GUIDs vs Auto-Incrementing Integers
-            .card-body
-              p.
-                Choosing between GUIDs and auto-incrementing integers for primary keys is a common decision in database design.
-                While both have their advantages and drawbacks, the choice often depends on the specific requirements of the application.
-                For scenarios where global uniqueness is essential, such as distributed systems or disconnected data creation,
-                GUIDs offer a robust solution.
-                On the other hand, auto-incrementing integers provide better performance and simplicity,
-                making them suitable for large databases with predictable access patterns.
-                When faced with this decision, developers should carefully evaluate the trade-offs and select the option that best aligns with their project's needs.
-              p.
-                For the Person entity, I opted to use GUIDs as the primary key. This choice was driven by the need of keeping the active items in memory and not wanting
-                to relay on a system to create auto-incremented integers.
-              .row
-                .col-md-6
-                  strong Using GUID
-                  dl
-                    dt Pros
-                    dd
-                      ul
-                        li They are globally unique without the need for a centralized authority to manage key allocation.
-                        li They are useful in scenarios where data needs to be created offline and then synchronized with a central database, as they eliminate the risk of key collisions.
-                    dt Cons
-                    dd
-                      ul
-                        li Larger size may impact database performance and increase index size.
-                        li Alphanumeric nature can complicate debugging and data analysis.
-                .col-md-6
-                  strong Using Auto-Incrementing Integers
-                  dl
-                    dt Pros
-                    dd
-                      ul
-                        li Better performance and smaller index size, beneficial for large databases.
-                        li Simplicity and predictability can enhance user experience.
-                    dt Cons
-                    dd
-                      ul
-                        li Potential security risks, as sequential patterns can be exploited.
-                        li Can complicate data integration in distributed database environments.
-
         h2 Setting Up
         p
           | Starting with a basic setup, I added FastEndpoints to a new .NET project and configured the necessary
@@ -209,45 +167,41 @@ block layout-content
         pre.code.
           builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
 
-        h2 Separate concerns with PersonMapper
+        h2 Separate concerns with Domain Mapper
         p.
-          The introduction of a `PersonMapper` class streamlined the transformation between our entities
-          and DTOs. This pattern of separating the data layer from the API responses ensured clean and
-          maintainable code.
-        pre.code.
-          public static PersonEntity ToEntity(CreatePersonRequest request)
-          {
-            return new PersonEntity
-            {
-              FirstName = request.FirstName,
-              LastName = request.LastName,
-              Age = request.Age,
-              Email = request.Email
-            };
-          }
-          public static PersonResponse ToPersonResponse(PersonEntity entity)
-          {
-            return new PersonResponse
-            {
-              Id = entity.Id,
-              FullName = $"{entity.FirstName} {entity.LastName}",
-              IsOver18 = entity.Age > 18
-            };
-          }
+          The domain mapper functionality in FastEndpoints simplifies the manual mapping process between request DTOs (Data Transfer Objects)
+          and domain entities.
+          By introducing a dedicated CreatePersonMapper class, I can efficiently transform data from entities to response DTOs and vice versa.
+          This separation of concerns ensures cleaner and more maintainable code,
+          making FastEndpoints an appealing choice for those who prefer manual mapping over auto-mapping libraries.
+        p
+          a(href='https://fast-endpoints.com/docs/domain-entity-mapping#mapping-logic-in-a-separate-class' target='_blank' rel='noopener noreferrer') FastEndpoints Documentation - Mapping Logic in a Separate Class
 
+        pre.code.
+          public class CreatePersonMapper : Mapper&lt;CreatePersonRequest, PersonResponse, PersonEntity&gt;
+          {
+            public override PersonEntity ToEntity(CreatePersonRequest r) =&gt; new()
+            {
+              FirstName = r.FirstName,
+              LastName = r.LastName,
+              Age = r.Age,
+              Email = r.Email
+            };
+            public override PersonResponse FromEntity(PersonEntity e) =&gt; new()
+            {
+              FullName = $"{e.FirstName} {e.LastName}",
+              IsOver18 = e.Age &gt;= 18,
+              PersonId = e.Id.ToString()
+            };
+          }
         h2 My First Fast Endpoint
         p.
           Time to put it all together.  I created my first Fast Endpoint for the Create Person method.
           The `CreatePersonEndpoint`, was succinct yet expressive, showcasing FastEndpoints'
           capability to handle complex scenarios with minimal fuss.
         pre.code.
-          public class CreatePersonEndpoint : FastEndpoint&lt;CreatePersonRequest, PersonResponse&gt;
+          public class CreatePersonEndpoint(IPersonService _personService) : Endpoint&lt;CreatePersonRequest, PersonResponse, CreatePersonMapper&gt;
           {
-            private readonly IPersonService _personService;
-            public CreatePersonEndpoint(IPersonService personService)
-            {
-            _personService = personService;
-            }
             public override void Configure()
             {
               Post("/api/person/create");
@@ -255,9 +209,10 @@ block layout-content
             }
             public override Task&lt;PersonResponse&gt; HandleAsync(CreatePersonRequest request)
             {
-            var person = PersonMapper.ToEntity(request);
-            var createdPerson = _personService.CreatePerson(person);
-            return Task.FromResult(PersonMapper.ToPersonResponse(createdPerson));
+              PersonEntity entity = Map.ToEntity(req);
+              entity = _personService.CreatePerson(entity);
+              Response = Map.FromEntity(entity);
+              return SendAsync(Response, cancellation: ct);
             }
           }
 
@@ -268,8 +223,8 @@ block layout-content
           The result was a clean, efficient API that showcased the power of FastEndpoints and the REPR pattern.
         p.
           I  added support for Swagger, enabling interactive documentation for the API.
-        p I created a GitHub action to build and deploy the API to and Azure Web App.
-          a(href='https://fastendpointsdemo.azurewebsites.net/swagger/index.html#/Api' target='_blank' rel='noopener noreferrer')
+        p I created a GitHub action to build and deploy the API to and Azure Web App on each push to the main branch. Here is the link to FastEndpoints Demo on Azure:
+          a(href='https://fastendpointsdemo.azurewebsites.net/swagger/index.html#/Api' target='_blank' rel='noopener noreferrer') https://fastendpointsdemo.azurewebsites.net
             img.img-fluid.d-block.w-90.rounded.border.border-1.border-dark(src='/assets/img/MarkHazleton-FastEndpointsDemo-PersonAPI.png' alt='FastEndpoints Demo Home Page')
         p.
           Taking FastEndpoints for a test drive was a fun project to quickly get an understanding of the Fast Endpoint libary.
@@ -297,3 +252,47 @@ block layout-content
           li.list-group-item
             a(href='https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/', target='_blank') https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/
             span MVC Controllers are Dinosaurs. Embrace API Endpoints an opinion piece by Steve Smith (aka Ardalis)
+
+
+    .painteddesert-section-content
+      .card.card-primarily
+        .card-header GUIDs vs Auto-Incrementing Integers
+        .card-body
+          p.
+            Choosing between GUIDs and auto-incrementing integers for primary keys is a common decision in database design.
+            While both have their advantages and drawbacks, the choice often depends on the specific requirements of the application.
+            For scenarios where global uniqueness is essential, such as distributed systems or disconnected data creation,
+            GUIDs offer a robust solution.
+            On the other hand, auto-incrementing integers provide better performance and simplicity,
+            making them suitable for large databases with predictable access patterns.
+            When faced with this decision, developers should carefully evaluate the trade-offs and select the option that best aligns with their project's needs.
+          p.
+            For the Person entity, I opted to use GUIDs as the primary key. This choice was driven by the need of keeping the active items in memory and not wanting
+            to relay on a system to create auto-incremented integers.
+          .row
+            .col-md-6
+              strong Using GUID
+              dl
+                dt Pros
+                dd
+                  ul
+                    li They are globally unique without the need for a centralized authority to manage key allocation.
+                    li They are useful in scenarios where data needs to be created offline and then synchronized with a central database, as they eliminate the risk of key collisions.
+                dt Cons
+                dd
+                  ul
+                    li Larger size may impact database performance and increase index size.
+                    li Alphanumeric nature can complicate debugging and data analysis.
+            .col-md-6
+              strong Using Auto-Incrementing Integers
+              dl
+                dt Pros
+                dd
+                  ul
+                    li Better performance and smaller index size, beneficial for large databases.
+                    li Simplicity and predictability can enhance user experience.
+                dt Cons
+                dd
+                  ul
+                    li Potential security risks, as sequential patterns can be exploited.
+                    li Can complicate data integration in distributed database environments.
