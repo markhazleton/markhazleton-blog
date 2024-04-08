@@ -48,24 +48,25 @@ block layout-content
         The SampleMvcCRUD project also includes a model called Employee that includes Department to show lookup techniques.
         The model supports an image that can be set for each Employee, and the images are stored on the file system of the application.
         Additionally, the code generates MOCK sample data so that every time you run the application, you get a different set of data.
-      pre.code.
-        public interface IEmployee
-        {
-          int Age { get; set; }
-          string? Country { get; set; }
-          Department Department { get; set; }
-          int DepartmentId { get; set; }
-          int? ManagerId { get; set; }
-          string Name { get; set; }
-          string? ProfilePicture { get; set; }
-          string? State { get; set; }
-        }
-        public interface IDepartment
-        {
-          string Description { get; set; }
-          ICollection&gt;Employee&lt; Employees { get; set; }
-          string Name { get; set; }
-        }
+      pre.language-csharp
+        code.language-csharp.
+          public interface IEmployee
+          {
+            int Age { get; set; }
+            string? Country { get; set; }
+            Department Department { get; set; }
+            int DepartmentId { get; set; }
+            int? ManagerId { get; set; }
+            string Name { get; set; }
+            string? ProfilePicture { get; set; }
+            string? State { get; set; }
+          }
+          public interface IDepartment
+          {
+            string Description { get; set; }
+            ICollection&gt;Employee&lt; Employees { get; set; }
+            string Name { get; set; }
+          }
 
       h2.mb-0 Fresh Data Every Time
       p.
@@ -79,21 +80,22 @@ block layout-content
         including names, ages, states, and departments, to simulate a real-world scenario.
 
       p Here is the method that uses the Bogus library to generate the sample data.
-      pre.code.
-        public static List&lt;Employee&gt; GetEmployeeList(int generateCount)
-        {
-          var states = new string[] { "Alabama", "Alaska", "Arizona",  };
-          var fakeEmployees = new Faker&lt;Employee&gt;()
-            // Call for objects that have complex initialization
-            .CustomInstantiator(f => new Employee())
-              .RuleFor(u => u.Name, (f, u) => f.Name.FullName())
-              .RuleFor(u => u.Age, f => f.Random.Number(18, 70))
-              .RuleFor(u => u.DepartmentId, f => f.Random.Number(1, 6))
-              .RuleFor(u => u.Country, "USA")
-              .RuleFor(u => u.State, f => f.Random.ListItem(states))
-              .FinishWith((f, u) => { });
-          return fakeEmployees.Generate(generateCount);
-        }
+      pre.language-csharp
+        code.language-csharp.
+          public static List&lt;Employee&gt; GetEmployeeList(int generateCount)
+          {
+            var states = new string[] { "Alabama", "Alaska", "Arizona",  };
+            var fakeEmployees = new Faker&lt;Employee&gt;()
+              // Call for objects that have complex initialization
+              .CustomInstantiator(f => new Employee())
+                .RuleFor(u => u.Name, (f, u) => f.Name.FullName())
+                .RuleFor(u => u.Age, f => f.Random.Number(18, 70))
+                .RuleFor(u => u.DepartmentId, f => f.Random.Number(1, 6))
+                .RuleFor(u => u.Country, "USA")
+                .RuleFor(u => u.State, f => f.Random.ListItem(states))
+                .FinishWith((f, u) => { });
+            return fakeEmployees.Generate(generateCount);
+          }
 
       p.
         Overall, the Bogus library is a great tool to have in your toolbox as a .NET developer.

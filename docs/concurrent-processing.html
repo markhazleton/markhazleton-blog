@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="X-Frame-Options" content="DENY" />
-        <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'" />
         <title>Concurrent Processing in C#: Mark Hazleton</title>
         <meta name="description" content="Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Delve into a real-world project and learn how to effectively manage multiple tasks in C#. Explore now!" />
         <meta name="keywords" content="Concurrent Processing, C# Concurrency, Task Autonomy, Synchronization, Thread Safety, Scalability, Error Handling, Load Balancing, Deadlocks, Livelocks, Resource Management, C# Programming" />
@@ -45,14 +43,11 @@
             }
         </script>
         <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1712593749515" />
-        <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/css/styles.css?version=1712607761520" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -146,82 +141,72 @@
                     </p>
                     <p>I started with a ChatGPT prompt that introduced me to the basics of concurrent processing. Armed with this initial guidance, I started writing the code. Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.</p>
                     <a href="#SemaphoreSlimClass">More on the SemaphoreSlim Class</a>
-                    <pre class="code">
-const int maxConcurrency = 100; // Maximum concurrent tasks allowed
-SemaphoreSlim semaphore = new(maxConcurrency);
-List&lt;Task&gt; tasks = new();
-int? taskId = 0;
-while (taskId is not null)
-{
-  Task task = ProcessAsync(taskId.Value, tasks.Count, await AwaitSemaphoreAsync(semaphore), semaphore);
-  tasks.Add(task);
-  taskId = GetNextTaskId(taskId);
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">int</span></span> maxConcurrency <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span> <span class="token comment">// Maximum concurrent tasks allowed</span>
+<span class="token class-name">SemaphoreSlim</span> semaphore <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span>maxConcurrency<span class="token punctuation">)</span><span class="token punctuation">;</span>
+List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>Task<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> tasks <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> taskId <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span>taskId <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">Task</span> task <span class="token operator">=</span> <span class="token function">ProcessAsync</span><span class="token punctuation">(</span>taskId<span class="token punctuation">.</span>Value<span class="token punctuation">,</span> tasks<span class="token punctuation">.</span>Count<span class="token punctuation">,</span> <span class="token keyword">await</span> <span class="token function">AwaitSemaphoreAsync</span><span class="token punctuation">(</span>semaphore<span class="token punctuation">)</span><span class="token punctuation">,</span> semaphore<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  tasks<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>task<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  taskId <span class="token operator">=</span> <span class="token function">GetNextTaskId</span><span class="token punctuation">(</span>taskId<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-  if (tasks.Count >= maxConcurrency)
-  {
-    Task finishedTask = await Task.WhenAny(tasks);
-    tasks.Remove(finishedTask);
-  }
-}
-await Task.WhenAll(tasks);
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>tasks<span class="token punctuation">.</span>Count <span class="token operator">>=</span> maxConcurrency<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name">Task</span> finishedTask <span class="token operator">=</span> <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">WhenAny</span><span class="token punctuation">(</span>tasks<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    tasks<span class="token punctuation">.</span><span class="token function">Remove</span><span class="token punctuation">(</span>finishedTask<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">WhenAll</span><span class="token punctuation">(</span>tasks<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-</pre
-                    >
+</code></pre>
                     <p>I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.</p>
-                    <pre class="code">
-//  Wait for semaphore to be released so that next task can start
-static async Task&lt;long&gt; AwaitSemaphoreAsync(SemaphoreSlim semaphore)
-{
-  Stopwatch stopwatch = Stopwatch.StartNew();
-  await semaphore.WaitAsync();
-  stopwatch.Stop();
-  return stopwatch.ElapsedTicks;
-}
-</pre
-                    >
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token comment">//  Wait for semaphore to be released so that next task can start</span>
+<span class="token keyword">static</span> <span class="token keyword">async</span> Task<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token keyword">long</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">AwaitSemaphoreAsync</span><span class="token punctuation">(</span><span class="token class-name">SemaphoreSlim</span> semaphore<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">Stopwatch</span> stopwatch <span class="token operator">=</span> Stopwatch<span class="token punctuation">.</span><span class="token function">StartNew</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> semaphore<span class="token punctuation">.</span><span class="token function">WaitAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  stopwatch<span class="token punctuation">.</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> stopwatch<span class="token punctuation">.</span>ElapsedTicks<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
                     <p>I created a mock async processing method that simulates work by delaying for a random amount of time. I also added telemetry data so that I could track the task ID, task count, semaphore count, and wait time. I used the `Task.Delay` method to simulate work, but in a real-world application, this would be replaced with actual work. The random delay was added to simulate the dynamic nature of concurrent processing.</p>
-                    <pre class="code">
-// Mock Async Task to simulate work
-static async Task ProcessAsync(int taskId, int taskCount, long waitTicks, SemaphoreSlim semaphore)
-{
-  try
-  {
-    await Task.Delay(TimeSpan.FromMilliseconds(new Random().Next(1, 500)));
-    Console.WriteLine($"Task:{taskId:D3} T:{taskCount} S:{semaphore.CurrentCount} W:{waitTicks}");
-  }
-  finally
-  {
-    semaphore.Release();
-  }
-}
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Mock Async Task to simulate work</span>
+<span class="token keyword">static</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">ProcessAsync</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> taskId<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">int</span></span> taskCount<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">long</span></span> waitTicks<span class="token punctuation">,</span> <span class="token class-name">SemaphoreSlim</span> semaphore<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">try</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Delay</span><span class="token punctuation">(</span>TimeSpan<span class="token punctuation">.</span><span class="token function">FromMilliseconds</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token constructor-invocation class-name">Random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"Task:</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">taskId</span><span class="token format-string"><span class="token punctuation">:</span>D3</span><span class="token punctuation">}</span></span><span class="token string"> T:</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">taskCount</span><span class="token punctuation">}</span></span><span class="token string"> S:</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">semaphore<span class="token punctuation">.</span>CurrentCount</span><span class="token punctuation">}</span></span><span class="token string"> W:</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">waitTicks</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">finally</span>
+  <span class="token punctuation">{</span>
+    semaphore<span class="token punctuation">.</span><span class="token function">Release</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-</pre
-                    >
+</code></pre>
                     <p>Finally, I created a function to generate the next task ID. This is how I controlled the number of tasks that were created.</p>
-                    <pre class="code">
-// Get Next Task ID
-static int? GetNextTaskId(int? taskId)
-{
-  if (taskId &lt; 1000) return taskId + 1;
-  else return null;
-}
-</pre
-                    >
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Get Next Task ID</span>
+<span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> <span class="token function">GetNextTaskId</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> taskId<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>taskId <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span> <span class="token number">1000</span><span class="token punctuation">)</span> <span class="token keyword">return</span> taskId <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">else</span> <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
                     <h2>Iterating and Learning</h2>
                     <p>As I dove into the code, I realized that understanding concurrent processing goes beyond just knowing how to create threads or tasks. I needed to comprehend the concept of synchronization and how to manage the number of concurrently executing tasks. The code I had started with was a great foundation, but it required iteration and refinement to achieve my goals.</p>
                     <p>The heart of the application was the use of the `SemaphoreSlim` class, which acted as a gatekeeper to control the number of tasks running concurrently. This was a crucial lesson in managing shared resources and preventing resource exhaustion.</p>
                     <h2>Experimenting and Observing</h2>
                     <p>With each iteration of the code, I ran the application and observed its behavior. The output of the program provided valuable insights into how tasks were being managed, the time each task spent waiting for a semaphore, and the overall concurrency control.</p>
-                    <pre class="code">
-...
-Task:061 T:61 S:2 W:2
-Task:070 T:70 S:0 W:4
-Task:037 T:37 S:0 W:2
-Task:018 T:18 S:3 W:2
-Task:023 T:23 S:1 W:2
-Task:026 T:26 S:2 W:3
-...</pre
-                    >
+                    <pre class="language-json"><code class="language-json">...
+Task<span class="token operator">:</span><span class="token number">061</span> T<span class="token operator">:</span><span class="token number">61</span> S<span class="token operator">:</span><span class="token number">2</span> W<span class="token operator">:</span><span class="token number">2</span>
+Task<span class="token operator">:</span><span class="token number">070</span> T<span class="token operator">:</span><span class="token number">70</span> S<span class="token operator">:</span><span class="token number">0</span> W<span class="token operator">:</span><span class="token number">4</span>
+Task<span class="token operator">:</span><span class="token number">037</span> T<span class="token operator">:</span><span class="token number">37</span> S<span class="token operator">:</span><span class="token number">0</span> W<span class="token operator">:</span><span class="token number">2</span>
+Task<span class="token operator">:</span><span class="token number">018</span> T<span class="token operator">:</span><span class="token number">18</span> S<span class="token operator">:</span><span class="token number">3</span> W<span class="token operator">:</span><span class="token number">2</span>
+Task<span class="token operator">:</span><span class="token number">023</span> T<span class="token operator">:</span><span class="token number">23</span> S<span class="token operator">:</span><span class="token number">1</span> W<span class="token operator">:</span><span class="token number">2</span>
+Task<span class="token operator">:</span><span class="token number">026</span> T<span class="token operator">:</span><span class="token number">26</span> S<span class="token operator">:</span><span class="token number">2</span> W<span class="token operator">:</span><span class="token number">3</span>
+...</code></pre>
                     <p>The output highlighted the dynamic nature of concurrent processing, where tasks were processed and released in a controlled manner, ensuring that the maximum concurrency was maintained while avoiding resource contention.</p>
                     <h2>Celebrating Success</h2>
                     <p>After several iterations, moments of frustration, and numerous debug sessions, I finally achieved my desired result. The application was now a well-functioning demonstration of concurrent processing, showcasing my newfound understanding of synchronization and resource management.</p>
@@ -401,8 +386,6 @@ Task:026 T:26 S:2 W:3
                     </div>
                 </div>
             </footer>
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->
             <script src="/js/scripts.js"></script>
         </div>

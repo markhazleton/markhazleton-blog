@@ -31,12 +31,12 @@ block layout-content
         a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/asyncdemo/' target="_blank" title='The full source code for the Async Demo is available on GitHub') The full source code for the Async Demo is available on GitHub
       h1 Fire and Forget
       p.card-text.lead.mb-5
-          | While working on a project, I encountered a practical challenge: how do I call an async method without waiting for it to process.
-          | I decided to explore the use of Fire and Forget technique in my AsyncDemo project.
-          a(href='https://github.com/markhazleton/AsyncDemo') https://github.com/markhazleton/AsyncDemo
-          | .
-          | Fire-and-forget is a programming approach where tasks are sent off to be processed independently,
-          | without the initiating program tracking or waiting for the results of these tasks.
+        | While working on a project, I encountered a practical challenge: how do I call an async method without waiting for it to process.
+        | I decided to explore the use of Fire and Forget technique in my AsyncDemo project.
+        a(href='https://github.com/markhazleton/AsyncDemo') https://github.com/markhazleton/AsyncDemo
+        | .
+        | Fire-and-forget is a programming approach where tasks are sent off to be processed independently,
+        | without the initiating program tracking or waiting for the results of these tasks.
 
       h2 The Risks Of Not Waiting
       p.
@@ -52,19 +52,19 @@ block layout-content
         dt I/O Operations and External System Interactions
         dd In scenarios involving I/O operations or external systems, unawaited tasks can result in incomplete or failed operations without appropriate notification or recovery mechanisms.
       p.
-          The Fire and Forget pattern must be used with understanding of its risks and appropriate error handling mechanisms.
-          In the context of my AsyncDemo project, I decided to use the Fire and Forget pattern to update a Service Bus topic upon user login.
-          This action, while important, is not directly tied to the user's immediate experience.
-          In such cases, a delayed or inefficient handling can inadvertently hamper the API's responsiveness, leading to a suboptimal user experience.
+        The Fire and Forget pattern must be used with understanding of its risks and appropriate error handling mechanisms.
+        In the context of my AsyncDemo project, I decided to use the Fire and Forget pattern to update a Service Bus topic upon user login.
+        This action, while important, is not directly tied to the user's immediate experience.
+        In such cases, a delayed or inefficient handling can inadvertently hamper the API's responsiveness, leading to a suboptimal user experience.
 
       h2 Benefits Of Fire And Forget
       strong.lead Let`s Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.
       p.
-       In today's fast-paced consumer driven world,
-       API performance is vital for the user experience and business efficiency.
-       One pattern that can be used is the "Fire and Forget" technique,
-       particularly in scenarios where immediate response is key,
-       but their are other tasks that are not critical to the user interaction.
+        In today's fast-paced consumer driven world,
+        API performance is vital for the user experience and business efficiency.
+        One pattern that can be used is the "Fire and Forget" technique,
+        particularly in scenarios where immediate response is key,
+        but their are other tasks that are not critical to the user interaction.
       p Take, for example, the process of updating a Service Bus topic upon user login. This action, while important, is not directly tied to the user's immediate experience. In such cases, a delayed or inefficient handling can inadvertently hamper the API's responsiveness, leading to a suboptimal user experience.
       p This is where a well-designed Fire and Forget class comes into play. By effectively decoupling non-critical tasks from the main execution thread, we ensure that our API remains swift and responsive. This approach not only enhances performance but also elevates the user experience, a factor that's increasingly becoming a differentiator in the digital marketplace.
       p Consider the scenario of a user logging into an application. Upon successful authentication, the system needs to update a Service Bus topic - an action that triggers other services to perform tasks like profile rebuilding or login history recording. While these tasks are important for maintaining system integrity and providing personalized experiences, they are not immediately critical to the user who is logging in.
@@ -118,11 +118,11 @@ block layout-content
       dl
         dt Class Definition
         dd.
-         The `FireAndForgetUtility` class is a sealed class designed for asynchronous operations without requiring a response,
-         incorporating exception handling and logging. In C# and other .NET languages, a 'sealed' class is a class that cannot
-         be inherited by other classes. It's a way to prevent further inheritance and is often used to provide a guarantee
-         that the class's behavior won't be altered unexpectedly by a subclass.
-         Once a class is declared as 'sealed', it's a final class and cannot serve as a base class for any other class.
+          The `FireAndForgetUtility` class is a sealed class designed for asynchronous operations without requiring a response,
+          incorporating exception handling and logging. In C# and other .NET languages, a 'sealed' class is a class that cannot
+          be inherited by other classes. It's a way to prevent further inheritance and is often used to provide a guarantee
+          that the class's behavior won't be altered unexpectedly by a subclass.
+          Once a class is declared as 'sealed', it's a final class and cannot serve as a base class for any other class.
         dt Constructor and Logger
         dd It takes an `ILogger` object in the constructor and initializes a private readonly `_logger` field. The logger is crucial for tracking the behavior and exceptions of the tasks.
         dt Method: SafeFireAndForget
@@ -135,51 +135,51 @@ block layout-content
         dd The method also handles task cancellation scenarios, logging a message if the task is canceled or if the cancellation token is requested.
         dt Conclusion
         dd This utility class is a robust tool for handling tasks that don't require direct synchronization with the main execution flow, enhancing application performance and responsiveness.
-      pre.code
-        code
-          | public sealed class FireAndForgetUtility
-          | {
-          |     private readonly ILogger _logger;
-          |
-          |     public FireAndForgetUtility(ILogger logger)
-          |     {
-          |         _logger = logger;
-          |     }
-          |
-          |     public void SafeFireAndForget(Task task, CancellationToken cancellationToken = default)
-          |     {
-          |         if (task == null)
-          |         {
-          |             throw new ArgumentNullException(nameof(task));
-          |         }
-          |
-          |         task.ContinueWith(t =>
-          |         {
-          |             if (t.IsFaulted)
-          |             {
-          |                 LogExceptions(t.Exception);
-          |             }
-          |             else if (t.IsCanceled)
-          |             {
-          |                 _logger.LogInformation("Task canceled");
-          |             }
-          |             else
-          |             {
-          |                 _logger.LogInformation("Task completed");
-          |             }
-          |         }, cancellationToken);
-          |     }
-          |
-          |     private void LogExceptions(Exception exception)
-          |     {
-          |         _logger.LogError(exception, "Exception in task");
-          |
-          |         if (exception is AggregateException aggregateException)
-          |         {
-          |             foreach (var innerException in aggregateException.InnerExceptions)
-          |             {
-          |                 LogExceptions(innerException);
-          |             }
-          |         }
-          |     }
-          | }
+          pre.language-csharp
+            code.language-csharp.
+              | public sealed class FireAndForgetUtility
+              | {
+              |     private readonly ILogger _logger;
+              |
+              |     public FireAndForgetUtility(ILogger logger)
+              |     {
+              |         _logger = logger;
+              |     }
+              |
+              |     public void SafeFireAndForget(Task task, CancellationToken cancellationToken = default)
+              |     {
+              |         if (task == null)
+              |         {
+              |             throw new ArgumentNullException(nameof(task));
+              |         }
+              |
+              |         task.ContinueWith(t =>
+              |         {
+              |             if (t.IsFaulted)
+              |             {
+              |                 LogExceptions(t.Exception);
+              |             }
+              |             else if (t.IsCanceled)
+              |             {
+              |                 _logger.LogInformation("Task canceled");
+              |             }
+              |             else
+              |             {
+              |                 _logger.LogInformation("Task completed");
+              |             }
+              |         }, cancellationToken);
+              |     }
+              |
+              |     private void LogExceptions(Exception exception)
+              |     {
+              |         _logger.LogError(exception, "Exception in task");
+              |
+              |         if (exception is AggregateException aggregateException)
+              |         {
+              |             foreach (var innerException in aggregateException.InnerExceptions)
+              |             {
+              |                 LogExceptions(innerException);
+              |             }
+              |         }
+              |     }
+              | }

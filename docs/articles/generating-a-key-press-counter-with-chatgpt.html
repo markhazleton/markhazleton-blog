@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="X-Frame-Options" content="DENY" />
-        <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'" />
         <title>Generating A Key Press Counter with Chat GPT</title>
         <meta name="description" content="Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights." />
         <meta name="keywords" content="key press counter, mouse click tracker, user interaction, software development, ethical computing, Mark Hazleton" />
@@ -55,14 +53,11 @@
             }
         </script>
         <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1712593749265" />
-        <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/css/styles.css?version=1712607761278" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -139,22 +134,22 @@
                         <dd>Clearly communicate the application's functionality to users and obtain their consent before use. Consider privacy laws and ethical guidelines.</dd>
                     </dl>
                     <p>We leveraged global hooks in .NET to monitor activities. Key aspects of the implementation include setting up hooks, event handling, and logging.</p>
-                    <pre class="code"><code>// Initialize global hooks
-globalHook = Hook.GlobalEvents();
-globalHook.KeyPress += GlobalHookKeyPress;
-globalHook.MouseClick += GlobalHookMouseClick;
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Initialize global hooks</span>
+globalHook <span class="token operator">=</span> Hook<span class="token punctuation">.</span><span class="token function">GlobalEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+globalHook<span class="token punctuation">.</span>KeyPress <span class="token operator">+=</span> GlobalHookKeyPress<span class="token punctuation">;</span>
+globalHook<span class="token punctuation">.</span>MouseClick <span class="token operator">+=</span> GlobalHookMouseClick<span class="token punctuation">;</span>
 
-// Event handler for key presses
-private void GlobalHookKeyPress(object sender, KeyPressEventArgs e)
-{
-  keyPressCount++;
-}
+<span class="token comment">// Event handler for key presses</span>
+<span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">GlobalHookKeyPress</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">object</span></span> sender<span class="token punctuation">,</span> <span class="token class-name">KeyPressEventArgs</span> e<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  keyPressCount<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-// Event handler for mouse clicks
-private void GlobalHookMouseClick(object sender, MouseEventArgs e)
-{
-  mouseClickCount++;
-}
+<span class="token comment">// Event handler for mouse clicks</span>
+<span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">GlobalHookMouseClick</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">object</span></span> sender<span class="token punctuation">,</span> <span class="token class-name">MouseEventArgs</span> e<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  mouseClickCount<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 </code></pre>
                     <h3>Source Code</h3>
                     <p>
@@ -172,21 +167,21 @@ private void GlobalHookMouseClick(object sender, MouseEventArgs e)
                     <p>To display balloon notifications on double click, I utilized the `ShowBalloonTip` method of the `NotifyIcon` class.</p>
                     <p>With these additions, users can now access the key press counter by double-clicking the tray icon and receive notifications about the counter's status.</p>
                     <p>Here's how I achieved this functionality:</p>
-                    <pre class="code"><code>trayIcon &#x3D; new NotifyIcon()
-{
-  Icon &#x3D; new Icon(&quot;favicon.ico&quot;), &#x2F;&#x2F; Set your icon here
-  ContextMenuStrip &#x3D; CreateContextMenu(), &#x2F;&#x2F; Optional: Set if you want a right-click menu
-  Visible &#x3D; true,
-  Text &#x3D; &quot;Double Click Icon for Stats&quot;
-};
-&#x2F;&#x2F; Optional: Handle double-click event
-trayIcon.DoubleClick +&#x3D; TrayIcon_DoubleClick;
+                    <pre class="language-csharp"><code class="language-csharp">trayIcon <span class="token operator">&amp;</span>#x3D<span class="token punctuation">;</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">NotifyIcon</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  Icon <span class="token operator">&amp;</span>#x3D<span class="token punctuation">;</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Icon</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>favicon<span class="token punctuation">.</span>ico<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>#x2F<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x2F<span class="token punctuation">;</span> Set your icon here
+  ContextMenuStrip <span class="token operator">&amp;</span>#x3D<span class="token punctuation">;</span> <span class="token function">CreateContextMenu</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>#x2F<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x2F<span class="token punctuation">;</span> Optional<span class="token punctuation">:</span> Set <span class="token keyword">if</span> you want a right<span class="token operator">-</span>click menu
+  Visible <span class="token operator">&amp;</span>#x3D<span class="token punctuation">;</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  Text <span class="token operator">&amp;</span>#x3D<span class="token punctuation">;</span> <span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>Double Click Icon <span class="token keyword">for</span> Stats<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#x2F<span class="token punctuation">;</span><span class="token operator">&amp;</span>#x2F<span class="token punctuation">;</span> Optional<span class="token punctuation">:</span> Handle <span class="token keyword">double</span><span class="token operator">-</span>click <span class="token keyword">event</span>
+trayIcon<span class="token punctuation">.</span>DoubleClick <span class="token operator">+</span><span class="token operator">&amp;</span>#x3D<span class="token punctuation">;</span> TrayIcon_DoubleClick<span class="token punctuation">;</span>
 
-private void UpdateTrayIconText()
-{
-   string log &#x3D; $&quot;\n Keystrokes: {keyPressCounter} \n Mouse Clicks: {mouseClickCounter}&quot;;
-   trayIcon.ShowBalloonTip(5000, &quot;KeyPressCounter Stats&quot;, $&quot;{log}&quot;, ToolTipIcon.Info);
-}
+<span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">UpdateTrayIconText</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">string</span> log <span class="token operator">&amp;</span>#x3D<span class="token punctuation">;</span> $<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>\<span class="token class-name">n</span> Keystrokes<span class="token punctuation">:</span> <span class="token punctuation">{</span>keyPressCounter<span class="token punctuation">}</span> \n <span class="token class-name">Mouse</span> Clicks<span class="token punctuation">:</span> <span class="token punctuation">{</span>mouseClickCounter<span class="token punctuation">}</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">;</span>
+  trayIcon<span class="token punctuation">.</span><span class="token function">ShowBalloonTip</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>KeyPressCounter Stats<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">,</span> $<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">{</span>log<span class="token punctuation">}</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">,</span> ToolTipIcon<span class="token punctuation">.</span>Info<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 </code></pre>
                     <p>The integration of a tray icon and balloon notifications enhances the usability of the key press counter application. It provides a convenient way for users to access the counter and stay informed about their key press activity. By leveraging ChatGPT and the capabilities of the `NotifyIcon` class, I was able to create a more user-friendly experience.</p>
                 </div>
@@ -287,8 +282,6 @@ private void UpdateTrayIconText()
                     </div>
                 </div>
             </footer>
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->
             <script src="/js/scripts.js"></script>
         </div>

@@ -37,11 +37,16 @@ module.exports = function renderAssets() {
     sh.cp(sourceConfigFile, destConfigFile);
 
 
+    // Get the fontawesome fonts
+    const fontSourcePath = upath.resolve(upath.dirname(__filename), '../node_modules/fontawesome-free/webfonts/');
+    const fontDestPath = upath.resolve(destPath);
+    sh.mkdir("-p", fontDestPath); // Ensure the destination directory exists
+    sh.cp('-R', fontSourcePath, fontDestPath);
 
-
-
-
-
-
+    // Get the devicon fonts
+    const deviconfontSourcePath = upath.resolve(upath.dirname(__filename), '../node_modules/devicon/fonts/');
+    const deviconfontDestPath = upath.resolve(destPath, 'css/');
+    sh.mkdir("-p", deviconfontDestPath);
+    sh.cp('-R', deviconfontSourcePath, deviconfontDestPath);
 
 };

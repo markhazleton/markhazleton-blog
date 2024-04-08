@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="X-Frame-Options" content="DENY" />
-        <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'" />
         <title>CancellationToken for Efficient Asynchronous Programming</title>
         <meta name="description" content="Explore the effective use of CancellationToken in C# for managing asynchronous programming. Understand how to implement cancellations efficiently in .NET applications." />
         <meta name="keywords" content="CancellationToken, Asynchronous Programming, C#, .NET, Task Cancellation, Efficient Coding, Software Development, .NET Asynchronous Techniques" />
@@ -57,14 +55,11 @@
             }
         </script>
         <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1712593749485" />
-        <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/css/styles.css?version=1712607761493" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -141,16 +136,14 @@
                         <strong>'CancellationToken'</strong>
                         with the Task class:
                     </p>
-                    <pre class="code">
-public async Task DownloadFileAsync(string url,
-  string filename,
-  HttpClient client,
-  CancellationToken cancellationToken)
-{
-  await client.DownloadFileTaskAsync(url, filename, cancellationToken);
-}
-</pre
-                    >
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">DownloadFileAsync</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> url<span class="token punctuation">,</span>
+  <span class="token class-name"><span class="token keyword">string</span></span> filename<span class="token punctuation">,</span>
+  <span class="token class-name">HttpClient</span> client<span class="token punctuation">,</span>
+  <span class="token class-name">CancellationToken</span> cancellationToken<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">await</span> client<span class="token punctuation">.</span><span class="token function">DownloadFileTaskAsync</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
                     <p>
                         In this example, the DownloadFileAsync method takes a URL and a filename as input, along with a
                         <strong>'CancellationToken'</strong>
@@ -180,32 +173,30 @@ public async Task DownloadFileAsync(string url,
                         <strong>'ThrowIfCancellationRequested()'</strong>
                         . Ideally, you should place it in a way that ensures cancellation occurs as close to the critical point as possible while still providing sufficient time for cleanup and graceful shutdown.
                     </p>
-                    <pre class="code">
-public async Task DownloadFileAsync(list&lt;string&gt; urls,
-  string filename,
-  HttpClient client,
-  CancellationToken cancellationToken)
-  {
-    try {
-      foreach (var url in urls)
-      {
-        // Check for cancellation before each download
-        cancellationToken.ThrowIfCancellationRequested();
-        await client.DownloadFileTaskAsync(url, filename, cancellationToken);
-      }
-    }
-    catch (TaskCanceledException ex)
-    {
-      // Handle cancellation thronw by client.DownloadFileTaskAsync() here
-    }
-    catch (OperationCanceledException ex)
-    {
-      // Handle cancellation thronw by ThrowIfCancellationRequested() here
-    }
-  }
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">DownloadFileAsync</span><span class="token punctuation">(</span>list<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token keyword">string</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> urls<span class="token punctuation">,</span>
+  <span class="token class-name"><span class="token keyword">string</span></span> filename<span class="token punctuation">,</span>
+  <span class="token class-name">HttpClient</span> client<span class="token punctuation">,</span>
+  <span class="token class-name">CancellationToken</span> cancellationToken<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> url <span class="token keyword">in</span> urls<span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        <span class="token comment">// Check for cancellation before each download</span>
+        cancellationToken<span class="token punctuation">.</span><span class="token function">ThrowIfCancellationRequested</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">await</span> client<span class="token punctuation">.</span><span class="token function">DownloadFileTaskAsync</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">TaskCanceledException</span> ex<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token comment">// Handle cancellation thronw by client.DownloadFileTaskAsync() here</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">OperationCanceledException</span> ex<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token comment">// Handle cancellation thronw by ThrowIfCancellationRequested() here</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
 
-</pre
-                    >
+</code></pre>
                     <p>
                         Overall, careful consideration of where to place the call to
                         <strong>'ThrowIfCancellationRequested()'</strong>
@@ -350,8 +341,6 @@ public async Task DownloadFileAsync(list&lt;string&gt; urls,
                     </div>
                 </div>
             </footer>
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->
             <script src="/js/scripts.js"></script>
         </div>

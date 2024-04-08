@@ -107,39 +107,40 @@ block layout-content
             This returns the code for the Article Model.
           p.
             And the code for the Article Service.
-          pre.code.
-            // ArticleModel.cs
-            public class ArticleModel
-            {
-              [JsonPropertyName("id")]
-              public int Id { get; set; }
+          pre.language-csharp
+            code.language-csharp.
+              // ArticleModel.cs
+              public class ArticleModel
+              {
+                [JsonPropertyName("id")]
+                public int Id { get; set; }
 
-              [JsonPropertyName("Section")]
-              public string Section { get; set; }
+                [JsonPropertyName("Section")]
+                public string Section { get; set; }
 
-              [JsonPropertyName("slug")]
-              public string Slug { get; set; }
+                [JsonPropertyName("slug")]
+                public string Slug { get; set; }
 
-              [JsonPropertyName("name")]
-              public string Name { get; set; }
+                [JsonPropertyName("name")]
+                public string Name { get; set; }
 
-              [JsonPropertyName("content")]
-              public string ArticleContent { get; set; }
+                [JsonPropertyName("content")]
+                public string ArticleContent { get; set; }
 
-              [JsonPropertyName("description")]
-              public string Description { get; set; }
+                [JsonPropertyName("description")]
+                public string Description { get; set; }
 
-              [JsonPropertyName("img_src")]
-              public string ImgSrc { get; set; }
+                [JsonPropertyName("img_src")]
+                public string ImgSrc { get; set; }
 
-              [JsonPropertyName("lastmod")]
-              public string LastModified { get; set; }
-                = DateTime.Now.ToString("yyyy-MM-dd");
+                [JsonPropertyName("lastmod")]
+                public string LastModified { get; set; }
+                  = DateTime.Now.ToString("yyyy-MM-dd");
 
-              [JsonPropertyName("changefreq")]
-              public string ChangeFrequency { get; set; }
-                = "monthly";
-            }
+                [JsonPropertyName("changefreq")]
+                public string ChangeFrequency { get; set; }
+                  = "monthly";
+              }
 
         dt Step 2: Create a Razor Page for Managing Articles
         dd
@@ -190,48 +191,50 @@ block layout-content
             }
           p.
             This returns the code for the Project Model.
-          pre.code.
-            // ProjectModel.cs
-            public class ProjectModel
-            {
-              public string Image { get; set; }
-              public string Title { get; set; }
-              public string Description { get; set; }
-              public string Link { get; set; }
-            }
+          pre.language-csharp
+            code.language-csharp.
+              // ProjectModel.cs
+              public class ProjectModel
+              {
+                public string Image { get; set; }
+                public string Title { get; set; }
+                public string Description { get; set; }
+                public string Link { get; set; }
+              }
 
           p.
             And the code for the Project Service.
-          pre.code.
-            // ProjectService.cs
-            using System.Collections.Generic;
-            using System.IO;
-            using Newtonsoft.Json;
+          pre.language-csharp
+            code.language-csharp.
+              // ProjectService.cs
+              using System.Collections.Generic;
+              using System.IO;
+              using Newtonsoft.Json;
 
-            public class ProjectService
-            {
-              private readonly string _jsonFilePath;
-              public ProjectService(string jsonFilePath)
+              public class ProjectService
               {
-                _jsonFilePath = jsonFilePath;
-              }
-
-              public List&lt;ProjectModel&gt; GetProjects()
-              {
-                using (StreamReader reader = new StreamReader(_jsonFilePath))
+                private readonly string _jsonFilePath;
+                public ProjectService(string jsonFilePath)
                 {
-                  string json = reader.ReadToEnd();
-                  List&lt;ProjectModel&gt; projects = JsonConvert.DeserializeObject&lt;List&lt;ProjectModel&gt;&gt;(json);
-                  return projects;
+                  _jsonFilePath = jsonFilePath;
+                }
+
+                public List&lt;ProjectModel&gt; GetProjects()
+                {
+                  using (StreamReader reader = new StreamReader(_jsonFilePath))
+                  {
+                    string json = reader.ReadToEnd();
+                    List&lt;ProjectModel&gt; projects = JsonConvert.DeserializeObject&lt;List&lt;ProjectModel&gt;&gt;(json);
+                    return projects;
+                  }
+                }
+
+                public void SaveProjects(List&lt;ProjectModel&gt; projects)
+                {
+                  string json = JsonConvert.SerializeObject(projects, Formatting.Indented);
+                  File.WriteAllText(_jsonFilePath, json);
                 }
               }
-
-              public void SaveProjects(List&lt;ProjectModel&gt; projects)
-              {
-                string json = JsonConvert.SerializeObject(projects, Formatting.Indented);
-                File.WriteAllText(_jsonFilePath, json);
-              }
-            }
 
         dt Step 2: Create a Razor Page for Managing Projects
         dd
@@ -246,84 +249,86 @@ block layout-content
           p.
             This returns the code for the Razor page.
 
-          pre.code.
-            // Projects.cshtml
-            @page
-            @model ProjectsModel
-            @{
-              ViewData["Title"] = "Projects";
-            }
-            &lt;h1&gt;@ViewData[&quot;Title&quot;]&lt;/h1&gt;
-
-            &lt;table class=&quot;table&quot;&gt;
-              &lt;thead&gt;
-                &lt;tr&gt;
-                  &lt;th&gt;Image&lt;/th&gt;
-                  &lt;th&gt;Title&lt;/th&gt;
-                  &lt;th&gt;Description&lt;/th&gt;
-                  &lt;th&gt;Link&lt;/th&gt;
-                &lt;/tr&gt;
-              &lt;/thead&gt;
-              &lt;tbody&gt;
-              @foreach (var project in Model.Projects)
-              {
-                &lt;tr&gt;
-                  &lt;td&gt;&lt;img src=&quot;@project.Image&quot; alt=&quot;@project.Title&quot; width=&quot;100&quot; /&gt;&lt;/td&gt;
-                  &lt;td&gt;@project.Title&lt;/td&gt;
-                  &lt;td&gt;@project.Description&lt;/td&gt;
-                  &lt;td&gt;&lt;a href=&quot;@project.Link&quot; target=&quot;_blank&quot;&gt;Visit&lt;/a&gt;&lt;/td&gt;
-                &lt;/tr&gt;
+          pre.language-csharp
+            code.language-csharp.
+              // Projects.cshtml
+              @page
+              @model ProjectsModel
+              @{
+                ViewData["Title"] = "Projects";
               }
-              &lt;/tbody&gt;
-              &lt;/table&gt;
+              &lt;h1&gt;@ViewData[&quot;Title&quot;]&lt;/h1&gt;
 
-            // Projects.cshtml.cs
-            using Microsoft.AspNetCore.Mvc;
-            using Microsoft.AspNetCore.Mvc.RazorPages;
-            using System.Collections.Generic;
+              &lt;table class=&quot;table&quot;&gt;
+                &lt;thead&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Image&lt;/th&gt;
+                    &lt;th&gt;Title&lt;/th&gt;
+                    &lt;th&gt;Description&lt;/th&gt;
+                    &lt;th&gt;Link&lt;/th&gt;
+                  &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                @foreach (var project in Model.Projects)
+                {
+                  &lt;tr&gt;
+                    &lt;td&gt;&lt;img src=&quot;@project.Image&quot; alt=&quot;@project.Title&quot; width=&quot;100&quot; /&gt;&lt;/td&gt;
+                    &lt;td&gt;@project.Title&lt;/td&gt;
+                    &lt;td&gt;@project.Description&lt;/td&gt;
+                    &lt;td&gt;&lt;a href=&quot;@project.Link&quot; target=&quot;_blank&quot;&gt;Visit&lt;/a&gt;&lt;/td&gt;
+                  &lt;/tr&gt;
+                }
+                &lt;/tbody&gt;
+                &lt;/table&gt;
 
-            public class ProjectsModel : PageModel
-            {
-              private readonly ProjectService _projectService;
-              public ProjectsModel(ProjectService projectService)
-              {
-                _projectService = projectService;
-              }
-              public List&lt;ProjectModel&gt; Projects { get; private set; }
-              public void OnGet()
-              {
-                Projects = _projectService.GetProjects();
-              }
-            }
+                // Projects.cshtml.cs
+                using Microsoft.AspNetCore.Mvc;
+                using Microsoft.AspNetCore.Mvc.RazorPages;
+                using System.Collections.Generic;
+
+                public class ProjectsModel : PageModel
+                {
+                  private readonly ProjectService _projectService;
+                  public ProjectsModel(ProjectService projectService)
+                  {
+                    _projectService = projectService;
+                  }
+                  public List&lt;ProjectModel&gt; Projects { get; private set; }
+                  public void OnGet()
+                  {
+                    Projects = _projectService.GetProjects();
+                  }
+                }
 
         dt Step 3: Configure Project Service for Dependency Injection
         dd
           p.
             Now that we have the service and Razor page, we can register the service and point to the Projects.JSON file.
 
-          pre.code.
-            // Program.cs
-            // Register Services
-            builder.Services.AddSingleton&gt;ArticleService&lt;(provider =&gt;
-            {
-              return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")));
-            });
-            builder.Services.AddSingleton&gt;ProjectService&lt;(provider =>
-            {
-              return new ProjectService(Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json")));
-            });
-            // Add a Virtual Directory for our images
-            app.UseStaticFiles(new StaticFileOptions
-            {
-              FileProvider = new PhysicalFileProvider(Path.GetFullPath(Path.Combine("..", "..", "src", "assets", "img"))),
-              RequestPath = "/assets/img"
-            });
+          pre.language-csharp
+            code.language-csharp.
+              // Program.cs
+              // Register Services
+              builder.Services.AddSingleton&gt;ArticleService&lt;(provider =&gt;
+              {
+                return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")));
+              });
+              builder.Services.AddSingleton&gt;ProjectService&lt;(provider =>
+              {
+                return new ProjectService(Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json")));
+              });
+              // Add a Virtual Directory for our images
+              app.UseStaticFiles(new StaticFileOptions
+              {
+                FileProvider = new PhysicalFileProvider(Path.GetFullPath(Path.Combine("..", "..", "src", "assets", "img"))),
+                RequestPath = "/assets/img"
+              });
 
       .image-container
         picture
           img.text-center.img-fluid(src='/assets/img/MarkHazleton-ChatGPT-CMSProjectDisplay.png' alt='Display Projects' title='Display Projects' width='100%')
 
         p.
-            And there you have it! I have created an interface to manage Articles in my blog using ASP.NET Core.
-            With the power of ChatGPT prompts, I was able to quickly generate the necessary code snippets
-            for the Article model, service, and Razor Page. Now I can efficiently manage Articles on my blog.
+          And there you have it! I have created an interface to manage Articles in my blog using ASP.NET Core.
+          With the power of ChatGPT prompts, I was able to quickly generate the necessary code snippets
+          for the Article model, service, and Razor Page. Now I can efficiently manage Articles on my blog.

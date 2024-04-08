@@ -30,7 +30,7 @@ block layout-content
         h2 Introduction
         p
           | FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance
-          | and productivity. By embracing the REPR (Request-Endpoint-Response) pattern, it offers an
+          | and productivity. By embracing the REPR (Request-Endpoint-Response) design pattern, it offers an
           | alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.
         h2 Minimal APIs
         p.
@@ -101,15 +101,16 @@ block layout-content
           p This CRUD functionality forms the backbone of many web services, from social networks to e-commerce platforms, making it an essential skill set for developers.
           h3 The Person Class
           p The Person class is a simple data model representing individuals in the system. Here's what I created for our Person entity:
-          pre.code.
-            public class Person
-            {
-              public Guid Id { get; set; } // A unique identifier for each person
-              public string FirstName { get; set; } // The person's first name
-              public string LastName { get; set; } // The person's last name
-              public int Age { get; set; } // The person's age
-              public string Email { get; set; } // The person's email address
-            }
+          pre.language-csharp
+            code.language-csharp.
+              public class Person
+              {
+                public Guid Id { get; set; } // A unique identifier for each person
+                public string FirstName { get; set; } // The person's first name
+                public string LastName { get; set; } // The person's last name
+                public int Age { get; set; } // The person's age
+                public string Email { get; set; } // The person's email address
+              }
           P.
             Each Person has a unique Id, along with basic information like FirstName, LastName, Age, and Email.
             This class structure is straightforward yet flexible enough to be expanded for more complex applications.
@@ -127,45 +128,48 @@ block layout-content
           | Starting with a basic setup, I added FastEndpoints to a new .NET project and configured the necessary
           | services in `Program.cs`. The ease of getting started was impressive, immediately making
           | the development process smoother.
-        pre.code.
-          using FastEndpointApi.services.person;
-          using FastEndpoints;
-          var builder = WebApplication.CreateBuilder(args);
-          builder.Services.AddFastEndpoints();
-          builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
-          var app = builder.Build();
-          app.UseFastEndpoints();
-          app.Run();
+        pre.language-csharp
+          code.language-csharp.
+            using FastEndpointApi.services.person;
+            using FastEndpoints;
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddFastEndpoints();
+            builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
+            var app = builder.Build();
+            app.UseFastEndpoints();
+            app.Run();
 
         h2 Creating the Person Service
         P The `PersonService` class encapsulated the business logic for managing Person entities. By
           | abstracting the data layer from the API endpoints, we achieved a clean separation of concerns,
           | promoting code reusability and maintainability.  Here is the interface for the `PersonService` class.
-        pre.code.
-          public interface IPersonService
-          {
-            PersonEntity CreatePerson(PersonEntity person);
-            void DeletePerson(Guid id);
-            PersonEntity ReadPerson(Guid id);
-            List&lt;PersonEntity&gt; ReadPersons();
-            PersonEntity UpdatePerson(Guid id, PersonEntity updatedPerson);
-          }
-          public class PersonService : IPersonService
-          {
-            private readonly List&lt;PersonEntity&gt; _people = new();  // In-memory storage for Person entities
-            public PersonEntity CreatePerson(PersonEntity person)
+        pre.language-csharp
+          code.language-csharp.
+            public interface IPersonService
             {
-              person.Id = Guid.NewGuid();
-              _people.Add(person);
-              return person;
+              PersonEntity CreatePerson(PersonEntity person);
+              void DeletePerson(Guid id);
+              PersonEntity ReadPerson(Guid id);
+              List&lt;PersonEntity&gt; ReadPersons();
+              PersonEntity UpdatePerson(Guid id, PersonEntity updatedPerson);
             }
+            public class PersonService : IPersonService
+            {
+              private readonly List&lt;PersonEntity&gt; _people = new();  // In-memory storage for Person entities
+              public PersonEntity CreatePerson(PersonEntity person)
+              {
+                person.Id = Guid.NewGuid();
+                _people.Add(person);
+                return person;
+              }
 
         p
           | Integrating the `PersonService` through dependency injection demonstrated FastEndpoints'
           | seamless integration with ASP.NET's core features. This allowed us to focus on business logic
           | without worrying about the plumbing.  Here is the code to register the service in the `Program.cs` file.
-        pre.code.
-          builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
+        pre.language-csharp
+          code.language-csharp.
+            builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
 
         h2 Separate concerns with Domain Mapper
         p.
@@ -177,44 +181,46 @@ block layout-content
         p
           a(href='https://fast-endpoints.com/docs/domain-entity-mapping#mapping-logic-in-a-separate-class' target='_blank' rel='noopener noreferrer') FastEndpoints Documentation - Mapping Logic in a Separate Class
 
-        pre.code.
-          public class CreatePersonMapper : Mapper&lt;CreatePersonRequest, PersonResponse, PersonEntity&gt;
-          {
-            public override PersonEntity ToEntity(CreatePersonRequest r) =&gt; new()
+        pre.language-csharp
+          code.language-csharp.
+            public class CreatePersonMapper : Mapper&lt;CreatePersonRequest, PersonResponse, PersonEntity&gt;
             {
-              FirstName = r.FirstName,
-              LastName = r.LastName,
-              Age = r.Age,
-              Email = r.Email
-            };
-            public override PersonResponse FromEntity(PersonEntity e) =&gt; new()
-            {
-              FullName = $"{e.FirstName} {e.LastName}",
-              IsOver18 = e.Age &gt;= 18,
-              PersonId = e.Id.ToString()
-            };
-          }
+              public override PersonEntity ToEntity(CreatePersonRequest r) =&gt; new()
+              {
+                FirstName = r.FirstName,
+                LastName = r.LastName,
+                Age = r.Age,
+                Email = r.Email
+              };
+              public override PersonResponse FromEntity(PersonEntity e) =&gt; new()
+              {
+                FullName = $"{e.FirstName} {e.LastName}",
+                IsOver18 = e.Age &gt;= 18,
+                PersonId = e.Id.ToString()
+              };
+            }
         h2 My First Fast Endpoint
         p.
           Time to put it all together.  I created my first Fast Endpoint for the Create Person method.
           The `CreatePersonEndpoint`, was succinct yet expressive, showcasing FastEndpoints'
           capability to handle complex scenarios with minimal fuss.
-        pre.code.
-          public class CreatePersonEndpoint(IPersonService _personService) : Endpoint&lt;CreatePersonRequest, PersonResponse, CreatePersonMapper&gt;
-          {
-            public override void Configure()
+        pre.language-csharp
+          code.language-csharp.
+            public class CreatePersonEndpoint(IPersonService _personService) : Endpoint&lt;CreatePersonRequest, PersonResponse, CreatePersonMapper&gt;
             {
-              Post("/api/person/create");
-              AllowAnonymous();
+              public override void Configure()
+              {
+                Post("/api/person/create");
+                AllowAnonymous();
+              }
+              public override Task&lt;PersonResponse&gt; HandleAsync(CreatePersonRequest request)
+              {
+                PersonEntity entity = Map.ToEntity(req);
+                entity = _personService.CreatePerson(entity);
+                Response = Map.FromEntity(entity);
+                return SendAsync(Response, cancellation: ct);
+              }
             }
-            public override Task&lt;PersonResponse&gt; HandleAsync(CreatePersonRequest request)
-            {
-              PersonEntity entity = Map.ToEntity(req);
-              entity = _personService.CreatePerson(entity);
-              Response = Map.FromEntity(entity);
-              return SendAsync(Response, cancellation: ct);
-            }
-          }
 
         h2 Next Steps and Conclusion
         p.

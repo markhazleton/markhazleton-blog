@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="X-Frame-Options" content="DENY" />
-        <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'" />
         <title>Mark Hazleton - Tools to Manage My Blog</title>
         <meta name="description" content="Mark Hazleton - Tools to Manage My Blog" />
         <meta name="author" content="Mark Hazleton" />
@@ -44,14 +42,11 @@
             }
         </script>
         <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1712593749165" />
-        <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/css/styles.css?version=1712607761137" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -132,41 +127,39 @@
                             <blockquote class="pre">Create a model class called ArticleModel in C# for the following JSON file. Create a Service to maintain the JSON file which consists of a list of the Article Model class. Here is the JSON for the articles. [ { "id": 0, "Section": "Personal Philosophy", "slug": "sidetrackedbysizzle.html", "name": "Sidetracked by Sizzle", "content": null, "description": "Description for Sidetracked by Sizzle", "img_src": "assets/img/ArgostoliGreeceBeach.jpg", "lastmod": "2023-09-05", "changefreq": "daily" }, }</blockquote>
                             <p>This returns the code for the Article Model.</p>
                             <p>And the code for the Article Service.</p>
-                            <pre class="code">
-// ArticleModel.cs
-public class ArticleModel
-{
-  [JsonPropertyName("id")]
-  public int Id { get; set; }
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// ArticleModel.cs</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ArticleModel</span>
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 
-  [JsonPropertyName("Section")]
-  public string Section { get; set; }
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"Section"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Section <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 
-  [JsonPropertyName("slug")]
-  public string Slug { get; set; }
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"slug"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Slug <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 
-  [JsonPropertyName("name")]
-  public string Name { get; set; }
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Name <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 
-  [JsonPropertyName("content")]
-  public string ArticleContent { get; set; }
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"content"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> ArticleContent <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 
-  [JsonPropertyName("description")]
-  public string Description { get; set; }
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"description"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Description <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 
-  [JsonPropertyName("img_src")]
-  public string ImgSrc { get; set; }
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"img_src"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> ImgSrc <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 
-  [JsonPropertyName("lastmod")]
-  public string LastModified { get; set; }
-    = DateTime.Now.ToString("yyyy-MM-dd");
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"lastmod"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> LastModified <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>Now<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-  [JsonPropertyName("changefreq")]
-  public string ChangeFrequency { get; set; }
-    = "monthly";
-}
-</pre
-                            >
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">JsonPropertyName</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"changefreq"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> ChangeFrequency <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token operator">=</span> <span class="token string">"monthly"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
                         </dd>
                         <dt>Step 2: Create a Razor Page for Managing Articles</dt>
                         <dd>
@@ -190,130 +183,122 @@ public class ArticleModel
                             <p>We can use the ChatGPT prompt to help generate the code for this.</p>
                             <blockquote class="pre">Create a model class called ProjectModel in C# for the following JSON file. Create a Service to maintain the JSON file which consists of a list of the Project Model class. Here is the JSON for the projects. [ { "image": "assets/img/frogsfolly.png", "p": "Frogsfolly", "d": " My first website, setup to share photos with my family but is now a 'Kitchen Sink' of demos and test ideas. The site is built with Web Project Mechanics CMS.", "h": "https://frogsfolly.com" }, }</blockquote>
                             <p>This returns the code for the Project Model.</p>
-                            <pre class="code">
-// ProjectModel.cs
-public class ProjectModel
-{
-  public string Image { get; set; }
-  public string Title { get; set; }
-  public string Description { get; set; }
-  public string Link { get; set; }
-}
-</pre
-                            >
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// ProjectModel.cs</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ProjectModel</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Image <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Title <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Description <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Link <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
                             <p>And the code for the Project Service.</p>
-                            <pre class="code">
-// ProjectService.cs
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// ProjectService.cs</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>IO</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Newtonsoft<span class="token punctuation">.</span>Json</span><span class="token punctuation">;</span>
 
-public class ProjectService
-{
-  private readonly string _jsonFilePath;
-  public ProjectService(string jsonFilePath)
-  {
-    _jsonFilePath = jsonFilePath;
-  }
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ProjectService</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name"><span class="token keyword">string</span></span> _jsonFilePath<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token function">ProjectService</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> jsonFilePath<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    _jsonFilePath <span class="token operator">=</span> jsonFilePath<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
 
-  public List&lt;ProjectModel&gt; GetProjects()
-  {
-    using (StreamReader reader = new StreamReader(_jsonFilePath))
-    {
-      string json = reader.ReadToEnd();
-      List&lt;ProjectModel&gt; projects = JsonConvert.DeserializeObject&lt;List&lt;ProjectModel&gt;&gt;(json);
-      return projects;
-    }
-  }
+  <span class="token keyword">public</span> List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ProjectModel<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">GetProjects</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name">StreamReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StreamReader</span><span class="token punctuation">(</span>_jsonFilePath<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token class-name"><span class="token keyword">string</span></span> json <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">ReadToEnd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ProjectModel<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> projects <span class="token operator">=</span> JsonConvert<span class="token punctuation">.</span>DeserializeObject<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ProjectModel<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> projects<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
 
-  public void SaveProjects(List&lt;ProjectModel&gt; projects)
-  {
-    string json = JsonConvert.SerializeObject(projects, Formatting.Indented);
-    File.WriteAllText(_jsonFilePath, json);
-  }
-}
-</pre
-                            >
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SaveProjects</span><span class="token punctuation">(</span>List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ProjectModel<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> projects<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">string</span></span> json <span class="token operator">=</span> JsonConvert<span class="token punctuation">.</span><span class="token function">SerializeObject</span><span class="token punctuation">(</span>projects<span class="token punctuation">,</span> Formatting<span class="token punctuation">.</span>Indented<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    File<span class="token punctuation">.</span><span class="token function">WriteAllText</span><span class="token punctuation">(</span>_jsonFilePath<span class="token punctuation">,</span> json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
                         </dd>
                         <dt>Step 2: Create a Razor Page for Managing Projects</dt>
                         <dd>
                             <p>Now let's create a Razor Page to manage the projects. We'll use dependency injection to get the `ProjectService` instance. By continuing our session in ChatGPT, I don't have to re-enter the previous code or prompts.</p>
                             <blockquote class="pre">Create a Razor Page (Projects.cshtml and Projects.cshtml.cs) that gets the service through DI and displays all projects.</blockquote>
                             <p>This returns the code for the Razor page.</p>
-                            <pre class="code">
-// Projects.cshtml
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Projects.cshtml</span>
 @page
 @model ProjectsModel
-@{
-  ViewData["Title"] = "Projects";
-}
-&lt;h1&gt;@ViewData[&quot;Title&quot;]&lt;/h1&gt;
+@<span class="token punctuation">{</span>
+  ViewData<span class="token punctuation">[</span><span class="token string">"Title"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"Projects"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>h1<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>@ViewData<span class="token punctuation">[</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>Title<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">]</span><span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>h1<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
 
-&lt;table class=&quot;table&quot;&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Image&lt;/th&gt;
-      &lt;th&gt;Title&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-      &lt;th&gt;Link&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-  @foreach (var project in Model.Projects)
-  {
-    &lt;tr&gt;
-      &lt;td&gt;&lt;img src=&quot;@project.Image&quot; alt=&quot;@project.Title&quot; width=&quot;100&quot; /&gt;&lt;/td&gt;
-      &lt;td&gt;@project.Title&lt;/td&gt;
-      &lt;td&gt;@project.Description&lt;/td&gt;
-      &lt;td&gt;&lt;a href=&quot;@project.Link&quot; target=&quot;_blank&quot;&gt;Visit&lt;/a&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  }
-  &lt;/tbody&gt;
-  &lt;/table&gt;
+<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>table <span class="token keyword">class</span><span class="token operator">=</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>table<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+  <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>thead<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>tr<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>Image<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>Title<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>Description<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>Link<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>th<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>tr<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+  <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>thead<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+  <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>tbody<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+  @<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> project <span class="token keyword">in</span> Model<span class="token punctuation">.</span>Projects<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>tr<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token class-name">img</span> src<span class="token operator">=</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>@project<span class="token punctuation">.</span>Image<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span> alt<span class="token operator">=</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>@project<span class="token punctuation">.</span>Title<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span> width<span class="token operator">=</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token number">100</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span> <span class="token operator">/</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>@project<span class="token punctuation">.</span>Title<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>@project<span class="token punctuation">.</span>Description<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+      <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token class-name">a</span> href<span class="token operator">=</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>@project<span class="token punctuation">.</span>Link<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span> target<span class="token operator">=</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>_blank<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>Visit<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>a<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>td<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>tr<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>tbody<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+  <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token operator">/</span>table<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
 
-// Projects.cshtml.cs
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
+  <span class="token comment">// Projects.cshtml.cs</span>
+  <span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>AspNetCore<span class="token punctuation">.</span>Mvc</span><span class="token punctuation">;</span>
+  <span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>AspNetCore<span class="token punctuation">.</span>Mvc<span class="token punctuation">.</span>RazorPages</span><span class="token punctuation">;</span>
+  <span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic</span><span class="token punctuation">;</span>
 
-public class ProjectsModel : PageModel
-{
-  private readonly ProjectService _projectService;
-  public ProjectsModel(ProjectService projectService)
-  {
-    _projectService = projectService;
-  }
-  public List&lt;ProjectModel&gt; Projects { get; private set; }
-  public void OnGet()
-  {
-    Projects = _projectService.GetProjects();
-  }
-}
-</pre
-                            >
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ProjectsModel</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">PageModel</span></span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">ProjectService</span> _projectService<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token function">ProjectsModel</span><span class="token punctuation">(</span><span class="token class-name">ProjectService</span> projectService<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      _projectService <span class="token operator">=</span> projectService<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ProjectModel<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> Projects <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">OnGet</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      Projects <span class="token operator">=</span> _projectService<span class="token punctuation">.</span><span class="token function">GetProjects</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+</code></pre>
                         </dd>
                         <dt>Step 3: Configure Project Service for Dependency Injection</dt>
                         <dd>
                             <p>Now that we have the service and Razor page, we can register the service and point to the Projects.JSON file.</p>
-                            <pre class="code">
-// Program.cs
-// Register Services
-builder.Services.AddSingleton&gt;ArticleService&lt;(provider =&gt;
-{
-  return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")));
-});
-builder.Services.AddSingleton&gt;ProjectService&lt;(provider =>
-{
-  return new ProjectService(Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json")));
-});
-// Add a Virtual Directory for our images
-app.UseStaticFiles(new StaticFileOptions
-{
-  FileProvider = new PhysicalFileProvider(Path.GetFullPath(Path.Combine("..", "..", "src", "assets", "img"))),
-  RequestPath = "/assets/img"
-});
-</pre
-                            >
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Program.cs</span>
+<span class="token comment">// Register Services</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span>AddSingleton<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>ArticleService<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token punctuation">(</span>provider <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArticleService</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">GetFullPath</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span><span class="token string">".."</span><span class="token punctuation">,</span> <span class="token string">".."</span><span class="token punctuation">,</span> <span class="token string">"src"</span><span class="token punctuation">,</span> <span class="token string">"articles.json"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span>AddSingleton<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>ProjectService<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token punctuation">(</span>provider <span class="token operator">=></span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ProjectService</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">GetFullPath</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span><span class="token string">".."</span><span class="token punctuation">,</span> <span class="token string">".."</span><span class="token punctuation">,</span> <span class="token string">"src"</span><span class="token punctuation">,</span> <span class="token string">"projects.json"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Add a Virtual Directory for our images</span>
+app<span class="token punctuation">.</span><span class="token function">UseStaticFiles</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token constructor-invocation class-name">StaticFileOptions</span>
+<span class="token punctuation">{</span>
+  FileProvider <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PhysicalFileProvider</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">GetFullPath</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span><span class="token string">".."</span><span class="token punctuation">,</span> <span class="token string">".."</span><span class="token punctuation">,</span> <span class="token string">"src"</span><span class="token punctuation">,</span> <span class="token string">"assets"</span><span class="token punctuation">,</span> <span class="token string">"img"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  RequestPath <span class="token operator">=</span> <span class="token string">"/assets/img"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
                         </dd>
                     </dl>
                     <div class="image-container">
@@ -418,8 +403,6 @@ app.UseStaticFiles(new StaticFileOptions
                     </div>
                 </div>
             </footer>
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->
             <script src="/js/scripts.js"></script>
         </div>
