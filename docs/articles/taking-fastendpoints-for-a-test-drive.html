@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="X-Frame-Options" content="DENY" />
-        <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none'" />
         <title>Case Studies - Taking FastEndpoints for a Test Drive</title>
         <meta name="description" content="Case Studies - Taking FastEndpoints for a Test Drive" />
         <meta name="keywords" content="FastEndpoints, ASP.NET, .NET, API, REST, REPR, Request-Endpoint-Response, Minimal APIs, FastEndpoints Demo" />
@@ -55,14 +53,11 @@
             }
         </script>
         <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1712593749330" />
-        <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/css/styles.css?version=1712607761341" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -115,7 +110,7 @@
                     <h1>Taking FastEndpoints for a Test Drive</h1>
                     <div class="row justify-content-center">
                         <h2>Introduction</h2>
-                        <p>FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance and productivity. By embracing the REPR (Request-Endpoint-Response) pattern, it offers an alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.</p>
+                        <p>FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance and productivity. By embracing the REPR (Request-Endpoint-Response) design pattern, it offers an alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.</p>
                         <h2>Minimal APIs</h2>
                         <p>Minimal APIs in .NET have marked a significant shift in the way developers approach API development within the ASP.NET Core framework. These APIs offer a streamlined, more efficient method for building HTTP APIs, requiring minimal code and configuration while still allowing for the fully functioning REST endpoints necessary for modern web applications.</p>
                         <p>Introduced in .NET 6, Minimal APIs were designed to reduce the overhead and boilerplate code traditionally associated with setting up new API endpoints in ASP.NET Core. By simplifying the API development process, they enable developers to focus more on the business logic rather than the scaffolding required to set up controllers and actions in a typical MVC application.</p>
@@ -142,101 +137,89 @@
                             <p>This CRUD functionality forms the backbone of many web services, from social networks to e-commerce platforms, making it an essential skill set for developers.</p>
                             <h3>The Person Class</h3>
                             <p>The Person class is a simple data model representing individuals in the system. Here's what I created for our Person entity:</p>
-                            <pre class="code">
-public class Person
-{
-  public Guid Id { get; set; } // A unique identifier for each person
-  public string FirstName { get; set; } // The person's first name
-  public string LastName { get; set; } // The person's last name
-  public int Age { get; set; } // The person's age
-  public string Email { get; set; } // The person's email address
-}</pre
-                            >
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">Guid</span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token comment">// A unique identifier for each person</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> FirstName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token comment">// The person's first name</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> LastName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token comment">// The person's last name</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Age <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token comment">// The person's age</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Email <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token comment">// The person's email address</span>
+<span class="token punctuation">}</span></code></pre>
                             <p>Each Person has a unique Id, along with basic information like FirstName, LastName, Age, and Email. This class structure is straightforward yet flexible enough to be expanded for more complex applications.</p>
                             <p>For the full CRUD API, this Person class will be central to the operations created with Fast Endpoints. When creating a new Person, the API will accept details like name, age, and email to construct a Person object to be stored. For reading, the API will fetch and return Person objects, either individually by Id or as a collection. Updating will involve modifying the properties of an existing Person, and deleting will remove a Person from our storage based on their Id.</p>
                             <p>This demo demonstrates not just the mechanics of building a CRUD API with FastEndpoints but also the underlying principles of web API development, such as RESTful design, HTTP methods, status codes, and more, providing a solid foundation for tackling more complex problem sets in the future.</p>
                         </div>
                         <h2>Setting Up</h2>
                         <p>Starting with a basic setup, I added FastEndpoints to a new .NET project and configured the necessary services in `Program.cs`. The ease of getting started was impressive, immediately making the development process smoother.</p>
-                        <pre class="code">
-using FastEndpointApi.services.person;
-using FastEndpoints;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddFastEndpoints();
-builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
-var app = builder.Build();
-app.UseFastEndpoints();
-app.Run();
-</pre
-                        >
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">FastEndpointApi<span class="token punctuation">.</span>services<span class="token punctuation">.</span>person</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">FastEndpoints</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> builder <span class="token operator">=</span> WebApplication<span class="token punctuation">.</span><span class="token function">CreateBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddFastEndpoints</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span>AddSingleton<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>IPersonService<span class="token punctuation">,</span> PersonService<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> app <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">UseFastEndpoints</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
                         <h2>Creating the Person Service</h2>
                         <p>The `PersonService` class encapsulated the business logic for managing Person entities. Byabstracting the data layer from the API endpoints, we achieved a clean separation of concerns, promoting code reusability and maintainability. Here is the interface for the `PersonService` class.</p>
-                        <pre class="code">
-public interface IPersonService
-{
-  PersonEntity CreatePerson(PersonEntity person);
-  void DeletePerson(Guid id);
-  PersonEntity ReadPerson(Guid id);
-  List&lt;PersonEntity&gt; ReadPersons();
-  PersonEntity UpdatePerson(Guid id, PersonEntity updatedPerson);
-}
-public class PersonService : IPersonService
-{
-  private readonly List&lt;PersonEntity&gt; _people = new();  // In-memory storage for Person entities
-  public PersonEntity CreatePerson(PersonEntity person)
-  {
-    person.Id = Guid.NewGuid();
-    _people.Add(person);
-    return person;
-  }
-</pre
-                        >
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IPersonService</span>
+<span class="token punctuation">{</span>
+  <span class="token return-type class-name">PersonEntity</span> <span class="token function">CreatePerson</span><span class="token punctuation">(</span><span class="token class-name">PersonEntity</span> person<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DeletePerson</span><span class="token punctuation">(</span><span class="token class-name">Guid</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token return-type class-name">PersonEntity</span> <span class="token function">ReadPerson</span><span class="token punctuation">(</span><span class="token class-name">Guid</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>PersonEntity<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">ReadPersons</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token return-type class-name">PersonEntity</span> <span class="token function">UpdatePerson</span><span class="token punctuation">(</span><span class="token class-name">Guid</span> id<span class="token punctuation">,</span> <span class="token class-name">PersonEntity</span> updatedPerson<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PersonService</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IPersonService</span></span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">readonly</span> List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>PersonEntity<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> _people <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// In-memory storage for Person entities</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">PersonEntity</span> <span class="token function">CreatePerson</span><span class="token punctuation">(</span><span class="token class-name">PersonEntity</span> person<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    person<span class="token punctuation">.</span>Id <span class="token operator">=</span> Guid<span class="token punctuation">.</span><span class="token function">NewGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    _people<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> person<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+</code></pre>
                         <p>Integrating the `PersonService` through dependency injection demonstrated FastEndpoints' seamless integration with ASP.NET's core features. This allowed us to focus on business logic without worrying about the plumbing. Here is the code to register the service in the `Program.cs` file.</p>
-                        <pre class="code">
-builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
-</pre
-                        >
+                        <pre class="language-csharp"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span>AddSingleton<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>IPersonService<span class="token punctuation">,</span> PersonService<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
                         <h2>Separate concerns with Domain Mapper</h2>
                         <p>The domain mapper functionality in FastEndpoints simplifies the manual mapping process between request DTOs (Data Transfer Objects) and domain entities. By introducing a dedicated CreatePersonMapper class, I can efficiently transform data from entities to response DTOs and vice versa. This separation of concerns ensures cleaner and more maintainable code, making FastEndpoints an appealing choice for those who prefer manual mapping over auto-mapping libraries.</p>
                         <p><a href="https://fast-endpoints.com/docs/domain-entity-mapping#mapping-logic-in-a-separate-class" target="_blank" rel="noopener noreferrer">FastEndpoints Documentation - Mapping Logic in a Separate Class</a></p>
-                        <pre class="code">
-public class CreatePersonMapper : Mapper&lt;CreatePersonRequest, PersonResponse, PersonEntity&gt;
-{
-  public override PersonEntity ToEntity(CreatePersonRequest r) =&gt; new()
-  {
-    FirstName = r.FirstName,
-    LastName = r.LastName,
-    Age = r.Age,
-    Email = r.Email
-  };
-  public override PersonResponse FromEntity(PersonEntity e) =&gt; new()
-  {
-    FullName = $"{e.FirstName} {e.LastName}",
-    IsOver18 = e.Age &gt;= 18,
-    PersonId = e.Id.ToString()
-  };
-}</pre
-                        >
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CreatePersonMapper</span> <span class="token punctuation">:</span> Mapper<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>CreatePersonRequest<span class="token punctuation">,</span> PersonResponse<span class="token punctuation">,</span> PersonEntity<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name">PersonEntity</span> <span class="token function">ToEntity</span><span class="token punctuation">(</span><span class="token class-name">CreatePersonRequest</span> r<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    FirstName <span class="token operator">=</span> r<span class="token punctuation">.</span>FirstName<span class="token punctuation">,</span>
+    LastName <span class="token operator">=</span> r<span class="token punctuation">.</span>LastName<span class="token punctuation">,</span>
+    Age <span class="token operator">=</span> r<span class="token punctuation">.</span>Age<span class="token punctuation">,</span>
+    Email <span class="token operator">=</span> r<span class="token punctuation">.</span>Email
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name">PersonResponse</span> <span class="token function">FromEntity</span><span class="token punctuation">(</span><span class="token class-name">PersonEntity</span> e<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    FullName <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">e<span class="token punctuation">.</span>FirstName</span><span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">e<span class="token punctuation">.</span>LastName</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">,</span>
+    IsOver18 <span class="token operator">=</span> e<span class="token punctuation">.</span>Age <span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">=</span> <span class="token number">18</span><span class="token punctuation">,</span>
+    PersonId <span class="token operator">=</span> e<span class="token punctuation">.</span>Id<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
                         <h2>My First Fast Endpoint</h2>
                         <p>Time to put it all together. I created my first Fast Endpoint for the Create Person method. The `CreatePersonEndpoint`, was succinct yet expressive, showcasing FastEndpoints' capability to handle complex scenarios with minimal fuss.</p>
-                        <pre class="code">
-public class CreatePersonEndpoint(IPersonService _personService) : Endpoint&lt;CreatePersonRequest, PersonResponse, CreatePersonMapper&gt;
-{
-  public override void Configure()
-  {
-    Post("/api/person/create");
-    AllowAnonymous();
-  }
-  public override Task&lt;PersonResponse&gt; HandleAsync(CreatePersonRequest request)
-  {
-    PersonEntity entity = Map.ToEntity(req);
-    entity = _personService.CreatePerson(entity);
-    Response = Map.FromEntity(entity);
-    return SendAsync(Response, cancellation: ct);
-  }
-}
-</pre
-                        >
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CreatePersonEndpoint</span><span class="token punctuation">(</span><span class="token class-name">IPersonService</span> _personService<span class="token punctuation">)</span> <span class="token punctuation">:</span> Endpoint<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>CreatePersonRequest<span class="token punctuation">,</span> PersonResponse<span class="token punctuation">,</span> CreatePersonMapper<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Configure</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token function">Post</span><span class="token punctuation">(</span><span class="token string">"/api/person/create"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">AllowAnonymous</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token keyword">override</span> Task<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>PersonResponse<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">HandleAsync</span><span class="token punctuation">(</span><span class="token class-name">CreatePersonRequest</span> request<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name">PersonEntity</span> entity <span class="token operator">=</span> Map<span class="token punctuation">.</span><span class="token function">ToEntity</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    entity <span class="token operator">=</span> _personService<span class="token punctuation">.</span><span class="token function">CreatePerson</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Response <span class="token operator">=</span> Map<span class="token punctuation">.</span><span class="token function">FromEntity</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">SendAsync</span><span class="token punctuation">(</span>Response<span class="token punctuation">,</span> <span class="token named-parameter punctuation">cancellation</span><span class="token punctuation">:</span> ct<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
                         <h2>Next Steps and Conclusion</h2>
                         <p>The next steps was to finish out the CRUD operations for the Person entity. I created the Read, Update, and Delete endpoints, each following the same pattern as the Create endpoint. The result was a clean, efficient API that showcased the power of FastEndpoints and the REPR pattern.</p>
                         <p>I added support for Swagger, enabling interactive documentation for the API.</p>
@@ -415,8 +398,6 @@ public class CreatePersonEndpoint(IPersonService _personService) : Endpoint&lt;C
                     </div>
                 </div>
             </footer>
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->
             <script src="/js/scripts.js"></script>
         </div>

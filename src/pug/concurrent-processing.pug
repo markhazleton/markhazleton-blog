@@ -113,39 +113,40 @@ block layout-content
         Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.
       a(href="#SemaphoreSlimClass") More on the SemaphoreSlim Class
 
-      pre.code.
-
-        const int maxConcurrency = 100; // Maximum concurrent tasks allowed
-        SemaphoreSlim semaphore = new(maxConcurrency);
-        List&lt;Task&gt; tasks = new();
-        int? taskId = 0;
-        while (taskId is not null)
-        {
-          Task task = ProcessAsync(taskId.Value, tasks.Count, await AwaitSemaphoreAsync(semaphore), semaphore);
-          tasks.Add(task);
-          taskId = GetNextTaskId(taskId);
-
-          if (tasks.Count >= maxConcurrency)
+      pre.language-csharp
+        code.language-csharp.
+          const int maxConcurrency = 100; // Maximum concurrent tasks allowed
+          SemaphoreSlim semaphore = new(maxConcurrency);
+          List&lt;Task&gt; tasks = new();
+          int? taskId = 0;
+          while (taskId is not null)
           {
-            Task finishedTask = await Task.WhenAny(tasks);
-            tasks.Remove(finishedTask);
+            Task task = ProcessAsync(taskId.Value, tasks.Count, await AwaitSemaphoreAsync(semaphore), semaphore);
+            tasks.Add(task);
+            taskId = GetNextTaskId(taskId);
+
+            if (tasks.Count >= maxConcurrency)
+            {
+              Task finishedTask = await Task.WhenAny(tasks);
+              tasks.Remove(finishedTask);
+            }
           }
-        }
-        await Task.WhenAll(tasks);
+          await Task.WhenAll(tasks);
 
 
       p.
         I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.
-      pre.code.
+      pre.language-csharp
+        code.language-csharp.
 
-        //  Wait for semaphore to be released so that next task can start
-        static async Task&lt;long&gt; AwaitSemaphoreAsync(SemaphoreSlim semaphore)
-        {
-          Stopwatch stopwatch = Stopwatch.StartNew();
-          await semaphore.WaitAsync();
-          stopwatch.Stop();
-          return stopwatch.ElapsedTicks;
-        }
+          //  Wait for semaphore to be released so that next task can start
+          static async Task&lt;long&gt; AwaitSemaphoreAsync(SemaphoreSlim semaphore)
+          {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            await semaphore.WaitAsync();
+            stopwatch.Stop();
+            return stopwatch.ElapsedTicks;
+          }
 
       p.
         I created a mock async processing method that simulates work by delaying for a random amount of time.
@@ -153,34 +154,36 @@ block layout-content
         I used the `Task.Delay` method to simulate work, but in a real-world application, this would be replaced with actual work.
         The random delay was added to simulate the dynamic nature of concurrent processing.
 
-      pre.code.
+      pre.language-csharp
+        code.language-csharp.
 
-        // Mock Async Task to simulate work
-        static async Task ProcessAsync(int taskId, int taskCount, long waitTicks, SemaphoreSlim semaphore)
-        {
-          try
+          // Mock Async Task to simulate work
+          static async Task ProcessAsync(int taskId, int taskCount, long waitTicks, SemaphoreSlim semaphore)
           {
-            await Task.Delay(TimeSpan.FromMilliseconds(new Random().Next(1, 500)));
-            Console.WriteLine($"Task:{taskId:D3} T:{taskCount} S:{semaphore.CurrentCount} W:{waitTicks}");
+            try
+            {
+              await Task.Delay(TimeSpan.FromMilliseconds(new Random().Next(1, 500)));
+              Console.WriteLine($"Task:{taskId:D3} T:{taskCount} S:{semaphore.CurrentCount} W:{waitTicks}");
+            }
+            finally
+            {
+              semaphore.Release();
+            }
           }
-          finally
-          {
-            semaphore.Release();
-          }
-        }
 
 
       p.
         Finally, I created a function to generate the next task ID.  This is how I controlled the number of tasks that were created.
 
-      pre.code.
+      pre.language-csharp
+        code.language-csharp.
 
-        // Get Next Task ID
-        static int? GetNextTaskId(int? taskId)
-        {
-          if (taskId &lt; 1000) return taskId + 1;
-          else return null;
-        }
+          // Get Next Task ID
+          static int? GetNextTaskId(int? taskId)
+          {
+            if (taskId &lt; 1000) return taskId + 1;
+            else return null;
+          }
 
       h2 Iterating and Learning
       p.
@@ -195,15 +198,16 @@ block layout-content
         With each iteration of the code, I ran the application and observed its behavior.
         The output of the program provided valuable insights into how tasks were being managed,
         the time each task spent waiting for a semaphore, and the overall concurrency control.
-      pre.code.
-        ...
-        Task:061 T:61 S:2 W:2
-        Task:070 T:70 S:0 W:4
-        Task:037 T:37 S:0 W:2
-        Task:018 T:18 S:3 W:2
-        Task:023 T:23 S:1 W:2
-        Task:026 T:26 S:2 W:3
-        ...
+      pre.language-json
+        code.language-json.
+          ...
+          Task:061 T:61 S:2 W:2
+          Task:070 T:70 S:0 W:4
+          Task:037 T:37 S:0 W:2
+          Task:018 T:18 S:3 W:2
+          Task:023 T:23 S:1 W:2
+          Task:026 T:26 S:2 W:3
+          ...
       p.
         The output highlighted the dynamic nature of concurrent processing,
         where tasks were processed and released in a controlled manner,
@@ -265,22 +269,22 @@ block layout-content
             intra-process synchronization where performance and efficiency are key considerations
           div.row
             div.col-6
-                p.lead Semaphore
-                dl
-                    dt Nature
-                    dd A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.
-                    dt Usage
-                    dd Ideal for thread synchronization across multiple processes or for inter-process communication.
-                    dt Performance
-                    dd Slower and more resource-intensive, relying on the system's kernel mode.
-                    dt Functionality
-                    dd Supports system-wide visibility and waiting on multiple semaphores.
-                    dt Example
-                    dd Synchronizing resource access across different applications on the same system.
-                    dt Pros
-                    dd Visibility across processes, suitable for complex synchronization.
-                    dt Cons
-                    dd Heavier, slower, and suitable for long wait times. Involves kernel transitions.
+              p.lead Semaphore
+              dl
+                dt Nature
+                dd A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.
+                dt Usage
+                dd Ideal for thread synchronization across multiple processes or for inter-process communication.
+                dt Performance
+                dd Slower and more resource-intensive, relying on the system's kernel mode.
+                dt Functionality
+                dd Supports system-wide visibility and waiting on multiple semaphores.
+                dt Example
+                dd Synchronizing resource access across different applications on the same system.
+                dt Pros
+                dd Visibility across processes, suitable for complex synchronization.
+                dt Cons
+                dd Heavier, slower, and suitable for long wait times. Involves kernel transitions.
             div.col-6
               p.lead SemaphoreSlim
               dl

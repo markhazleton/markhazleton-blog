@@ -26,6 +26,8 @@ block layout-content
 
   section#post.painteddesert-section.painteddesert-section-background
     .painteddesert-section-content
+      p.fw-bold.text-primary.text-center.bg-primary.text-white
+        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/TaskListProcessor' target="_blank" title='The full source code for the Task List Processor is available on GitHub') The full source code for the Task List Processor is available on GitHub
       h1.mb-0 Task List Processing
       .subheading.mb-3 Mastering Concurrent Operations in .NET with TaskListProcessor
       p.lead.
@@ -90,24 +92,24 @@ block layout-content
       section.travel-website-use-case
         h2 Use Case: Travel Website Dashboard
         div.row
-            div.col-2
-                img.img-fluid.d-block.w-100(src='assets/img/Task-List-Processor-Use-Case.png' alt='Task List Processor Use Case' title='Task List Processor Use Case. Image Credit ChatGPT with DALL-E')
-            div.col-10
-                p.
-                    Consider a travel website displaying a dashboard of top destination cities,
-                    aggregating data like weather, attractions, events, and flights.
-                p Performance Challenges:
-                ul
-                    li Handling diverse data sources with different response times can slow down the dashboard's loading speed.
-                    li Inconsistent data retrieval from these sources adds complexity to maintaining a user-friendly interface.
-                p TaskListProcessor Solution:
-                ul
-                    li  Concurrently manages data retrieval tasks, enhancing overall loading speed.
-                    li  Offers robust error handling to prevent one data source failure from impacting the entire dashboard.
-                p Business Benefits:
-                ul
-                    li Ensures a responsive dashboard, displaying available data like city weather, even if other data like activities are delayed.
-                    li Avoids empty dashboard scenarios, maintaining user engagement and trust by providing partial but timely information.
+          div.col-2
+            img.img-fluid.d-block.w-100(src='assets/img/Task-List-Processor-Use-Case.png' alt='Task List Processor Use Case' title='Task List Processor Use Case. Image Credit ChatGPT with DALL-E')
+          div.col-10
+            p.
+              Consider a travel website displaying a dashboard of top destination cities,
+              aggregating data like weather, attractions, events, and flights.
+            p Performance Challenges:
+            ul
+              li Handling diverse data sources with different response times can slow down the dashboard's loading speed.
+              li Inconsistent data retrieval from these sources adds complexity to maintaining a user-friendly interface.
+            p TaskListProcessor Solution:
+            ul
+              li  Concurrently manages data retrieval tasks, enhancing overall loading speed.
+              li  Offers robust error handling to prevent one data source failure from impacting the entire dashboard.
+            p Business Benefits:
+            ul
+              li Ensures a responsive dashboard, displaying available data like city weather, even if other data like activities are delayed.
+              li Avoids empty dashboard scenarios, maintaining user engagement and trust by providing partial but timely information.
 
       section.technical-jargon
         h2 Technical Jargon Explained
@@ -115,34 +117,35 @@ block layout-content
           I wanted to clarify some of the technical terms used in our discussion about TaskListProcessor.
           Understanding these concepts will help you understand how TaskListProcessor enhances concurrent task management in .NET applications.
         dl
-            dt Concurrent Asynchronous Tasks
-            dd
-              | Tasks that are executed simultaneously, but each task operates independently and completes at its own pace. This is crucial in a multi-threading environment.
-            dt Error Propagation
-            dd
-              | This refers to the process where an error in one part of the system spreads to other parts, potentially causing wider system failure. Effective error handling is essential to prevent this.
-            dt Telemetry
-            dd
-              | The process of collecting and analyzing data about the performance of a system or application. This can include metrics like task execution time and error rates.
-            dt ILogger
-            dd
-              | An interface used in .NET for logging information, errors, and other significant events within an application.
-            dt TaskResult
-            dd
-              | A custom object designed to encapsulate the outcome of a task, storing details like the result, the task's name, and any errors encountered.
+          dt Concurrent Asynchronous Tasks
+          dd
+            | Tasks that are executed simultaneously, but each task operates independently and completes at its own pace. This is crucial in a multi-threading environment.
+          dt Error Propagation
+          dd
+            | This refers to the process where an error in one part of the system spreads to other parts, potentially causing wider system failure. Effective error handling is essential to prevent this.
+          dt Telemetry
+          dd
+            | The process of collecting and analyzing data about the performance of a system or application. This can include metrics like task execution time and error rates.
+          dt ILogger
+          dd
+            | An interface used in .NET for logging information, errors, and other significant events within an application.
+          dt TaskResult
+          dd
+            | A custom object designed to encapsulate the outcome of a task, storing details like the result, the task's name, and any errors encountered.
 
       h2 The WhenAllWithLoggingAsync Method
-      pre.code.
+      pre.language-csharp
+        code.language-csharp.
           public static async Task WhenAllWithLoggingAsync(IEnumerable&lt;Task&gt; tasks, ILogger logger)
           {
             ArgumentNullException.ThrowIfNull(logger);
             try
             {
-                await Task.WhenAll(tasks);
+              await Task.WhenAll(tasks);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, &quot;TLP: An error occurred while executing one or more tasks.&quot;);
+              logger.LogError(ex, &quot;TLP: An error occurred while executing one or more tasks.&quot;);
             }
           }
       dl
@@ -170,27 +173,28 @@ block layout-content
           This level of detail aids in faster debugging and simplifies maintenance, especially in complex systems with many concurrent tasks.
 
       h2 The GetTaskResultAsync Method
-      pre.code.
+      pre.language-csharp
+        code.language-csharp.
           public async Task GetTaskResultAsync&lt;T&gt;(string taskName, Task&lt;T&gt; task) where T : class
           {
-            var sw &#x3D; new Stopwatch();
+            var sw = new Stopwatch();
             sw.Start();
-            var taskResult &#x3D; new TaskResult { Name &#x3D; taskName };
+            var taskResult = new TaskResult { Name = taskName };
             try
             {
-                taskResult.Data &#x3D; await task;
-                sw.Stop();
-                Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds));
+              taskResult.Data = await task;
+              sw.Stop();
+              Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds));
             }
             catch (Exception ex)
             {
-                sw.Stop();
-                Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds, &quot;Exception&quot;, ex.Message));
-                taskResult.Data &#x3D; null;
+              sw.Stop();
+              Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds, &quot;Exception&quot;, ex.Message));
+              taskResult.Data = null;
             }
             finally
             {
-                TaskResults.Add(taskResult);
+              TaskResults.Add(taskResult);
             }
           }
       dl
@@ -215,37 +219,22 @@ block layout-content
       h2 TaskResult Class Overview
       p.
         The TaskResult class is a cornerstone within the TaskListProcessor architecture, designed to encapsulate the outcome of asynchronous tasks. It provides a unified structure for storing the result data and metadata about the task's execution, such as the task's name, and whether it completed successfully or encountered errors.
-      pre.code.
-          public class TaskResult
+      pre.language-csharp
+        code.language-csharp.
+          public class TaskResult<T> : ITaskResult
           {
-            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
-            &#x2F;&#x2F;&#x2F; Initializes a new instance of the TaskResult class with default values.
-            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
             public TaskResult()
             {
-                Name &#x3D; &quot;UNKNOWN&quot;;
-                Data &#x3D; null;
+              Name = 'UNKNOWN';
+              Data = null;
             }
 
-            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
-            &#x2F;&#x2F;&#x2F; Initializes a new instance of the TaskResult class with the specified task name and data.
-            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
-            &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;name&quot;&gt;The name of the task.&lt;&#x2F;param&gt;
-            &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;data&quot;&gt;The result data of the task.&lt;&#x2F;param&gt;
-            public TaskResult(string name, object? data)
+            public TaskResult(string name, T data)
             {
-                Name &#x3D; name;
-                Data &#x3D; data;
+              Name = name;
+              Data = data;
             }
-
-            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
-            &#x2F;&#x2F;&#x2F; The result data of the task.
-            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
-            public object? Data { get; set; }
-
-            &#x2F;&#x2F;&#x2F; &lt;summary&gt;
-            &#x2F;&#x2F;&#x2F; The name of the task.
-            &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;
+            public T? Data { get; set; }
             public string Name { get; set; }
           }
 
@@ -317,108 +306,102 @@ block layout-content
           While console logging serves as a simple demonstration tool, a production environment would require a more sophisticated logging solution.
           In a live setting, the ILogger interface would be implemented to integrate with a logging framework that supports structured logging,
           log levels, and persistent storage, ensuring comprehensive monitoring and troubleshooting capabilities.
-      pre.code.
-          Console.WriteLine(TimeProvider.System.GetLocalNow());
-          var loggerFactory &#x3D; LoggerFactory.Create(builder &#x3D;&gt; builder.AddConsole());
-          var logger &#x3D; loggerFactory.CreateLogger&lt;Program&gt;();
-
-          var weatherService &#x3D; new WeatherService();
-          var weatherCities &#x3D; new TaskListProcessing.TaskListProcessor();
-          var cities &#x3D; new List&lt;string&gt; { &quot;London&quot;, &quot;Paris&quot;, &quot;New York&quot;, &quot;Tokyo&quot;, &quot;Sydney&quot;,&quot;Chicago&quot;,&quot;Dallas&quot;,&quot;Wichita&quot; };
-          var tasks &#x3D; new List&lt;Task&gt;();
-          foreach (var city in cities)
-          {
-            tasks.Add(weatherCities.GetTaskResultAsync(city, weatherService.GetWeather(city)));
-          }
-          await TaskListProcessing.TaskListProcessor.WhenAllWithLoggingAsync(tasks, logger);
-
-          Console.WriteLine(&quot;All tasks completed\n\n&quot;);
-          Console.WriteLine(&quot;Telemetry:&quot;);
-          foreach (var cityTelemetry in weatherCities.Telemetry)
-          {
-            Console.WriteLine(cityTelemetry);
-          }
-
-          Console.WriteLine(&quot;\n\nResults:&quot;);
-          foreach (var city in weatherCities.TaskResults)
-          {
-            Console.WriteLine($&quot;{city.Name}:&quot;);
-            if (city.Data is not null)
+        pre.language-csharp
+          code.language-csharp.
+            Console.WriteLine(TimeProvider.System.GetLocalNow());
+            var loggerFactory = LoggerFactory.Create(builder =&gt; builder.AddConsole());
+            var logger = loggerFactory.CreateLogger&lt;Program&gt;();
+            var weatherService = new WeatherService();
+            var weatherCities = new TaskListProcessing.TaskListProcessor();
+            var cities = new List&lt;string&gt; { &quot;London&quot;, &quot;Paris&quot;, &quot;New York&quot;, &quot;Tokyo&quot;, &quot;Sydney&quot;,&quot;Chicago&quot;,&quot;Dallas&quot;,&quot;Wichita&quot; };
+            var tasks = new List&lt;Task&gt;();
+            foreach (var city in cities)
             {
+              tasks.Add(weatherCities.GetTaskResultAsync(city, weatherService.GetWeather(city)));
+            }
+            await TaskListProcessing.TaskListProcessor.WhenAllWithLoggingAsync(tasks, logger);
+            Console.WriteLine(&quot;All tasks completed\n\n&quot;);
+            Console.WriteLine(&quot;Telemetry:&quot;);
+            foreach (var cityTelemetry in weatherCities.Telemetry)
+            {
+              Console.WriteLine(cityTelemetry);
+            }
+            Console.WriteLine(&quot;\n\nResults:&quot;);
+            foreach (var city in weatherCities.TaskResults)
+            {
+              Console.WriteLine($&quot;{city.Name}:&quot;);
+              if (city.Data is not null)
+              {
                 foreach (var forecast in city.Data as IEnumerable&lt;WeatherForecast&gt;)
                 {
-                    Console.WriteLine(forecast);
+                  Console.WriteLine(forecast);
                 }
-            }
-            else
-            {
+              }
+              else
+              {
                 Console.WriteLine(&quot;No data&quot;);
+              }
+              Console.WriteLine();
             }
+            Console.WriteLine(TimeProvider.System.GetLocalNow());
             Console.WriteLine();
-         }
-
-         Console.WriteLine(TimeProvider.System.GetLocalNow());
-         Console.WriteLine();
 
       h3 The Output
-      pre.code.
-        11&#x2F;9&#x2F;2023 4:56:36 PM -06:00
-        All tasks completed
+      pre.language-json
+        code.language-json.
+          All tasks completed
+
+          Telemetry:
+          Chicago: Task completed in 602 ms with ERROR Exception: Random failure occurred fetching weather data.
+          Paris: Task completed in 723 ms with ERROR Exception: Random failure occurred fetching weather data.
+          New York: Task completed in 818 ms with ERROR Exception: Random failure occurred fetching weather data.
+          Dallas: Task completed in 1,009 ms
+          Sydney: Task completed in 1,318 ms
+          Tokyo: Task completed in 1,921 ms
+          Wichita: Task completed in 2,672 ms with ERROR Exception: Random failure occurred fetching weather data.
+          London: Task completed in 2,789 ms
 
 
-        Telemetry:
-        Chicago: Task completed in 602 ms with ERROR Exception: Random failure occurred fetching weather data.
-        Paris: Task completed in 723 ms with ERROR Exception: Random failure occurred fetching weather data.
-        New York: Task completed in 818 ms with ERROR Exception: Random failure occurred fetching weather data.
-        Dallas: Task completed in 1,009 ms
-        Sydney: Task completed in 1,318 ms
-        Tokyo: Task completed in 1,921 ms
-        Wichita: Task completed in 2,672 ms with ERROR Exception: Random failure occurred fetching weather data.
-        London: Task completed in 2,789 ms
+          Results:
+          Chicago:
+          No data
 
+          Paris:
+          No data
 
-        Results:
-        Chicago:
-        No data
+          New York:
+          No data
 
-        Paris:
-        No data
+          Dallas:
+          City: Dallas, Date: 2023-11-10, Temp (F): 40, Summary: Cool
+          City: Dallas, Date: 2023-11-11, Temp (F): 87, Summary: Balmy
+          City: Dallas, Date: 2023-11-12, Temp (F): 18, Summary: Chilly
+          City: Dallas, Date: 2023-11-13, Temp (F): 31, Summary: Chilly
+          City: Dallas, Date: 2023-11-14, Temp (F): 105, Summary: Sweltering
 
-        New York:
-        No data
+          Sydney:
+          City: Sydney, Date: 2023-11-10, Temp (F): 116, Summary: Sweltering
+          City: Sydney, Date: 2023-11-11, Temp (F): 49, Summary: Cool
+          City: Sydney, Date: 2023-11-12, Temp (F): 123, Summary: Scorching
+          City: Sydney, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
+          City: Sydney, Date: 2023-11-14, Temp (F): -2, Summary: Bracing
 
-        Dallas:
-        City: Dallas, Date: 2023-11-10, Temp (F): 40, Summary: Cool
-        City: Dallas, Date: 2023-11-11, Temp (F): 87, Summary: Balmy
-        City: Dallas, Date: 2023-11-12, Temp (F): 18, Summary: Chilly
-        City: Dallas, Date: 2023-11-13, Temp (F): 31, Summary: Chilly
-        City: Dallas, Date: 2023-11-14, Temp (F): 105, Summary: Sweltering
+          Tokyo:
+          City: Tokyo, Date: 2023-11-10, Temp (F): 75, Summary: Warm
+          City: Tokyo, Date: 2023-11-11, Temp (F): 120, Summary: Sweltering
+          City: Tokyo, Date: 2023-11-12, Temp (F): 27, Summary: Chilly
+          City: Tokyo, Date: 2023-11-13, Temp (F): 57, Summary: Mild
+          City: Tokyo, Date: 2023-11-14, Temp (F): 7, Summary: Bracing
 
-        Sydney:
-        City: Sydney, Date: 2023-11-10, Temp (F): 116, Summary: Sweltering
-        City: Sydney, Date: 2023-11-11, Temp (F): 49, Summary: Cool
-        City: Sydney, Date: 2023-11-12, Temp (F): 123, Summary: Scorching
-        City: Sydney, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
-        City: Sydney, Date: 2023-11-14, Temp (F): -2, Summary: Bracing
+          Wichita:
+          No data
 
-        Tokyo:
-        City: Tokyo, Date: 2023-11-10, Temp (F): 75, Summary: Warm
-        City: Tokyo, Date: 2023-11-11, Temp (F): 120, Summary: Sweltering
-        City: Tokyo, Date: 2023-11-12, Temp (F): 27, Summary: Chilly
-        City: Tokyo, Date: 2023-11-13, Temp (F): 57, Summary: Mild
-        City: Tokyo, Date: 2023-11-14, Temp (F): 7, Summary: Bracing
-
-        Wichita:
-        No data
-
-        London:
-        City: London, Date: 2023-11-10, Temp (F): 16, Summary: Chilly
-        City: London, Date: 2023-11-11, Temp (F): -3, Summary: Freezing
-        City: London, Date: 2023-11-12, Temp (F): 125, Summary: Scorching
-        City: London, Date: 2023-11-13, Temp (F): 16, Summary: Chilly
-        City: London, Date: 2023-11-14, Temp (F): 84, Summary: Warm
-
-        11&#x2F;9&#x2F;2023 4:56:39 PM -06:00
+          London:
+          City: London, Date: 2023-11-10, Temp (F): 16, Summary: Chilly
+          City: London, Date: 2023-11-11, Temp (F): -3, Summary: Freezing
+          City: London, Date: 2023-11-12, Temp (F): 125, Summary: Scorching
+          City: London, Date: 2023-11-13, Temp (F): 16, Summary: Chilly
+          City: London, Date: 2023-11-14, Temp (F): 84, Summary: Warm
 
 
       h2 Take the TaskListProcessor for a Test Drive
@@ -455,73 +438,73 @@ block layout-content
         With the Task List Processor at its core, the updated application reflects a robust, real-world application scenario, demonstrating the full potential
         of concurrent task processing in .NET. It's a leap forward in our journey to provide developers with a tool that not only simplifies complex operations
         but also enriches the end-user experience with a wealth of information at their fingertips.
-      pre.code.
-          var thingsToDoService &#x3D; new CityThingsToDoService();
-          var weatherService &#x3D; new WeatherService();
-          var cityDashboards &#x3D; new TaskListProcessing.TaskListProcessor();
-          var cities &#x3D; new List&lt;string&gt; { &quot;London&quot;, &quot;Paris&quot;, &quot;New York&quot;, &quot;Tokyo&quot;, &quot;Sydney&quot;, &quot;Chicago&quot;, &quot;Dallas&quot;, &quot;Wichita&quot; };
-          var tasks &#x3D; new List&lt;Task&gt;();
+      pre.language-csharp
+        code.language-csharp.
+          var thingsToDoService = new CityThingsToDoService();
+          var weatherService = new WeatherService();
+          var cityDashboards = new TaskListProcessorGeneric();
+          var cities = new List<string> { "London", "Paris", "New York", "Tokyo", "Sydney", "Chicago", "Dallas", "Wichita" };
+          var tasks = new List<Task>();
           foreach (var city in cities)
           {
-            tasks.Add(cityDashboards.GetTaskResultAsync($&quot;{city} Weather&quot;, weatherService.GetWeather(city)));
-            tasks.Add(cityDashboards.GetTaskResultAsync($&quot;{city} Things To Do&quot;, thingsToDoService.GetThingsToDoAsync(city)));
+            tasks.Add(cityDashboards.GetTaskResultAsync($"{city} Weather", weatherService.GetWeather(city)));
+            tasks.Add(cityDashboards.GetTaskResultAsync($"{city} Things To Do", thingsToDoService.GetThingsToDoAsync(city)));
           }
-          await TaskListProcessing.TaskListProcessor.WhenAllWithLoggingAsync(tasks, logger);
+          await cityDashboards.WhenAllWithLoggingAsync(tasks, logger);
 
       h3 The Output
-      pre.code.
-        11/10/2023 8:28:47 AM -06:00
-        All tasks completed
+      pre.language-json
+        code.language-json.
+          11/10/2023 8:28:47 AM -06:00
+          All tasks completed
 
-        Telemetry:
-        Chicago Things To Do: Task completed in 963 ms
-        Chicago Weather: Task completed in 2,263 ms
-        Dallas Things To Do: Task completed in 969 ms
-        Dallas Weather: Task completed in 2,163 ms with ERROR Exception: Random failure occurred fetching weather data.
-        London Things To Do: Task completed in 497 ms
-        London Weather: Task completed in 2,273 ms with ERROR Exception: Random failure occurred fetching weather data.
+          Telemetry:
+          Chicago Things To Do: Task completed in 963 ms
+          Chicago Weather: Task completed in 2,263 ms
+          Dallas Things To Do: Task completed in 969 ms
+          Dallas Weather: Task completed in 2,163 ms with ERROR Exception: Random failure occurred fetching weather data.
+          London Things To Do: Task completed in 497 ms
+          London Weather: Task completed in 2,273 ms with ERROR Exception: Random failure occurred fetching weather data.
 
 
-        Results:
-        Chicago Things To Do:
-        Visit the Art Institute of Chicago - $25.00
-        Take an architecture river cruise - $40.00
-        Stand on the Skydeck at Willis Tower - $23.00
-        Explore Millennium Park - $0.00
+          Results:
+          Chicago Things To Do:
+          Visit the Art Institute of Chicago - $25.00
+          Take an architecture river cruise - $40.00
+          Stand on the Skydeck at Willis Tower - $23.00
+          Explore Millennium Park - $0.00
 
-        Chicago Weather:
-        City: Chicago, Date: 2023-11-11, Temp (F): 2, Summary: Bracing
-        City: Chicago, Date: 2023-11-12, Temp (F): 29, Summary: Chilly
-        City: Chicago, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
-        City: Chicago, Date: 2023-11-14, Temp (F): 93, Summary: Balmy
-        City: Chicago, Date: 2023-11-15, Temp (F): 105, Summary: Sweltering
+          Chicago Weather:
+          City: Chicago, Date: 2023-11-11, Temp (F): 2, Summary: Bracing
+          City: Chicago, Date: 2023-11-12, Temp (F): 29, Summary: Chilly
+          City: Chicago, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
+          City: Chicago, Date: 2023-11-14, Temp (F): 93, Summary: Balmy
+          City: Chicago, Date: 2023-11-15, Temp (F): 105, Summary: Sweltering
 
-        Dallas Things To Do:
-        Visit the Sixth Floor Museum at Dealey Plaza - $18.00
-        Stroll through the Dallas Arboretum and Botanical Garden - $15.00
-        Experience the Perot Museum of Nature and Science - $20.00
-        Explore the Dallas World Aquarium - $25.00
+          Dallas Things To Do:
+          Visit the Sixth Floor Museum at Dealey Plaza - $18.00
+          Stroll through the Dallas Arboretum and Botanical Garden - $15.00
+          Experience the Perot Museum of Nature and Science - $20.00
+          Explore the Dallas World Aquarium - $25.00
 
-        Dallas Weather:
-        No data
+          Dallas Weather:
+          No data
 
-        London Things To Do:
-        Ride the London Eye - $30.00
-        Tour the Tower of London - $25.00
-        Visit the British Museum - $0.00
-        Explore Camden Market - $0.00
+          London Things To Do:
+          Ride the London Eye - $30.00
+          Tour the Tower of London - $25.00
+          Visit the British Museum - $0.00
+          Explore Camden Market - $0.00
 
-        London Weather:
-        No data
+          London Weather:
+          No data
 
 
       section.version-compatibility-updates
         h2 Version Compatibility and Updates
-        p The TaskListProcessor is currently developed for .NET version 8, which is in preview. This version offers the latest features and optimizations in the .NET framework.
+        p The TaskListProcessor is currently developed for .NET version 8. This version offers the latest features and optimizations in the .NET framework.
         p Future Updates:
         ul
-            li Our project is committed to staying up-to-date with the .NET ecosystem. As new versions of the .NET framework and NuGet packages are released, we will update our codebase accordingly.
-            li Regular updates will ensure compatibility with the latest .NET features and performance enhancements.
+          li Our project is committed to staying up-to-date with the .NET ecosystem. As new versions of the .NET framework and NuGet packages are released, we will update our codebase accordingly.
+          li Regular updates will ensure compatibility with the latest .NET features and performance enhancements.
         p Follow our GitHub repository for the latest updates and to access the most current version of the TaskListProcessor.
-
-

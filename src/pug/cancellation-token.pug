@@ -49,14 +49,15 @@ block layout-content
       p.
         The following code snippet shows how to use a <strong>'CancellationToken'</strong> with the Task class:
 
-      pre.code.
-        public async Task DownloadFileAsync(string url,
-          string filename,
-          HttpClient client,
-          CancellationToken cancellationToken)
-        {
-          await client.DownloadFileTaskAsync(url, filename, cancellationToken);
-        }
+      pre.language-csharp
+        code.language-csharp.
+          public async Task DownloadFileAsync(string url,
+            string filename,
+            HttpClient client,
+            CancellationToken cancellationToken)
+          {
+            await client.DownloadFileTaskAsync(url, filename, cancellationToken);
+          }
 
       p.
         In this example, the DownloadFileAsync method takes a URL and a filename as input,
@@ -97,29 +98,30 @@ block layout-content
         Ideally, you should place it in a way that ensures cancellation occurs
         as close to the critical point as possible while still providing sufficient time for cleanup and graceful shutdown.
 
-      pre.code.
-        public async Task DownloadFileAsync(list&lt;string&gt; urls,
-          string filename,
-          HttpClient client,
-          CancellationToken cancellationToken)
-          {
-            try {
-              foreach (var url in urls)
+      pre.language-csharp
+        code.language-csharp.
+          public async Task DownloadFileAsync(list&lt;string&gt; urls,
+            string filename,
+            HttpClient client,
+            CancellationToken cancellationToken)
+            {
+              try {
+                foreach (var url in urls)
+                {
+                  // Check for cancellation before each download
+                  cancellationToken.ThrowIfCancellationRequested();
+                  await client.DownloadFileTaskAsync(url, filename, cancellationToken);
+                }
+              }
+              catch (TaskCanceledException ex)
               {
-                // Check for cancellation before each download
-                cancellationToken.ThrowIfCancellationRequested();
-                await client.DownloadFileTaskAsync(url, filename, cancellationToken);
+                // Handle cancellation thronw by client.DownloadFileTaskAsync() here
+              }
+              catch (OperationCanceledException ex)
+              {
+                // Handle cancellation thronw by ThrowIfCancellationRequested() here
               }
             }
-            catch (TaskCanceledException ex)
-            {
-              // Handle cancellation thronw by client.DownloadFileTaskAsync() here
-            }
-            catch (OperationCanceledException ex)
-            {
-              // Handle cancellation thronw by ThrowIfCancellationRequested() here
-            }
-          }
 
 
       p.

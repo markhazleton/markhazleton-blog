@@ -33,32 +33,32 @@ block layout-content
       dl
         dt Data Retrieval:
         dd
-            ul
-                li.
-                    When a weather forecast request comes in, the API checks the cache for existing forecast data.
-                li.
-                    If cached data is present the API directly serves the cached data to the user.
+          ul
+            li.
+              When a weather forecast request comes in, the API checks the cache for existing forecast data.
+            li.
+              If cached data is present the API directly serves the cached data to the user.
 
         dt Cache Miss:
         dd
-            ul
-                li.
-                    If the cache is empty, the API waits for the weather forecast data to be retrieved.
-                li.
-                    If the cache is past the refresh time, the API serves the stale data to ensure a quick response
-                    and backend refresh is initiated.
+          ul
+            li.
+              If the cache is empty, the API waits for the weather forecast data to be retrieved.
+            li.
+              If the cache is past the refresh time, the API serves the stale data to ensure a quick response
+              and backend refresh is initiated.
 
         dt Background Cache Refresh:
         dd
-            ul
-                li.
-                    The API kicks off an asynchronous cache refresh process,
-                    updating the forecast data in the cache for future requests.
-                li.
-                    This refresh process does not block the main thread,
-                    ensuring the API remains responsive.
-                li.
-                    A static boolean is used to ensure only one refresh process is running at a time.
+          ul
+            li.
+              The API kicks off an asynchronous cache refresh process,
+              updating the forecast data in the cache for future requests.
+            li.
+              This refresh process does not block the main thread,
+              ensuring the API remains responsive.
+            li.
+              A static boolean is used to ensure only one refresh process is running at a time.
 
       h2  Understanding the System Cached List
       p.
@@ -116,28 +116,28 @@ block layout-content
       dl
         dt Stale Data Risk:
         dd.
-            Depending on the cache expiration settings,
-            there's a risk of serving stale data to users if updates are infrequent or delayed.
-            Careful consideration of cache expiration times is essential to strike the right
-            balance between freshness and efficiency.
+          Depending on the cache expiration settings,
+          there's a risk of serving stale data to users if updates are infrequent or delayed.
+          Careful consideration of cache expiration times is essential to strike the right
+          balance between freshness and efficiency.
 
         dt Increased Complexity:
         dd.
-            Implementing a System Cached List requires careful consideration of thread safety,
-            cache management, and update scheduling. This complexity can sometimes lead to potential bugs
-            or challenges in maintenance.
+          Implementing a System Cached List requires careful consideration of thread safety,
+          cache management, and update scheduling. This complexity can sometimes lead to potential bugs
+          or challenges in maintenance.
 
         dt Memory Usage:
         dd.
-            While memory caching is efficient, it's essential to monitor memory consumption.
-            Storing large datasets in memory can lead to increased memory usage,
-            potentially affecting the overall system's performance.
+          While memory caching is efficient, it's essential to monitor memory consumption.
+          Storing large datasets in memory can lead to increased memory usage,
+          potentially affecting the overall system's performance.
 
         dt Cold Start Overhead:
         dd.
-            When the application starts or the cache expires,
-            there might be a slight overhead as the cache is repopulated.
-            This initial delay could impact the user experience momentarily.
+          When the application starts or the cache expires,
+          there might be a slight overhead as the cache is repopulated.
+          This initial delay could impact the user experience momentarily.
 
       h2  Implementing the System Cached List
       p.
@@ -149,13 +149,14 @@ block layout-content
           p.
             This class encapsulates the cached data along with metadata such as the last update time
             and the expected next update time.
-          pre.code.
-            class CachedData
-              {
-                public DateTime LastUpdated { get; set; }
-                public DateTime NextUpdate { get; set; }
-                public object Data { get; set; }
-              }
+          pre.language-csharp
+            code.language-csharp.
+              class CachedData
+                {
+                  public DateTime LastUpdated { get; set; }
+                  public DateTime NextUpdate { get; set; }
+                  public object Data { get; set; }
+                }
 
         dt SystemValuesCache Class:
         dd
@@ -179,39 +180,40 @@ block layout-content
             be executed in a non-blocking manner, allowing the application to continue functioning
             while the data retrieval is in progress.
 
-          pre.code.
+          pre.language-csharp
+            code.language-csharp.
 
-            public static CachedData&lt;T&gt; GetCachedData&lt;T&gt;(
-              string cacheKey,
-              Func&lt;Task&lt;List&lt;T&gt;&gt;&gt; fetchDataFunction,
-              double cacheTimeInSeconds)
-            {
-              List&lt;T&gt; cachedValues = _cache.Get(cacheKey) as List&lt;T&gt; ?? new List&lt;T&gt;();
-              if (cachedValues.Count == 0 || DateTime.Now - _lastUpdateTime &gt; TimeSpan.FromSeconds(cacheTimeInSeconds))
+              public static CachedData&lt;T&gt; GetCachedData&lt;T&gt;(
+                string cacheKey,
+                Func&lt;Task&lt;List&lt;T&gt;&gt;&gt; fetchDataFunction,
+                double cacheTimeInSeconds)
               {
-                lock (LockObject)
+                List&lt;T&gt; cachedValues = _cache.Get(cacheKey) as List&lt;T&gt; ?? new List&lt;T&gt;();
+                if (cachedValues.Count == 0 || DateTime.Now - _lastUpdateTime &gt; TimeSpan.FromSeconds(cacheTimeInSeconds))
                 {
-                  Task.Run(async () =&gt;
+                  lock (LockObject)
                   {
-                    var data = await fetchDataFunction();
-                    cachedValues.Clear();
-                    cachedValues.AddRange(data);
-                    var cachePolicy = new CacheItemPolicy
+                    Task.Run(async () =&gt;
                     {
-                      AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(cacheTimeInSeconds)
-                    };
-                    _cache.Set(cacheKey, cachedValues, cachePolicy);
-                    _lastUpdateTime = DateTime.Now;
-                  }).Wait();
+                      var data = await fetchDataFunction();
+                      cachedValues.Clear();
+                      cachedValues.AddRange(data);
+                      var cachePolicy = new CacheItemPolicy
+                      {
+                        AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(cacheTimeInSeconds)
+                      };
+                      _cache.Set(cacheKey, cachedValues, cachePolicy);
+                      _lastUpdateTime = DateTime.Now;
+                    }).Wait();
+                  }
                 }
+                return new CachedData&lt;T&gt;()
+                {
+                  Data = cachedValues,
+                  LastUpdateTime = _lastUpdateTime,
+                  NextUpdateTime = _lastUpdateTime.AddSeconds(cacheTimeInSeconds)
+                };
               }
-              return new CachedData&lt;T&gt;()
-              {
-                Data = cachedValues,
-                LastUpdateTime = _lastUpdateTime,
-                NextUpdateTime = _lastUpdateTime.AddSeconds(cacheTimeInSeconds)
-              };
-            }
 
       h2 Conclusion
       p.
