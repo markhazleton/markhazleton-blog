@@ -117,7 +117,7 @@ block layout-content
         code.language-csharp.
           const int maxConcurrency = 100; // Maximum concurrent tasks allowed
           SemaphoreSlim semaphore = new(maxConcurrency);
-          List&lt;Task&gt; tasks = new();
+          List<Task> tasks = new();
           int? taskId = 0;
           while (taskId is not null)
           {
@@ -140,7 +140,7 @@ block layout-content
         code.language-csharp.
 
           //  Wait for semaphore to be released so that next task can start
-          static async Task&lt;long&gt; AwaitSemaphoreAsync(SemaphoreSlim semaphore)
+          static async Task<long> AwaitSemaphoreAsync(SemaphoreSlim semaphore)
           {
             Stopwatch stopwatch = Stopwatch.StartNew();
             await semaphore.WaitAsync();

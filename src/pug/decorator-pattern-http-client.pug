@@ -27,10 +27,9 @@ block layout-content
         Each decorator class wraps an instance
         of the base class/interface and provides its implementation of the additional behavior.
       p.
-        The current version of the web application is hosted on Azure App Service and virtual machine.
+        The current version of the web application is hosted on Azure App Service.
       ul
-        li <a href='https://httpclientdecorator.frogsfolly.com/' target='_blank' rel='noopener noreferrer'>Azure virtual machine and Net 8</a>
-        li <a href='https://httpclientdecorator.azurewebsites.net/' target='_blank' rel='noopener noreferrer'>Azure App Service with Net 8</a>
+        li <a href='https://httpclientdecoratorpattern.azurewebsites.net/' target='_blank' rel='noopener noreferrer'>Azure App Service with Net 8</a>
 
       dl
         dt What is a Design Pattern?
@@ -86,7 +85,7 @@ block layout-content
 
       p.
         Full Souce code for this post is available on
-        GitHub: <a href="https://github.com/markhazleton/httpclientdecorator.markhazleton.comcoratorPattern">DecoratorPatternHttpClient</a>
+        GitHub: <a href="https://github.com/markhazleton/HttpClientDecoratorPattern">HttpClientDecoratorPattern</a>
 
 
       h2 The Interfaces
@@ -104,12 +103,12 @@ block layout-content
 
               public interface IHttpGetCallService
               {
-                Task&lt;HttpGetCallResults&lt;T&gt;&gt; GetAsync&lt;T&gt;(HttpGetCallResults&lt;T&gt; callResults);
+                Task<HttpGetCallResults<T>> GetAsync<T>(HttpGetCallResults<T> callResults);
               }
 
         dt IHttpGetCallResults
         dd This interface defines the properties for the response from the HTTP call.
-          | The implementation of this interface is the class, HttpGetCallResults&lt;T&gt;&gt;,
+          | The implementation of this interface is the class, HttpGetCallResults&lt;T&gt;,
           | a generic class that is used to store the results (response)of an HTTP Request call.
           | It has properties to store the completion date and time, elapsed time in milliseconds,
           | error message (if any), iteration number, number of retries, status path, and results of the HTTP Response.
@@ -118,7 +117,7 @@ block layout-content
           pre.language-csharp
             code.language-csharp.
 
-              public interface IHttpGetCallResults&lt;T&gt;&gt;
+              public interface IHttpGetCallResults<T>
               {
                 DateTime? CompletionDate { get; set; }
                 long ElapsedMilliseconds { get; set; }
@@ -151,21 +150,15 @@ block layout-content
 
       pre.language-csharp
         code.language-csharp.
-          /// &lt;summary&gt;
-          /// Makes a GET request to the specified URL and returns the response.
-          /// &lt;/summary&gt;
-          /// &lt;typeparam name=&quot;T&quot;&gt;The type of the expected response data.&lt;/typeparam&gt;
-          /// &lt;param name=&quot;callResults&quot;&gt;A container for the URL to make the GET request to, and the expected response data.&lt;/param&gt;
-          /// &lt;returns&gt;A container for the response data and any relevant error information.&lt;/returns&gt;
-          public async Task&lt;HttpGetCallResults&gt; GetAsync&lt;T&gt;(HttpGetCallResults callResults)
+          public async Task<HttpGetCallResults> GetAsync<T>(HttpGetCallResults callResults)
           {
             if (callResults == null)
             {
-              throw new ArgumentNullException(nameof(callResults), &quot;The parameter 'callResults' cannot be null.&quot;);
+              throw new ArgumentNullException(nameof(callResults),"The parameter 'callResults' cannot be null.");
             }
             if (string.IsNullOrWhiteSpace(callResults.GetPath))
             {
-              throw new ArgumentException(&quot;The URL path specified in 'callResults' cannot be null or empty.&quot;, nameof(callResults));
+              throw new ArgumentException("The URL path specified in 'callResults' cannot be null or empty.", nameof(callResults));
             }
 
             try
@@ -177,20 +170,19 @@ block layout-content
               var statusResults = await response.Content.ReadAsStringAsync();
               try
               {
-                callResults.GetResults = JsonSerializer.Deserialize&lt;T&gt;(statusResults);
+                callResults.GetResults = JsonSerializer.Deserialize<T>(statusResults);
               }
               catch (Exception ex)
               {
-                _logger.LogCritical(&quot;HttpGetCallService:GetAsync:DeserializeException&quot;, ex.Message);
-                callResults.GetResults = JsonSerializer.Deserialize&lt;dynamic&gt;(statusResults);
+                _logger.LogCritical("HttpGetCallService:GetAsync:DeserializeException", ex.Message);
+                callResults.GetResults = JsonSerializer.Deserialize<dynamic>(statusResults);
               }
 
             }
             catch (Exception ex)
             {
-              _logger.LogCritical(&quot;HttpGetCallService:GetAsync:Exception&quot;, ex.Message);
+              _logger.LogCritical("HttpGetCallService:GetAsync:Exception", ex.Message);
             }
-
             return callResults;
           }
 
@@ -228,24 +220,18 @@ block layout-content
 
       pre.language-csharp
         code.language-csharp.
-          /// &lt;summary&gt;
-          /// GetAsync performs a GET request and adds telemetry information to the response.
-          /// &lt;/summary&gt;
-          /// &lt;typeparam name=&quot;T&quot;&gt;Result type of the GET request&lt;/typeparam&gt;
-          /// &lt;param name=&quot;callResults&quot;&gt;HttpGetCallResults instance&lt;/param&gt;
-          /// &lt;returns&gt;HttpGetCallResults instance including telemetry information&lt;/returns&gt;
-          public async Task&lt;HttpGetCallResults&lt;T&gt;&gt; GetAsync&lt;T&gt;(HttpGetCallResults&lt;T&gt; callResults)
+          public async Task<HttpGetCallResults<T>> GetAsync<T>(HttpGetCallResults<T> callResults)
           {
             Stopwatch sw = new();
             sw.Start();
-            var response = new HttpGetCallResults&lt;T&gt;(callResults);
+            var response = new HttpGetCallResults<T>(callResults);
             try
             {
-              response = await _service.GetAsync&lt;T&gt;(callResults);
+              response = await _service.GetAsync<T>(callResults);
             }
             catch (Exception ex)
             {
-              _logger.LogCritical(&quot;Telemetry:GetAsync:Exception&quot;, ex.Message);
+              _logger.LogCritical("Telemetry:GetAsync:Exception", ex.Message);
             }
             sw.Stop();
             response.ElapsedMilliseconds = sw.ElapsedMilliseconds;
@@ -263,13 +249,13 @@ block layout-content
           ... snip ...
 
           // Add Http Client Factory Implementation
-          builder.Services.AddHttpClient("httpclientdecorator.markhazleton.comcorator", client =&gt;
+          builder.Services.AddHttpClient("HttpClientDecoratorPattern.markhazleton.com", client =&gt;
           {
             client.Timeout = TimeSpan.FromMilliseconds(1500);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Add("User-Agent", "httpclientdecorator.markhazleton.comcorator");
+            client.DefaultRequestHeaders.Add("User-Agent", "HttpClientDecoratorPattern.markhazleton.com");
             client.DefaultRequestHeaders.Add("X-Request-ID", Guid.NewGuid().ToString());
-            client.DefaultRequestHeaders.Add("X-Request-Source", "httpclientdecorator.markhazleton.comcorator");
+            client.DefaultRequestHeaders.Add("X-Request-Source", "HttpClientDecoratorPattern.markhazleton.com");
           });
 
           // Register the decorator implementation via dependency injection.
