@@ -47,7 +47,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1712607761520" />
+        <link rel="stylesheet" href="/css/styles.css?version=1712672127177" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -143,7 +143,7 @@
                     <a href="#SemaphoreSlimClass">More on the SemaphoreSlim Class</a>
                     <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">int</span></span> maxConcurrency <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span> <span class="token comment">// Maximum concurrent tasks allowed</span>
 <span class="token class-name">SemaphoreSlim</span> semaphore <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span>maxConcurrency<span class="token punctuation">)</span><span class="token punctuation">;</span>
-List<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>Task<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> tasks <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">List<span class="token punctuation">&lt;</span>Task<span class="token punctuation">></span></span> tasks <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> taskId <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token keyword">while</span> <span class="token punctuation">(</span>taskId <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
@@ -162,7 +162,7 @@ List<span class="token operator">&amp;</span>lt<span class="token punctuation">;
 </code></pre>
                     <p>I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.</p>
                     <pre class="language-csharp"><code class="language-csharp"><span class="token comment">//  Wait for semaphore to be released so that next task can start</span>
-<span class="token keyword">static</span> <span class="token keyword">async</span> Task<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token keyword">long</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">AwaitSemaphoreAsync</span><span class="token punctuation">(</span><span class="token class-name">SemaphoreSlim</span> semaphore<span class="token punctuation">)</span>
+<span class="token keyword">static</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span><span class="token keyword">long</span><span class="token punctuation">></span></span> <span class="token function">AwaitSemaphoreAsync</span><span class="token punctuation">(</span><span class="token class-name">SemaphoreSlim</span> semaphore<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token class-name">Stopwatch</span> stopwatch <span class="token operator">=</span> Stopwatch<span class="token punctuation">.</span><span class="token function">StartNew</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token keyword">await</span> semaphore<span class="token punctuation">.</span><span class="token function">WaitAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
