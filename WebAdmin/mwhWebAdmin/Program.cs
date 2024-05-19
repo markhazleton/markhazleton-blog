@@ -1,10 +1,10 @@
 global using mwhWebAdmin.Models;
 global using System.Text.Json;
+global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
 global using System.Xml;
-global using System.Text.Json.Serialization;
-using mwhWebAdmin.Project;
 using Microsoft.Extensions.FileProviders;
+using mwhWebAdmin.Project;
 
 var builder = WebApplication.CreateBuilder(args);
 
