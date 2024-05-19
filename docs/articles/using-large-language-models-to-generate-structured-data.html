@@ -5,23 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <title>Development - Fire and Forget for Enhanced Performance</title>
+        <title>ChatGPT - Using Large Language Models to Generate Structured Data</title>
+        <meta name="description" content="Explore how large language models like GPT-4 are revolutionizing data structuring, focusing on Mechanics of Motherhood's use of AI to structure JSON recipes." />
+        <meta name="keywords" content="AI, JSON, Data Structuring, Large Language Models, GPT-4, Recipes, Mechanics of Motherhood" />
         <meta name="author" content="Mark Hazleton" />
-        <meta name="description" content="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login." />
-        <meta name="keywords" content="Mark Hazleton, API Performance, Fire and Forget, Asynchronous Processing, Service Bus, User Experience, Technology Solutions, System Integrity, Software Architecture" />
-        <link rel="canonical" href="https://markhazleton.com/articles/fire-and-forget-for-enhanced-performance.html" />
-        <meta property="og:title" content="Development - Fire and Forget for Enhanced Performance" />
-        <meta property="og:description" content="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login." />
-        <meta property="og:url" content="https://markhazleton.com/articles/fire-and-forget-for-enhanced-performance.html" />
-        <meta property="og:type" content="article" />
-        <meta property="og:image" content="/assets/img/MarkHazleton-Fire-And-Forget.png" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Development - Fire and Forget for Enhanced Performance" />
-        <meta name="twitter:description" content="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login." />
-        <meta name="twitter:image" content="/assets/img/MarkHazleton-MarkHazleton-Fire-And-Forget.png" />
-        <meta name="robots" content="index, follow" />
-        <meta name="language" content="English" />
-        <meta name="revisit-after" content="7 days" />
+        <link rel="canonical" href="https://markhazleton.com/articles/using-large-language-models-to-generate-structured-data.html" />
         <meta property="og:title" content="Mark Hazleton - Solutions Architect" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://markhazleton.com/" />
@@ -59,7 +47,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1716134087809" />
+        <link rel="stylesheet" href="/css/styles.css?version=1716134087996" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -108,133 +96,62 @@
         <div class="container-fluid p-0">
             <section class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/asyncdemo/" target="_blank" title="The full source code for the Async Demo is available on GitHub">The full source code for the Async Demo is available on GitHub</a></p>
-                    <h1>Fire and Forget</h1>
-                    <p class="card-text lead mb-5">
-                        While working on a project, I encountered a practical challenge: how do I call an async method without waiting for it to process. I decided to explore the use of Fire and Forget technique in my AsyncDemo project.
-                        <a href="https://github.com/markhazleton/AsyncDemo">https://github.com/markhazleton/AsyncDemo</a>
-                        . Fire-and-forget is a programming approach where tasks are sent off to be processed independently, without the initiating program tracking or waiting for the results of these tasks.
-                    </p>
-                    <h2>The Risks Of Not Waiting</h2>
-                    <p>Fire-and-forget may call multiple methods without awaiting the completion of the methods. While this technique can be useful in certain scenarios, it can also lead to a number of issues, including:</p>
-                    <dl>
-                        <dt>Unhandled Exceptions</dt>
-                        <dd>When a task is not awaited, exceptions thrown by it can lead to silent failures, making them difficult to catch and debug.</dd>
-                        <dt>Resource Management Issues</dt>
-                        <dd>Unawaited tasks may continue consuming resources, potentially leading to resource leaks or performance degradation, especially in high-load or long-running applications.</dd>
-                        <dt>Inconsistent Application State</dt>
-                        <dd>Not waiting for the completion of async operations can result in race conditions and unpredictable application behavior, affecting data integrity.</dd>
-                        <dt>I/O Operations and External System Interactions</dt>
-                        <dd>In scenarios involving I/O operations or external systems, unawaited tasks can result in incomplete or failed operations without appropriate notification or recovery mechanisms.</dd>
-                    </dl>
-                    <p>The Fire and Forget pattern must be used with understanding of its risks and appropriate error handling mechanisms. In the context of my AsyncDemo project, I decided to use the Fire and Forget pattern to update a Service Bus topic upon user login. This action, while important, is not directly tied to the user's immediate experience. In such cases, a delayed or inefficient handling can inadvertently hamper the API's responsiveness, leading to a suboptimal user experience.</p>
-                    <h2>Benefits Of Fire And Forget</h2>
-                    <strong class="lead">Let`s Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.</strong>
-                    <p>In today's fast-paced consumer driven world, API performance is vital for the user experience and business efficiency. One pattern that can be used is the "Fire and Forget" technique, particularly in scenarios where immediate response is key, but their are other tasks that are not critical to the user interaction.</p>
-                    <p>Take, for example, the process of updating a Service Bus topic upon user login. This action, while important, is not directly tied to the user's immediate experience. In such cases, a delayed or inefficient handling can inadvertently hamper the API's responsiveness, leading to a suboptimal user experience.</p>
-                    <p>This is where a well-designed Fire and Forget class comes into play. By effectively decoupling non-critical tasks from the main execution thread, we ensure that our API remains swift and responsive. This approach not only enhances performance but also elevates the user experience, a factor that's increasingly becoming a differentiator in the digital marketplace.</p>
-                    <p>Consider the scenario of a user logging into an application. Upon successful authentication, the system needs to update a Service Bus topic - an action that triggers other services to perform tasks like profile rebuilding or login history recording. While these tasks are important for maintaining system integrity and providing personalized experiences, they are not immediately critical to the user who is logging in.</p>
-                    <p>Implementing a Fire and Forget class in this context allows these non-urgent tasks to be handled asynchronously. This means the API can swiftly return a response to the user, confirming a successful login, while the system quietly takes care of the updates in the background. It's an elegant solution that balances the need for efficiency and thoroughness.</p>
-                    <p>Moreover, in a landscape where every millisecond counts, optimizing API performance with techniques like Fire and Forget is not just a technical consideration - it's a strategic one. By ensuring our systems are responsive and efficient, we're aligning technology more closely with business outcomes and user satisfaction.</p>
-                    <p>In summary, the Fire and Forget pattern is more than a technical solution; it's a strategic tool that can significantly enhance the performance and user experience of APIs. It's an approach that aligns well with my philosophy of practical, business-driven technology solutions - ensuring that we deliver not only in terms of technical performance but also in terms of tangible business value.</p>
-                    <div class="card w-50 mx-auto mb-5">
-                        <div class="card-header"><h5 class="card-title">Example: Online Order Processing</h5></div>
-                        <div class="card-body">
-                            <p>Let`s explore how the fire-and-forget pattern can be applied in a real-world scenario: online order processing. When a user places an order, immediate feedback is crucial for a good user experience. This is where our fire-and-forget method comes into play.</p>
-                            <p>We start by sending a quick response to the user, confirming receipt of the order. This is the 'fire' part. It's fast and gives immediate feedback.</p>
-                            <p>Behind the scenes, the system then processes several sub-tasks like validating the order, checking inventory, and calculating shipping. This is done asynchronously, without the user having to wait for each step to complete. The user can continue with other activities, while our system handles these tasks in the background.</p>
-                            <p>Finally, once all sub-tasks are complete, the system sends a detailed confirmation to the user. This might take a few minutes, but it doesn't hinder the user's experience as they have already moved on after the initial confirmation.</p>
-                            <p>Here are tasks that might be involved in the processing of an online order, both from a customer-facing and a back-end perspective. Some of these tasks are critical to the user experience, while others are not. The fire-and-forget pattern can be used to handle the non-critical tasks, ensuring that the user gets a swift response while the system quietly takes care of the rest.</p>
-                            <dl>
-                                <dt>Inventory Check</dt>
-                                <dd>Ensuring the ordered items are in stock.</dd>
-                                <dt>Fraud Analysis</dt>
-                                <dd>Assessing the order for potential fraud or security risks. Running fraud detection analysis on the order details.</dd>
-                                <dt>Picking and Packing</dt>
-                                <dd>Preparing the items in the warehouse for shipment.</dd>
-                                <dt>Shipping Label Creation</dt>
-                                <dd>Generating a shipping label with tracking information.</dd>
-                                <dt>Automatic Reorder of Stock</dt>
-                                <dd>Initiating a reorder if inventory levels are low.</dd>
-                                <dt>Order Routing</dt>
-                                <dd>Deciding the fulfillment center based on various factors.</dd>
-                                <dt>Supplier Notification</dt>
-                                <dd>Notifying suppliers for direct shipping or inventory replenishment.</dd>
-                                <dt>Warehouse Management</dt>
-                                <dd>Updating the warehouse system with order details.</dd>
-                                <dt>Logistics Coordination</dt>
-                                <dd>Coordinating with shipping partners for order delivery.</dd>
-                                <dt>Data Analysis and Reporting</dt>
-                                <dd>Updating and analyzing sales and inventory data.</dd>
-                                <dt>CRM Update</dt>
-                                <dd>Recording order details in the CRM system for future reference.</dd>
-                            </dl>
+                    <h1>LLM generating Structured Data</h1>
+                    <h2 class="subheading mb-3">How Mechanics of Motherhood is using AI to generate a strucuted JSON string for importing into thier recipe database.</h2>
+                    <div class="container mt-4">
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                <div class="ratio ratio-16x9"><iframe src="https://www.youtube.com/embed/TY8zKxYld1E?si=oMUx64kGRKizQQVB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+                                <center class="center-text"><p class="video-caption">The video provides a detailed demonstration of the "Mechanics of Motherhood" recipe management tool which offers a wide range of recipes that cater to quick and easy weeknight dinners. The structured management system of the site allows for easy modification of details such as name, description, category, servings, ingredients, and instructions. The video shows the integration with AOpenAI's API which facilitates the addition of new recipes.</p></center>
+                            </div>
                         </div>
-                        <div class="card-footer"><p class="card-text"></p></div>
                     </div>
-                    <h2>Detailed Solution Breakdown</h2>
+                    <hr />
                     <dl>
-                        <dt>Class Definition</dt>
-                        <dd>The `FireAndForgetUtility` class is a sealed class designed for asynchronous operations without requiring a response, incorporating exception handling and logging. In C# and other .NET languages, a 'sealed' class is a class that cannot be inherited by other classes. It's a way to prevent further inheritance and is often used to provide a guarantee that the class's behavior won't be altered unexpectedly by a subclass. Once a class is declared as 'sealed', it's a final class and cannot serve as a base class for any other class.</dd>
-                        <dt>Constructor and Logger</dt>
-                        <dd>It takes an `ILogger` object in the constructor and initializes a private readonly `_logger` field. The logger is crucial for tracking the behavior and exceptions of the tasks.</dd>
-                        <dt>Method: SafeFireAndForget</dt>
-                        <dd>The `SafeFireAndForget` method accepts a `Task` and an optional `CancellationToken`. It ensures that the provided task is not null before proceeding.</dd>
-                        <dt>Task Continuation</dt>
-                        <dd>The method uses `ContinueWith` to handle the task's completion. Depending on the task's state (faulted, canceled, or successfully completed), it logs appropriate messages.</dd>
-                        <dt>Exception Handling</dt>
-                        <dd>In case of exceptions, it iterates through all inner exceptions (if any) and logs them, ensuring thorough reporting of issues.</dd>
-                        <dt>Cancellation Handling</dt>
-                        <dd>The method also handles task cancellation scenarios, logging a message if the task is canceled or if the cancellation token is requested.</dd>
-                        <dt>Conclusion</dt>
+                        <dt>Introduction</dt>
                         <dd>
-                            This utility class is a robust tool for handling tasks that don't require direct synchronization with the main execution flow, enhancing application performance and responsiveness.
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token operator">|</span> <span class="token keyword">public</span> <span class="token keyword">sealed</span> <span class="token keyword">class</span> <span class="token class-name">FireAndForgetUtility</span>
-<span class="token operator">|</span> <span class="token punctuation">{</span>
-<span class="token operator">|</span>     <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">ILogger</span> _logger<span class="token punctuation">;</span>
-<span class="token operator">|</span>
-<span class="token operator">|</span>     <span class="token keyword">public</span> <span class="token function">FireAndForgetUtility</span><span class="token punctuation">(</span><span class="token class-name">ILogger</span> logger<span class="token punctuation">)</span>
-<span class="token operator">|</span>     <span class="token punctuation">{</span>
-<span class="token operator">|</span>         _logger <span class="token operator">=</span> logger<span class="token punctuation">;</span>
-<span class="token operator">|</span>     <span class="token punctuation">}</span>
-<span class="token operator">|</span>
-<span class="token operator">|</span>     <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SafeFireAndForget</span><span class="token punctuation">(</span><span class="token class-name">Task</span> task<span class="token punctuation">,</span> <span class="token class-name">CancellationToken</span> cancellationToken <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">)</span>
-<span class="token operator">|</span>     <span class="token punctuation">{</span>
-<span class="token operator">|</span>         <span class="token keyword">if</span> <span class="token punctuation">(</span>task <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
-<span class="token operator">|</span>         <span class="token punctuation">{</span>
-<span class="token operator">|</span>             <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentNullException</span><span class="token punctuation">(</span><span class="token keyword">nameof</span><span class="token punctuation">(</span>task<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">|</span>         <span class="token punctuation">}</span>
-<span class="token operator">|</span>
-<span class="token operator">|</span>         task<span class="token punctuation">.</span><span class="token function">ContinueWith</span><span class="token punctuation">(</span>t <span class="token operator">=></span>
-<span class="token operator">|</span>         <span class="token punctuation">{</span>
-<span class="token operator">|</span>             <span class="token keyword">if</span> <span class="token punctuation">(</span>t<span class="token punctuation">.</span>IsFaulted<span class="token punctuation">)</span>
-<span class="token operator">|</span>             <span class="token punctuation">{</span>
-<span class="token operator">|</span>                 <span class="token function">LogExceptions</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span>Exception<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">|</span>             <span class="token punctuation">}</span>
-<span class="token operator">|</span>             <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>t<span class="token punctuation">.</span>IsCanceled<span class="token punctuation">)</span>
-<span class="token operator">|</span>             <span class="token punctuation">{</span>
-<span class="token operator">|</span>                 _logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"Task canceled"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">|</span>             <span class="token punctuation">}</span>
-<span class="token operator">|</span>             <span class="token keyword">else</span>
-<span class="token operator">|</span>             <span class="token punctuation">{</span>
-<span class="token operator">|</span>                 _logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"Task completed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">|</span>             <span class="token punctuation">}</span>
-<span class="token operator">|</span>         <span class="token punctuation">}</span><span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">|</span>     <span class="token punctuation">}</span>
-<span class="token operator">|</span>
-<span class="token operator">|</span>     <span class="token keyword">private</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">LogExceptions</span><span class="token punctuation">(</span><span class="token class-name">Exception</span> exception<span class="token punctuation">)</span>
-<span class="token operator">|</span>     <span class="token punctuation">{</span>
-<span class="token operator">|</span>         _logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>exception<span class="token punctuation">,</span> <span class="token string">"Exception in task"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">|</span>
-<span class="token operator">|</span>         <span class="token keyword">if</span> <span class="token punctuation">(</span>exception <span class="token keyword">is</span> <span class="token class-name">AggregateException</span> aggregateException<span class="token punctuation">)</span>
-<span class="token operator">|</span>         <span class="token punctuation">{</span>
-<span class="token operator">|</span>             <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> innerException <span class="token keyword">in</span> aggregateException<span class="token punctuation">.</span>InnerExceptions<span class="token punctuation">)</span>
-<span class="token operator">|</span>             <span class="token punctuation">{</span>
-<span class="token operator">|</span>                 <span class="token function">LogExceptions</span><span class="token punctuation">(</span>innerException<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">|</span>             <span class="token punctuation">}</span>
-<span class="token operator">|</span>         <span class="token punctuation">}</span>
-<span class="token operator">|</span>     <span class="token punctuation">}</span>
-<span class="token operator">|</span> <span class="token punctuation">}</span></code></pre>
+                            <p>The role of artificial intelligence (AI) in structuring and managing data has been increasingly pivotal across various sectors. With the introduction of advanced tools like OpenAI's JSON mode, the functionality and reliability of these AI systems, particularly in structuring data into JSON formats, have seen significant improvements.</p>
+                            <p>Large language models (LLM) are revolutionizing how we build appliations. The application of artificial intelligence (AI) in processing and structuring data has become a transformative force across various industries. LLMs like GPT-4 are at the forefront of this innovation, offering capabilities that extend far beyond simple text generation.</p>
+                        </dd>
+                        <dt><h2>Large Language Models in Data Structuring</h2></dt>
+                        <dd>
+                            <h3>Understanding Large Language Models</h3>
+                            <p>Large language models (LLMs) are advanced AI systems trained on diverse datasets to understand and generate human-like text. LLMs like GPT-4 have been designed to comprehend and generate text that mimics human-like understanding, which can be particularly useful in transforming unstructured data into structured formats such as JSON.</p>
+                            <h3>Why Structured Data Matters</h3>
+                            <p>JSON (JavaScript Object Notation) is a lightweight data-interchange format that is easy for humans to read and write, and easy for machines to parse and generate. JSON is critical for data management due to its lightweight and easy-to-parse nature, which is essential for web applications like Mechanics of Motherhood to efficiently manage recipe data.</p>
+                            <p>Structured data is organized and tagged with accurate metadata, making it easier for machines to understand, process, and "read" the information efficiently.</p>
+                            <h3>OpenAI's JSON Mode: A New Development</h3>
+                            <p>Recently, OpenAI introduced a specific feature known as "JSON mode" in its API offerings (such as gpt-4-turbo-preview and gpt-3.5-turbo-0125), which forces the model to generate outputs that are valid JSON objects. This development is particularly useful in scenarios where data integrity and format validity are paramount.</p>
+                            <p>When enabled, JSON mode constrains the AI model to produce only strings that parse into valid JSON objects. This feature is crucial for applications that require reliable data formatting without errors commonly associated with manual parsing.</p>
+                        </dd>
+                        <dt>Mechanics of Motherhood: A Website for Mothers</dt>
+                        <dd>
+                            <h2>About Mechanics of Motherhood</h2>
+                            <p>Mechanics of Motherhood is a website that offers a vast array of mother-approved recipes aimed at simplifying meal preparation for busy parents.</p>
+                            <p>Mechanics of Motherhood is dedicated to offering real-world perspectives on the challenges and triumphs of being a working mother. Recognizing that motherhood is a full-time job, the site provides resources to simplify mealtime with quick, affordable, and kid-friendly recipes designed to reduce stress and increase family time.</p>
+                            <p>In addition to recipes, the site features a blog sharing personal stories, insights, and tips from a mother's perspective.</p>
+                        </dd>
+                        <dt>From Recipe to JSON</dt>
+                        <dd>
+                            <h2>Using AI to Generate Structured Data</h2>
+                            <p>The first step involves gathering the recipe content, which could be in various formats such as text files, emails, or even scanned documents.</p>
+                            <p>The user can just prompt the AI model with the recipe details and let the LLM generate the JSON string for the recipe.</p>
+                            <p>The input is used to create a call to the AI model, which processes the information and generates a structured JSON string.</p>
+                            <p>The JSON string includes key recipe details such as name, description, category, servings, ingredients, and instructions.</p>
+                            <p>The structured JSON string is then imported into the Mechanics of Motherhood database, where it is displayed on the website for users to access.</p>
+                        </dd>
+                        <dt>Benefits of Using AI for Data Structuring</dt>
+                        <dd>
+                            <h2>Efficiency and Accuracy</h2>
+                            <p>AI dramatically speeds up the process of data entry and reduces human errors, ensuring that the recipes are accurate and uniformly formatted.</p>
+                            <h2>Search Engine Optemization (SEO)</h2>
+                            <p>Structured data is essential for SEO, as it helps search engines understand the content of a webpage better, leading to improved visibility and ranking.</p>
+                            <p>The LLM-generated JSON strings are optimized for SEO, ensuring that the recipes are easily discoverable by search engines.</p>
+                        </dd>
+                        <dt>Leveraging OpenAI's JSON Mode</dt>
+                        <dd>
+                            <p>By utilizing OpenAI's JSON mode, platforms like Mechanics of Motherhood can ensure that the generated data is correctly formatted and ready for import.</p>
+                            <p>The integration of large language models in generating structured data has proven to be a game-changer for Mechanics of Motherhood recipe management tool.</p>
                         </dd>
                     </dl>
                 </div>
