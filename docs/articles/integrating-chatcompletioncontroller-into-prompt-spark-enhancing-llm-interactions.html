@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="author" content="Mark Hazleton" />
+        <meta name="robots" content="index, follow" />
+        <title>Integrating Chat Completion into Prompt Spark</title>
+        <meta name="description" content="Learn how the ChatCompletionController enhances LLM interactions in the Prompt Spark project by enabling seamless chat functionalities for Core Spark Variants." />
+        <meta name="keywords" content="ChatCompletionController, Prompt Spark, LLM, AI Chat, AI Assistant, Core Spark, Spark Variants" />
+        <meta name="author" content="Mark Hazleton" />
+        <link rel="canonical" href="https://markhazleton.com/integrating-chatcompletioncontroller-into-prompt-spark" />
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "familyName": "Hazleton",
+                "givenName": "Mark",
+                "jobTitle": "Solutions Architect",
+                "alumniOf": "University of North Texas",
+                "affiliation": {
+                    "@type": "Organization",
+                    "name": "Control Origins"
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
+                "url": "https://markhazleton.com"
+            }
+        </script>
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "url": "https://markhazleton.com",
+                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+            }
+        </script>
+        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="/css/styles.css?version=1717773398864" />
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+        <script>
+            (function (c, l, a, r, i, t, y) {
+                c[a] =
+                    c[a] ||
+                    function () {
+                        (c[a].q = c[a].q || []).push(arguments);
+                    };
+                t = l.createElement(r);
+                t.async = 1;
+                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+            })(window, document, 'clarity', 'script', 'd628hovv63');
+        </script>
+    </head>
+    <body class="sidetracked-body" id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
+                <span class="d-block d-lg-none">Mark Hazleton</span>
+                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#articles">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#education">Education</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Page Content-->
+        <div class="container-fluid p-0">
+            <section class="painteddesert-section painteddesert-section-background" id="post">
+                <div class="painteddesert-section-content">
+                    <h1>Integrating Chat Completion into Prompt Spark</h1>
+                    <h2 class="subheading mb-3">Learn how the Chat Completion enhances LLM interactions in the Prompt Spark project by using Microsoft.SemanticKernel to enable chat functionalities for Core Spark Variants.</h2>
+                    <h3>Chat Completions: Revolutionizing System Design and User Interaction</h3>
+                    <p>Since its public launch in November 2022, ChatGPT has captured global attention by demonstrating the extraordinary potential of Large Language Models (LLM). Generating human-like responses to a wide range of requests, from practical queries to surreal prompts, ChatGPT has drafted cover letters, composed poetry, and even pretended to be William Shakespeare. This revolutionary technology is changing how we design systems and interact with computers, offering a more natural and intuitive way for users to communicate with machines.</p>
+                    <p>The impact of these tools extends beyond mere novelty. They are reshaping the landscape of user interaction by providing seamless, conversational interfaces that can understand and respond to complex human inputs. This evolution presents a significant design challenge: creating contextually rich experiences that feel natural and engaging for users. By integrating chat completions into applications, we can enhance accessibility, streamline workflows, and revolutionize the way we work and communicate.</p>
+                    <p>The Chat Completion interface demands a shift in how designers and prompt engineers approach system design. Instead of static and linear interactions, these interfaces require dynamic and context-aware communication strategies. Designers must anticipate a wide array of user inputs and craft responses that are not only accurate but also contextually relevant. This involves understanding user intent, maintaining conversational flow, and adapting to the user's needs in real-time.</p>
+                    <h3>The Future of System Design and User Interaction</h3>
+                    <p>Chat Completions transforming the way we work by enhancing efficiency, effectiveness, and speed. AI-powered chat completions optimize writing tasks, generating essays, memos, and other content. As we embrace these technologies, our challenge is to develop tools that aligns with human goals and educate users on their ethical use. Just as calculators didn't replace math education but became powerful tools, AI-mediated communication will continue to evolve, supporting our work while requiring thoughtful implementation.</p>
+                    <dl>
+                        <dt>Traditional Interfaces to Dynamic Communication</dt>
+                        <dd>The advent of chat completions is ushering in a new era of system design. Traditional interfaces are giving way to more dynamic and interactive modes of communication. Users now expect systems to understand natural language inputs and provide contextually relevant responses. This shift necessitates a redesign of user interfaces to accommodate conversational agents, making interactions more fluid and intuitive.</dd>
+                        <dt>Enhancing Accessibility</dt>
+                        <dd>These advancements are enhancing accessibility, enabling users who may not be familiar with technical jargon or complex interfaces to interact with systems effortlessly. The democratization of technology through conversational AI is making powerful tools available to a broader audience, fostering inclusivity and engagement.</dd>
+                        <dt>Integration and Evolution</dt>
+                        <dd>The integration of chat completions into various applications will continue to evolve. From customer support to personal assistants and beyond, the ability of AI to converse naturally and meaningfully with users will redefine our relationship with technology. The future of system design lies in creating seamless, user-centric interactions that leverage the full potential of AI-driven communication.</dd>
+                    </dl>
+                    <h3>Chat Completions in Prompt Spark</h3>
+                    <p>Chat Completion was added to the Prompt Spark project to demonstrate a chat, co-pilot, or assistant interface. This integration allows users to converse with spark variants derived from a given Core Spark, providing a practical and insightful way to evaluate their performance.</p>
+                    <a class="btn btn-primary" href="https://gpt.frogsfolly.com" target="_blank" rel="noopener"><img class="img-fluid d-block w-100" src="/assets/img/MarkHazleton-PromptSpark-ChatCompletion.png" alt="Prompt Spark - Chat Completion " title="Prompt Spark - Chat Completion" /></a>
+                    <h2>
+                        Microsoft.SemanticKernel NuGet Package
+                        <a class="btn btn-primary" href="https://learn.microsoft.com/en-us/semantic-kernel/overview/?tabs=Csharp" target="_blank">Learn More</a>
+                    </h2>
+                    <p>The Microsoft Semantic Kernel is an open-source SDK designed to help developers build AI agents by combining existing code with AI models from various providers like OpenAI, Azure, and Hugging Face. It functions as an AI orchestration layer, enabling the creation of agents that can automate tasks by calling existing code. This SDK allows for extensibility through plugins and connectors, making it easy to integrate various AI services and automate complex business processes.</p>
+                    <p>The Microsoft.SemanticKernel NuGet package offers an innovative SDK designed to integrate advanced Large Language Models (LLMs) with conventional programming languages such as C#, Python, and Java. This package provides developers with the tools to seamlessly incorporate AI-driven functionalities into their applications, leveraging the capabilities of platforms like OpenAI, Azure OpenAI, and Hugging Face.</p>
+                    <dl>
+                        <dt>Key Features and Functionality</dt>
+                        <dd>
+                            <dl>
+                                <dt>Plugins</dt>
+                                <dd>Semantic Kernel allows you to define and integrate plugins easily. These plugins can be described with simple attributes, enabling AI models to understand and use them effectively.</dd>
+                                <dt>Automatic Orchestration</dt>
+                                <dd>The SDK includes advanced orchestration capabilities, where it can automatically generate and execute plans using AI, significantly reducing the manual coding effort required to achieve complex tasks.</dd>
+                                <dt>Multilingual Support</dt>
+                                <dd>The package supports multiple languages, offering robust functionality in C#, Python, and Java. This ensures flexibility and accessibility for a wide range of developers, regardless of their preferred programming language.</dd>
+                                <dt>Ease of Use</dt>
+                                <dd>Developers can quickly start using Semantic Kernel by installing the package and following straightforward setup instructions. Whether using .NET, Python, or Java, the initial setup involves adding the package, configuring API keys, and integrating basic sample code.</dd>
+                                <dt>Interactive Learning</dt>
+                                <dd>For hands-on learning, the SDK provides Jupyter notebooks that showcase usage examples and code snippets, helping developers to quickly grasp the core concepts and functionalities of Semantic Kernel.</dd>
+                            </dl>
+                        </dd>
+                    </dl>
+                    <h2>Adding Chat to Prompt Spark</h2>
+                    <dl>
+                        <dt>Background: Prompt Spark Solution</dt>
+                        <dd>
+                            <p>Prompt Spark is designed to help developers and businesses optimize the use of LLM models by effectively managing, tracking, and comparing system prompts. Here are the key components of the Prompt Spark solution:</p>
+                            <dl>
+                                <dt>Core Sparks</dt>
+                                <dd><p>Core Sparks define the essential behavior and output expectations for LLMs. They establish rigorous requirements and guidelines to ensure consistency and quality across all interactions.</p></dd>
+                                <dt>Spark Variants</dt>
+                                <dd><p>A Spark Variant is an LLM implementation of a Core Spark. Variants are used to compare responses and conduct in-depth testing and analysis of different implementations of the same Core Spark.</p></dd>
+                                <dt>User Prompts</dt>
+                                <dd><p>User Prompts are collections of test inputs designed for a Core Spark. These prompts are systematically run against various Variants to assess their effectiveness and adherence to the Core Spark specifications.</p></dd>
+                            </dl>
+                        </dd>
+                        <dt>Building the ChatCompletionController</dt>
+                        <dd>
+                            <p>The ChatCompletionController serves as a pivotal element in the Prompt Spark project, enabling real-time, AI-driven conversations with different LLM Variants. Here’s a step-by-step breakdown of its implementation:</p>
+                            <dl>
+                                <dt>Controller Setup</dt>
+                                <dd>
+                                    <p>The `ChatCompletionController` setup in the Prompt Spark project is designed to initialize and configure essential components through dependency injection. By injecting services the controller gains access to HTTP context for session management, real-time client communication, chat completion functionalities, GPT definitions, and logging capabilities. This setup ensures that the controller can efficiently manage chat interactions, storing and retrieving necessary data, and sending real-time updates to clients.</p>
+                                    <p>This modular approach enhances the maintainability and testability of the application, as each service can be easily replaced or mocked during testing. It promotes a clear separation of concerns, where each service handles a specific aspect of the controller's operations, contributing to a scalable architecture. This configuration aligns with the goals of Prompt Spark, providing a robust framework for managing and comparing LLM interactions, ensuring consistency and quality in AI-driven chat functionalities.</p>
+                                    <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ChatCompletionController</span><span class="token punctuation">(</span>
+  <span class="token class-name">IHttpContextAccessor</span> _httpContextAccessor<span class="token punctuation">,</span>
+  <span class="token class-name">IHubContext<span class="token punctuation">&lt;</span>ChatHub<span class="token punctuation">></span></span> hubContext<span class="token punctuation">,</span>
+  <span class="token class-name">IChatCompletionService</span> _chatCompletionService<span class="token punctuation">,</span>
+  <span class="token class-name">IGPTDefinitionService</span> definitionService<span class="token punctuation">,</span>
+  <span class="token class-name">ILogger<span class="token punctuation">&lt;</span>ChatCompletionController<span class="token punctuation">></span></span> logger<span class="token punctuation">)</span> <span class="token punctuation">:</span> OpenAIBaseController
+
+</code></pre>
+                                </dd>
+                                <dt>Index Action</dt>
+                                <dd>
+                                    <p>The `Index` action in the `ChatCompletionController` serves as the initial entry point for setting up a chat session based on a specific GPT definition. When a request is made to this action with an optional `id` parameter, it checks if the `id` is zero and redirects to the default chat view if necessary. If a valid `id` is provided, it retrieves the corresponding GPT definition using the `IGPTDefinitionService` and serializes this information into a session variable. This setup ensures that subsequent requests within the session can access the necessary GPT definition details, facilitating a seamless chat experience.</p>
+                                    <p>The purpose of this action is to prepare the chat environment by loading the appropriate definition data, which includes the core prompts and configurations for the chat session. By storing the `DefinitionDto` in the session, the application maintains stateful information that can be used across multiple interactions, enhancing the user experience by ensuring that each chat session is contextually aware and properly configured based on the selected GPT definition. This approach aligns with Prompt Spark's goal of optimizing and managing LLM interactions efficiently.</p>
+                                    <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>IActionResult<span class="token punctuation">></span></span> <span class="token function">Index</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> id <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>id <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> Response<span class="token punctuation">.</span><span class="token function">Redirect</span><span class="token punctuation">(</span><span class="token string">"/OpenAI/Chat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> definitionDto <span class="token operator">=</span> <span class="token keyword">await</span> definitionService<span class="token punctuation">.</span><span class="token function">GetDefinitionDtoAsync</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> session <span class="token operator">=</span> _httpContextAccessor<span class="token punctuation">.</span>HttpContext<span class="token punctuation">.</span>Session<span class="token punctuation">;</span>
+    session<span class="token punctuation">.</span><span class="token function">SetString</span><span class="token punctuation">(</span><span class="token string">"DefinitionDto"</span><span class="token punctuation">,</span> JsonConvert<span class="token punctuation">.</span><span class="token function">SerializeObject</span><span class="token punctuation">(</span>definitionDto<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">View</span><span class="token punctuation">(</span>definitionDto<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+                                </dd>
+                                <dt>SendMessage Action</dt>
+                                <dd>
+                                    <p>The `SendMessage` action in the `ChatCompletionController` processes user messages, managing the conversation flow between the user and the AI system. It retrieves the stored `DefinitionDto` from the session, which contains the core prompts and configurations for the chat. The action then constructs the chat history by incorporating system messages and parsing the conversation history provided in the request. This setup ensures that the AI has the necessary context to generate appropriate responses.</p>
+                                    <p>The primary function of this action is to facilitate real-time communication using SignalR. It streams the AI's responses to the client, converting the content to HTML format before sending it. The action also includes robust error handling, logging any issues that occur during the process. This approach ensures a dynamic and responsive chat experience, aligning with Prompt Spark's objective of optimizing LLM interactions by maintaining context and providing immediate feedback to users.</p>
+                                    <pre class="language-csharp"><code class="language-csharp"><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">HttpPost</span></span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>IActionResult<span class="token punctuation">></span></span> <span class="token function">SendMessage</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">FromForm</span></span><span class="token punctuation">]</span> <span class="token class-name"><span class="token keyword">string</span></span> message<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">FromForm</span></span><span class="token punctuation">]</span> <span class="token class-name"><span class="token keyword">string</span></span> conversationHistory<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> session <span class="token operator">=</span> _httpContextAccessor<span class="token punctuation">.</span>HttpContext<span class="token punctuation">.</span>Session<span class="token punctuation">;</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> definitionDtoJson <span class="token operator">=</span> session<span class="token punctuation">.</span><span class="token function">GetString</span><span class="token punctuation">(</span><span class="token string">"DefinitionDto"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> definitionDto <span class="token operator">=</span> JsonConvert<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">DeserializeObject</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>DefinitionDto<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>definitionDtoJson<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">IsNullOrEmpty</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> chatHistory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ChatHistory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    chatHistory<span class="token punctuation">.</span><span class="token function">AddSystemMessage</span><span class="token punctuation">(</span>definitionDto<span class="token punctuation">.</span>Prompt<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    chatHistory<span class="token punctuation">.</span><span class="token function">AddSystemMessage</span><span class="token punctuation">(</span><span class="token string">"You are in a conversation, keep your answers brief, always ask follow-up questions, ask if ready for full answer."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> messages <span class="token operator">=</span> JsonConvert<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">DeserializeObject</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span>conversationHistory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> messages<span class="token punctuation">.</span>Count<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        chatHistory<span class="token punctuation">.</span><span class="token function">AddUserMessage</span><span class="token punctuation">(</span>messages<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        chatHistory<span class="token punctuation">.</span><span class="token function">AddSystemMessage</span><span class="token punctuation">(</span>messages<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token class-name"><span class="token keyword">var</span></span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">await</span> <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> response <span class="token keyword">in</span> _chatCompletionService<span class="token punctuation">.</span><span class="token function">GetStreamingChatMessageContentsAsync</span><span class="token punctuation">(</span>chatHistory<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>response<span class="token punctuation">?.</span>Content <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          buffer<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>Content<span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>response<span class="token punctuation">.</span>Content<span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span><span class="token char">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> contentToSend <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> htmlContent <span class="token operator">=</span> Markdown<span class="token punctuation">.</span><span class="token function">ToHtml</span><span class="token punctuation">(</span>contentToSend<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">await</span> hubContext<span class="token punctuation">.</span>Clients<span class="token punctuation">.</span>All<span class="token punctuation">.</span><span class="token function">SendAsync</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token string">"System"</span><span class="token punctuation">,</span> htmlContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            buffer<span class="token punctuation">.</span><span class="token function">Clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>buffer<span class="token punctuation">.</span>Length <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> remainingContent <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> htmlContent <span class="token operator">=</span> Markdown<span class="token punctuation">.</span><span class="token function">ToHtml</span><span class="token punctuation">(</span>remainingContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">await</span> hubContext<span class="token punctuation">.</span>Clients<span class="token punctuation">.</span>All<span class="token punctuation">.</span><span class="token function">SendAsync</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token string">"System"</span><span class="token punctuation">,</span> htmlContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"Error occurred while processing the request"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">Ok</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span><span class="token string">"Invalid input"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">BadRequest</span><span class="token punctuation">(</span><span class="token string">"Invalid input"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                                </dd>
+                            </dl>
+                        </dd>
+                        <dt>Benefits of Chat Completion in Prompt Spark</dt>
+                        <dd>
+                            <dl>
+                                <dt>Enhanced Interactivity</dt>
+                                <dd>By leveraging real-time chat functionalities, users can interact dynamically with different LLM variants, providing immediate feedback and insights.</dd>
+                                <dt>Improved Testing and Evaluation</dt>
+                                <dd>The ability to converse with multiple LLM variants based on a single Core Spark allows for comprehensive testing and performance comparison, ensuring adherence to quality standards.</dd>
+                                <dt>Efficient Prompt Management</dt>
+                                <dd>Storing and managing conversation histories and definition DTOs within session states streamline the process of tracking and analyzing interactions.</dd>
+                            </dl>
+                        </dd>
+                    </dl>
+                    <p>Integrating Chat Completion into the Prompt Spark project demostrates a new capability to manage and evaluate LLM interactions. This demonstrates the practical implementation of a chat interface but also provides a valuable tool for developers to optimize their use of LLM models throgh prompt engineering.</p>
+                    <p>
+                        Visit Prompt Spark to explore its capabilities and elevate your prompt engineering projects.
+                        <a class="btn btn-primary" href="https://gpt.frogsfolly.com" target="_blank" rel="noopener" alt="Explore Prompt Spark - LLM Prompt Managment Tool" title="Explore Prompt Spark - LLM Prompt Managment Tool">Explore Prompt Spark - LLM Prompt Managment Tool</a>
+                    </p>
+                </div>
+            </section>
+            <footer class="navbar-dark bg-primary">
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-8 text-left text-light">
+                        <br />
+                        <div class="row">
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Case Studies</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/data-analysis-demonstration.html" target="_self" title="Visualizing Data with the Data Analysis Demonstration">Data Analysis Demonstration</a></li>
+                                    <li><a class="text-light" href="/articles/wichita-sewer-site-creation.html" target="_self" title="Discover the journey behind the creation of the Wichita Sewer and Drain website, from initial planning to final launch, and the lessons learned along the way.">From Concept To Live: The Unveiling Of The WichitaSewer.com Website</a></li>
+                                    <li><a class="text-light" href="/sample-mvc-crud.html" target="_self" title="The SampleMvcCRUD Project">SampleMvcCRUD Project</a></li>
+                                    <li><a class="text-light" href="/articles/taking-fastendpoints-for-a-test-drive.html" target="_self" title="Exploring the streamlined approach to building ASP.NET APIs">Taking FastEndpoints for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/articles/taking-microsoft-copilot-studio-for-a-test-drive.html" target="_self" title="Mark Hazleton explores Microsoft Copilot Studio, sharing insights on creating a personalized AI chatbot, Copilot Mark. Discover how AI is revolutionizing site interactions and team communication.">Taking Microsoft Copilot Studio for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/articles/building-a-web-application-to-manage-your-blog-articles.html" target="_self" title="Building a Web Application to Manage Your Blog Articles: A Journey into Web Content Management Systems">Tools to Manage My Blog</a></li>
+                                    <li><a class="text-light" href="/web-project-mechanics.html" target="_self" title="Description for Web Project Mechanics">Web Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">ChatGPT</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html" target="_self" title="Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.">ChatGPT Meets Jeopardy: C# Solution for Trivia Aficionados</a></li>
+                                    <li><a class="text-light" href="/crafting-chatgpt-prompt.html" target="_self" title="Explore the art of crafting effective ChatGPT prompts with Mark Hazleton. Discover the significance of context, learn prompt engineering techniques, and unlock the potential of ChatGPT for better AI-powered conversations and code generation.">Crafting ChatGPT Prompt</a></li>
+                                    <li><a class="text-light" href="/creating-a-php-website-with-chat-gpt.html" target="_self" title="Overcoming the Challenge of Unfamiliar Territory">Creating a PHP Website with ChatGPT</a></li>
+                                    <li><a class="text-light" href="/articles/generating-a-key-press-counter-with-chatgpt.html" target="_self" title="Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights.">Generating A Key Press Counter with Chat GPT</a></li>
+                                    <li><a class="text-light" href="/trivia-spark-development.html" target="_self" title="Trivia Spark: Igniting Creativity with ChatGPT">Trivia Spark With ChatGPT</a></li>
+                                    <li><a class="text-light" href="/using-chatgpt-for-developers.html" target="_self" title="Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.">Using ChatGPT for C# Development</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Development</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/cancellation-token.html" target="_self" title="Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming">CancellationToken</a></li>
+                                    <li><a class="text-light" href="/concurrent-processing.html" target="_self" title="Learning Concurrent Processing Through Code with ChatGPT">Concurrent Processing</a></li>
+                                    <li><a class="text-light" href="/articles/fire-and-forget-for-enhanced-performance.html" target="_self" title="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.">Fire and Forget for Enhanced Performance</a></li>
+                                    <li><a class="text-light" href="/git-flow-rethink.html" target="_self" title="Revaluating the meaning of Continuous in CI/CD with Git Flow">Git Flow Rethink</a></li>
+                                    <li><a class="text-light" href="/git-organized.html" target="_self" title="Git Organized: A Guide to Organized Version Control">Git Organized</a></li>
+                                    <li><a class="text-light" href="/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html" target="_self" title="In the dynamic world of ASP.NET development, optimizing performance is a cornerstone for building successful applications. Caching is one of the most effective strategies for this, and the MemoryCacheManager class is a vital tool in this endeavor. This article dives into its functionalities and benefits, complemented by demonstration code available on GitHub https://github.com/markhazleton/AsyncDemo">Harnessing the Power of Caching in ASP.NET with MemoryCacheManager</a></li>
+                                    <li><a class="text-light" href="/nuget-packages-pros-cons.html" target="_self" title="The Pros and Cons of Using NuGet Packages in Your Projects">NuGet Package Pros and Cons</a></li>
+                                    <li><a class="text-light" href="/redis-local-instance.html" target="_self" title="Redis Local Instance">Redis Local Instance</a></li>
+                                    <li><a class="text-light" href="/system-cache.html" target="_self" title="Enhancing Web API Performance with a System Cached List">System Cache</a></li>
+                                    <li><a class="text-light" href="/task-list-processor.html" target="_self" title="Discover how the TaskListProcessor class streamlines concurrent operations in .NET, enabling efficient asynchronous programming and performance monitoring.">Task List Processor</a></li>
+                                    <li><a class="text-light" href="/decorator-pattern-http-client.html" target="_self" title="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.">The Decorator Pattern with Http Client</a></li>
+                                    <li><a class="text-light" href="/articles/transforming-samplemvccrud-with-net-aspire-a-cloud-native-evolution.html" target="_self" title="Discover how integrating .NET Aspire into the SampleMvcCRUD project revolutionizes it with cloud-native capabilities, enhanced observability, and seamless service orchestration. Dive into the journey of adopting microservices architecture and leveraging advanced telemetry for insightful application monitoring.">Transforming SampleMvcCRUD with .NET Aspire: A Cloud-Native Evolution</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Personal Philosophy</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/lifelong-learning.html" target="_self" title="Reinventing Yourself: The Transformative Power of Lifelong Learning">Lifelong Learning</a></li>
+                                    <li><a class="text-light" href="/sidetrackedbysizzle.html" target="_self" title="Explore the concept of getting Sidetracked By Sizzle with Mark Hazleton. Understand how to stay focused and avoid the allure of superficial attractions.">Sidetracked by Sizzle</a></li>
+                                    <li><a class="text-light" href="/articles/the-art-of-making-yourself-replaceable-a-developers-guide-to-career-growth.html" target="_self" title="Explore how developers can enhance their career growth by embracing the concept of making themselves replaceable, focusing on adapting to the evolving tech landscape.">The Art of Making Yourself Replaceable: A Guide to Career Growth</a></li>
+                                    <li><a class="text-light" href="/articles/the-balanced-equation-crafting-the-perfect-project-team-mix.html" target="_self" title="Discover the art of constructing the perfect project team mix, leveraging the unique strengths of both internal employees and external consultants for project success.">The Balanced Equation: Crafting the Perfect Project Team Mix</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/" target="_self" title="Change management is an important aspect of project management, as it helps to ensure that changes to the project are properly planned and implemented">Change Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/conflict-management/" target="_self" title="Learn effective conflict management strategies to enhance your project management skills. Discover how to navigate conflicts among team members, clients, and handle poor performance. Ensure project success with these expert tips.">Conflict Management for Project Managers</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/issue-management.html" target="_self" title="issue management. ">Issue Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/program-management-office.html" target="_self" title="The Program Management Office Role in Project Delivery">Program Management Office</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-life-cycle.html" target="_self" title="From Idea to Delivery the Project Life Cycle">Project Life Cycle</a></li>
+                                    <li><a class="text-light" href="/projectmechanics" target="_self" title="The Art and Science of Project Management">Project Mechanics</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-meetings.html" target="_self" title="Project meetings can be the black hole of project management. ">Project Meetings</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics Leadership</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/accountability-and-authority.html" target="_self" title="Finding Balance Between Accountability and Authority">Accountability and Authority</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/evolution-over-revolution.html" target="_self" title="Description for Evolution Over Revolution">Evolution Over Revolution</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/from-features-to-outcomes.html" target="_self" title="Focus on outcomes, not just features">From Features to Outcomes</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership" target="_self" title="Project Mechanics Leadership Overview">Leadership</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">PromptSpark</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/english-is-the-new-programming-language-of-choice.html" target="_self" title="Explore the pivotal role of English in the evolution of the Microsoft Stack, specifically within .NET technologies such as C#, F#, VB.NET, and SQL. Understand why English is becoming as crucial as traditional programming languages in software development.">English is the New Programming Language of Choice</a></li>
+                                    <li><a class="text-light" href="/articles/integrating-chatcompletioncontroller-into-prompt-spark-enhancing-llm-interactions.html" target="_self" title="Learn how chat completions enhances LLM interactions in the Prompt Spark project by enabling seamless chat functionalities for Core Spark Variants.">Integrating Chat Completion into Prompt Spark</a></li>
+                                    <li><a class="text-light" href="/articles/prompt-spark-revolutionizing-llm-system-prompt-management.html" target="_self" title="Discover how Prompt Spark offers comprehensive tools and resources for managing and optimizing LLM system prompts. Learn about features like the variants library, performance tracking, and prompt engineering strategies.">Prompt Spark: Revolutionizing LLM System Prompt Management</a></li>
+                                    <li><a class="text-light" href="/articles/using-large-language-models-to-generate-structured-data.html" target="_self" title="Explore how large language models like GPT-4 are revolutionizing data structuring, focusing on Mechanics of Motherhood's use of AI to structure JSON recipes.">Using Large Language Models to Generate Structured Data</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Tools</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" target="_self" title="In the ever-evolving landscape of web development, the surge in popularity of static websites has been nothing short of remarkable. These sites, known for their speed, security, and simplicity, are increasingly becoming the go-to for developers and businesses alike. My journey with static websites has been transformative, leading me to embrace cloud-based solutions for hosting. Among these, Azure Static Web Apps stands out as a beacon of efficiency and innovation.">Embracing Azure Static Web Apps for Static Site Hosting</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <br />
+                        <div class="social-icons">
+                            <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
+                            <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
+                            <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- Core theme JS-->
+            <script src="/js/scripts.js"></script>
+        </div>
+    </body>
+</html>
