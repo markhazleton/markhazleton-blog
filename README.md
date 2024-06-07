@@ -2,7 +2,7 @@
 
 [Mark Hazleton Resume](https://markhazleton.com/) is the Mark Hazleton online resume/CV based on the theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/) with the following template [Start Bootstrap - Source Template](https://startbootstrap.com/theme/resume/)
 
-[![Azure Static Web Apps CI/CD](https://github.com/controlorigins/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml/badge.svg)](https://github.com/controlorigins/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml)
+[![Azure Static Web Apps CI/CD](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml/badge.svg)](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml)
 
 
 ## Status
@@ -29,4 +29,4 @@ Start Bootstrap is based on the [Bootstrap](https://getbootstrap.com/) framework
 
 ## Copyright and License
 
-Copyright 2013-2023 d.b.a. Control Origins. Code released under the [MIT](https://github.com/controlorigins/markhazleton-blog/blob/main/LICENSE) license.
+Copyright 2013-2023 d.b.a. Control Origins. Code released under the [MIT](https://github.com/markhazleton/markhazleton-blog/blob/main/LICENSE) license.
