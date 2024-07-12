@@ -42,13 +42,13 @@ module.exports = function renderAssets() {
 
     // Copy FontAwesome fonts
     const fontSourcePath = upath.resolve(upath.dirname(__filename), '../node_modules/fontawesome-free/webfonts/');
-    const fontDestPath = upath.resolve(destPath, 'webfonts/');
+    const fontDestPath = upath.resolve(destPath, '');
     sh.mkdir("-p", fontDestPath);
     sh.cp('-R', fontSourcePath, fontDestPath);
 
     // Copy Devicon fonts
     const deviconFontSourcePath = upath.resolve(upath.dirname(__filename), '../node_modules/devicon/fonts/');
-    const deviconFontDestPath = upath.resolve(destPath, 'css/fonts/');
+    const deviconFontDestPath = upath.resolve(destPath, 'css/');
     sh.mkdir("-p", deviconFontDestPath);
     sh.cp('-R', deviconFontSourcePath, deviconFontDestPath);
 
