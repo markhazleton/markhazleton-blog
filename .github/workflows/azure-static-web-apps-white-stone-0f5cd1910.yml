@@ -44,6 +44,19 @@ jobs:
           api_location: ""
           output_location: "" # This should be the directory where your build script outputs the files
 
+      # Trigger IndexNow after successful deployment
+      - name: Trigger IndexNow
+        if: success()
+        run: |
+          curl -X POST "https://www.bing.com/indexnow" \
+          -H "Content-Type: application/json" \
+          -d '{
+                "host": "markhazleton.com",
+                "key": "63a3bf5bd1c146adb1921e4532d443f5",
+                "keyLocation": "https://markhazleton.com/indexnow.txt",
+                "sitemapLocations": ["https://markhazleton.com/sitemap.xml"]
+              }'
+
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
