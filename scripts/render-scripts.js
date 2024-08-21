@@ -15,18 +15,22 @@ module.exports = async function renderScripts() {
     // Path to Bootstrap JS in node_modules (adjust according to your Bootstrap version)
     const bootstrapJSPath = upath.resolve(upath.dirname(__filename), '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
 
+    // Path to PrismJS in node_modules (adjust according to your PrismJS setup)
+    const prismJSPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/prism.js');
+
     // Paths for scripts.js and its destination
     const sourcePathScriptsJS = upath.resolve(upath.dirname(__filename), '../src/js/scripts.js');
     const destPathScriptsJS = upath.resolve(upath.dirname(__filename), '../docs/js/scripts.js');
 
-    // Read the Bootstrap JS and your scripts.js content
-    const [bootstrapJS, scriptsJS] = await Promise.all([
+    // Read the Bootstrap JS, PrismJS, and your scripts.js content
+    const [bootstrapJS, prismJS, scriptsJS] = await Promise.all([
         fs.readFile(bootstrapJSPath, 'utf8'),
+        fs.readFile(prismJSPath, 'utf8'),
         fs.readFile(sourcePathScriptsJS, 'utf8')
     ]);
 
-    // Combine Bootstrap JS and your scripts.js
-    const combinedScripts = bootstrapJS + '\n' + scriptsJS;
+    // Combine Bootstrap JS, PrismJS, and your scripts.js
+    const combinedScripts = bootstrapJS + '\n' + prismJS + '\n' + scriptsJS;
 
     // Include copyright notice
     const copyrightNotice = `/*!
