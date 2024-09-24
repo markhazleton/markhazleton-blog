@@ -8,11 +8,14 @@ using mwhWebAdmin.Project;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(configure => configure.AddConsole());
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<ArticleService>(provider =>
 {
-    return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")));
+    var logger = provider.GetRequiredService<ILogger<ArticleService>>();
+    return new ArticleService(Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json")),logger);
 });
 
 builder.Services.AddSingleton<ProjectService>(provider =>

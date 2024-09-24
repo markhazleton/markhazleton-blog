@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace mwhWebAdmin.Pages;
 
-
-
 public class ArticlesModel : PageModel
 {
     private readonly ArticleService _articleService;
@@ -19,5 +17,6 @@ public class ArticlesModel : PageModel
     {
         Articles = _articleService.GetArticles();
         _articleService.GenerateSiteMap();
+        _articleService.GenerateRSSFeed();
     }
 }
