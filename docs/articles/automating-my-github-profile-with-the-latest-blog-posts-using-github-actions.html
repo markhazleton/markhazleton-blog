@@ -10,6 +10,16 @@
         <meta name="keywords" content="GitHub Actions, Node.js, RSS feed, automation, GitHub profile, workflow automation" />
         <meta name="author" content="Mark Hazleton" />
         <link rel="canonical" href="https://markhazleton.com/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html" />
+        <meta property="og:title" content="Update GitHub Profile with Latest Blog Posts Using GitHub Actions" />
+        <meta property="og:description" content="Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed." />
+        <meta property="og:image" content="/assets/img/MarkHazleton-GitHub-Profile.png" />
+        <meta property="og:url" content="https://markhazleton.com/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html" />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Update GitHub Profile with Latest Blog Posts Using GitHub Actions" />
+        <meta name="twitter:description" content="Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed." />
+        <meta name="twitter:image" content="/assets/img/MarkHazleton-GitHub-Profile.png" />
+        <meta name="twitter:creator" content="@markhazleton" />
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <script type="application/ld+json">
@@ -42,7 +52,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1727365505475" />
+        <link rel="stylesheet" href="/css/styles.css?version=1727368788725" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -98,58 +108,62 @@
                     <p>In this post, I'll quickly review the steps I took to create the RSS feed and set up the GitHub Action to update my profile with the most recent blog posts.</p>
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-12 col-md-8"><img class="img-fluid rounded" src="/assets/img/MarkHazleton-GitHub-Profile.png" alt="GitHub Profile" title="GitHub Profile" /></div>
+                            <div class="col-12 col-md-8">
+                                <a href="https://github.com/markhazleton" target="_blank" title="GitHub Profile for Mark Hazleton"><img class="img-fluid rounded" src="/assets/img/MarkHazleton-GitHub-Profile.png" alt="GitHub Profile" title="GitHub Profile" /></a>
+                            </div>
                         </div>
                     </div>
                     <dl>
-                        <dt>Creating the RSS Feed with Node.js</dt>
+                        <dt>Creating the RSS Feed with Blog Admin Tool</dt>
                         <dd>
-                            <p>To create an RSS feed, I used Node.js and the `rss` package to generate the XML feed. Here is some template code to get you started in creating an RSS feed using Node.js.</p>
-                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token constant">RSS</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'rss'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Create a new RSS feed</span>
-<span class="token keyword">const</span> feed <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RSS</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Mark Hazleton\'s Blog'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'Updates from Mark Hazleton on technology, development, and life.'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">feed_url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/rss.xml'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">site_url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">image_url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/logo.png'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">pubDate</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">ttl</span><span class="token operator">:</span> <span class="token number">60</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Add blog posts to the feed</span>
-<span class="token keyword">const</span> posts <span class="token operator">=</span> <span class="token punctuation">[</span>
+                            <p>To create an RSS feed, I updated my Blog Admin tool to create an XML file with the latest blog posts whenever a new article is published.</p>
+                            <p>
+                                For more information about the Blog Admin tool, check out my previous post
+                                <a href="https://markhazleton.com/articles/building-a-web-application-to-manage-your-blog-articles.html" target="_blank" title="Building a Web Application to Manage Your Blog Articles">Building a Web Application to Manage Your Blog Articles</a>
+                            </p>
+                            <p>Here is the updated code snippet from the Blog Admin tool that generates the RSS feed.</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">GenerateRSSFeed</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">try</span>
   <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Getting Started with Node.js'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'A guide to getting started with Node.js for beginners.'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/getting-started-with-nodejs'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">date</span><span class="token operator">:</span> <span class="token string">'2024-09-15'</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Advanced ASP.NET Core Patterns'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'Exploring advanced patterns in ASP.NET Core for better architecture.'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/advanced-aspnet-core-patterns'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">date</span><span class="token operator">:</span> <span class="token string">'2024-09-20'</span>
+    <span class="token class-name"><span class="token keyword">string</span></span> rssFeedPath <span class="token operator">=</span> Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">GetDirectoryName</span><span class="token punctuation">(</span>_filePath<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"rss.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> recentArticles <span class="token operator">=</span> _articles<span class="token punctuation">.</span><span class="token function">OrderByDescending</span><span class="token punctuation">(</span>a <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">ConvertStringToDate</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span>LastModified<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Take</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name">XmlWriter</span> writer <span class="token operator">=</span> XmlWriter<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span>rssFeedPath<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">XmlWriterSettings</span> <span class="token punctuation">{</span> Indent <span class="token operator">=</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteStartDocument</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteStartElement</span><span class="token punctuation">(</span><span class="token string">"rss"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteAttributeString</span><span class="token punctuation">(</span><span class="token string">"version"</span><span class="token punctuation">,</span> <span class="token string">"2.0"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      writer<span class="token punctuation">.</span><span class="token function">WriteStartElement</span><span class="token punctuation">(</span><span class="token string">"channel"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"Mark Hazleton Articles"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"link"</span><span class="token punctuation">,</span> <span class="token string">"https://markhazleton.com/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"description"</span><span class="token punctuation">,</span> <span class="token string">"Latest articles from Mark Hazleton."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"lastBuildDate"</span><span class="token punctuation">,</span> DateTime<span class="token punctuation">.</span>Now<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token string">"r"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> article <span class="token keyword">in</span> recentArticles<span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        writer<span class="token punctuation">.</span><span class="token function">WriteStartElement</span><span class="token punctuation">(</span><span class="token string">"item"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> article<span class="token punctuation">.</span>Name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"link"</span><span class="token punctuation">,</span> <span class="token interpolation-string"><span class="token string">$"https://markhazleton.com/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">article<span class="token punctuation">.</span>Slug</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"description"</span><span class="token punctuation">,</span> article<span class="token punctuation">.</span>Description<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        writer<span class="token punctuation">.</span><span class="token function">WriteElementString</span><span class="token punctuation">(</span><span class="token string">"pubDate"</span><span class="token punctuation">,</span> <span class="token function">ConvertStringToDate</span><span class="token punctuation">(</span>article<span class="token punctuation">.</span>LastModified<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token string">"r"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        writer<span class="token punctuation">.</span><span class="token function">WriteEndElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      writer<span class="token punctuation">.</span><span class="token function">WriteEndElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// channel</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteEndElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// rss</span>
+      writer<span class="token punctuation">.</span><span class="token function">WriteEndDocument</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    _logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"RSS feed generated successfully."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
-<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    _logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"Failed to generate RSS feed."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
 
-<span class="token comment">// Add items to the feed</span>
-posts<span class="token punctuation">.</span><span class="token method function property-access">forEach</span><span class="token punctuation">(</span><span class="token parameter">post</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
-  feed<span class="token punctuation">.</span><span class="token method function property-access">item</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">title</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">description</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">description</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">url</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">url</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">date</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">date</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-<span class="token comment">// Write the RSS feed to a file</span>
-fs<span class="token punctuation">.</span><span class="token method function property-access">writeFileSync</span><span class="token punctuation">(</span><span class="token string">'rss.xml'</span><span class="token punctuation">,</span> feed<span class="token punctuation">.</span><span class="token method function property-access">xml</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">log</span><span class="token punctuation">(</span><span class="token string">'RSS feed created successfully!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token template-punctuation string">`</span></span>`</code></pre>
-                            After creating the RSS feed, I uploaded the `rss.xml` file to my blog’s root directory. Now, whenever I update my blog, I’ll regenerate this file with new content.
+</code></pre>
                         </dd>
                         <dt>Setting Up the GitHub Action</dt>
                         <dd>
