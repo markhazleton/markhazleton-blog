@@ -1,0 +1,176 @@
+extends ../layouts/articles
+
+block pagehead
+  title Update GitHub Profile with Latest Blog Posts Using GitHub Actions
+  meta(name='description', content='Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed.')
+  meta(name="keywords" content="GitHub Actions, Node.js, RSS feed, automation, GitHub profile, workflow automation")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Automating GitHub Profile with Latest Blog Posts Using GitHub Actions
+      h2.subheading.mb-3 Streamline Your Workflow by Automatically Updating Your GitHub Profile with Latest Blog Posts
+
+      p.
+        As a developer, I'm always looking for ways to streamline my workflow and share my latest work more effectively.
+        Recently, I updated my blog at markhazleton.com to include an RSS feed using some updated Node.js programming.
+        With this feed in place, I decided to automate the process of displaying my latest blog posts on my GitHub profile
+        using GitHub Actions.
+      p.
+        In this post, I'll quickly review the steps I took to create the RSS feed
+        and set up the GitHub Action to update my profile with the most recent blog posts.
+
+      dl
+        dt Creating the RSS Feed with Node.js
+        dd
+          p.
+            To create an RSS feed, I used Node.js and the `rss` package to generate the XML feed.
+            Here is some template code to get you started in creating an RSS feed using Node.js.
+
+          pre.language-javascript
+            code.language-javascript.
+              const RSS = require('rss');
+              const fs = require('fs');
+
+              // Create a new RSS feed
+              const feed = new RSS({
+                title: 'Mark Hazleton\'s Blog',
+                description: 'Updates from Mark Hazleton on technology, development, and life.',
+                feed_url: 'https://markhazleton.com/rss.xml',
+                site_url: 'https://markhazleton.com',
+                image_url: 'https://markhazleton.com/logo.png',
+                pubDate: new Date(),
+                ttl: 60
+              });
+
+              // Add blog posts to the feed
+              const posts = [
+                {
+                  title: 'Getting Started with Node.js',
+                  description: 'A guide to getting started with Node.js for beginners.',
+                  url: 'https://markhazleton.com/getting-started-with-nodejs',
+                  date: '2024-09-15'
+                },
+                {
+                  title: 'Advanced ASP.NET Core Patterns',
+                  description: 'Exploring advanced patterns in ASP.NET Core for better architecture.',
+                  url: 'https://markhazleton.com/advanced-aspnet-core-patterns',
+                  date: '2024-09-20'
+                }
+              ];
+
+              // Add items to the feed
+              posts.forEach(post => {
+                feed.item({
+                  title: post.title,
+                  description: post.description,
+                  url: post.url,
+                  date: post.date
+                });
+              });
+
+              // Write the RSS feed to a file
+              fs.writeFileSync('rss.xml', feed.xml());
+              console.log('RSS feed created successfully!');
+              ```
+          | After creating the RSS feed, I uploaded the `rss.xml` file to my blog’s root directory. Now, whenever I update my blog, I’ll regenerate this file with new content.
+
+        dt Setting Up the GitHub Action
+        dd
+          p.
+            With the RSS feed in place, I created a GitHub Action in my profile repository (`github.com/markhazleton/markhazleton`).
+            This action fetches the latest posts from my blog’s RSS feed and updates my profile README with the top five articles.
+          dl
+            dt Daily Automation
+            dd.
+              The Action runs every day at midnight (UTC) and can also be triggered manually.
+              I used the the `cron` schedule to run the workflow at a specific time each day.
+              So each night at midnight, the workflow fetches the latest blog posts and updates my profile README.
+            dt XML Parsing
+            dd It installs `xmlstarlet`, a command-line XML tool, to parse the RSS feed.
+            dt Fetch Posts
+            dd It fetches the top five latest blog posts from my RSS feed using `curl` and `xmlstarlet` and saves them to a file called `latest-posts.md`.
+            dt Update README
+            dd It then updates the `README.md` by replacing the content between the `<!-- BLOG-POST-LIST:START -->` and `<!-- BLOG-POST-LIST:END -->` tags with the new posts.
+            dt Commit Changes
+            dd If the `README.md` has been updated, it commits and pushes the changes back to the repository.
+
+
+          p.
+            Here's the full GitHub Action workflow file that I used to automate my GitHub profile updates with the latest blog posts.
+
+          pre.language-yaml
+            code.language-yaml.
+              name: Update README with Latest Blog Posts
+
+              on:
+                schedule:
+                  # Runs at 12:00 AM UTC every day
+                  - cron: '0 0 * * *'
+                workflow_dispatch: # Allows manual trigger of the workflow
+
+              jobs:
+                update-readme:
+                  runs-on: ubuntu-latest
+
+                  steps:
+                  - name: Checkout Repository
+                    uses: actions/checkout@v3
+
+                  - name: Install xmlstarlet
+                    run: sudo apt-get install -y xmlstarlet
+
+                  - name: Fetch Latest Blog Posts
+                    id: fetch_blog_posts
+                    run: |
+                      # Fetch the latest blog posts from the RSS feed
+                      curl -s https://markhazleton.com/rss.xml | xmlstarlet sel -t -m '//item' \
+                      -v 'concat("- [", title, "](", link, ")")' -n | head -5 > latest-posts.md
+
+                  - name: Update README.md
+                    run: |
+                      # Read the latest posts into a variable
+                      latest_posts=$(<latest-posts.md)
+
+                      # Replace the placeholder text between the <!-- BLOG-POST-LIST:START --> and <!-- BLOG-POST-LIST:END --> tags
+                      awk -v latest_posts="$latest_posts" '
+                      BEGIN {in_blog_list=0}
+                      /<!-- BLOG-POST-LIST:START -->/ {print; print latest_posts; in_blog_list=1; next}
+                      /<!-- BLOG-POST-LIST:END -->/ {print; in_blog_list=0; next}
+                      !in_blog_list {print}
+                      ' README.md > updated_readme.md
+
+                  - name: Check if README.md was updated
+                    run: |
+                      # Compare updated README.md with the current one
+                      if ! diff updated_readme.md README.md > /dev/null; then
+                        mv updated_readme.md README.md
+                      else
+                        echo "README.md is up to date. No changes needed."
+                        exit 0
+                      fi
+
+                  - name: Commit Changes
+                    run: |
+                      git config --global user.name "github-actions[bot]"
+                      git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                      git add README.md
+                      git commit -m "Updated README with latest blog posts"
+                      git push
+              ```
+
+        dt How It Works
+        dd
+
+        dt Testing and Debugging
+        dd
+          | After setting up the workflow, I ran it manually to ensure it worked as expected. There were a few issues initially with XML parsing and formatting, but those were resolved by tweaking the `xmlstarlet` command and the `awk` script used for replacing the content in the README.
+
+        dt Final Thoughts
+        dd
+          | This GitHub Action has been a great way to keep my GitHub profile updated with my latest content automatically. It not only showcases my recent work but also saves me the hassle of manually updating my profile. If you’re looking to automate your GitHub profile or any other repetitive task, I highly recommend giving GitHub Actions a try.
+
+          | If you have any questions or run into issues setting up a similar workflow, feel free to reach out. I’d be happy to help!
