@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <title>The Singleton Advantage: Managing Configurations in .NET Core</title>
-        <meta name="description" content="Leverage the singleton pattern for efficient configuration management in .NET Core. Implement lazy loading, thread safety, and secure Azure Key Vault access." />
-        <meta name="keywords" content="singleton pattern, .NET Core, configuration management, lazy loading, thread safety, Azure Key Vault" />
+        <title>Update GitHub Profile with Latest Blog Posts Using GitHub Actions</title>
+        <meta name="description" content="Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed." />
+        <meta name="keywords" content="GitHub Actions, Node.js, RSS feed, automation, GitHub profile, workflow automation" />
         <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.com/articles/the-singleton-advantage-managing-configurations-in-net.html" />
+        <link rel="canonical" href="https://markhazleton.com/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html" />
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <script type="application/ld+json">
@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1727317865728" />
+        <link rel="stylesheet" href="/css/styles.css?version=1727317865221" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -91,234 +91,148 @@
         <div class="container-fluid p-0">
             <section class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <h1>The Singleton Advantage</h1>
-                    <p class="subheading mb-3">Managing Configurations in .NET Core</p>
-                    <p>In ASP.NET Core applications, choosing between a static class and a singleton pattern for managing shared resources or services can have significant implications for the design, scalability, and maintainability of the application. Here’s a breakdown of the pros and cons of each approach:</p>
-                    <h2>Static Class vs Singleton Pattern</h2>
-                    <p>Discover the key differences between static classes and singleton patterns in ASP.NET Core applications, and learn when to use each for optimal design, scalability, and maintainability.</p>
+                    <h1>Automating GitHub Profile with Latest Blog Posts Using GitHub Actions</h1>
+                    <h2 class="subheading mb-3">Streamline Your Workflow by Automatically Updating Your GitHub Profile with Latest Blog Posts</h2>
+                    <p>As a developer, I'm always looking for ways to streamline my workflow and share my latest work more effectively. Recently, I updated my blog at markhazleton.com to include an RSS feed using some updated Node.js programming. With this feed in place, I decided to automate the process of displaying my latest blog posts on my GitHub profile using GitHub Actions.</p>
+                    <p>In this post, I'll quickly review the steps I took to create the RSS feed and set up the GitHub Action to update my profile with the most recent blog posts.</p>
                     <dl>
-                        <dt>Static Class</dt>
+                        <dt>Creating the RSS Feed with Node.js</dt>
                         <dd>
-                            Pros:
-                            <dl>
-                                <dt>Simplicity:</dt>
-                                <dd><p>Static classes are easy to implement and use. There's no need to manage the lifecycle of an instance, and you can directly access methods and properties without instantiating the class.</p></dd>
-                                <dt>Global Access:</dt>
-                                <dd><p>Static members are globally accessible, which can be convenient for utility functions or services that are truly stateless and require no configuration or initialization.</p></dd>
-                                <dt>No Overhead:</dt>
-                                <dd><p>Static classes do not involve instance management, which can reduce the overhead associated with object creation and garbage collection.</p></dd>
-                                <dt>Thread Safety:</dt>
-                                <dd><p>If the static class only contains immutable data or purely functional methods, it can be naturally thread-safe without any additional synchronization mechanisms.</p></dd>
-                            </dl>
+                            <p>To create an RSS feed, I used Node.js and the `rss` package to generate the XML feed. Here is some template code to get you started in creating an RSS feed using Node.js.</p>
+                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token constant">RSS</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'rss'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Create a new RSS feed</span>
+<span class="token keyword">const</span> feed <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RSS</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Mark Hazleton\'s Blog'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'Updates from Mark Hazleton on technology, development, and life.'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">feed_url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/rss.xml'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">site_url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">image_url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/logo.png'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">pubDate</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">ttl</span><span class="token operator">:</span> <span class="token number">60</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Add blog posts to the feed</span>
+<span class="token keyword">const</span> posts <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Getting Started with Node.js'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'A guide to getting started with Node.js for beginners.'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/getting-started-with-nodejs'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">date</span><span class="token operator">:</span> <span class="token string">'2024-09-15'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Advanced ASP.NET Core Patterns'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">description</span><span class="token operator">:</span> <span class="token string">'Exploring advanced patterns in ASP.NET Core for better architecture.'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">url</span><span class="token operator">:</span> <span class="token string">'https://markhazleton.com/advanced-aspnet-core-patterns'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">date</span><span class="token operator">:</span> <span class="token string">'2024-09-20'</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Add items to the feed</span>
+posts<span class="token punctuation">.</span><span class="token method function property-access">forEach</span><span class="token punctuation">(</span><span class="token parameter">post</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  feed<span class="token punctuation">.</span><span class="token method function property-access">item</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token literal-property property">title</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">title</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">description</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">description</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">url</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">url</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">date</span><span class="token operator">:</span> post<span class="token punctuation">.</span><span class="token property-access">date</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Write the RSS feed to a file</span>
+fs<span class="token punctuation">.</span><span class="token method function property-access">writeFileSync</span><span class="token punctuation">(</span><span class="token string">'rss.xml'</span><span class="token punctuation">,</span> feed<span class="token punctuation">.</span><span class="token method function property-access">xml</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">log</span><span class="token punctuation">(</span><span class="token string">'RSS feed created successfully!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token template-punctuation string">`</span></span>`</code></pre>
+                            After creating the RSS feed, I uploaded the `rss.xml` file to my blog’s root directory. Now, whenever I update my blog, I’ll regenerate this file with new content.
                         </dd>
+                        <dt>Setting Up the GitHub Action</dt>
                         <dd>
-                            Cons:
+                            <p>With the RSS feed in place, I created a GitHub Action in my profile repository (`github.com/markhazleton/markhazleton`). This action fetches the latest posts from my blog’s RSS feed and updates my profile README with the top five articles.</p>
                             <dl>
-                                <dt>Lack of Flexibility:</dt>
-                                <dd><p>Static classes are rigid. You can't implement interfaces with them or inject them into other classes, which makes them less flexible when compared to singleton instances.</p></dd>
-                                <dt>Testing Challenges:</dt>
-                                <dd><p>Static classes can be harder to mock and test because you can't replace them with test doubles or mock objects. This makes unit testing more difficult, especially in large and complex applications.</p></dd>
-                                <dt>No Lifecycle Management:</dt>
-                                <dd><p>Static classes do not have lifecycle management, which means you can't control their initialization or disposal. This can be a drawback if the class holds resources like database connections or file handles.</p></dd>
-                                <dt>Global State Issues:</dt>
-                                <dd><p>If a static class holds state, it can lead to unintended side effects or bugs, particularly in web applications where multiple requests are handled concurrently. This can make the application harder to reason about and debug.</p></dd>
-                            </dl>
-                        </dd>
-                        <dt>Singleton Pattern</dt>
-                        <dd>
-                            Pros:
-                            <dl>
-                                <dt>Controlled Instantiation:</dt>
-                                <dd><p>The singleton pattern ensures that only one instance of the class is created, and it provides a global point of access to that instance. This is useful for services that require a single shared instance, like configuration providers or logging services.</p></dd>
-                                <dt>Dependency Injection Compatibility:</dt>
-                                <dd><p>Singletons are compatible with ASP.NET Core's built-in dependency injection (DI) system, which allows them to be injected into other classes. This promotes loose coupling and makes the code more modular and testable.</p></dd>
-                                <dt>Lifecycle Management:</dt>
-                                <dd><p>When using DI, the singleton's lifecycle is managed by the framework, meaning it can be initialized once and cleaned up when the application shuts down. This is useful for managing resources like connections or expensive initialization tasks.</p></dd>
-                                <dt>Thread Safety:</dt>
-                                <dd><p>Singleton instances can be designed with thread safety in mind. ASP.NET Core’s DI system ensures that singletons are created in a thread-safe manner, so you don’t have to worry about concurrency issues.</p></dd>
-                            </dl>
-                        </dd>
-                        <dd>
-                            Cons:
-                            <dl>
-                                <dt>Complexity:</dt>
-                                <dd><p>Implementing a singleton can be more complex than using a static class, especially if you need to handle lazy initialization, thread safety, or resource management.</p></dd>
-                                <dt>Potential Memory Bloat:</dt>
-                                <dd><p>Since the singleton instance lives for the lifetime of the application, it can lead to memory bloat if it holds onto resources that are no longer needed but aren't properly disposed of.</p></dd>
-                                <dt>Difficult to Replace:</dt>
-                                <dd><p>While easier to replace than static classes, singletons can still pose challenges when testing, especially if the singleton is deeply embedded in the application.</p></dd>
-                                <dt>Overuse:</dt>
-                                <dd><p>Singletons can be overused or misused, leading to poor design decisions where the singleton pattern is applied inappropriately. This can result in tightly coupled code and reduced flexibility.</p></dd>
-                            </dl>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>When to Use Each</dt>
-                        <dd>
-                            <dl>
-                                <dt>Static Class:</dt>
-                                <dd><p>Use a static class when you have a set of utility functions that are stateless and do not need to be replaced, injected, or initialized. Examples include mathematical functions, string manipulation utilities, or configuration readers that don't require dynamic input.</p></dd>
-                                <dt>Singleton Pattern:</dt>
-                                <dd><p>Use a singleton when you have a service that needs to be shared across multiple components, has state that needs to be preserved, or holds onto resources that should be managed throughout the application’s lifecycle. Examples include database connection pools, logging services, or configuration providers.</p></dd>
-                            </dl>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>Summary</dt>
-                        <dd>
-                            <p>Static classes are simple and efficient but inflexible and harder to test.</p>
-                            <p>Singletons offer controlled instantiation, are compatible with DI, and provide lifecycle management, making them more suitable for services that require shared state or resources in ASP.NET Core applications. However, they come with more complexity and potential pitfalls if not used carefully.</p>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>Why You Should Use a Singleton for Configuration Values Instead of a Static Class</dt>
-                        <dd>
-                            <dl>
-                                <dt>The Static Class Approach</dt>
+                                <dt>Daily Automation</dt>
+                                <dd>The Action runs every day at midnight (UTC) and can also be triggered manually. I used the the `cron` schedule to run the workflow at a specific time each day. So each night at midnight, the workflow fetches the latest blog posts and updates my profile README.</dd>
+                                <dt>XML Parsing</dt>
+                                <dd>It installs `xmlstarlet`, a command-line XML tool, to parse the RSS feed.</dd>
+                                <dt>Fetch Posts</dt>
+                                <dd>It fetches the top five latest blog posts from my RSS feed using `curl` and `xmlstarlet` and saves them to a file called `latest-posts.md`.</dd>
+                                <dt>Update README</dt>
                                 <dd>
-                                    <p>A static class is often the go-to for storing configuration values because it’s simple and straightforward. Static classes are easy to implement, and their members are globally accessible without needing to instantiate an object. However, this approach has some significant drawbacks:</p>
-                                    <dl>
-                                        <dt>No Flexibility for Updates:</dt>
-                                        <dd><p>Static classes do not allow for easy updates to their values. Once the application starts, the values are effectively frozen, making it difficult to apply any changes without restarting the application.</p></dd>
-                                        <dt>Global State Issues:</dt>
-                                        <dd><p>If the static class holds state (like configuration values), it can introduce global state management issues, especially in multi-threaded applications. This can lead to bugs that are difficult to trace.</p></dd>
-                                        <dt>Testing Challenges:</dt>
-                                        <dd><p>Static classes can be challenging to mock or substitute during unit testing, which can lead to more complex test setups or reduced test coverage.</p></dd>
-                                    </dl>
+                                    It then updates the `README.md` by replacing the content between the `
+                                    <!-- BLOG-POST-LIST:START -->
+                                    ` and `
+                                    <!-- BLOG-POST-LIST:END -->
+                                    ` tags with the new posts.
                                 </dd>
-                                <dt>The Case for Singleton</dt>
-                                <dd>
-                                    <p>In contrast, a singleton pattern provides a more robust and flexible solution for managing configuration values that might need to be updated during the application's lifecycle. Here are the key benefits:</p>
-                                    <dl>
-                                        <dt>Controlled Updates and Lifecycle Management:</dt>
-                                        <dd><p>A singleton allows you to encapsulate the configuration values within a single, globally accessible instance. Unlike static classes, a singleton can have its values updated at runtime. Since the singleton's lifecycle is managed by the application, it can be designed to handle updates in a controlled and thread-safe manner.</p></dd>
-                                        <dt>Dependency Injection (DI) Compatibility:</dt>
-                                        <dd><p>ASP.NET Core's built-in dependency injection (DI) framework naturally supports singletons. You can inject the configuration singleton into services, controllers, or other components, promoting a modular and testable design. This compatibility with DI is a significant advantage over static classes, which cannot be injected.</p></dd>
-                                        <dt>Thread Safety:</dt>
-                                        <dd><p>Singletons can be designed with thread safety in mind, ensuring that updates to the configuration values are handled without race conditions or other concurrency issues. This is particularly important in web applications where multiple requests may be processed simultaneously.</p></dd>
-                                        <dt>Easy Testing:</dt>
-                                        <dd><p>Since a singleton is instantiated via the DI system, it can be easily replaced with a mock or stub during unit tests. This makes it easier to isolate the behavior of your application during testing, leading to better test coverage and more maintainable code.</p></dd>
-                                    </dl>
-                                </dd>
+                                <dt>Commit Changes</dt>
+                                <dd>If the `README.md` has been updated, it commits and pushes the changes back to the repository.</dd>
                             </dl>
+                            <p>Here's the full GitHub Action workflow file that I used to automate my GitHub profile updates with the latest blog posts.</p>
+                            <pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Update README with Latest Blog Posts
+
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+  <span class="token key atrule">schedule</span><span class="token punctuation">:</span>
+    <span class="token comment"># Runs at 12:00 AM UTC every day</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">cron</span><span class="token punctuation">:</span> <span class="token string">'0 0 * * *'</span>
+  <span class="token key atrule">workflow_dispatch</span><span class="token punctuation">:</span> <span class="token comment"># Allows manual trigger of the workflow</span>
+
+<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token key atrule">update-readme</span><span class="token punctuation">:</span>
+    <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
+
+    <span class="token key atrule">steps</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Checkout Repository
+      <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v3
+
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install xmlstarlet
+      <span class="token key atrule">run</span><span class="token punctuation">:</span> sudo apt<span class="token punctuation">-</span>get install <span class="token punctuation">-</span>y xmlstarlet
+
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Fetch Latest Blog Posts
+      <span class="token key atrule">id</span><span class="token punctuation">:</span> fetch_blog_posts
+      <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+        # Fetch the latest blog posts from the RSS feed
+        curl -s https://markhazleton.com/rss.xml | xmlstarlet sel -t -m '//item' \
+        -v 'concat("- [", title, "](", link, ")")' -n | head -5 > latest-posts.md</span>
+
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Update README.md
+      <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+        # Read the latest posts into a variable
+        latest_posts=$(&lt;latest-posts.md)</span>
+
+        <span class="token comment"># Replace the placeholder text between the &lt;!-- BLOG-POST-LIST:START --> and &lt;!-- BLOG-POST-LIST:END --> tags</span>
+        awk <span class="token punctuation">-</span>v latest_posts="$latest_posts" '
+        BEGIN <span class="token punctuation">{</span>in_blog_list=0<span class="token punctuation">}</span>
+        /&lt;<span class="token tag">!--</span> BLOG<span class="token punctuation">-</span>POST<span class="token punctuation">-</span>LIST<span class="token punctuation">:</span>START <span class="token punctuation">-</span><span class="token punctuation">-</span><span class="token punctuation">></span>/ <span class="token punctuation">{</span>print; print latest_posts; in_blog_list=1; next<span class="token punctuation">}</span>
+        /&lt;<span class="token tag">!--</span> BLOG<span class="token punctuation">-</span>POST<span class="token punctuation">-</span>LIST<span class="token punctuation">:</span>END <span class="token punctuation">-</span><span class="token punctuation">-</span><span class="token punctuation">></span>/ <span class="token punctuation">{</span>print; in_blog_list=0; next<span class="token punctuation">}</span>
+        <span class="token tag">!in_blog_list</span> <span class="token punctuation">{</span>print<span class="token punctuation">}</span>
+        ' README.md <span class="token punctuation">></span> updated_readme.md
+
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Check if README.md was updated
+      <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+        # Compare updated README.md with the current one
+        if ! diff updated_readme.md README.md > /dev/null; then
+          mv updated_readme.md README.md
+        else
+          echo "README.md is up to date. No changes needed."
+          exit 0
+        fi</span>
+
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Commit Changes
+      <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add README.md
+        git commit -m "Updated README with latest blog posts"
+        git push</span>
+```
+</code></pre>
                         </dd>
+                        <dt>How It Works</dt>
+                        <dd></dd>
+                        <dt>Testing and Debugging</dt>
+                        <dd>After setting up the workflow, I ran it manually to ensure it worked as expected. There were a few issues initially with XML parsing and formatting, but those were resolved by tweaking the `xmlstarlet` command and the `awk` script used for replacing the content in the README.</dd>
+                        <dt>Final Thoughts</dt>
+                        <dd>This GitHub Action has been a great way to keep my GitHub profile updated with my latest content automatically. It not only showcases my recent work but also saves me the hassle of manually updating my profile. If you’re looking to automate your GitHub profile or any other repetitive task, I highly recommend giving GitHub Actions a try. If you have any questions or run into issues setting up a similar workflow, feel free to reach out. I’d be happy to help!</dd>
                     </dl>
-                    <h2 class="mb-4">Choosing a Pattern for Your Configuration Data in .NET 8</h2>
-                    <p class="mb-4">Selecting the right pattern for managing configuration data in your .NET 8 application is crucial for ensuring scalability, maintainability, and performance. Here’s a breakdown of several popular patterns you might consider:</p>
-                    <div class="accordion" id="accordionConfiguration">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingSingleton"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSingleton" aria-expanded="false" aria-controls="collapseSingleton">Singleton Pattern</button></h2>
-                            <div class="accordion-collapse collapse" id="collapseSingleton" aria-labelledby="headingSingleton" data-bs-parent="#accordionConfiguration">
-                                <div class="accordion-body">
-                                    <p>The Singleton pattern is ideal for managing global configuration values that should be shared across the application. It ensures that only one instance of the configuration class exists, and can be combined with lazy loading to optimize performance.</p>
-                                    <p>
-                                        <strong>Pros:</strong>
-                                        Easy to implement, thread-safe, and integrates well with ASP.NET Core's Dependency Injection (DI) system.
-                                    </p>
-                                    <p>
-                                        <strong>Cons:</strong>
-                                        May be overused or misapplied, potentially leading to tightly coupled code.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingFactory"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFactory" aria-expanded="false" aria-controls="collapseFactory">Factory Pattern</button></h2>
-                            <div class="accordion-collapse collapse" id="collapseFactory" aria-labelledby="headingFactory" data-bs-parent="#accordionConfiguration">
-                                <div class="accordion-body">
-                                    <p>The Factory pattern allows you to create configuration objects on demand, which can be particularly useful when your application needs to support multiple configurations or environments.</p>
-                                    <p>
-                                        <strong>Pros:</strong>
-                                        Centralizes the creation logic, making it easier to manage different configurations.
-                                    </p>
-                                    <p>
-                                        <strong>Cons:</strong>
-                                        Adds complexity, especially if the application only needs a single configuration instance.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingObserver"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseObserver" aria-expanded="false" aria-controls="collapseObserver">Observer Pattern</button></h2>
-                            <div class="accordion-collapse collapse" id="collapseObserver" aria-labelledby="headingObserver" data-bs-parent="#accordionConfiguration">
-                                <div class="accordion-body">
-                                    <p>The Observer pattern is useful for scenarios where configuration changes need to notify other parts of the application. This pattern decouples configuration management from the application logic.</p>
-                                    <p>
-                                        <strong>Pros:</strong>
-                                        Enables dynamic updates and decouples configuration from application logic.
-                                    </p>
-                                    <p>
-                                        <strong>Cons:</strong>
-                                        Can introduce complexity in managing observers and handling notifications.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingProvider"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProvider" aria-expanded="false" aria-controls="collapseProvider">Configuration Provider Pattern</button></h2>
-                            <div class="accordion-collapse collapse" id="collapseProvider" aria-labelledby="headingProvider" data-bs-parent="#accordionConfiguration">
-                                <div class="accordion-body">
-                                    <p>ASP.NET Core’s Configuration Provider pattern allows you to create custom providers for loading configuration values, including from Azure Key Vault. This pattern seamlessly integrates with the built-in configuration system.</p>
-                                    <p>
-                                        <strong>Pros:</strong>
-                                        Offers clean integration with ASP.NET Core’s configuration pipeline, supporting multiple sources.
-                                    </p>
-                                    <p>
-                                        <strong>Cons:</strong>
-                                        Requires a deeper understanding of the configuration provider system and can add boilerplate code.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingAdapter"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdapter" aria-expanded="false" aria-controls="collapseAdapter">Adapter Pattern</button></h2>
-                            <div class="accordion-collapse collapse" id="collapseAdapter" aria-labelledby="headingAdapter" data-bs-parent="#accordionConfiguration">
-                                <div class="accordion-body">
-                                    <p>The Adapter pattern is useful when you need to provide a consistent interface for accessing configuration values, regardless of their source. This pattern is especially handy when switching between different configuration systems.</p>
-                                    <p>
-                                        <strong>Pros:</strong>
-                                        Promotes flexibility and allows for easy swapping of configuration sources.
-                                    </p>
-                                    <p>
-                                        <strong>Cons:</strong>
-                                        Adds an extra layer of abstraction, which can complicate debugging and maintenance.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingDecorator"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDecorator" aria-expanded="false" aria-controls="collapseDecorator">Decorator Pattern</button></h2>
-                            <div class="accordion-collapse collapse" id="collapseDecorator" aria-labelledby="headingDecorator" data-bs-parent="#accordionConfiguration">
-                                <div class="accordion-body">
-                                    <p>The Decorator pattern allows you to add additional behavior to your configuration objects, such as caching, logging, or validation. This can be done dynamically, without modifying the underlying configuration class.</p>
-                                    <p>
-                                        <strong>Pros:</strong>
-                                        Enhances extensibility and can be used to add cross-cutting concerns like caching and logging.
-                                    </p>
-                                    <p>
-                                        <strong>Cons:</strong>
-                                        Can introduce complexity, especially with multiple decorators.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingProxy"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProxy" aria-expanded="false" aria-controls="collapseProxy">Proxy Pattern</button></h2>
-                            <div class="accordion-collapse collapse" id="collapseProxy" aria-labelledby="headingProxy" data-bs-parent="#accordionConfiguration">
-                                <div class="accordion-body">
-                                    <p>The Proxy pattern can control access to configuration values, such as implementing lazy loading or security checks. This pattern is ideal for managing sensitive data retrieved from Azure Key Vault.</p>
-                                    <p>
-                                        <strong>Pros:</strong>
-                                        Adds control over access, supporting lazy loading and security enforcement.
-                                    </p>
-                                    <p>
-                                        <strong>Cons:</strong>
-                                        Adds an additional layer of complexity and requires careful management to ensure thread safety.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">
