@@ -6,7 +6,16 @@ block pagehead
   meta(name="keywords" content="GitHub Actions, Node.js, RSS feed, automation, GitHub profile, workflow automation")
   meta(name='author', content='Mark Hazleton')
   link(rel='canonical', href='https://markhazleton.com/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html')
-
+  meta(property='og:title' content='Update GitHub Profile with Latest Blog Posts Using GitHub Actions')
+  meta(property='og:description' content='Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed.')
+  meta(property='og:image' content='/assets/img/MarkHazleton-GitHub-Profile.png')
+  meta(property='og:url' content='https://markhazleton.com/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html')
+  meta(property='og:type' content='article')
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:title' content='Update GitHub Profile with Latest Blog Posts Using GitHub Actions')
+  meta(name='twitter:description' content='Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed.')
+  meta(name='twitter:image' content='/assets/img/MarkHazleton-GitHub-Profile.png')
+  meta(name='twitter:creator' content='@markhazleton')
 block layout-content
 
   section#post.painteddesert-section.painteddesert-section-background
@@ -28,65 +37,64 @@ block layout-content
       .container
         .row.justify-content-center
           .col-12.col-md-8
-            img.img-fluid.rounded(src='/assets/img/MarkHazleton-GitHub-Profile.png' alt='GitHub Profile' title='GitHub Profile')
-
-
+            a(href='https://github.com/markhazleton' target="_blank" title='GitHub Profile for Mark Hazleton')
+              img.img-fluid.rounded(src='/assets/img/MarkHazleton-GitHub-Profile.png' alt='GitHub Profile' title='GitHub Profile')
 
 
       dl
-        dt Creating the RSS Feed with Node.js
+        dt Creating the RSS Feed with Blog Admin Tool
         dd
           p.
-            To create an RSS feed, I used Node.js and the `rss` package to generate the XML feed.
-            Here is some template code to get you started in creating an RSS feed using Node.js.
+            To create an RSS feed, I updated my Blog Admin tool to create an XML file with the latest blog posts whenever a new article is published.
+          p
+            | For more information about the Blog Admin tool, check out my previous post
+            a(href="https://markhazleton.com/articles/building-a-web-application-to-manage-your-blog-articles.html" target="_blank" title="Building a Web Application to Manage Your Blog Articles") Building a Web Application to Manage Your Blog Articles
 
-          pre.language-javascript
-            code.language-javascript.
-              const RSS = require('rss');
-              const fs = require('fs');
+          p Here is the updated code snippet from the Blog Admin tool that generates the RSS feed.
 
-              // Create a new RSS feed
-              const feed = new RSS({
-                title: 'Mark Hazleton\'s Blog',
-                description: 'Updates from Mark Hazleton on technology, development, and life.',
-                feed_url: 'https://markhazleton.com/rss.xml',
-                site_url: 'https://markhazleton.com',
-                image_url: 'https://markhazleton.com/logo.png',
-                pubDate: new Date(),
-                ttl: 60
-              });
-
-              // Add blog posts to the feed
-              const posts = [
+          pre.language-csharp
+            code.language-csharp.
+              public void GenerateRSSFeed()
+              {
+                try
                 {
-                  title: 'Getting Started with Node.js',
-                  description: 'A guide to getting started with Node.js for beginners.',
-                  url: 'https://markhazleton.com/getting-started-with-nodejs',
-                  date: '2024-09-15'
-                },
-                {
-                  title: 'Advanced ASP.NET Core Patterns',
-                  description: 'Exploring advanced patterns in ASP.NET Core for better architecture.',
-                  url: 'https://markhazleton.com/advanced-aspnet-core-patterns',
-                  date: '2024-09-20'
+                  string rssFeedPath = Path.Combine(Path.GetDirectoryName(_filePath), "rss.xml");
+                  var recentArticles = _articles.OrderByDescending(a =&gt; ConvertStringToDate(a.LastModified)).Take(10).ToList();
+                  using (XmlWriter writer = XmlWriter.Create(rssFeedPath, new XmlWriterSettings { Indent = true }))
+                  {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("rss");
+                    writer.WriteAttributeString("version", "2.0");
+
+                    writer.WriteStartElement("channel");
+                    writer.WriteElementString("title", "Mark Hazleton Articles");
+                    writer.WriteElementString("link", "https://markhazleton.com/");
+                    writer.WriteElementString("description", "Latest articles from Mark Hazleton.");
+                    writer.WriteElementString("lastBuildDate", DateTime.Now.ToString("r"));
+
+                    foreach (var article in recentArticles)
+                    {
+                      writer.WriteStartElement("item");
+                      writer.WriteElementString("title", article.Name);
+                      writer.WriteElementString("link", $"https://markhazleton.com/{article.Slug}");
+                      writer.WriteElementString("description", article.Description);
+                      writer.WriteElementString("pubDate", ConvertStringToDate(article.LastModified).ToString("r"));
+                      writer.WriteEndElement();
+                    }
+
+                    writer.WriteEndElement(); // channel
+                    writer.WriteEndElement(); // rss
+                    writer.WriteEndDocument();
+                  }
+                  _logger.LogInformation("RSS feed generated successfully.");
                 }
-              ];
+                catch (Exception ex)
+                {
+                  _logger.LogError(ex, "Failed to generate RSS feed.");
+                }
 
-              // Add items to the feed
-              posts.forEach(post => {
-                feed.item({
-                  title: post.title,
-                  description: post.description,
-                  url: post.url,
-                  date: post.date
-                });
-              });
+              }
 
-              // Write the RSS feed to a file
-              fs.writeFileSync('rss.xml', feed.xml());
-              console.log('RSS feed created successfully!');
-              ```
-          | After creating the RSS feed, I uploaded the `rss.xml` file to my blog’s root directory. Now, whenever I update my blog, I’ll regenerate this file with new content.
 
         dt Setting Up the GitHub Action
         dd
