@@ -52,7 +52,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1727369225924" />
+        <link rel="stylesheet" href="/css/styles.css?version=1727636540659" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -187,14 +187,12 @@
                                 <dd>If the `README.md` has been updated, it commits and pushes the changes back to the repository.</dd>
                             </dl>
                             <p>Here's the full GitHub Action workflow file that I used to automate my GitHub profile updates with the latest blog posts.</p>
-                            <pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Update README with Latest Blog Posts
-
+                            <pre class="language-yml"><code class="language-yml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Update README with Latest Blog Posts
 <span class="token key atrule">on</span><span class="token punctuation">:</span>
   <span class="token key atrule">schedule</span><span class="token punctuation">:</span>
     <span class="token comment"># Runs at 12:00 AM UTC every day</span>
     <span class="token punctuation">-</span> <span class="token key atrule">cron</span><span class="token punctuation">:</span> <span class="token string">'0 0 * * *'</span>
-  <span class="token key atrule">workflow_dispatch</span><span class="token punctuation">:</span> <span class="token comment"># Allows manual trigger of the workflow</span>
-
+    <span class="token key atrule">workflow_dispatch</span><span class="token punctuation">:</span> <span class="token comment"># Allows manual trigger of the workflow</span>
 <span class="token key atrule">jobs</span><span class="token punctuation">:</span>
   <span class="token key atrule">update-readme</span><span class="token punctuation">:</span>
     <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
@@ -218,7 +216,7 @@
         # Read the latest posts into a variable
         latest_posts=$(&lt;latest-posts.md)</span>
 
-        <span class="token comment"># Replace the placeholder text between the &lt;!-- BLOG-POST-LIST:START --> and &lt;!-- BLOG-POST-LIST:END --> tags</span>
+        <span class="token comment"># Replace the content between the &lt;!-- BLOG-POST-LIST:START --> and &lt;!-- BLOG-POST-LIST:END --> tags</span>
         awk <span class="token punctuation">-</span>v latest_posts="$latest_posts" '
         BEGIN <span class="token punctuation">{</span>in_blog_list=0<span class="token punctuation">}</span>
         /&lt;<span class="token tag">!--</span> BLOG<span class="token punctuation">-</span>POST<span class="token punctuation">-</span>LIST<span class="token punctuation">:</span>START <span class="token punctuation">-</span><span class="token punctuation">-</span><span class="token punctuation">></span>/ <span class="token punctuation">{</span>print; print latest_posts; in_blog_list=1; next<span class="token punctuation">}</span>
@@ -227,27 +225,40 @@
         ' README.md <span class="token punctuation">></span> updated_readme.md
 
     <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Check if README.md was updated
+      <span class="token key atrule">id</span><span class="token punctuation">:</span> check_changes
       <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
         # Compare updated README.md with the current one
         if ! diff updated_readme.md README.md > /dev/null; then
           mv updated_readme.md README.md
+          echo "changes_detected=true" >> $GITHUB_ENV
         else
           echo "README.md is up to date. No changes needed."
+          echo "changes_detected=false" >> $GITHUB_ENV
           exit 0
         fi</span>
 
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Clean up untracked files
+      <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+        rm -f latest-posts.md updated_readme.md</span>
+
     <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Commit Changes
+      <span class="token key atrule">if</span><span class="token punctuation">:</span> env.changes_detected == 'true'
       <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add README.md
         git commit -m "Updated README with latest blog posts"
         git push</span>
-```
 </code></pre>
                         </dd>
                         <dt>Testing and Debugging</dt>
                         <dd>After setting up the workflow, I ran it manually to ensure it worked as expected. There were a few issues initially with XML parsing and formatting, but those were resolved by tweaking the `xmlstarlet` command and the `awk` script used for replacing the content in the README.</dd>
+                        <dt>Runtime Errors and Warnings</dt>
+                        <dd>
+                            <p>Initially, the GitHub Action ran into a couple of issues. The first problem occurred when there were no changes detected in the README.md file, causing the workflow to fail with the message: nothing added to commit but untracked files present. This happened because git attempted to commit even when there was nothing to change.</p>
+                            <p>To solve this, I added a conditional check before the commit step. I used diff to compare the current and updated versions of README.md, and only moved forward with the commit when actual changes were detected.</p>
+                            <p>The second issue was related to a deprecation warning about the set-output command, which is now outdated and replaced by GitHub’s environment files for setting output variables. I refactored the action to use environment files, appending the detected changes to $GITHUB_ENV. This new method ensures the workflow is future-proof and adheres to GitHub’s latest standards for workflow outputs, eliminating both the error and the warning.</p>
+                        </dd>
                         <dt>Final Thoughts</dt>
                         <dd>This GitHub Action has been a great way to keep my GitHub profile updated with my latest content automatically. It not only showcases my recent work but also saves me the hassle of manually updating my profile. If you’re looking to automate your GitHub profile or any other repetitive task, I highly recommend giving GitHub Actions a try.</dd>
                     </dl>

@@ -120,16 +120,14 @@ block layout-content
           p.
             Here's the full GitHub Action workflow file that I used to automate my GitHub profile updates with the latest blog posts.
 
-          pre.language-yaml
-            code.language-yaml.
+          pre.language-yml
+            code.language-yml.
               name: Update README with Latest Blog Posts
-
               on:
                 schedule:
                   # Runs at 12:00 AM UTC every day
                   - cron: '0 0 * * *'
-                workflow_dispatch: # Allows manual trigger of the workflow
-
+                  workflow_dispatch: # Allows manual trigger of the workflow
               jobs:
                 update-readme:
                   runs-on: ubuntu-latest
@@ -153,7 +151,7 @@ block layout-content
                       # Read the latest posts into a variable
                       latest_posts=$(<latest-posts.md)
 
-                      # Replace the placeholder text between the <!-- BLOG-POST-LIST:START --> and <!-- BLOG-POST-LIST:END --> tags
+                      # Replace the content between the <!-- BLOG-POST-LIST:START --> and <!-- BLOG-POST-LIST:END --> tags
                       awk -v latest_posts="$latest_posts" '
                       BEGIN {in_blog_list=0}
                       /<!-- BLOG-POST-LIST:START -->/ {print; print latest_posts; in_blog_list=1; next}
@@ -162,29 +160,49 @@ block layout-content
                       ' README.md > updated_readme.md
 
                   - name: Check if README.md was updated
+                    id: check_changes
                     run: |
                       # Compare updated README.md with the current one
                       if ! diff updated_readme.md README.md > /dev/null; then
                         mv updated_readme.md README.md
+                        echo "changes_detected=true" >> $GITHUB_ENV
                       else
                         echo "README.md is up to date. No changes needed."
+                        echo "changes_detected=false" >> $GITHUB_ENV
                         exit 0
                       fi
 
+                  - name: Clean up untracked files
+                    run: |
+                      rm -f latest-posts.md updated_readme.md
+
                   - name: Commit Changes
+                    if: env.changes_detected == 'true'
                     run: |
                       git config --global user.name "github-actions[bot]"
                       git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
                       git add README.md
                       git commit -m "Updated README with latest blog posts"
                       git push
-              ```
 
         dt Testing and Debugging
         dd
           | After setting up the workflow, I ran it manually to ensure it worked as expected. There were a few issues initially with XML parsing and formatting,
           | but those were resolved by tweaking the `xmlstarlet` command and the `awk` script used for replacing the content in the README.
 
+        dt Runtime Errors and Warnings
+        dd
+          p.
+            Initially, the GitHub Action ran into a couple of issues. The first problem occurred when there were no changes detected in the README.md file,
+            causing the workflow to fail with the message: nothing added to commit but untracked files present.
+            This happened because git attempted to commit even when there was nothing to change.
+          p.
+            To solve this, I added a conditional check before the commit step. I used diff to compare the current and updated versions of README.md,
+            and only moved forward with the commit when actual changes were detected.
+          p.
+            The second issue was related to a deprecation warning about the set-output command, which is now outdated and replaced by GitHub’s environment files for setting output variables.
+            I refactored the action to use environment files, appending the detected changes to $GITHUB_ENV.
+            This new method ensures the workflow is future-proof and adheres to GitHub’s latest standards for workflow outputs, eliminating both the error and the warning.
         dt Final Thoughts
         dd
           | This GitHub Action has been a great way to keep my GitHub profile updated with my latest content automatically.
