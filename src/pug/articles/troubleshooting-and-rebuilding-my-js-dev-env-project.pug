@@ -1,0 +1,337 @@
+extends ../layouts/articles
+
+block pagehead
+  title Troubleshooting JS-Dev-Env Project
+  meta(name='description', content='A detailed guide on how I faced issues, restarted from scratch, and successfully rebuilt a JavaScript development environment using Node.js, Nodemon, ESLint, Express, and Bootstrap.')
+  meta(name="keywords" content="JavaScript, Node.js, Nodemon, ESLint, Bootstrap, development environment")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/troubleshooting-and-rebuilding-my-js-dev-env-project.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Troubleshooting JS-Dev-Env Project
+      h2.subheading.mb-3 A story of challenges, breaking changes, and rebuilding from scratch.
+      p.
+        When I first set out to build a development environment for my JavaScript project, I envisioned a smooth, streamlined setup.
+        I wanted a workspace where I could write modern JavaScript, manage dependencies effortlessly, lint my code,
+        and run a local server with instant updates.
+      p.
+        However, what I didn’t account for was the series of breaking changes in the core packages that made my initial environment incompatible with the newer versions of these tools.
+
+      dl
+        dt Facing the Initial Issues and Breaking Changes
+        dd
+          | The first sign of trouble was when I tried to upgrade my core packages—Node.js, Nodemon, and ESLint. Each package had introduced breaking changes that resulted in errors, version conflicts, and even the inability to run the project.
+
+          | The breaking changes in ESLint were the most frustrating. Several rules were deprecated, and new rule configurations required major changes to the `.eslintrc` file. Additionally, the plugin `eslint-plugin-import` began requiring newer versions of ESLint that weren’t backward compatible with my original configuration.
+          pre.language-base
+            code.language-bash.
+              npm install eslint@latest eslint-plugin-import@latest
+
+          | Nodemon also underwent significant updates. The move to Nodemon 3.x came with breaking changes in how the watcher worked and how it interacted with my build scripts. The config settings I was using to handle auto-reloading became obsolete, causing the server to crash when certain files changed.
+          pre.language-JavaScript
+            code.language-JavaScript.
+              "dev": "nodemon --watch src --exec node server.js"
+
+          | These breaking changes led to a cascade of dependency issues, where some packages required older versions of Node.js, while others demanded the latest version. This mismatch made it nearly impossible to have a stable, functioning environment without sacrificing modern features.
+
+        dt Code Changes to Support New Versions
+        dd
+          | To resolve these issues, I had to update several parts of my codebase. First, I upgraded the project dependencies to the latest versions and updated the ESLint rules and configuration accordingly.
+
+          | For example, ESLint’s newer rules required specific configuration changes. The deprecation of `no-use-before-define` for functions required me to manually rewrite functions or disable the rule in the config file.
+          pre.language-JavaScript
+            code.language-JavaScript.
+              "rules": {
+                "no-use-before-define": ["error", { "functions": false }]
+              }
+
+          | I also had to refactor my scripts to ensure compatibility with Nodemon’s changes. The way the file watcher worked had changed, so I modified my script in `package.json` to explicitly specify which directories to watch.
+          pre.language-JavaScript
+            code.language-JavaScript.
+              "scripts": {
+                "start": "node server.js",
+                "dev": "nodemon --watch 'src/**/*.js' --exec 'node server.js'"
+              }
+
+        dt Troubleshooting Dependency Conflicts
+        dd
+          | The dependency conflicts were another major issue. Older versions of some libraries, such as Babel or TypeScript, wouldn’t work properly with the newer versions of Node.js or ESLint. I had to experiment with different version combinations to find a setup that worked without too many compatibility issues.
+
+          | The conflicts between Node.js versions and specific package versions required that I settle on using Node.js 16.x, which was a stable release compatible with both ESLint and Nodemon. However, this still meant that I couldn’t use certain cutting-edge features of Node.js 18.x without risking breaking the entire setup.
+          pre.language-JavaScript
+            code.language-JavaScript.
+              "engines": {
+                "node": ">=16.0.0"
+              }
+
+          | To handle these issues, I relied on tools like `nvm` (Node Version Manager) to switch between Node.js versions easily, allowing me to maintain different projects with different Node.js versions without causing issues in my overall environment.
+          pre.language-base
+            code.language-bash.
+              nvm use 16
+
+        dt The Decision to Start Over
+        dd
+          | After countless hours spent troubleshooting, upgrading dependencies, and trying different combinations, I realized that my dev environment was a patchwork of fixes that lacked stability. I made the tough decision to scrap the original environment and start fresh with a minimalist setup that only included the essentials.
+
+          | This decision was key in reducing complexity and avoiding further dependency conflicts. I chose to start with the basics: a simple server, a linter, and a few essential packages. Once that was stable, I could expand incrementally.
+
+        dt Lessons Learned from Breaking Changes
+        dd
+          | The experience of troubleshooting breaking changes taught me valuable lessons about maintaining a development environment:
+
+          | 1. **Stick to LTS Versions**: Always aim for Long-Term Support (LTS) versions of Node.js and other core packages to avoid running into cutting-edge changes that could break backward compatibility.
+          | 2. **Understand Your Dependencies**: Before upgrading any package, especially major versions, review the changelogs and release notes to understand what breaking changes have been introduced.
+          | 3. **Use Version Locking**: Using `package-lock.json` or `yarn.lock` files can save a lot of trouble by ensuring consistent dependency versions across different environments.
+          | 4. **Refactor Incrementally**: When upgrading or fixing breaking changes, it’s better to refactor your codebase step-by-step, rather than trying to overhaul everything at once.
+
+      h2.subheading.mb-3 Conclusion: Starting Fresh After Breaking Changes
+      p.
+        The breaking changes to Node.js, ESLint, and Nodemon forced me to re-evaluate my initial approach. By starting fresh and focusing on core functionality, I was able to create a more stable and maintainable development environment. This experience reinforced the importance of simplicity and version management in modern development workflows.
+
+      h1 Rebuilding My JS-Dev-Env Project
+      p.
+        When I first set out to build a development environment for my JavaScript project,
+        I envisioned a smooth, streamlined setup that would support all my needs.
+        I wanted a workspace where I could write modern JavaScript, manage dependencies effortlessly,
+        lint my code, and run a local server with instant updates.
+      p.
+        But things didn't go as planned. Here is how I built a functional dev environment from scratch.
+
+      dl
+        dt Building a Basic Development Environment
+        dd
+          p I started fresh, deleteing everthing in my folder expect for .git and starting over.  At least I would have a history of before and after.
+          pre.language-bash
+            code.language-bash.
+              cd js-dev-env
+              npm init -y
+
+          | I installed core packages like Express, Nodemon, EJS, and Bootstrap.
+          pre.language-bash
+            code.language-bash.
+              npm install express nodemon ejs bootstrap
+              npm install --save-dev nodemon
+
+          | I then added basic scripts to package.json.
+          pre.language-yml
+            code.language-yml.
+              "scripts": {
+                "start": "node server.js",
+                "dev": "nodemon server.js"
+              }
+
+        dt Building the Basic Site
+        dd
+          | I set up a simple Express server to serve content and EJS templates.
+          pre.language-JavaScript
+            code.language-JavaScript.
+              const express = require('express');
+              const path = require('path');
+              const app = express();
+
+              app.set('view engine', 'ejs');
+              app.use(express.static(path.join(__dirname, 'public')));
+
+              app.get('/', (req, res) => {
+                res.render('index', { title: 'Home' });
+              });
+
+              app.listen(3000, () => {
+                console.log('Server running on http://localhost:3000');
+              });
+
+        dt Running the Site
+        dd
+          | With everything set up, I used Nodemon to run the development server.
+          pre.language-bash
+            code.language-bash.
+              npm run dev
+
+      h2.subheading.mb-3 Conclusion: Lessons Learned
+      p.
+        In the end, starting over helped me streamline my development environment. By going back to basics, I was able to:
+      dl
+        dt Use Express
+        dd
+          | Serve static content and manage routes.
+        dt Integrate Nodemon
+        dd
+          | Automatically restart the server on changes during development.
+        dt Employ EJS
+        dd
+          | Easily manage templates and layouts.
+        dt Utilize Bootstrap
+        dd
+          | Simplify styling without writing custom CSS.
+
+      p.
+        This approach not only simplified my development process but taught me the value of focusing on core functionality first.
+
+      h1 Dynamic Content and Navigation
+      h2.subheading.mb-3 Simplify content management and navigation using a JSON file
+      p.
+        I decided I wanted some dynamic content and navigation in the project.
+        I added a `pages.json` file to dynamically control both the content and navigation of the pages in my JS-Dev-Env project.
+        This approach allows you to manage your site's content and navigation links without hardcoding them, making it much easier to update or add new pages later on.
+
+      dl
+        dt Prerequisites
+        dd
+          p Before starting, ensure the following is in place:
+          ul
+            li Node.js installed
+            li Express set up to handle routes
+            li EJS templating engine
+            li Bootstrap for styling
+
+        dt Step 1: Create the pages.json File
+        dd
+          | The `pages.json` file will hold details for all your site's pages, such as the title, URL, template, and content. This will allow you to dynamically generate both pages and navigation.
+
+          | First, create a `data` folder in the root of your project, and inside it, create a `pages.json` file. Here's an example of how to structure your JSON file:
+          pre.language-JavaScript
+            code.language-JavaScript.
+              [
+                {
+                  "title": "Home",
+                  "url": "/",
+                  "template": "page",
+                  "content": {
+                    "heading": "Welcome to My Bootstrap 5 Website",
+                    "text": "This is the home page."
+                  }
+                },
+                {
+                  "title": "About",
+                  "url": "/about",
+                  "template": "page",
+                  "content": {
+                    "heading": "About Us",
+                    "text": "This is the about page. Learn more about us here."
+                  }
+                },
+                {
+                  "title": "Contact",
+                  "url": "/contact",
+                  "template": "page",
+                  "content": {
+                    "heading": "Contact Us",
+                    "text": "Get in touch with us using the form below."
+                  }
+                }
+              ]
+
+        dt Step 2: Modify index.js to Use pages.json
+        dd
+          | Now, update your `index.js` file to read the `pages.json` data and generate routes dynamically. This step also involves extracting the top-level pages for the navigation bar and passing them to EJS templates.
+
+          pre.language-JavaScript
+            code.language-JavaScript.
+              const express = require('express');
+              const path = require('path');
+              const fs = require('fs');
+              const app = express();
+
+              app.set('view engine', 'ejs');
+              app.use(express.static(path.join(__dirname, 'public')));
+
+              // Read the pages.json file
+              const pagesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'pages.json'), 'utf-8'));
+
+              // Filter top-level pages for navigation
+              const topLevelPages = pagesData.filter(page => (page.url.match(/\//g) || []).length === 1);
+
+              // Generate dynamic routes from pages.json
+              pagesData.forEach(page => {
+                app.get(page.url, (req, res) => {
+                  res.render(page.template, {
+                    title: page.title,
+                    heading: page.content.heading,
+                    text: page.content.text,
+                    pages: topLevelPages  // Pass navigation items
+                  });
+                });
+              });
+
+              // Start the server
+              const port = process.env.PORT || 3000;
+              app.listen(port, () => {
+                console.log(`Server running at http://localhost:${port}/`);
+              });
+
+        dt Step 3: Update the Layout to Include Dynamic Navigation
+        dd
+          | Next, update the `layout.ejs` file to dynamically render the navigation bar based on the `pages.json` data. This avoids hardcoding navigation links in every template and makes it easier to manage as new pages are added.
+
+          pre.language-html
+            code.language-html.
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title><%= title %></title>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+              </head>
+              <body>
+                <!-- Dynamic Navigation Bar -->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                  <div class="container-fluid">
+                    <a class="navbar-brand" href="/">My Site</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                      <ul class="navbar-nav ms-auto">
+                        <% pages.forEach(function(page) { %>
+                          <li class="nav-item">
+                            <a class="nav-link" href="<%= page.url %>"><%= page.title %></a>
+                          </li>
+                        <% }); %>
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
+                <!-- Main Content -->
+                <main class="container mt-5">
+                  <h1><%= heading %></h1>
+                  <p><%= text %></p>
+                  <%- body %> <!-- View content will be injected here -->
+                </main>
+              </body>
+              </html>
+
+        dt Step 4: Create EJS Templates for Each Page
+        dd
+          p.
+            Each page in the `pages.json` file needs a corresponding EJS template.
+            I started out with a very basic `page.ejs` template that displays the heading and text content for each page.
+            For the time being it is just an emply page with the heading and text content added in the layout.  Over time I can create different templates
+            for different types of pages.
+
+          pre.language-html
+            code.language-html.
+              <!--
+                Page Template
+              -->
+
+        dt Step 5: Run the Project
+        dd
+          | Now that everything is set up, you can start your development server using Nodemon:
+          pre.language-bash
+            code.language-bash.
+              npm run dev
+
+          | Visit your site in the browser to see the dynamically generated content and navigation:
+          pre.language-bash
+            code.language-bash.
+              http://localhost:3000/
+              http://localhost:3000/about
+              http://localhost:3000/contact
+
+      h2.subheading.mb-3 Conclusion: Dynamically Controlled Content and Navigation
+      p.
+        By adding a `pages.json` file and updating the server logic, we’ve effectively created a basic content management system that controls both the navigation and the page content dynamically. This setup makes it easy to maintain and expand the site by simply modifying or adding entries in `pages.json`. You no longer need to hardcode new pages or navigation links—everything is driven by data, making it simple to update in the future.
