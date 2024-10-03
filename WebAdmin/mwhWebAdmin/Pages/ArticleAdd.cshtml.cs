@@ -11,6 +11,7 @@ public class ArticleAddModel : PageModel
         "Case Studies",
         "ChatGPT",
         "Development",
+        "Data Science",
         "Personal Philosophy",
         "Project Mechanics",
         "Project Mechanics Leadership",
