@@ -16,7 +16,8 @@ block layout-content
         Node.js applications are generally efficient, but sometimes a bug can lead to
         unexpected consequences. Recently, I encountered a situation where a Node.js
         program started creating a near-infinite number of recursive folders on my
-        Windows machine. It quickly spiraled out of control, and manually deleting these
+        Windows machine.
+        It quickly spiraled out of control, and manually deleting these
         folders wasn’t an option due to their sheer number. In this article, I’ll walk you
         through the problem, how I identified the issue, and the C++ solution I used to
         clean up the folders.
@@ -26,44 +27,51 @@ block layout-content
         dd
           | The issue began when a Node.js script, due to faulty logic, created recursive directories.
           | Each iteration of the script added a new folder inside the previous one. This quickly grew
-          | into thousands of directories, becoming impossible to delete manually through Windows
+          | into thousands of nested directories, becoming impossible to delete manually through Windows
           | Explorer or Command Prompt due to the excessive depth of the folder structure.
+
         dt Long Path Support in Windows
         dd
-          | Windows has a long-standing history of limitations with file path lengths. The default maximum
-          | length for paths is 260 characters, known as "MAX_PATH." By default, attempts to create or
-          | manipulate paths longer than this would fail. However, starting with Windows 10 (Anniversary
-          | Update), it became possible to enable long file path support by modifying the Group Policy or
-          | Windows Registry.
+          p.
+            Windows has a long-standing history of limitations with file path lengths. The default maximum
+            length for paths is 260 characters, known as "MAX_PATH." By default, attempts to create or
+            manipulate paths longer than this would fail. However, starting with Windows 10 (Anniversary
+            Update), it became possible to enable long file path support by modifying the Group Policy or
+            Windows Registry.
+
           dl
             dt Enabling Long File Path Support
             dd
-              | To enable support for longer paths, I did the following:
+              p To enable support for longer paths, I did the following:
               dl
                 dt 1. Opened Group Policy Editor (gpedit.msc)
                 dd
-                  | Navigated to "Computer Configuration > Administrative Templates > System > Filesystem"
-                  | and enabled the "Enable Win32 long paths" policy.
+                  p.
+                    Navigated to "Computer Configuration > Administrative Templates > System > Filesystem"
+                    and enabled the "Enable Win32 long paths" policy.
 
                 dt 2. Edited the Windows Registry
                 dd
-                  | As an alternative, I edited the Registry directly by setting the value of
-                  | "LongPathsEnabled" in `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem`
-                  | to `1`. This allowed support for file paths longer than 260 characters.
+                  p.
+                    As an alternative, I edited the Registry directly by setting the value of
+                    "LongPathsEnabled" in `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem`
+                    to `1`. This allowed support for file paths longer than 260 characters.
 
             dt Why Path Length is Important
             dd
-              | Despite enabling long file path support, I still encountered limitations with other tools.
-              | The core issue was that many standard Windows utilities (such as Command Prompt and
-              | PowerShell) still had trouble handling long paths reliably, even with the new support.
-              | That's why a custom C++ solution, which directly interacts with the WIN32 API, became
-              | necessary.
+              p.
+                Despite enabling long file path support, I still encountered limitations with other tools.
+                The core issue was that many standard Windows utilities (such as Command Prompt and
+                PowerShell) still had trouble handling long paths reliably, even with the new support.
+                That's why a custom C++ solution, which directly interacts with the WIN32 API, became
+                necessary.
 
         dt Steps Attempted Before Writing the C++ Program
         dd
-          | Initially, I tried using built-in tools like Windows Command Prompt and PowerShell, thinking
-          | I could delete the directories with a simple recursive command. Below are the detailed steps I
-          | attempted before concluding that I needed a custom solution:
+          p.
+            Initially, I tried using built-in tools like Windows Command Prompt and PowerShell, thinking
+            I could delete the directories with a simple recursive command. Below are the tools I tried
+            to use before concluding that I needed a custom solution:
           dl
             dt Windows Command Prompt
             dd
@@ -78,7 +86,8 @@ block layout-content
                 Using the "rmdir /s" command, I attempted to remove the entire folder structure recursively.
                 While this works well with normal directories, it failed in this case due to the extreme depth
                 and length of the directory paths. Windows has limitations on path lengths, and this caused
-                the command to fail with errors like "The file name is too long."
+                the command to fail with errors like "The file name is too long." or "The system cannot find
+                the path specified." or just having the command shell close abrubtly.
 
 
             dt PowerShell
@@ -115,9 +124,10 @@ block layout-content
                 environment is more forgiving with paths, it inherits the limitations from Windows.
               p.
                 Linux systems handle long paths and recursive operations much more gracefully than Windows.
-                I attempted to use Bash through WSL (Windows Subsystem for Linux) to navigate and delete
+                I attempted to use Bash through VS Code to navigate and delete
                 the directories. However, even though Linux could theoretically handle this depth of recursion,
                 Bash failed due to Windows' underlying file system still imposing limits on path lengths.
+
             dt Robocopy
             dd
               p.
@@ -125,54 +135,13 @@ block layout-content
                 operations. I attempted to use Robocopy to mirror an empty directory structure over the
                 runaway directory, effectively overwriting it. However, Robocopy also failed due to the
                 path length limitations, as it couldn't traverse the deep directory structure to delete the
-                folders.
-              dl
-                dt Step 1: Navigate to the parent directory
-                dd
-                  p First, you need to navigate to the parent directory of the offending directory using the `cd` command:
-                  pre.language-csharp
-                    code.language-csharp.
-                      cd c:\subdir\more
-                dt Step 2: Create an empty directory
-                dd
-                  p Create an empty directory which will be used to mirror into the offending directory:
-                  pre.language-csharp
-                    code.language-csharp.
-                      mkdir empty
-                dt Step 3: Use Robocopy to mirror the empty directory into the offending directory
-                dd
-                  p The Robocopy command will mirror the empty directory into the offending directory. This effectively clears the content of the offending directory without removing the structure itself:
-                  pre.language-csharp
-                    code.language-csharp.
-                      robocopy empty offending_dir /mir
-                dt Step 4: Remove the offending directory
-                dd
-                  p Once Robocopy has completed the mirroring, you can safely delete the now empty offending directory:
-                  pre.language-csharp
-                    code.language-csharp.
-                      rmdir offending_dir
-                dt Step 5: Clean up by removing the empty directory
-                dd
-                  p Finally, remove the temporary empty directory you created at the start:
-                  pre.language-csharp
-                    code.language-csharp.
-                      rmdir empty
+                folders. I also tried to purge the directory using Robocopy, but it was unable to handle the
+                excessive depth of the folder structure.
 
         dt Conclusion
         dd
           | Ultimately, after trying all the built-in tools and existing solutions, I decided to write a C++ program
-          | that used the WIN32 API to delete directories recursively. The WIN32 API offered the control and
-          | flexibility needed to handle such a complex directory structure while bypassing the limitations of
-          | traditional Windows tools.
-
-        dt Why Write a C++ Program Using WIN32 API?
-        dd
-          | Writing the custom C++ solution allowed me to bypass the limitations of standard Windows tools.
-          | The WIN32 API offers direct access to the underlying file system and can handle long paths
-          | effectively, provided the paths are prefixed with "\\\\?\\". This special prefix enables the API to
-          | handle file paths beyond the normal MAX_PATH limitation. By using the WIN32 API, I was able to
-          | traverse and delete directories without running into the typical errors caused by long paths.
-
+          | that used the WIN32 API to delete directories recursively.
 
       h1 Writing a C++ Program
       h2.subheading.mb-3 Windows C++ Program to Rename and Delete Recursive Folders
@@ -180,9 +149,16 @@ block layout-content
       dl
         dt Solution: Windows C++ Program to Rename and Delete Recursive Folders
         dd
-          | To address the problem, I wrote a C++ program using Windows API functions that could delete
-          | directories recursively. This program first collected all directories and files and then removed them
-          | from the deepest level up to the root, ensuring safe cleanup without triggering further recursion.
+          p.
+            Writing the custom C++ solution allowed me to bypass the limitations of standard Windows tools.
+            The WIN32 API offers direct access to the underlying file system and can handle long paths
+            effectively, provided the paths are prefixed with "\\\\?\\". This special prefix enables the API to
+            handle file paths beyond the normal MAX_PATH limitation. By using the WIN32 API, I was able to
+            traverse and delete directories without running into the typical errors caused by long paths.
+          p.
+            This program first collected all directories and files and then removed them
+            from the deepest level up to the root, ensuring safe cleanup without getting errors for trying to
+            delete a folder that has sub-folders.
 
           pre.language-csharp
             code.language-csharp.
