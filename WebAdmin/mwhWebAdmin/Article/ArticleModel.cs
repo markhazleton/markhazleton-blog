@@ -2,6 +2,11 @@ namespace mwhWebAdmin.Models;
 
 public class ArticleModel
 {
+    public ArticleModel()
+    {
+        Slug = "tbd";
+        ImgSrc = "assets/img/ArgostoliGreeceBeach.jpg";
+    }
     [JsonPropertyName("id")]
     public int Id { get; set; }
 
