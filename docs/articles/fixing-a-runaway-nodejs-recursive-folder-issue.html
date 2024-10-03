@@ -5,10 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <title>Mark Hazleton - Igniting Creativity with ChatGPT</title>
-        <meta name="description" content="Mark Hazleton - Trivia Spark: Igniting Creativity with ChatGPT" />
-        <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.com/trivia-spark-development.html" />
+        <title>Fixing Recursive Folder Issue</title>
+        <meta name="description" content="Learn how to fix a runaway Node.js program that creates near-infinite recursive directories. Includes Windows C++ script to clean up." />
+        <meta name="keywords" content="Node.js, recursive folders, Windows, infinite directories, delete folders, long file names, PowerShell, WIN32" />
+        <link rel="canonical" href="https://markhazleton.com/articles/fixing-a-runaway-nodejs-recursive-folder-issue.html" />
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <script type="application/ld+json">
@@ -41,7 +41,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1727959006237" />
+        <link rel="stylesheet" href="/css/styles.css?version=1727959005053" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -90,149 +90,168 @@
         <div class="container-fluid p-0">
             <section class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <h1 class="mb-0">Trivia Spark:</h1>
-                    <div class="subheading mb-3">Igniting Creativity with ChatGPT</div>
-                    <p class="lead">Welcome to the kickoff of the Trivia Spark application! Trivia Spark is my experiment in using ChatGPT to help me develop a trivia application. My goal here is to document the collaboration with ChatGPT as the project develops. I will be updating this page as the project progresses.</p>
-                    <p>You can follow along with the project on GitHub.</p>
-                    <ul>
-                        <li><a href="https://github.com/controlorigins/triviaspark">Trivia Spark GitHub Repositroy</a></li>
-                        <li><a href="https://triviaspark.markhazleton.com/">(AWS VM) Trivia Spark Website</a></li>
-                        <li><a href="https://triviasparkweb.azurewebsites.net/">(Azure AppService) Trivia Spark Website</a></li>
-                        <li><a href="https://markhazleton.com/using-chatgpt-for-developers.html">Article - Using ChatGPT for devlopers</a></li>
-                    </ul>
-                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-TriviaSparkMatch.png" alt="Trivia Spark Early Screenshot" />
+                    <h1>Fixing Recursive Folder Issue</h1>
+                    <h2 class="subheading mb-3">Resolving a program that creates endless recursive folders</h2>
+                    <p>Node.js applications are generally efficient, but sometimes a bug can lead to unexpected consequences. Recently, I encountered a situation where a Node.js program started creating a near-infinite number of recursive folders on my Windows machine. It quickly spiraled out of control, and manually deleting these folders wasn’t an option due to their sheer number. In this article, I’ll walk you through the problem, how I identified the issue, and the C++ solution I used to clean up the folders.</p>
                     <dl>
-                        <dt>Collaboration with ChatGPT (a.k.a. Chat)</dt>
+                        <dt>Problem: Near-Infinite Recursive Folders</dt>
+                        <dd>The issue began when a Node.js script, due to faulty logic, created recursive directories. Each iteration of the script added a new folder inside the previous one. This quickly grew into thousands of directories, becoming impossible to delete manually through Windows Explorer or Command Prompt due to the excessive depth of the folder structure.</dd>
+                        <dt>Long Path Support in Windows</dt>
                         <dd>
-                            <p>The Trivia Spark application came about when I was working with open public APIs. I found the Open Trivia database API and saw that it had an easy-to-use endpoint to get trivia questions. I wanted to see how using the Open Trivia Db as a starting point, I could use Chat to help quickly build an application to present trivia questions and show the result.</p>
-                            <p>Chat was able to provide suggestions and ideas for different approaches to take when I got stuck on a particular problem. I would explain the issue by asking leading questions, and then Chat would provide suggestions on how to resolve them. Many times Chat would provide a code snippet.</p>
-                            <p>Chat was also able to help me speed up development by creating code snippets that I could use in the project. This allowed me to spend less time on repetitive tasks and more time on more complex parts of the project.</p>
-                            <p>One of the most significant benefits of collaborating with Chat was the ability to quickly prototype different ideas. I would come up with a concept and Chat would provide feedback and help iterate on it until I had a working code.</p>
+                            Windows has a long-standing history of limitations with file path lengths. The default maximum length for paths is 260 characters, known as "MAX_PATH." By default, attempts to create or manipulate paths longer than this would fail. However, starting with Windows 10 (Anniversary Update), it became possible to enable long file path support by modifying the Group Policy or Windows Registry.
+                            <dl>
+                                <dt>Enabling Long File Path Support</dt>
+                                <dd>
+                                    To enable support for longer paths, I did the following:
+                                    <dl>
+                                        <dt>1. Opened Group Policy Editor (gpedit.msc)</dt>
+                                        <dd>Navigated to "Computer Configuration > Administrative Templates > System > Filesystem" and enabled the "Enable Win32 long paths" policy.</dd>
+                                        <dt>2. Edited the Windows Registry</dt>
+                                        <dd>As an alternative, I edited the Registry directly by setting the value of "LongPathsEnabled" in `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem` to `1`. This allowed support for file paths longer than 260 characters.</dd>
+                                    </dl>
+                                </dd>
+                                <dt>Why Path Length is Important</dt>
+                                <dd>Despite enabling long file path support, I still encountered limitations with other tools. The core issue was that many standard Windows utilities (such as Command Prompt and PowerShell) still had trouble handling long paths reliably, even with the new support. That's why a custom C++ solution, which directly interacts with the WIN32 API, became necessary.</dd>
+                            </dl>
                         </dd>
-                        <dt>Chat As Trusted Advisor</dt>
+                        <dt>Steps Attempted Before Writing the C++ Program</dt>
                         <dd>
-                            <p>In the development of Trivia Spark, Chat and I were able to work together to create a successful prototype in a short amount of time. One example of a discussion was around the concept of Match Mode and how to implement it in a flexible and maintainable way.</p>
-                            <p>At the start of the project, I was unsure about how to handle the different modes of play in the Trivia Spark game. Chat suggested using an enum and a dictionary to map the enum values to different implementations of the IMatchService interface. I was able to quickly implement this approach and it provided a great foundation for the project moving forward.</p>
-                            <p>In looking at the Match Mode (type of play) I was trying to figure out how to best handle the creation and management of a Match Model instance. Chat suggested using a lazy loading approach with error checking to ensure that the model was properly initialized before use.</p>
-                            <p>Throughout the development process, we were able to quickly iterate on different approaches to tackle various challenges. Chat's expertise in software development and ability to provide clear and concise solutions proved invaluable to the project's success.</p>
-                            <p>Overall, the collaboration highlights the benefits of working with experts in the field to accelerate development and create successful software projects. Unlike other developers, I have collaborated with, Chat was able to take criticism and make adjustments without getting snippy.</p>
+                            Initially, I tried using built-in tools like Windows Command Prompt and PowerShell, thinking I could delete the directories with a simple recursive command. Below are the detailed steps I attempted before concluding that I needed a custom solution:
+                            <dl>
+                                <dt>Windows Command Prompt</dt>
+                                <dd>
+                                    <p>The Windows Command Prompt is a simpler tool that lacks robust recursion and error-handling mechanisms. Commands like "rmdir" are not built to handle such complex directory structures and will often terminate with errors related to file path length or file locks.</p>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token function">rmdir</span> /s <span class="token string">"C:\Your\Directory\Path"</span></code></pre>
+                                    <p>Using the "rmdir /s" command, I attempted to remove the entire folder structure recursively. While this works well with normal directories, it failed in this case due to the extreme depth and length of the directory paths. Windows has limitations on path lengths, and this caused the command to fail with errors like "The file name is too long."</p>
+                                </dd>
+                                <dt>PowerShell</dt>
+                                <dd>
+                                    <p>PowerShell is usually a robust tool for file management, but when dealing with an extremely large number of nested directories, it often fails due to the path length limitation and the recursion depth.</p>
+                                    <p>I then tried using PowerShell with the "Remove-Item -Recurse -Force" command. PowerShell is a more powerful tool for managing files and directories, but it, too, failed due to the long file paths and the number of folders. PowerShell inherits the same file path limitations as the Command Prompt unless configured differently, so this option was insufficient.</p>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token function">rm</span> <span class="token parameter variable">-r</span> <span class="token parameter variable">-force</span> <span class="token string">"C:\Your\Directory\Path"</span></code></pre>
+                                    <p>Though PowerShell had limitations in my case, a potential workaround could involve using the following script, which attempts to bypass the long path limitation by enabling long paths and splitting the process into smaller recursive chunks:</p>
+                                    <pre class="language-bash"><code class="language-bash">Remove-Item <span class="token parameter variable">-LiteralPath</span> <span class="token string">"C:\Your\Directory\Path"</span> <span class="token parameter variable">-Recurse</span> <span class="token parameter variable">-Force</span>
+</code></pre>
+                                    <p>This script could work for some, but in extreme cases like mine, where paths were excessively long and directories numbered in the thousands, it still fell short.</p>
+                                </dd>
+                                <dt>Bash Shell in VS Code</dt>
+                                <dd>
+                                    <p>While Linux systems generally handle file systems more gracefully, using Bash on WSL still relies on Windows' underlying file system. This means that although the Linux environment is more forgiving with paths, it inherits the limitations from Windows.</p>
+                                    <p>Linux systems handle long paths and recursive operations much more gracefully than Windows. I attempted to use Bash through WSL (Windows Subsystem for Linux) to navigate and delete the directories. However, even though Linux could theoretically handle this depth of recursion, Bash failed due to Windows' underlying file system still imposing limits on path lengths.</p>
+                                </dd>
+                                <dt>Robocopy</dt>
+                                <dd>
+                                    <p>Robocopy is a robust file copy utility built into Windows that can handle complex file operations. I attempted to use Robocopy to mirror an empty directory structure over the runaway directory, effectively overwriting it. However, Robocopy also failed due to the path length limitations, as it couldn't traverse the deep directory structure to delete the folders.</p>
+                                    <dl>
+                                        <dt>Step 1: Navigate to the parent directory</dt>
+                                        <dd>
+                                            <p>First, you need to navigate to the parent directory of the offending directory using the `cd` command:</p>
+                                            <pre class="language-csharp"><code class="language-csharp"><span class="token class-name">cd</span> c<span class="token punctuation">:</span>\subdir\more</code></pre>
+                                        </dd>
+                                        <dt>Step 2: Create an empty directory</dt>
+                                        <dd>
+                                            <p>Create an empty directory which will be used to mirror into the offending directory:</p>
+                                            <pre class="language-csharp"><code class="language-csharp">mkdir empty</code></pre>
+                                        </dd>
+                                        <dt>Step 3: Use Robocopy to mirror the empty directory into the offending directory</dt>
+                                        <dd>
+                                            <p>The Robocopy command will mirror the empty directory into the offending directory. This effectively clears the content of the offending directory without removing the structure itself:</p>
+                                            <pre class="language-csharp"><code class="language-csharp">robocopy empty offending_dir <span class="token operator">/</span>mir</code></pre>
+                                        </dd>
+                                        <dt>Step 4: Remove the offending directory</dt>
+                                        <dd>
+                                            <p>Once Robocopy has completed the mirroring, you can safely delete the now empty offending directory:</p>
+                                            <pre class="language-csharp"><code class="language-csharp">rmdir offending_dir</code></pre>
+                                        </dd>
+                                        <dt>Step 5: Clean up by removing the empty directory</dt>
+                                        <dd>
+                                            <p>Finally, remove the temporary empty directory you created at the start:</p>
+                                            <pre class="language-csharp"><code class="language-csharp">rmdir empty
+</code></pre>
+                                        </dd>
+                                    </dl>
+                                </dd>
+                            </dl>
                         </dd>
-                        <dt>ChatGPT vs GitHub copilot</dt>
-                        <dd>
-                            <p>I have also been using GitHub Copilot to help with the development of the Trivia Spark application. I have found that GitHub Copilot is a great tool for helping with the development of the application.</p>
-                            <p>GitHub Copilot is a new AI-powered code auto-completion tool that was released by GitHub in 2021. It uses advanced machine learning models to suggest code snippets and entire functions as you type, making it faster and easier to write code.</p>
-                            <p>In using Copilot, it works like traditional Intellisense in Visual Studio by providing suggestions based on the current context in the code editor. It offers suggestions for class names, methods, properties, and other elements that are available in the current scope. The difference between the two is that GitHub Copilot uses advanced AI models that can suggest entire functions or even multiple lines of code based on the context and your coding style. GitHub Copilot takes things a step further by leveraging AI to offer more comprehensive and context-aware suggestions.</p>
-                        </dd>
+                        <dt>Conclusion</dt>
+                        <dd>Ultimately, after trying all the built-in tools and existing solutions, I decided to write a C++ program that used the WIN32 API to delete directories recursively. The WIN32 API offered the control and flexibility needed to handle such a complex directory structure while bypassing the limitations of traditional Windows tools.</dd>
+                        <dt>Why Write a C++ Program Using WIN32 API?</dt>
+                        <dd>Writing the custom C++ solution allowed me to bypass the limitations of standard Windows tools. The WIN32 API offers direct access to the underlying file system and can handle long paths effectively, provided the paths are prefixed with "\\\\?\\". This special prefix enables the API to handle file paths beyond the normal MAX_PATH limitation. By using the WIN32 API, I was able to traverse and delete directories without running into the typical errors caused by long paths.</dd>
                     </dl>
-                    <h2 class="mb-5">Chat In Action</h2>
-                    <p>Here are a few screenshots of the types of collaboration that Chat and I had while working on the Trivia Spark application.</p>
-                    <div class="carousel slide" id="carouselControlOrigins" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-                            <button class="active" type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="0" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="4" aria-label="Slide 5"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="5" aria-label="Slide 6"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="6" aria-label="Slide 7"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="7" aria-label="Slide 8"></button>
-                            <button type="button" data-bs-target="#carouselControlOrigins" data-bs-slide-to="8" aria-label="Slide 9"></button>
-                        </div>
-                        <div class="carousel-inner" style="color: red; background: transparent">
-                            <div class="carousel-item active">
-                                <div class="container text-center">
-                                    <h5>Get Unanswered Questions</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-GetUnAnsweredQuestions.png" alt="Get Unanswered Questions" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>Lazy Loading Example</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-LazyLoadingExample.png" alt="Lazy Loading Example" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>Pros and Cons of Virtual Methods</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-ProConVirtualMethods.png" alt="Pros and Cons of Virtual Methods" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>Refactor With Suggestions</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-RefactorWithInput.png" alt="Refactor With Suggestions" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>Optimize With Hashset</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-OptimizeWithHashSet.png" alt="Optimize With Hashset" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>Rapid Prototyping</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-RapidPrototyping.png" alt="RapidPrototyping" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>Get Incorrect Questions</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-GetIncorrectQuestions.png" alt="Get Incorrect Questions" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>Game Play Modes</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-GamePlayModes.png" alt="Game Play Modes" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="container text-center">
-                                    <h5>ENUM Parse from String</h5>
-                                    <img class="img-fluid d-block w-100" src="assets/img/MarkHazleton-ChatGPT-EnumParse.png" alt="Enum Parse from String" />
-                                    <br clear="both" />
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselControlOrigins" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselControlOrigins" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                    <h2>Parting Thoughts</h2>
-                    <p>The kickoff of the Trivia Spark application was a collaborative effort with ChatGPT. Working with ChatGPT, I was able to prototype ideas quickly, overcome obstacles, and come up with a working application in a relatively short amount of time.</p>
-                    <p>Collaboration between humans and AI models like ChatGPT is becoming increasingly common in the software development industry.</p>
-                    <p>New tools come along all the time, some of which are more useful than others. ChatGPT is a tool that I will continue to evaluate to find ways to improve my development process.</p>
-                    <p>The tools that I use are constantly evolving, here are a few of the other tools I currently use:</p>
-                    <ul>
-                        <li><a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2022</a></li>
-                        <li><a href="https://www.devexpress.com/products/coderush/">Coderush by DevExpress</a></li>
-                        <li><a href="https://en.wikipedia.org/wiki/GitHub_Copilot">GitHub Copilot</a></li>
-                    </ul>
-                    <p>For now, ChatGPT falls more into the reference tool category. Which means I use it outside of my primary development tool like Visual Studio or VS Code. Here are other reference sources I use:</p>
-                    <ul>
-                        <li><a href="https://stackoverflow.com/">Stack Overflow</a></li>
-                        <li><a href="https://www.dotnetrocks.com/">.NET Rocks</a></li>
-                        <li><a href="https://wilderminds.com/">Shawn Wildermuth - Wilder Minds</a></li>
-                        <li><a href="https://www.hanselman.com/">Scott Hanselman</a></li>
-                        <li><a href="https://nickchapsas.com/">Nick Chapsas - Keep Coding</a></li>
-                    </ul>
+                    <h1>Writing a C++ Program</h1>
+                    <h2 class="subheading mb-3">Windows C++ Program to Rename and Delete Recursive Folders</h2>
+                    <dl>
+                        <dt>Solution: Windows C++ Program to Rename and Delete Recursive Folders</dt>
+                        <dd>
+                            To address the problem, I wrote a C++ program using Windows API functions that could delete directories recursively. This program first collected all directories and files and then removed them from the deepest level up to the root, ensuring safe cleanup without triggering further recursion.
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token preprocessor property">#include &lt;iostream></span>
+<span class="token preprocessor property">#include &lt;windows.h></span>
+<span class="token preprocessor property">#include &lt;string></span>
+<span class="token preprocessor property">#include &lt;vector></span>
+<span class="token preprocessor property">#include &lt;fstream></span>
+
+<span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">LogOperation</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token punctuation">::</span>wstring<span class="token operator">&amp;</span> message<span class="token punctuation">,</span> <span class="token keyword">const</span> std<span class="token punctuation">::</span>wstring<span class="token operator">&amp;</span> logFileName <span class="token operator">=</span> L<span class="token string">"operation_log.txt"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  std<span class="token punctuation">::</span><span class="token return-type class-name">wofstream</span> <span class="token function">logFile</span><span class="token punctuation">(</span>logFileName<span class="token punctuation">,</span> <span class="token named-parameter punctuation">std</span><span class="token punctuation">::</span>ios<span class="token punctuation">::</span>app<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>logFile<span class="token punctuation">.</span><span class="token function">is_open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    logFile <span class="token operator">&lt;&lt;</span> message <span class="token operator">&lt;&lt;</span> std<span class="token punctuation">::</span>endl<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DeleteDirectoryRecursively</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token punctuation">::</span>wstring<span class="token operator">&amp;</span> directory<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  std<span class="token punctuation">::</span><span class="token class-name">vector<span class="token punctuation">&lt;</span>std<span class="token punctuation">:</span><span class="token punctuation">:</span>wstring<span class="token punctuation">></span></span> directoriesToDelete<span class="token punctuation">;</span>
+  std<span class="token punctuation">::</span><span class="token class-name">vector<span class="token punctuation">&lt;</span>std<span class="token punctuation">:</span><span class="token punctuation">:</span>wstring<span class="token punctuation">></span></span> allDirectories<span class="token punctuation">;</span>
+
+  directoriesToDelete<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>directory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>directoriesToDelete<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    std<span class="token punctuation">::</span><span class="token class-name">wstring</span> currentDir <span class="token operator">=</span> directoriesToDelete<span class="token punctuation">.</span><span class="token function">back</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    directoriesToDelete<span class="token punctuation">.</span><span class="token function">pop_back</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name">WIN32_FIND_DATA</span> findFileData<span class="token punctuation">;</span>
+    std<span class="token punctuation">::</span><span class="token class-name">wstring</span> searchPath <span class="token operator">=</span> currentDir <span class="token operator">+</span> L<span class="token string">"\\*"</span><span class="token punctuation">;</span>
+    <span class="token class-name">HANDLE</span> hFind <span class="token operator">=</span> <span class="token function">FindFirstFile</span><span class="token punctuation">(</span>searchPath<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>findFileData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>hFind <span class="token operator">!=</span> INVALID_HANDLE_VALUE<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">do</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> std<span class="token punctuation">::</span><span class="token class-name">wstring</span> fileOrDirName <span class="token operator">=</span> findFileData<span class="token punctuation">.</span>cFileName<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>fileOrDirName <span class="token operator">!=</span> L<span class="token string">"."</span> <span class="token operator">&amp;&amp;</span> fileOrDirName <span class="token operator">!=</span> L<span class="token string">".."</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">const</span> std<span class="token punctuation">::</span><span class="token class-name">wstring</span> fullPath <span class="token operator">=</span> currentDir <span class="token operator">+</span> L<span class="token string">"\\"</span> <span class="token operator">+</span> fileOrDirName<span class="token punctuation">;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>findFileData<span class="token punctuation">.</span>dwFileAttributes <span class="token operator">&amp;</span> FILE_ATTRIBUTE_DIRECTORY<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            directoriesToDelete<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>fullPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            allDirectories<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>fullPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token function">SetFileAttributes</span><span class="token punctuation">(</span>fullPath<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> FILE_ATTRIBUTE_NORMAL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">DeleteFile</span><span class="token punctuation">(</span>fullPath<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">FindNextFile</span><span class="token punctuation">(</span>hFind<span class="token punctuation">,</span> <span class="token operator">&amp;</span>findFileData<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">FindClose</span><span class="token punctuation">(</span>hFind<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  std<span class="token punctuation">::</span><span class="token function">reverse</span><span class="token punctuation">(</span>allDirectories<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> allDirectories<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token punctuation">::</span>wstring<span class="token operator">&amp;</span> dir <span class="token punctuation">:</span> allDirectories<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">RemoveDirectory</span><span class="token punctuation">(</span>dir<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">RemoveDirectory</span><span class="token punctuation">(</span>directory<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token return-type class-name"><span class="token keyword">int</span></span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> std<span class="token punctuation">::</span><span class="token class-name">wstring</span> baseDirectory <span class="token operator">=</span> L<span class="token string">"\\\\?\\C:\\AzureDevOps\\runaway-node"</span><span class="token punctuation">;</span>
+  <span class="token function">LogOperation</span><span class="token punctuation">(</span>L<span class="token string">"Starting directory delete process."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">DeleteDirectoryRecursively</span><span class="token punctuation">(</span>baseDirectory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">LogOperation</span><span class="token punctuation">(</span>L<span class="token string">"Directory delete process completed."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                        </dd>
+                        <dt>Explanation of the Code</dt>
+                        <dd>This C++ code starts by scanning the directory provided (in this case, "C:\\AzureDevOps\\runaway-node") and collecting a list of all subdirectories. It does this recursively, storing all directories for later deletion. After collecting all the directories, it deletes them from the deepest folder up to the root directory.</dd>
+                    </dl>
                 </div>
             </section>
-            <hr class="m-0" />
             <footer class="navbar-dark bg-primary">
                 <div class="row">
                     <div class="col-1"><br /></div>
