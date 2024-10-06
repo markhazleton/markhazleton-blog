@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1728092924735" />
+        <link rel="stylesheet" href="/css/styles.css?version=1728163761192" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -93,21 +93,16 @@
                 <div class="painteddesert-section-content">
                     <h1>Exploring Data Using PCA and K-means Clustering</h1>
                     <h2 class="subheading mb-3">Understanding Nutrient Patterns and Segmenting Foods</h2>
-                    <p>As a Data Scientist and Microsoft Solutions Architect, I recently analyzed a nutritional dataset using Google Colab, a platform that lets you write and execute Python code in a browser-based Jupyter notebook. The goal was to understand nutrient patterns across various foods and to segment these items based on their nutrient content.</p>
                     <p>
-                        You can find the full code and analysis in my Google Drive folder
+                        I recently analyzed a nutritional dataset from Kaggle using Google Colab, a platform that lets you write and execute Python code in a browser-based Jupyter notebook. The goal was to understand nutrient patterns across various foods and to segment these items based on their nutrient content. You can find the full code and analysis in my Google Drive folder
                         <a href="https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing" target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis" alt="Google Drive Folder">here.</a>
                     </p>
                     <p>Kaggle is an excellent resource for data scientists and enthusiasts to find and share datasets. It offers a vast collection of datasets across various domains, making it a great place to practice data analysis and machine learning techniques. You can find datasets on topics ranging from healthcare to finance, and even niche areas like nutritional data. Kaggle also hosts competitions where you can test your skills against others and learn from the community.</p>
                     <p>I got my hands on a dataset containing nutritional values for common foods and products, including protein, fat, vitamin C, and fiber content.</p>
                     <dl>
-                        <dt>Step 1: Initial Data Exploration</dt>
+                        <dt>Data Exploration</dt>
                         <dd>
-                            <p>To load a CSV file from Google Drive into a Google Colab Jupyter Notebook, you can use the Google Drive library to access files stored in your drive. First, you'll need to mount your Google Drive by running a code snippet that authorizes access to your account. This process allows seamless integration of data stored in Google Drive, making it convenient to analyze datasets stored in your cloud storage within the Colab environment.</p>
-                            <p>
-                                For more details on how to use Pandas for data manipulation and analysis, you can refer to the official
-                                <a href="https://pandas.pydata.org/pandas-docs/stable/" target="_blank" rel="nofollow" title="Pandas Documentation" alt="Pandas Documentation">Pandas Documentation.</a>
-                            </p>
+                            <p>To load a CSV file into a Google Colab Jupyter Notebook, you can use Google Drive to access files stored in your account. But first, you need to mount your Google Drive by running a code snippet that authorizes the notebook to access to your files. This process allows seamless integration of data stored in Google Drive, making it convenient to analyze datasets stored in your cloud storage within the Colab environment.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Mount Google Drive to access files</span>
 <span class="token keyword">from</span> google<span class="token punctuation">.</span>colab <span class="token keyword">import</span> drive
 drive<span class="token punctuation">.</span>mount<span class="token punctuation">(</span><span class="token string">'/content/drive'</span><span class="token punctuation">)</span>
@@ -116,12 +111,77 @@ drive<span class="token punctuation">.</span>mount<span class="token punctuation
 <span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
 <span class="token comment"># Source --> https://www.kaggle.com/datasets/trolukovich/nutritional-values-for-common-foods-and-products?resource=download</span>
 data_path <span class="token operator">=</span> <span class="token string">'/content/drive/MyDrive/CoLab/nutrition.csv'</span>
-data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>data_path<span class="token punctuation">)</span></code></pre>
-                            <p>After loading the data into Google Colab, I performed some basic checks to ensure it was clean (no missing values).</p>
+data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>data_path<span class="token punctuation">)</span>
+
+</code></pre>
+                            <dl>
+                                <dt>Inspect the Data</dt>
+                                <dd>
+                                    <p>Once the data is loaded, we need to inspect it to get a high-level overview of its structure. This involves checking the size of the data, the column names, and the general characteristics of each column.</p>
+                                    <dl>
+                                        <dt>Shape of the dataset</dt>
+                                        <dd>
+                                            <p>The shape tells us how many rows (observations) and columns (features):</p>
+                                            <pre class="language-python"><code class="language-python"><span class="token comment"># Display the shape of the dataset</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Shape of the dataset:"</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>shape<span class="token punctuation">)</span></code></pre>
+                                        </dd>
+                                        <dt>Display the first few rows</dt>
+                                        <dd>
+                                            <p>The head() method displays the first few rows of the dataset, giving us a glimpse of the data. This helps us understand the structure and format of the data.</p>
+                                            <pre class="language-python"><code class="language-python"><span class="token comment"># Display the first 5 and last 5 rows of the dataset</span>
+data<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+data<span class="token punctuation">.</span>tail<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span></code></pre>
+                                        </dd>
+                                        <dt>Summary of Data Types</dt>
+                                        <dd>
+                                            <p>Check what types of data each column holds. This helps identify if the columns are correctly typed (e.g., numerical, categorical, datetime) and if any columns need to be converted to a different data type.</p>
+                                            <pre class="language-python"><code class="language-python"><span class="token comment"># Display the data types of each column</span>
+data<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                                        </dd>
+                                    </dl>
+                                </dd>
+                                <dt>Check for Missing Values</dt>
+                                <dd>
+                                    <p>Missing values can affect the quality of our analysis and results. It's essential to check for missing values and decide how to handle them. Common strategies include removing rows with missing values, imputing missing values, or using advanced imputation techniques.</p>
+                                    <pre class="language-python"><code class="language-python"><span class="token comment"># Check for missing values in the dataset</span>
+missing_values <span class="token operator">=</span> data<span class="token punctuation">.</span>isnull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Missing values in each column:\n"</span><span class="token punctuation">,</span> missing_values<span class="token punctuation">)</span></code></pre>
+                                    <p>Handling missing values could involve:</p>
+                                    <ul>
+                                        <li>Dropping rows or columns with too many missing values</li>
+                                        <li>Imputation, where you fill missing values using the mean, median, mode, or other statistical methods</li>
+                                        <li>Forward/Backward filling for time-series data</li>
+                                    </ul>
+                                </dd>
+                                <dt>Descriptive Statistics</dt>
+                                <dd>
+                                    <p>Get summary statistics to understand the distribution of numerical features. This helps to identify the central tendency (mean, median) and spread (standard deviation, percentiles) and detect any anomalies or outliers. The 'T' attribute transposes the summary for better readability. It is especially useful when you have many columns.</p>
+                                    <ul>
+                                        <li>Count: Number of non-missing values</li>
+                                        <li>Mean, Median: Measures of central tendency</li>
+                                        <li>Min/Max Range: Minimum and maximum values</li>
+                                        <li>Standard Deviation: Measure of data dispersion</li>
+                                        <li>Percentiles: Values below which a given percentage of observations fall also called quartiles</li>
+                                    </ul>
+                                    <pre class="language-python"><code class="language-python"><span class="token comment"># Display descriptive statistics for all numeric columns</span>
+data<span class="token punctuation">.</span>describe<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T</code></pre>
+                                </dd>
+                                <dt>Identify Duplicate Rows</dt>
+                            </dl>
+                            <p>
+                                After loading the data into Google Colab, I performed some basic checks to ensure it was clean (no missing values). For more details on how to use Pandas for data manipulation and analysis, you can refer to the official
+                                <a href="https://pandas.pydata.org/pandas-docs/stable/" target="_blank" rel="nofollow" title="Pandas Documentation" alt="Pandas Documentation">Pandas Documentation.</a>
+                            </p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Display the first few rows and basic info to understand the structure</span>
-data<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>describe<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T</code></pre>
-                            <p>I found that most of the cells had the unit of measure in the data, so I had to convert the data to a numerical format by strippng off the units. For instance, "10 g" would be converted to "10" for numerical analysis. I renamed the columns to make sure I did not lose the unit of measure information. Once this was done I selected only the numeric columns and the 'name' column to keep track of the food item. Here is an example of how I did this in Python:</p>
-                            <pre class="language-python"><code class="language-python"><span class="token comment"># Convert gram columns to numeric and append '_garms' to keep track of the original columns units</span>
+data<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>describe<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T
+
+
+</code></pre>
+                        </dd>
+                        <dt>Data Manipulation</dt>
+                        <dd>
+                            <p>I found that most of the cells had the unit of measure in the data, so I had to convert the data to a numerical format by strippng off the units. For instance, "10 g" would be converted to "10" for numerical analysis. I renamed the columns to make sure I did not lose the unit of measure information. Once this was done I selected the numeric columns and the 'name' column to keep track of the food item. This reduced the number of columns from 77 to 9, giving me a more manageable dataset to work with.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Convert gram columns to numeric and append '_garms'</span>
 data<span class="token punctuation">[</span><span class="token string">'serving_size_grams'</span><span class="token punctuation">]</span> <span class="token operator">=</span> data<span class="token punctuation">[</span><span class="token string">'serving_size'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">str</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'g'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> regex<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span><span class="token builtin">float</span><span class="token punctuation">)</span>
 data<span class="token punctuation">[</span><span class="token string">'total_fat_grams'</span><span class="token punctuation">]</span> <span class="token operator">=</span> data<span class="token punctuation">[</span><span class="token string">'total_fat'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">str</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'g'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> regex<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span><span class="token builtin">float</span><span class="token punctuation">)</span>
 data<span class="token punctuation">[</span><span class="token string">'protein_grams'</span><span class="token punctuation">]</span> <span class="token operator">=</span> data<span class="token punctuation">[</span><span class="token string">'protein'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">str</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'g'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> regex<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span><span class="token builtin">float</span><span class="token punctuation">)</span>
@@ -137,7 +197,7 @@ data <span class="token operator">=</span> data<span class="token punctuation">.
 data <span class="token operator">=</span> data<span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>include<span class="token operator">=</span><span class="token punctuation">[</span>np<span class="token punctuation">.</span>number<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 data<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
                         </dd>
-                        <p>Finally, I decided to use histograms and box plots to visualize the distribution of nutrients across the dataset. To do that I first created a list of my numeric columns and then used a for loop to plot the histograms and box plots. Here is an example of how I did this in Python:</p>
+                        <p>I decided to use histograms and box plots to visualize the distribution of values in each of the nutrient columns. To do that I first created a list of my numeric columns and then used a for loop to plot the histograms and box plots.</p>
                         <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 
 <span class="token comment"># Create a list of numeric columns for visualization</span>
@@ -162,7 +222,7 @@ plt<span class="token punctuation">.</span>figure<span class="token punctuation"
 plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Adjust spacing between subplots</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-                        <dt>Step 2: Exploring Nutrient Relationships</dt>
+                        <dt>Exploring Nutrient Relationships</dt>
                         <dd>
                             <p>To investigate relationships between nutrients, I used a correlation matrix, which measures how changes in one variable relate to another. For example, a positive correlation means that as one nutrient increases, another tends to increase as well. A heatmap visualization of the correlation matrix helps to identify strong relationships between nutrients.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Calculate the correlation matrix</span>
@@ -179,7 +239,7 @@ plt<span class="token punctuation">.</span>figure<span class="token punctuation"
 sns<span class="token punctuation">.</span>heatmap<span class="token punctuation">(</span>correlation_matrix<span class="token punctuation">,</span> annot<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'coolwarm'</span><span class="token punctuation">,</span> linewidths<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'Correlation Matrix'</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-                            <p>I also created a pairplot to visualize the relationships between nutrients in a scatterplot matrix. A pairplot shows the relationships between all pairs of variables in the dataset, making it easy to identify patterns and correlations. This can take a long time on large datasets or datasets with many columns, so be careful when using this method. That we we create a 9 by 9 matrix of plots. I ran this after I recuced the 77 columns to 9 columns.</p>
+                            <p>I created a pairplot to visualize the relationships between nutrients in a scatterplot matrix. A pairplot shows the relationships between all pairs of variables in the dataset, making it easy to identify patterns and correlations. This can take a long time on large datasets or datasets with many columns, so be careful when using this method. For this dataset I created a 9 by 9 matrix of plots.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Visualize relationships between nutrients using a pairplot</span>
 sns<span class="token punctuation">.</span>pairplot<span class="token punctuation">(</span>data<span class="token operator">=</span>data<span class="token punctuation">[</span>numeric_columns<span class="token punctuation">]</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>suptitle<span class="token punctuation">(</span><span class="token string">'Pairplot of Nutrients'</span><span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token number">1.02</span><span class="token punctuation">)</span>
@@ -187,10 +247,10 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
 
 </code></pre>
                         </dd>
-                        <dt>Step 3: Dimensionality Reduction with PCA</dt>
+                        <dt>Dimensionality Reduction with PCA</dt>
                         <dd><p>I applied Principal Component Analysis (PCA) to reduce the complexity of the data. PCA transforms the data into new dimensions, called principal components, which capture the most significant patterns. This allowed me to visualize nutrient relationships in just two dimensions, preserving about 68% of the data’s variance, or information.</p></dd>
-                        <dt>Step 4: Segmentation Using K-means Clustering</dt>
-                        <dd>Next, I applied K-means clustering, a technique that divides data into clusters based on their similarity. To determine the optimal number of clusters, I plotted an elbow curve using the inertia (sum of squared distances within clusters). The “elbow point” at three clusters indicated a good balance. I confirmed this choice with the silhouette score, which measures how well-separated the clusters are; a score closer to 1 suggests distinct and well-defined clusters.</dd>
+                        <dt>Segmentation Using K-means Clustering</dt>
+                        <dd><p>I applied K-means clustering, a technique that divides data into clusters based on their similarity. To determine the optimal number of clusters, I plotted an elbow curve using the inertia (sum of squared distances within clusters). The “elbow point” at three clusters indicated a good balance. I confirmed this choice with the silhouette score, which measures how well-separated the clusters are; a score closer to 1 suggests distinct and well-defined clusters.</p></dd>
                     </dl>
                     <h2>Key Concepts</h2>
                     <p>This project provided valuable experience with PCA and K-means clustering. While Google Colab allowed me to work interactively, PCA simplified the data by highlighting major patterns, and K-means grouped the data into meaningful clusters, which could be helpful for future analyses like customer segmentation or recommendation systems.</p>
