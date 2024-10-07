@@ -29,4 +29,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
     Prism.highlightAll();
 
 
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const icon = this.querySelector('i');
+          icon.classList.toggle('fa-plus');
+          icon.classList.toggle('fa-minus');
+        });
+      });
+
+
 });
