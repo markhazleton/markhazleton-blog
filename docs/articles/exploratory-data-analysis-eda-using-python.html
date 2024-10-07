@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="author" content="Mark Hazleton" />
+        <meta name="robots" content="index, follow" />
+        <title>Data Science - Exploratory Data Analysis (EDA) Using Python</title>
+        <meta name="description" content="An in-depth guide to Data Sanity checks and Exploratory Data Analysis (EDA) using Python." />
+        <meta name="keywords" content="data sanity, EDA, Python, exploratory data analysis, data integrity, outliers, missing data" />
+        <meta name="author" content="Mark Hazleton" />
+        <link rel="canonical" href="https://markhazleton.com/articles/exploratory-data-analysis-eda-using-python.html" />
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "familyName": "Hazleton",
+                "givenName": "Mark",
+                "jobTitle": "Solutions Architect",
+                "alumniOf": "University of North Texas",
+                "affiliation": {
+                    "@type": "Organization",
+                    "name": "Control Origins"
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
+                "url": "https://markhazleton.com"
+            }
+        </script>
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "url": "https://markhazleton.com",
+                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+            }
+        </script>
+        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="/css/styles.css?version=1728260399553" />
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+        <script>
+            (function (c, l, a, r, i, t, y) {
+                c[a] =
+                    c[a] ||
+                    function () {
+                        (c[a].q = c[a].q || []).push(arguments);
+                    };
+                t = l.createElement(r);
+                t.async = 1;
+                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+            })(window, document, 'clarity', 'script', 'd628hovv63');
+        </script>
+    </head>
+    <body class="sidetracked-body" id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
+                <span class="d-block d-lg-none">Mark Hazleton</span>
+                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#articles">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Page Content-->
+        <div class="container-fluid p-0">
+            <section class="painteddesert-section painteddesert-section-background" id="post">
+                <div class="painteddesert-section-content">
+                    <h1>Exploratory Data Analysis (EDA)</h1>
+                    <h2 class="subheading mb-3">A comprehensive guide to data sanity checks and EDA using Python</h2>
+                    <p>Before diving deep into advanced data analysis or machine learning, it’s crucial to ensure that the data you’re working with is clean and makes sense. This article walks you through the process of Data Sanity checks and Exploratory Data Analysis (EDA), both of which are foundational steps for understanding your dataset. While we won’t modify the data initially, these steps will help us pinpoint issues such as missing values, duplicates, and outliers, and will provide insights into the structure and relationships within the data.</p>
+                    <p>Before you start analyzing the data, it's essential to inspect the dataset to understand its structure and contents. You need to understand the data and identify any issues that may affect your analysis. Once you complete the initial inspection, you can decide if any data cleaning or preprocessing steps are necessary. At this point we are not changing the data in any way, istead we are learning about the data so we can plan any necessary clean-up.</p>
+                    <p>You need to understand the data and identify any issues that may affect your analysis. Once you complete the initial inspection, you can decide if any data cleaning or preprocessing steps are necessary. At this point we are not changing the data in any way, istead we are learning about the data so we can plan any necessary clean-up.</p>
+                    <p>
+                        I recently analyzed a nutritional dataset from Kaggle using Google Colab, a platform that lets you write and execute Python code in a browser-based Jupyter notebook. The goal was to understand nutrient patterns across various foods and to segment these items based on their nutrient content. You can find the full code and analysis in my Google Drive folder
+                        <a href="https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing" target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis" alt="Google Drive Folder">here.</a>
+                    </p>
+                    <p>Kaggle is an excellent resource for data scientists and enthusiasts to find and share datasets. It offers a vast collection of datasets across various domains, making it a great place to practice data analysis and machine learning techniques. You can find datasets on topics ranging from healthcare to finance, and even niche areas like nutritional data. Kaggle also hosts competitions where you can test your skills against others and learn from the community.</p>
+                    <p>I got my hands on a dataset containing nutritional values for common foods and products, including protein, fat, vitamin C, and fiber content.</p>
+                    <h3>Section 1: Understanding the Dataset</h3>
+                    <p>
+                        <strong>Objective:</strong>
+                        Load the dataset into Python and perform initial inspection.
+                    </p>
+                    <ul>
+                        <li>Use pandas.read_csv() or equivalent loading functions.</li>
+                        <li>Inspect the first few rows using df.head() and df.tail() for a snapshot of the dataset.</li>
+                        <li>Check dataset structure and basic metadata with df.info().</li>
+                        <li>View basic statistics with df.describe() to understand the distribution of numerical columns.</li>
+                    </ul>
+                    <dl>
+                        <dt>1.1 Data Loading and Initial Exploration</dt>
+                        <dd>
+                            <p>To load a CSV file into a Google Colab Jupyter Notebook, you can use Google Drive to access files stored in your account. But first, you need to mount your Google Drive by running a code snippet that authorizes the notebook to access to your files. This process allows seamless integration of data stored in Google Drive, making it convenient to analyze datasets stored in your cloud storage within the Colab environment.</p>
+                            <p>The first step in any analysis is understanding the data itself. I begin by loading the dataset into Python using the `pandas` library using the read_csv() method from pandas.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Mount Google Drive to access files</span>
+<span class="token keyword">from</span> google<span class="token punctuation">.</span>colab <span class="token keyword">import</span> drive
+drive<span class="token punctuation">.</span>mount<span class="token punctuation">(</span><span class="token string">'/content/drive'</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Load the data using Pandas</span>
+<span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<span class="token comment"># Source --> https://www.kaggle.com/datasets/trolukovich/nutritional-values-for-common-foods-and-products?resource=download</span>
+data_path <span class="token operator">=</span> <span class="token string">'/content/drive/MyDrive/CoLab/nutrition.csv'</span>
+data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>data_path<span class="token punctuation">)</span></code></pre>
+                        </dd>
+                        <dt>1.2 Shape and Size of Data</dt>
+                        <dd>
+                            <p>Once the data is loaded, we need to inspect it to get a high-level overview of its structure. This involves checking the size of the data, the column names, and the general characteristics of each column. Understanding the dataset's dimensionality is the first step.</p>
+                            <p>The shape tells us how many rows (observations) and columns (features):</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Display the shape of the dataset</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Shape of the dataset:"</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>shape<span class="token punctuation">)</span></code></pre>
+                        </dd>
+                        <dt>1.3 View Rows of Data</dt>
+                        <dd>
+                            <p>Sometimes the best way to understand the data is to look at it. The head() and tail() methods displays the first and last few rows of the dataset, giving us a glimpse of the data. This helps us understand the structure and format of the data and help identify any issues that may need to be addressed.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Display the first 5 and last 5 rows of the dataset</span>
+data<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+data<span class="token punctuation">.</span>tail<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+</code></pre>
+                        </dd>
+                        <dt>1.4 View the features (Columns)</dt>
+                        <dd>
+                            <p>After viewing the rows, it's essential to understand how the features (columns) are being defined in the dataset. Since we have seen the data, we can now confirm if the dataframe accurately represents the data we have seen. Are types correct? Are there any columns that need to be converted to a different data type? We know that numerical data should be represented as integers or floats, and categorical data should be represented as strings or categories. This uses the 'info' method in Pandas.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Display the data types of each column</span>
+data<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                        </dd>
+                        <dt>1.5 Identify Unique Values</dt>
+                        <dd>
+                            <p>The unique() method helps us identify the unique values in a column. This is useful for categorical columns to understand the different categories present in the dataset.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Display the count of Unique Values in each column</span>
+<span class="token keyword">for</span> column <span class="token keyword">in</span> data<span class="token punctuation">.</span>columns<span class="token punctuation">:</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Unique values in '</span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">': </span><span class="token interpolation"><span class="token punctuation">{</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>nunique<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+</code></pre>
+                        </dd>
+                    </dl>
+                    <h3>Section 2: Data Sanity Checks</h3>
+                    <p>
+                        <strong>Objective:</strong>
+                        Indentify missing values, duplicates, and data integrity issues.
+                    </p>
+                    <p>Before analyzing the dataset, it's essential to perform sanity checks to ensure data integrity. These checks help identify missing values, duplicates, and inconsistent data types. Data Sanity Checks are essential steps to ensure the quality and integrity of a dataset before performing any analysis. These checks help identify and address issues such as missing values, outliers, and inconsistencies.</p>
+                    <dl>
+                        <dt>2.1 Missing Data Detection</dt>
+                        <dd>
+                            <p>Missing values can affect the quality of our analysis and results. It's essential to check for missing values and decide how to handle them. Common strategies include removing rows with missing values, imputing missing values, or using advanced imputation techniques.</p>
+                            <p>Handling missing values could involve:</p>
+                            <ul>
+                                <li>Dropping rows or columns with too many missing values</li>
+                                <li>Imputation, where you fill missing values using the mean, median, mode, or other statistical methods</li>
+                                <li>Forward/Backward filling for time-series data</li>
+                                <li>Using advanced imputation techniques like KNN imputation or MICE</li>
+                            </ul>
+                            <p>Missing values can lead to biased results and should be handled appropriately. Common methods include removing rows with missing values, imputing missing values with mean/median, or using advanced techniques like KNN imputation.</p>
+                            <p>Missing data can significantly impact the quality of our analysis. It's essential to identify and handle missing values before proceeding with any analysis. The isnull() method in Pandas helps us identify missing values in the dataset.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Check for missing values in the dataset</span>
+missing_values <span class="token operator">=</span> data<span class="token punctuation">.</span>isnull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Missing values in each column:\n"</span><span class="token punctuation">,</span> missing_values<span class="token punctuation">)</span>
+
+<span class="token comment"># Optionally, visualize missing values using a heatmap</span>
+<span class="token keyword">import</span> seaborn <span class="token keyword">as</span> sns
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>heatmap<span class="token punctuation">(</span>data<span class="token punctuation">.</span>isnull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cbar<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'viridis'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'Heatmap of Missing Values'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                            <p>Visualize missing data patterns with missingno library (e.g., missingno.matrix(df) or missingno.heatmap(df)).</p>
+                            <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> missingno <span class="token keyword">as</span> msno
+msno<span class="token punctuation">.</span>matrix<span class="token punctuation">(</span>data<span class="token punctuation">)</span></code></pre>
+                        </dd>
+                        <dt>2.2 Duplicate Data Detection</dt>
+                        <dd>
+                            <p>Duplicates can skew our analysis and lead to incorrect conclusions. It's crucial to identify and remove duplicate rows from the dataset. The duplicated() method in Pandas helps us identify duplicate rows. If they do exist, we can count them and decide how to handle them.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Check for duplicate rows in the dataset</span>
+duplicate_rows <span class="token operator">=</span> data<span class="token punctuation">.</span>duplicated<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Duplicate rows in the dataset: </span><span class="token interpolation"><span class="token punctuation">{</span>duplicate_rows<span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span></code></pre>
+                        </dd>
+                        <dt>2.3 Consistency of Data types</dt>
+                        <dd>
+                            <p>Data types play a crucial role in data analysis. It's essential to ensure that the data types are consistent with the values in the dataset. The dtypes attribute in Pandas helps us check the data types of each column. Cross-verify if numerical data is stored as numbers, and if categorical data is appropriately formatted.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Check the data types of each column</span>
+data<span class="token punctuation">.</span>dtypes</code></pre>
+                        </dd>
+                        <dt>2.4 Outlier Detection</dt>
+                        <dd>
+                            <p>Outliers can skew our analysis, so detecting them is an important part of sanity checks. Outliers can be identified visually using boxplots or statistically using the IQR method.</p>
+                            <ul>
+                                <li>Use boxplots (seaborn.boxplot or matplotlib’s boxplot) to visually inspect outliers.</li>
+                                <li>Calculate the Interquartile Range (IQR) and use it to identify outliers programmatically.</li>
+                            </ul>
+                            <p>Outliers are data points that significantly differ from other observations. They can distort statistical analyses and should be investigated. Methods to handle outliers include removing them, transforming the data, or using robust statistical techniques. Outliers can be indicative of data entry errors, unusual behavior, or rare events, and detecting them early allows for informed decision-making on whether to address or retain them in further analyses. Key Statistics for Outlier Detection:</p>
+                            <ul>
+                                <li>Mean: Average value in the dataset.</li>
+                                <li>Median: The middle value, helpful for skewed distributions.</li>
+                                <li>Mode: Most frequent value, useful in categorical data.</li>
+                                <li>Min/Max: Helps identify extreme values.</li>
+                                <li>Standard Deviation: Shows the spread of the data.</li>
+                                <li>IQR (Interquartile Range): Captures the range of the middle 50%, useful for detecting outliers.</li>
+                            </ul>
+                            <p>The IQR (Interquartile Range) method is commonly used to identify outliers. It defines outliers as points outside 1.5 times the IQR from the first and third quartiles. A box plot can help visualize outliers in the data.</p>
+                            <p>For numeric columns, the most straightforward and effective way to detect outliers is by using box plots. Box plots are a visual tool that display the distribution of a dataset, highlighting the quartiles and identifying potential outliers through the use of “whiskers,” which typically extend to 1.5 times the interquartile range (IQR). Any points outside this range are flagged as potential outliers. This method provides a quick, visual check for outliers and gives an overall sense of data spread and variability.</p>
+                            <p>Pairing the box plot with a scatter plot allows us to examine how values are distributed across the dataset, offering further context on potential outliers. Scatter plots provide a view of individual data points, which can help determine if outliers are isolated or part of a broader pattern. By using a combination of box plots and scatter plots, we can visually detect and investigate outliers in numeric data with minimal computational overhead.</p>
+                            <p>For non-numeric or high-dimensional data (such as categorical or text columns), visualizations like bar charts can be inefficient and slow to render, especially when dealing with large datasets or columns with many unique values (high cardinality). Instead of using visual methods, we recommend a summary-based approach for these types of columns. This approach involves generating key statistics for each non-numeric column, such as:</p>
+                            <ul>
+                                <li>Unique Values: Count of distinct values in the column, which can highlight unusually high cardinality.</li>
+                                <li>Most Frequent Value: The mode of the column, which provides insight into the most common category or entry.</li>
+                                <li>Frequency of the Most Frequent Value: Knowing how often the most frequent value occurs can help spot anomalies, such as over-represented categories.</li>
+                                <li>Total Non-Null Entries: The count of valid entries in the column, useful for identifying sparsity or missing data.</li>
+                            </ul>
+                            <p>This summary allows for a high-level overview of non-numeric columns without the delays and performance issues associated with plotting. This method provides a quick sanity check for categorical or textual data by identifying potential anomalies in the distribution of values.</p>
+                            <p>To ensure the outlier detection process remains efficient and scalable as the size of our datasets grows, it is important to tailor the approach based on the data type. For numeric data, visual methods like box plots and scatter plots are appropriate, as they provide fast and intuitive insights. For non-numeric data, where the cardinality or the data size may be large, a summary-based approach is more efficient.</p>
+                            <p>By automatically detecting and summarizing the column types, we can avoid unnecessary computations and still provide a comprehensive overview of potential outliers. This hybrid approach balances thoroughness with performance, ensuring that outlier detection does not become a bottleneck in our data validation pipeline.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+<span class="token comment"># Example DataFrame (Replace with your own DataFrame 'data')</span>
+<span class="token comment"># data = pd.read_csv('your_data.csv')</span>
+
+<span class="token comment"># Loop through all columns in the DataFrame</span>
+<span class="token keyword">for</span> column <span class="token keyword">in</span> data<span class="token punctuation">.</span>columns<span class="token punctuation">:</span>
+  <span class="token keyword">if</span> pd<span class="token punctuation">.</span>api<span class="token punctuation">.</span>types<span class="token punctuation">.</span>is_numeric_dtype<span class="token punctuation">(</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># Check if the column is numeric</span>
+    fig<span class="token punctuation">,</span> axs <span class="token operator">=</span> plt<span class="token punctuation">.</span>subplots<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># Set wider and shorter figure size</span>
+
+    <span class="token comment"># Boxplot (rotated horizontally)</span>
+    axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>boxplot<span class="token punctuation">(</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>dropna<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vert<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+    axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_title<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'Box plot of </span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+    axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_xlabel<span class="token punctuation">(</span>column<span class="token punctuation">)</span>
+    axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># Scatter plot (against index)</span>
+    axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>data<span class="token punctuation">.</span>index<span class="token punctuation">,</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">)</span>  <span class="token comment"># Scatter plot with index on the x-axis</span>
+    axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_title<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'Scatter plot of </span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+    axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_xlabel<span class="token punctuation">(</span><span class="token string">'Index'</span><span class="token punctuation">)</span>
+    axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_ylabel<span class="token punctuation">(</span>column<span class="token punctuation">)</span>
+    axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># Adjust layout and spacing</span>
+    plt<span class="token punctuation">.</span>subplots_adjust<span class="token punctuation">(</span>wspace<span class="token operator">=</span><span class="token number">0.4</span><span class="token punctuation">)</span>  <span class="token comment"># Add space between the plots</span>
+    plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Show the combined plots</span>
+  <span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token comment"># For non-numeric columns, provide a simple summary instead of a bar chart</span>
+    unique_values <span class="token operator">=</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>nunique<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    top_value <span class="token operator">=</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>mode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># Most frequent value</span>
+    top_value_count <span class="token operator">=</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>value_counts<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>iloc<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># Frequency of the top value</span>
+    total_count <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>dropna<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># Print a summary of the non-numeric column</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Column '</span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">':"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - Unique values: </span><span class="token interpolation"><span class="token punctuation">{</span>unique_values<span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - Most frequent value: '</span><span class="token interpolation"><span class="token punctuation">{</span>top_value<span class="token punctuation">}</span></span><span class="token string">' (Count: </span><span class="token interpolation"><span class="token punctuation">{</span>top_value_count<span class="token punctuation">}</span></span><span class="token string">)"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - Total non-null entries: </span><span class="token interpolation"><span class="token punctuation">{</span>total_count<span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+  <span class="token comment"># Add a line break between each feature for better separation</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span>
+</code></pre>
+                            <p>Once potential outliers are identified, it is important to have a plan for handling them. Depending on the nature of the dataset and the context of the analysis, outliers can either be removed, transformed, or retained for further investigation. Outliers that result from data entry errors or inconsistencies should be corrected or removed. However, in some cases (such as fraud detection or rare event prediction), outliers may represent important signals and should be preserved. Implementing a review process for outliers ensures that we maintain data integrity while addressing any anomalies.</p>
+                            <p>Incorporating outlier detection as part of our data sanity checks ensures that we identify and address anomalies before they impact downstream analysis or model performance. By using a visual approach for numeric data and a summary-based approach for non-numeric data, we maintain efficiency without sacrificing accuracy or detail. This method ensures that our data is clean, reliable, and ready for further analysis or modeling, ultimately improving the quality of our insights and decisions.</p>
+                        </dd>
+                    </dl>
+                    <h3>Section 3: Exploratory Data Analysis (EDA)</h3>
+                    <p>
+                        <strong>Objective:</strong>
+                        Load the dataset into Python and perform initial inspection.
+                    </p>
+                    <p>Now that we've ensured the data is sane, we can begin exploring it to uncover patterns and relationships. We'll start with univariate analysis before moving on to bivariate and multivariate explorations.</p>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">3.1 Univariate Data Analysis</h3></div>
+                        <div class="card-body">
+                            <p>Univariate analysis focuses on analyzing individual variables in the dataset. It helps us understand the distribution of each feature and identify patterns or anomalies. Common univariate analysis techniques include histograms, bar plots, and frequency tables.</p>
+                            <ul>
+                                <li>Use histograms (df.hist()) to visualize the distribution of numerical features.</li>
+                                <li>Use bar plots (df['column'].value_counts().plot(kind='bar')) to visualize categorical features.</li>
+                            </ul>
+                            <p>Univariate Analysis is a type of data analysis in data science that focuses on examining a single variable at a time. The term "univariate" combines "uni-" meaning "one" and "variate," which refers to a variable. Essentially, it’s about understanding the distribution, central tendency, and spread of one variable in isolation, without considering relationships with other variables.</p>
+                            <p>Key Aspects of Univariate Data Analysis:</p>
+                            <dl>
+                                <dt>Distribution</dt>
+                                <dd><p>The distribution of a variable shows how its values are spread out. Common ways to visualize distributions include histograms, box plots, and density plots.</p></dd>
+                                <dt>Central Tendency</dt>
+                                <dd><p>Central tendency measures where the center of the data lies. The most common measures are the mean (average), median (middle value), and mode (most frequent value).</p></dd>
+                                <dt>Spread or Variability</dt>
+                                <dd><p>Exploring the variability or dispersion within the variable, commonly using measures like range, variance, and standard deviation. This helps understand how spread out the data points are from the central value.</p></dd>
+                            </dl>
+                            <p>Techniques for Univariate Analysis:</p>
+                            <dl>
+                                <dt>Histogram</dt>
+                                <dd>
+                                    <p>A histogram is a graphical representation of the distribution of a variable. It shows the frequency of values within different intervals or bins. Here is an example of how to create histograms for all numeric columns in Python:</p>
+                                    <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token comment"># Create histograms for all numeric columns</span>
+data<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span> edgecolor<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>suptitle<span class="token punctuation">(</span><span class="token string">'Histograms of All Numeric Columns'</span><span class="token punctuation">,</span> fontsize<span class="token operator">=</span><span class="token number">16</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                                </dd>
+                                <dt>Descriptive Statistics</dt>
+                                <dd>
+                                    <p>The describe() method in Pandas provides a summary of the dataset, including data types and descriptive statistics. Using the .T attribute transposes the summary for better readability.</p>
+                                    <p>Descriptive statistics summarize the main characteristics of a variable, including measures of central tendency and variability. I like to add the transpose attribute '.T' to the describe method to make the output more readable.</p>
+                                    <pre class="language-python"><code class="language-python"><span class="token comment"># Display descriptive statistics for all numeric columns</span>
+data<span class="token punctuation">.</span>describe<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T</code></pre>
+                                </dd>
+                                <dt>Box Plot</dt>
+                                <dd>
+                                    <p>A box plot displays the distribution of a variable using quartiles. It shows the median, interquartile range, and potential outliers.</p>
+                                    <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> seaborn <span class="token keyword">as</span> sns
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token comment"># Create box plots for all numeric columns</span>
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>boxplot<span class="token punctuation">(</span>data<span class="token operator">=</span>data<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'Box Plots of All Numeric Columns'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                                    <p>Key compents of a box plot:</p>
+                                    <dl>
+                                        <dt>Minimum (Lower Whisker)</dt>
+                                        <dd><p>The minimum is the smallest value in the dataset, excluding outliers. It represents the lower end of the data. In the boxplot, it’s typically connected to Q1 by a line called the “whisker.” The lower whisker extends to the smallest data point within 1.5 times the interquartile range (IQR) below Q1.</p></dd>
+                                        <dt>First Quartile (Q1)</dt>
+                                        <dd><p>The first quartile (Q1) is the value below which 25% of the data falls. It marks the lower boundary of the box in the boxplot.</p></dd>
+                                        <dt>Median (Second Quartile Q2)</dt>
+                                        <dd><p>The median is the middle value of the dataset when it’s sorted in ascending order. It’s represented by the line inside the box.</p></dd>
+                                        <dt>Third Quartile (Q3)</dt>
+                                        <dd><p>The third quartile (Q3) is the value below which 75% of the data falls. It marks the upper boundary of the box in the boxplot.</p></dd>
+                                        <dt>Maximum (Upper Whisker)</dt>
+                                        <dd><p>The maximum is the largest value in the dataset, excluding outliers. It represents the upper end of the data. In the boxplot, it’s typically connected to Q3 by a line called the “whisker.” The upper whisker extends to the largest data point within 1.5 times the interquartile range (IQR) above Q3.</p></dd>
+                                        <dt>Interquartile Range (IQR)</dt>
+                                        <dd><p>The interquartile range (IQR) is the range between the first and third quartiles (Q1 and Q3). It represents the middle 50% of the data. The box in the boxplot spans the IQR, showing the spread of the central data.</p></dd>
+                                    </dl>
+                                </dd>
+                                <dt>Skewness and Kurtosis</dt>
+                                <dd>
+                                    <p>Skewness measures the asymmetry of the distribution, indicating whether the data is skewed to the left or right. Kurtosis measures the shape of the distribution, showing how peaked or flat it is compared to a normal distribution. These statistics provide insights into the shape of the data distribution.</p>
+                                    <pre class="language-python"><code class="language-python"><span class="token comment"># Calculate skewness and kurtosis for all numeric columns</span>
+skewness <span class="token operator">=</span> data<span class="token punctuation">.</span>skew<span class="token punctuation">(</span><span class="token punctuation">)</span>
+kurtosis <span class="token operator">=</span> data<span class="token punctuation">.</span>kurtosis<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Skewness of each column:\n"</span><span class="token punctuation">,</span> skewness<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Kurtosis of each column:\n"</span><span class="token punctuation">,</span> kurtosis<span class="token punctuation">)</span></code></pre>
+                                </dd>
+                                <dt>KDE Plot</dt>
+                                <dd>
+                                    <p>A Kernel Density Estimate (KDE) plot is a smoothed version of a histogram that shows the distribution of a variable. It provides a continuous estimate of the probability density function of the data. A KDE plot (Kernel Density Estimation) provides a smooth, continuous curve that estimates the probability density of the data. Unlike a histogram, it doesn't rely on binning but instead smooths over the data, offering a more fluid representation of the distribution.</p>
+                                    <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> seaborn <span class="token keyword">as</span> sns
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+<span class="token comment"># Create KDE plots for all numeric columns</span>
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># Calculate the number of rows needed based on the number of columns</span>
+num_rows <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>include<span class="token operator">=</span><span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>columns<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">3</span>
+
+<span class="token keyword">for</span> i<span class="token punctuation">,</span> col <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>data<span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>include<span class="token operator">=</span><span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>columns<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token comment"># Adjust subplot layout to accommodate more plots</span>
+plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span>num_rows<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>kdeplot<span class="token punctuation">(</span>data<span class="token punctuation">[</span>col<span class="token punctuation">]</span><span class="token punctuation">,</span> shade<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'KDE Plot of </span><span class="token interpolation"><span class="token punctuation">{</span>col<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                                </dd>
+                            </dl>
+                            <p>Univariate Data Analysis helps to summarize and understand the characteristics of individual variables, providing a foundation for more complex analyses. Univariate analysis provides a foundation for understanding data by highlighting patterns within individual variables. It’s an essential first step in data exploration, often setting the stage for more complex analyses like bivariate or multivariate analysis.</p>
+                        </div>
+                        <div class="card-footer"><a class="btn btn-primary" href="https://en.wikipedia.org/wiki/Univariate_analysis" target="_blank" rel="nofollow" title="Learn more about Univariate Data Analysis on Wikipedia" alt="Wikipedia on Univariate Data Analysis">Wikipedia on Univariate Data Analysis</a></div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">3.2 Bivariate Data Analysis</h3></div>
+                        <div class="card-body">
+                            <p>Bivariate analysis focuses on analyzing the relationship between two variables in the dataset. It helps us understand how variables interact with each other and identify correlations. Common bivariate analysis techniques include scatter plots, pair plots, and correlation matrices.</p>
+                            <ul>
+                                <li>Use scatter plots (sns.scatterplot) to visualize the relationship between two numerical features.</li>
+                                <li>Use pair plots (sns.pairplot) to visualize relationships between multiple numerical features.</li>
+                                <li>Use correlation matrices (df.corr()) to quantify the relationship between numerical features.</li>
+                            </ul>
+                            <p>Bivariate Analysis is a statistical method in data science that examines the relationship between two variables. The term "bivariate" stems from the prefix "bi-" meaning "two" and "variate," which refers to variables. In essence, bivariate analysis explores how one variable interacts or correlates with another. It helps to understand how one variable changes with respect to another.</p>
+                            <p>This analysis helps in understanding patterns, trends, or associations between the two variables. For example, in a dataset containing information about people's ages and their corresponding income levels, bivariate analysis could be used to investigate whether there is a relationship between age and income. Techniques commonly used for bivariate analysis include scatter plots, correlation coefficients, and cross-tabulation.</p>
+                            <dl>
+                                <dt>Pair Plot</dt>
+                                <dd>
+                                    <p>Pair plots are a grid of scatter plots that visualize the relationships between multiple numerical features. Pair plots are a powerful tool for visualizing relationships between multiple numerical features. They provide a grid of scatter plots, where each plot shows the relationship between a pair of features. This allows us to quickly identify patterns, correlations, and potential outliers in the data.</p>
+                                    <p>However, there are some considerations to keep in mind when using pair plots:</p>
+                                    <ul>
+                                        <li>
+                                            Pros:
+                                            <ul>
+                                                <li>Comprehensive Visualization: Pair plots provide a detailed view of relationships between all pairs of numerical features.</li>
+                                                <li>Easy Identification of Patterns: They help in identifying patterns, correlations, and potential outliers.</li>
+                                                <li>Useful for Initial Exploration: Pair plots are great for initial data exploration and understanding the structure of the dataset.</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            Cons:
+                                            <ul>
+                                                <li>Computationally Intensive: Pair plots can be computationally expensive, especially for large datasets with many features.</li>
+                                                <li>Cluttered Visuals: For datasets with many features, pair plots can become cluttered and hard to interpret.</li>
+                                                <li>Limited to Numerical Data: Pair plots are primarily useful for numerical data and may not be suitable for categorical features.</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            Caution:
+                                            <ul>
+                                                <li>Compute Time: Generating pair plots for large datasets can be time-consuming. Consider sampling the data or using a subset of features if compute time is a concern.</li>
+                                                <li>Display Size: Pair plots can take up a lot of space, making them difficult to display on smaller screens. Ensure you have adequate display space or consider saving the plots to a file for later review.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> seaborn <span class="token keyword">as</span> sns
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token comment"># Create a pair plot of numerical features</span>
+sns<span class="token punctuation">.</span>pairplot<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+                                </dd>
+                                <dt>Correlation Coefficient and Matrix</dt>
+                                <dd>
+                                    <p>The correlation coefficient measures the strength and direction of the linear relationship between two variables. Values range from -1 to 1, where 1 indicates a perfect positive relationship, -1 indicates a perfect negative relationship, and 0 indicates no relationship.</p>
+                                    <p>A Correlation Matrix is a table that shows how different things (variables) are related to each other. It helps us understand whether two things increase or decrease together, or if they don’t have much of a relationship at all. A correlation matrix helps us to see connections between things in an organized way. It's a great tool to figure out where you might want to focus more attention and helps to guide further analysis.</p>
+                                    <ul>
+                                        <li>+1 means a perfect positive relationship: if one thing goes up, the other also goes up.</li>
+                                        <li>0 means no relationship: the two things don’t really affect each other.</li>
+                                        <li>-1 means a perfect negative relationship: if one thing goes up, the other goes down.</li>
+                                    </ul>
+                                    <pre class="language-python"><code class="language-python"><span class="token comment"># Calculate the correlation matrix</span>
+correlation_matrix <span class="token operator">=</span> data<span class="token punctuation">.</span>corr<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Display the correlation matrix</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>correlation_matrix<span class="token punctuation">)</span>
+
+<span class="token comment"># Optionally, visualize the correlation matrix using a heatmap</span>
+<span class="token keyword">import</span> seaborn <span class="token keyword">as</span> sns
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>heatmap<span class="token punctuation">(</span>correlation_matrix<span class="token punctuation">,</span> annot<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'coolwarm'</span><span class="token punctuation">,</span> linewidths<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'Correlation Matrix Heatmap'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+                                    <p>A correlation matrix is useful because it lets you see all the relationships in one table. People often use it when they have lots of data to quickly find out which things are connected. For example, a scientist studying health might use a correlation matrix to find out if eating certain foods is related to having a lower risk of disease. By using a correlation matrix, they can easily see which foods are most important and worth looking into further.</p>
+                                </dd>
+                            </dl>
+                            <p>Bivariate Data Analysis helps to uncover relationships between variables, providing insights that can inform decision-making and further analysis.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-primary" href="https://en.wikipedia.org/wiki/Bivariate_analysis" target="_blank" rel="nofollow" title="Learn more about Bivariate Data Analysis on Wikipedia" alt="Wikipedia on Bivariate Data Analysis">Wikipedia on Bivariate Data Analysis</a>
+                            <a class="btn btn-primary" href="https://en.wikipedia.org/wiki/Correlation_matrix" target="_blank" rel="nofollow" title="Learn more about Correlation Matrices on Wikipedia" alt="Wikipedia on Correlation Matrices">Wikipedia on Correlation Matrices</a>
+                        </div>
+                    </div>
+                    <br />
+                    <dl>
+                        <dt>3.3 Multivariate Analysis</dt>
+                        <dd>
+                            <p>Multivariate analysis focuses on analyzing the relationship between multiple variables in the dataset. It helps us understand complex interactions between features and identify patterns or trends. Common multivariate analysis techniques include heatmaps, cluster analysis, and dimensionality reduction.</p>
+                            <ul>
+                                <li>Use heatmaps (sns.heatmap) to visualize the relationship between multiple numerical features.</li>
+                                <li>Use cluster analysis (KMeans, DBSCAN) to group similar observations based on features.</li>
+                                <li>Use dimensionality reduction (PCA, t-SNE) to reduce the number of features while preserving important information.</li>
+                            </ul>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Heatmap to visualize the relationship between multiple numerical features</span>
+sns<span class="token punctuation">.</span>heatmap<span class="token punctuation">(</span>df<span class="token punctuation">.</span>corr<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> annot<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Cluster analysis to group similar observations based on features</span>
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>cluster <span class="token keyword">import</span> KMeans
+kmeans <span class="token operator">=</span> KMeans<span class="token punctuation">(</span>n_clusters<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span>
+df<span class="token punctuation">[</span><span class="token string">'cluster'</span><span class="token punctuation">]</span> <span class="token operator">=</span> kmeans<span class="token punctuation">.</span>fit_predict<span class="token punctuation">(</span>df<span class="token punctuation">)</span>
+
+<span class="token comment"># Dimensionality reduction to reduce the number of features</span>
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>decomposition <span class="token keyword">import</span> PCA
+pca <span class="token operator">=</span> PCA<span class="token punctuation">(</span>n_components<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+df_pca <span class="token operator">=</span> pca<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df<span class="token punctuation">)</span>
+df_pca <span class="token operator">=</span> pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">(</span>df_pca<span class="token punctuation">,</span> columns<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'PC1'</span><span class="token punctuation">,</span> <span class="token string">'PC2'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+df_pca<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                        </dd>
+                        <dt>3.4 Feature Relationship and correlations</dt>
+                        <dd>
+                            <p>Understanding the relationship between features is crucial for building predictive models. Correlation analysis helps us identify features that are highly correlated with the target variable. This step is essential for feature selection and model building.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Correlation matrix to quantify the relationship between features and target variable</span>
+df<span class="token punctuation">.</span>corr<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'target_variable'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>sort_values<span class="token punctuation">(</span>ascending<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span></code></pre>
+                        </dd>
+                        <dt>3.5 Time Series Analysis (if applicable)</dt>
+                        <dd>
+                            <p>If the dataset includes temporal data, it’s essential to analyze trends, seasonality, and autocorrelations.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Plotting time series data</span>
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>df<span class="token punctuation">[</span><span class="token string">'date_column'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> df<span class="token punctuation">[</span><span class="token string">'value_column'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+                            <p>If your dataset contains time series data, time series analysis can provide valuable insights into trends and patterns over time. Time series analysis techniques include time series decomposition, forecasting, and anomaly detection.</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Time series decomposition to analyze trends and seasonality</span>
+<span class="token keyword">from</span> statsmodels<span class="token punctuation">.</span>tsa<span class="token punctuation">.</span>seasonal <span class="token keyword">import</span> seasonal_decompose
+decomposition <span class="token operator">=</span> seasonal_decompose<span class="token punctuation">(</span>df<span class="token punctuation">[</span><span class="token string">'time_series_column'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> model<span class="token operator">=</span><span class="token string">'additive'</span><span class="token punctuation">)</span>
+decomposition<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Time series forecasting to predict future values</span>
+<span class="token keyword">from</span> statsmodels<span class="token punctuation">.</span>tsa<span class="token punctuation">.</span>arima<span class="token punctuation">.</span>model <span class="token keyword">import</span> ARIMA
+model <span class="token operator">=</span> ARIMA<span class="token punctuation">(</span>df<span class="token punctuation">[</span><span class="token string">'time_series_column'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> order<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+model_fit <span class="token operator">=</span> model<span class="token punctuation">.</span>fit<span class="token punctuation">(</span><span class="token punctuation">)</span>
+forecast <span class="token operator">=</span> model_fit<span class="token punctuation">.</span>forecast<span class="token punctuation">(</span>steps<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>forecast<span class="token punctuation">)</span>
+
+</code></pre>
+                        </dd>
+                    </dl>
+                    <h3>Section 4: Plan for Data Cleaning and Preprocessing</h3>
+                    <p>
+                        <strong>Objective:</strong>
+                        Create a Plan for any data cleaning or preprocessing steps.
+                    </p>
+                    <h3>Section 5: Conclusion</h3>
+                    <p>By conducting thorough data sanity checks and EDA, we lay a strong foundation for further analysis. With a clear understanding of the data, the next steps could include feature engineering, advanced visualizations, or machine learning.</p>
+                </div>
+            </section>
+            <footer class="navbar-dark bg-primary">
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-10 text-left text-light">
+                        <br />
+                        <div class="row">
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Case Studies</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/fixing-a-runaway-nodejs-recursive-folder-issue.html" target="_self" title="Learn how to fix a runaway Node.js program that creates near-infinite recursive directories. Includes Windows C++ program to clean up">Fixing a Runaway Node.js Recursive Folder Issue</a></li>
+                                    <li><a class="text-light" href="/articles/wichita-sewer-site-creation.html" target="_self" title="Discover the journey behind the creation of the Wichita Sewer and Drain website, from initial planning to final launch, and the lessons learned along the way.">From Concept To Live: The Unveiling Of The WichitaSewer.com Website</a></li>
+                                    <li><a class="text-light" href="/sample-mvc-crud.html" target="_self" title="The SampleMvcCRUD Project">SampleMvcCRUD Project</a></li>
+                                    <li><a class="text-light" href="/articles/taking-fastendpoints-for-a-test-drive.html" target="_self" title="Exploring the streamlined approach to building ASP.NET APIs">Taking FastEndpoints for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/articles/taking-microsoft-copilot-studio-for-a-test-drive.html" target="_self" title="Mark Hazleton explores Microsoft Copilot Studio, sharing insights on creating a personalized AI chatbot, Copilot Mark. Discover how AI is revolutionizing site interactions and team communication.">Taking Microsoft Copilot Studio for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/articles/building-a-web-application-to-manage-your-blog-articles.html" target="_self" title="Building a Web Application to Manage Your Blog Articles: A Journey into Web Content Management Systems">Tools to Manage My Blog</a></li>
+                                    <li><a class="text-light" href="/web-project-mechanics.html" target="_self" title="Description for Web Project Mechanics">Web Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">ChatGPT</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/azure-wiki-expert-gpt-a-game-changer-for-azure-devops-documentation.html" target="_self" title="Learn how Azure Wiki Expert GPT speeds up Azure DevOps wiki writing by automating content generation in Markdown format. Boost productivity and ensure high-quality, consistent documentation with this powerful tool.">Accelerate Azure DevOps Wiki Writing with Azure Wiki Expert GPT</a></li>
+                                    <li><a class="text-light" href="/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html" target="_self" title="Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.">ChatGPT Meets Jeopardy: C# Solution for Trivia Aficionados</a></li>
+                                    <li><a class="text-light" href="/crafting-chatgpt-prompt.html" target="_self" title="Explore the art of crafting effective ChatGPT prompts with Mark Hazleton. Discover the significance of context, learn prompt engineering techniques, and unlock the potential of ChatGPT for better AI-powered conversations and code generation.">Crafting ChatGPT Prompt</a></li>
+                                    <li><a class="text-light" href="/creating-a-php-website-with-chat-gpt.html" target="_self" title="Overcoming the Challenge of Unfamiliar Territory">Creating a PHP Website with ChatGPT</a></li>
+                                    <li><a class="text-light" href="/articles/generating-a-key-press-counter-with-chatgpt.html" target="_self" title="Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights.">Generating A Key Press Counter with Chat GPT</a></li>
+                                    <li><a class="text-light" href="/articles/the-brain-behind-the-jshow-trivia-demo-on-webspark-j-show-builder-gpt.html" target="_self" title="Discover the development journey of J-Show Builder GPT, an AI-powered tool that generates fun trivia games in a grid format for WebSpark’s JShow Trivia Demo.">The Brain Behind the JShow Trivia Demo on WebSpark J-Show Builder GPT</a></li>
+                                    <li><a class="text-light" href="/trivia-spark-development.html" target="_self" title="Trivia Spark: Igniting Creativity with ChatGPT">Trivia Spark With ChatGPT</a></li>
+                                    <li><a class="text-light" href="/using-chatgpt-for-developers.html" target="_self" title="Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.">Using ChatGPT for C# Development</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Data Science</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/python-the-language-of-data-science.html" target="_self" title="Python, Data Science, Python history, Python libraries, Pandas, NumPy, Python for C# developers">Python: The Language of Data Science</a></li>
+                                    <li><a class="text-light" href="/data-analysis-demonstration.html" target="_self" title="Visualizing Data with the Data Analysis Demonstration">Data Analysis Demonstration</a></li>
+                                    <li><a class="text-light" href="/articles/data-science-for-net-developers.html" target="_self" title="Learn why a seasoned .NET developer chose the AI/ML program offered by UT Austin and Great Learning, exploring how data science is the next frontier for developers.">Data Science for NET Developers</a></li>
+                                    <li><a class="text-light" href="/articles/exploratory-data-analysis-eda-using-python.html" target="_self" title="An in-depth guide to Data Sanity checks and Exploratory Data Analysis (EDA) using Python.">Exploratory Data Analysis (EDA) Using Python</a></li>
+                                    <li><a class="text-light" href="/articles/exploring-nutritional-data-using-pca-and-k-means-clustering.html" target="_self" title="A Data Scientist explores nutritional data patterns using PCA and K-means Clustering on Google Colab, segmenting foods by nutrient content.">Exploring Nutritional Data Using PCA and K-means Clustering</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Development</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html" target="_self" title="Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed.">Automating My GitHub Profile with the Latest Blog Posts Using GitHub Actions</a></li>
+                                    <li><a class="text-light" href="/articles/building-resilient-net-applications-with-polly.html" target="_self" title="Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.">Building Resilient .NET Applications with Polly</a></li>
+                                    <li><a class="text-light" href="/cancellation-token.html" target="_self" title="Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming">CancellationToken</a></li>
+                                    <li><a class="text-light" href="/concurrent-processing.html" target="_self" title="Learning Concurrent Processing Through Code with ChatGPT">Concurrent Processing</a></li>
+                                    <li><a class="text-light" href="/articles/fire-and-forget-for-enhanced-performance.html" target="_self" title="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.">Fire and Forget for Enhanced Performance</a></li>
+                                    <li><a class="text-light" href="/git-flow-rethink.html" target="_self" title="Revaluating the meaning of Continuous in CI/CD with Git Flow">Git Flow Rethink</a></li>
+                                    <li><a class="text-light" href="/git-organized.html" target="_self" title="Git Organized: A Guide to Organized Version Control">Git Organized</a></li>
+                                    <li><a class="text-light" href="/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html" target="_self" title="In the dynamic world of ASP.NET development, optimizing performance is a cornerstone for building successful applications. Caching is one of the most effective strategies for this, and the MemoryCacheManager class is a vital tool in this endeavor. This article dives into its functionalities and benefits, complemented by demonstration code available on GitHub https://github.com/markhazleton/webspark">Harnessing the Power of Caching in ASP.NET with MemoryCacheManager</a></li>
+                                    <li><a class="text-light" href="/articles/migrating-samplemvccrud-application-from-net-8-to-net-9.html" target="_self" title="Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance.">Migrating SampleMvcCRUD Application from .NET 8 to .NET 9</a></li>
+                                    <li><a class="text-light" href="/articles/moving-to-markhazletoncom.html" target="_self" title="My experience migrating my blog from markhazleton.controlorigins.com to markhazleton.com, hosted on Azure Static Web Apps and using Cloudflare for DNS, with detailed steps and best practices">Moving to MarkHazleton.com</a></li>
+                                    <li><a class="text-light" href="/nuget-packages-pros-cons.html" target="_self" title="The Pros and Cons of Using NuGet Packages in Your Projects">NuGet Package Pros and Cons</a></li>
+                                    <li><a class="text-light" href="/redis-local-instance.html" target="_self" title="Redis Local Instance">Redis Local Instance</a></li>
+                                    <li><a class="text-light" href="//articles/syntax-highlighting-using-prismjs-for-xml-pug-yaml-and-csharp.html" target="_self" title="Learn how to implement syntax highlighting for XML, PUG, YAML, and C# using Prism.js. We also explore automating the bundling process using render-scripts.js.">Syntax Highlighting Using Prism.js for XML, PUG, YAML, and C#</a></li>
+                                    <li><a class="text-light" href="/system-cache.html" target="_self" title="Enhancing Web API Performance with a System Cached List">System Cache</a></li>
+                                    <li><a class="text-light" href="/task-list-processor.html" target="_self" title="Discover how the TaskListProcessor class streamlines concurrent operations in .NET, enabling efficient asynchronous programming and performance monitoring.">Task List Processor</a></li>
+                                    <li><a class="text-light" href="/decorator-pattern-http-client.html" target="_self" title="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.">The Decorator Pattern with Http Client</a></li>
+                                    <li><a class="text-light" href="/articles/the-singleton-advantage-managing-configurations-in-net.html" target="_self" title="Unlock the power of the singleton pattern for managing configurations in .NET Core. Learn how to implement lazy loading, thread safety, and secure Azure Key Vault access.">The Singleton Advantage: Managing Configurations in .NET</a></li>
+                                    <li><a class="text-light" href="/articles/transforming-samplemvccrud-with-net-aspire-a-cloud-native-evolution.html" target="_self" title="Discover how integrating .NET Aspire into the SampleMvcCRUD project revolutionizes it with cloud-native capabilities, enhanced observability, and seamless service orchestration. Dive into the journey of adopting microservices architecture and leveraging advanced telemetry for insightful application monitoring.">Transforming SampleMvcCRUD with .NET Aspire: A Cloud-Native Evolution</a></li>
+                                    <li><a class="text-light" href="/articles/troubleshooting-and-rebuilding-my-js-dev-env-project.html" target="_self" title="A detailed guide on how I faced issues, restarted from scratch, and successfully rebuilt a JavaScript development environment using Node.js, Nodemon, ESLint, Express, and Bootstrap.">Troubleshooting and Rebuilding My JS-Dev-Env Project</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Personal Philosophy</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/lifelong-learning.html" target="_self" title="Reinventing Yourself: The Transformative Power of Lifelong Learning">Lifelong Learning</a></li>
+                                    <li><a class="text-light" href="/sidetrackedbysizzle.html" target="_self" title="Explore the concept of getting Sidetracked By Sizzle with Mark Hazleton. Understand how to stay focused and avoid the allure of superficial attractions.">Sidetracked by Sizzle</a></li>
+                                    <li><a class="text-light" href="/articles/the-art-of-making-yourself-replaceable-a-developers-guide-to-career-growth.html" target="_self" title="Explore how developers can enhance their career growth by embracing the concept of making themselves replaceable, focusing on adapting to the evolving tech landscape.">The Art of Making Yourself Replaceable: A Guide to Career Growth</a></li>
+                                    <li><a class="text-light" href="/articles/the-balanced-equation-crafting-the-perfect-project-team-mix.html" target="_self" title="Discover the art of constructing the perfect project team mix, leveraging the unique strengths of both internal employees and external consultants for project success.">The Balanced Equation: Crafting the Perfect Project Team Mix</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/" target="_self" title="Change management is an important aspect of project management, as it helps to ensure that changes to the project are properly planned and implemented">Change Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/conflict-management/" target="_self" title="Learn effective conflict management strategies to enhance your project management skills. Discover how to navigate conflicts among team members, clients, and handle poor performance. Ensure project success with these expert tips.">Conflict Management for Project Managers</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/issue-management.html" target="_self" title="issue management. ">Issue Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/program-management-office.html" target="_self" title="The Program Management Office Role in Project Delivery">Program Management Office</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-life-cycle.html" target="_self" title="From Idea to Delivery the Project Life Cycle">Project Life Cycle</a></li>
+                                    <li><a class="text-light" href="/projectmechanics" target="_self" title="The Art and Science of Project Management">Project Mechanics</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-meetings.html" target="_self" title="Project meetings can be the black hole of project management. ">Project Meetings</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics Leadership</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/accountability-and-authority.html" target="_self" title="Finding Balance Between Accountability and Authority">Accountability and Authority</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/evolution-over-revolution.html" target="_self" title="Description for Evolution Over Revolution">Evolution Over Revolution</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/from-features-to-outcomes.html" target="_self" title="Focus on outcomes, not just features">From Features to Outcomes</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership" target="_self" title="Project Mechanics Leadership Overview">Leadership</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">PromptSpark</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/english-is-the-new-programming-language-of-choice.html" target="_self" title="Explore the pivotal role of English in the evolution of the Microsoft Stack, specifically within .NET technologies such as C#, F#, VB.NET, and SQL. Understand why English is becoming as crucial as traditional programming languages in software development.">English is the New Programming Language of Choice</a></li>
+                                    <li><a class="text-light" href="/articles/integrating-chat-completions-into-prompt-spark.html" target="_self" title="Learn how chat completions enhances LLM interactions in the Prompt Spark project by enabling seamless chat functionalities for Core Spark Variants.">Integrating Chat Completion into Prompt Spark</a></li>
+                                    <li><a class="text-light" href="/articles/prompt-spark-revolutionizing-llm-system-prompt-management.html" target="_self" title="Discover how Prompt Spark offers comprehensive tools and resources for managing and optimizing LLM system prompts. Learn about features like the variants library, performance tracking, and prompt engineering strategies.">Prompt Spark: Revolutionizing LLM System Prompt Management</a></li>
+                                    <li><a class="text-light" href="/articles/using-large-language-models-to-generate-structured-data.html" target="_self" title="Explore how large language models like GPT-4 are revolutionizing data structuring, focusing on Mechanics of Motherhood's use of AI to structure JSON recipes.">Using Large Language Models to Generate Structured Data</a></li>
+                                    <li><a class="text-light" href="/articles/webspark-the-next-evolution-of-web-project-mechanics.html" target="_self" title="Explore the journey from Web Project Mechanics to WebSpark, a suite of web applications designed by Mark Hazleton to enhance digital experiences.">WebSpark: The Next Evolution of Web Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Tools</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" target="_self" title="In the ever-evolving landscape of web development, the surge in popularity of static websites has been nothing short of remarkable. These sites, known for their speed, security, and simplicity, are increasingly becoming the go-to for developers and businesses alike. My journey with static websites has been transformative, leading me to embrace cloud-based solutions for hosting. Among these, Azure Static Web Apps stands out as a beacon of efficiency and innovation.">Embracing Azure Static Web Apps for Static Site Hosting</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-10 justify-content-end">
+                        <br />
+                        <div class="social-icons d-flex">
+                            <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
+                            <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
+                            <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
+                            <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12"><br /></div>
+                </div>
+            </footer>
+            <!-- Core theme JS-->
+            <script src="/js/scripts.js"></script>
+        </div>
+    </body>
+</html>

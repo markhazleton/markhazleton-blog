@@ -1,8 +1,8 @@
 extends ../layouts/articles
 
 block pagehead
-  title Exploring Data Using PCA and K-means Clustering
-  meta(name='description', content='A Data Scientist explores nutritional data patterns using PCA and K-means Clustering on Google Colab, segmenting foods by nutrient content.')
+  title Exploring Data Using K-means Clustering
+  meta(name='description', content='A Data Scientist explores nutritional data patterns using K-means Clustering on Google Colab, segmenting foods by nutrient content.')
   meta(name="keywords" content="PCA, K-means Clustering, Nutritional Data, Google Colab, Data Science, Jupyter Notebook")
   meta(name='author', content='Mark Hazleton')
   link(rel='canonical', href='https://markhazleton.com/articles/exploring-nutritional-data-using-pca-and-k-means-clustering.html')
@@ -11,9 +11,81 @@ block layout-content
 
   section#post.painteddesert-section.painteddesert-section-background
     .painteddesert-section-content
-      h1 Exploring Data Using PCA and K-means Clustering
-      h2.subheading.mb-3 Understanding Nutrient Patterns and Segmenting Foods
+      h1 Exploring Data K-means Clustering
+      h2.subheading.mb-3 Understanding K-means Clustering
+      p.
+        Clustering, from a data science perspective, refers to the process of grouping a set of objects or data points in such a way that items in the same group (called a cluster)
+        are more similar to each other than to those in other groups. It’s a key technique in unsupervised learning,
+        where the algorithm identifies patterns and relationships in data without predefined labels or categories.
+        The goal of clustering is to uncover hidden structures in data by organizing it into meaningful groups based on their similarities.
+        This approach is widely used in various fields, including customer segmentation, market analysis, image recognition, and medical diagnostics, helping data scientists make sense of complex datasets and draw valuable insights.
+      p.
+        Let's look at K-means clustering, a popular algorithm for partitioning data into clusters based on their similarities.
+      dl
+        dt K
+        dd The "K" in K-means refers to the number of clusters you want to divide your data into. For example, if you choose K = 3, the algorithm will create three groups based on the similarities in the data.
+        dt Means
+        dd The "means" part refers to the centroids or averages of the clusters. In K-means clustering, each cluster has a central point, which is the average (or mean) of all the data points in that cluster. The algorithm calculates these means and adjusts them as it organizes the data into clusters.
+        dt Clustering
+        dd Clustering is the process of grouping similar data points together. In K-means clustering, data points are grouped into K clusters based on their similarity to the centroids. The goal is to minimize the distance between data points and their assigned cluster’s centroid.
+      p.
+        By iteratively adjusting the clusters and centroids, K-means efficiently finds patterns and groups within data, making it one of the most widely used techniques for discovering hidden structures in datasets.
+      p.
+        K-means Clustering is a method used to group data points into clusters based on their similarities.
+        Each cluster has a center point called a centroid, and data points are grouped by how close they are to this centroid.
+      p.
+        K-means clustering is a popular unsupervised machine learning algorithm that partitions data into
+        𝑘 clusters, where each point belongs to the cluster with the nearest mean (centroid). The algorithm
+        iterates to minimize the variance within clusters, producing an optimal clustering result. This article
+        will walk through its key concepts, applications, and provide answers to common questions.
 
+      .card
+        .card-header
+          h5.card-title Student Grade Example
+        .card-body
+          p.card-text.
+            Let’s imagine you’re a teacher with a class of students, and you want to group them based on their grades in subjects like Math, Science, English, Drama, Band, Choir, History, and P.E.
+            You don’t know in advance which students are good at which subjects, so you use K-means clustering to let the data guide you.
+            Using K-means clustering, we can find groups of students who are similar in their performance in these subjects, but unlike other methods, this is an unsupervised approach.
+            Since K-means is an unsupervised clustering algorithm, we don't start with any assumptions about which students belong to which group.
+            Instead, we let the data, in this case the students' grades, lead us to the grouping.
+            The algorithm analyzes their performance across all subjects and forms clusters based on similarities in their grades.
+          dl
+            dt Start with a Guess
+            dd At the beginning, you randomly place three imaginary "centers" (these are like starting points) anywhere in the grade data. You don't know yet which students belong to which group, so these centers are just rough guesses.
+            dt Group By grades
+            dd Next, you look at each student’s grades and see which center they are closest to. For example, a student who has high grades in Math and Science might be grouped with the "math and science" center, while a student with high Drama and Band grades might be closer to the "arts" center.
+            dt Move the Center
+            dd After assigning students to the nearest group, you update each center by moving it to the average of the grades in its group. For example, if the "math and science" group now has several students, the center moves to the average of their Math and Science grades.
+            dt Repeat
+            dd.
+              You keep repeating this process, assigning students to the nearest center and updating the centers,
+              until the centers no longer move. At this point, the algorithm has found stable groups of students based on their grades.
+              You keep repeating this process—grouping students by the nearest center,
+              moving the centers to the average of each group—until the centers stop moving.
+              This means the groups are now stable, and you’ve found clusters of students based on their grades.
+          p.
+            In this way, K-means doesn’t start with any assumptions about which students are good in which subjects.
+            The algorithm uses the grade data to create groups naturally, allowing you to find patterns in how students perform across subjects.
+            Whether they are strong in math or enjoy the arts, the data leads to the final grouping!  This is the power of unsupervised learning.
+            Here is a simple example of how K-means clustering might group students based on their grades in different subjects:
+          ul
+            li
+              strong Group 1:
+              |  Students with high grades in Math and Science might be grouped together. This could indicate a group of students who are strong in math and science subjects.
+            li
+              strong Group 2:
+              |  Students with high grades in Drama, Band, and Choir might naturally group together. These students may enjoy the arts or theatre-related activities.
+            li
+              strong Group 3:
+              |  Students with high grades in P.E. and History could form a group, reflecting students who excel in physical activities or sports.
+          p.card-text.
+            In this way, K-means clustering allows the data itself to define the groups, helping teachers see patterns in student strengths without making any assumptions beforehand.
+            K-means Clustering helps to identify patterns and group similar data points, making it easier to analyze and understand large datasets.
+        .card-footer
+          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/K-means_clustering' target="_blank" rel="nofollow" title="Learn more about K-means Clustering on Wikipedia" alt="Wikipedia on K-means Clustering") Wikipedia on K-means Clustering
+
+      h2.subheading.mb-3 K-Means Clustering Nutrient Data
       p
         | I recently analyzed a nutritional dataset from Kaggle using Google Colab,
         | a platform that lets you write and execute Python code in a browser-based Jupyter notebook.
@@ -28,205 +100,129 @@ block layout-content
         You can find datasets on topics ranging from healthcare to finance, and even niche areas like nutritional data.
         Kaggle also hosts competitions where you can test your skills against others and learn from the community.
       p.
-        I got my hands on a dataset containing nutritional values
-        for common foods and products, including protein, fat, vitamin C, and fiber content.
+        I got my hands on a dataset containing nutritional values for common foods and products, including protein, fat, vitamin C, and fiber content.
+      p.
+        I have already performed data exploration and manipulation steps, so let's dive into the key concepts of K-means clustering.
+        We have a clean dataset with the nutrient values of various foods, and we are ready to apply K-means clustering to segment these foods based on their nutrient content.
+      dl
+        dt Random Initialization
+        dd
+          | K-means starts by randomly selecting 𝑘 initial centroids. Since this process is random, different
+          | runs of K-means can yield different results. This issue can be reduced by running the algorithm multiple
+          | times and selecting the result with the lowest sum of squared errors (SSE).
+          pre.language-csharp
+            code.language-csharp.
+              // Example pseudocode for random initialization
+              Initialize k random centroids;
+              while not converged:
+                Assign points to the nearest centroid;
+                Update centroid locations;
+              End while;
+
+        dt Cluster Assignment and Centroid Update
+        dd
+          | After initialization, the algorithm assigns data points to the nearest centroid based on Euclidean distance.
+          | The centroids are then updated by calculating the mean of the points in each cluster. This process is repeated
+          | until the centroids stabilize.
+          pre.language-csharp
+            code.language-csharp.
+              // Pseudocode for cluster assignment and update
+              for each point in dataset:
+                Assign point to nearest centroid;
+              Update centroids;
+              Repeat until centroids no longer change;
+
+        dt Sum of Squared Errors (SSE)
+        dd
+          | K-means aims to minimize the sum of squared errors (SSE), which is the total squared distance between points
+          | and their centroids. The lower the SSE, the better the clustering result.
+          pre.language-csharp
+            code.language-csharp.
+              // Formula for SSE
+              SSE = sum((x - centroid)^2 for all x in cluster);
+
+        dt Choosing the Optimal Number of Clusters
+        dd
+          | Two common methods for selecting the optimal number of clusters are:
+          | - **Elbow Method:** Plot SSE for different values of 𝑘 and look for the "elbow," where adding more clusters
+          |   no longer significantly reduces SSE.
+          | - **Silhouette Score:** Measures how similar a point is to its own cluster compared to other clusters. The
+          |   higher the score, the better the clustering.
+
+        dt Scaling Data for K-Means
+        dd
+          | Scaling is critical in K-means to ensure that all features contribute equally to the distance calculations.
+          | Data should be scaled, especially when the features have different units or scales, to prevent larger-scale
+          | features from dominating the clustering.
+      .row
+        .col-12
+          .accordion(id="faqAccordion")
+            .accordion-item
+              h2.accordion-header(id="headingOne")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne")
+                  | Q1: Why might different runs of K-means produce slightly different results?
+              #collapseOne.accordion-collapse.collapse(aria-labelledby="headingOne", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | K-means relies on random initialization of centroids, which can lead to different clustering results.
+                  | Running the algorithm multiple times and selecting the result with the lowest SSE can address this issue.
+
+            .accordion-item
+              h2.accordion-header(id="headingTwo")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
+                  | Q2: Does K-means automatically scale the data during the iterations?
+              #collapseTwo.accordion-collapse.collapse(aria-labelledby="headingTwo", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | No, K-means does not scale data automatically. It is necessary to scale the data manually before applying the algorithm.
+
+            .accordion-item
+              h2.accordion-header(id="headingThree")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree", aria-expanded="false", aria-controls="collapseThree")
+                  | Q3: How does K-means compute the centroids for clusters?
+              #collapseThree.accordion-collapse.collapse(aria-labelledby="headingThree", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | The centroids are calculated by taking the mean of all points assigned to each cluster after every iteration.
+
+            .accordion-item
+              h2.accordion-header(id="headingFour")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFour", aria-expanded="false", aria-controls="collapseFour")
+                  | Q4: Why is it important to specify the number of clusters in K-means?
+              #collapseFour.accordion-collapse.collapse(aria-labelledby="headingFour", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | K-means requires specifying the number of clusters (𝑘) beforehand, as this determines how many centroids are initialized and how the data is partitioned.
+
+            .accordion-item
+              h2.accordion-header(id="headingFive")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFive", aria-expanded="false", aria-controls="collapseFive")
+                  | Q5: What happens if the number of clusters is equal to the number of data points?
+              #collapseFive.accordion-collapse.collapse(aria-labelledby="headingFive", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | If 𝑘 equals the number of data points, each point will be its own cluster, and the SSE will be zero.
+
+            .accordion-item
+              h2.accordion-header(id="headingSix")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSix", aria-expanded="false", aria-controls="collapseSix")
+                  | Q6: Is K-means sensitive to outliers?
+              #collapseSix.accordion-collapse.collapse(aria-labelledby="headingSix", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | Yes, K-means can be sensitive to outliers, as they can heavily influence the centroids. Handling outliers before applying K-means is important, or consider using other algorithms like K-medoids.
+
+            .accordion-item
+              h2.accordion-header(id="headingSeven")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSeven", aria-expanded="false", aria-controls="collapseSeven")
+                  | Q7: What kind of distance metric does K-means use?
+              #collapseSeven.accordion-collapse.collapse(aria-labelledby="headingSeven", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | K-means typically uses Euclidean distance for measuring the distance between points and centroids.
+
+            .accordion-item
+              h2.accordion-header(id="headingEight")
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseEight", aria-expanded="false", aria-controls="collapseEight")
+                  | Q8: Can K-means be used for non-spherical clusters?
+              #collapseEight.accordion-collapse.collapse(aria-labelledby="headingEight", data-bs-parent="#faqAccordion")
+                .accordion-body
+                  | K-means works best for spherical clusters with relatively uniform variance. For non-spherical clusters, other algorithms like DBSCAN may be more appropriate.
 
       dl
-        dt Data Exploration
-        dd
-          p.
-            To load a CSV file into a Google Colab Jupyter Notebook, you can use Google Drive to
-            access files stored in your account. But first, you need to mount your Google Drive
-            by running a code snippet that authorizes the notebook to access to your files.
-            This process allows seamless integration of data stored in Google Drive,
-            making it convenient to analyze datasets stored in your cloud storage within the Colab environment.
-          pre.language-python
-            code.language-python.
-              # Mount Google Drive to access files
-              from google.colab import drive
-              drive.mount('/content/drive')
-
-              # Load the data using Pandas
-              import pandas as pd
-              # Source --> https://www.kaggle.com/datasets/trolukovich/nutritional-values-for-common-foods-and-products?resource=download
-              data_path = '/content/drive/MyDrive/CoLab/nutrition.csv'
-              data = pd.read_csv(data_path)
-
-
-          dl
-            dt Inspect the Data
-            dd
-              p.
-                Once the data is loaded, we need to inspect it to get a high-level overview of its structure.
-                This involves checking the size of the data, the column names, and the general characteristics of each column.
-              dl
-                dt Shape of the dataset
-                dd
-                  p The shape tells us how many rows (observations) and columns (features):
-                  pre.language-python
-                    code.language-python.
-                      # Display the shape of the dataset
-                      print("Shape of the dataset:", data.shape)
-                dt Display the first few rows
-                dd
-                  p.
-                    The head() method displays the first few rows of the dataset, giving us a glimpse of the data.
-                    This helps us understand the structure and format of the data.
-                  pre.language-python
-                    code.language-python.
-                      # Display the first 5 and last 5 rows of the dataset
-                      data.head(5)
-                      data.tail(5)
-                dt Summary of Data Types
-                dd
-                  p.
-                    Check what types of data each column holds. This helps identify if the columns are correctly typed (e.g., numerical, categorical, datetime)
-                    and if any columns need to be converted to a different data type.
-                  pre.language-python
-                    code.language-python.
-                      # Display the data types of each column
-                      data.info()
-            dt Check for Missing Values
-            dd
-              p.
-                Missing values can affect the quality of our analysis and results. It's essential to check for missing values and decide how to handle them.
-                Common strategies include removing rows with missing values, imputing missing values, or using advanced imputation techniques.
-              pre.language-python
-                code.language-python.
-                  # Check for missing values in the dataset
-                  missing_values = data.isnull().sum()
-                  print("Missing values in each column:\n", missing_values)
-              p Handling missing values could involve:
-              ul
-                li Dropping rows or columns with too many missing values
-                li Imputation, where you fill missing values using the mean, median, mode, or other statistical methods
-                li Forward/Backward filling for time-series data
-
-            dt Descriptive Statistics
-            dd
-              p.
-                Get summary statistics to understand the distribution of numerical features.
-                This helps to identify the central tendency (mean, median) and spread (standard deviation, percentiles) and detect any anomalies or outliers.
-                The 'T' attribute transposes the summary for better readability.  It is especially useful when you have many columns.
-              ul
-                li Count: Number of non-missing values
-                li Mean, Median: Measures of central tendency
-                li Min/Max Range: Minimum and maximum values
-                li Standard Deviation: Measure of data dispersion
-                li Percentiles: Values below which a given percentage of observations fall also called quartiles
-              pre.language-python
-                code.language-python.
-                  # Display descriptive statistics for all numeric columns
-                  data.describe().T
-            dt Identify Duplicate Rows
-
-
-          p
-            | After loading the data into Google Colab, I performed some basic checks to ensure it was clean (no missing values).
-            | For more details on how to use Pandas for data manipulation and analysis, you can refer to the official
-            a(href='https://pandas.pydata.org/pandas-docs/stable/' target="_blank" rel="nofollow" title="Pandas Documentation" alt="Pandas Documentation") Pandas Documentation.
-
-          pre.language-python
-            code.language-python.
-              # Display the first few rows and basic info to understand the structure
-              data.head(), data.info(), data.describe().T
-
-
-
-        dt Data Manipulation
-        dd
-          p.
-            I found that most of the cells had the unit of measure in the data, so I had to convert the data to a numerical format by
-            strippng off the units.  For instance, "10 g" would be converted to "10" for numerical analysis.  I renamed the columns to
-            make sure I did not lose the unit of measure information.  Once this was done I selected the numeric columns and the 'name' column
-            to keep track of the food item.  This reduced the number of columns from 77 to 9, giving me a more manageable dataset to work with.
-
-          pre.language-python
-            code.language-python.
-              # Convert gram columns to numeric and append '_garms'
-              data['serving_size_grams'] = data['serving_size'].str.replace('g', '', regex=False).astype(float)
-              data['total_fat_grams'] = data['total_fat'].str.replace('g', '', regex=False).astype(float)
-              data['protein_grams'] = data['protein'].str.replace('g', '', regex=False).astype(float)
-              data['carbohydrate_grams'] = data['carbohydrate'].str.replace('g', '', regex=False).astype(float)
-              data['fiber_grams'] = data['fiber'].str.replace('g', '', regex=False).astype(float)
-              data['sugars_grams'] = data['sugars'].str.replace('g', '', regex=False).astype(float)
-              data['cholesterol_mg'] = data['cholesterol'].str.replace('mg', '', regex=False).astype(float)
-              data['caffeine_mg'] = data['caffeine'].str.replace('mg', '', regex=False).astype(float)
-              data['sodium_mg'] = data['sodium'].str.replace('mg', '', regex=False).astype(float)
-              # Remove the old columns except fo the 'name' column
-              data = data.drop('Unnamed: 0', axis=1)
-              data = data.drop('lucopene', axis=1)
-              data = data.select_dtypes(include=[np.number]).join(data['name'])
-              data.info()
-        p.
-          I decided to use histograms and box plots to visualize the distribution of values in each of the nutrient columns.  To do that
-          I first created a list of my numeric columns and then used a for loop to plot the histograms and box plots.
-
-        pre.language-python
-          code.language-python.
-            import matplotlib.pyplot as plt
-
-            # Create a list of numeric columns for visualization
-            numeric_columns = data.select_dtypes(include=[np.number]).columns
-
-            # Visualize the distribution of nutrients using histograms and box plots
-            # Define figure size and specify the layout for subplots
-            plt.figure(figsize=(16, 12))
-
-            # Plot histogram and boxplot side by side for each feature
-            for i, feature in enumerate(numeric_columns):
-              # Histogram on the left
-              plt.subplot(len(numeric_columns), 2, 2 * i + 1)
-              sns.histplot(data=data, x=feature)
-              plt.title(f'Histogram of {feature}')
-
-              # Boxplot on the right
-              plt.subplot(len(numeric_columns), 2, 2 * i + 2)
-              sns.boxplot(data=data, x=feature)
-              plt.title(f'Boxplot of {feature}')
-
-            plt.tight_layout()  # Adjust spacing between subplots
-            plt.show()
-
-        dt Exploring Nutrient Relationships
-        dd
-          p.
-            To investigate relationships between nutrients, I used a correlation matrix,
-            which measures how changes in one variable relate to another.
-            For example, a positive correlation means that as one nutrient increases, another tends to increase as well.
-            A heatmap visualization of the correlation matrix helps to identify strong relationships between nutrients.
-
-          pre.language-python
-            code.language-python.
-              # Calculate the correlation matrix
-              correlation_matrix = data.corr()
-
-              # Display the correlation matrix
-              print(correlation_matrix)
-
-              # Optionally, visualize the correlation matrix using a heatmap
-              import seaborn as sns
-              import matplotlib.pyplot as plt
-
-              plt.figure(figsize=(10, 8))
-              sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
-              plt.title('Correlation Matrix')
-              plt.show()
-          p.
-            I created a pairplot to visualize the relationships between nutrients in a scatterplot matrix.
-            A pairplot shows the relationships between all pairs of variables in the dataset,
-            making it easy to identify patterns and correlations.  This can take a long time on large datasets
-            or datasets with many columns, so be careful when using this method. For this dataset
-            I created a 9 by 9 matrix of plots.
-
-          pre.language-python
-            code.language-python.
-              # Visualize relationships between nutrients using a pairplot
-              sns.pairplot(data=data[numeric_columns])
-              plt.suptitle('Pairplot of Nutrients', y=1.02)
-              plt.show()
-
-
         dt Dimensionality Reduction with PCA
         dd
           p.
@@ -234,8 +230,6 @@ block layout-content
             PCA transforms the data into new dimensions, called principal components, which capture the most significant patterns.
             This allowed me to visualize nutrient relationships in just two dimensions,
             preserving about 68% of the data’s variance, or information.
-
-
         dt Segmentation Using K-means Clustering
         dd
           p.
@@ -247,7 +241,7 @@ block layout-content
             which measures how well-separated the clusters are;
             a score closer to 1 suggests distinct and well-defined clusters.
 
-      h2 Key Concepts
+      h3 Key Concepts
       p.
         This project provided valuable experience with PCA and K-means clustering.
         While Google Colab allowed me to work interactively,
@@ -257,364 +251,21 @@ block layout-content
 
       .card
         .card-header
-          h3.card-title Data Sanity Checks
-        .card-body
-          p.
-            Data Sanity Checks are essential steps to ensure the quality and integrity of a dataset before performing any analysis. These checks help identify and address issues such as missing values, outliers, and inconsistencies.
-          p.
-            Here’s a more detailed look at Data Sanity Checks:
-          dl
-            dt Missing Values
-            dd
-              p.
-                Missing values can lead to biased results and should be handled appropriately. Common methods include removing rows with missing values, imputing missing values with mean/median, or using advanced techniques like KNN imputation.
-              pre.language-python
-                code.language-python.
-                  # Check for missing values in the dataset
-                  missing_values = data.isnull().sum()
-                  print("Missing values in each column:\n", missing_values)
-
-                  # Optionally, visualize missing values using a heatmap
-                  import seaborn as sns
-                  import matplotlib.pyplot as plt
-
-                  plt.figure(figsize=(10, 6))
-                  sns.heatmap(data.isnull(), cbar=False, cmap='viridis')
-                  plt.title('Heatmap of Missing Values')
-                  plt.show()
-
-            dt Outliers
-            dd
-              p.
-                Outliers are data points that significantly differ from other observations. They can distort statistical analyses and should be investigated. Methods to handle outliers include removing them, transforming the data, or using robust statistical techniques.
-              p.
-                The IQR (Interquartile Range) method is commonly used to identify outliers.
-                It defines outliers as points outside 1.5 times the IQR from the first and third quartiles.
-                A box plot can help visualize outliers in the data.
-
-              pre.language-python
-                code.language-python.
-                  # Identify outliers using the IQR method
-                  Q1 = data.quantile(0.25)
-                  Q3 = data.quantile(0.75)
-                  IQR = Q3 - Q1
-
-                  # Define outliers as points outside 1.5 * IQR from Q1 and Q3
-                  outliers = ((data < (Q1 - 1.5 * IQR)) | (data > (Q3 + 1.5 * IQR))).sum()
-                  print("Outliers in each column:\n", outliers)
-
-                  # Optionally, visualize outliers using box plots
-                  import seaborn as sns
-                  import matplotlib.pyplot as plt
-
-                  plt.figure(figsize=(12, 8))
-                  sns.boxplot(data=data)
-                  plt.title('Box Plot to Visualize Outliers')
-                  plt.show()
-
-            dt Data Types
-            dd
-              p.
-                Ensuring that each column has the correct data type (e.g., numeric, categorical) is crucial for accurate analysis.
-                Incorrect data types can lead to errors in calculations and visualizations.
-              p.
-                The describe() method in Pandas provides a summary of the dataset, including data types and descriptive statistics.
-                Using the .T attribute transposes the summary for better readability.
-              pre.language-python
-                code.language-python.
-                  # Check the data types of each column
-                  data_types = data.dtypes
-                  print("Data types of each column:\n", data_types)
-
-                  # Use describe().T to get a summary of the dataset
-                  summary = data.describe().T
-                  print("Summary of the dataset:\n", summary)
-
-            dt Consistency
-            dd
-              p.
-                Consistency checks involve verifying that the data follows expected patterns and rules. For example, dates should be in a consistent format, and categorical variables should have consistent labels.
-              p.
-                You can also check you to convert object data types to numerical data types for consistency.  For instance, sometimes data has the
-                type of units in the filed, for instance "10 g" or "10 grams" or "10 grams" and you would want to convert all of these to "10" for
-                numerical analysis.  Here is an example of how you might do this in Python:
-              pre.language-python
-                code.language-python.
-                  # Define the regex pattern for valid milligram format (including "0", "0mg", "###mg", and "### mg")
-                  mg_pattern = r'^(0|0mg|\d+(\.\d+)?)(\s*mg)?$'
-                  # Patterns to specifically match "##mg" or "## mg" formats
-                  exact_mg_patterns = [r'^\d+(\.\d+)?mg$', r'^\d+(\.\d+)?\s+mg$']
-
-                  # Lists to store columns that can and cannot be converted to milligrams
-                  mg_convertible_columns = []
-                  mg_non_convertible_columns = []
-
-                  # Loop through each column for milligram check
-                  for column in data.columns:
-                    # Check if the column contains any entries with " mg", "mg", or is "0"
-                    if data[column].astype(str).str.contains('mg|^0$', na=False).any():
-                      # Handle NaN values by replacing them with empty strings for matching purposes
-                      valid_format = data[column].fillna('').astype(str).str.match(mg_pattern)
-
-                      # Check if there's at least one row matching "##mg" or "## mg" format
-                      has_exact_mg = data[column].astype(str).str.match(exact_mg_patterns[0]).any() or \
-                        data[column].astype(str).str.match(exact_mg_patterns[1]).any()
-
-                      # Determine if the column can be fully converted to milligrams
-                      if valid_format.all() and has_exact_mg:
-                        mg_convertible_columns.append(column)
-                      else:
-                        mg_non_convertible_columns.append(column)
-                  # Output summary results
-                  print("\nColumns that can be converted to milligrams:")
-                  print(mg_convertible_columns)
-          p.
-            Data Sanity Checks are a critical first step in any data analysis project, helping to ensure that the data is clean, reliable, and ready for further analysis.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Data_cleaning' target="_blank" rel="nofollow" title="Learn more about Data Sanity Checks on Wikipedia" alt="Wikipedia on Data Cleaning") Wikipedia on Data Cleaning
-      br
-      hr
-      br
-      .card
-        .card-header
-          h3.card-title Univariate Data Analysis
-        .card-body
-          p.
-            Univariate Analysis is a type of data analysis in data science that focuses on examining a single variable at a time.
-            The term "univariate" combines "uni-" meaning "one" and "variate," which refers to a variable.
-            Essentially, it’s about understanding the distribution, central tendency, and spread of one variable in isolation,
-            without considering relationships with other variables.
-          p Key Aspects of Univariate Data Analysis:
-          dl
-            dt Distribution
-            dd
-              p.
-                The distribution of a variable shows how its values are spread out. Common ways to visualize distributions include histograms, box plots, and density plots.
-            dt Central Tendency
-            dd
-              p.
-                Central tendency measures where the center of the data lies. The most common measures are the mean (average), median (middle value), and mode (most frequent value).
-            dt Spread or Variability
-            dd
-              p.
-                Exploring the variability or dispersion within the variable, commonly using measures like range, variance,
-                and standard deviation. This helps understand how spread out the data points are from the central value.
-          p Techniques for Univariate Analysis:
-          dl
-            dt Histogram
-            dd
-              p.
-                A histogram is a graphical representation of the distribution of a variable. It shows the frequency of values within different intervals or bins.
-                Here is an example of how to create histograms for all numeric columns in Python:
-              pre.language-python
-                code.language-python.
-                  import matplotlib.pyplot as plt
-                  # Create histograms for all numeric columns
-                  data.hist(figsize=(16, 12), bins=20, edgecolor='black')
-                  plt.suptitle('Histograms of All Numeric Columns', fontsize=16)
-                  plt.show()
-            dt Box Plot
-            dd
-              p.
-                A box plot displays the distribution of a variable using quartiles.
-                It shows the median, interquartile range, and potential outliers.
-              pre.language-python
-                code.language-python.
-                  import seaborn as sns
-                  import matplotlib.pyplot as plt
-                  # Create box plots for all numeric columns
-                  plt.figure(figsize=(16, 12))
-                  sns.boxplot(data=data)
-                  plt.title('Box Plots of All Numeric Columns')
-                  plt.show()
-              p Key compents of a box plot:
-              dl
-                dt Minimum (Lower Whisker)
-                dd
-                  p.
-                    The minimum is the smallest value in the dataset, excluding outliers. It represents the lower end of the data.
-                    In the boxplot, it’s typically connected to Q1 by a line called the “whisker.”
-                    The lower whisker extends to the smallest data point within 1.5 times the interquartile range (IQR) below Q1.
-                dt First Quartile (Q1)
-                dd
-                  p.
-                    The first quartile (Q1) is the value below which 25% of the data falls.
-                    It marks the lower boundary of the box in the boxplot.
-                dt Median (Second Quartile Q2)
-                dd
-                  p.
-                    The median is the middle value of the dataset when it’s sorted in ascending order.
-                    It’s represented by the line inside the box.
-                dt Third Quartile (Q3)
-                dd
-                  p.
-                    The third quartile (Q3) is the value below which 75% of the data falls.
-                    It marks the upper boundary of the box in the boxplot.
-                dt Maximum (Upper Whisker)
-                dd
-                  p.
-                    The maximum is the largest value in the dataset, excluding outliers. It represents the upper end of the data.
-                    In the boxplot, it’s typically connected to Q3 by a line called the “whisker.”
-                    The upper whisker extends to the largest data point within 1.5 times the interquartile range (IQR) above Q3.
-                dt Interquartile Range (IQR)
-                dd
-                  p.
-                    The interquartile range (IQR) is the range between the first and third quartiles (Q1 and Q3). It represents the middle 50% of the data.
-                    The box in the boxplot spans the IQR, showing the spread of the central data.
-
-            dt Descriptive Statistics
-            dd
-              p.
-                Descriptive statistics summarize the main characteristics of a variable,
-                including measures of central tendency and variability.  I like to add the transpose attribute '.T' to the
-                describe method to make the output more readable.
-              pre.language-python
-                code.language-python.
-                  # Display descriptive statistics for all numeric columns
-                  data.describe().T
-            dt Skewness and Kurtosis
-            dd
-              p.
-                Skewness measures the asymmetry of the distribution, indicating whether the data is skewed to the left or right.
-                Kurtosis measures the shape of the distribution, showing how peaked or flat it is compared to a normal distribution.
-                These statistics provide insights into the shape of the data distribution.
-              pre.language-python
-                code.language-python.
-                  # Calculate skewness and kurtosis for all numeric columns
-                  skewness = data.skew()
-                  kurtosis = data.kurtosis()
-                  print("Skewness of each column:\n", skewness)
-                  print("Kurtosis of each column:\n", kurtosis)
-
-          p.
-            Univariate Data Analysis helps to summarize and understand the characteristics of individual variables,
-            providing a foundation for more complex analyses.
-            Univariate analysis provides a foundation for understanding data by highlighting patterns within individual variables.
-            It’s an essential first step in data exploration,
-            often setting the stage for more complex analyses like bivariate or multivariate analysis.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Univariate_analysis' target="_blank" rel="nofollow" title="Learn more about Univariate Data Analysis on Wikipedia" alt="Wikipedia on Univariate Data Analysis") Wikipedia on Univariate Data Analysis
-      br
-      hr
-      br
-      .card
-        .card-header
-          h3.card-title Bivariate Data Analysis
-        .card-body
-          p.
-            Bivariate Analysis is a statistical method in data science that examines the relationship between two variables.
-            The term "bivariate" stems from the prefix "bi-" meaning "two" and "variate," which refers to variables.
-            In essence, bivariate analysis explores how one variable interacts or correlates with another.
-            It helps to understand how one variable changes with respect to another.
-          p.
-            This analysis helps in understanding patterns, trends, or associations between the two variables.
-            For example, in a dataset containing information about people's ages and their corresponding income levels,
-            bivariate analysis could be used to investigate whether there is a relationship between age and income.
-            Techniques commonly used for bivariate analysis include scatter plots, correlation coefficients, and cross-tabulation.
-
-          dl
-            dt Scatter Plot
-            dd
-              p.
-                A scatter plot is a graphical representation of the relationship between two variables. Each point represents an observation in the dataset.
-              pre.language-python
-                code.language-python.
-                  import matplotlib.pyplot as plt
-                  # Create a scatter plot of two variables
-                  plt.figure(figsize=(8, 6))
-                  plt.scatter(data['variable1'], data['variable2'])
-                  plt.xlabel('Variable 1')
-                  plt.ylabel('Variable 2')
-                  plt.title('Scatter Plot of Variable 1 vs. Variable 2')
-                  plt.show()
-
-            dt Correlation Coefficient
-            dd
-              p.
-                The correlation coefficient measures the strength and direction of the linear relationship
-                between two variables.
-                Values range from -1 to 1, where 1 indicates a perfect positive relationship,
-                -1 indicates a perfect negative relationship, and 0 indicates no relationship.
-              pre.language-python
-                code.language-python.
-                  # Calculate the correlation coefficient between two variables
-                  correlation_coefficient = data['variable1'].corr(data['variable2'])
-                  print("Correlation Coefficient:", correlation_coefficient)
-
-            dt Regression Analysis
-            dd
-              p.
-                Regression analysis involves fitting a line or curve to the data to model the relationship between the variables.
-                The most common type is linear regression, which fits a straight line to the data.
-              pre.language-python
-                code.language-python.
-                  import numpy as np
-                  from sklearn.linear_model import LinearRegression
-                  # Fit a linear regression model to the data
-                  X = data['variable1'].values.reshape(-1, 1)
-                  y = data['variable2'].values
-                  model = LinearRegression()
-                  model.fit(X, y)
-                  # Get the slope and intercept of the regression line
-                  slope = model.coef_[0]
-                  intercept = model.intercept_
-                  print("Slope:", slope)
-                  print("Intercept:", intercept)
-
-          p.
-            Bivariate Data Analysis helps to uncover relationships between variables, providing insights that can inform decision-making and further analysis.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Bivariate_analysis' target="_blank" rel="nofollow" title="Learn more about Bivariate Data Analysis on Wikipedia" alt="Wikipedia on Bivariate Data Analysis") Wikipedia on Bivariate Data Analysis
-      br
-      hr
-      br
-      .card
-        .card-header
-          h3.card-title Correlation Matrix
-        .card-body
-          p.
-            A Correlation Matrix is a table that shows how different things (variables) are related to each other.
-            It helps us understand whether two things increase or decrease together, or if they don’t have much of a relationship at all.
-            A correlation matrix helps us to see connections between things in an organized way.
-            It's a great tool to figure out where you might want to focus more attention and helps to guide further analysis.
-
-          ul
-            li  +1 means a perfect positive relationship: if one thing goes up, the other also goes up.
-            li  0 means no relationship: the two things don’t really affect each other.
-            li -1 means a perfect negative relationship: if one thing goes up, the other goes down.
-
-          pre.language-python
-            code.language-python.
-              # Calculate the correlation matrix
-              correlation_matrix = data.corr()
-
-              # Display the correlation matrix
-              print(correlation_matrix)
-
-              # Optionally, visualize the correlation matrix using a heatmap
-              import seaborn as sns
-              import matplotlib.pyplot as plt
-
-              plt.figure(figsize=(10, 8))
-              sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
-              plt.title('Correlation Matrix Heatmap')
-              plt.show()
-
-          p.
-            A correlation matrix is useful because it lets you see all the relationships in one table.
-            People often use it when they have lots of data to quickly find out which things are connected.
-            For example, a scientist studying health might use a correlation matrix to find out if eating
-            certain foods is related to having a lower risk of disease.
-            By using a correlation matrix, they can easily see which foods are most important and worth looking into further.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Correlation_matrix' target="_blank" rel="nofollow" title="Learn more about Correlation Matrices on Wikipedia" alt="Wikipedia on Correlation Matrices") Wikipedia on Correlation Matrices
-      br
-      hr
-      br
-      .card
-        .card-header
           h3.card-title Principal Component Analysis (PCA)
         .card-body
+        p.
+          Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms data into
+          a smaller number of uncorrelated variables (principal components) that capture the main patterns in the data.
+        p.
+          Imagine you have a lot of data, like test scores in math, science, history, and art.
+          It can be hard to see the big picture when you have many different variables,
+          especially if there are a lot of patterns and connections between them.
+          PCA is a tool that helps you simplify this information.
+          It takes a big set of data with many variables and reduces it to a smaller set of "components"
+          that still capture the most important information.
+        dl
+          dt Principal Component Analysis (PCA)
+          dd
           p.
             Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms data into
             a smaller number of uncorrelated variables (principal components) that capture the main patterns in the data.
@@ -625,65 +276,52 @@ block layout-content
             PCA is a tool that helps you simplify this information.
             It takes a big set of data with many variables and reduces it to a smaller set of "components"
             that still capture the most important information.
-          dl
-            dt Principal Component Analysis (PCA)
-            dd
-              p.
-                Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms data into
-                a smaller number of uncorrelated variables (principal components) that capture the main patterns in the data.
-              p.
-                Imagine you have a lot of data, like test scores in math, science, history, and art.
-                It can be hard to see the big picture when you have many different variables,
-                especially if there are a lot of patterns and connections between them.
-                PCA is a tool that helps you simplify this information.
-                It takes a big set of data with many variables and reduces it to a smaller set of "components"
-                that still capture the most important information.
-            dt How PCA Works
-            dd
-              p.
-                PCA works by looking for patterns in the data. It finds directions (or components) in which the data varies the most.
-                These components are like new axes, and they represent combinations of the original variables.
-                Here’s a step-by-step look at how PCA simplifies data:
-              ol
-                li.
-                  Find the Directions of Maximum Variance: PCA looks for the direction in the data where the points are spread out the most.
-                  This direction is called the first principal component. It shows the main pattern in the data.
-                li.
-                  Add More Components: After finding the first principal component, PCA looks for the next direction where the data varies the most, but at a right angle to the first one.
-                  This is the second principal component. These components are always at right angles (90 degrees) to each other, making them uncorrelated.
-                li.
-                  Keep the Important Components: You can add as many components as there are variables, but most of the time, only the first few components capture the main patterns.
-                  By keeping only the most important ones, you reduce the data’s complexity.
-            dt Example with Simple Data
-            dd
-              p.
-                Imagine a dataset with students' scores in Math and Science.
-                If there’s a strong relationship (students who do well in Math also do well in Science), PCA would combine these scores into one main component that represents both subjects.
-              ol
-                li Original Data: Math and Science Scores
-                li First Principal Component: Overall Academic Ability
-                li Second Principal Component: Difference Between Math and Science
-              p.
-                So, instead of tracking two scores separately, PCA would give you an “Overall Academic Ability” score that captures the main pattern, simplifying the data.
-            dt Why PCA is Useful
-            dd
-              p.
-                PCA has several benefits for analyzing data:
-              ol
-                li Reduces Complexity: PCA simplifies data by reducing the number of variables you need to look at. You keep the main patterns and ignore the rest, making the data easier to understand.
-                li Finds Patterns: PCA reveals hidden patterns by focusing on the directions where the data varies the most.
-                li Helps with Visualization: If you have data with many variables, PCA can reduce it to two or three components, making it possible to plot and visualize.
+          dt How PCA Works
+          dd
           p.
-            In summary, PCA is a way to look at the big picture of your data by focusing on what’s most important. It turns a complex dataset into something simpler, allowing you to see patterns and relationships that would otherwise be hidden.
+            PCA works by looking for patterns in the data. It finds directions (or components) in which the data varies the most.
+            These components are like new axes, and they represent combinations of the original variables.
+            Here’s a step-by-step look at how PCA simplifies data:
+          ol
+            li.
+              Find the Directions of Maximum Variance: PCA looks for the direction in the data where the points are spread out the most.
+              This direction is called the first principal component. It shows the main pattern in the data.
+            li.
+              Add More Components: After finding the first principal component, PCA looks for the next direction where the data varies the most, but at a right angle to the first one.
+              This is the second principal component. These components are always at right angles (90 degrees) to each other, making them uncorrelated.
+            li.
+              Keep the Important Components: You can add as many components as there are variables, but most of the time, only the first few components capture the main patterns.
+              By keeping only the most important ones, you reduce the data’s complexity.
+          dt Example with Simple Data
+          dd
+          p.
+            Imagine a dataset with students' scores in Math and Science.
+            If there’s a strong relationship (students who do well in Math also do well in Science), PCA would combine these scores into one main component that represents both subjects.
+          ol
+            li Original Data: Math and Science Scores
+            li First Principal Component: Overall Academic Ability
+            li Second Principal Component: Difference Between Math and Science
+          p.
+            So, instead of tracking two scores separately, PCA would give you an “Overall Academic Ability” score that captures the main pattern, simplifying the data.
+          dt Why PCA is Useful
+          dd
+          p.
+            PCA has several benefits for analyzing data:
+          ol
+            li Reduces Complexity: PCA simplifies data by reducing the number of variables you need to look at. You keep the main patterns and ignore the rest, making the data easier to understand.
+            li Finds Patterns: PCA reveals hidden patterns by focusing on the directions where the data varies the most.
+            li Helps with Visualization: If you have data with many variables, PCA can reduce it to two or three components, making it possible to plot and visualize.
+        p.
+          In summary, PCA is a way to look at the big picture of your data by focusing on what’s most important. It turns a complex dataset into something simpler, allowing you to see patterns and relationships that would otherwise be hidden.
         .card-footer
           a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Principal_component_analysis' target="_blank" rel="nofollow" title="Learn more about Principal Component Analysis on Wikipedia" alt="Wikipedia on PCA") Wikipedia on PCA
-      br
-      hr
-      br
-      .card
-        .card-header
-          h3.card-title Principal Components
-        .card-body
+        br
+        hr
+        br
+        .card
+          .card-header
+            h3.card-title Principal Components
+          .card-body
           p.
             Principal Components are the new variables created by PCA that represent the directions of maximum variance in the data.
             Each principal component is a linear combination of the original variables, and they are uncorrelated with each other.
@@ -692,99 +330,62 @@ block layout-content
           dl
             dt First Principal Component
             dd
-              p.
-                The first principal component captures the largest amount of variance in the data. It is the direction in which the data varies the most.
-                This component often represents the most significant pattern in the dataset.
+            p.
+              The first principal component captures the largest amount of variance in the data. It is the direction in which the data varies the most.
+              This component often represents the most significant pattern in the dataset.
             dt Second Principal Component
             dd
-              p.
-                The second principal component captures the second largest amount of variance, but it is orthogonal (at a right angle) to the first component.
-                This ensures that it represents a different pattern in the data.
+            p.
+              The second principal component captures the second largest amount of variance, but it is orthogonal (at a right angle) to the first component.
+              This ensures that it represents a different pattern in the data.
             dt Subsequent Principal Components
             dd
-              p.
-                Each subsequent principal component captures the next highest variance while being orthogonal to all previous components.
-                These components continue to represent new patterns in the data, but each captures less variance than the previous one.
+            p.
+              Each subsequent principal component captures the next highest variance while being orthogonal to all previous components.
+              These components continue to represent new patterns in the data, but each captures less variance than the previous one.
             dt Eigenvalues and Eigenvectors
             dd
-              p.
-                Principal components are derived from the eigenvectors of the covariance matrix of the data. The eigenvalues associated with these eigenvectors indicate the amount of variance captured by each principal component.
+            p.
+              Principal components are derived from the eigenvectors of the covariance matrix of the data. The eigenvalues associated with these eigenvectors indicate the amount of variance captured by each principal component.
             dt Interpretation
             dd
-              p.
-                Interpreting principal components involves looking at the coefficients of the original variables in each component.
-                These coefficients indicate the contribution of each variable to the component, helping to understand the underlying patterns.
+            p.
+              Interpreting principal components involves looking at the coefficients of the original variables in each component.
+              These coefficients indicate the contribution of each variable to the component, helping to understand the underlying patterns.
           p.
             In summary, Principal Components are essential in PCA as they transform the data into a new set of variables that capture the most significant patterns, making it easier to analyze and visualize complex datasets.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Principal_component_analysis#Details' target="_blank" rel="nofollow" title="Learn more about Principal Components on Wikipedia" alt="Wikipedia on Principal Components") Wikipedia on Principal Components
-      br
-      hr
-      br
-      .card
-        .card-header
-          h3.card-title K-means Clustering
-          .card-body
-            p.
-              K-means Clustering is a method used to group data points into clusters based on their similarities. Each cluster has a center point called a centroid, and data points are grouped by how close they are to this centroid.
-            p.
-              Here’s a simple example to understand K-means Clustering:
-            dl
-              dt Example: Grouping Students by Study Habits
-              dd
-                p.
-                  Imagine you have data on how many hours students study Math and Science each week. K-means Clustering can group students into clusters based on their study habits.
-                ol
-                  li.
-                    First, choose the number of clusters (e.g., 3 clusters for different study habits).
-                  li.
-                    The algorithm randomly selects 3 initial centroids.
-                  li.
-                    Each student is assigned to the nearest centroid, forming 3 clusters.
-                  li.
-                    The centroids are recalculated based on the average study hours of students in each cluster.
-                  li.
-                    Steps 3 and 4 are repeated until the centroids no longer change significantly.
-                p.
-                  In the end, you might have clusters like:
-                ul
-                  li Cluster 1: Students who study a lot of Math and Science.
-                  li Cluster 2: Students who study a moderate amount.
-                  li Cluster 3: Students who study less.
-            p.
-              K-means Clustering helps to identify patterns and group similar data points, making it easier to analyze and understand large datasets.
           .card-footer
-            a.btn.btn-primary(href='https://en.wikipedia.org/wiki/K-means_clustering' target="_blank" rel="nofollow" title="Learn more about K-means Clustering on Wikipedia" alt="Wikipedia on K-means Clustering") Wikipedia on K-means Clustering
-      br
-      hr
-      br
+            a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Principal_component_analysis#Details' target="_blank" rel="nofollow" title="Learn more about Principal Components on Wikipedia" alt="Wikipedia on Principal Components") Wikipedia on Principal Components
+        br
+        hr
+        br
 
-      h2 Glossary of Terms
-      dl
-        dt Google Colab
-        dd
+        h2 Glossary of Terms
+        dl
+          dt Google Colab
+          dd
           | A free, browser-based environment for writing and running Python code in Jupyter notebooks, particularly popular for data science projects.
 
-        dt Jupyter Notebook
-        dd
+          dt Jupyter Notebook
+          dd
           | An interactive coding environment that allows you to combine code, visualizations, and text, commonly used in data science.
 
-        dt Dendrogram
-        dd
+          dt Dendrogram
+          dd
           | A tree-like diagram used to illustrate the arrangement of clusters formed by hierarchical clustering.
 
-        dt Elbow Curve
-        dd
+          dt Elbow Curve
+          dd
           | A plot used to determine the optimal number of clusters in K-means by finding a point where the decrease in variance slows, resembling an "elbow."
 
-        dt Inertia
-        dd
+          dt Inertia
+          dd
           | The sum of squared distances between data points and their cluster centroids. Lower inertia indicates tighter clusters.
 
-        dt Silhouette Score
-        dd
+          dt Silhouette Score
+          dd
           | A measure of how similar each point is to its cluster compared to other clusters, with values close to 1 indicating well-separated clusters.
 
-        dt Dimensionality Reduction
-        dd
+          dt Dimensionality Reduction
+          dd
           | The process of reducing the number of variables in a dataset while retaining as much information as possible.
