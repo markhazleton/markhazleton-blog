@@ -1,9 +1,9 @@
 extends ../layouts/articles
 
 block pagehead
-  title Implementing Syntax Highlighting Using Prism.js for XML, PUG, YAML, and C#
-  meta(name='description', content='Learn how to implement syntax highlighting for XML, PUG, YAML, and C# using Prism.js. We also explore automating the bundling process using render-scripts.js.')
-  meta(name="keywords", content="Prism.js, Syntax Highlighting, XML, PUG, YAML, C#, render-scripts.js")
+  title Implementing Syntax Highlighting Using Prism.js for XML, PUG, YAML, C#, and Python
+  meta(name='description', content='Learn how to implement syntax highlighting for XML, PUG, YAML, C#, and Python using Prism.js. We also explore automating the bundling process using render-scripts.js.')
+  meta(name="keywords", content="Prism.js, Syntax Highlighting, XML, PUG, YAML, C#,Python, render-scripts.js")
   meta(name='author', content='Mark Hazleton')
   link(rel='canonical', href='https://markhazleton.com//articles/syntax-highlighting-using-prismjs-for-xml-pug-yaml-and-csharp.html')
 
@@ -13,9 +13,13 @@ block layout-content
     .painteddesert-section-content
       p.fw-bold.text-primary.text-center.bg-primary.text-white
       h1 Implementing Syntax Highlighting
-      h2.subheading.mb-3 Using Prism.js for XML, PUG, YAML, and C#
+      h2.subheading.mb-3 Using Prism.js for XML, PUG, YAML, C#, and Python
       p.
-        When building a website or documentation portal that involves a lot of code snippets, syntax highlighting becomes essential to enhance readability. Prism.js is a lightweight and customizable library for syntax highlighting. In this guide, we will walk through setting up Prism.js for XML, PUG, YAML, and C# and discuss automating this process using a custom build tool, `render-scripts.js`.
+        When building a website or documentation portal that involves a lot of code snippets,
+        syntax highlighting becomes essential to enhance readability.
+        Prism.js is a lightweight and customizable library for syntax highlighting.
+      p.
+        In this guide, we will walk through setting up Prism.js for XML, PUG, YAML, C#, and Python and discuss automating this process using a custom build tool, `render-scripts.js`.
 
       h3 Adding Prism.js to Your website project
       dl
@@ -29,13 +33,14 @@ block layout-content
 
         dt Step 2: Adding Support for Specific Languages
         dd
-          | To highlight specific languages like XML, PUG, YAML, and C#, add their corresponding language components.
+          | To highlight specific languages like XML, PUG, YAML, C#, and Python add their corresponding language components.
           pre.language-html
             code.language-html.
               <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-xml.min.js"></script>
               <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-pug.min.js"></script>
               <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-yaml.min.js"></script>
               <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-csharp.min.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-python.min.js"></script>
 
         dt Step 3: Creating Code Blocks for Each Language
         dd
@@ -94,24 +99,26 @@ block layout-content
               const prismXMLPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-xml-doc.min.js');
               const prismPUGPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-pug.min.js');
               const prismCSHARPPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-csharp.min.js');
+              const prismPYTHONPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-python.min.js');
 
               // Paths for scripts.js and its destination
               const sourcePathScriptsJS = upath.resolve(upath.dirname(__filename), '../src/js/scripts.js');
               const destPathScriptsJS = upath.resolve(upath.dirname(__filename), '../docs/js/scripts.js');
 
               // Read the Bootstrap JS, PrismJS, Prism YAML, and your scripts.js content
-              const [bootstrapJS, prismJS, prismYAML, prismXML, prismPUG, prismCSHARP, scriptsJS] = await Promise.all([
+              const [bootstrapJS, prismJS, prismYAML, prismXML, prismPUG, prismCSHARP,prismPYTHON, scriptsJS] = await Promise.all([
                 fs.readFile(bootstrapJSPath, 'utf8'),
                 fs.readFile(prismJSPath, 'utf8'),
                 fs.readFile(prismYAMLPath, 'utf8'),
                 fs.readFile(prismXMLPath, 'utf8'),
                 fs.readFile(prismPUGPath, 'utf8'),
                 fs.readFile(prismCSHARPPath, 'utf8'),
+                fs.readFile(prismPYTHONPath, 'utf8'),
                 fs.readFile(sourcePathScriptsJS, 'utf8')
               ]);
 
               // Combine Bootstrap JS, PrismJS, Prism YAML, and your scripts.js
-              const combinedScripts = bootstrapJS + '\n' + prismJS + '\n' + prismYAML + '\n' + prismXML + '\n' + prismPUG + '\n' + prismCSHARP + '\n' + scriptsJS;
+              const combinedScripts = bootstrapJS + '\n' + prismJS + '\n' + prismYAML + '\n' + prismXML + '\n' + prismPUG + '\n' + prismCSHARP + '\n' + prismPYTHON + '\n'+ scriptsJS;
 
         dt Step 5: Verifying and Customizing Highlighting
         dd
