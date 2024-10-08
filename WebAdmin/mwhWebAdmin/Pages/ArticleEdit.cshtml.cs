@@ -6,27 +6,6 @@ namespace mwhWebAdmin.Pages;
 public class ArticleEditModel : PageModel
 {
     private readonly ArticleService _articleService;
-    public List<string> Sections { get; } = new List<string>
-    {
-        "Case Studies",
-        "ChatGPT",
-        "Development",
-        "Data Science",
-        "Personal Philosophy",
-        "Project Mechanics",
-        "Project Mechanics Leadership",
-    };
-    public List<string> ChangeFrequency { get; } = new List<string>
-    {
-        "always",
-        "hourly",
-        "daily",
-        "weekly",
-        "monthly",
-        "yearly",
-        "never"
-    };
-
 
     [BindProperty]
     public ArticleModel Article { get; set; }

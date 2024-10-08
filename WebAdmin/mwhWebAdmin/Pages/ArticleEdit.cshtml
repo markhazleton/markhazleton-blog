@@ -2,7 +2,8 @@
 @model mwhWebAdmin.Pages.ArticleEditModel
 @{
     ViewData["Title"] = "Article Edit";
-
+    var sections = ArticleModelHelpers.Sections;
+    var frequencies = ArticleModelHelpers.ChangeFrequency;
 }
 
 <div class="container mt-5">
@@ -14,7 +15,7 @@
         <div class="mb-3">
             <label for="Section" class="form-label">Section:</label>
             <select class="form-control" asp-for="Article.Section">
-                @foreach (var item in Model.Sections.OrderBy(o=>0))
+                @foreach (var item in sections.OrderBy(o=>0))
                 {
                     <option value="@item">@item</option>
                 }
@@ -43,7 +44,7 @@
         <div class="mb-3">
             <label for="ChangeFrequency" class="form-label">Change Frequency:</label>
             <select class="form-control" asp-for="Article.ChangeFrequency">
-                @foreach (var item in Model.ChangeFrequency.OrderBy(o => 0))
+                @foreach (var item in @frequencies.OrderBy(o => 0))
                 {
                     <option value="@item">@item</option>
                 }
