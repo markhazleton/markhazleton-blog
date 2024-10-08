@@ -640,3 +640,170 @@ block layout-content
       p.
         By conducting thorough data sanity checks and EDA, we lay a strong foundation for further analysis.
         With a clear understanding of the data, the next steps could include feature engineering, advanced visualizations, or machine learning.
+
+      .card
+        .card-header
+          h3.card-title Automating Univariate and Bivariate Analysis in Python
+        .card-body
+          p.lead.
+            During your Data Sanity checks, it's essential to classify your variables
+            into numerical, categorical, and dependent types before starting your
+            Exploratory Data Analysis (EDA).
+          p.
+            In the early stages of data analysis,
+            you will often need to determine whether your variables are numerical, categorical, or dependent.
+            Identifying these is crucial for:
+          ul
+            li Performing the correct statistical methods on your data
+            li Automating your exploratory analysis using scripts
+            li Generating meaningful insights into relationships between features
+          p.
+            Once these variables are classified,
+            you can begin the process of performing univariate (analyzing one variable)
+            and bivariate (analyzing relationships between two variables) analysis.
+            Automating this process will save you time and ensure consistency in your Exploratory Data Analysis (EDA).
+
+          h4.mb-4 Automating Univariate Analysis for Numerical and Categorical Features
+          p.
+            In univariate analysis, you focus on understanding the distribution of a single feature.
+            The following Python functions allow you to automate this process for both numerical and categorical features.
+          p.
+            This function calculates the key statistical attributes for a numerical feature,
+            including mean, median, variance, and skewness.
+            It also provides visual insights using KDE plots, BoxPlots, and Histograms.
+
+          p Here's the full implementation of the function:
+
+          pre.language-python
+            code.language-python.
+              def univariate_analysis(df, features):
+                for feature in features:
+                  skewness = df[feature].skew()
+                  minimum = df[feature].min()
+                  maximum = df[feature].max()
+                  mean = df[feature].mean()
+                  mode = df[feature].mode().values[0]
+                  unique_count = df[feature].nunique()
+                  variance = df[feature].var()
+                  std_dev = df[feature].std()
+                  percentile_25 = df[feature].quantile(0.25)
+                  median = df[feature].median()
+                  percentile_75 = df[feature].quantile(0.75)
+                  data_range = maximum - minimum
+
+                  print(f"Univariate Analysis for {feature}")
+                  print(f"Skewness: {skewness:.4f}")
+                  print(f"Min: {minimum}")
+                  print(f"Max: {maximum}")
+                  print(f"Mean: {mean:.4f}")
+                  print(f"Mode: {mode}")
+                  print(f"Unique Count: {unique_count}")
+                  print(f"Variance: {variance:.4f}")
+                  print(f"Std Dev: {std_dev:.4f}")
+                  print(f"25th Percentile: {percentile_25}")
+                  print(f"Median (50th Pct): {median}")
+                  print(f"75th Percentile: {percentile_75}")
+                  print(f"Range: {data_range}")
+
+                  plt.figure(figsize=(18, 6))
+                  plt.subplot(1, 3, 1)
+                  sns.kdeplot(df[feature], fill=True)
+                  plt.title(f"KDE of {feature}")
+                  plt.subplot(1, 3, 2)
+                  sns.boxplot(df[feature])
+                  plt.title(f"Box Plot of {feature}")
+                  plt.subplot(1, 3, 3)
+                  sns.histplot(df[feature], bins=10, kde=True)
+                  plt.title(f"Histogram of {feature}")
+                  plt.tight_layout()
+                  plt.show()
+
+          p This function provides a comprehensive analysis for each numerical feature by calculating statistical attributes and generating KDE, BoxPlot, and Histogram visualizations.
+
+          h4.mb-3 Categorical Univariate Analysis
+          p For categorical features, we analyze the distribution of categories and their relationship with the dependent feature. Here's a function that automates this process:
+
+          pre.language-python
+            code.language-python.
+              def univariate_analysis_categorical(df, categorical_features):
+                for feature in categorical_features:
+                  unique_categories = df[feature].nunique()
+                  mode = df[feature].mode().values[0]
+                  mode_freq = df[feature].value_counts().max()
+                  category_counts = df[feature].value_counts()
+                  category_percent = df[feature].value_counts(normalize=True) * 100
+                  missing_values = df[feature].isnull().sum()
+                  total_values = len(df[feature])
+                  imbalance_ratio = category_counts.max() / total_values
+
+                  print(f"Univariate Analysis for {feature}")
+                  print(f"Unique Categories: {unique_categories}")
+                  print(f"Mode (Most frequent): {mode}")
+                  print(f"Frequency of Mode: {mode_freq}")
+                  print(f"Missing Values: {missing_values}")
+                  print(f"Imbalance Ratio (Max/Total): {imbalance_ratio:.4f}")
+                  print(f"Category Counts:\n{category_counts}")
+
+                  plt.figure(figsize=(10, 6))
+                  sns.countplot(x=df[feature], order=df[feature].value_counts().index)
+                  plt.title(f"Frequency of {feature} Categories")
+                  plt.xlabel(feature)
+                  plt.ylabel("Count")
+                  plt.tight_layout()
+                  plt.show()
+
+          p.
+            This function provides a clear understanding of how categories are distributed
+            across the data and helps identify potential imbalances.
+
+          h4.mb-4 Automating Bivariate Analysis
+          p.
+            Bivariate analysis allows you to understand the relationship between two variables.
+            Here's how you can automate this process.
+          p.
+            The following function calculates key attributes for a numerical feature in relation
+            to a boolean dependent feature.
+            It prints out key insights and generates side-by-side visualizations to understand their relationship.
+
+          pre.language-python
+            code.language-python.
+              def bivariate_analysis(df, numerical_features, categorical_features, dependent_feature):
+                if numerical_features:
+                  for feature in numerical_features:
+                    mean_0 = df[df[dependent_feature] == 0][feature].mean()
+                    mean_1 = df[df[dependent_feature] == 1][feature].mean()
+                    median_0 = df[df[dependent_feature] == 0][feature].median()
+                    median_1 = df[df[dependent_feature] == 1][feature].median()
+                    var_0 = df[df[dependent_feature] == 0][feature].var()
+                    var_1 = df[df[dependent_feature] == 1][feature].var()
+
+                    print(f"Mean {feature} for group 0: {mean_0:.2f}")
+                    print(f"Mean {feature} for group 1: {mean_1:.2f}")
+                    print(f"Median {feature} for group 0: {median_0:.2f}")
+                    print(f"Median {feature} for group 1: {median_1:.2f}")
+                    print(f"Variance of {feature} for group 0: {var_0:.2f}")
+                    print(f"Variance of {feature} for group 1: {var_1:.2f}")
+
+                    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+                    sns.boxplot(x=df[dependent_feature], y=df[feature], ax=axes[0])
+                    axes[0].set_title(f"{feature} Distribution by {dependent_feature}")
+                    sns.barplot(x=df[dependent_feature], y=df[feature], estimator='mean', ax=axes[1])
+                    axes[1].set_title(f"Mean {feature} by {dependent_feature}")
+                    plt.tight_layout()
+                    plt.show()
+
+                if categorical_features:
+                  for feature in categorical_features:
+                    category_distribution = df.groupby([feature, dependent_feature]).size().unstack(fill_value=0)
+                    chi2, p, dof, expected = chi2_contingency(category_distribution)
+
+                    print(f"Chi-Square Test for {feature}: Chi2 = {chi2:.4f}, p-value = {p:.4f}")
+                    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+                    sns.countplot(x=df[feature], hue=df[dependent_feature], ax=axes[0])
+                    axes[0].set_title(f"{feature} Count by {dependent_feature}")
+                    sns.barplot(x=df[feature], y=df[dependent_feature], estimator='mean', ax=axes[1])
+                    axes[1].set_title(f"Proportion of {dependent_feature} by {feature}")
+                    plt.tight_layout()
+                    plt.show()
+
+          p This function performs bivariate analysis by calculating key attributes and generating box plots, bar plots, and count plots to help you better understand the relationship between variables.
