@@ -1,4 +1,4 @@
-namespace mwhWebAdmin.Models;
+namespace mwhWebAdmin.Article;
 
 /// <summary>
 /// Represents an article model with various properties such as Id, Section, Slug, Name, Content, Description, Image Source, Last Modified date, and Change Frequency.
