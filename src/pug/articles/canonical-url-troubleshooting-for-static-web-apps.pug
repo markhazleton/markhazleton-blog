@@ -1,0 +1,91 @@
+extends ../layouts/articles
+
+block pagehead
+  title Canonical URL Troubleshooting for Static Web Apps
+  meta(name='description', content='Learn how to manage canonical URLs for static web apps using Azure and Cloudflare for SEO optimization.')
+  meta(name="keywords", content="canonical URL, static web apps, Cloudflare, SEO, Azure, troubleshooting")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/canonical-url-troubleshooting-for-static-web-apps.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Canonical URL Troubleshooting
+      h2.subheading.mb-3 Managing Canonical URLs in Static Web Apps for SEO Optimization
+      p.
+        When deploying static web apps, ensuring proper canonicalization is critical for SEO. Multiple URLs serving the same content can
+        lead to search engines penalizing your site for duplicate content.
+        This is my journey into canonical URL management for Azure Static Web Apps and Cloudflare, including what worked best based on practical experience on MarkHazleton.com
+      dl
+        dt Challenges in Static Web Apps
+        dd
+          p.
+            Using Azure Static Web Apps, I encountered several issues related to canonical URLs. Specifically:
+          ul
+            li.
+              URL variations for the same content, such as `/projectmechanics`, `/projectmechanics/`, and `/projectmechanics/index.html`.
+            li.
+              Multiple methods to configure canonical URLs led to varying levels of success, complicating SEO optimization.
+            li.
+              The lack of server-side components in static web apps makes traditional enforcement of URL structures more difficult.
+
+        dt What I Tried
+        dd
+          p Adding Canonical Tags
+          p.
+            I added a canonical link in the header of the page to indicate the preferred URL. This helped search engines understand the canonical URL but didn’t resolve the multiple accessible URL variants.
+            While this was a good start, it didn’t fully address the issue, as the same content was reachable through different URLs.
+          pre.language-JavaScript
+            code.language-JavaScript.
+              link(rel='canonical', href='https://markhazleton.com/projectmechanics/')
+
+        dd
+          p Using `staticwebapp.config.json` for Redirects
+          p.
+            In Azure Static Web Apps, I set up custom redirects using the `staticwebapp.config.json` file to force non-canonical URLs to redirect to the preferred version.
+            This is managed in my GitHub repository and deployed automatically to Azure Static Web Apps.
+          pre.language-JavaScript
+            code.language-JavaScript.
+              {
+                "routes": [
+                  {
+                    "route": "/projectmechanics/index.html",
+                    "redirect": "/projectmechanics/",
+                    "statusCode": 301
+                  },
+                  {
+                    "route": "/projectmechanics",
+                    "redirect": "/projectmechanics/",
+                    "statusCode": 301
+                  }
+                ]
+              }
+          p.
+            Unfortunately, this method caused issues with my GitHub build and deploy action.
+            In addtion, it didn't solve the root problem.  So rather than spend time troubleshooting the GitHub action,
+            I moved on to other solutions.
+
+        dt What Worked: Cloudflare Page Rules
+        dd
+          p I host my DNS for MarkHazleton.com on Cloudflare, so I decided to leverage Cloudflare’s URL redirection capabilities.  This was the most effective solution.
+          p Setting Up Page Rules
+          p.
+            The most effective solution was to configure Cloudflare Page Rules to handle URL redirection. Here’s how I set it up:
+          ul
+            li.
+              Redirect `/projectmechanics` and `/projectmechanics/index.html` to `/projectmechanics/`.
+            li.
+              Enforce a 301 Permanent Redirect so search engines recognize the canonical URL.
+          p.
+            This approach worked well by efficiently handling all variations of the URL.
+            Cloudflare’s flexibility in matching different URL patterns provided a more seamless experience for both users and search engines.
+          p
+            | For more information on setting up Cloudflare Url Forwarding Rules, refer to the
+            a(href='https://developers.cloudflare.com/rules/url-forwarding/' rel='nofollow' target='_blank' title='Cloudflare URL Forwarding Documentation' alt='Cloudflare URL Forwarding Documentation') Cloudflare URL Forwarding documentation.
+        dt Conclusion
+        dd
+          p.
+            While adding canonical tags and using Azure Static Web Apps can help with SEO,
+            Cloudflare Page Rules proved to be the most robust solution for handling canonical URLs and mitigating duplicate content issues.
+            This combination ensures a smooth, SEO-friendly static web app without URL conflicts.

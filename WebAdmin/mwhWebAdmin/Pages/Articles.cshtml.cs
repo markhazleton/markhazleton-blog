@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using mwhWebAdmin.Article;
 
 namespace mwhWebAdmin.Pages;
 

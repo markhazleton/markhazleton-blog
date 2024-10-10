@@ -1,17 +1,13 @@
 using System.Globalization;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Xml;
-using Microsoft.Extensions.Logging;
 
-namespace mwhWebAdmin.Models;
+namespace mwhWebAdmin.Article;
 
 public class ArticleService
 {
     private List<ArticleModel> _articles;
     private readonly string _articlesDirectory;
     private readonly string _filePath;
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
     private readonly ILogger<ArticleService> _logger;
 
     public ArticleService(string filePath, ILogger<ArticleService> logger)
@@ -43,7 +39,7 @@ public class ArticleService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Failed to generate Pug content for article: {article.Name}");
+            _logger.LogError(ex, "Failed to generate Pug content for article: {ArticleName}", article.Name);
             return string.Empty;
         }
     }
@@ -63,25 +59,6 @@ public class ArticleService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to load articles.");
-            _articles = new List<ArticleModel>();
-        }
-    }
-
-    private async Task LoadArticlesAsync()
-    {
-        try
-        {
-            string jsonContent = await File.ReadAllTextAsync(_filePath);
-            _articles = JsonSerializer.Deserialize<List<ArticleModel>>(jsonContent) ?? new List<ArticleModel>();
-            foreach (var article in _articles.OrderBy(o => o.Name))
-            {
-                article.Id = _articles.IndexOf(article);
-            }
-            _logger.LogInformation("Articles loaded successfully (Async).");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to load articles asynchronously.");
             _articles = new List<ArticleModel>();
         }
     }
@@ -133,11 +110,11 @@ public class ArticleService
                 }
 
                 SaveArticles();
-                _logger.LogInformation($"Article '{newArticle.Name}' added successfully.");
+                _logger.LogInformation("Article '{ArticleName}' added successfully.", newArticle.Name);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to add article: {newArticle.Name}");
+                _logger.LogError(ex, "Failed to add article: {ArticleName}", newArticle.Name);
             }
         }
     }

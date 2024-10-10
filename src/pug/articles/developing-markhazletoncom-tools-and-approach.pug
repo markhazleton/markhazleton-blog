@@ -1,0 +1,247 @@
+extends ../layouts/articles
+
+block pagehead
+  title Developing MarkHazleton.com: Tools and Approach
+  meta(name='description', content='An in-depth look into the technologies and development process behind MarkHazleton.com. Discover the tools and frameworks used to create this site.')
+  meta(name="keywords" content="Mark Hazleton, website development, Node.js, Pug, VS Code, SB UI Kit Pro, GitHub, Azure, Cloudflare, Screaming Frog SEO Spider")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/developing-markhazletoncom-tools-and-approach.html')
+
+block layout-content
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Developing MarkHazleton.com
+      h2.subheading.mb-3 The Tools, Technologies, and Thought Process Behind the Site
+      p.
+        Building MarkHazleton.com was a journey defined by choosing the right tools for rapid development and efficient management. Every tool was carefully selected to ensure that the website was reliable, easy to maintain, and able to grow with the needs of the business. This article highlights the key technologies that made the site what it is today.
+
+      h2.subheading.mb-3 Leveraging a Well-Thought-Out Template
+      p
+        | When I began working on MarkHazleton.com, I started by forking the
+        a(href='https://github.com/StartBootstrap/startbootstrap-resume' title='Start Bootstrap Resume GitHub Repository' alt='Start Bootstrap Resume GitHub Repository' rel='nofollow' target='_blank') Start Bootstrap Resume GitHub Repository
+        | which provided a well-planned, thoughtfully designed foundation.
+        | Its structure allowed me to quickly come up to speed with static site development.
+        | I was able to focus on customizing content while gradually exploring more advanced features and adapting the template to my growing needs.
+
+      dl
+        dt Easy Adaptability
+        dd
+          p.
+            The design of the Start Bootstrap Resume template made it easy to add new sections,
+            adjust layouts, and integrate dynamic elements with Node.js and npm.
+            As I became more familiar with the technology, I added features like Pug for templating and SCSS for styling.
+
+        dt Quick Learning and Customization
+        dd
+          p.
+            Thanks to the well-thought-out structure, I quickly learned how to manage static site builds,
+            minify assets, and automate tasks using Node.js.
+            The template's simplicity helped me focus on growth as I built a more robust website over time.
+
+      h2.subheading.mb-3 A Flexible and Efficient Starting Point
+      p.
+        The Start Bootstrap Resume template not only provided a solid foundation but also offered the flexibility I needed as my project evolved. It allowed me to create MarkHazleton.com efficiently, giving me the tools to scale and refine the site as needed.
+
+      h2.subheading.mb-3 Local Development and Deployment Automation
+      p.
+        Node.js plays a crucial role in the development and deployment workflow of MarkHazleton.com. It powers both the local development environment and the automated build and deployment pipeline, ensuring efficient site management. Through a set of custom npm scripts, I am able to handle everything from building static assets to deploying the site on Azure Static Web Apps via GitHub Actions.
+      dl
+        dt Package.json: Custom Scripts
+        dd
+          p The project’s `package.json` includes multiple npm scripts that automate key tasks like cleaning, building SCSS, generating Pug templates, and copying assets. This ensures a streamlined workflow, allowing me to edit, build, and deploy from a single command.
+          pre.language-javascript
+            code.language-javascript.
+              "scripts": {
+                "build": "npm run clean && npm run build:pug && npm run build:scss && npm run build:scripts && npm run build:assets",
+                "build:assets": "node scripts/build-assets.js",
+                "build:pug": "node scripts/build-pug.js",
+                "build:scripts": "node scripts/build-scripts.js",
+                "build:scss": "node scripts/build-scss.js",
+                "clean": "node scripts/clean.js",
+                "start": "npm run build && node scripts/start.js",
+                "start:debug": "npm run build && node scripts/start-debug.js"
+              }
+
+        dt Local Development Setup
+        dd
+          p This is how to set up live reloading for your static website in Visual Studio Code using a custom start.js script and BrowserSync.
+          p.
+            During development, I rely on these scripts to copy static assets, compile SCSS,
+            and transform Pug templates into static HTML.
+            By using a single `npm start` command, I can run and debug the site, allowing for fast iterations.
+          h3 Setting Up start.js
+          p The start.js script runs two tasks concurrently:
+          ul
+            li A Scipt (sp-watch.js) to monitor your source files for changes and trigger a rebuild.
+            li Serves the site from the docs folder and automatically reloads the browser when changes are detected.
+            li BrowserSync, which automatically refreshes your browser when files are updated.
+          h3 Running the Site
+          p To start live reloading:
+
+          ol
+            li Open your project in VS Code.
+            li Run the start.js script in the terminal.
+            li As you update your source files, BrowserSync will automatically refresh your browser.
+
+          p With the start.js script and BrowserSync, you can easily build and run your static site with live reloading, streamlining the development process.
+          pre.language-javascript
+            code.language-javascript.
+              const concurrently = require("concurrently");
+              const upath = require("upath");
+              const browserSyncPath = upath.resolve(
+                upath.dirname(__filename),
+                "../node_modules/.bin/browser-sync.cmd"
+              );
+              // Using PowerShell command in the correct format
+              const browserSyncCommand = `powershell -Command "& '${browserSyncPath}' --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --https --key 'C:\\Program Files\\OpenSSL-Win64\\bin\\localhost.key' --cert 'C:\\Program Files\\OpenSSL-Win64\\bin\\localhost.crt'"`;
+              concurrently(
+                [
+                  {
+                    command: "node scripts/sb-watch.js",
+                    name: "SB_WATCH",
+                    prefixColor: "bgBlue.bold",
+                  },
+                  {
+                    command: browserSyncCommand,
+                    name: "SB_BROWSER_SYNC",
+                    prefixColor: "bgGreen.bold",
+                  },
+                ],
+                {
+                  prefix: "name",
+                  killOthers: ["failure", "success"],
+                  restartTries: 3, // Optional: Set restart attempts if failure occurs
+                }
+              );
+              function success() {
+                console.log("Success");
+              }
+              function failure() {
+                console.log("Failure");
+              }
+
+        dt GitHub Actions and Azure Static Web Apps
+        dd
+          p.
+            I use GitHub Actions to automate the deployment process. Once changes are pushed to the repository, GitHub Actions triggers a build process, running the same npm scripts that handle asset copying, SCSS compilation, and template generation. The final static files are then deployed to Azure Static Web Apps, ensuring the latest version of the site is live.
+
+        dt Best Practices for Node.js Static Site Builds
+        dd
+          dl
+            dt Modular npm scripts
+            dd Break tasks into smaller scripts for better control and flexibility.
+            dt Minification and Optimization
+            dd Use tools like Terser and CSSnano to minimize file sizes for faster load times.
+            dt CI/CD Automation
+            dd Use GitHub Actions to automate the build and deployment pipeline, ensuring every change is automatically deployed to Azure.
+      p.
+        Node.js provides a robust environment for managing both development and deployment workflows. By leveraging custom scripts, continuous integration, and Azure Static Web Apps, the process of building and maintaining a static website becomes highly efficient and scalable.
+      dl
+        dt Node.js and npm
+        dd
+          p Node.js was chosen for its robust server-side JavaScript environment, which allowed seamless integration between development and production. npm’s extensive package management helped to quickly incorporate libraries and tools necessary for site features and automation.
+          pre.language-javascript
+            code.language-javascript.
+              // Example Node.js setup for MarkHazleton.com
+              const express = require('express');
+              const app = express();
+              app.set('view engine', 'pug');
+              app.set('views', './views');
+
+              app.get('/', function (req, res) {
+                res.render('index', { title: 'MarkHazleton.com' });
+              });
+
+              app.listen(3000, () => console.log('Server running on port 3000'));
+
+        dt Pug Template Engine
+        dd
+          p The Pug template engine streamlined the creation of dynamic HTML pages, enhancing development speed with its concise and readable syntax. It was also the best choice for maintaining a clean, maintainable codebase.
+          pre.language-pug
+            code.language-pug.
+              // Pug template example for MarkHazleton.com
+              doctype html
+              html
+                head
+                  title= title
+                body
+                  h1 Welcome to #{title}
+                  p This is a sample page created with Pug.
+
+        dt Visual Studio Code
+        dd
+          p Visual Studio Code was my editor of choice for this project, thanks to its support for multiple programming languages, its rich extension ecosystem, and features like Git integration and IntelliSense, which significantly sped up development.
+
+        dt SB UI Kit Pro (Start Bootstrap)
+        dd
+          p Using the SB UI Kit Pro template ensured that the design was modern and responsive, leveraging Bootstrap 5. The template provided pre-designed elements that accelerated both the design and development processes.
+
+        dt GitHub
+        dd
+          p A private GitHub repository was essential for managing source control, offering secure collaboration and easy integration with other tools like CI/CD pipelines.
+
+        dt Azure Static Web Apps
+        dd
+          p Azure Static Web Apps provided a seamless platform for hosting the site, automating deployment directly from the GitHub repository. It supported global distribution and security, ensuring the site was fast and secure.
+
+        dt Cloudflare
+        dd
+          p Cloudflare’s services, including its free SSL and DNS, improved both the security and performance of the website. Its DDoS protection and HTTP/2 support ensured that the site could handle high traffic loads efficiently.
+
+        dt Screaming Frog SEO Spider
+        dd
+          p Screaming Frog was used to audit the site’s SEO, ensuring that meta tags, headers, and internal linking were optimized for search engines. This tool was critical in identifying and fixing issues that could impact visibility and rankings.
+
+      h2.subheading.mb-3 Best Practices for SCSS with Node.js
+      p.
+        Using Node.js and SCSS together is a powerful approach to generating and minifying CSS. This method leverages tools such as Sass for compiling SCSS into CSS, Autoprefixer for browser compatibility, and CSSnano for minification. Combining all CSS into a single file optimizes site performance by reducing HTTP requests and file sizes.
+
+      dl
+        dt SCSS Structure
+        dd
+          p The SCSS setup used in this project is modular, with imports for variables, global styles, and component-specific styles. The inclusion of Bootstrap and third-party libraries like FontAwesome and PrismJS enhances functionality and design flexibility.
+          pre.language-javascript
+            code.language-javascript.
+              // Import variables and libraries
+              @import "./variables.scss";
+              @import "bootstrap/scss/bootstrap.scss";
+              @import "fontawesome-free/css/all";
+
+              // Component-specific styles
+              @import "./components/sidenav.scss";
+              @import "./sections/painteddesert-section.scss";
+
+        dt Node.js Script for SCSS Processing
+        dd
+          p The Node.js script automates the process of compiling SCSS into a minified CSS file. It utilizes Sass for SCSS compilation and PostCSS for processing the CSS. Autoprefixer ensures browser compatibility, while CSSnano minifies the file for production.
+          pre.language-javascript
+            code.language-javascript.
+              const autoprefixer = require('autoprefixer');
+              const cssnano = require('cssnano');
+              const sass = require('sass');
+              const postcss = require('postcss');
+              const fs = require('fs');
+
+              const renderSCSS = () => {
+                const result = sass.renderSync({ file: 'styles.scss' });
+                postcss([autoprefixer, cssnano({ preset: 'default' })])
+                  .process(result.css, { from: undefined })
+                  .then(output => fs.writeFileSync('styles.min.css', output.css));
+              };
+
+        dt Best Practices
+        dd
+          p.
+            1. **Modular SCSS**: Organize styles into reusable components and sections for easier management and updates.
+          p.
+            2. **Autoprefixer**: Ensure cross-browser compatibility by automatically adding vendor prefixes.
+          p.
+            3. **CSSnano**: Minify CSS for production to reduce file sizes and improve load times.
+          p.
+            4. **Continuous Integration**: Automate the SCSS build process with a Node.js script and integrate it into your CI/CD pipeline for seamless deployments.
+
+      h2.subheading.mb-3 Conclusion
+      p.
+        By combining SCSS and Node.js, you can efficiently manage and optimize CSS files for production, ensuring faster load times and a smoother development process. This method emphasizes maintainability, performance, and scalability.
+      p.
+        The development of MarkHazleton.com relied on carefully selected technologies that aligned with the goals of the business: speed, efficiency, and maintainability. Each tool and technology was chosen to optimize the process, ensuring a solid foundation for future growth and updates.
