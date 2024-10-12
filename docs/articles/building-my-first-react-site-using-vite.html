@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1728763246065" />
+        <link rel="stylesheet" href="/css/styles.css?version=1728773288828" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -437,25 +437,49 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                             <h2 class="accordion-header" id="headingSix"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Union and Intersection Types</button></h2>
                             <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#typescriptConceptsAccordion">
                                 <div class="accordion-body">
-                                    <p>Union types allow a variable to hold multiple types, while intersection types combine types.</p>
-                                    <p>Learn to use union and intersection types in TypeScript.</p>
-                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">type</span> <span class="token class-name">StringOrNumber</span> <span class="token operator">=</span> <span class="token builtin">string</span> <span class="token operator">|</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
-<span class="token keyword">let</span> value<span class="token operator">:</span> StringOrNumber <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
+                                    <p>TypeScript's Union and Intersection types add flexibility and power to type definitions, particularly useful in complex React applications.</p>
+                                    <dl>
+                                        <dt>Union Types</dt>
+                                        <dd>They allow a variable to be one of several types. For example, if you have a component that can accept a string or number as a prop, you’d use a union type. This is handy for functions and components that can handle multiple types of inputs.</dd>
+                                        <dt>Intersection Types</dt>
+                                        <dd>They combine multiple types into one. This means an object of this type must satisfy all the combined types. Useful when you need an object to have multiple sets of properties.</dd>
+                                        <p>Example in a Web Application: Imagine you have a UserProfile component that displays different user information based on user roles.</p>
+                                        <dl>
+                                            <dt>Union Type:</dt>
+                                            <dd>The user prop can be either User or SuperUser. This allows the UserProfile component to accept different user types, providing flexibility.</dd>
+                                            <dt>Intersection Type:</dt>
+                                            <dd>SuperUser combines the properties of both Admin and User, meaning a SuperUser must have all properties of both types. This is useful for users who have combined roles.</dd>
+                                        </dl>
+                                    </dl>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
 
-<span class="token keyword">interface</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
-  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">interface</span> <span class="token class-name">Employee</span> <span class="token punctuation">{</span>
-  employeeId<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">type</span> <span class="token class-name">Worker</span> <span class="token operator">=</span> Person <span class="token operator">&amp;</span> Employee<span class="token punctuation">;</span>
-
-<span class="token keyword">const</span> worker<span class="token operator">:</span> Worker <span class="token operator">=</span> <span class="token punctuation">{</span>
-  name<span class="token operator">:</span> <span class="token string">"Alice"</span><span class="token punctuation">,</span>
-  employeeId<span class="token operator">:</span> <span class="token number">123</span>
+<span class="token keyword">type</span> <span class="token class-name">Admin</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  adminRights<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">type</span> <span class="token class-name">User</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  email<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">type</span> <span class="token class-name">SuperUser</span> <span class="token operator">=</span> Admin <span class="token operator">&amp;</span> User<span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> UserProfile<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token constant">FC</span><span class="token operator">&lt;</span><span class="token punctuation">{</span> user<span class="token operator">:</span> User <span class="token operator">|</span> SuperUser <span class="token punctuation">}</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">{</span> user <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span>h2<span class="token operator">></span><span class="token punctuation">{</span>user<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">></span>
+      <span class="token operator">&lt;</span>p<span class="token operator">></span><span class="token punctuation">{</span>user<span class="token punctuation">.</span>email<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
+      <span class="token punctuation">{</span><span class="token string">'adminRights'</span> <span class="token keyword">in</span> user <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>
+        <span class="token operator">&lt;</span>ul<span class="token operator">></span>
+          <span class="token punctuation">{</span>user<span class="token punctuation">.</span>adminRights<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>right<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
+            <span class="token operator">&lt;</span>li key<span class="token operator">=</span><span class="token punctuation">{</span>right<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span>right<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
+      <span class="token punctuation">)</span><span class="token punctuation">}</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> UserProfile<span class="token punctuation">;</span>
 </code></pre>
                                 </div>
                             </div>
@@ -465,11 +489,45 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                             <h2 class="accordion-header" id="headingSeven"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">Generics</button></h2>
                             <div class="accordion-collapse collapse" id="collapseSeven" aria-labelledby="headingSeven" data-bs-parent="#typescriptConceptsAccordion">
                                 <div class="accordion-body">
-                                    <p>Generics allow you to write functions, interfaces, and classes that can work with any data type, providing flexibility with type safety.</p>
-                                    <p>Learn how to use Generics for reusable, type-safe components.</p>
-                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">function</span> <span class="token generic-function"><span class="token function">identity</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>arg<span class="token operator">:</span> <span class="token constant">T</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token constant">T</span> <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> arg<span class="token punctuation">;</span>
+                                    <p>Generics in TypeScript provide a way to create reusable components that work with a variety of types instead of a single one. They allow you to write flexible and type-safe code by enabling you to define components, functions, or hooks that can operate with different data types while preserving type information. In the context of React, generics are often used in components and hooks to ensure they can handle a wide range of data types without losing the benefits of TypeScript's type-checking.</p>
+                                    <p>Example in a Web Application: Let's say you have a list component that can render lists of different types, such as users, products, or orders. By using generics, you can create a single List component that works for any type of data.</p>
+                                    <ul>
+                                        <li>The List component is a generic component that takes a type parameter T.</li>
+                                        <li>The ListProps interface uses this type parameter to define the shape of the props.</li>
+                                        <li>The items prop is an array of T, and the renderItem prop is a function that takes an item of type T and returns a React node.</li>
+                                    </ul>
+                                    <p>Using generics this way ensures that the List component can handle any type of data, making it highly reusable and type-safe. This flexibility is a powerful feature of TypeScript, allowing you to write more generic and adaptable components while retaining strong type-checking benefits.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">interface</span> <span class="token class-name">ListProps<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span> <span class="token punctuation">{</span>
+  items<span class="token operator">:</span> <span class="token constant">T</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token function-variable function">renderItem</span><span class="token operator">:</span> <span class="token punctuation">(</span>item<span class="token operator">:</span> <span class="token constant">T</span><span class="token punctuation">)</span> <span class="token operator">=></span> React<span class="token punctuation">.</span>ReactNode<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token generic-function"><span class="token function">List</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">{</span> items<span class="token punctuation">,</span> renderItem <span class="token punctuation">}</span><span class="token operator">:</span> ListProps<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>ul<span class="token operator">></span>
+    <span class="token punctuation">{</span>items<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>li key<span class="token operator">=</span><span class="token punctuation">{</span>index<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token function">renderItem</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">}</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Alice'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Bob'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> products <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Laptop'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Phone'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span>h2<span class="token operator">></span>Users<span class="token operator">:</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">></span>
+      <span class="token operator">&lt;</span>List items<span class="token operator">=</span><span class="token punctuation">{</span>users<span class="token punctuation">}</span> renderItem<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token operator">&lt;</span>span<span class="token operator">></span><span class="token punctuation">{</span>user<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>h2<span class="token operator">></span>Products<span class="token operator">:</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">></span>
+      <span class="token operator">&lt;</span>List items<span class="token operator">=</span><span class="token punctuation">{</span>products<span class="token punctuation">}</span> renderItem<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span>product<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token operator">&lt;</span>span<span class="token operator">></span><span class="token punctuation">{</span>product<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
+
 </code></pre>
                                 </div>
                             </div>
@@ -479,10 +537,27 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                             <h2 class="accordion-header" id="headingEight"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">Type Assertions</button></h2>
                             <div class="accordion-collapse collapse" id="collapseEight" aria-labelledby="headingEight" data-bs-parent="#typescriptConceptsAccordion">
                                 <div class="accordion-body">
-                                    <p>Type assertions tell the compiler to treat a variable as a specific type. This is helpful when you know more about the type than TypeScript does.</p>
-                                    <p>Learn to assert types in TypeScript for more control over type checking.</p>
-                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">let</span> someValue<span class="token operator">:</span> <span class="token builtin">any</span> <span class="token operator">=</span> <span class="token string">"This is a string"</span><span class="token punctuation">;</span>
-<span class="token keyword">let</span> strLength<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=</span> <span class="token punctuation">(</span>someValue <span class="token keyword">as</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+                                    <p>TypeScript type assertions are a way to tell the compiler that you know more about the type of a value than it does. It's essentially a way to override the compiler's inferred type and specify a more specific type, which can be useful in certain scenarios. For instance, let's say you retrieve a value from an API response that is of type unknown or any, and you know it’s actually a string. You can use type assertions to inform TypeScript of this fact and proceed with string-specific operations. There are two syntaxes for type assertions: the as syntax and the angle-bracket &lt;Type&gt; syntax.</p>
+                                    <p>Imagine you have an input field where users can enter their age, and you want to ensure that the value is treated as a number. Since the input value is always a string by default, you can use a type assertion to convert it to a number.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> AgeInput<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>age<span class="token punctuation">,</span> setAge<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">number</span> <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">handleAgeChange</span> <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> React<span class="token punctuation">.</span>ChangeEvent<span class="token operator">&lt;</span>HTMLInputElement<span class="token operator">></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> inputAge <span class="token operator">=</span> e<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value <span class="token keyword">as</span> <span class="token builtin">unknown</span> <span class="token keyword">as</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+    <span class="token function">setAge</span><span class="token punctuation">(</span>inputAge<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span>label htmlFor<span class="token operator">=</span><span class="token string">"age"</span><span class="token operator">></span>Enter your age<span class="token operator">:</span><span class="token operator">&lt;</span><span class="token operator">/</span>label<span class="token operator">></span>
+      <span class="token operator">&lt;</span>input type<span class="token operator">=</span><span class="token string">"text"</span> id<span class="token operator">=</span><span class="token string">"age"</span> onChange<span class="token operator">=</span><span class="token punctuation">{</span>handleAgeChange<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token punctuation">{</span>age <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>p<span class="token operator">></span>Your age <span class="token keyword">is</span><span class="token operator">:</span> <span class="token punctuation">{</span>age<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span><span class="token punctuation">}</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> AgeInput<span class="token punctuation">;</span>
+
 </code></pre>
                                 </div>
                             </div>
@@ -492,16 +567,56 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                             <h2 class="accordion-header" id="headingNine"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">Enums</button></h2>
                             <div class="accordion-collapse collapse" id="collapseNine" aria-labelledby="headingNine" data-bs-parent="#typescriptConceptsAccordion">
                                 <div class="accordion-body">
-                                    <p>Enums define a set of named constants, which can help manage related values.</p>
-                                    <p>Learn to create and use Enums for defining sets of constants.</p>
-                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">enum</span> Direction <span class="token punctuation">{</span>
-  Up <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
-  Down<span class="token punctuation">,</span>
-  Left<span class="token punctuation">,</span>
-  Right
+                                    <p>Enums, or enumerations, in TypeScript are a way to define a set of named constants. They can be a great tool to make your code more readable and expressive, especially when dealing with sets of related values. Enums help avoid magic strings or numbers in your code, making it easier to manage and understand. In the context of a React application, enums are often used to represent a fixed set of possible values for a prop, state, or parameter. This ensures that only valid values are used, reducing the risk of bugs.</p>
+                                    <p>Example in a Web Application: Suppose you are building a task management app where each task can have a specific status.</p>
+                                    <ul>
+                                        <li>An enum TaskStatus is created to define the possible statuses a task can have: ToDo, InProgress, and Done.</li>
+                                        <li>The Task interface includes a status property that uses the TaskStatus enum, ensuring that only valid statuses can be assigned.</li>
+                                        <li>The TaskComponent uses the enum to manage and display the task's status, providing buttons to change the status, each using values from the TaskStatus enum.</li>
+                                    </ul>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">enum</span> TaskStatus <span class="token punctuation">{</span>
+  ToDo <span class="token operator">=</span> <span class="token string">'ToDo'</span><span class="token punctuation">,</span>
+  InProgress <span class="token operator">=</span> <span class="token string">'InProgress'</span><span class="token punctuation">,</span>
+  Done <span class="token operator">=</span> <span class="token string">'Done'</span>
 <span class="token punctuation">}</span>
 
-<span class="token keyword">let</span> currentDirection<span class="token operator">:</span> Direction <span class="token operator">=</span> Direction<span class="token punctuation">.</span>Up<span class="token punctuation">;</span>
+<span class="token keyword">interface</span> <span class="token class-name">Task</span> <span class="token punctuation">{</span>
+  id<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+  title<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  status<span class="token operator">:</span> TaskStatus<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> TaskComponent<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token constant">FC</span><span class="token operator">&lt;</span><span class="token punctuation">{</span> task<span class="token operator">:</span> Task <span class="token punctuation">}</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">{</span> task <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>status<span class="token punctuation">,</span> setStatus<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span>TaskStatus<span class="token operator">></span></span></span><span class="token punctuation">(</span>task<span class="token punctuation">.</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">handleStatusChange</span> <span class="token operator">=</span> <span class="token punctuation">(</span>newStatus<span class="token operator">:</span> TaskStatus<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token function">setStatus</span><span class="token punctuation">(</span>newStatus<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span>h3<span class="token operator">></span><span class="token punctuation">{</span>task<span class="token punctuation">.</span>title<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h3<span class="token operator">></span>
+      <span class="token operator">&lt;</span>p<span class="token operator">></span>Status<span class="token operator">:</span> <span class="token punctuation">{</span>status<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
+      <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">handleStatusChange</span><span class="token punctuation">(</span>TaskStatus<span class="token punctuation">.</span>ToDo<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">></span>To Do<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
+      <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">handleStatusChange</span><span class="token punctuation">(</span>TaskStatus<span class="token punctuation">.</span>InProgress<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">></span>In Progress<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
+      <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">handleStatusChange</span><span class="token punctuation">(</span>TaskStatus<span class="token punctuation">.</span>Done<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">></span>Done<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> task<span class="token operator">:</span> Task <span class="token operator">=</span> <span class="token punctuation">{</span>
+    id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    title<span class="token operator">:</span> <span class="token string">'Learn TypeScript enums'</span><span class="token punctuation">,</span>
+    status<span class="token operator">:</span> TaskStatus<span class="token punctuation">.</span>ToDo
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token operator">&lt;</span>TaskComponent task<span class="token operator">=</span><span class="token punctuation">{</span>task<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
 </code></pre>
                                 </div>
                             </div>
@@ -511,8 +626,20 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                             <h2 class="accordion-header" id="headingTen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">React Native Props with TypeScript</button></h2>
                             <div class="accordion-collapse collapse" id="collapseTen" aria-labelledby="headingTen" data-bs-parent="#typescriptConceptsAccordion">
                                 <div class="accordion-body">
-                                    <p>In React Native, TypeScript is particularly useful for typing props and state in functional components.</p>
-                                    <p>Learn to use TypeScript to define props in React Native components.</p>
+                                    <p>React Native, like React, allows components to receive data and event handlers through props. Using TypeScript with React Native adds the benefit of strong typing to these props, enhancing code quality and reducing bugs. Props in React Native: Props are used to pass data from one component to another, creating dynamic and reusable components. They ensure that components can be customized and controlled by their parent components.</p>
+                                    <dl>
+                                        <dt>GreetingProps Interface:</dt>
+                                        <dd><p>This defines the structure of the props expected by the Greeting component. It specifies that the component expects a name (mandatory string) and an optional age (number). The age property has a question mark (?), indicating it is optional.</p></dd>
+                                        <dt>Greeting Component:</dt>
+                                        <dd>
+                                            <p>This functional component takes GreetingProps as its props type. It destructures name and age from the props. Within the component:</p>
+                                            <ul>
+                                                <li>It renders a View containing a Text element that always displays the name.</li>
+                                                <li>It conditionally renders another Text element showing the age if the age prop is provided.</li>
+                                                <li>This setup ensures that the Greeting component is type-safe and can flexibly handle the presence or absence of the age prop while always displaying the name.</li>
+                                            </ul>
+                                        </dd>
+                                    </dl>
                                     <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">GreetingProps</span> <span class="token punctuation">{</span>
   name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
   age<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>

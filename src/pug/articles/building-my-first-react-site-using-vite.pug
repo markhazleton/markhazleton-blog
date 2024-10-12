@@ -444,27 +444,52 @@ block layout-content
               | Union and Intersection Types
           .accordion-collapse.collapse#collapseSix(aria-labelledby="headingSix" data-bs-parent="#typescriptConceptsAccordion")
             .accordion-body
-              p Union types allow a variable to hold multiple types, while intersection types combine types.
-              p Learn to use union and intersection types in TypeScript.
+              p.
+                TypeScript's Union and Intersection types add flexibility and power to type definitions, particularly useful in complex React applications.
+              dl
+                dt Union Types
+                dd They allow a variable to be one of several types. For example, if you have a component that can accept a string or number as a prop, you’d use a union type. This is handy for functions and components that can handle multiple types of inputs.
+                dt Intersection Types
+                dd They combine multiple types into one. This means an object of this type must satisfy all the combined types. Useful when you need an object to have multiple sets of properties.
+                p.
+                  Example in a Web Application: Imagine you have a UserProfile component that displays different user information based on user roles.
+                dl
+                  dt Union Type:
+                  dd The user prop can be either User or SuperUser. This allows the UserProfile component to accept different user types, providing flexibility.
+                  dt Intersection Type:
+                  dd SuperUser combines the properties of both Admin and User, meaning a SuperUser must have all properties of both types. This is useful for users who have combined roles.
+
               pre.language-typescript
                 code.language-typescript.
-                  type StringOrNumber = string | number;
-                  let value: StringOrNumber = "Hello";
+                  import React from 'react';
 
-                  interface Person {
-                    name: string;
-                  }
-
-                  interface Employee {
-                    employeeId: number;
-                  }
-
-                  type Worker = Person & Employee;
-
-                  const worker: Worker = {
-                    name: "Alice",
-                    employeeId: 123
+                  type Admin = {
+                    adminRights: string[];
                   };
+
+                  type User = {
+                    name: string;
+                    email: string;
+                  };
+
+                  type SuperUser = Admin & User;
+
+                  const UserProfile: React.FC<{ user: User | SuperUser }> = ({ user }) => {
+                    return (
+                      <div>
+                        <h2>{user.name}</h2>
+                        <p>{user.email}</p>
+                        {'adminRights' in user && (
+                          <ul>
+                            {user.adminRights.map((right) => (
+                              <li key={right}>{right}</li>))}
+                          </ul>
+                        )}
+                      </div>
+                      );
+                    };
+
+                  export default UserProfile;
 
         // Concept 7: Generics
         .accordion-item
@@ -473,13 +498,58 @@ block layout-content
               | Generics
           .accordion-collapse.collapse#collapseSeven(aria-labelledby="headingSeven" data-bs-parent="#typescriptConceptsAccordion")
             .accordion-body
-              p Generics allow you to write functions, interfaces, and classes that can work with any data type, providing flexibility with type safety.
-              p Learn how to use Generics for reusable, type-safe components.
+              p.
+                Generics in TypeScript provide a way to create reusable components that work with a variety of types instead of a single one.
+                They allow you to write flexible and type-safe code by enabling you to define components, functions,
+                or hooks that can operate with different data types while preserving type information.
+                In the context of React, generics are often used in components and hooks to ensure they can
+                handle a wide range of data types without losing the benefits of TypeScript's type-checking.
+              p.
+                Example in a Web Application: Let's say you have a list component that can render lists of different types,
+                such as users, products, or orders. By using generics, you can create a single List component that works for any type of data.
+              ul
+                li The List component is a generic component that takes a type parameter T.
+                li The ListProps interface uses this type parameter to define the shape of the props.
+                li The items prop is an array of T, and the renderItem prop is a function that takes an item of type T and returns a React node.
+              p.
+                Using generics this way ensures that the List component can handle any type of data,
+                making it highly reusable and type-safe.
+                This flexibility is a powerful feature of TypeScript,
+                allowing you to write more generic and adaptable components while retaining strong type-checking benefits.
+
               pre.language-typescript
                 code.language-typescript.
-                  function identity<T>(arg: T): T {
-                    return arg;
+                  import React from 'react';
+
+                  interface ListProps<T> {
+                    items: T[];
+                    renderItem: (item: T) => React.ReactNode;
                   }
+
+                  function List<T>({ items, renderItem }: ListProps<T>) {
+                    return (
+                      <ul>
+                      {items.map((item, index) => (
+                        <li key={index}>{renderItem(item)}</li>)
+                      )}
+                      </ul>
+                    );
+                  }
+                  const users = [{ name: 'Alice' }, { name: 'Bob' }];
+                  const products = [{ name: 'Laptop' }, { name: 'Phone' }];
+
+                  const App: React.FC = () => {
+                    return (
+                      <div>
+                        <h2>Users:</h2>
+                        <List items={users} renderItem={(user) => <span>{user.name}</span>} />
+                        <h2>Products:</h2>
+                        <List items={products} renderItem={(product) => <span>{product.name}</span>} />
+                      </div>
+                      );
+                  };
+                  export default App;
+
 
         // Concept 8: Type Assertions
         .accordion-item
@@ -488,12 +558,36 @@ block layout-content
               | Type Assertions
           .accordion-collapse.collapse#collapseEight(aria-labelledby="headingEight" data-bs-parent="#typescriptConceptsAccordion")
             .accordion-body
-              p Type assertions tell the compiler to treat a variable as a specific type. This is helpful when you know more about the type than TypeScript does.
-              p Learn to assert types in TypeScript for more control over type checking.
+              p.
+                TypeScript type assertions are a way to tell the compiler that you know more about the type of a value than it does.
+                It's essentially a way to override the compiler's inferred type and specify a more specific type, which can be useful in certain scenarios.
+                For instance, let's say you retrieve a value from an API response that is of type unknown or any,
+                and you know it’s actually a string. You can use type assertions to inform TypeScript of this fact and proceed with string-specific operations.
+                There are two syntaxes for type assertions: the as syntax and the angle-bracket &lt;Type&gt; syntax.
+              p.
+                Imagine you have an input field where users can enter their age, and you want to ensure that the value is treated as a number.
+                Since the input value is always a string by default, you can use a type assertion to convert it to a number.
               pre.language-typescript
                 code.language-typescript.
-                  let someValue: any = "This is a string";
-                  let strLength: number = (someValue as string).length;
+                  import React, { useState } from 'react';
+                  const AgeInput: React.FC = () => {
+                    const [age, setAge] = useState<number | null>(null);
+
+                    const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                      const inputAge = e.target.value as unknown as number;
+                      setAge(inputAge);
+                    };
+
+                    return (
+                      <div>
+                        <label htmlFor="age">Enter your age:</label>
+                        <input type="text" id="age" onChange={handleAgeChange} />
+                          {age !== null && <p>Your age is: {age}</p>}
+                      </div>
+                    );
+                  };
+                  export default AgeInput;
+
 
         // Concept 9: Enums
         .accordion-item
@@ -502,18 +596,64 @@ block layout-content
               | Enums
           .accordion-collapse.collapse#collapseNine(aria-labelledby="headingNine" data-bs-parent="#typescriptConceptsAccordion")
             .accordion-body
-              p Enums define a set of named constants, which can help manage related values.
-              p Learn to create and use Enums for defining sets of constants.
+              p.
+                Enums, or enumerations, in TypeScript are a way to define a set of named constants.
+                They can be a great tool to make your code more readable and expressive, especially when dealing with sets of related values.
+                Enums help avoid magic strings or numbers in your code, making it easier to manage and understand.
+                In the context of a React application, enums are often used to represent a fixed set of possible values for a prop, state, or parameter.
+                This ensures that only valid values are used, reducing the risk of bugs.
+              p.
+                Example in a Web Application: Suppose you are building a task management app where each task can have a specific status.
+              ul
+                li An enum TaskStatus is created to define the possible statuses a task can have: ToDo, InProgress, and Done.
+                li The Task interface includes a status property that uses the TaskStatus enum, ensuring that only valid statuses can be assigned.
+                li The TaskComponent uses the enum to manage and display the task's status, providing buttons to change the status, each using values from the TaskStatus enum.
+
               pre.language-typescript
                 code.language-typescript.
-                  enum Direction {
-                    Up = 1,
-                    Down,
-                    Left,
-                    Right
+                  import React, { useState } from 'react';
+
+                  enum TaskStatus {
+                    ToDo = 'ToDo',
+                    InProgress = 'InProgress',
+                    Done = 'Done'
                   }
 
-                  let currentDirection: Direction = Direction.Up;
+                  interface Task {
+                    id: number;
+                    title: string;
+                    status: TaskStatus;
+                  }
+
+                  const TaskComponent: React.FC<{ task: Task }> = ({ task }) => {
+                    const [status, setStatus] = useState<TaskStatus>(task.status);
+
+                    const handleStatusChange = (newStatus: TaskStatus) => {
+                      setStatus(newStatus);
+                    };
+
+                    return (
+                      <div>
+                        <h3>{task.title}</h3>
+                        <p>Status: {status}</p>
+                        <button onClick={() => handleStatusChange(TaskStatus.ToDo)}>To Do</button>
+                        <button onClick={() => handleStatusChange(TaskStatus.InProgress)}>In Progress</button>
+                        <button onClick={() => handleStatusChange(TaskStatus.Done)}>Done</button>
+                      </div>
+                      );
+                  };
+
+                  const App: React.FC = () => {
+                    const task: Task = {
+                      id: 1,
+                      title: 'Learn TypeScript enums',
+                      status: TaskStatus.ToDo
+                      };
+
+                    return <TaskComponent task={task} />;
+                  };
+
+                  export default App;
 
         // Concept 10: React Native Props with TypeScript
         .accordion-item
@@ -522,8 +662,27 @@ block layout-content
               | React Native Props with TypeScript
           .accordion-collapse.collapse#collapseTen(aria-labelledby="headingTen" data-bs-parent="#typescriptConceptsAccordion")
             .accordion-body
-              p In React Native, TypeScript is particularly useful for typing props and state in functional components.
-              p Learn to use TypeScript to define props in React Native components.
+              p.
+                React Native, like React, allows components to receive data and event handlers through props.
+                Using TypeScript with React Native adds the benefit of strong typing to these props, enhancing code quality and reducing bugs.
+                Props in React Native: Props are used to pass data from one component to another, creating dynamic and reusable components.
+                They ensure that components can be customized and controlled by their parent components.
+              dl
+                dt GreetingProps Interface:
+                dd
+                  p.
+                    This defines the structure of the props expected by the Greeting component.
+                    It specifies that the component expects a name (mandatory string) and an optional age (number).
+                    The age property has a question mark (?), indicating it is optional.
+                dt Greeting Component:
+                dd
+                  p.
+                    This functional component takes GreetingProps as its props type. It destructures name and age from the props. Within the component:
+                  ul
+                    li It renders a View containing a Text element that always displays the name.
+                    li It conditionally renders another Text element showing the age if the age prop is provided.
+                    li This setup ensures that the Greeting component is type-safe and can flexibly handle the presence or absence of the age prop while always displaying the name.
+
               pre.language-typescript
                 code.language-typescript.
                   interface GreetingProps {
