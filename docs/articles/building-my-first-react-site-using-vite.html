@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="author" content="Mark Hazleton" />
+        <meta name="robots" content="index, follow" />
+        <title>Building My First React Site Using Vite</title>
+        <meta name="description" content="Learn how to quickly build and deploy a React site using Vite and GitHub Pages, including troubleshooting common issues like CORS." />
+        <meta name="keywords" content="Vite, React, GitHub Pages, CORS, deployment, setup" />
+        <meta name="author" content="Mark Hazleton" />
+        <link rel="canonical" href="https://markhazleton.com/articles/building-my-first-react-site-using-vite.html" />
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "familyName": "Hazleton",
+                "givenName": "Mark",
+                "jobTitle": "Solutions Architect",
+                "alumniOf": "University of North Texas",
+                "affiliation": {
+                    "@type": "Organization",
+                    "name": "Control Origins"
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
+                "url": "https://markhazleton.com"
+            }
+        </script>
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "url": "https://markhazleton.com",
+                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+            }
+        </script>
+        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="/css/styles.css?version=1728756410987" />
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+        <script>
+            (function (c, l, a, r, i, t, y) {
+                c[a] =
+                    c[a] ||
+                    function () {
+                        (c[a].q = c[a].q || []).push(arguments);
+                    };
+                t = l.createElement(r);
+                t.async = 1;
+                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+            })(window, document, 'clarity', 'script', 'd628hovv63');
+        </script>
+    </head>
+    <body class="sidetracked-body" id="page-top">
+        <nav class="navbar navbar-dark bg-primary p-1">
+            <div class="container-fluid justify-content-end">
+                <div class="social-icons d-flex">
+                    <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in text-light me-2" style="font-size: 2rem"></i></a>
+                    <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github text-light me-2" style="font-size: 2rem"></i></a>
+                    <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube text-light me-2" style="font-size: 2rem"></i></a>
+                    <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram text-light" style="font-size: 2rem"></i></a>
+                </div>
+            </div>
+        </nav>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
+                <span class="d-block d-lg-none">Mark Hazleton</span>
+                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#articles">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Page Content-->
+        <div class="container-fluid p-0 painteddesert-background">
+            <section class="painteddesert-section painteddesert-section-background" id="post">
+                <div class="painteddesert-section-content">
+                    <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/ReactSparkPortfolio" target="_blank" title="The full source code for the ReactSparkPortfolio is available on GitHub">The full source code for the ReactSparkPortfolio is available on GitHub</a></p>
+                    <h1>Building My First React Site Using Vite and GitHub</h1>
+                    <h2 class="subheading mb-3">A step-by-step guide to setting up and deploying a React project</h2>
+                    <p>I recently created a React portfolio project using Vite and deployed it to GitHub Pages. Since this was my first time building with React and TypeScript, I learned a lot along the way.</p>
+                    <p>Vite offers an incredibly fast and efficient way to create and deploy React sites. In this guide, we will walk through the entire process, including setting up Vite, configuring it for GitHub Pages, handling CORS issues, and deploying the final product.</p>
+                    <dl>
+                        <dt>Initial Project Setup</dt>
+                        <dd>
+                            <p>Start by using Vite's project scaffolding for React. This sets up the initial folder structure and installs dependencies.</p>
+                            <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> create vite@latest
+<span class="token builtin class-name">cd</span> ReactSparkPortfolio
+<span class="token function">npm</span> <span class="token function">install</span>
+</code></pre>
+                        </dd>
+                        <dt>Writing and Organizing My React Components</dt>
+                        <dd>
+                            <p>After setting up the project, I created components for my portfolio. I wanted a simple, clean layout with sections for Home, About, Projects, and Contact.</p>
+                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Header <span class="token keyword">from</span> <span class="token string">'./components/Header'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Hero <span class="token keyword">from</span> <span class="token string">'./components/Hero'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> About <span class="token keyword">from</span> <span class="token string">'./components/About'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Projects <span class="token keyword">from</span> <span class="token string">'./components/Projects'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Contact <span class="token keyword">from</span> <span class="token string">'./components/Contact'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Footer <span class="token keyword">from</span> <span class="token string">'./components/Footer'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>activeSection<span class="token punctuation">,</span> setActiveSection<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token string">'home'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">handleSectionChange</span> <span class="token operator">=</span> <span class="token punctuation">(</span>section<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token function">setActiveSection</span><span class="token punctuation">(</span>section<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"d-flex flex-column min-vh-100"</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>Header onSectionChange<span class="token operator">=</span><span class="token punctuation">{</span>handleSectionChange<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>main className<span class="token operator">=</span><span class="token string">"flex-grow-1 pt-5 mt-5 container"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-10"</span><span class="token operator">></span>
+            <span class="token punctuation">{</span>activeSection <span class="token operator">===</span> <span class="token string">'home'</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>Hero <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span>
+            <span class="token punctuation">{</span>activeSection <span class="token operator">===</span> <span class="token string">'about'</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>About <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span>
+            <span class="token punctuation">{</span>activeSection <span class="token operator">===</span> <span class="token string">'projects'</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>Projects <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span>
+            <span class="token punctuation">{</span>activeSection <span class="token operator">===</span> <span class="token string">'contact'</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>Contact <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span>
+          <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>main<span class="token operator">></span>
+      <span class="token operator">&lt;</span>Footer <span class="token operator">/</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
+</code></pre>
+                        </dd>
+                        <dt>Configure Vite for GitHub Pages</dt>
+                        <dd>
+                            <p>Vite builds the production files into a "dist" folder by default. For GitHub Pages, however, we need to modify Vite’s configuration to output into the "docs" folder. This makes setting up the GitHub Pages deployment easier as it serves the site from the "docs" folder by default.</p>
+                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> defineConfig <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"vite"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> react <span class="token keyword">from</span> <span class="token string">"@vitejs/plugin-react"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  base<span class="token operator">:</span> <span class="token string">"./"</span><span class="token punctuation">,</span>
+  build<span class="token operator">:</span> <span class="token punctuation">{</span>
+    outDir<span class="token operator">:</span> <span class="token string">"docs"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  plugins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token function">react</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                        </dd>
+                        <dt>Serving Static Assets and Handling CORS Issues</dt>
+                        <dd>
+                            <p>Fetching data from external sources during development can cause CORS issues. One way to resolve this is by moving static files like rss.xml to Vite's public folder, which serves static assets directly.</p>
+                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> <span class="token function-variable function">fetchRSSFeed</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">'/rss.xml'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> rssData <span class="token operator">=</span> <span class="token keyword">await</span> response<span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DOMParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> xmlDoc <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parseFromString</span><span class="token punctuation">(</span>rssData<span class="token punctuation">,</span> <span class="token string">'application/xml'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+                        </dd>
+                        <dt>Adding the Articles Component</dt>
+                        <dd>
+                            <p>To display content from an RSS feed, create an "Articles" component that fetches and parses the RSS XML file, rendering article titles and links.</p>
+                            <p>This TypeScript code defines a React functional component that dynamically fetches and displays a list of articles from an RSS feed. The component uses React’s useState hook to create a state variable that holds the articles, which is initialized as an empty array. The state is updated once the RSS feed is fetched and parsed. Additionally, useEffect is used to ensure that the fetch operation happens when the component first renders. Since useEffect is invoked with an empty dependency array, it acts like a componentDidMount lifecycle event, executing the fetch operation only once when the component is mounted.</p>
+                            <p>The RSS feed is fetched asynchronously using the native fetch API, targeting the /rss.xml endpoint on the server. After retrieving the raw XML data as plain text, the code uses DOMParser to parse this text into an XML structure. Once parsed, the &lt;item> elements, which represent individual articles, are extracted. For each &lt;item>, the component pulls relevant data such as the title, link, and publication date by accessing the corresponding child elements. This extracted information is stored in a structured array, which is then used to update the component’s state.</p>
+                            <p>Once the state is updated with the parsed articles, the component renders a list of articles in the browser. Each article is displayed as a clickable link along with its publication date. The component efficiently maps through the state array of articles to dynamically generate the list items, ensuring that the data is presented as soon as it is fetched and parsed. By combining useEffect for side effects and useState for managing data, the component handles asynchronous data fetching and re-renders itself when new data becomes available, creating a simple and effective way to display RSS feed content in a React application.</p>
+                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useEffect<span class="token punctuation">,</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> Articles<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>articles<span class="token punctuation">,</span> setArticles<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token function-variable function">fetchRSSFeed</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">'/rss.xml'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> rssData <span class="token operator">=</span> <span class="token keyword">await</span> response<span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">const</span> parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DOMParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> xmlDoc <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parseFromString</span><span class="token punctuation">(</span>rssData<span class="token punctuation">,</span> <span class="token string">'application/xml'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> items <span class="token operator">=</span> xmlDoc<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">'item'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">const</span> parsedArticles <span class="token operator">=</span> <span class="token builtin">Array</span><span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span>items<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>item <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
+        title<span class="token operator">:</span> item<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">'title'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>textContent<span class="token punctuation">,</span>
+        link<span class="token operator">:</span> item<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">'link'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>textContent<span class="token punctuation">,</span>
+        pubDate<span class="token operator">:</span> item<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">'pubDate'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>textContent<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token function">setArticles</span><span class="token punctuation">(</span>parsedArticles<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token function">fetchRSSFeed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span>h2<span class="token operator">></span>Latest Articles<span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">></span>
+      <span class="token operator">&lt;</span>ul<span class="token operator">></span>
+        <span class="token punctuation">{</span>articles<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>article<span class="token punctuation">,</span> index<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
+          <span class="token operator">&lt;</span>li key<span class="token operator">=</span><span class="token punctuation">{</span>index<span class="token punctuation">}</span><span class="token operator">></span>
+            <span class="token operator">&lt;</span>a href<span class="token operator">=</span><span class="token punctuation">{</span>article<span class="token punctuation">.</span>link<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span>article<span class="token punctuation">.</span>title<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">></span> <span class="token operator">-</span> <span class="token punctuation">{</span>article<span class="token punctuation">.</span>pubDate<span class="token punctuation">}</span>
+          <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+        <span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> Articles<span class="token punctuation">;</span>
+</code></pre>
+                        </dd>
+                        <dt>Deploying the Site on GitHub Pages</dt>
+                        <dd>
+                            <p>Deploying a Vite site to GitHub Pages involves configuring a GitHub Actions workflow. This automates the process and pushes the build output to the "docs" folder on every push.</p>
+                            <pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy React App to GitHub Pages
+
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+  <span class="token key atrule">push</span><span class="token punctuation">:</span>
+    <span class="token key atrule">branches</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> main
+
+<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token key atrule">build</span><span class="token punctuation">:</span>
+    <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
+    <span class="token key atrule">steps</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Checkout code
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v2
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Set up Node.js
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/setup<span class="token punctuation">-</span>node@v2
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">node-version</span><span class="token punctuation">:</span> <span class="token string">'16'</span>
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install dependencies
+        <span class="token key atrule">run</span><span class="token punctuation">:</span> npm install
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build the project
+        <span class="token key atrule">run</span><span class="token punctuation">:</span> npm run build
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to GitHub Pages
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v3
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
+          <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./docs
+</code></pre>
+                        </dd>
+                        <dt>Final Thoughts</dt>
+                        <dd><p>Vite simplifies React development with features like instant hot module replacement and minimal configuration. With just a few steps, you can deploy a project using GitHub Pages. Even with common issues like CORS, Vite offers flexible solutions that help you get your project online quickly.</p></dd>
+                    </dl>
+                    <h1>Learn TypeScript with Code Examples</h1>
+                    <h2 class="subheading mb-3">Explore TypeScript concepts through examples and interactive code</h2>
+                    <!-- Bootstrap Accordion for TypeScript Concepts-->
+                    <div class="accordion" id="typescriptConceptsAccordion">
+                        <!-- Concept 1: Basic Type Annotations-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Basic Type Annotations</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Type annotations are a fundamental feature of TypeScript. They help you specify the types of variables, function parameters, and return values.</p>
+                                    <p>Learn how to use TypeScript’s type annotations.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">let</span> message<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token operator">=</span> <span class="token string">"Hello, TypeScript!"</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> isDone<span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> count<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=</span> <span class="token number">42</span><span class="token punctuation">;</span></code></pre>
+                                    <p>Output:</p>
+                                    <pre class="language-bash"><code class="language-bash">Hello, TypeScript<span class="token operator">!</span>
+<span class="token boolean">false</span>
+<span class="token number">42</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 2: Functions with Typed Parameters and Return Types-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Functions with Typed Parameters and Return Types</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Declaring the types for function arguments and return values helps prevent errors by catching type mismatches.</p>
+                                    <p>Learn to define typed parameters and return values for functions.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span>x<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> y<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">number</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">greet</span><span class="token punctuation">(</span>name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Hello, </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 15</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token string">"Alice"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Hello, Alice</span>
+</code></pre>
+                                    <p>Output:</p>
+                                    <pre class="language-java"><code class="language-java"><span class="token number">15</span> <span class="token punctuation">(</span>after calling <span class="token function">add</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token class-name">Hello</span><span class="token punctuation">,</span> <span class="token class-name">Alice</span> <span class="token punctuation">(</span>after calling <span class="token function">greet</span><span class="token punctuation">(</span><span class="token string">"Alice"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 3: Optional and Default Parameters-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Optional and Default Parameters</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>In TypeScript, function parameters can be optional or have default values.</p>
+                                    <p>Learn how to use optional and default parameters in TypeScript functions.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">function</span> <span class="token function">greet</span><span class="token punctuation">(</span>name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> greeting<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>greeting<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">, </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+                                    <p>Output:</p>
+                                    <pre class="language-plaintext"><code class="language-plaintext">Hello, Alice
+Hi, Alice
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 4: Interfaces-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Interfaces</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Interfaces define the structure of an object. They ensure that the object conforms to a specific shape.</p>
+                                    <p>Learn to define object structures with interfaces in TypeScript.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+  id<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  age<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> user<span class="token operator">:</span> User <span class="token operator">=</span> <span class="token punctuation">{</span>
+  id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  name<span class="token operator">:</span> <span class="token string">"John Doe"</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 5: Type Aliases-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFive"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Type Aliases</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Type aliases allow you to define custom types, which can make your code more readable and reusable.</p>
+                                    <p>Learn to use Type Aliases to create custom types.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">type</span> <span class="token class-name"><span class="token constant">ID</span></span> <span class="token operator">=</span> <span class="token builtin">number</span> <span class="token operator">|</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">printId</span><span class="token punctuation">(</span>id<span class="token operator">:</span> <span class="token constant">ID</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">ID: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 6: Union and Intersection Types-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSix"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Union and Intersection Types</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Union types allow a variable to hold multiple types, while intersection types combine types.</p>
+                                    <p>Learn to use union and intersection types in TypeScript.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">type</span> <span class="token class-name">StringOrNumber</span> <span class="token operator">=</span> <span class="token builtin">string</span> <span class="token operator">|</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> value<span class="token operator">:</span> StringOrNumber <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">interface</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">interface</span> <span class="token class-name">Employee</span> <span class="token punctuation">{</span>
+  employeeId<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">Worker</span> <span class="token operator">=</span> Person <span class="token operator">&amp;</span> Employee<span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> worker<span class="token operator">:</span> Worker <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"Alice"</span><span class="token punctuation">,</span>
+  employeeId<span class="token operator">:</span> <span class="token number">123</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 7: Generics-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSeven"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">Generics</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseSeven" aria-labelledby="headingSeven" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Generics allow you to write functions, interfaces, and classes that can work with any data type, providing flexibility with type safety.</p>
+                                    <p>Learn how to use Generics for reusable, type-safe components.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">function</span> <span class="token generic-function"><span class="token function">identity</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>arg<span class="token operator">:</span> <span class="token constant">T</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token constant">T</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> arg<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 8: Type Assertions-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingEight"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">Type Assertions</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseEight" aria-labelledby="headingEight" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Type assertions tell the compiler to treat a variable as a specific type. This is helpful when you know more about the type than TypeScript does.</p>
+                                    <p>Learn to assert types in TypeScript for more control over type checking.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">let</span> someValue<span class="token operator">:</span> <span class="token builtin">any</span> <span class="token operator">=</span> <span class="token string">"This is a string"</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> strLength<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=</span> <span class="token punctuation">(</span>someValue <span class="token keyword">as</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 9: Enums-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingNine"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">Enums</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseNine" aria-labelledby="headingNine" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>Enums define a set of named constants, which can help manage related values.</p>
+                                    <p>Learn to create and use Enums for defining sets of constants.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">enum</span> Direction <span class="token punctuation">{</span>
+  Up <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  Down<span class="token punctuation">,</span>
+  Left<span class="token punctuation">,</span>
+  Right
+<span class="token punctuation">}</span>
+
+<span class="token keyword">let</span> currentDirection<span class="token operator">:</span> Direction <span class="token operator">=</span> Direction<span class="token punctuation">.</span>Up<span class="token punctuation">;</span>
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Concept 10: React Native Props with TypeScript-->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">React Native Props with TypeScript</button></h2>
+                            <div class="accordion-collapse collapse" id="collapseTen" aria-labelledby="headingTen" data-bs-parent="#typescriptConceptsAccordion">
+                                <div class="accordion-body">
+                                    <p>In React Native, TypeScript is particularly useful for typing props and state in functional components.</p>
+                                    <p>Learn to use TypeScript to define props in React Native components.</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">GreetingProps</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  age<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> Greeting<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token constant">FC</span><span class="token operator">&lt;</span>GreetingProps<span class="token operator">></span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">,</span> age <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>View<span class="token operator">></span>
+      <span class="token operator">&lt;</span>Text<span class="token operator">></span>Hello<span class="token punctuation">,</span> <span class="token punctuation">{</span>name<span class="token punctuation">}</span><span class="token operator">!</span><span class="token operator">&lt;</span><span class="token operator">/</span>Text<span class="token operator">></span>
+      <span class="token punctuation">{</span>age <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>Text<span class="token operator">></span>You are <span class="token punctuation">{</span>age<span class="token punctuation">}</span> years old<span class="token punctuation">.</span><span class="token operator">&lt;</span><span class="token operator">/</span>Text<span class="token operator">></span><span class="token punctuation">}</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>View<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+                                    <p>In this example, name is a required prop, and age is optional. TypeScript will enforce the correct usage of these props when using the Greeting component.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>These 10 TypeScript code samples cover core features that will improve the development experience for new developers. They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.</p>
+                </div>
+            </section>
+            <footer class="navbar-dark bg-primary">
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-10 text-left text-light">
+                        <br />
+                        <div class="row">
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Blog Management</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html" target="_self" title="Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed.">Automating My GitHub Profile with the Latest Blog Posts Using GitHub Actions</a></li>
+                                    <li><a class="text-light" href="/articles/canonical-url-troubleshooting-for-static-web-apps.html" target="_self" title="Learn how to manage canonical URLs for static web apps using Azure and Cloudflare for SEO optimization.">Canonical URL Troubleshooting for Static Web Apps</a></li>
+                                    <li><a class="text-light" href="/articles/developing-markhazletoncom-tools-and-approach.html" target="_self" title="An in-depth look into the technologies and development process behind MarkHazleton.com. Discover the tools and frameworks used to create this site.">Developing MarkHazleton.com: Tools and Approach</a></li>
+                                    <li><a class="text-light" href="/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" target="_self" title="In the ever-evolving landscape of web development, the surge in popularity of static websites has been nothing short of remarkable. These sites, known for their speed, security, and simplicity, are increasingly becoming the go-to for developers and businesses alike. My journey with static websites has been transformative, leading me to embrace cloud-based solutions for hosting. Among these, Azure Static Web Apps stands out as a beacon of efficiency and innovation.">Embracing Azure Static Web Apps for Static Site Hosting</a></li>
+                                    <li><a class="text-light" href="/articles/moving-to-markhazletoncom.html" target="_self" title="My experience migrating my blog from markhazleton.controlorigins.com to markhazleton.com, hosted on Azure Static Web Apps and using Cloudflare for DNS, with detailed steps and best practices">Moving to MarkHazleton.com</a></li>
+                                    <li><a class="text-light" href="/articles/syntax-highlighting-using-prismjs-for-xml-pug-yaml-and-csharp.html" target="_self" title="Learn how to implement syntax highlighting for XML, PUG, YAML, and C# using Prism.js. We also explore automating the bundling process using render-scripts.js.">Syntax Highlighting Using Prism.js for XML, PUG, YAML, and C#</a></li>
+                                    <li><a class="text-light" href="/articles/building-a-web-application-to-manage-your-blog-articles.html" target="_self" title="Building a Web Application to Manage Your Blog Articles: A Journey into Web Content Management Systems">Tools to Manage My Blog</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Case Studies</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/building-my-first-react-site-using-vite.html" target="_self" title="Learn how to quickly build and deploy a React site using Vite and GitHub Pages, including troubleshooting common issues like CORS">Building My First React Site Using Vite</a></li>
+                                    <li><a class="text-light" href="/articles/fixing-a-runaway-nodejs-recursive-folder-issue.html" target="_self" title="Learn how to fix a runaway Node.js program that creates near-infinite recursive directories. Includes Windows C++ program to clean up">Fixing a Runaway Node.js Recursive Folder Issue</a></li>
+                                    <li><a class="text-light" href="/articles/wichita-sewer-site-creation.html" target="_self" title="Discover the journey behind the creation of the Wichita Sewer and Drain website, from initial planning to final launch, and the lessons learned along the way.">From Concept To Live: The Unveiling Of The WichitaSewer.com Website</a></li>
+                                    <li><a class="text-light" href="/sample-mvc-crud.html" target="_self" title="The SampleMvcCRUD Project">SampleMvcCRUD Project</a></li>
+                                    <li><a class="text-light" href="/articles/taking-fastendpoints-for-a-test-drive.html" target="_self" title="Exploring the streamlined approach to building ASP.NET APIs">Taking FastEndpoints for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/articles/taking-microsoft-copilot-studio-for-a-test-drive.html" target="_self" title="Mark Hazleton explores Microsoft Copilot Studio, sharing insights on creating a personalized AI chatbot, Copilot Mark. Discover how AI is revolutionizing site interactions and team communication.">Taking Microsoft Copilot Studio for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/web-project-mechanics.html" target="_self" title="Description for Web Project Mechanics">Web Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">ChatGPT</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/azure-wiki-expert-gpt-a-game-changer-for-azure-devops-documentation.html" target="_self" title="Learn how Azure Wiki Expert GPT speeds up Azure DevOps wiki writing by automating content generation in Markdown format. Boost productivity and ensure high-quality, consistent documentation with this powerful tool.">Accelerate Azure DevOps Wiki Writing with Azure Wiki Expert GPT</a></li>
+                                    <li><a class="text-light" href="/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html" target="_self" title="Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.">ChatGPT Meets Jeopardy: C# Solution for Trivia Aficionados</a></li>
+                                    <li><a class="text-light" href="/crafting-chatgpt-prompt.html" target="_self" title="Explore the art of crafting effective ChatGPT prompts with Mark Hazleton. Discover the significance of context, learn prompt engineering techniques, and unlock the potential of ChatGPT for better AI-powered conversations and code generation.">Crafting ChatGPT Prompt</a></li>
+                                    <li><a class="text-light" href="/creating-a-php-website-with-chat-gpt.html" target="_self" title="Overcoming the Challenge of Unfamiliar Territory">Creating a PHP Website with ChatGPT</a></li>
+                                    <li><a class="text-light" href="/articles/generating-a-key-press-counter-with-chatgpt.html" target="_self" title="Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights.">Generating A Key Press Counter with Chat GPT</a></li>
+                                    <li><a class="text-light" href="/articles/the-brain-behind-the-jshow-trivia-demo-on-webspark-j-show-builder-gpt.html" target="_self" title="Discover the development journey of J-Show Builder GPT, an AI-powered tool that generates fun trivia games in a grid format for WebSpark’s JShow Trivia Demo.">The Brain Behind the JShow Trivia Demo on WebSpark J-Show Builder GPT</a></li>
+                                    <li><a class="text-light" href="/trivia-spark-development.html" target="_self" title="Trivia Spark: Igniting Creativity with ChatGPT">Trivia Spark With ChatGPT</a></li>
+                                    <li><a class="text-light" href="/using-chatgpt-for-developers.html" target="_self" title="Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.">Using ChatGPT for C# Development</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Data Science</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/python-the-language-of-data-science.html" target="_self" title="Python, Data Science, Python history, Python libraries, Pandas, NumPy, Python for C# developers">Python: The Language of Data Science</a></li>
+                                    <li><a class="text-light" href="/data-analysis-demonstration.html" target="_self" title="Visualizing Data with the Data Analysis Demonstration">Data Analysis Demonstration</a></li>
+                                    <li><a class="text-light" href="/articles/data-science-for-net-developers.html" target="_self" title="Learn why a seasoned .NET developer chose the AI/ML program offered by UT Austin and Great Learning, exploring how data science is the next frontier for developers.">Data Science for NET Developers</a></li>
+                                    <li><a class="text-light" href="/articles/exploratory-data-analysis-eda-using-python.html" target="_self" title="An in-depth guide to Data Sanity checks and Exploratory Data Analysis (EDA) using Python.">Exploratory Data Analysis (EDA) Using Python</a></li>
+                                    <li><a class="text-light" href="/articles/exploring-nutritional-data-using-pca-and-k-means-clustering.html" target="_self" title="A Data Scientist explores nutritional data patterns using K-means Clustering on Google Colab, segmenting foods by nutrient content.">Exploring Nutritional Data Using K-means Clustering</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Development</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/building-resilient-net-applications-with-polly.html" target="_self" title="Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.">Building Resilient .NET Applications with Polly</a></li>
+                                    <li><a class="text-light" href="/cancellation-token.html" target="_self" title="Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming">CancellationToken</a></li>
+                                    <li><a class="text-light" href="/concurrent-processing.html" target="_self" title="Learning Concurrent Processing Through Code with ChatGPT">Concurrent Processing</a></li>
+                                    <li><a class="text-light" href="/articles/fire-and-forget-for-enhanced-performance.html" target="_self" title="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.">Fire and Forget for Enhanced Performance</a></li>
+                                    <li><a class="text-light" href="/git-flow-rethink.html" target="_self" title="Revaluating the meaning of Continuous in CI/CD with Git Flow">Git Flow Rethink</a></li>
+                                    <li><a class="text-light" href="/git-organized.html" target="_self" title="Git Organized: A Guide to Organized Version Control">Git Organized</a></li>
+                                    <li><a class="text-light" href="/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html" target="_self" title="In the dynamic world of ASP.NET development, optimizing performance is a cornerstone for building successful applications. Caching is one of the most effective strategies for this, and the MemoryCacheManager class is a vital tool in this endeavor. This article dives into its functionalities and benefits, complemented by demonstration code available on GitHub https://github.com/markhazleton/webspark">Harnessing the Power of Caching in ASP.NET with MemoryCacheManager</a></li>
+                                    <li><a class="text-light" href="/articles/migrating-samplemvccrud-application-from-net-8-to-net-9.html" target="_self" title="Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance.">Migrating SampleMvcCRUD Application from .NET 8 to .NET 9</a></li>
+                                    <li><a class="text-light" href="/nuget-packages-pros-cons.html" target="_self" title="The Pros and Cons of Using NuGet Packages in Your Projects">NuGet Package Pros and Cons</a></li>
+                                    <li><a class="text-light" href="/redis-local-instance.html" target="_self" title="Redis Local Instance">Redis Local Instance</a></li>
+                                    <li><a class="text-light" href="/system-cache.html" target="_self" title="Enhancing Web API Performance with a System Cached List">System Cache</a></li>
+                                    <li><a class="text-light" href="/task-list-processor.html" target="_self" title="Discover how the TaskListProcessor class streamlines concurrent operations in .NET, enabling efficient asynchronous programming and performance monitoring.">Task List Processor</a></li>
+                                    <li><a class="text-light" href="/decorator-pattern-http-client.html" target="_self" title="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.">The Decorator Pattern with Http Client</a></li>
+                                    <li><a class="text-light" href="/articles/the-singleton-advantage-managing-configurations-in-net.html" target="_self" title="Unlock the power of the singleton pattern for managing configurations in .NET Core. Learn how to implement lazy loading, thread safety, and secure Azure Key Vault access.">The Singleton Advantage: Managing Configurations in .NET</a></li>
+                                    <li><a class="text-light" href="/articles/transforming-samplemvccrud-with-net-aspire-a-cloud-native-evolution.html" target="_self" title="Discover how integrating .NET Aspire into the SampleMvcCRUD project revolutionizes it with cloud-native capabilities, enhanced observability, and seamless service orchestration. Dive into the journey of adopting microservices architecture and leveraging advanced telemetry for insightful application monitoring.">Transforming SampleMvcCRUD with .NET Aspire: A Cloud-Native Evolution</a></li>
+                                    <li><a class="text-light" href="/articles/troubleshooting-and-rebuilding-my-js-dev-env-project.html" target="_self" title="A detailed guide on how I faced issues, restarted from scratch, and successfully rebuilt a JavaScript development environment using Node.js, Nodemon, ESLint, Express, and Bootstrap.">Troubleshooting and Rebuilding My JS-Dev-Env Project</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Personal Philosophy</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/accountability-and-authority.html" target="_self" title="Finding Balance Between Accountability and Authority">Accountability and Authority</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/evolution-over-revolution.html" target="_self" title="Description for Evolution Over Revolution">Evolution Over Revolution</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/from-features-to-outcomes.html" target="_self" title="Focus on outcomes, not just features">From Features to Outcomes</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/" target="_self" title="Project Mechanics Leadership Overview">Leadership</a></li>
+                                    <li><a class="text-light" href="/lifelong-learning.html" target="_self" title="Reinventing Yourself: The Transformative Power of Lifelong Learning">Lifelong Learning</a></li>
+                                    <li><a class="text-light" href="/sidetrackedbysizzle.html" target="_self" title="Explore the concept of getting Sidetracked By Sizzle with Mark Hazleton. Understand how to stay focused and avoid the allure of superficial attractions.">Sidetracked by Sizzle</a></li>
+                                    <li><a class="text-light" href="/articles/the-art-of-making-yourself-replaceable-a-developers-guide-to-career-growth.html" target="_self" title="Explore how developers can enhance their career growth by embracing the concept of making themselves replaceable, focusing on adapting to the evolving tech landscape.">The Art of Making Yourself Replaceable: A Guide to Career Growth</a></li>
+                                    <li><a class="text-light" href="/articles/the-balanced-equation-crafting-the-perfect-project-team-mix.html" target="_self" title="Discover the art of constructing the perfect project team mix, leveraging the unique strengths of both internal employees and external consultants for project success.">The Balanced Equation: Crafting the Perfect Project Team Mix</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/" target="_self" title="Change management is an important aspect of project management, as it helps to ensure that changes to the project are properly planned and implemented">Change Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/conflict-management/" target="_self" title="Learn effective conflict management strategies to enhance your project management skills. Discover how to navigate conflicts among team members, clients, and handle poor performance. Ensure project success with these expert tips.">Conflict Management for Project Managers</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/issue-management.html" target="_self" title="issue management. ">Issue Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/program-management-office.html" target="_self" title="The Program Management Office Role in Project Delivery">Program Management Office</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-life-cycle.html" target="_self" title="From Idea to Delivery the Project Life Cycle">Project Life Cycle</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/" target="_self" title="The Art and Science of Project Management">Project Mechanics</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-meetings.html" target="_self" title="Project meetings can be the black hole of project management. ">Project Meetings</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/solution-architect-technology-decisions-that-impact-business.html" target="_self" title="A comprehensive guide for solution architects on aligning technology decisions with business goals and outcomes.">Solution Architect Technology Decisions that Impact Business</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">PromptSpark</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/english-is-the-new-programming-language-of-choice.html" target="_self" title="Explore the pivotal role of English in the evolution of the Microsoft Stack, specifically within .NET technologies such as C#, F#, VB.NET, and SQL. Understand why English is becoming as crucial as traditional programming languages in software development.">English is the New Programming Language of Choice</a></li>
+                                    <li><a class="text-light" href="/articles/integrating-chat-completions-into-prompt-spark.html" target="_self" title="Learn how chat completions enhances LLM interactions in the Prompt Spark project by enabling seamless chat functionalities for Core Spark Variants.">Integrating Chat Completion into Prompt Spark</a></li>
+                                    <li><a class="text-light" href="/articles/prompt-spark-revolutionizing-llm-system-prompt-management.html" target="_self" title="Discover how Prompt Spark offers comprehensive tools and resources for managing and optimizing LLM system prompts. Learn about features like the variants library, performance tracking, and prompt engineering strategies.">Prompt Spark: Revolutionizing LLM System Prompt Management</a></li>
+                                    <li><a class="text-light" href="/articles/using-large-language-models-to-generate-structured-data.html" target="_self" title="Explore how large language models like GPT-4 are revolutionizing data structuring, focusing on Mechanics of Motherhood's use of AI to structure JSON recipes.">Using Large Language Models to Generate Structured Data</a></li>
+                                    <li><a class="text-light" href="/articles/webspark-the-next-evolution-of-web-project-mechanics.html" target="_self" title="Explore the journey from Web Project Mechanics to WebSpark, a suite of web applications designed by Mark Hazleton to enhance digital experiences.">WebSpark: The Next Evolution of Web Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-10 justify-content-end">
+                        <br />
+                        <div class="social-icons d-flex">
+                            <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
+                            <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
+                            <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
+                            <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12"><br /></div>
+                </div>
+            </footer>
+            <!-- Core theme JS-->
+            <script src="/js/scripts.js"></script>
+        </div>
+    </body>
+</html>

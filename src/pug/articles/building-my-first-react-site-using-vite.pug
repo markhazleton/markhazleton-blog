@@ -1,0 +1,451 @@
+extends ../layouts/articles
+
+block pagehead
+  title Building My First React Site Using Vite
+  meta(name='description', content='Learn how to quickly build and deploy a React site using Vite and GitHub Pages, including troubleshooting common issues like CORS.')
+  meta(name="keywords" content="Vite, React, GitHub Pages, CORS, deployment, setup")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/building-my-first-react-site-using-vite.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      p.fw-bold.text-primary.text-center.bg-primary.text-white
+        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/ReactSparkPortfolio' target="_blank" title='The full source code for the ReactSparkPortfolio is available on GitHub') The full source code for the ReactSparkPortfolio is available on GitHub
+      h1 Building My First React Site Using Vite and GitHub
+      h2.subheading.mb-3 A step-by-step guide to setting up and deploying a React project
+      p.
+        I recently created a React portfolio project using Vite and deployed it to GitHub Pages.
+        Since this was my first time building with React and TypeScript, I learned a lot along
+        the way.
+      p.
+        Vite offers an incredibly fast and efficient way to create and deploy React sites. In this guide,
+        we will walk through the entire process, including setting up Vite, configuring it for GitHub Pages,
+        handling CORS issues, and deploying the final product.
+
+      dl
+        dt Initial Project Setup
+        dd
+          p.
+            Start by using Vite's project scaffolding for React. This sets up the initial folder structure
+            and installs dependencies.
+          pre.language-bash
+            code.language-bash.
+              npm create vite@latest
+              cd ReactSparkPortfolio
+              npm install
+
+        dt Writing and Organizing My React Components
+        dd
+          p.
+            After setting up the project, I created components for my portfolio. I wanted a simple, clean
+            layout with sections for Home, About, Projects, and Contact.
+          pre.language-typescript
+            code.language-typescript.
+              import React, { useState } from 'react';
+              import Header from './components/Header';
+              import Hero from './components/Hero';
+              import About from './components/About';
+              import Projects from './components/Projects';
+              import Contact from './components/Contact';
+              import Footer from './components/Footer';
+
+              const App: React.FC = () => {
+                const [activeSection, setActiveSection] = useState<string>('home');
+
+                const handleSectionChange = (section: string) => {
+                  setActiveSection(section);
+                };
+
+                return (
+                  <div className="d-flex flex-column min-vh-100">
+                    <Header onSectionChange={handleSectionChange} />
+                    <main className="flex-grow-1 pt-5 mt-5 container">
+                      <div className="row justify-content-center">
+                        <div className="col-md-10">
+                          {activeSection === 'home' && <Hero />}
+                          {activeSection === 'about' && <About />}
+                          {activeSection === 'projects' && <Projects />}
+                          {activeSection === 'contact' && <Contact />}
+                        </div>
+                      </div>
+                    </main>
+                    <Footer />
+                  </div>
+                );
+              };
+
+              export default App;
+
+        dt Configure Vite for GitHub Pages
+        dd
+          p.
+            Vite builds the production files into a "dist" folder by default. For GitHub Pages, however,
+            we need to modify Vite’s configuration to output into the "docs" folder.  This makes setting up
+            the GitHub Pages deployment easier as it serves the site from the "docs" folder by default.
+          pre.language-typescript
+            code.language-typescript.
+              import { defineConfig } from "vite";
+              import react from "@vitejs/plugin-react";
+
+              export default defineConfig({
+                base: "./",
+                build: {
+                  outDir: "docs",
+                },
+                plugins: [react()],
+              });
+
+        dt Serving Static Assets and Handling CORS Issues
+        dd
+          p.
+            Fetching data from external sources during development can cause CORS issues. One way to
+            resolve this is by moving static files like rss.xml to Vite's public folder, which serves static assets directly.
+          pre.language-typescript
+            code.language-typescript.
+              const fetchRSSFeed = async () => {
+                const response = await fetch('/rss.xml');
+                const rssData = await response.text();
+
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(rssData, 'application/xml');
+              };
+
+        dt Adding the Articles Component
+        dd
+          p.
+            To display content from an RSS feed, create an "Articles" component that fetches and parses the RSS XML
+            file, rendering article titles and links.
+          p.
+            This TypeScript code defines a React functional component that dynamically fetches and displays a list of articles from an RSS feed.
+            The component uses React’s useState hook to create a state variable that holds the articles, which is initialized as an empty array.
+            The state is updated once the RSS feed is fetched and parsed.
+            Additionally, useEffect is used to ensure that the fetch operation happens when the component first renders.
+            Since useEffect is invoked with an empty dependency array, it acts like a componentDidMount lifecycle event,
+            executing the fetch operation only once when the component is mounted.
+          p.
+            The RSS feed is fetched asynchronously using the native fetch API,
+            targeting the /rss.xml endpoint on the server.
+            After retrieving the raw XML data as plain text, the code uses DOMParser to parse this text into an XML structure.
+            Once parsed, the &lt;item> elements, which represent individual articles, are extracted. For each &lt;item>,
+            the component pulls relevant data such as the title, link, and publication date by accessing the corresponding child elements.
+            This extracted information is stored in a structured array, which is then used to update the component’s state.
+          p.
+            Once the state is updated with the parsed articles, the component renders a list of articles in the browser.
+            Each article is displayed as a clickable link along with its publication date.
+            The component efficiently maps through the state array of articles to dynamically generate the list items,
+            ensuring that the data is presented as soon as it is fetched and parsed.
+            By combining useEffect for side effects and useState for managing data, the component handles asynchronous
+            data fetching and re-renders itself when new data becomes available,
+            creating a simple and effective way to display RSS feed content in a React application.
+
+          pre.language-typescript
+            code.language-typescript.
+              import React, { useEffect, useState } from 'react';
+
+              const Articles: React.FC = () => {
+                const [articles, setArticles] = useState<any[]>([]);
+
+                useEffect(() => {
+                  const fetchRSSFeed = async () => {
+                    const response = await fetch('/rss.xml');
+                    const rssData = await response.text();
+
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(rssData, 'application/xml');
+                    const items = xmlDoc.getElementsByTagName('item');
+
+                    const parsedArticles = Array.from(items).map(item => ({
+                      title: item.getElementsByTagName('title')[0].textContent,
+                      link: item.getElementsByTagName('link')[0].textContent,
+                      pubDate: item.getElementsByTagName('pubDate')[0].textContent,
+                    }));
+
+                    setArticles(parsedArticles);
+                  };
+                  fetchRSSFeed();
+                }, []);
+
+                return (
+                  <div>
+                    <h2>Latest Articles</h2>
+                    <ul>
+                      {articles.map((article, index) => (
+                        <li key={index}>
+                          <a href={article.link}>{article.title}</a> - {article.pubDate}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              };
+
+              export default Articles;
+
+        dt Deploying the Site on GitHub Pages
+        dd
+          p.
+            Deploying a Vite site to GitHub Pages involves configuring a GitHub Actions workflow.
+            This automates the process and pushes the build output to the "docs" folder on every push.
+          pre.language-yaml
+            code.language-yaml.
+              name: Deploy React App to GitHub Pages
+
+              on:
+                push:
+                  branches:
+                    - main
+
+              jobs:
+                build:
+                  runs-on: ubuntu-latest
+                  steps:
+                    - name: Checkout code
+                      uses: actions/checkout@v2
+
+                    - name: Set up Node.js
+                      uses: actions/setup-node@v2
+                      with:
+                        node-version: '16'
+
+                    - name: Install dependencies
+                      run: npm install
+
+                    - name: Build the project
+                      run: npm run build
+
+                    - name: Deploy to GitHub Pages
+                      uses: peaceiris/actions-gh-pages@v3
+                      with:
+                        github_token: ${{ secrets.GITHUB_TOKEN }}
+                        publish_dir: ./docs
+
+        dt Final Thoughts
+        dd
+          p.
+            Vite simplifies React development with features like instant hot module replacement and minimal configuration.
+            With just a few steps, you can deploy a project using GitHub Pages. Even with common issues like CORS, Vite
+            offers flexible solutions that help you get your project online quickly.
+
+
+      h1 Learn TypeScript with Code Examples
+      h2.subheading.mb-3 Explore TypeScript concepts through examples and interactive code
+
+      // Bootstrap Accordion for TypeScript Concepts
+      .accordion#typescriptConceptsAccordion
+        // Concept 1: Basic Type Annotations
+        .accordion-item
+          h2.accordion-header#headingOne
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseOne" aria-expanded="false", aria-controls="collapseOne")
+              | Basic Type Annotations
+          .accordion-collapse.collapse#collapseOne(aria-labelledby="headingOne" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Type annotations are a fundamental feature of TypeScript. They help you specify the types of variables, function parameters, and return values.
+              p Learn how to use TypeScript’s type annotations.
+              pre.language-typescript
+                code.language-typescript.
+                  let message: string = "Hello, TypeScript!";
+                  let isDone: boolean = false;
+                  let count: number = 42;
+              p Output:
+              pre.language-bash
+                code.language-bash.
+                  Hello, TypeScript!
+                  false
+                  42
+
+        // Concept 2: Functions with Typed Parameters and Return Types
+        .accordion-item
+          h2.accordion-header#headingTwo
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo" aria-expanded="false", aria-controls="collapseTwo")
+              | Functions with Typed Parameters and Return Types
+          .accordion-collapse.collapse#collapseTwo(aria-labelledby="headingTwo" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Declaring the types for function arguments and return values helps prevent errors by catching type mismatches.
+              p Learn to define typed parameters and return values for functions.
+              pre.language-typescript
+                code.language-typescript.
+                  function add(x: number, y: number): number {
+                    return x + y;
+                    }
+                  function greet(name: string): string {
+                    return `Hello, ${name}`;
+                    }
+                  console.log(add(5, 10)); // 15
+                  console.log(greet("Alice")); // Hello, Alice
+
+              p Output:
+              pre.language-java
+                code.language-java.
+                  15 (after calling add(5, 10))
+                  Hello, Alice (after calling greet("Alice"))
+
+        // Concept 3: Optional and Default Parameters
+        .accordion-item
+          h2.accordion-header#headingThree
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree" aria-expanded="false", aria-controls="collapseThree")
+              | Optional and Default Parameters
+          .accordion-collapse.collapse#collapseThree(aria-labelledby="headingThree" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p In TypeScript, function parameters can be optional or have default values.
+              p Learn how to use optional and default parameters in TypeScript functions.
+              pre.language-typescript
+                code.language-typescript.
+                  function greet(name: string, greeting: string = "Hello"): string {
+                    return `${greeting}, ${name}`;
+                  }
+              p Output:
+              pre.language-plaintext
+                code.language-plaintext.
+                  Hello, Alice
+                  Hi, Alice
+
+        // Concept 4: Interfaces
+        .accordion-item
+          h2.accordion-header#headingFour
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFour" aria-expanded="false", aria-controls="collapseFour")
+              | Interfaces
+          .accordion-collapse.collapse#collapseFour(aria-labelledby="headingFour" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Interfaces define the structure of an object. They ensure that the object conforms to a specific shape.
+              p Learn to define object structures with interfaces in TypeScript.
+              pre.language-typescript
+                code.language-typescript.
+                  interface User {
+                    id: number;
+                    name: string;
+                    age?: number;
+                  }
+
+                  const user: User = {
+                    id: 1,
+                    name: "John Doe"
+                  };
+
+        // Concept 5: Type Aliases
+        .accordion-item
+          h2.accordion-header#headingFive
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFive" aria-expanded="false", aria-controls="collapseFive")
+              | Type Aliases
+          .accordion-collapse.collapse#collapseFive(aria-labelledby="headingFive" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Type aliases allow you to define custom types, which can make your code more readable and reusable.
+              p Learn to use Type Aliases to create custom types.
+              pre.language-typescript
+                code.language-typescript.
+                  type ID = number | string;
+
+                  function printId(id: ID): void {
+                    console.log(`ID: ${id}`);
+                  }
+
+        // Concept 6: Union and Intersection Types
+        .accordion-item
+          h2.accordion-header#headingSix
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSix" aria-expanded="false", aria-controls="collapseSix")
+              | Union and Intersection Types
+          .accordion-collapse.collapse#collapseSix(aria-labelledby="headingSix" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Union types allow a variable to hold multiple types, while intersection types combine types.
+              p Learn to use union and intersection types in TypeScript.
+              pre.language-typescript
+                code.language-typescript.
+                  type StringOrNumber = string | number;
+                  let value: StringOrNumber = "Hello";
+
+                  interface Person {
+                    name: string;
+                  }
+
+                  interface Employee {
+                    employeeId: number;
+                  }
+
+                  type Worker = Person & Employee;
+
+                  const worker: Worker = {
+                    name: "Alice",
+                    employeeId: 123
+                  };
+
+        // Concept 7: Generics
+        .accordion-item
+          h2.accordion-header#headingSeven
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSeven" aria-expanded="false", aria-controls="collapseSeven")
+              | Generics
+          .accordion-collapse.collapse#collapseSeven(aria-labelledby="headingSeven" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Generics allow you to write functions, interfaces, and classes that can work with any data type, providing flexibility with type safety.
+              p Learn how to use Generics for reusable, type-safe components.
+              pre.language-typescript
+                code.language-typescript.
+                  function identity<T>(arg: T): T {
+                    return arg;
+                  }
+
+        // Concept 8: Type Assertions
+        .accordion-item
+          h2.accordion-header#headingEight
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseEight" aria-expanded="false", aria-controls="collapseEight")
+              | Type Assertions
+          .accordion-collapse.collapse#collapseEight(aria-labelledby="headingEight" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Type assertions tell the compiler to treat a variable as a specific type. This is helpful when you know more about the type than TypeScript does.
+              p Learn to assert types in TypeScript for more control over type checking.
+              pre.language-typescript
+                code.language-typescript.
+                  let someValue: any = "This is a string";
+                  let strLength: number = (someValue as string).length;
+
+        // Concept 9: Enums
+        .accordion-item
+          h2.accordion-header#headingNine
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseNine" aria-expanded="false", aria-controls="collapseNine")
+              | Enums
+          .accordion-collapse.collapse#collapseNine(aria-labelledby="headingNine" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p Enums define a set of named constants, which can help manage related values.
+              p Learn to create and use Enums for defining sets of constants.
+              pre.language-typescript
+                code.language-typescript.
+                  enum Direction {
+                    Up = 1,
+                    Down,
+                    Left,
+                    Right
+                  }
+
+                  let currentDirection: Direction = Direction.Up;
+
+        // Concept 10: React Native Props with TypeScript
+        .accordion-item
+          h2.accordion-header#headingTen
+            button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTen" aria-expanded="false", aria-controls="collapseTen")
+              | React Native Props with TypeScript
+          .accordion-collapse.collapse#collapseTen(aria-labelledby="headingTen" data-bs-parent="#typescriptConceptsAccordion")
+            .accordion-body
+              p In React Native, TypeScript is particularly useful for typing props and state in functional components.
+              p Learn to use TypeScript to define props in React Native components.
+              pre.language-typescript
+                code.language-typescript.
+                  interface GreetingProps {
+                    name: string;
+                    age?: number;
+                  }
+
+                  const Greeting: React.FC<GreetingProps> = ({ name, age }) => {
+                    return (
+                      <View>
+                        <Text>Hello, {name}!</Text>
+                        {age && <Text>You are {age} years old.</Text>}
+                      </View>
+                    );
+                  };
+              p.
+                In this example, name is a required prop, and age is optional. TypeScript will enforce the correct usage of these props when using the Greeting component.
+
+      p.
+        These 10 TypeScript code samples cover core features that will improve the development experience for new developers.
+        They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.
+

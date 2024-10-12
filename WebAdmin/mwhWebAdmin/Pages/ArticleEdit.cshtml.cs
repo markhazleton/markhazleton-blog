@@ -14,6 +14,7 @@ public class ArticleEditModel(ArticleService articleService) : PageModel
     /// Gets or sets the required article.
     /// </summary>
     public required ArticleModel Article { get; set; }
+    public List<string> ExistingKeywords { get; set; } = articleService.GetKeywords();
 
     /// <summary>
     /// Handles the GET request for editing an article.
