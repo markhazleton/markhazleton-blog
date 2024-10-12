@@ -49,6 +49,13 @@ public class ArticleModel
     /// </summary>
     [JsonPropertyName("description")]
     public string Description { get; set; }
+
+    /// <summary>
+    /// Gets or sets the keywords for the article.
+    /// </summary>
+    [JsonPropertyName("keywords")]
+    public string Keywords { get; set; } = "";
+
     ///
     /// <summary>
     /// Gets or sets the image source URL for the article.

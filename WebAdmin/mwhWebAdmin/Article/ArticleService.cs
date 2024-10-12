@@ -2,14 +2,25 @@ using System.Globalization;
 
 namespace mwhWebAdmin.Article;
 
+
+
+/// <summary>
+/// Represents a service for managing articles.
+/// </summary>
 public class ArticleService
 {
-    private List<ArticleModel> _articles;
+    private List<ArticleModel> _articles = [];
     private readonly string _articlesDirectory;
     private readonly string _filePath;
     private readonly Lock _lock = new();
     private readonly ILogger<ArticleService> _logger;
+    private readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ArticleService"/> class.
+    /// </summary>
+    /// <param name="filePath">The file path of the articles JSON file.</param>
+    /// <param name="logger">The logger instance.</param>
     public ArticleService(string filePath, ILogger<ArticleService> logger)
     {
         _filePath = filePath;
@@ -18,6 +29,11 @@ public class ArticleService
         LoadArticles();
     }
 
+    /// <summary>
+    /// Generates the Pug file content for an article.
+    /// </summary>
+    /// <param name="article">The article model.</param>
+    /// <returns>The Pug file content.</returns>
     private string GeneratePugFileContent(ArticleModel article)
     {
         try
@@ -44,12 +60,15 @@ public class ArticleService
         }
     }
 
+    /// <summary>
+    /// Loads the articles from the JSON file.
+    /// </summary>
     private void LoadArticles()
     {
         try
         {
             string jsonContent = File.ReadAllText(_filePath);
-            _articles = JsonSerializer.Deserialize<List<ArticleModel>>(jsonContent) ?? new List<ArticleModel>();
+            _articles = JsonSerializer.Deserialize<List<ArticleModel>>(jsonContent) ?? [];
             foreach (var article in _articles.OrderBy(o => o.Name))
             {
                 article.Id = _articles.IndexOf(article);
@@ -59,10 +78,13 @@ public class ArticleService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to load articles.");
-            _articles = new List<ArticleModel>();
+            _articles = [];
         }
     }
 
+    /// <summary>
+    /// Saves the articles to the JSON file.
+    /// </summary>
     private void SaveArticles()
     {
         lock (_lock)
@@ -73,7 +95,9 @@ public class ArticleService
                 {
                     article.LastModified = ConvertStringToDate(article.LastModified).ToString("yyyy-MM-dd");
                 }
-                string jsonContent = JsonSerializer.Serialize(_articles, new JsonSerializerOptions { WriteIndented = true });
+                string jsonContent = JsonSerializer.Serialize(
+                    _articles,
+                    jsonSerializerOptions);
                 File.WriteAllText(_filePath, jsonContent);
                 GenerateSiteMap();
                 _logger.LogInformation("Articles saved successfully.");
@@ -85,6 +109,10 @@ public class ArticleService
         }
     }
 
+    /// <summary>
+    /// Adds a new article.
+    /// </summary>
+    /// <param name="newArticle">The new article model.</param>
     public void AddArticle(ArticleModel newArticle)
     {
         lock (_lock)
@@ -98,7 +126,7 @@ public class ArticleService
             try
             {
                 newArticle.Slug = "articles/" + GenerateSlug(newArticle.Name) + ".html";
-                newArticle.Id = _articles.Any() ? _articles.Max(article => article.Id) + 1 : 1; // Assign a new ID
+                newArticle.Id = _articles.Count != 0 ? _articles.Max(article => article.Id) + 1 : 1; // Assign a new ID
                 _articles.Add(newArticle);
 
                 string pugContent = GeneratePugFileContent(newArticle);
@@ -119,6 +147,9 @@ public class ArticleService
         }
     }
 
+    /// <summary>
+    /// Generates the site map XML file.
+    /// </summary>
     public void GenerateSiteMap()
     {
         try
@@ -168,11 +199,21 @@ public class ArticleService
                 writer.WriteStartElement("rss");
                 writer.WriteAttributeString("version", "2.0");
 
+                // Add the atom namespace for the atom:link
+                writer.WriteAttributeString("xmlns", "atom", null, "http://www.w3.org/2005/Atom");
+
                 writer.WriteStartElement("channel");
                 writer.WriteElementString("title", "Mark Hazleton Articles");
                 writer.WriteElementString("link", "https://markhazleton.com/");
                 writer.WriteElementString("description", "Latest articles from Mark Hazleton.");
                 writer.WriteElementString("lastBuildDate", DateTime.Now.ToString("r"));
+
+                // Add the atom:link element with rel="self"
+                writer.WriteStartElement("link", "atom", "http://www.w3.org/2005/Atom");
+                writer.WriteAttributeString("href", "https://markhazleton.com/rss.xml");
+                writer.WriteAttributeString("rel", "self");
+                writer.WriteAttributeString("type", "application/rss+xml");
+                writer.WriteEndElement(); // atom:link
 
                 foreach (var article in recentArticles)
                 {
@@ -181,7 +222,11 @@ public class ArticleService
                     writer.WriteElementString("link", $"https://markhazleton.com/{article.Slug}");
                     writer.WriteElementString("description", article.Description);
                     writer.WriteElementString("pubDate", ConvertStringToDate(article.LastModified).ToString("r"));
-                    writer.WriteEndElement();
+
+                    // Add a unique GUID for the item (use the article's link as the GUID)
+                    writer.WriteElementString("guid", $"https://markhazleton.com/{article.Slug}");
+
+                    writer.WriteEndElement(); // item
                 }
 
                 writer.WriteEndElement(); // channel
@@ -196,6 +241,11 @@ public class ArticleService
         }
     }
 
+    /// <summary>
+    /// Converts a string to a DateTime object.
+    /// </summary>
+    /// <param name="dateString">The string representation of the date.</param>
+    /// <returns>The DateTime object.</returns>
     public static DateTime ConvertStringToDate(string dateString)
     {
         if (DateTime.TryParse(dateString, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateValue))
@@ -208,6 +258,11 @@ public class ArticleService
         }
     }
 
+    /// <summary>
+    /// Generates a URL-friendly slug from the input string.
+    /// </summary>
+    /// <param name="input">The input string.</param>
+    /// <returns>The URL-friendly slug.</returns>
     public static string GenerateSlug(string input)
     {
         string slug = input.ToLower();
@@ -218,6 +273,11 @@ public class ArticleService
         return slug;
     }
 
+    /// <summary>
+    /// Gets an article by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the article.</param>
+    /// <returns>The article model.</returns>
     public ArticleModel GetArticleById(int id)
     {
         lock (_lock)
@@ -232,6 +292,10 @@ public class ArticleService
         }
     }
 
+    /// <summary>
+    /// Gets a list of all articles.
+    /// </summary>
+    /// <returns>The list of articles.</returns>
     public List<ArticleModel> GetArticles()
     {
         lock (_lock)
@@ -240,6 +304,10 @@ public class ArticleService
         }
     }
 
+    /// <summary>
+    /// Updates an existing article.
+    /// </summary>
+    /// <param name="updatedArticle">The updated article model.</param>
     public void UpdateArticle(ArticleModel updatedArticle)
     {
         lock (_lock)
@@ -264,10 +332,20 @@ public class ArticleService
         }
     }
 
-    private bool ValidateArticle(ArticleModel article)
+    /// <summary>
+    /// Validates an article model.
+    /// </summary>
+    /// <param name="article">The article model to validate.</param>
+    /// <returns>True if the article is valid; otherwise, false.</returns>
+    private static bool ValidateArticle(ArticleModel article)
     {
         return !string.IsNullOrWhiteSpace(article.Name) &&
                !string.IsNullOrWhiteSpace(article.Section) &&
                !string.IsNullOrWhiteSpace(article.Slug);
+    }
+
+    internal List<string> GetKeywords()
+    {
+        return new List<string>();
     }
 }
