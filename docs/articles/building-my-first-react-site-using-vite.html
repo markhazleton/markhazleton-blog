@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1728924596489" />
+        <link rel="stylesheet" href="/css/styles.css?version=1728931135550" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -103,6 +103,12 @@
                 <div class="painteddesert-section-content">
                     <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/ReactSparkPortfolio" target="_blank" title="The full source code for the ReactSparkPortfolio is available on GitHub">The full source code for the ReactSparkPortfolio is available on GitHub</a></p>
                     <h1>Building My First React Site Using Vite and GitHub</h1>
+                    <p class="lead">
+                        As I work on the project, GitHub pages will be the place to view the application:
+                        <a href="https://markhazleton.github.io/ReactSparkPortfolio/" target="_blank" title="ReactSparkPortfolio on GitHub Pages">ReactSparkPortfolio on GitHub Pages</a>
+                    </p>
+                    <br />
+                    <br />
                     <div class="card mb-3">
                         <div class="card-header bg-primary text-white"><h2 class="card-title mb-0">Why Learn React Native and TypeScript?</h2></div>
                         <div class="card-body">
@@ -727,6 +733,9 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                         </div>
                     </div>
                     <p>These TypeScript code samples cover core features that will improve the development experience for new developers. They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.</p>
+                    <br />
+                    <hr />
+                    <br />
                     <div class="card">
                         <div class="card-header"><h2 class="card-title">Adding React Router</h2></div>
                         <div class="card-body">
@@ -834,6 +843,69 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 </dd>
                                 <dt>Conclusion</dt>
                                 <dd><p>Now I have added React Router to the portfolio project. With this setup, users can navigate different sections using hash-based URLs without reloading the page.</p></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <br />
+                    <hr />
+                    <br />
+                    <div class="card">
+                        <div class="card-header"><h2 class="card-title">Deploy a Vite app to GitHub Pages</h2></div>
+                        <div class="card-body">
+                            <p class="lead">Deploying a Vite project to GitHub Pages can be straightforward, but requires attention to configuration, especially around base paths and environment variables. This guide provides clear steps to successfully deploy your Vite app.</p>
+                            <dl>
+                                <dt>Step 1: Setting the Base Path in Vite Configuration</dt>
+                                <dd>
+                                    <p>In Vite, the base path must be set to match the subdirectory where GitHub Pages serves the site. This ensures correct paths to assets like JavaScript and CSS. In the `vite.config.ts`, configure the base property:</p>
+                                    <pre class="language-ts"><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  base<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">VITE_BASE_URL</span> <span class="token operator">||</span> <span class="token string">"/"</span><span class="token punctuation">,</span>
+  build<span class="token operator">:</span> <span class="token punctuation">{</span>
+  outDir<span class="token operator">:</span> <span class="token string">"docs"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>Step 2: Using Environment Variables with dotenv</dt>
+                                <dd>
+                                    <p>Use environment variables for path configuration. Create `.env` and `.env.production` files to manage paths in development and production environments. The production file should reflect your repository name.</p>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token assign-left variable">VITE_BASE_URL</span><span class="token operator">=</span>/</code></pre>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token assign-left variable">VITE_BASE_URL</span><span class="token operator">=</span>/repository-name/
+</code></pre>
+                                </dd>
+                                <dt>Step 3: Loading Environment Variables in Vite Config</dt>
+                                <dd>
+                                    <p>Vite automatically loads environment variables with the `VITE_` prefix. For custom environment handling, import the `dotenv` package and manually load environment files based on the environment mode.</p>
+                                    <pre class="language-ts"><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> defineConfig <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"vite"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> react <span class="token keyword">from</span> <span class="token string">"@vitejs/plugin-react"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> dotenv <span class="token keyword">from</span> <span class="token string">"dotenv"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> mode <span class="token operator">=</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">NODE_ENV</span> <span class="token operator">||</span> <span class="token string">"development"</span><span class="token punctuation">;</span>
+dotenv<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> path<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">.env.</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>mode<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  base<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">VITE_BASE_URL</span> <span class="token operator">||</span> <span class="token string">"/"</span><span class="token punctuation">,</span>
+  build<span class="token operator">:</span> <span class="token punctuation">{</span>
+  outDir<span class="token operator">:</span> <span class="token string">"docs"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  plugins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token function">react</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>Step 4: Building the Project for GitHub Pages</dt>
+                                <dd>
+                                    <p>After configuring the project, run the build command to generate the production-ready files in the `docs/` folder, which is used by GitHub Pages.</p>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> run build
+</code></pre>
+                                </dd>
+                                <dt>Step 5: Deploying to GitHub Pages</dt>
+                                <dd>
+                                    <p>Once the build is complete, commit and push the `docs/` folder to your repository. In the GitHub Pages settings, set the source to the `docs/` folder to make your site live.</p>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Deploy Vite project to GitHub Pages"</span>
+<span class="token function">git</span> push origin main
+</code></pre>
+                                </dd>
+                                <p>By following these steps, you can deploy a Vite project to GitHub Pages with proper handling of environment variables and paths. The critical step is setting the correct base path and using dotenv to manage environment settings across development and production environments.</p>
                             </dl>
                         </div>
                     </div>
