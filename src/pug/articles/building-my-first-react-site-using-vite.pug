@@ -14,6 +14,11 @@ block layout-content
       p.fw-bold.text-primary.text-center.bg-primary.text-white
         a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/ReactSparkPortfolio' target="_blank" title='The full source code for the ReactSparkPortfolio is available on GitHub') The full source code for the ReactSparkPortfolio is available on GitHub
       h1 Building My First React Site Using Vite and GitHub
+      p.lead As I work on the project, GitHub pages will be the place to view the application:
+        a(href='https://markhazleton.github.io/ReactSparkPortfolio/' target="_blank" title='ReactSparkPortfolio on GitHub Pages') ReactSparkPortfolio on GitHub Pages
+
+      br
+      br
       .card.mb-3
         .card-header.bg-primary.text-white
           h2.card-title.mb-0 Why Learn React Native and TypeScript?
@@ -801,6 +806,9 @@ block layout-content
         These TypeScript code samples cover core features that will improve the development experience for new developers.
         They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.
 
+      br
+      hr
+      br
 
       .card
         .card-header
@@ -923,3 +931,78 @@ block layout-content
             dd
               p.
                 Now I have added React Router to the portfolio project. With this setup, users can navigate different sections using hash-based URLs without reloading the page.
+
+      br
+      hr
+      br
+      .card
+        .card-header
+          h2.card-title Deploy a Vite app to GitHub Pages
+        .card-body
+          p.lead Deploying a Vite project to GitHub Pages can be straightforward, but requires attention to configuration, especially around base paths and environment variables. This guide provides clear steps to successfully deploy your Vite app.
+          dl
+            dt Step 1: Setting the Base Path in Vite Configuration
+            dd
+              p.
+                In Vite, the base path must be set to match the subdirectory where GitHub Pages serves the site. This ensures correct paths to assets like JavaScript and CSS. In the `vite.config.ts`, configure the base property:
+              pre.language-ts
+                code.language-ts.
+                  export default defineConfig({
+                    base: process.env.VITE_BASE_URL || "/",
+                    build: {
+                    outDir: "docs",
+                    },
+                  });
+
+            dt Step 2: Using Environment Variables with dotenv
+            dd
+              p.
+                Use environment variables for path configuration. Create `.env` and `.env.production` files to manage paths in development and production environments. The production file should reflect your repository name.
+              pre.language-bash
+                code.language-bash.
+                  VITE_BASE_URL=/
+              pre.language-bash
+                code.language-bash.
+                  VITE_BASE_URL=/repository-name/
+
+            dt Step 3: Loading Environment Variables in Vite Config
+            dd
+              p.
+                Vite automatically loads environment variables with the `VITE_` prefix. For custom environment handling, import the `dotenv` package and manually load environment files based on the environment mode.
+              pre.language-ts
+                code.language-ts.
+                  import { defineConfig } from "vite";
+                  import react from "@vitejs/plugin-react";
+                  import * as dotenv from "dotenv";
+
+                  const mode = process.env.NODE_ENV || "development";
+                  dotenv.config({ path: `.env.${mode}` });
+
+                  export default defineConfig({
+                    base: process.env.VITE_BASE_URL || "/",
+                    build: {
+                    outDir: "docs",
+                    },
+                    plugins: [react()],
+                  });
+
+            dt Step 4: Building the Project for GitHub Pages
+            dd
+              p.
+                After configuring the project, run the build command to generate the production-ready files in the `docs/` folder, which is used by GitHub Pages.
+              pre.language-bash
+                code.language-bash.
+                  npm run build
+
+            dt Step 5: Deploying to GitHub Pages
+            dd
+              p.
+                Once the build is complete, commit and push the `docs/` folder to your repository. In the GitHub Pages settings, set the source to the `docs/` folder to make your site live.
+              pre.language-bash
+                code.language-bash.
+                  git add .
+                  git commit -m "Deploy Vite project to GitHub Pages"
+                  git push origin main
+
+            p.
+              By following these steps, you can deploy a Vite project to GitHub Pages with proper handling of environment variables and paths. The critical step is setting the correct base path and using dotenv to manage environment settings across development and production environments.
