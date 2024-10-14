@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1728840835951" />
+        <link rel="stylesheet" href="/css/styles.css?version=1728924596489" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -727,6 +727,116 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                         </div>
                     </div>
                     <p>These TypeScript code samples cover core features that will improve the development experience for new developers. They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.</p>
+                    <div class="card">
+                        <div class="card-header"><h2 class="card-title">Adding React Router</h2></div>
+                        <div class="card-body">
+                            <p class="lead">I decided to implement React Router for navigation between sections using URLs like /#about and /#projects.</p>
+                            <p>Here are the steps I took to integrate React Router into my portfolio project. This enabled me to navigate to different sections using URLs like /#about and /#projects.</p>
+                            <dl>
+                                <dt>Step 1: Install react-router-dom</dt>
+                                <dd>
+                                    <p>The first step is to install the React Router library by running the following command:</p>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> react-router-dom
+</code></pre>
+                                </dd>
+                                <dt>Step 2: Update App.tsx to Use HashRouter</dt>
+                                <dd>
+                                    <p>Next, update the `App.tsx` file to use `HashRouter` for URL navigation. The following code sets up routes for different sections of your portfolio:</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> HashRouter<span class="token punctuation">,</span> Routes<span class="token punctuation">,</span> Route <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-router-dom'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Header <span class="token keyword">from</span> <span class="token string">'./components/Header'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Footer <span class="token keyword">from</span> <span class="token string">'./components/Footer'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> lazy<span class="token punctuation">,</span> Suspense <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> Hero <span class="token operator">=</span> <span class="token function">lazy</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'./components/Hero'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> About <span class="token operator">=</span> <span class="token function">lazy</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'./components/About'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Projects <span class="token operator">=</span> <span class="token function">lazy</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'./components/Projects'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Articles <span class="token operator">=</span> <span class="token function">lazy</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'./components/Articles'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Joke <span class="token operator">=</span> <span class="token function">lazy</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'./components/Joke'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+  <span class="token operator">&lt;</span>HashRouter<span class="token operator">></span>
+    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"d-flex flex-column min-vh-100"</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span>Header <span class="token operator">/</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span>main className<span class="token operator">=</span><span class="token string">"flex-grow-1 pt-5 mt-5 container"</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-10"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Suspense fallback<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>div<span class="token operator">></span>Loading<span class="token operator">...</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><span class="token punctuation">}</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Routes<span class="token operator">></span>
+          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Hero <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/about"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>About <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/projects"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Projects <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/joke"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Joke <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/articles"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Articles <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>Routes<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>Suspense<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>main<span class="token operator">></span>
+    <span class="token operator">&lt;</span>Footer <span class="token operator">/</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+  <span class="token operator">&lt;</span><span class="token operator">/</span>HashRouter<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>Step 3: Modify Header.tsx to Use Links</dt>
+                                <dd>
+                                    <p>Modify the `Header.tsx` file to replace traditional anchor `&lt;a&gt` tags with React Router's `Link` component for route-based navigation:</p>
+                                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Link <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-router-dom'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> Header<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+  <span class="token operator">&lt;</span>header<span class="token operator">></span>
+    <span class="token operator">&lt;</span>nav className<span class="token operator">=</span><span class="token string">"navbar navbar-expand-lg navbar-light bg-light fixed-top"</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container-fluid"</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"navbar-brand"</span> to<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">></span>Mark Hazleton<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+      <span class="token operator">&lt;</span>button className<span class="token operator">=</span><span class="token string">"navbar-toggler"</span> type<span class="token operator">=</span><span class="token string">"button"</span> data<span class="token operator">-</span>bs<span class="token operator">-</span>toggle<span class="token operator">=</span><span class="token string">"collapse"</span> data<span class="token operator">-</span>bs<span class="token operator">-</span>target<span class="token operator">=</span><span class="token string">"#navbarNav"</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>span className<span class="token operator">=</span><span class="token string">"navbar-toggler-icon"</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
+      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"collapse navbar-collapse"</span> id<span class="token operator">=</span><span class="token string">"navbarNav"</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>ul className<span class="token operator">=</span><span class="token string">"navbar-nav"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">></span>Home<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/about"</span><span class="token operator">></span>About<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/projects"</span><span class="token operator">></span>Projects<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/articles"</span><span class="token operator">></span>Articles<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/joke"</span><span class="token operator">></span>Joke<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>nav<span class="token operator">></span>
+  <span class="token operator">&lt;</span><span class="token operator">/</span>header<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> Header<span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>Step 4: Build the Project</dt>
+                                <dd>
+                                    <p>Finally, build the project with the following command:</p>
+                                    <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> run clean
+<span class="token function">npm</span> run build
+<span class="token function">npm</span> run dev
+</code></pre>
+                                </dd>
+                                <dt>Conclusion</dt>
+                                <dd><p>Now I have added React Router to the portfolio project. With this setup, users can navigate different sections using hash-based URLs without reloading the page.</p></dd>
+                            </dl>
+                        </div>
+                    </div>
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">
