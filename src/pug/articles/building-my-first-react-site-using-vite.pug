@@ -801,3 +801,125 @@ block layout-content
         These TypeScript code samples cover core features that will improve the development experience for new developers.
         They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.
 
+
+      .card
+        .card-header
+          h2.card-title Adding React Router
+        .card-body
+          p.lead I decided to implement React Router for navigation between sections using URLs like /#about and /#projects.
+          p.
+            Here are the steps I took to integrate React Router into my portfolio project.
+            This enabled me to navigate to different sections using URLs like /#about and /#projects.
+          dl
+            dt Step 1: Install react-router-dom
+            dd
+              p.
+                The first step is to install the React Router library by running the following command:
+              pre.language-bash
+                code.language-bash.
+                  npm install react-router-dom
+
+            dt Step 2: Update App.tsx to Use HashRouter
+            dd
+              p.
+                Next, update the `App.tsx` file to use `HashRouter` for URL navigation.
+                The following code sets up routes for different sections of your portfolio:
+              pre.language-typescript
+                code.language-typescript.
+                  import { HashRouter, Routes, Route } from 'react-router-dom';
+                  import Header from './components/Header';
+                  import Footer from './components/Footer';
+                  import { lazy, Suspense } from 'react';
+
+                  const Hero = lazy(() => import('./components/Hero'));
+                  const About = lazy(() => import('./components/About'));
+                  const Projects = lazy(() => import('./components/Projects'));
+                  const Articles = lazy(() => import('./components/Articles'));
+                  const Joke = lazy(() => import('./components/Joke'));
+
+                  const App: React.FC = () => {
+                    return (
+                    <HashRouter>
+                      <div className="d-flex flex-column min-vh-100">
+                      <Header />
+                      <main className="flex-grow-1 pt-5 mt-5 container">
+                        <div className="row justify-content-center">
+                        <div className="col-md-10">
+                          <Suspense fallback={<div>Loading...</div>}>
+                          <Routes>
+                            <Route path="/" element={<Hero />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/projects" element={<Projects />} />
+                            <Route path="/joke" element={<Joke />} />
+                            <Route path="/articles" element={<Articles />} />
+                          </Routes>
+                          </Suspense>
+                        </div>
+                        </div>
+                      </main>
+                      <Footer />
+                      </div>
+                    </HashRouter>
+                    );
+                  };
+
+                  export default App;
+
+            dt Step 3: Modify Header.tsx to Use Links
+            dd
+              p.
+                Modify the `Header.tsx` file to replace traditional anchor `&lt;a&gt` tags with React Router's `Link` component for route-based navigation:
+              pre.language-typescript
+                code.language-typescript.
+                  import { Link } from 'react-router-dom';
+
+                  const Header: React.FC = () => {
+                    return (
+                    <header>
+                      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+                      <div className="container-fluid">
+                        <Link className="navbar-brand" to="/">Mark Hazleton</Link>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                        <ul className="navbar-nav">
+                          <li className="nav-item">
+                          <Link className="nav-link" to="/">Home</Link>
+                          </li>
+                          <li className="nav-item">
+                          <Link className="nav-link" to="/about">About</Link>
+                          </li>
+                          <li className="nav-item">
+                          <Link className="nav-link" to="/projects">Projects</Link>
+                          </li>
+                          <li className="nav-item">
+                          <Link className="nav-link" to="/articles">Articles</Link>
+                          </li>
+                          <li className="nav-item">
+                          <Link className="nav-link" to="/joke">Joke</Link>
+                          </li>
+                        </ul>
+                        </div>
+                      </div>
+                      </nav>
+                    </header>
+                    );
+                  };
+
+                  export default Header;
+
+            dt Step 4: Build the Project
+            dd
+              p.
+                Finally, build the project with the following command:
+              pre.language-bash
+                code.language-bash.
+                  npm run clean
+                  npm run build
+                  npm run dev
+
+            dt Conclusion
+            dd
+              p.
+                Now I have added React Router to the portfolio project. With this setup, users can navigate different sections using hash-based URLs without reloading the page.
