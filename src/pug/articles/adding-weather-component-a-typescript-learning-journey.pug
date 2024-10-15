@@ -1,0 +1,240 @@
+extends ../layouts/articles
+
+block pagehead
+  title Adding Weather Component: A TypeScript Learning Journey
+  meta(name='description', content='Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling.')
+  meta(name="keywords" content="TypeScript, React Native, Weather API, Async Data Fetching, State Management")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/adding-weather-component-a-typescript-learning-journey.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      p.fw-bold.text-primary.text-center.bg-primary.text-white
+        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/ReactSparkPortfolio' target="_blank" title='The full source code for the ReactSparkPortfolio is available on GitHub') The full source code for the ReactSparkPortfolio is available on GitHub
+      h1 Adding Weather to My Profile Application: A TypeScript Learning Journey
+      h2.subheading.mb-3 Demonstrating TypeScript in Real-World Applications
+      p.lead As I work on the project, GitHub pages will be the place to view the application:
+        a(href='https://markhazleton.github.io/ReactSparkPortfolio/' target="_blank" title='ReactSparkPortfolio on GitHub Pages') ReactSparkPortfolio on GitHub Pages
+
+      p.
+        As a developer on a learning path with TypeScript,
+        one of my goals is to build meaningful,
+        real-world applications while demonstrating key TypeScript skills.
+        My Profile Application serves as a sandbox for practicing and refining my React Native skills,
+        specifically focusing on TypeScript.
+        Recently, I decided to enrich this project by adding a Weather Forecast feature,
+        which includes fetching live weather data and displaying a map of the user’s location.
+
+      dl
+        dt Why TypeScript?
+        dd
+          p.
+            TypeScript is a superset of JavaScript that adds static types.
+            It catches errors at compile time, helping avoid runtime failures,
+            especially useful in large, complex applications.
+            This strict control over data types and structure makes TypeScript
+            invaluable for handling data-fetching operations and managing state effectively in React Native apps.
+
+        dt Setting the Scene: The Profile Application
+        dd
+          p.
+            My Profile Application is a project where I display personal details, hobbies, and now, weather forecasts.
+            Integrating weather forecasts allows me to demonstrate TypeScript's role in data-fetching, state management,
+            and UI component creation, such as mapping user locations.
+
+        dt TypeScript Skills Demonstrated
+        dd
+          p The Weather Forecast and Map components demonstrate important TypeScript concepts:
+          ul
+            li Typed React Components
+            li Interface Definitions for Props
+            li Strongly Typed State Management
+            li Type-Safe Event Handling
+            li Handling Asynchronous Data Fetching
+            li Type Checking for Conditional Rendering
+            li Error Handling and Debugging
+
+        dt 1. Typed React Components
+        dd
+          p.
+            React components can be typed using React.FC (Functional Component)
+            to ensure that the component accepts and manages the right props.
+            In my Weather Forecast component, I used React.FC to define a functional component structure with TypeScript,
+            ensuring that I get proper type inference for props and state.
+
+          pre.language-typescript
+            code.language-typescript.
+              const WeatherForecast: React.FC = () => {
+                // Component logic here
+              }
+
+          p.
+            Using React.FC in TypeScript gives me type safety for props
+            and ensures that I avoid common pitfalls such as forgetting required props
+            or passing the wrong data types into components.
+            This is a foundational skill for building robust, maintainable React Native applications.
+
+        dt 2. Interface Definitions for Props
+        dd
+          p.
+            When building reusable components, defining interfaces for props ensures that you pass the correct types of data.
+            For example, the MapComponent needs latitude and longitude values, so I created a MapComponentProps interface
+            to specify the type of these props:
+          p.
+            Defining interfaces for component props ensures type safety.
+            The MapComponent, for example, receives latitude and longitude values:
+          pre.language-typescript
+            code.language-typescript.
+              interface MapComponentProps {
+                latitude: number;
+                longitude: number;
+              }
+
+              const MapComponent: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
+                return (
+                  <MapContainer center={[latitude, longitude]} zoom={13}>
+                    <Marker position={[latitude, longitude]} />
+                  </MapContainer>
+                );
+              };
+          p.
+            By defining this interface, I make sure that the MapComponent always receives numeric values
+            for latitude and longitude. If someone tries to pass in a string or other invalid data type,
+            TypeScript will immediately throw an error during development, helping me avoid bugs before they happen.
+
+        dt 3. Strongly Typed State Management
+        dd
+          p.
+            In the WeatherForecast component, I used useState hooks with explicit type annotations to ensure that the state
+            variables are strongly typed. This is particularly important when handling different kinds of data,
+            such as user input, fetched weather data, or UI states like loading indicators.
+
+          pre.language-typescript
+            code.language-typescript.
+              const [city, setCity] = useState<string>('');
+              const [loading, setLoading] = useState<boolean>(false);
+              const [weatherData, setWeatherData] = useState<any>(null);
+              const [error, setError] = useState<string>('');
+          p.
+            This explicit type declaration ensures that these variables only store data of the expected type.
+            For example, city can only be a string, and trying to assign any other type will raise a TypeScript error,
+            preventing type-related bugs early in development.
+
+        dt 4. Type-Safe Event Handling
+        dd
+          p.
+            Capturing and responding to user input in forms is a common task in React applications.
+            By typing event handlers in TypeScript, I ensure that the form behaves predictably.
+            Here’s how I typed the event in the input field for entering the city name:
+
+          pre.language-typescript
+            code.language-typescript.
+              <Form.Control
+                type="text"
+                placeholder="Enter city"
+                value={city}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCity(e.target.value)}
+              />
+          p.
+            TypeScript ensures that the event is correctly typed as React.ChangeEvent&lt;HTMLInputElement&gt;,
+            which means the function knows exactly what kind of event to expect.
+            This prevents issues like mistakenly accessing properties that don’t exist on the event object.
+
+        dt 5. Handling Asynchronous Data Fetching
+        dd
+          p.
+            The Weather Forecast feature involves fetching data from a weather API.
+            I used async/await in combination with TypeScript's strong typing to handle the API response and possible errors.
+          pre.language-typescript
+            code.language-typescript.
+              const fetchWeather = async () => {
+                setLoading(true);
+                setError('');
+
+                try {
+                  const response = await fetch(`https://api.example.com/weather?location=${city}`);
+                  const data = await response.json();
+
+                  if (data.success) {
+                    setWeatherData(data);
+                  } else {
+                    setError('Failed to fetch weather data.');
+                  }
+                } catch (err: any) {
+                  setError(`Error: ${err.message}`);
+                } finally {
+                  setLoading(false);
+                }
+              };
+          p.
+            Handling asynchronous operations properly is a critical skill in web development.
+            By typing the error as any (catch (err: any)),
+            I ensure that any error object caught will be properly typed and can be inspected.
+            The result is clear, concise error handling, with informative messages passed back to the user when something goes wrong.
+            TypeScript ensures that I handle the API response and error cases correctly,
+            making the code more robust and reliable.
+            By explicitly typing the error object as any, I can access its properties without TypeScript complaining about unknown types.
+
+        dt 6. Type Checking for Conditional Rendering
+        dd
+          p.
+            When dealing with fetched data, conditional rendering is crucial to ensure that the app doesn’t
+            attempt to render undefined or null values.
+            In the Weather Forecast component, I only render the forecast and map if the weatherData is available.
+
+          pre.language-typescript
+            code.language-typescript.
+              {weatherData && (
+                <>
+                  <Card>...Weather Details...</Card>
+                  <MapComponent
+                    latitude={weatherData.location.latitude}
+                    longitude={weatherData.location.longitude}
+                  />
+                </>
+              )}
+          p.
+            By adding this conditional check, TypeScript ensures that I won’t accidentally try to access properties
+            of weatherData before it’s been set, preventing potential runtime errors from undefined values.
+
+        dt 7. Error Handling and Debugging
+        dd
+          p.
+            One of the key advantages of TypeScript is that it forces you to think about edge cases like errors or missing data.
+            In the Weather Forecast component, I handle errors both in the API request and in user
+            interaction (e.g., if no city is entered or the API call fails).
+            This improves the user experience by displaying meaningful error messages when things go wrong.
+
+          pre.language-typescript
+            code.language-typescript.
+              {error && <div className="alert alert-danger">{error}</div>}
+          p.
+            TypeScript helps ensure that all errors are properly handled. With clear types,
+            it’s easier to trace where an error comes from, making debugging much more efficient.
+
+        dt Demonstrating My TypeScript Growth
+        dd
+          p.
+            Through the development of the Weather Forecast and Map components, I have sharpened several important TypeScript skills, particularly in building robust, type-safe React components. Here’s a summary of the key skills demonstrated:
+          ul
+            li Typed components using React.FC to ensure type safety for functional components.
+            li Interfaces for defining prop types, ensuring reusable components receive the correct data structure.
+            li Strongly typed state management with useState, ensuring that state variables only hold values of the expected type.
+            li Type-safe event handling to capture user input without runtime errors.
+            li Asynchronous data fetching with proper error handling, ensuring robustness when dealing with external APIs.
+            li Type checking for conditional rendering, ensuring the app doesn’t attempt to render undefined or null values.
+            li Clear error handling to improve the user experience with informative feedback.
+
+        dt What’s Next?
+        dd
+          p.
+            With the weather and map components successfully integrated into my Profile Application,
+            I’m eager to continue exploring more advanced TypeScript topics,
+            such as custom hooks, generic types, and state management libraries like Redux.
+            Each new feature provides another opportunity to refine my TypeScript skills while building something tangible.
+          p.
+            By making small but meaningful improvements to my application,
+            I can demonstrate the practical benefits of TypeScript,
+            not just in theory but in real-world scenarios that other developers can appreciate and learn from.

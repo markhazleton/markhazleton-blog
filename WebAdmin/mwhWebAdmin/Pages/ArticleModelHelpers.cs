@@ -9,7 +9,8 @@ public static class ArticleModelHelpers
         "Development",
         "Personal Philosophy",
         "Project Mechanics",
-        "PromptSpark"
+        "PromptSpark",
+        "ReactSpark"
     ];
     public static List<string> ChangeFrequency { get; } =
     [
