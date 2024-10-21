@@ -1,10 +1,17 @@
 const concurrently = require("concurrently");
 const upath = require("upath");
+const path = require("path");
 
-const browserSyncPath = upath.resolve(
-    upath.dirname(__filename),
-    "../node_modules/.bin/browser-sync"
-);
+// Detect platform
+const isWindows = process.platform === "win32";
+
+// Set BrowserSync path based on platform
+const browserSyncPath = isWindows
+    ? upath.resolve(upath.dirname(__filename), "../node_modules/.bin/browser-sync.cmd")
+    : upath.resolve(upath.dirname(__filename), "../node_modules/.bin/browser-sync");
+
+// BrowserSync command
+const browserSyncCommand = `${browserSyncPath} docs -w --no-online`;
 
 concurrently(
     [
@@ -14,9 +21,9 @@ concurrently(
             prefixColor: "bgBlue.bold",
         },
         {
-            command: `${browserSyncPath} docs -w --no-online`,
+            command: browserSyncCommand,
             name: "SB_BROWSER_SYNC",
-            prefixColor: "bgBlue.bold",
+            prefixColor: "bgGreen.bold", // Changed to green for consistency with your other example
         },
     ],
     {
@@ -25,6 +32,7 @@ concurrently(
     }
 );
 
+// Success and failure handlers
 function success() {
     console.log("Success");
 }
