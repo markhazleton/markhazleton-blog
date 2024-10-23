@@ -1,9 +1,6 @@
 using System.Globalization;
 
 namespace mwhWebAdmin.Article;
-
-
-
 /// <summary>
 /// Represents a service for managing articles.
 /// </summary>
@@ -12,7 +9,7 @@ public class ArticleService
     private List<ArticleModel> _articles = [];
     private readonly string _articlesDirectory;
     private readonly string _filePath;
-    private readonly Lock _lock = new();
+    private readonly object _lock = new();
     private readonly ILogger<ArticleService> _logger;
     private readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
 
