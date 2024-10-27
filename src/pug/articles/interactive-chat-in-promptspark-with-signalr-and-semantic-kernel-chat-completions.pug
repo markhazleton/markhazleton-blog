@@ -1,0 +1,412 @@
+extends ../layouts/articles
+
+block pagehead
+  title PromptSpark - Interactive Chat in PromptSpark With SignalR and Semantic Kernel Chat Completions
+  meta(name='description', content='Guide to implementing a real-time, AI-driven chat application in PromptSpark using ASP.NET SignalR and OpenAI GPT via Semantic Kernel.')
+  meta(name="keywords" content="PromptSpark, SignalR, Semantic Kernel, real-time chat, AI-driven chat")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/interactive-chat-in-promptspark-with-signalr-and-semantic-kernel-chat-completions.html')
+
+block layout-content
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Interactive Chat in PromptSpark With SignalR
+
+      h2.subheading.mb-3 Transitioning to a Simplified and Agile Approach
+      p
+        | This article reimagines the approach from
+        a(href='/articles/integrating-chat-completions-into-prompt-spark.html') Integrating Chat Completions into Prompt Spark,
+        | focusing on agility and adaptability to meet the needs of a React Native component.
+        | By simplifying the integration, I want to make the chat completions implementation more efficient and effective,
+        | embracing a continuous learning approach. This transition underscores the importance of staying open to better,
+        | streamlined methods as new insights emerge, allowing us to build more responsive, user-centric applications.
+
+      h2.subheading.mb-3 Building an AI-driven, real-time chat using ASP.NET SignalR and OpenAI's GPT models via Semantic Kernel
+      p.
+        This guide covers the steps to create an interactive chat experience using ASP.NET SignalR
+        for real-time functionality and OpenAI's GPT models for intelligent responses, through Semantic Kernel.
+      p.
+        In this new article, I am refining the approach introduced in the original "Integrating Chat Completions into Prompt Spark,"
+        focusing on a more agile and adaptable structure.
+        As I explore this updated implementation, the goal is to simplify and enhance the process of embedding chat completions,
+        making the design more efficient and ready for a VIT React Native environment.
+        This transition reflects a commitment to continuous improvement,
+        staying open to evolving insights that reveal better, streamlined methods.
+      dl
+        dt Introduction
+        dd
+          p.
+            In this article, developers and solution architects will learn how to integrate ASP.NET SignalR with Semantic Kernel's chat completion service to build a responsive, intelligent chat application in PromptSpark. SignalR enables real-time communication, while Semantic Kernel leverages OpenAI's GPT models for contextually relevant responses.
+
+        dt What You’ll Build and Why It Matters
+        dd
+          p.
+            You’ll create an interactive chat application where users receive immediate, AI-generated responses, closely simulating natural conversation flow. Combining SignalR's real-time messaging and Semantic Kernel's adaptive AI enhances engagement, suitable for use cases like customer support, virtual assistants, and interactive content.
+
+        dt Setting Up Your Development Environment
+        dd
+          p.
+            This project requires ASP.NET Core, SignalR, and Semantic Kernel. Follow these steps to set up your environment and secure your OpenAI API keys with environment variables.
+          pre.language-bash
+            code.language-bash.
+              dotnet add package Microsoft.AspNetCore.SignalR
+              dotnet add package Microsoft.SemanticKernel
+
+        dt Setting Up Program.cs
+        dd
+          p.
+            In this section, we’ll set up the main program configuration in `Program.cs` for the integration
+            of SignalR and OpenAI’s GPT models via Semantic Kernel.
+            This configuration ensures real-time functionality and prepares the AI chat service for prompt responses.
+          dl
+            dt Logging Configuration
+            dd
+              p.
+                Add console logging for debugging and set a debug level to capture detailed information.
+                  pre.language-csharp
+              pre.language-csharp
+                code.language-csharp.
+                  builder.Logging.AddConsole();
+                  builder.Logging.SetMinimumLevel(LogLevel.Debug);
+
+            dt SignalR Setup
+            dd
+              p.
+                Add SignalR to the services, enabling real-time messaging capabilities in the application.
+              pre.language-csharp
+                code.language-csharp.
+                  builder.Services.AddSignalR();
+
+            dt OpenAI API Integration
+            dd
+              p.
+                Configure Semantic Kernel’s `AddOpenAIChatCompletion` service, using API keys stored in environment variables.
+                Ensure the environment variables `OPENAI_API_KEY` and `MODEL_ID` are correctly set to avoid errors.
+              pre.language-csharp
+                code.language-csharp.
+                  string apikey = builder.Configuration.GetValue<string>("OPENAI_API_KEY") ?? "not found";
+                  string modelId = builder.Configuration.GetValue<string>("MODEL_ID") ?? "gpt-4o";
+                  builder.Services.AddOpenAIChatCompletion(modelId, apikey);
+
+            dt Routing and Middleware
+            dd
+              p.
+                Map routes for API controllers and the SignalR `ChatHub`, enabling endpoint access and
+                serving static files like the front-end HTML.
+              pre.language-csharp
+                code.language-csharp.
+                  var app = builder.Build();
+                  app.UseDefaultFiles();  // Looks for index.html, index.htm by default
+                  app.UseStaticFiles();
+
+                  app.MapControllers();
+                  app.MapHub<ChatHub>("/chatHub");
+
+        dt Implementing the SignalR Chat Hub
+        dd
+          p.
+            The ChatHub manages messages, maintains conversation history, and processes real-time user interactions. Below is the implementation of the `ChatHub` class, which initializes with an instance of `IChatCompletionService` and manages message flow with a `ConcurrentDictionary` for chat history.
+          pre.language-csharp
+            code.language-csharp.
+              public class ChatHub(IChatCompletionService _chatCompletionService) : Hub
+              {
+                public class ChatEntry
+                {
+                  public DateTime Timestamp { get; set; }
+                  public string User { get; set; }
+                  public string UserMessage { get; set; }
+                  public string BotResponse { get; set; }
+                }
+
+                private static readonly ConcurrentDictionary<string, List<ChatEntry>> ChatHistoryCache = new();
+
+                public async Task SendMessage(string user, string message, string conversationId)
+                {
+                  if (!ChatHistoryCache.ContainsKey(conversationId))
+                  {
+                    ChatHistoryCache[conversationId] = new List<ChatEntry>();
+                  }
+                  var timestamp = DateTime.Now;
+
+                  // Broadcast user's message
+                  await Clients.All.SendAsync("ReceiveMessage", user, message, conversationId);
+
+                  var chatHistory = new ChatHistory();
+                  chatHistory.AddSystemMessage("You are in a conversation, keep your answers brief, always ask follow-up questions, ask if ready for full answer.");
+
+                  foreach (var chatEntry in ChatHistoryCache[conversationId])
+                  {
+                    chatHistory.AddUserMessage(chatEntry.UserMessage);
+                    chatHistory.AddSystemMessage(chatEntry.BotResponse);
+                  }
+                  chatHistory.AddUserMessage(message);
+
+                  // Generate bot response with streaming
+                  var botResponse = await GenerateStreamingBotResponse(chatHistory, conversationId);
+
+                  // Add the message to the in-memory cache
+                  ChatHistoryCache[conversationId].Add(new ChatEntry
+                  {
+                    Timestamp = timestamp,
+                    User = user,
+                    UserMessage = message,
+                    BotResponse = botResponse
+                  });
+                }
+
+                private async Task<string> GenerateStreamingBotResponse(ChatHistory chatHistory, string conversationId)
+                {
+                  var buffer = new StringBuilder();
+                  var message = new StringBuilder();
+                  try
+                  {
+                    await foreach (var response in _chatCompletionService.GetStreamingChatMessageContentsAsync(chatHistory))
+                    {
+                      if (response?.Content != null)
+                      {
+                        buffer.Append(response.Content);
+
+                        if (response.Content.Contains('\n'))
+                        {
+                          var contentToSend = buffer.ToString();
+                          await Clients.All.SendAsync("ReceiveMessage", "ChatBot", contentToSend, conversationId);
+                          await AppendToCsvLog(conversationId, "System", contentToSend);
+                          message.Append(contentToSend);
+                          buffer.Clear();
+                        }
+                      }
+                    }
+
+                    if (buffer.Length > 0)
+                    {
+                      var remainingContent = buffer.ToString();
+                      await Clients.All.SendAsync("ReceiveMessage", "ChatBot", remainingContent, conversationId);
+                      message.Append(remainingContent);
+                      await AppendToCsvLog(conversationId, "System", remainingContent);
+                    }
+                  }
+                  catch (Exception ex)
+                  {
+                    Console.WriteLine($"Error in generating bot response: {ex.Message}");
+                    message.Append("An error occurred while processing your request.");
+                    await Clients.Caller.SendAsync("ReceiveMessage", "System", "An error occurred while processing your request.");
+                  }
+                  return message.ToString();
+                }
+
+                private async Task AppendToCsvLog(string conversationId, string sender, string message)
+                {
+                  Console.WriteLine($"{DateTime.Now}, {conversationId}, {sender}: {message}");
+                }
+              }
+
+        dt Generating AI-Powered Responses with Semantic Kernel
+        dd
+          p.
+            The `GenerateStreamingBotResponse` method in the ChatHub class generates responses asynchronously. This method streams responses to the client in real-time, providing a continuous "typing" effect for a more dynamic chat experience.
+
+        dt Building the Front-End for PromptSpark Chat
+        dd
+          p.
+            Set up a user-friendly interface with an input box, chat history window, and “send” button.
+            Establish a SignalR connection for real-time messaging, and use streaming for a “typing” effect in AI responses.
+
+          pre.language-javascript
+            code.language-javascript.
+              const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chathub")
+                .build();
+
+              connection.on("ReceiveMessage", (user, message, conversationId) => {
+                // Display received messages
+              });
+
+
+        dt Front-End Testing with index.html
+        dd
+          p.
+            Create a simple test harness 'index.html' in the wwwwroot folder for the interactive chat interface.
+            It provides a basic layout with Bootstrap styling, enabling users to send messages and view responses in real-time.
+          pre.language-html
+            code.language-html.
+              <div class="card">
+                <div class="card-header text-center">
+                  <h2>PromptSpark Chat</h2>
+                </div>
+                <div class="card-body">
+                  <div id="userForm" class="mb-4">
+                    <label for="userInput" class="form-label">Enter your name to join the chat:</label>
+                    <input type="text" id="userInput" class="form-control" placeholder="Your name" />
+                    <button class="btn btn-primary mt-2" onclick="joinChat()">Join Chat</button>
+                  </div>
+                  <div id="chatWindow" style="display: none;">
+                    <ul id="messagesList" class="list-unstyled mb-3 p-3 border rounded bg-white" style="height: 300px; overflow-y: scroll;">
+                    </ul>
+                    <div class="input-group">
+                      <input type="text" id="messageInput" class="form-control" placeholder="Type your message here..." />
+                      <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          p.
+            Add the following JavaScript code to the 'index.html' file to establish a SignalR connection and handle real-time messaging.
+          pre.language-javascript
+            code.language-javascript.
+
+              const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chatHub")
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+              let userName = "";
+              let conversationId = localStorage.getItem("conversationId") || generateConversationId();
+              let botMessageElement = null;
+              localStorage.setItem("conversationId", conversationId);
+
+              function generateConversationId() {
+                return Math.random().toString(36).substring(2, 15);
+              }
+
+              async function start() {
+                try {
+                  await connection.start();
+                  console.log("Connected to SignalR hub!");
+                } catch (err) {
+                  console.error("Connection failed: ", err);
+                  setTimeout(start, 5000);
+                }
+              }
+
+              connection.on("ReceiveMessage", (user, message) => {
+                const messagesList = document.getElementById("messagesList");
+
+                if (user === "ChatBot") {
+                  if (!botMessageElement) {
+                    botMessageElement = document.createElement("li");
+                    botMessageElement.classList.add("mb-2");
+                    botMessageElement.setAttribute("data-user", "ChatBot");
+                    botMessageElement.innerHTML = `<strong>${user}:</strong> <span class="bot-message-content"></span>`;
+                    messagesList.appendChild(botMessageElement);
+                  }
+                  botMessageElement.querySelector(".bot-message-content").textContent += message + " ";
+                } else {
+                  botMessageElement = null;
+                  const li = document.createElement("li");
+                  li.classList.add("mb-2");
+                  li.innerHTML = `<strong>${user}:</strong> ${message}`;
+                  messagesList.appendChild(li);
+                }
+                messagesList.scrollTop = messagesList.scrollHeight;
+              });
+
+              function joinChat() {
+                userName = document.getElementById("userInput").value.trim();
+                if (userName) {
+                  document.getElementById("userForm").style.display = "none";
+                  document.getElementById("chatWindow").style.display = "block";
+                  document.getElementById("messageInput").focus();
+                }
+              }
+
+              async function sendMessage() {
+                const message = document.getElementById("messageInput").value.trim();
+                if (userName && message) {
+                  try {
+                    await connection.invoke("SendMessage", userName, message, conversationId);
+                    document.getElementById("messageInput").value = '';
+                  } catch (err) {
+                    console.error("SendMessage failed: ", err);
+                  }
+                }
+              }
+
+              document.getElementById("messageInput").addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  sendMessage();
+                }
+              });
+
+              start();
+
+          dl
+            dt SignalR Connection
+            dd
+              p.
+                Establishes a real-time connection with the SignalR hub.  This is some simple javascript code that connects to the SignalR hub and logs a message to the console when the connection is successful.
+              pre.language-javascript
+                code.language-javascript.
+                  const connection = new signalR.HubConnectionBuilder()
+                    .withUrl("/chathub")
+                    .build();
+
+                  connection.on("ReceiveMessage", (user, message, conversationId) => {
+                    // Display received messages
+                  });
+
+            dt User Interaction
+            dd
+              p.
+                Provides a join functionality with a unique conversation ID per session.
+              pre.language-javascript
+                code.language-javascript.
+                  function joinChat() {
+                    userName = document.getElementById("userInput").value.trim();
+                    if (userName) {
+                      document.getElementById("userForm").style.display = "none";
+                      document.getElementById("chatWindow").style.display = "block";
+                      document.getElementById("messageInput").focus();
+                    }
+                  }
+            dt Real-Time Messaging
+            dd
+              p.
+                Updates the chat window in real time with both user and bot messages, including a “typing” effect for bot responses.
+              pre.language-javascript
+                code.language-javascript.
+                  connection.on("ReceiveMessage", (user, message) => {
+                    const messagesList = document.getElementById("messagesList");
+
+                    if (user === "ChatBot") {
+                      if (!botMessageElement) {
+                        botMessageElement = document.createElement("li");
+                        botMessageElement.classList.add("mb-2");
+                        botMessageElement.setAttribute("data-user", "ChatBot");
+                        botMessageElement.innerHTML = `<strong>${user}:</strong> <span class="bot-message-content"></span>`;
+                        messagesList.appendChild(botMessageElement);
+                      }
+                      botMessageElement.querySelector(".bot-message-content").textContent += message + " ";
+                    } else {
+                      botMessageElement = null;
+                      const li = document.createElement("li");
+                      li.classList.add("mb-2");
+                      li.innerHTML = `<strong>${user}:</strong> ${message}`;
+                      messagesList.appendChild(li);
+                    }
+                    messagesList.scrollTop = messagesList.scrollHeight;
+                  });
+            dt Testing Tips
+            dd
+              p.
+                Test by sending messages, observing real-time updates, and verifying that the bot's responses stream line by line for an enhanced chat experience.
+
+
+        dt Testing and Improving the Chat Experience
+        dd
+          p.
+            Test the chat flow to ensure messages display correctly, and responses stream as expected. Refine the AI's tone through system prompts in ChatHistory, log key interactions, and optimize the user experience.
+
+        dt Common Issues and Troubleshooting Tips
+        dd
+          p.
+            Troubleshoot OpenAI API key issues, SignalR connectivity problems, and adjust prompt history for enhanced response quality. Ensure connection stability and efficient response streaming.
+
+        dt Extending and Scaling the Chat Application
+        dd
+          p.
+            Consider persisting chat history across sessions for customer support applications, and use Azure SignalR Service for scaling. Future enhancements could include multilingual support and sentiment analysis.
+
+      h2 Conclusion
+      p.
+        This guide has shown how to create an AI-enhanced, real-time chat application in PromptSpark using SignalR and Semantic Kernel. By combining real-time messaging with intelligent responses, developers can build highly engaging, adaptive chat experiences. Explore customizations and build unique AI-driven applications in PromptSpark.

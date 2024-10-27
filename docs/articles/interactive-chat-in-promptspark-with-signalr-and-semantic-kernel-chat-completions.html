@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="author" content="Mark Hazleton" />
+        <meta name="robots" content="index, follow" />
+        <title>PromptSpark - Interactive Chat in PromptSpark With SignalR and Semantic Kernel Chat Completions</title>
+        <meta name="description" content="Guide to implementing a real-time, AI-driven chat application in PromptSpark using ASP.NET SignalR and OpenAI GPT via Semantic Kernel." />
+        <meta name="keywords" content="PromptSpark, SignalR, Semantic Kernel, real-time chat, AI-driven chat" />
+        <meta name="author" content="Mark Hazleton" />
+        <link rel="canonical" href="https://markhazleton.com/articles/interactive-chat-in-promptspark-with-signalr-and-semantic-kernel-chat-completions.html" />
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "familyName": "Hazleton",
+                "givenName": "Mark",
+                "jobTitle": "Solutions Architect",
+                "alumniOf": "University of North Texas",
+                "affiliation": {
+                    "@type": "Organization",
+                    "name": "Control Origins"
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
+                "url": "https://markhazleton.com"
+            }
+        </script>
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "url": "https://markhazleton.com",
+                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+            }
+        </script>
+        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="/css/styles.css?version=1730069153798" />
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+        <script>
+            (function (c, l, a, r, i, t, y) {
+                c[a] =
+                    c[a] ||
+                    function () {
+                        (c[a].q = c[a].q || []).push(arguments);
+                    };
+                t = l.createElement(r);
+                t.async = 1;
+                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+            })(window, document, 'clarity', 'script', 'd628hovv63');
+        </script>
+    </head>
+    <body class="sidetracked-body" id="page-top">
+        <nav class="navbar navbar-dark bg-primary p-1">
+            <div class="container-fluid justify-content-end">
+                <div class="social-icons d-flex">
+                    <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in text-light me-2" style="font-size: 2rem"></i></a>
+                    <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github text-light me-2" style="font-size: 2rem"></i></a>
+                    <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube text-light me-2" style="font-size: 2rem"></i></a>
+                    <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram text-light" style="font-size: 2rem"></i></a>
+                </div>
+            </div>
+        </nav>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
+                <span class="d-block d-lg-none">Mark Hazleton</span>
+                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#articles">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Page Content-->
+        <div class="container-fluid p-0 painteddesert-background">
+            <section class="painteddesert-section painteddesert-section-background" id="post">
+                <div class="painteddesert-section-content">
+                    <h1>Interactive Chat in PromptSpark With SignalR</h1>
+                    <h2 class="subheading mb-3">Transitioning to a Simplified and Agile Approach</h2>
+                    <p>
+                        This article reimagines the approach from
+                        <a href="/articles/integrating-chat-completions-into-prompt-spark.html">Integrating Chat Completions into Prompt Spark,</a>
+                        focusing on agility and adaptability to meet the needs of a React Native component. By simplifying the integration, I want to make the chat completions implementation more efficient and effective, embracing a continuous learning approach. This transition underscores the importance of staying open to better, streamlined methods as new insights emerge, allowing us to build more responsive, user-centric applications.
+                    </p>
+                    <h2 class="subheading mb-3">Building an AI-driven, real-time chat using ASP.NET SignalR and OpenAI's GPT models via Semantic Kernel</h2>
+                    <p>This guide covers the steps to create an interactive chat experience using ASP.NET SignalR for real-time functionality and OpenAI's GPT models for intelligent responses, through Semantic Kernel.</p>
+                    <p>In this new article, I am refining the approach introduced in the original "Integrating Chat Completions into Prompt Spark," focusing on a more agile and adaptable structure. As I explore this updated implementation, the goal is to simplify and enhance the process of embedding chat completions, making the design more efficient and ready for a VIT React Native environment. This transition reflects a commitment to continuous improvement, staying open to evolving insights that reveal better, streamlined methods.</p>
+                    <dl>
+                        <dt>Introduction</dt>
+                        <dd><p>In this article, developers and solution architects will learn how to integrate ASP.NET SignalR with Semantic Kernel's chat completion service to build a responsive, intelligent chat application in PromptSpark. SignalR enables real-time communication, while Semantic Kernel leverages OpenAI's GPT models for contextually relevant responses.</p></dd>
+                        <dt>What You’ll Build and Why It Matters</dt>
+                        <dd><p>You’ll create an interactive chat application where users receive immediate, AI-generated responses, closely simulating natural conversation flow. Combining SignalR's real-time messaging and Semantic Kernel's adaptive AI enhances engagement, suitable for use cases like customer support, virtual assistants, and interactive content.</p></dd>
+                        <dt>Setting Up Your Development Environment</dt>
+                        <dd>
+                            <p>This project requires ASP.NET Core, SignalR, and Semantic Kernel. Follow these steps to set up your environment and secure your OpenAI API keys with environment variables.</p>
+                            <pre class="language-bash"><code class="language-bash">dotnet <span class="token function">add</span> package Microsoft.AspNetCore.SignalR
+dotnet <span class="token function">add</span> package Microsoft.SemanticKernel
+</code></pre>
+                        </dd>
+                        <dt>Setting Up Program.cs</dt>
+                        <dd>
+                            <p>In this section, we’ll set up the main program configuration in `Program.cs` for the integration of SignalR and OpenAI’s GPT models via Semantic Kernel. This configuration ensures real-time functionality and prepares the AI chat service for prompt responses.</p>
+                            <dl>
+                                <dt>Logging Configuration</dt>
+                                <dd>
+                                    <p>Add console logging for debugging and set a debug level to capture detailed information. pre.language-csharp</p>
+                                    <pre class="language-csharp"><code class="language-csharp">builder<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span><span class="token function">AddConsole</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span><span class="token function">SetMinimumLevel</span><span class="token punctuation">(</span>LogLevel<span class="token punctuation">.</span>Debug<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>SignalR Setup</dt>
+                                <dd>
+                                    <p>Add SignalR to the services, enabling real-time messaging capabilities in the application.</p>
+                                    <pre class="language-csharp"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSignalR</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>OpenAI API Integration</dt>
+                                <dd>
+                                    <p>Configure Semantic Kernel’s `AddOpenAIChatCompletion` service, using API keys stored in environment variables. Ensure the environment variables `OPENAI_API_KEY` and `MODEL_ID` are correctly set to avoid errors.</p>
+                                    <pre class="language-csharp"><code class="language-csharp"><span class="token class-name"><span class="token keyword">string</span></span> apikey <span class="token operator">=</span> builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetValue</span><span class="token generic class-name"><span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token string">"OPENAI_API_KEY"</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token string">"not found"</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">string</span></span> modelId <span class="token operator">=</span> builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetValue</span><span class="token generic class-name"><span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token string">"MODEL_ID"</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token string">"gpt-4o"</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddOpenAIChatCompletion</span><span class="token punctuation">(</span>modelId<span class="token punctuation">,</span> apikey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>Routing and Middleware</dt>
+                                <dd>
+                                    <p>Map routes for API controllers and the SignalR `ChatHub`, enabling endpoint access and serving static files like the front-end HTML.</p>
+                                    <pre class="language-csharp"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> app <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">UseDefaultFiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Looks for index.html, index.htm by default</span>
+app<span class="token punctuation">.</span><span class="token function">UseStaticFiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+app<span class="token punctuation">.</span><span class="token function">MapControllers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">MapHub</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ChatHub<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token string">"/chatHub"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                            </dl>
+                        </dd>
+                        <dt>Implementing the SignalR Chat Hub</dt>
+                        <dd>
+                            <p>The ChatHub manages messages, maintains conversation history, and processes real-time user interactions. Below is the implementation of the `ChatHub` class, which initializes with an instance of `IChatCompletionService` and manages message flow with a `ConcurrentDictionary` for chat history.</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ChatHub</span><span class="token punctuation">(</span><span class="token class-name">IChatCompletionService</span> _chatCompletionService<span class="token punctuation">)</span> <span class="token punctuation">:</span> Hub
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ChatEntry</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">DateTime</span> Timestamp <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> User <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> UserMessage <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> BotResponse <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">readonly</span> <span class="token class-name">ConcurrentDictionary<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">,</span> List<span class="token punctuation">&lt;</span>ChatEntry<span class="token punctuation">></span><span class="token punctuation">></span></span> ChatHistoryCache <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">SendMessage</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> user<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> message<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> conversationId<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>ChatHistoryCache<span class="token punctuation">.</span><span class="token function">ContainsKey</span><span class="token punctuation">(</span>conversationId<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      ChatHistoryCache<span class="token punctuation">[</span>conversationId<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span>ChatEntry<span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> timestamp <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>Now<span class="token punctuation">;</span>
+
+    <span class="token comment">// Broadcast user's message</span>
+    <span class="token keyword">await</span> Clients<span class="token punctuation">.</span>All<span class="token punctuation">.</span><span class="token function">SendAsync</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> user<span class="token punctuation">,</span> message<span class="token punctuation">,</span> conversationId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> chatHistory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ChatHistory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    chatHistory<span class="token punctuation">.</span><span class="token function">AddSystemMessage</span><span class="token punctuation">(</span><span class="token string">"You are in a conversation, keep your answers brief, always ask follow-up questions, ask if ready for full answer."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> chatEntry <span class="token keyword">in</span> ChatHistoryCache<span class="token punctuation">[</span>conversationId<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      chatHistory<span class="token punctuation">.</span><span class="token function">AddUserMessage</span><span class="token punctuation">(</span>chatEntry<span class="token punctuation">.</span>UserMessage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      chatHistory<span class="token punctuation">.</span><span class="token function">AddSystemMessage</span><span class="token punctuation">(</span>chatEntry<span class="token punctuation">.</span>BotResponse<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    chatHistory<span class="token punctuation">.</span><span class="token function">AddUserMessage</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Generate bot response with streaming</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> botResponse <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">GenerateStreamingBotResponse</span><span class="token punctuation">(</span>chatHistory<span class="token punctuation">,</span> conversationId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Add the message to the in-memory cache</span>
+    ChatHistoryCache<span class="token punctuation">[</span>conversationId<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token constructor-invocation class-name">ChatEntry</span>
+    <span class="token punctuation">{</span>
+      Timestamp <span class="token operator">=</span> timestamp<span class="token punctuation">,</span>
+      User <span class="token operator">=</span> user<span class="token punctuation">,</span>
+      UserMessage <span class="token operator">=</span> message<span class="token punctuation">,</span>
+      BotResponse <span class="token operator">=</span> botResponse
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span> <span class="token function">GenerateStreamingBotResponse</span><span class="token punctuation">(</span><span class="token class-name">ChatHistory</span> chatHistory<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> conversationId<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> message <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">await</span> <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> response <span class="token keyword">in</span> _chatCompletionService<span class="token punctuation">.</span><span class="token function">GetStreamingChatMessageContentsAsync</span><span class="token punctuation">(</span>chatHistory<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>response<span class="token punctuation">?.</span>Content <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+          buffer<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>Content<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>response<span class="token punctuation">.</span>Content<span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span><span class="token char">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token punctuation">{</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> contentToSend <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">await</span> Clients<span class="token punctuation">.</span>All<span class="token punctuation">.</span><span class="token function">SendAsync</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token string">"ChatBot"</span><span class="token punctuation">,</span> contentToSend<span class="token punctuation">,</span> conversationId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">await</span> <span class="token function">AppendToCsvLog</span><span class="token punctuation">(</span>conversationId<span class="token punctuation">,</span> <span class="token string">"System"</span><span class="token punctuation">,</span> contentToSend<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            message<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span>contentToSend<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            buffer<span class="token punctuation">.</span><span class="token function">Clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>buffer<span class="token punctuation">.</span>Length <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> remainingContent <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">await</span> Clients<span class="token punctuation">.</span>All<span class="token punctuation">.</span><span class="token function">SendAsync</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token string">"ChatBot"</span><span class="token punctuation">,</span> remainingContent<span class="token punctuation">,</span> conversationId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        message<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span>remainingContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">await</span> <span class="token function">AppendToCsvLog</span><span class="token punctuation">(</span>conversationId<span class="token punctuation">,</span> <span class="token string">"System"</span><span class="token punctuation">,</span> remainingContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"Error in generating bot response: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">ex<span class="token punctuation">.</span>Message</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      message<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">"An error occurred while processing your request."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">await</span> Clients<span class="token punctuation">.</span>Caller<span class="token punctuation">.</span><span class="token function">SendAsync</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token string">"System"</span><span class="token punctuation">,</span> <span class="token string">"An error occurred while processing your request."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> message<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">AppendToCsvLog</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> conversationId<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> sender<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> message<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">DateTime<span class="token punctuation">.</span>Now</span><span class="token punctuation">}</span></span><span class="token string">, </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">conversationId</span><span class="token punctuation">}</span></span><span class="token string">, </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">sender</span><span class="token punctuation">}</span></span><span class="token string">: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">message</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                        </dd>
+                        <dt>Generating AI-Powered Responses with Semantic Kernel</dt>
+                        <dd><p>The `GenerateStreamingBotResponse` method in the ChatHub class generates responses asynchronously. This method streams responses to the client in real-time, providing a continuous "typing" effect for a more dynamic chat experience.</p></dd>
+                        <dt>Building the Front-End for PromptSpark Chat</dt>
+                        <dd>
+                            <p>Set up a user-friendly interface with an input box, chat history window, and “send” button. Establish a SignalR connection for real-time messaging, and use streaming for a “typing” effect in AI responses.</p>
+                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token method function property-access">withUrl</span><span class="token punctuation">(</span><span class="token string">"/chathub"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token method function property-access">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+connection<span class="token punctuation">.</span><span class="token method function property-access">on</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> message<span class="token punctuation">,</span> conversationId</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Display received messages</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+                        </dd>
+                        <dt>Front-End Testing with index.html</dt>
+                        <dd>
+                            <p>Create a simple test harness 'index.html' in the wwwwroot folder for the interactive chat interface. It provides a basic layout with Bootstrap styling, enabling users to send messages and view responses in real-time.</p>
+                            <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card-header text-center<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>PromptSpark Chat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card-body<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>userForm<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>mb-4<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>userInput<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form-label<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Enter your name to join the chat:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>userInput<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form-control<span class="token punctuation">"</span></span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Your name<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-primary mt-2<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">onclick</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value javascript language-javascript"><span class="token function">joinChat</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>Join Chat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>chatWindow<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>messagesList<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list-unstyled mb-3 p-3 border rounded bg-white<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">300</span><span class="token unit">px</span><span class="token punctuation">;</span> <span class="token property">overflow-y</span><span class="token punctuation">:</span> scroll<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input-group<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>messageInput<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form-control<span class="token punctuation">"</span></span> <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Type your message here...<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-primary<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">onclick</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value javascript language-javascript"><span class="token function">sendMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>Send<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+                            <p>Add the following JavaScript code to the 'index.html' file to establish a SignalR connection and handle real-time messaging.</p>
+                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token method function property-access">withUrl</span><span class="token punctuation">(</span><span class="token string">"/chatHub"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token method function property-access">configureLogging</span><span class="token punctuation">(</span>signalR<span class="token punctuation">.</span><span class="token property-access"><span class="token maybe-class-name">LogLevel</span></span><span class="token punctuation">.</span><span class="token property-access"><span class="token maybe-class-name">Information</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token method function property-access">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> userName <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> conversationId <span class="token operator">=</span> <span class="token dom variable">localStorage</span><span class="token punctuation">.</span><span class="token method function property-access">getItem</span><span class="token punctuation">(</span><span class="token string">"conversationId"</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token function">generateConversationId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> botMessageElement <span class="token operator">=</span> <span class="token keyword null nil">null</span><span class="token punctuation">;</span>
+<span class="token dom variable">localStorage</span><span class="token punctuation">.</span><span class="token method function property-access">setItem</span><span class="token punctuation">(</span><span class="token string">"conversationId"</span><span class="token punctuation">,</span> conversationId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">generateConversationId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword control-flow">return</span> <span class="token known-class-name class-name">Math</span><span class="token punctuation">.</span><span class="token method function property-access">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">toString</span><span class="token punctuation">(</span><span class="token number">36</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">substring</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword control-flow">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword control-flow">await</span> connection<span class="token punctuation">.</span><span class="token method function property-access">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">log</span><span class="token punctuation">(</span><span class="token string">"Connected to SignalR hub!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword control-flow">catch</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">error</span><span class="token punctuation">(</span><span class="token string">"Connection failed: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">setTimeout</span><span class="token punctuation">(</span>start<span class="token punctuation">,</span> <span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+connection<span class="token punctuation">.</span><span class="token method function property-access">on</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> message</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> messagesList <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messagesList"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>user <span class="token operator">===</span> <span class="token string">"ChatBot"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>botMessageElement<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      botMessageElement <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">createElement</span><span class="token punctuation">(</span><span class="token string">"li"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      botMessageElement<span class="token punctuation">.</span><span class="token property-access">classList</span><span class="token punctuation">.</span><span class="token method function property-access">add</span><span class="token punctuation">(</span><span class="token string">"mb-2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      botMessageElement<span class="token punctuation">.</span><span class="token method function property-access">setAttribute</span><span class="token punctuation">(</span><span class="token string">"data-user"</span><span class="token punctuation">,</span> <span class="token string">"ChatBot"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      botMessageElement<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token html language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>user<span class="token interpolation-punctuation punctuation">}</span></span>:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bot-message-content<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+      messagesList<span class="token punctuation">.</span><span class="token method function property-access">appendChild</span><span class="token punctuation">(</span>botMessageElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    botMessageElement<span class="token punctuation">.</span><span class="token method function property-access">querySelector</span><span class="token punctuation">(</span><span class="token string">".bot-message-content"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">textContent</span> <span class="token operator">+=</span> message <span class="token operator">+</span> <span class="token string">" "</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword control-flow">else</span> <span class="token punctuation">{</span>
+    botMessageElement <span class="token operator">=</span> <span class="token keyword null nil">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> li <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">createElement</span><span class="token punctuation">(</span><span class="token string">"li"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    li<span class="token punctuation">.</span><span class="token property-access">classList</span><span class="token punctuation">.</span><span class="token method function property-access">add</span><span class="token punctuation">(</span><span class="token string">"mb-2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    li<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token html language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>user<span class="token interpolation-punctuation punctuation">}</span></span>:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> <span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>message<span class="token interpolation-punctuation punctuation">}</span></span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    messagesList<span class="token punctuation">.</span><span class="token method function property-access">appendChild</span><span class="token punctuation">(</span>li<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  messagesList<span class="token punctuation">.</span><span class="token property-access">scrollTop</span> <span class="token operator">=</span> messagesList<span class="token punctuation">.</span><span class="token property-access">scrollHeight</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">joinChat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  userName <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"userInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">value</span><span class="token punctuation">.</span><span class="token method function property-access">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>userName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"userForm"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">style</span><span class="token punctuation">.</span><span class="token property-access">display</span> <span class="token operator">=</span> <span class="token string">"none"</span><span class="token punctuation">;</span>
+    <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"chatWindow"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">style</span><span class="token punctuation">.</span><span class="token property-access">display</span> <span class="token operator">=</span> <span class="token string">"block"</span><span class="token punctuation">;</span>
+    <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messageInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">focus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">sendMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> message <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messageInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">value</span><span class="token punctuation">.</span><span class="token method function property-access">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>userName <span class="token operator">&amp;&amp;</span> message<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword control-flow">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword control-flow">await</span> connection<span class="token punctuation">.</span><span class="token method function property-access">invoke</span><span class="token punctuation">(</span><span class="token string">"SendMessage"</span><span class="token punctuation">,</span> userName<span class="token punctuation">,</span> message<span class="token punctuation">,</span> conversationId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messageInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">value</span> <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword control-flow">catch</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">error</span><span class="token punctuation">(</span><span class="token string">"SendMessage failed: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messageInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">addEventListener</span><span class="token punctuation">(</span><span class="token string">"keypress"</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">event</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>event<span class="token punctuation">.</span><span class="token property-access">key</span> <span class="token operator">===</span> <span class="token string">"Enter"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    event<span class="token punctuation">.</span><span class="token method function property-access">preventDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sendMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                            <dl>
+                                <dt>SignalR Connection</dt>
+                                <dd>
+                                    <p>Establishes a real-time connection with the SignalR hub. This is some simple javascript code that connects to the SignalR hub and logs a message to the console when the connection is successful.</p>
+                                    <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token method function property-access">withUrl</span><span class="token punctuation">(</span><span class="token string">"/chathub"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token method function property-access">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+connection<span class="token punctuation">.</span><span class="token method function property-access">on</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> message<span class="token punctuation">,</span> conversationId</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Display received messages</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                                </dd>
+                                <dt>User Interaction</dt>
+                                <dd>
+                                    <p>Provides a join functionality with a unique conversation ID per session.</p>
+                                    <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">joinChat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  userName <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"userInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">value</span><span class="token punctuation">.</span><span class="token method function property-access">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>userName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"userForm"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">style</span><span class="token punctuation">.</span><span class="token property-access">display</span> <span class="token operator">=</span> <span class="token string">"none"</span><span class="token punctuation">;</span>
+    <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"chatWindow"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">style</span><span class="token punctuation">.</span><span class="token property-access">display</span> <span class="token operator">=</span> <span class="token string">"block"</span><span class="token punctuation">;</span>
+    <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messageInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">focus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+                                </dd>
+                                <dt>Real-Time Messaging</dt>
+                                <dd>
+                                    <p>Updates the chat window in real time with both user and bot messages, including a “typing” effect for bot responses.</p>
+                                    <pre class="language-javascript"><code class="language-javascript">connection<span class="token punctuation">.</span><span class="token method function property-access">on</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> message</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> messagesList <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messagesList"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>user <span class="token operator">===</span> <span class="token string">"ChatBot"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>botMessageElement<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      botMessageElement <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">createElement</span><span class="token punctuation">(</span><span class="token string">"li"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      botMessageElement<span class="token punctuation">.</span><span class="token property-access">classList</span><span class="token punctuation">.</span><span class="token method function property-access">add</span><span class="token punctuation">(</span><span class="token string">"mb-2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      botMessageElement<span class="token punctuation">.</span><span class="token method function property-access">setAttribute</span><span class="token punctuation">(</span><span class="token string">"data-user"</span><span class="token punctuation">,</span> <span class="token string">"ChatBot"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      botMessageElement<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token html language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>user<span class="token interpolation-punctuation punctuation">}</span></span>:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>bot-message-content<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+      messagesList<span class="token punctuation">.</span><span class="token method function property-access">appendChild</span><span class="token punctuation">(</span>botMessageElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    botMessageElement<span class="token punctuation">.</span><span class="token method function property-access">querySelector</span><span class="token punctuation">(</span><span class="token string">".bot-message-content"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">textContent</span> <span class="token operator">+=</span> message <span class="token operator">+</span> <span class="token string">" "</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword control-flow">else</span> <span class="token punctuation">{</span>
+    botMessageElement <span class="token operator">=</span> <span class="token keyword null nil">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> li <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">createElement</span><span class="token punctuation">(</span><span class="token string">"li"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    li<span class="token punctuation">.</span><span class="token property-access">classList</span><span class="token punctuation">.</span><span class="token method function property-access">add</span><span class="token punctuation">(</span><span class="token string">"mb-2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    li<span class="token punctuation">.</span><span class="token property-access">innerHTML</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token html language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>user<span class="token interpolation-punctuation punctuation">}</span></span>:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span> <span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>message<span class="token interpolation-punctuation punctuation">}</span></span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    messagesList<span class="token punctuation">.</span><span class="token method function property-access">appendChild</span><span class="token punctuation">(</span>li<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  messagesList<span class="token punctuation">.</span><span class="token property-access">scrollTop</span> <span class="token operator">=</span> messagesList<span class="token punctuation">.</span><span class="token property-access">scrollHeight</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+                                </dd>
+                                <dt>Testing Tips</dt>
+                                <dd><p>Test by sending messages, observing real-time updates, and verifying that the bot's responses stream line by line for an enhanced chat experience.</p></dd>
+                            </dl>
+                        </dd>
+                        <dt>Testing and Improving the Chat Experience</dt>
+                        <dd><p>Test the chat flow to ensure messages display correctly, and responses stream as expected. Refine the AI's tone through system prompts in ChatHistory, log key interactions, and optimize the user experience.</p></dd>
+                        <dt>Common Issues and Troubleshooting Tips</dt>
+                        <dd><p>Troubleshoot OpenAI API key issues, SignalR connectivity problems, and adjust prompt history for enhanced response quality. Ensure connection stability and efficient response streaming.</p></dd>
+                        <dt>Extending and Scaling the Chat Application</dt>
+                        <dd><p>Consider persisting chat history across sessions for customer support applications, and use Azure SignalR Service for scaling. Future enhancements could include multilingual support and sentiment analysis.</p></dd>
+                    </dl>
+                    <h2>Conclusion</h2>
+                    <p>This guide has shown how to create an AI-enhanced, real-time chat application in PromptSpark using SignalR and Semantic Kernel. By combining real-time messaging with intelligent responses, developers can build highly engaging, adaptive chat experiences. Explore customizations and build unique AI-driven applications in PromptSpark.</p>
+                </div>
+            </section>
+            <footer class="navbar-dark bg-primary">
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-10 text-left text-light">
+                        <br />
+                        <div class="row">
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Blog Management</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/automating-my-github-profile-with-the-latest-blog-posts-using-github-actions.html" target="_self" title="Learn how to automate your GitHub profile updates with the latest blog posts using GitHub Actions and Node.js to create an RSS feed.">Automating My GitHub Profile with the Latest Blog Posts Using GitHub Actions</a></li>
+                                    <li><a class="text-light" href="/articles/canonical-url-troubleshooting-for-static-web-apps.html" target="_self" title="Learn how to manage canonical URLs for static web apps using Azure and Cloudflare for SEO optimization.">Canonical URL Troubleshooting for Static Web Apps</a></li>
+                                    <li><a class="text-light" href="/articles/developing-markhazletoncom-tools-and-approach.html" target="_self" title="An in-depth look into the technologies and development process behind MarkHazleton.com. Discover the tools and frameworks used to create this site.">Developing MarkHazleton.com: Tools and Approach</a></li>
+                                    <li><a class="text-light" href="/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" target="_self" title="In the ever-evolving landscape of web development, the surge in popularity of static websites has been nothing short of remarkable. These sites, known for their speed, security, and simplicity, are increasingly becoming the go-to for developers and businesses alike. My journey with static websites has been transformative, leading me to embrace cloud-based solutions for hosting. Among these, Azure Static Web Apps stands out as a beacon of efficiency and innovation.">Embracing Azure Static Web Apps for Static Site Hosting</a></li>
+                                    <li><a class="text-light" href="/articles/moving-to-markhazletoncom.html" target="_self" title="My experience migrating my blog from markhazleton.controlorigins.com to markhazleton.com, hosted on Azure Static Web Apps and using Cloudflare for DNS, with detailed steps and best practices">Moving to MarkHazleton.com</a></li>
+                                    <li><a class="text-light" href="/articles/syntax-highlighting-using-prismjs-for-xml-pug-yaml-and-csharp.html" target="_self" title="Learn how to implement syntax highlighting for XML, PUG, YAML, and C# using Prism.js. We also explore automating the bundling process using render-scripts.js.">Syntax Highlighting Using Prism.js for XML, PUG, YAML, and C#</a></li>
+                                    <li><a class="text-light" href="/articles/building-a-web-application-to-manage-your-blog-articles.html" target="_self" title="Building a Web Application to Manage Your Blog Articles: A Journey into Web Content Management Systems">Tools to Manage My Blog</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Case Studies</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/fixing-a-runaway-nodejs-recursive-folder-issue.html" target="_self" title="Learn how to fix a runaway Node.js program that creates near-infinite recursive directories. Includes Windows C++ program to clean up">Fixing a Runaway Node.js Recursive Folder Issue</a></li>
+                                    <li><a class="text-light" href="/articles/wichita-sewer-site-creation.html" target="_self" title="Discover the journey behind the creation of the Wichita Sewer and Drain website, from initial planning to final launch, and the lessons learned along the way.">From Concept To Live: The Unveiling Of The WichitaSewer.com Website</a></li>
+                                    <li><a class="text-light" href="/sample-mvc-crud.html" target="_self" title="The SampleMvcCRUD Project">SampleMvcCRUD Project</a></li>
+                                    <li><a class="text-light" href="/articles/taking-fastendpoints-for-a-test-drive.html" target="_self" title="Exploring the streamlined approach to building ASP.NET APIs">Taking FastEndpoints for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/articles/taking-microsoft-copilot-studio-for-a-test-drive.html" target="_self" title="Mark Hazleton explores Microsoft Copilot Studio, sharing insights on creating a personalized AI chatbot, Copilot Mark. Discover how AI is revolutionizing site interactions and team communication.">Taking Microsoft Copilot Studio for a Test Drive</a></li>
+                                    <li><a class="text-light" href="/web-project-mechanics.html" target="_self" title="Description for Web Project Mechanics">Web Project Mechanics</a></li>
+                                    <li><a class="text-light" href="/articles/windows-to-mac-broadening-my-horizons.html" target="_self" title="My journey from Windows to macOS, learning to use a MacBook Pro and enhancing my tech toolkit.">Windows to Mac: Broadening My Horizons</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">ChatGPT</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/azure-wiki-expert-gpt-a-game-changer-for-azure-devops-documentation.html" target="_self" title="Learn how Azure Wiki Expert GPT speeds up Azure DevOps wiki writing by automating content generation in Markdown format. Boost productivity and ensure high-quality, consistent documentation with this powerful tool.">Accelerate Azure DevOps Wiki Writing with Azure Wiki Expert GPT</a></li>
+                                    <li><a class="text-light" href="/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html" target="_self" title="Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.">ChatGPT Meets Jeopardy: C# Solution for Trivia Aficionados</a></li>
+                                    <li><a class="text-light" href="/crafting-chatgpt-prompt.html" target="_self" title="Explore the art of crafting effective ChatGPT prompts with Mark Hazleton. Discover the significance of context, learn prompt engineering techniques, and unlock the potential of ChatGPT for better AI-powered conversations and code generation.">Crafting ChatGPT Prompt</a></li>
+                                    <li><a class="text-light" href="/creating-a-php-website-with-chat-gpt.html" target="_self" title="Overcoming the Challenge of Unfamiliar Territory">Creating a PHP Website with ChatGPT</a></li>
+                                    <li><a class="text-light" href="/articles/generating-a-key-press-counter-with-chatgpt.html" target="_self" title="Explore the development of a key/mouse press counter by Mark Hazleton, focusing on user interaction, ethical considerations, and technical insights.">Generating A Key Press Counter with Chat GPT</a></li>
+                                    <li><a class="text-light" href="/articles/the-brain-behind-the-jshow-trivia-demo-on-webspark-j-show-builder-gpt.html" target="_self" title="Discover the development journey of J-Show Builder GPT, an AI-powered tool that generates fun trivia games in a grid format for WebSpark’s JShow Trivia Demo.">The Brain Behind the JShow Trivia Demo on WebSpark J-Show Builder GPT</a></li>
+                                    <li><a class="text-light" href="/trivia-spark-development.html" target="_self" title="Trivia Spark: Igniting Creativity with ChatGPT">Trivia Spark With ChatGPT</a></li>
+                                    <li><a class="text-light" href="/using-chatgpt-for-developers.html" target="_self" title="Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.">Using ChatGPT for C# Development</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Data Science</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/python-the-language-of-data-science.html" target="_self" title="Python, Data Science, Python history, Python libraries, Pandas, NumPy, Python for C# developers">Python: The Language of Data Science</a></li>
+                                    <li><a class="text-light" href="/data-analysis-demonstration.html" target="_self" title="Visualizing Data with the Data Analysis Demonstration">Data Analysis Demonstration</a></li>
+                                    <li><a class="text-light" href="/articles/data-science-for-net-developers.html" target="_self" title="Learn why a seasoned .NET developer chose the AI/ML program offered by UT Austin and Great Learning, exploring how data science is the next frontier for developers.">Data Science for NET Developers</a></li>
+                                    <li><a class="text-light" href="/articles/exploratory-data-analysis-eda-using-python.html" target="_self" title="An in-depth guide to Data Sanity checks and Exploratory Data Analysis (EDA) using Python.">Exploratory Data Analysis (EDA) Using Python</a></li>
+                                    <li><a class="text-light" href="/articles/exploring-nutritional-data-using-pca-and-k-means-clustering.html" target="_self" title="A Data Scientist explores nutritional data patterns using K-means Clustering on Google Colab, segmenting foods by nutrient content.">Exploring Nutritional Data Using K-means Clustering</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Development</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/building-resilient-net-applications-with-polly.html" target="_self" title="Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.">Building Resilient .NET Applications with Polly</a></li>
+                                    <li><a class="text-light" href="/cancellation-token.html" target="_self" title="Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming">CancellationToken</a></li>
+                                    <li><a class="text-light" href="/concurrent-processing.html" target="_self" title="Learning Concurrent Processing Through Code with ChatGPT">Concurrent Processing</a></li>
+                                    <li><a class="text-light" href="/articles/fire-and-forget-for-enhanced-performance.html" target="_self" title="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login.">Fire and Forget for Enhanced Performance</a></li>
+                                    <li><a class="text-light" href="/git-flow-rethink.html" target="_self" title="Revaluating the meaning of Continuous in CI/CD with Git Flow">Git Flow Rethink</a></li>
+                                    <li><a class="text-light" href="/git-organized.html" target="_self" title="Git Organized: A Guide to Organized Version Control">Git Organized</a></li>
+                                    <li><a class="text-light" href="/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html" target="_self" title="In the dynamic world of ASP.NET development, optimizing performance is a cornerstone for building successful applications. Caching is one of the most effective strategies for this, and the MemoryCacheManager class is a vital tool in this endeavor. This article dives into its functionalities and benefits, complemented by demonstration code available on GitHub https://github.com/markhazleton/webspark">Harnessing the Power of Caching in ASP.NET with MemoryCacheManager</a></li>
+                                    <li><a class="text-light" href="/articles/migrating-samplemvccrud-application-from-net-8-to-net-9.html" target="_self" title="Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance.">Migrating SampleMvcCRUD Application from .NET 8 to .NET 9</a></li>
+                                    <li><a class="text-light" href="/nuget-packages-pros-cons.html" target="_self" title="The Pros and Cons of Using NuGet Packages in Your Projects">NuGet Package Pros and Cons</a></li>
+                                    <li><a class="text-light" href="/redis-local-instance.html" target="_self" title="Redis Local Instance">Redis Local Instance</a></li>
+                                    <li><a class="text-light" href="/system-cache.html" target="_self" title="Enhancing Web API Performance with a System Cached List">System Cache</a></li>
+                                    <li><a class="text-light" href="/task-list-processor.html" target="_self" title="Discover how the TaskListProcessor class streamlines concurrent operations in .NET, enabling efficient asynchronous programming and performance monitoring.">Task List Processor</a></li>
+                                    <li><a class="text-light" href="/decorator-pattern-http-client.html" target="_self" title="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.">The Decorator Pattern with Http Client</a></li>
+                                    <li><a class="text-light" href="/articles/the-singleton-advantage-managing-configurations-in-net.html" target="_self" title="Unlock the power of the singleton pattern for managing configurations in .NET Core. Learn how to implement lazy loading, thread safety, and secure Azure Key Vault access.">The Singleton Advantage: Managing Configurations in .NET</a></li>
+                                    <li><a class="text-light" href="/articles/transforming-samplemvccrud-with-net-aspire-a-cloud-native-evolution.html" target="_self" title="Discover how integrating .NET Aspire into the SampleMvcCRUD project revolutionizes it with cloud-native capabilities, enhanced observability, and seamless service orchestration. Dive into the journey of adopting microservices architecture and leveraging advanced telemetry for insightful application monitoring.">Transforming SampleMvcCRUD with .NET Aspire: A Cloud-Native Evolution</a></li>
+                                    <li><a class="text-light" href="/articles/troubleshooting-and-rebuilding-my-js-dev-env-project.html" target="_self" title="A detailed guide on how I faced issues, restarted from scratch, and successfully rebuilt a JavaScript development environment using Node.js, Nodemon, ESLint, Express, and Bootstrap.">Troubleshooting and Rebuilding My JS-Dev-Env Project</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Personal Philosophy</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/accountability-and-authority.html" target="_self" title="Finding Balance Between Accountability and Authority">Accountability and Authority</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/evolution-over-revolution.html" target="_self" title="Description for Evolution Over Revolution">Evolution Over Revolution</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/from-features-to-outcomes.html" target="_self" title="Focus on outcomes, not just features">From Features to Outcomes</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/leadership/" target="_self" title="Project Mechanics Leadership Overview">Leadership</a></li>
+                                    <li><a class="text-light" href="/lifelong-learning.html" target="_self" title="Reinventing Yourself: The Transformative Power of Lifelong Learning">Lifelong Learning</a></li>
+                                    <li><a class="text-light" href="/sidetrackedbysizzle.html" target="_self" title="Explore the concept of getting Sidetracked By Sizzle with Mark Hazleton. Understand how to stay focused and avoid the allure of superficial attractions.">Sidetracked by Sizzle</a></li>
+                                    <li><a class="text-light" href="/articles/the-art-of-making-yourself-replaceable-a-developers-guide-to-career-growth.html" target="_self" title="Explore how developers can enhance their career growth by embracing the concept of making themselves replaceable, focusing on adapting to the evolving tech landscape.">The Art of Making Yourself Replaceable: A Guide to Career Growth</a></li>
+                                    <li><a class="text-light" href="/articles/the-balanced-equation-crafting-the-perfect-project-team-mix.html" target="_self" title="Discover the art of constructing the perfect project team mix, leveraging the unique strengths of both internal employees and external consultants for project success.">The Balanced Equation: Crafting the Perfect Project Team Mix</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">Project Mechanics</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/" target="_self" title="Change management is an important aspect of project management, as it helps to ensure that changes to the project are properly planned and implemented">Change Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/conflict-management/" target="_self" title="Learn effective conflict management strategies to enhance your project management skills. Discover how to navigate conflicts among team members, clients, and handle poor performance. Ensure project success with these expert tips.">Conflict Management for Project Managers</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/change-management/issue-management.html" target="_self" title="issue management. ">Issue Management</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/program-management-office.html" target="_self" title="The Program Management Office Role in Project Delivery">Program Management Office</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-life-cycle.html" target="_self" title="From Idea to Delivery the Project Life Cycle">Project Life Cycle</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/" target="_self" title="The Art and Science of Project Management">Project Mechanics</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/project-meetings.html" target="_self" title="Project meetings can be the black hole of project management. ">Project Meetings</a></li>
+                                    <li><a class="text-light" href="/projectmechanics/solution-architect-technology-decisions-that-impact-business.html" target="_self" title="A comprehensive guide for solution architects on aligning technology decisions with business goals and outcomes.">Solution Architect Technology Decisions that Impact Business</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">PromptSpark</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/english-is-the-new-programming-language-of-choice.html" target="_self" title="Explore the pivotal role of English in the evolution of the Microsoft Stack, specifically within .NET technologies such as C#, F#, VB.NET, and SQL. Understand why English is becoming as crucial as traditional programming languages in software development.">English is the New Programming Language of Choice</a></li>
+                                    <li><a class="text-light" href="/articles/integrating-chat-completions-into-prompt-spark.html" target="_self" title="Learn how chat completions enhances LLM interactions in the Prompt Spark project by enabling seamless chat functionalities for Core Spark Variants.">Integrating Chat Completion into Prompt Spark</a></li>
+                                    <li><a class="text-light" href="/articles/interactive-chat-in-promptspark-with-signalr-and-semantic-kernel-chat-completions.html" target="_self" title="Guide to implementing a real-time, AI-driven chat application in PromptSpark using ASP.NET SignalR and OpenAI GPT via Semantic Kernel.">Interactive Chat in PromptSpark With SignalR and Semantic Kernel Chat Completions</a></li>
+                                    <li><a class="text-light" href="/articles/prompt-spark-revolutionizing-llm-system-prompt-management.html" target="_self" title="Discover how Prompt Spark offers comprehensive tools and resources for managing and optimizing LLM system prompts. Learn about features like the variants library, performance tracking, and prompt engineering strategies.">Prompt Spark: Revolutionizing LLM System Prompt Management</a></li>
+                                    <li><a class="text-light" href="/articles/using-large-language-models-to-generate-structured-data.html" target="_self" title="Explore how large language models like GPT-4 are revolutionizing data structuring, focusing on Mechanics of Motherhood's use of AI to structure JSON recipes.">Using Large Language Models to Generate Structured Data</a></li>
+                                    <li><a class="text-light" href="/articles/webspark-the-next-evolution-of-web-project-mechanics.html" target="_self" title="Explore the journey from Web Project Mechanics to WebSpark, a suite of web applications designed by Mark Hazleton to enhance digital experiences.">WebSpark: The Next Evolution of Web Project Mechanics</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-4">
+                                <h3 class="text-light">ReactSpark</h3>
+                                <ul>
+                                    <li><a class="text-light" href="/articles/building-my-first-react-site-using-vite.html" target="_self" title="Learn how to quickly build and deploy a React site using Vite and GitHub Pages, including troubleshooting common issues like CORS">Building My First React Site Using Vite</a></li>
+                                    <li><a class="text-light" href="/articles/adding-weather-component-a-typescript-learning-journey.html" target="_self" title="Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling.">Adding Weather Component: A TypeScript Learning Journey</a></li>
+                                    <li><a class="text-light" href="/articles/building-real-time-chat-with-react-signalr-and-markdown-streaming.html" target="_self" title="Explore building a real-time React chat app with TypeScript, SignalR for live messaging, and streaming Markdown rendering.">Building Real-Time Chat with React, SignalR, and Markdown Streaming</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1"><br /></div>
+                    <div class="col-10 justify-content-end">
+                        <br />
+                        <div class="social-icons d-flex">
+                            <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
+                            <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
+                            <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
+                            <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12"><br /></div>
+                </div>
+            </footer>
+            <!-- Core theme JS-->
+            <script src="/js/scripts.js"></script>
+        </div>
+    </body>
+</html>
