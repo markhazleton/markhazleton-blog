@@ -1,0 +1,210 @@
+extends ../layouts/articles
+
+block pagehead
+  title Building Real-Time Chat with React, SignalR, and Markdown Streaming
+  meta(name='description', content='Explore building a real-time React chat app with TypeScript, SignalR for live messaging, and streaming Markdown rendering.')
+  meta(name="keywords" content="React chat app, TypeScript, SignalR, Markdown streaming, real-time messaging")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/building-real-time-chat-with-react-signalr-and-markdown-streaming.html')
+
+  // Open Graph Tags for Social Sharing
+  meta(property="og:title" content="Building Real-Time Chat with React, SignalR, and Markdown Streaming")
+  meta(property="og:description" content="Explore building a real-time React chat app with TypeScript, SignalR for live messaging, and streaming Markdown rendering.")
+  meta(property="og:image" content="https://img.youtube.com/vi/D82StHCr6ig/maxresdefault.jpg")
+  meta(property="og:url" content="https://www.youtube.com/embed/D82StHCr6ig")
+  meta(property="og:type" content="video.other")
+
+  // Twitter Card Tags for Social Sharing
+  meta(name="twitter:card" content="player")
+  meta(name="twitter:title" content="Building Real-Time Chat with React, SignalR, and Markdown Streaming")
+  meta(name="twitter:description" content="Explore building a real-time React chat app with TypeScript, SignalR for live messaging, and streaming Markdown rendering.")
+  meta(name="twitter:image" content="https://img.youtube.com/vi/D82StHCr6ig/maxresdefault.jpg")
+
+  // Schema.org VideoObject for Search Engines
+  script(type="application/ld+json").
+    {
+      "@context": "http://schema.org",
+      "@type": "VideoObject",
+      "name": "PromptSpark Joke Explainer Demo",
+      "description": "Watch the PromptSpark Joke Explainer in action as it analyzes jokes with AI.",
+      "thumbnailUrl": "https://img.youtube.com/vi/D82StHCr6ig/maxresdefault.jpg",
+      "uploadDate": "2024-10-27",
+      "contentUrl": "https://www.youtube.com/watch?v=D82StHCr6ig",
+      "embedUrl": "https://www.youtube.com/embed/D82StHCr6ig",
+      "publisher": {
+        "@type": "Individual",
+        "name": "Mark Hazleton",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg""
+        }
+      }
+    }
+
+
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Updating My First React Site: Integrating PromptSpark and SignalR
+      h2.subheading.mb-3 Enhancing My First React Project with Real-Time Features
+      p.lead As I work on the project, GitHub pages will be the place to view the application:
+        a(href='https://markhazleton.github.io/ReactSparkPortfolio/' target="_blank" title='ReactSparkPortfolio on GitHub Pages') ReactSparkPortfolio on GitHub Pages
+
+      div.video-section.container.mt-5
+        h2.text-center.mb-4 Video Tutorial: Building a Real-Time Chat App
+          .row.justify-content-center
+            .col-md-8
+              .ratio.ratio-16x9
+                iframe(width="560" height="315" src="https://www.youtube.com/embed/D82StHCr6ig?si=q5KuO9Og3DIYsw66" title="YouTube Joke Explainer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen)
+
+      p.
+        In my ongoing journey to learn React and TypeScript, I’ve been revisiting and enhancing the very first React site I built.
+        This post dives into integrating the updated site with my PromptSpark project for customizable prompts
+        and linking it with the existing SignalR implementation for real-time capabilities.
+
+      dl
+        dt Original Project Setup with Vite
+        dd
+          p.
+            Initially, I built my React site with Vite to benefit from fast development speeds,
+            simplified setup, and compatibility with TypeScript. Starting with the basics,
+            I created a functional and minimal site that allowed me to explore React's component-based structure, state management, and simple user interactions. Vite’s zero-config setup was a great advantage, allowing me to start coding immediately with hot-reloading and seamless builds.
+
+        dt Integrating PromptSpark with SignalR
+        dd
+          p.
+            The goal with this update was to connect my site to PromptSpark,
+            a tool I built to provide customizable prompts for applications,
+            and enhance its functionality with real-time interactivity.
+            To achieve this, I leveraged my existing SignalR setup to
+            facilitate two-way communication between users and the PromptSpark system.
+            SignalR’s integration allows for real-time prompt suggestions and dynamic updates, creating a more interactive user experience.
+
+        dt Reflections on Modular Development with React
+        dd
+          p.
+            By building on the foundation of my original site,
+            I could focus on integrating these new features without needing a major overhaul.
+            This journey reinforced the advantages of modular development with React and
+            showcased the power of TypeScript and Vite for rapid development, even as requirements grow.
+
+      h2.subheading.mb-3 A complete guide to building a real-time chat app with TypeScript, SignalR, and Markdown rendering
+      p.
+        I recently added a chat component to my React Portfolio project
+        leverage strong typing, real-time messaging, and Markdown formatting.
+        My goals included setting up SignalR for bidirectional communication,
+        integrating a bot to handle different conversational tones,
+        and supporting Markdown for rich text formatting.
+
+      dl
+        dt Setting Up the Project
+        dd
+          p.
+            I started with my Portfolio project setup using Vite for fast development builds,
+            along with TypeScript and React.
+            For this effor, I needed to add SignalR for real-time messaging and
+            `react-markdown` for rendering Markdown content.
+
+          pre.language-bash
+            code.language-bash.
+              npm install @microsoft/signalr react-markdown
+
+        dt Connecting to SignalR for Real-Time Messaging
+        dd
+          p.
+            One of the first tasks was configuring SignalR to enable real-time, two-way communication between the server and the client. In my `Chat.tsx` file, I created a `HubConnection` to connect to the server and added an event listener to receive messages in real time.
+
+          pre.language-typescript
+            code.language-typescript.
+              import * as signalR from "@microsoft/signalr";
+              const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chatHub")
+                .build();
+
+              connection.on("ReceiveMessage", (user, message) => {
+                setMessages((prev) => [...prev, { user, message }]);
+              });
+
+        dt Designing the Chat UI with React
+        dd
+          p.
+            The UI needed to be straightforward and mobile-responsive, so I used Bootstrap classes to quickly create the layout. I structured it with input fields for username and messages, a join button, and a display area for conversation-style messages.
+
+          pre.language-jsx
+            code.language-jsx.
+              return (
+                <div className="chat-container">
+                  <input type="text" placeholder="Username" onChange={setUser} />
+                  <input type="text" placeholder="Message" onChange={setMessage} />
+                  <button onClick={sendMessage}>Join Chat</button>
+                  <div className="messages-display">{messages.map(...)</div>
+                </div>
+              );
+
+        dt Integrating a Bot with Customizable Tones
+        dd
+          p.
+            I wanted the chat app to feature a bot with customizable tones, such as helpful, funny, or pirate-themed responses. I achieved this by passing a `variantName` prop to customize each bot’s tone, making it easy for users to choose a specific bot personality.
+
+          pre.language-typescript
+            code.language-typescript.
+              const BotResponse = ({ variantName }: { variantName: string }) => {
+                switch(variantName) {
+                  case "pirate":
+                    return "Arr! Ye message received!";
+                  case "helpful":
+                    return "How can I assist you today?";
+                  // other variants
+                }
+              };
+
+        dt Streaming Responses in Real Time
+        dd
+          p.
+            To achieve a real-time, streaming experience, I implemented logic to accumulate bot responses in chunks, displaying the content as it streamed in. Using a `streamingMessage` state, the bot’s responses would appear incrementally as data continued streaming from SignalR.
+
+          pre.language-typescript
+            code.language-typescript.
+              const [streamingMessage, setStreamingMessage] = useState("");
+              connection.on("StreamMessage", (chunk) => {
+                setStreamingMessage((prev) => prev + chunk);
+              });
+
+        dt Rendering Markdown with react-markdown
+        dd
+          p.
+            For a richer text experience, I used `react-markdown` to render bot responses with Markdown formatting. This allowed the bot to send formatted messages, including bold text, lists, and links.
+
+          pre.language-jsx
+            code.language-jsx.
+              import ReactMarkdown from "react-markdown";
+              <ReactMarkdown>{markdownContent}</ReactMarkdown>;
+
+        dt Handling Incremental Loading in the Chat
+        dd
+          p.
+            I added incremental message updates with the `FlatList` component's `ListFooterComponent`, allowing the UI to update as new Markdown chunks streamed in. This setup provided a seamless, real-time experience, with messages appearing as soon as they arrived.
+
+          pre.language-typescript
+            code.language-typescript.
+              <FlatList
+                data={messages}
+                renderItem={({ item }) => <ReactMarkdown>{item}</ReactMarkdown>}
+                ListFooterComponent={<div>{streamingMessage}</div>}
+              />
+
+        dt Managing Errors and Fixing Styling Issues
+        dd
+          p.
+            Throughout development, I encountered TypeScript errors, especially with type mismatches in components. I solved these by refining types and ensuring all components aligned with TypeScript and React standards. Additionally, I removed redundant CSS by relying more on Bootstrap utilities for a cleaner, consistent style.
+
+        dt Finalizing with Bootstrap Icons and Styles
+        dd
+          p.
+            For the final touches, I added Bootstrap Icons and styled components to keep the interface cohesive. This approach streamlined the code and enhanced user experience with clean, responsive visuals.
+
+      h2 Conclusion
+      p.
+        Building this chat app provided a deeper understanding of real-time communication, content streaming, and Markdown rendering in a React and TypeScript environment. It involved leveraging SignalR for bidirectional messaging, handling Markdown in real time, and creating dynamic bot personalities for a more engaging user experience.
