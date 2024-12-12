@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Load paths from configuration or fallback to defaults
 var articlesPath = Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json"));
-var projectsPath =  Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json"));
+var projectsPath = Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json"));
 var imgAssetsPath = Path.GetFullPath(Path.Combine("..", "..", "src", "assets", "img"));
 
 if (!Directory.Exists(imgAssetsPath))
