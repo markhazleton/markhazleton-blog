@@ -54,7 +54,7 @@ public class ArticleModel
     /// Gets or sets the keywords for the article.
     /// </summary>
     [JsonPropertyName("keywords")]
-    public string Keywords { get; set; } = "";
+    public string Keywords { get; set; } = string.Empty;
 
     ///
     /// <summary>
