@@ -1,3 +1,4 @@
+using HtmlAgilityPack;
 using System.Globalization;
 
 namespace mwhWebAdmin.Article;
@@ -88,6 +89,9 @@ public class ArticleService
         {
             try
             {
+                // call update keywords using task.run
+                Task.Run(async () => await UpdateKeywordsAsync()).GetAwaiter().GetResult();
+
                 foreach (var article in _articles)
                 {
                     article.LastModified = ConvertStringToDate(article.LastModified).ToString("yyyy-MM-dd");
@@ -297,7 +301,7 @@ public class ArticleService
     {
         lock (_lock)
         {
-            return _articles.ToList(); // Return a copy to avoid external modifications
+            return [.. _articles]; // Return a copy to avoid external modifications
         }
     }
 
@@ -328,7 +332,49 @@ public class ArticleService
             }
         }
     }
+    /// <summary>
+    /// Updates the Keywords property for all articles by fetching meta tag keywords from their respective URLs.
+    /// </summary>
+    public async Task UpdateKeywordsAsync()
+    {
+        using var httpClient = new HttpClient();
 
+        foreach (var article in _articles)
+        {
+            try
+            {
+                string url = $"https://markhazleton.com/{article.Slug}";
+                _logger.LogInformation($"Fetching keywords for article: {article.Name} from {url}");
+
+                // Fetch the HTML content
+                var response = await httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string htmlContent = await response.Content.ReadAsStringAsync();
+
+                // Parse the HTML to extract meta keywords
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(htmlContent);
+
+                var metaKeywords = htmlDoc.DocumentNode
+                    .SelectSingleNode("//meta[@name='keywords']")
+                    ?.GetAttributeValue("content", string.Empty);
+
+                if (!string.IsNullOrEmpty(metaKeywords))
+                {
+                    article.Keywords = string.Join(", ", metaKeywords.Split(',').Select(k => k.Trim()));
+                    _logger.LogInformation($"Keywords updated for article: {article.Name}");
+                }
+                else
+                {
+                    _logger.LogWarning($"No keywords found for article: {article.Name}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to update keywords for article: {article.Name}");
+            }
+        }
+    }
     /// <summary>
     /// Validates an article model.
     /// </summary>
