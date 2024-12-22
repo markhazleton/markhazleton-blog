@@ -40,6 +40,12 @@ module.exports = function renderAssets() {
         copyFile(sourceFile, destFile);
     });
 
+    // Copy Bootstrap fonts
+    const bsiSourcePath = upath.resolve(upath.dirname(__filename), '../node_modules/bootstrap-icons/font/fonts/');
+    const bsiDestPath = upath.resolve(destPath, 'css/');
+    sh.mkdir("-p", bsiDestPath);
+    sh.cp('-R', bsiSourcePath, bsiDestPath);
+
     // Copy FontAwesome fonts
     const fontSourcePath = upath.resolve(upath.dirname(__filename), '../node_modules/fontawesome-free/webfonts/');
     const fontDestPath = upath.resolve(destPath, '');
