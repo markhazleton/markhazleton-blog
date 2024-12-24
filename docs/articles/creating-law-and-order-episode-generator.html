@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <title>Migrating SampleMvcCRUD from .NET 8 to .NET 9</title>
-        <meta name="description" content="Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance." />
-        <meta name="keywords" content="ASP.NET, .NET 9, MVC, CRUD Application, Migration, SEO" />
+        <title>PromptSpark - Creating Law and Order Episode Generator</title>
+        <meta name="description" content="Learn how to use PromptSpark to build a GPT that generates Law &amp; Order episodes from Reddit thread analysis." />
+        <meta name="keywords" content="PromptSpark, GPT, Law and Order episodes, Reddit threads, AI storytelling, system prompt creation, AI prompts" />
         <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.com/articles/migrating-samplemvccrud-application-from-net-8-to-net-9.html" />
+        <link rel="canonical" href="https://markhazleton.com/articles/creating-law-and-order-episode-generator.html" />
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <script type="application/ld+json">
@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1735005164694" />
+        <link rel="stylesheet" href="/css/styles.css?version=1735005279697" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -101,266 +101,181 @@
         <div class="container-fluid p-0 painteddesert-background">
             <section class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <h1>Migrating SampleMvcCRUD from .NET 8 to .NET 9</h1>
-                    <h2 class="subheading mb-3">How I migrated my application and optimized its SEO.</h2>
-                    <p>Migrating a .NET MVC CRUD application from .NET 8 to .NET 9 involves several key steps to ensure compatibility, performance improvement, and better visibility through SEO enhancements. In this article, I'll share my personal experience with the migration process, covering the challenges faced and the steps I took to ensure a smooth transition and an optimized web presence.</p>
-                    <p>
-                        For more information on the Sample MVC CRUD application, you can reference the following page:
-                        <a href="https://markhazleton.com/sample-mvc-crud.html" target="_blank">Sample MVC CRUD Application.</a>
-                    </p>
-                    <div class="card mb-3">
-                        <div class="card-header"><h5 class="mb-0">NET Version Strategy</h5></div>
-                        <div class="card-body">
-                            <p>Microsoft adopts a structured versioning strategy for .NET with Long-Term Support (LTS) and Current (STS) releases:</p>
-                            <ul>
-                                <li>**LTS Releases:** Supported for at least three years, these versions focus on stability and receive critical updates and security patches, making them ideal for enterprise applications.</li>
-                                <li>**STS Releases:** Supported for 18 months, they introduce new features and improvements. These are suitable for developers who want to leverage the latest capabilities.</li>
-                            </ul>
-                            <p>The yearly cycle was introduced to provide predictability and stability for enterprises while encouraging innovation. LTS releases offer three years of support, focusing on stability, whereas STS releases are supported for 18 months, featuring the latest innovations.</p>
-                            <ul>
-                                <li>.NET Core 1.0 (2016): First cross-platform release.</li>
-                                <li>.NET Core 3.0 (2019): LTS release, precursor to .NET 5.</li>
-                                <li>.NET 5 (2020): Unified .NET platform, starting the annual cycle.</li>
-                                <li>.NET 6 (2021): LTS release, enhanced performance and new APIs.</li>
-                                <li>.NET 7 (2022): STS release, focused on cloud-native improvements.</li>
-                                <li>.NET 8 (2023): LTS release, major runtime and library enhancements.</li>
-                                <li>.NET 9 (2024): STS release, new language features and tooling updates.</li>
-                            </ul>
-                            <p class="mb-0">Choose LTS for stability and STS for innovation based on your project's needs.</p>
-                        </div>
-                    </div>
+                    <h1>Creating Law &amp; Order Episode Generator</h1>
+                    <h2 class="subheading mb-3">How PromptSpark powers a GPT for generating Law &amp; Order episodes from Reddit themes.</h2>
+                    <p>Combining the analytical power of AI with creative storytelling has led to exciting innovations, such as using PromptSpark to develop a GPT that generates Law &amp; Order-style episodes. This project involves analyzing Reddit threads, extracting thematic elements, and crafting a compelling legal drama. By leveraging PromptSpark’s capabilities, we can systematically design, test, and optimize prompts to create a highly effective storytelling GPT.</p>
+                    <h3>The Law &amp; Order Formula</h3>
+                    <p>Dick Wolf's "Law &amp; Order" franchise has captivated audiences for decades, thanks to a meticulously crafted formula that combines compelling storytelling with a consistent structure. The key elements contributing to its enduring success include:</p>
                     <dl>
-                        <dt>Step 1: Run .NET Migration Assistance App</dt>
+                        <dt>1. Bifurcated Structure</dt>
                         <dd>
-                            The .NET Migration Assistance App is a versatile tool designed to simplify the process of upgrading legacy .NET applications. It provides automated assistance, guiding developers through complex migration tasks such as updating project files, replacing deprecated APIs, and handling configuration changes. With support for various project types, the tool ensures that the migration is efficient and less prone to errors. The app also offers flexibility in usage, with both a graphical interface integrated into Visual Studio and a command-line tool for automation. This versatility makes it suitable for diverse team workflows, from manual migrations to automated CI/CD processes.
-                            <dl>
-                                <dt>Deprecated API Detection</dt>
-                                <dd>The app identifies deprecated APIs and suggests modern alternatives, making it easier to update large codebases. This reduces the manual effort required for finding and replacing outdated code.</dd>
-                                <dt>Visual Studio Integration</dt>
-                                <dd>The tool integrates seamlessly with Visual Studio and offers both a graphical interface and a command-line option, allowing developers to use it according to their preferred workflow.</dd>
-                                <dt>Comprehensive Reporting</dt>
-                                <dd>After the migration process, the app generates detailed reports highlighting areas that need attention, helping teams prioritize tasks and resolve critical issues efficiently.</dd>
-                            </dl>
+                            <p>Each episode is divided into two distinct halves:</p>
+                            <ul>
+                                <li>Investigation: The first half follows detectives as they investigate a crime, gather evidence, and apprehend suspects.</li>
+                                <li>Prosecution: The second half shifts focus to the legal proceedings, showcasing the district attorney's efforts to prosecute the accused.</li>
+                            </ul>
+                            <p>This dual approach offers viewers a comprehensive view of the criminal justice process, from the crime scene to the courtroom.</p>
                         </dd>
-                        <dt>Step 2: Update the Target Framework and NuGet Packages</dt>
+                        <dt>2. "Ripped from the Headlines" Storytelling</dt>
+                        <dd><p>"Law &amp; Order" often draws inspiration from real-life events, adapting contemporary news stories into its narrative. This technique adds a layer of authenticity and relevance, engaging viewers with familiar issues and ethical dilemmas.</p></dd>
+                        <dt>3. Consistent Episode Structure</dt>
                         <dd>
-                            Once the target framework is updated, it's essential to ensure that all NuGet packages are also updated to versions compatible with .NET 9. This involves not only updating the packages but also reviewing each project for included packages that may have vulnerabilities or deprecated features. A systematic approach is necessary for this step. Each project should be evaluated individually, and a plan should be made to address any security concerns or compatibility issues that arise.
-                            <dl>
-                                <dt>Update All NuGet Packages</dt>
-                                <dd>Use the `dotnet list package --outdated` command to identify all outdated packages and update them using `dotnet add package` to the latest compatible versions.</dd>
-                                <dt>Check for Vulnerable Packages</dt>
-                                <dd>For each project, use tools like `dotnet list package --vulnerable` to identify packages with known vulnerabilities and replace them with safer alternatives or patches.</dd>
-                                <dt>Project-by-Project Review</dt>
-                                <dd>
-                                    Review each project individually:
-                                    <dl>
-                                        <dt>Dependency Analysis</dt>
-                                        <dd>Analyze each project's dependencies for compatibility with .NET 9.</dd>
-                                        <dt>Resolve Conflicts</dt>
-                                        <dd>Resolve any conflicts between updated packages and existing code.</dd>
-                                        <dt>Rebuild and Test</dt>
-                                        <dd>Rebuild and thoroughly test each project after updating to ensure stability and compatibility.</dd>
-                                    </dl>
-                                </dd>
-                            </dl>
+                            <p>The series adheres to a reliable format, typically featuring:</p>
+                            <ol>
+                                <li>Teaser: Introduction of the crime.</li>
+                                <li>Investigation: Detectives gather evidence and identify suspects.</li>
+                                <li>Arrest: Culmination of the investigation leading to an arrest.</li>
+                                <li>Trial Preparation: Prosecutors build their case.</li>
+                                <li>Trial: Courtroom proceedings and verdict.</li>
+                            </ol>
+                            <p>This structure provides a familiar rhythm that keeps audiences engaged.</p>
                         </dd>
-                        <dt>Step 3: Update Docker Configuration</dt>
-                        <dd>
-                            Updating the Docker configuration involves changing the base images to use .NET 9 SDK and runtime images. This ensures the Docker containers are using the latest .NET 9 features and performance optimizations.
-                            <pre class="language-csharp"><code class="language-csharp">FROM mcr<span class="token punctuation">.</span>microsoft<span class="token punctuation">.</span>com<span class="token operator">/</span>dotnet<span class="token operator">/</span>aspnet<span class="token punctuation">:</span><span class="token number">9.0</span> AS <span class="token keyword">base</span>
-FROM mcr<span class="token punctuation">.</span>microsoft<span class="token punctuation">.</span>com<span class="token operator">/</span>dotnet<span class="token operator">/</span>sdk<span class="token punctuation">:</span><span class="token number">9.0</span> AS build</code></pre>
-                            After updating, I verified the Docker build locally:
-                            <pre class="language-csharp"><code class="language-csharp">docker build <span class="token operator">-</span><span class="token class-name">t</span> samplemvcapp<span class="token punctuation">:</span>latest <span class="token punctuation">.</span>
-docker run <span class="token operator">-</span>p <span class="token number">5000</span><span class="token punctuation">:</span><span class="token number">80</span> samplemvcapp<span class="token punctuation">:</span>latest</code></pre>
-                            Updating CI/CD pipelines to use .NET 9 for building and testing is another critical step.
-                        </dd>
-                        <dt>Step 4: Code Changes and Refactoring</dt>
-                        <dd>I reviewed the release notes and breaking changes in .NET 9 to update the code accordingly. Replacing deprecated APIs and using newer counterparts was necessary to maintain compatibility. Thorough testing helped me identify and fix any runtime issues and behavioral changes in the application.</dd>
-                        <dt>Step 5: Search Engine Optimization (SEO)</dt>
-                        <dd>
-                            Enhancing the SEO of the application involved updating meta tags, improving URL structures, and implementing structured data. This step ensures better visibility and user engagement.
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token operator">&lt;</span><span class="token class-name">meta</span> name<span class="token operator">=</span><span class="token string">"description"</span> content<span class="token operator">=</span><span class="token string">"Sample MVC CRUD application showcasing .NET 9 features."</span><span class="token operator">></span>
-<span class="token operator">&lt;</span><span class="token class-name">meta</span> property<span class="token operator">=</span><span class="token string">"og:title"</span> content<span class="token operator">=</span><span class="token string">"Sample MVC App - .NET 9"</span><span class="token operator">></span>
-<span class="token operator">&lt;</span><span class="token class-name">meta</span> property<span class="token operator">=</span><span class="token string">"og:description"</span> content<span class="token operator">=</span><span class="token string">"Learn how to build and optimize a .NET 9 MVC CRUD application."</span><span class="token operator">></span></code></pre>
-                            I also improved URL structures to follow a RESTful approach:
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token operator">/</span>products<span class="token operator">/</span>edit<span class="token operator">/</span><span class="token number">1</span></code></pre>
-                        </dd>
+                        <dt>4. Character Development and Continuity</dt>
+                        <dd><p>While each episode presents a self-contained story, character arcs develop over time, allowing viewers to form connections with the main cast. This balance between episodic content and character progression contributes to sustained viewer interest.</p></dd>
+                        <dt>5. Emphasis on Moral and Legal Complexities</dt>
+                        <dd><p>The show delves into ethical dilemmas and the gray areas of law enforcement and prosecution, prompting viewers to contemplate complex societal issues. This depth adds intellectual engagement beyond mere entertainment.</p></dd>
+                        <p>By maintaining these core elements, Dick Wolf has created a franchise that not only entertains but also provokes thought, ensuring "Law &amp; Order" remains a staple in television drama.</p>
                     </dl>
-                </div>
-                <div class="painteddesert-section-content">
-                    <h2>Migration Checklist from .NET 8 to .NET 9</h2>
-                    <p>Here's a quick checklist to ensure a smooth migration from .NET 8 to .NET 9:</p>
-                    <div class="accordion" id="checklist">
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingOne"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">1. Review .NET 9 Release Notes and Breaking Changes</button></span>
-                            <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Review the official .NET 9 release notes for new features.</li>
-                                        <li>Identify and document any breaking changes.</li>
-                                        <li>Plan for code updates and refactoring if necessary.</li>
-                                    </ul>
-                                </div>
-                            </div>
+                    <h2>Creating an AI Agent to Write Law &amp; Order Episodes</h2>
+                    <p>The meticulous formula behind Dick Wolf’s Law &amp; Order franchise is ideal for training AI agents to write episodes inspired by highly viral news stories. By leveraging structured storytelling, the AI can emulate the show’s balance of investigation, legal drama, and moral exploration.</p>
+                    <p>The AI agent can generate episodes inspired by viral news stories. By blending structured storytelling with real-world events, this AI mimics the show's signature format to create compelling narratives.</p>
+                    <dl>
+                        <dt>Ripped from the Headlines Approach</dt>
+                        <dd>
+                            <p>AI agents can be trained to monitor and analyze highly viral news stories from platforms like Reddit, Twitter, and news outlets. By identifying trending topics related to crime, ethics, or societal controversies, the AI can extract the core narrative. Using natural language processing, it identifies recurring themes, key players, and ethical dilemmas. These insights form the foundation for compelling episodes.</p>
+                            <p>For example, A viral story about a whistleblower exposing corporate fraud can inspire an episode exploring themes of loyalty, greed, and justice.</p>
+                        </dd>
+                        <dt>Structured Storytelling</dt>
+                        <dd>
+                            <p>
+                                The
+                                <strong>Law &amp; Order</strong>
+                                formula, with its investigation and prosecution phases, is encoded into the AI. Each episode follows this bifurcated structure, beginning with crime discovery and culminating in courtroom drama.
+                            </p>
+                        </dd>
+                        <dt>Integrating Ethical Dilemmas</dt>
+                        <dd><p>The AI incorporates moral gray areas by analyzing public opinion from social media and weaving diverse perspectives into character motives and courtroom debates. This creates episodes that challenge viewers' perspectives.</p></dd>
+                        <dt>Character Development</dt>
+                        <dd><p>Predefined character archetypes help the AI develop engaging detectives, prosecutors, and suspects. Recurring themes and conflicts allow characters to evolve across episodes.</p></dd>
+                        <dt>Automated Feedback and Iteration</dt>
+                        <dd><p>The AI iteratively improves episodes through feedback from human reviewers or additional AI models. Scripts are evaluated on pacing, character arcs, and thematic depth to ensure high-quality narratives.</p></dd>
+                    </dl>
+                    <p>With this approach, the AI agent not only captures the essence of *Law & Order* but also adapts to contemporary issues, ensuring relevance and engagement with modern audiences.</p>
+                    <dl>
+                        <dt>What is PromptSpark?</dt>
+                        <dd>
+                            <p>
+                                PromptSpark is a tool designed to streamline the creation and optimization of prompts for Large Language Models (LLMs). It includes features like
+                                <strong>Core Sparks</strong>
+                                (foundational behavior guidelines),
+                                <strong>Spark Variants</strong>
+                                (different implementations of a core design), and
+                                <strong>User Prompts</strong>
+                                (test cases to evaluate outputs). These components enable structured testing and iterative refinement of AI capabilities, making it ideal for developing niche applications like the Law & Order Episode Generator.
+                            </p>
+                        </dd>
+                        <dt>Designing the System Prompt</dt>
+                        <dd>
+                            <p>The system prompt sets the expectations for the GPT, defining its role as a Law & Order writer. It establishes the structure and style of the generated episode. A sample system prompt might look like this:</p>
+                            <pre
+                                class="language-javascript"
+                            ><code class="language-javascript"><span class="token maybe-class-name">You</span> are a skilled television scriptwriter tasked <span class="token keyword">with</span> creating episode outlines <span class="token keyword control-flow">for</span> the long<span class="token operator">-</span>running legal drama <span class="token operator">*</span><span class="token maybe-class-name">Law</span> <span class="token operator">&amp;</span> <span class="token maybe-class-name">Order</span><span class="token operator">*</span><span class="token punctuation">.</span> <span class="token property-access"><span class="token maybe-class-name">Your</span></span> outlines should follow the classic <span class="token operator">*</span><span class="token maybe-class-name">Law</span> <span class="token operator">&amp;</span> <span class="token maybe-class-name">Order</span><span class="token operator">*</span> format<span class="token punctuation">,</span> featuring the investigation by detectives <span class="token keyword">in</span> the first half <span class="token keyword">of</span> the episode and the courtroom drama <span class="token keyword">in</span> the second half<span class="token punctuation">,</span> <span class="token keyword">with</span> the classic cast <span class="token keyword">of</span> <span class="token operator">**</span><span class="token maybe-class-name">Detectives</span> <span class="token maybe-class-name">Lennie</span> <span class="token maybe-class-name">Briscoe</span> and <span class="token maybe-class-name">Ed</span> <span class="token maybe-class-name">Green</span><span class="token operator">**</span><span class="token punctuation">,</span> and <span class="token operator">**</span><span class="token maybe-class-name">District</span> <span class="token maybe-class-name">Attorney</span> <span class="token maybe-class-name">Jack</span> <span class="token maybe-class-name">McCoy</span><span class="token operator">**</span> leading the charge<span class="token punctuation">.</span>
+<span class="token property-access"><span class="token maybe-class-name">Each</span></span> episode outline should include<span class="token operator">:</span>
+<span class="token number">1.</span> <span class="token operator">**</span><span class="token maybe-class-name">Title</span><span class="token operator">**</span><span class="token operator">:</span> <span class="token constant">A</span> short<span class="token punctuation">,</span> compelling name reflecting the episode's theme or central conflict<span class="token punctuation">.</span>
+<span class="token number">2.</span> <span class="token operator">**</span><span class="token maybe-class-name">Opening</span> <span class="token maybe-class-name">Scene</span><span class="token operator">**</span><span class="token operator">:</span> <span class="token constant">A</span> vivid description <span class="token keyword">of</span> the crime scene or inciting event that sets the episode <span class="token keyword">in</span> motion<span class="token punctuation">.</span>
+<span class="token number">3.</span> <span class="token operator">**</span><span class="token maybe-class-name">Act</span> <span class="token constant">I</span><span class="token operator">:</span> <span class="token maybe-class-name">Investigation</span> <span class="token maybe-class-name">Begins</span><span class="token operator">**</span><span class="token operator">:</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Detail</span> the initial steps taken by <span class="token maybe-class-name">Detectives</span> <span class="token maybe-class-name">Briscoe</span> and <span class="token maybe-class-name">Green</span><span class="token punctuation">,</span> including key discoveries<span class="token punctuation">,</span> witness interviews<span class="token punctuation">,</span> and any clues that move the <span class="token keyword">case</span> forward<span class="token punctuation">.</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Highlight</span> <span class="token maybe-class-name">Briscoe’s</span> wit and <span class="token maybe-class-name">Green’s</span> sharp instincts during their interactions<span class="token punctuation">.</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Include</span> a <span class="token maybe-class-name">Brisco</span> quip about the victim that is both punny and relevant<span class="token punctuation">.</span>
+<span class="token number">4.</span> <span class="token operator">**</span><span class="token maybe-class-name">Act</span> <span class="token constant">II</span><span class="token operator">:</span> <span class="token maybe-class-name">The</span> <span class="token maybe-class-name">Arrest</span><span class="token operator">**</span><span class="token operator">:</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Describe</span> how the detectives narrow down suspects and make the arrest<span class="token punctuation">,</span> emphasizing the challenges they face <span class="token keyword">in</span> uncovering the truth<span class="token punctuation">.</span>
+<span class="token number">5.</span> <span class="token operator">**</span><span class="token maybe-class-name">Act</span> <span class="token constant">III</span><span class="token operator">:</span> <span class="token maybe-class-name">The</span> <span class="token constant">DA</span>'s <span class="token maybe-class-name">Dilemma</span><span class="token operator">**</span><span class="token operator">:</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Show</span> <span class="token maybe-class-name">Jack</span> <span class="token maybe-class-name">McCoy’s</span> strategic and passionate approach to building the prosecution’s <span class="token keyword">case</span><span class="token punctuation">.</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Highlight</span> any legal or ethical dilemmas he and his team face<span class="token punctuation">,</span> especially when dealing <span class="token keyword">with</span> moral gray areas or external pressures<span class="token punctuation">.</span>
+<span class="token number">6.</span> <span class="token operator">**</span><span class="token maybe-class-name">Act</span> <span class="token constant">IV</span><span class="token operator">:</span> <span class="token maybe-class-name">The</span> <span class="token maybe-class-name">Trial</span><span class="token operator">**</span><span class="token operator">:</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Outline</span> the courtroom proceedings<span class="token punctuation">,</span> focusing on <span class="token maybe-class-name">McCoy’s</span> compelling arguments and any dramatic twists<span class="token punctuation">,</span> key evidence<span class="token punctuation">,</span> or surprising testimonies<span class="token punctuation">.</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Include</span> moments where <span class="token maybe-class-name">McCoy’s</span> sharp intellect and fiery demeanor shine<span class="token punctuation">.</span>
+<span class="token number">7.</span> <span class="token operator">**</span><span class="token maybe-class-name">Act</span> <span class="token constant">V</span><span class="token operator">:</span> <span class="token maybe-class-name">The</span> <span class="token maybe-class-name">Verdict</span><span class="token operator">**</span><span class="token operator">:</span>
+  <span class="token operator">-</span> <span class="token maybe-class-name">Reveal</span> the outcome <span class="token keyword">of</span> the trial and any immediate aftermath<span class="token punctuation">,</span> including character reflections or broader societal implications<span class="token punctuation">.</span>
+<span class="token number">8.</span> <span class="token operator">**</span><span class="token maybe-class-name">Themes</span><span class="token operator">**</span><span class="token operator">:</span> <span class="token maybe-class-name">Summarize</span> the broader societal or ethical issues explored <span class="token keyword">in</span> the episode<span class="token punctuation">.</span>
+<span class="token number">9.</span> <span class="token operator">**</span><span class="token maybe-class-name">Closing</span> <span class="token maybe-class-name">Scene</span><span class="token operator">**</span><span class="token operator">:</span> <span class="token maybe-class-name">End</span> <span class="token keyword">with</span> a reflective or poignant moment<span class="token punctuation">,</span> often featuring <span class="token maybe-class-name">McCoy</span> or the detectives discussing the complexities <span class="token keyword">of</span> justice<span class="token punctuation">,</span> morality<span class="token punctuation">,</span> or human nature<span class="token punctuation">.</span>
+<span class="token property-access"><span class="token maybe-class-name">Your</span></span> tone should be dramatic yet grounded<span class="token punctuation">,</span> reflecting the real<span class="token operator">-</span>life complexities <span class="token keyword">of</span> law<span class="token punctuation">,</span> crime<span class="token punctuation">,</span> and justice<span class="token punctuation">.</span> <span class="token property-access"><span class="token maybe-class-name">Incorporate</span></span> twists<span class="token punctuation">,</span> moral dilemmas<span class="token punctuation">,</span> and relevant social issues to create compelling and thought<span class="token operator">-</span>provoking episodes<span class="token punctuation">.</span> <span class="token property-access"><span class="token maybe-class-name">Ensure</span></span> <span class="token maybe-class-name">Briscoe’s</span> humor and <span class="token maybe-class-name">McCoy’s</span> intensity are woven throughout<span class="token punctuation">,</span> staying <span class="token boolean">true</span> to the iconic style <span class="token keyword">of</span> the classic cast<span class="token punctuation">.</span> <span class="token property-access"><span class="token maybe-class-name">Each</span></span> outline should be detailed and approximately <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">00</span> words <span class="token keyword">in</span> length<span class="token punctuation">.</span>
+</code></pre>
+                        </dd>
+                        <dt>Extracting Themes from Reddit Threads</dt>
+                        <dd>
+                            <p>The process begins by selecting Reddit threads with rich thematic content, such as workplace betrayals, viral ethical dilemmas, or systemic injustices. The GPT, guided by the system prompt, analyzes discussions to identify recurring motifs and potential storylines.</p>
+                            <p>Example: A thread about whistleblowing in a toxic workplace might inspire an episode examining corporate ethics and personal sacrifice.</p>
+                        </dd>
+                        <dt>Fun with User Prompts</dt>
+                        <dd>
+                            <p>Testing the system involves crafting user prompts derived from real Reddit threads. These prompts simulate inputs and allow iterative improvements. Examples include:</p>
+                            <pre class="language-text"><code class="language-text">Breach Of Trust -- Create a detailed episode outline for the *Law &amp; Order* episode titled **"Breach of Trust"**,
+featuring the classic cast of **Detectives Lennie Briscoe and Ed Green**, and **District Attorney Jack McCoy**.
+Follow the traditional *Law &amp; Order* structure with investigation in the first half and courtroom drama in the second half.
+The episode should center on the murder of Victor Hamlin, the CEO of Titan Health, a leading private health insurance company.
+Detectives Briscoe and Green discover that Hamlin’s murder is linked to Leonard Martone, a former friend of the CEO.
+The twist is that Hamlin froze the insurance coverage for Martone’s daughter’s life-saving treatment,
+employing the classic "Delay, Defer, and Depose" strategy to maximize company profits.
+This betrayal destroyed their friendship and led to Martone’s desperation and ultimate confrontation.
+Include the following:
+1. **Title**: Reflect the episode's theme.
+2. **Opening Scene**: Describe the discovery of Hamlin’s body in his luxurious Manhattan penthouse, with signs of a violent altercation.
+3. **Act I: Investigation Begins**: - Detail how Briscoe and Green follow the trail of evidence, uncovering Hamlin’s connection to Martone and the backstory of their broken friendship.
+4. **Act II: The Arrest**: - Narrate Martone’s arrest, including his emotional justification for confronting Hamlin.
+5. **Act III: The DA’s Dilemma**: - Highlight McCoy’s struggle to balance legal accountability with the moral weight of Hamlin’s actions and the insurance industry’s practices.
+6. **Act IV: The Trial**: - Outline the courtroom drama as McCoy prosecutes Martone while the defense reveals the devastating impact of Hamlin’s decisions on Martone’s family.
+7. **Act V: The Verdict**: - Reveal the trial’s outcome and explore the societal aftermath, including public reaction to Titan Health’s business practices.
+8. **Themes**: Focus on corporate greed, betrayal, and the moral complexities of justice.
+9. **Closing Scene**: End with a reflective moment where McCoy and the detectives discuss the broader implications of the case. Ensure the outline incorporates Briscoe’s dry humor, Green’s sharp instincts, and McCoy’s passionate courtroom tactics.
+The episode should delve into themes of corporate corruption, personal betrayal,
+and the human cost of profit-driven decisions, all within the classic *Law &amp; Order* tone.
+</code></pre>
+                        </dd>
+                        <dt>Testing and Refining with PromptSpark</dt>
+                        <dd><p>PromptSpark makes it easy to test and refine the system by comparing outputs against expectations. By using Spark Variants and analyzing results with User Prompts, developers can tweak the system prompt and improve alignment with the desired storytelling format.</p></dd>
+                        <dt>Consistent Themes and Style</dt>
+                        <dd>
+                            <p>
+                                Each generated episode must align with
+                                <strong>Law &amp; Order's</strong>
+                                signature style: moral complexity, systemic critiques, and legal drama. Themes from Reddit threads are fictionalized while preserving the show's structure.
+                            </p>
+                        </dd>
+                        <dt>Final Thoughts</dt>
+                        <dd><p>Using PromptSpark to build the Law &amp; Order Episode Generator demonstrates how AI can blend analysis and creativity. By refining system prompts and engaging with user feedback, this project highlights the potential for AI to craft compelling narratives inspired by real-life events.</p></dd>
+                    </dl>
+                    <p>To complete this effort, I had to have the Google NotebookLM Deep Dive team create a podcast on the episode "Breach of Trust" that was generated by the AI. The podcast is available on YouTube and provides a deep dive into the episode's themes, characters, and storytelling elements. You can watch the podcast below to learn more about the AI-generated Law &amp; Order episode "Breach of Trust."</p>
+                    <div class="card" style="width: 100%">
+                        <div class="card-header d-flex align-items-center">
+                            <i class="bi bi-tv-fill me-2"></i>
+                            <h5 class="mb-0">Deep Dive: AI-Generated Law & Order Episode - "Breach of Trust"</h5>
                         </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingTwo"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">2. Assess Third-Party Library Compatibility</button></span>
-                            <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Check compatibility of all NuGet packages with .NET 9.</li>
-                                        <li>Update or replace incompatible packages.</li>
-                                        <li>Test the application with updated libraries.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingThree"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">3. Backup Current Project and Dependencies</button></span>
-                            <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Backup the current project and source code.</li>
-                                        <li>Export and save a copy of all dependencies.</li>
-                                        <li>Store backups in a secure, version-controlled environment.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingFour"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">4. Run .NET Migration Assistance App on Each Project</button></span>
-                            <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Use the tool to analyze project compatibility.</li>
-                                        <li>Apply suggested changes and review the report.</li>
-                                        <li>Resolve any flagged issues or incompatibilities.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingFive"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">5. Update the TargetFramework in .csproj Files</button></span>
-                            <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Open each project’s .csproj file in a text editor.</li>
-                                        <li>Change the TargetFramework element to net9.0.</li>
-                                        <li>Save the changes and verify build success.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingSix"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">6. Upgrade NuGet Packages</button></span>
-                            <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>List outdated packages using `dotnet list package --outdated`.</li>
-                                        <li>Update each package to a compatible version.</li>
-                                        <li>Run tests to ensure stability.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingSeven"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">7. Update Dockerfile Base Images to .NET 9</button></span>
-                            <div class="accordion-collapse collapse" id="collapseSeven" aria-labelledby="headingSeven" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Update the base image references in Dockerfile.</li>
-                                        <li>Build and run Docker containers locally.</li>
-                                        <li>Test application functionality within the container.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingEight"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">8. Replace Deprecated APIs</button></span>
-                            <div class="accordion-collapse collapse" id="collapseEight" aria-labelledby="headingEight" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Identify deprecated APIs used in the project.</li>
-                                        <li>Replace deprecated APIs with updated alternatives.</li>
-                                        <li>Test thoroughly to ensure no breaking changes.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingNine"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">9. Run Unit, Integration, and End-to-End Tests</button></span>
-                            <div class="accordion-collapse collapse" id="collapseNine" aria-labelledby="headingNine" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Run all unit tests to verify individual components.</li>
-                                        <li>Execute integration tests for inter-component interactions.</li>
-                                        <li>Perform end-to-end testing to validate overall functionality.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingTen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">10. Modify CI/CD Pipelines to Use .NET 9</button></span>
-                            <div class="accordion-collapse collapse" id="collapseTen" aria-labelledby="headingTen" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Update build pipelines to target .NET 9.</li>
-                                        <li>Modify Docker build steps in CI/CD scripts.</li>
-                                        <li>Test the pipelines in a staging environment.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingEleven"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">11. Deploy to a Staging Environment First</button></span>
-                            <div class="accordion-collapse collapse" id="collapseEleven" aria-labelledby="headingEleven" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Deploy the updated application to a staging environment.</li>
-                                        <li>Verify functionality and performance under load.</li>
-                                        <li>Fix any issues before deploying to production.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingTwelve"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">12. Update Meta Tags, Titles, and Descriptions</button></span>
-                            <div class="accordion-collapse collapse" id="collapseTwelve" aria-labelledby="headingTwelve" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Review and update meta tags for SEO optimization.</li>
-                                        <li>Ensure each page has a unique and descriptive title.</li>
-                                        <li>Implement Open Graph and Twitter Card metadata.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingThirteen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">13. Implement Structured Data and Improve URL Structure</button></span>
-                            <div class="accordion-collapse collapse" id="collapseThirteen" aria-labelledby="headingThirteen" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Implement structured data using Schema.org.</li>
-                                        <li>Update URLs to be clean and descriptive.</li>
-                                        <li>Avoid query parameters; use RESTful URLs instead.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingFourteen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFourteen" aria-expanded="false" aria-controls="collapseFourteen">14. Optimize Performance and Ensure Responsive Design</button></span>
-                            <div class="accordion-collapse collapse" id="collapseFourteen" aria-labelledby="headingFourteen" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Improve page load times by leveraging caching.</li>
-                                        <li>Minify JavaScript, CSS, and HTML resources.</li>
-                                        <li>Ensure mobile-friendly design using Bootstrap.</li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="card-body">
+                            <div class="ratio ratio-16x9"><iframe src="https://www.youtube.com/embed/yrX6EFPdmZ0?si=XDcWOTKK3wHssVjP" title="Deep Dive: AI-Generated Law &amp; Order Episode - 'Breach of Trust'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+                            <h6 class="card-title"></h6>
+                            <i class="bi bi-info-circle me-1"></i>
+                            About the Episode
+                            <p class="card-text"></p>
+                            "Breach of Trust" is an AI-generated episode inspired by themes of corporate greed, betrayal, and the moral complexities of justice. Follow Detectives Lennie Briscoe and Ed Green as they investigate the murder of a controversial CEO, leading to a courtroom drama with District Attorney Jack McCoy.
+                            <h6 class="card-title"></h6>
+                            <i class="bi bi-bookmark-star me-1"></i>
+                            Highlights
+                            <ul class="list-unstyled"></ul>
+                            <li>
+                                <i class="bi bi-arrow-right-circle-fill text-primary me-2"></i>
+                                Engaging murder investigation
+                            </li>
+                            <li>
+                                <i class="bi bi-arrow-right-circle-fill text-primary me-2"></i>
+                                Intense courtroom drama
+                            </li>
+                            <li>
+                                <i class="bi bi-arrow-right-circle-fill text-primary me-2"></i>
+                                Exploration of moral and legal conflicts
+                            </li>
                         </div>
                     </div>
-                    <p>Migrating to .NET 9 and optimizing for SEO will not only improve the performance and security of your application but also increase its visibility. Follow the steps and checklist provided to ensure a smooth migration and enhanced user experience. If you have any questions or need assistance, feel free to reach out to me!</p>
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">

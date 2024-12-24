@@ -5,11 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <title>Migrating SampleMvcCRUD from .NET 8 to .NET 9</title>
-        <meta name="description" content="Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance." />
-        <meta name="keywords" content="ASP.NET, .NET 9, MVC, CRUD Application, Migration, SEO" />
+        <title>Data Science - An Introduction to Neural Networks</title>
+        <meta name="description" content="Data Science - An Introduction to Neural Networks" />
+        <meta name="description" content="A beginner-friendly introduction to neural networks, explaining key concepts and their role in artificial intelligence." />
+        <meta name="keywords" content="neural networks, introduction, AI, machine learning, data science, deep learning" />
         <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.com/articles/migrating-samplemvccrud-application-from-net-8-to-net-9.html" />
+        <link rel="canonical" href="https://markhazleton.com/articles/an-introduction-to-neural-networks.html" />
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <script type="application/ld+json">
@@ -42,7 +43,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1735005164694" />
+        <link rel="stylesheet" href="/css/styles.css?version=1735005163930" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -99,268 +100,109 @@
         </nav>
         <!-- Page Content-->
         <div class="container-fluid p-0 painteddesert-background">
-            <section class="painteddesert-section painteddesert-section-background" id="post">
+            <section class="painteddesert-section painteddesert-section-background" id="neural-network">
                 <div class="painteddesert-section-content">
-                    <h1>Migrating SampleMvcCRUD from .NET 8 to .NET 9</h1>
-                    <h2 class="subheading mb-3">How I migrated my application and optimized its SEO.</h2>
-                    <p>Migrating a .NET MVC CRUD application from .NET 8 to .NET 9 involves several key steps to ensure compatibility, performance improvement, and better visibility through SEO enhancements. In this article, I'll share my personal experience with the migration process, covering the challenges faced and the steps I took to ensure a smooth transition and an optimized web presence.</p>
-                    <p>
-                        For more information on the Sample MVC CRUD application, you can reference the following page:
-                        <a href="https://markhazleton.com/sample-mvc-crud.html" target="_blank">Sample MVC CRUD Application.</a>
-                    </p>
-                    <div class="card mb-3">
-                        <div class="card-header"><h5 class="mb-0">NET Version Strategy</h5></div>
-                        <div class="card-body">
-                            <p>Microsoft adopts a structured versioning strategy for .NET with Long-Term Support (LTS) and Current (STS) releases:</p>
-                            <ul>
-                                <li>**LTS Releases:** Supported for at least three years, these versions focus on stability and receive critical updates and security patches, making them ideal for enterprise applications.</li>
-                                <li>**STS Releases:** Supported for 18 months, they introduce new features and improvements. These are suitable for developers who want to leverage the latest capabilities.</li>
-                            </ul>
-                            <p>The yearly cycle was introduced to provide predictability and stability for enterprises while encouraging innovation. LTS releases offer three years of support, focusing on stability, whereas STS releases are supported for 18 months, featuring the latest innovations.</p>
-                            <ul>
-                                <li>.NET Core 1.0 (2016): First cross-platform release.</li>
-                                <li>.NET Core 3.0 (2019): LTS release, precursor to .NET 5.</li>
-                                <li>.NET 5 (2020): Unified .NET platform, starting the annual cycle.</li>
-                                <li>.NET 6 (2021): LTS release, enhanced performance and new APIs.</li>
-                                <li>.NET 7 (2022): STS release, focused on cloud-native improvements.</li>
-                                <li>.NET 8 (2023): LTS release, major runtime and library enhancements.</li>
-                                <li>.NET 9 (2024): STS release, new language features and tooling updates.</li>
-                            </ul>
-                            <p class="mb-0">Choose LTS for stability and STS for innovation based on your project's needs.</p>
-                        </div>
-                    </div>
+                    <h1>An Introduction to Neural Networks</h1>
+                    <h2 class="subheading mb-3">Understanding the basics of neural networks and their applications.</h2>
+                    <h3>What is a Neural Network?</h3>
+                    <p class="mb-3">Neural networks are powerful computational models inspired by the structure and function of the human brain. These models are designed to recognize patterns, solve problems, and make predictions. They are composed of interconnected nodes (or neurons) organized into layers.</p>
+                    <h4>Components of a Neural Network:</h4>
+                    <p class="mb-3">Neural networks consist of interconnected nodes, often referred to as neurons or units, arranged in layers. Each neuron mimics the behavior of a biological neuron by taking inputs, applying weights and biases, processing the result through an activation function, and passing the output to subsequent neurons. Each connection has a weight, signifying its importance, and biases to adjust the input. These parameters are fine-tuned during training to optimize the network's performance. The primary components include:</p>
+                    <p class="mb-3">Here’s a breakdown of their structure and function:</p>
                     <dl>
-                        <dt>Step 1: Run .NET Migration Assistance App</dt>
+                        <dt>Input Layer</dt>
                         <dd>
-                            The .NET Migration Assistance App is a versatile tool designed to simplify the process of upgrading legacy .NET applications. It provides automated assistance, guiding developers through complex migration tasks such as updating project files, replacing deprecated APIs, and handling configuration changes. With support for various project types, the tool ensures that the migration is efficient and less prone to errors. The app also offers flexibility in usage, with both a graphical interface integrated into Visual Studio and a command-line tool for automation. This versatility makes it suitable for diverse team workflows, from manual migrations to automated CI/CD processes.
-                            <dl>
-                                <dt>Deprecated API Detection</dt>
-                                <dd>The app identifies deprecated APIs and suggests modern alternatives, making it easier to update large codebases. This reduces the manual effort required for finding and replacing outdated code.</dd>
-                                <dt>Visual Studio Integration</dt>
-                                <dd>The tool integrates seamlessly with Visual Studio and offers both a graphical interface and a command-line option, allowing developers to use it according to their preferred workflow.</dd>
-                                <dt>Comprehensive Reporting</dt>
-                                <dd>After the migration process, the app generates detailed reports highlighting areas that need attention, helping teams prioritize tasks and resolve critical issues efficiently.</dd>
-                            </dl>
+                            <p>This is the first layer of the network where raw data is input.</p>
+                            <p>Each neuron in the input layer corresponds to a single feature of the input data. For example, in an image recognition task, each pixel value of the image might be an input neuron.</p>
+                            <p>The input layer does not perform any computations; it simply passes the data to the next layer.</p>
                         </dd>
-                        <dt>Step 2: Update the Target Framework and NuGet Packages</dt>
+                        <dt>Hidden Layers</dt>
                         <dd>
-                            Once the target framework is updated, it's essential to ensure that all NuGet packages are also updated to versions compatible with .NET 9. This involves not only updating the packages but also reviewing each project for included packages that may have vulnerabilities or deprecated features. A systematic approach is necessary for this step. Each project should be evaluated individually, and a plan should be made to address any security concerns or compatibility issues that arise.
-                            <dl>
-                                <dt>Update All NuGet Packages</dt>
-                                <dd>Use the `dotnet list package --outdated` command to identify all outdated packages and update them using `dotnet add package` to the latest compatible versions.</dd>
-                                <dt>Check for Vulnerable Packages</dt>
-                                <dd>For each project, use tools like `dotnet list package --vulnerable` to identify packages with known vulnerabilities and replace them with safer alternatives or patches.</dd>
-                                <dt>Project-by-Project Review</dt>
-                                <dd>
-                                    Review each project individually:
-                                    <dl>
-                                        <dt>Dependency Analysis</dt>
-                                        <dd>Analyze each project's dependencies for compatibility with .NET 9.</dd>
-                                        <dt>Resolve Conflicts</dt>
-                                        <dd>Resolve any conflicts between updated packages and existing code.</dd>
-                                        <dt>Rebuild and Test</dt>
-                                        <dd>Rebuild and thoroughly test each project after updating to ensure stability and compatibility.</dd>
-                                    </dl>
-                                </dd>
-                            </dl>
+                            <p>Hidden layers are where the magic happens. These layers process and transform data by identifying patterns and relationships. They consist of multiple neurons connected to adjacent layers, enabling the network to learn complex, non-linear representations.</p>
+                            <p>These layers are called "hidden" because their computations are not directly visible but are crucial for learning.</p>
                         </dd>
-                        <dt>Step 3: Update Docker Configuration</dt>
+                        <dt>Output Layer</dt>
                         <dd>
-                            Updating the Docker configuration involves changing the base images to use .NET 9 SDK and runtime images. This ensures the Docker containers are using the latest .NET 9 features and performance optimizations.
-                            <pre class="language-csharp"><code class="language-csharp">FROM mcr<span class="token punctuation">.</span>microsoft<span class="token punctuation">.</span>com<span class="token operator">/</span>dotnet<span class="token operator">/</span>aspnet<span class="token punctuation">:</span><span class="token number">9.0</span> AS <span class="token keyword">base</span>
-FROM mcr<span class="token punctuation">.</span>microsoft<span class="token punctuation">.</span>com<span class="token operator">/</span>dotnet<span class="token operator">/</span>sdk<span class="token punctuation">:</span><span class="token number">9.0</span> AS build</code></pre>
-                            After updating, I verified the Docker build locally:
-                            <pre class="language-csharp"><code class="language-csharp">docker build <span class="token operator">-</span><span class="token class-name">t</span> samplemvcapp<span class="token punctuation">:</span>latest <span class="token punctuation">.</span>
-docker run <span class="token operator">-</span>p <span class="token number">5000</span><span class="token punctuation">:</span><span class="token number">80</span> samplemvcapp<span class="token punctuation">:</span>latest</code></pre>
-                            Updating CI/CD pipelines to use .NET 9 for building and testing is another critical step.
+                            <p>The output layer produces the final result of the neural network. This could be a classification, numerical prediction, or another output type, depending on the task.</p>
+                            <p>The number of neurons in this layer depends on the task (e.g., one neuron for binary classification, multiple neurons with softmax activation for multi-class tasks).</p>
                         </dd>
-                        <dt>Step 4: Code Changes and Refactoring</dt>
-                        <dd>I reviewed the release notes and breaking changes in .NET 9 to update the code accordingly. Replacing deprecated APIs and using newer counterparts was necessary to maintain compatibility. Thorough testing helped me identify and fix any runtime issues and behavioral changes in the application.</dd>
-                        <dt>Step 5: Search Engine Optimization (SEO)</dt>
+                        <dt>Connections Between Neurons</dt>
                         <dd>
-                            Enhancing the SEO of the application involved updating meta tags, improving URL structures, and implementing structured data. This step ensures better visibility and user engagement.
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token operator">&lt;</span><span class="token class-name">meta</span> name<span class="token operator">=</span><span class="token string">"description"</span> content<span class="token operator">=</span><span class="token string">"Sample MVC CRUD application showcasing .NET 9 features."</span><span class="token operator">></span>
-<span class="token operator">&lt;</span><span class="token class-name">meta</span> property<span class="token operator">=</span><span class="token string">"og:title"</span> content<span class="token operator">=</span><span class="token string">"Sample MVC App - .NET 9"</span><span class="token operator">></span>
-<span class="token operator">&lt;</span><span class="token class-name">meta</span> property<span class="token operator">=</span><span class="token string">"og:description"</span> content<span class="token operator">=</span><span class="token string">"Learn how to build and optimize a .NET 9 MVC CRUD application."</span><span class="token operator">></span></code></pre>
-                            I also improved URL structures to follow a RESTful approach:
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token operator">/</span>products<span class="token operator">/</span>edit<span class="token operator">/</span><span class="token number">1</span></code></pre>
+                            <p>Neurons in a network are connected by edges, each assigned a weight to determine the influence of one neuron on another. Connections also include biases, which shift activation thresholds for greater flexibility.</p>
+                            <p>Adjusting weights and biases during training allows the network to learn and improve performance.</p>
                         </dd>
                     </dl>
-                </div>
-                <div class="painteddesert-section-content">
-                    <h2>Migration Checklist from .NET 8 to .NET 9</h2>
-                    <p>Here's a quick checklist to ensure a smooth migration from .NET 8 to .NET 9:</p>
-                    <div class="accordion" id="checklist">
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingOne"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">1. Review .NET 9 Release Notes and Breaking Changes</button></span>
-                            <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Review the official .NET 9 release notes for new features.</li>
-                                        <li>Identify and document any breaking changes.</li>
-                                        <li>Plan for code updates and refactoring if necessary.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingTwo"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">2. Assess Third-Party Library Compatibility</button></span>
-                            <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Check compatibility of all NuGet packages with .NET 9.</li>
-                                        <li>Update or replace incompatible packages.</li>
-                                        <li>Test the application with updated libraries.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingThree"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">3. Backup Current Project and Dependencies</button></span>
-                            <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Backup the current project and source code.</li>
-                                        <li>Export and save a copy of all dependencies.</li>
-                                        <li>Store backups in a secure, version-controlled environment.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingFour"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">4. Run .NET Migration Assistance App on Each Project</button></span>
-                            <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Use the tool to analyze project compatibility.</li>
-                                        <li>Apply suggested changes and review the report.</li>
-                                        <li>Resolve any flagged issues or incompatibilities.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingFive"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">5. Update the TargetFramework in .csproj Files</button></span>
-                            <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Open each project’s .csproj file in a text editor.</li>
-                                        <li>Change the TargetFramework element to net9.0.</li>
-                                        <li>Save the changes and verify build success.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingSix"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">6. Upgrade NuGet Packages</button></span>
-                            <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>List outdated packages using `dotnet list package --outdated`.</li>
-                                        <li>Update each package to a compatible version.</li>
-                                        <li>Run tests to ensure stability.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingSeven"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">7. Update Dockerfile Base Images to .NET 9</button></span>
-                            <div class="accordion-collapse collapse" id="collapseSeven" aria-labelledby="headingSeven" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Update the base image references in Dockerfile.</li>
-                                        <li>Build and run Docker containers locally.</li>
-                                        <li>Test application functionality within the container.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingEight"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">8. Replace Deprecated APIs</button></span>
-                            <div class="accordion-collapse collapse" id="collapseEight" aria-labelledby="headingEight" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Identify deprecated APIs used in the project.</li>
-                                        <li>Replace deprecated APIs with updated alternatives.</li>
-                                        <li>Test thoroughly to ensure no breaking changes.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingNine"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">9. Run Unit, Integration, and End-to-End Tests</button></span>
-                            <div class="accordion-collapse collapse" id="collapseNine" aria-labelledby="headingNine" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Run all unit tests to verify individual components.</li>
-                                        <li>Execute integration tests for inter-component interactions.</li>
-                                        <li>Perform end-to-end testing to validate overall functionality.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingTen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">10. Modify CI/CD Pipelines to Use .NET 9</button></span>
-                            <div class="accordion-collapse collapse" id="collapseTen" aria-labelledby="headingTen" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Update build pipelines to target .NET 9.</li>
-                                        <li>Modify Docker build steps in CI/CD scripts.</li>
-                                        <li>Test the pipelines in a staging environment.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingEleven"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">11. Deploy to a Staging Environment First</button></span>
-                            <div class="accordion-collapse collapse" id="collapseEleven" aria-labelledby="headingEleven" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Deploy the updated application to a staging environment.</li>
-                                        <li>Verify functionality and performance under load.</li>
-                                        <li>Fix any issues before deploying to production.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingTwelve"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">12. Update Meta Tags, Titles, and Descriptions</button></span>
-                            <div class="accordion-collapse collapse" id="collapseTwelve" aria-labelledby="headingTwelve" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Review and update meta tags for SEO optimization.</li>
-                                        <li>Ensure each page has a unique and descriptive title.</li>
-                                        <li>Implement Open Graph and Twitter Card metadata.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingThirteen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">13. Implement Structured Data and Improve URL Structure</button></span>
-                            <div class="accordion-collapse collapse" id="collapseThirteen" aria-labelledby="headingThirteen" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Implement structured data using Schema.org.</li>
-                                        <li>Update URLs to be clean and descriptive.</li>
-                                        <li>Avoid query parameters; use RESTful URLs instead.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <span class="accordion-header" id="headingFourteen"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFourteen" aria-expanded="false" aria-controls="collapseFourteen">14. Optimize Performance and Ensure Responsive Design</button></span>
-                            <div class="accordion-collapse collapse" id="collapseFourteen" aria-labelledby="headingFourteen" data-bs-parent="#checklist">
-                                <div class="accordion-body">
-                                    <ul>
-                                        <li>Improve page load times by leveraging caching.</li>
-                                        <li>Minify JavaScript, CSS, and HTML resources.</li>
-                                        <li>Ensure mobile-friendly design using Bootstrap.</li>
-                                    </ul>
-                                </div>
-                            </div>
+                    <p class="mt-3">Neural networks learn through a process called training, involving forward propagation to generate outputs, loss calculation to measure errors, and backpropagation to adjust weights and biases. This iterative process transforms raw data into valuable predictions, making neural networks indispensable in AI.</p>
+                    <p>Neural networks are computational models inspired by the structure of the human brain. They form the foundation of many artificial intelligence (AI) systems, capable of solving a wide range of problems by learning from data. This article explores the core concepts behind neural networks and their role in transforming industries like healthcare, finance, and technology.</p>
+                    <dl>
+                        <dt>What is a Neural Network?</dt>
+                        <dd>
+                            <p>At its core, a neural network is a system of interconnected nodes, or "neurons," that process data to recognize patterns and make decisions. These nodes are organized into three main types of layers:</p>
+                            <dl>
+                                <dt>Input Layer:</dt>
+                                <dd>Takes raw data as input.</dd>
+                                <dt>Hidden Layers:</dt>
+                                <dd>Processes data to find patterns.</dd>
+                                <dt>Output Layer:</dt>
+                                <dd>Produces predictions or classifications.</dd>
+                            </dl>
+                            <p></p>
+                        </dd>
+                        <dt>How Do Neural Networks Learn?</dt>
+                        <dd>
+                            <p>Neural networks learn through a process called training, which involves:</p>
+                            <pre class="language-python"><code class="language-python"><span class="token comment"># Learning Steps</span>
+<span class="token comment"># 1. Forward propagation to compute predictions.</span>
+<span class="token comment"># 2. Loss calculation to measure error.</span>
+<span class="token comment"># 3. Backpropagation to adjust weights.</span>
+<span class="token comment"># 4. Optimization to minimize loss.</span></code></pre>
+                        </dd>
+                        <dt>Applications of Neural Networks</dt>
+                        <dd>
+                            <p>Neural networks are used in diverse fields to solve complex problems:</p>
+                            <ul>
+                                <li>Image Recognition: Identifying objects in photos.</li>
+                                <li>Natural Language Processing: Understanding and generating text.</li>
+                                <li>Predictive Analytics: Forecasting trends like sales or stock prices.</li>
+                            </ul>
+                        </dd>
+                        <dt>Why Are Neural Networks Important?</dt>
+                        <dd>
+                            <p>Neural networks have transformed industries by enabling:</p>
+                            <ul>
+                                <li>Enhanced automation through AI.</li>
+                                <li>Improved decision-making with predictive insights.</li>
+                                <li>Breakthroughs in personalized healthcare, financial analysis, and more.</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <div class="card mt-4">
+                        <div class="card-header d-flex align-items-center justify-content-between"><h5 class="mb-0">Neural Networks Example</h5></div>
+                        <div class="card-body">
+                            <p>Practical Example: Identifying handwritten digits</p>
+                            <p>Humans effortlessly identify handwritten digits on checks, forms, or photographs, but this task is challenging for computers due to variations in handwriting, lighting, and noise in images. For example, the digit "7" may be slanted or written with a crossbar, while "1" may resemble a lowercase "L."</p>
+                            <p>To process a digit, an image (e.g., 28x28 pixels) is flattened into a vector of 784 numerical values, where each value represents the intensity of a pixel. This vector becomes the input layer of the neural network.</p>
+                            <p>Hidden layers transform the input data by learning hierarchical features, such as edges, shapes, and patterns. These layers apply mathematical functions to combine pixel values into increasingly abstract representations, making the network capable of distinguishing between digits.</p>
+                            <dl>
+                                <dt>Input Layer</dt>
+                                <dd><p>Each pixel of a 28x28 image is an input, totaling 784 inputs.</p></dd>
+                                <dt>Hidden Layers</dt>
+                                <dd><p>These layers perform mathematical operations to process pixel data.</p></dd>
+                                <dt>Output Layer</dt>
+                                <dd>
+                                    <p>The output layer consists of 10 neurons, each corresponding to a possible digit (0–9). The network assigns a probability to each neuron. The digit with the highest probability becomes the prediction.</p>
+                                    <p>The network produces 10 outputs, one for each digit. It selects the highest score as its prediction.</p>
+                                </dd>
+                                <dt>Learning Process</dt>
+                                <dd>
+                                    <p>During training, the network compares its predictions to the correct labels. For instance, if it predicts "5" for an image of "7," it calculates the error and adjusts the network's weights using a process called backpropagation and an optimization algorithm like gradient descent. Over many iterations, this feedback loop minimizes errors.</p>
+                                    <p>If the prediction is incorrect, such as predicting "5" instead of "7," the network adjusts its connections to improve accuracy.</p>
+                                    <p>Once trained, the network generalizes its learning to new, unseen images. This ability to recognize patterns it hasn’t explicitly encountered demonstrates the strength of neural networks in solving complex recognition tasks.</p>
+                                </dd>
+                            </dl>
                         </div>
                     </div>
-                    <p>Migrating to .NET 9 and optimizing for SEO will not only improve the performance and security of your application but also increase its visibility. Follow the steps and checklist provided to ensure a smooth migration and enhanced user experience. If you have any questions or need assistance, feel free to reach out to me!</p>
+                    <p class="mt-4">As neural networks continue to evolve, they remain central to advancements in artificial intelligence. By understanding their structure and applications, anyone can appreciate their transformative potential and begin exploring their use in solving real-world challenges.</p>
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">
