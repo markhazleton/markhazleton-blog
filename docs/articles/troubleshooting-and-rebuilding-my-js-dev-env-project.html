@@ -42,7 +42,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=1735844780677" />
+        <link rel="stylesheet" href="/css/styles.css?version=1735919517715" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -355,6 +355,108 @@ http://localhost:3000/contact
                     </dl>
                     <h2 class="subheading mb-3">Conclusion: Dynamically Controlled Content and Navigation</h2>
                     <p>By adding a `pages.json` file and updating the server logic, we’ve effectively created a basic content management system that controls both the navigation and the page content dynamically. This setup makes it easy to maintain and expand the site by simply modifying or adding entries in `pages.json`. You no longer need to hardcode new pages or navigation links—everything is driven by data, making it simple to update in the future.</p>
+                    <h2 class="subheading mb-3">Add SCSS to JS development environment</h2>
+                    <p>Today, I made significant improvements to my JS Dev Env project by addressing key issues and optimizing the development process.</p>
+                    <dl>
+                        <dt>Integrating SCSS with Bootstrap</dt>
+                        <dd>
+                            <p>Migrating to SCSS instead of hosted CSS involved several key steps:</p>
+                            <ul>
+                                <li>
+                                    Adding SCSS to the project as a development dependency.
+                                    <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> sass --save-dev
+</code></pre>
+                                </li>
+                                <li>
+                                    Configuring a main SCSS file to include Bootstrap SCSS, custom styles, and Bootstrap Icons.
+                                    <pre class="language-scss"><code class="language-scss"><span class="token keyword">@import</span> <span class="token string">'node_modules/bootstrap/scss/bootstrap'</span><span class="token punctuation">;</span>
+<span class="token keyword">@import</span> <span class="token string">'styles.scss'</span><span class="token punctuation">;</span>
+<span class="token keyword">@import</span> <span class="token string">'bootstrap-icons/font/bootstrap-icons'</span><span class="token punctuation">;</span>
+</code></pre>
+                                </li>
+                                <li>
+                                    Using the load-path option with Sass to ensure proper import paths.
+                                    <pre class="language-scss"><code class="language-scss">sass --watch src/<span class="token property">scss</span><span class="token punctuation">:</span>public/css --load-path=node_modules/bootstrap/scss
+</code></pre>
+                                </li>
+                            </ul>
+                        </dd>
+                        <dt>Handling Bootstrap Icons Locally</dt>
+                        <dd>
+                            <p>Serving Bootstrap Icons locally was a critical improvement:</p>
+                            <ul>
+                                <li>
+                                    Adding a script in
+                                    <code class="language-json">package.json</code>
+                                    :
+                                    <pre class="language-JavaScript"><code class="language-JavaScript"><span class="token string-property property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  <span class="token string-property property">"copy-icons"</span><span class="token operator">:</span> <span class="token string">"xcopy ./node_modules/bootstrap-icons/font/* ./public/fonts/bootstrap-icons /s /e"</span>
+<span class="token punctuation">}</span></code></pre>
+                                </li>
+                                <li>
+                                    Verifying the icons under
+                                    <code class="language-bash">public/fonts/bootstrap-icons</code>
+                                    and updating
+                                    <code class="language-html">layout.ejs</code>
+                                    to reference the local file.
+                                </li>
+                            </ul>
+                        </dd>
+                        <dt>Updating the Development Workflow</dt>
+                        <dd>
+                            <p>Enhancing the workflow involved creating a consolidated script:</p>
+                            <ul>
+                                <li>
+                                    Installing
+                                    <code class="language-bash">
+                                        <span class="token function">npm</span>
+                                        <span class="token function">install</span>
+                                        npm-run-all --save-dev
+                                    </code>
+                                </li>
+                                <li>
+                                    Adding a
+                                    <code class="language-json">
+                                        start
+                                        <span class="token operator">:</span>
+                                        dev
+                                    </code>
+                                    script in
+                                    <code class="language-json">package.json</code>
+                                    :
+                                    <pre class="language-json"><code class="language-json"><span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  <span class="token property">"start:dev"</span><span class="token operator">:</span> <span class="token string">"npm-run-all copy-icons build-css watch-css nodemon"</span>
+<span class="token punctuation">}</span></code></pre>
+                                </li>
+                                <li>Testing to ensure changes were handled seamlessly.</li>
+                            </ul>
+                        </dd>
+                        <dt>Dynamic Routing with Pages.json</dt>
+                        <dd>
+                            <p>Improving routing with code.language-json | pages.json | added flexibility:</p>
+                            <ul>
+                                <li>Allowed icons in content fields like headings, text, and body.</li>
+                                <li>Simplified adding new pages with consistent navigation.</li>
+                            </ul>
+                        </dd>
+                        <dt>Lessons Learned</dt>
+                        <dd>
+                            <p>Key takeaways from this update:</p>
+                            <ul>
+                                <li>
+                                    Migrating from Sass
+                                    <code class="language-css">@import</code>
+                                    to
+                                    <code class="language-css">@use</code>
+                                    .
+                                </li>
+                                <li>Properly serving static assets with correct MIME types.</li>
+                                <li>Balancing automation with simplicity in workflows.</li>
+                            </ul>
+                        </dd>
+                        <dt>Conclusion</dt>
+                        <dd><p>These updates have made my JS Dev Env project more robust, modular, and maintainable. I hope these insights are helpful as you optimize your own projects. Check back for more updates!</p></dd>
+                    </dl>
                 </div>
             </section>
             <footer class="navbar-dark bg-primary">
