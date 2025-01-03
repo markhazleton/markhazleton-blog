@@ -337,3 +337,109 @@ block layout-content
       h2.subheading.mb-3 Conclusion: Dynamically Controlled Content and Navigation
       p.
         By adding a `pages.json` file and updating the server logic, we’ve effectively created a basic content management system that controls both the navigation and the page content dynamically. This setup makes it easy to maintain and expand the site by simply modifying or adding entries in `pages.json`. You no longer need to hardcode new pages or navigation links—everything is driven by data, making it simple to update in the future.
+
+
+      h2.subheading.mb-3 Add SCSS to JS development environment
+      p.
+        Today, I made significant improvements to my JS Dev Env project by addressing key issues and optimizing the development process.
+
+      dl
+        dt Integrating SCSS with Bootstrap
+        dd
+          p.
+            Migrating to SCSS instead of hosted CSS involved several key steps:
+          ul
+            li Adding SCSS to the project as a development dependency.
+              pre.language-bash
+                code.language-bash.
+                  npm install sass --save-dev
+
+            li Configuring a main SCSS file to include Bootstrap SCSS, custom styles, and Bootstrap Icons.
+                pre.language-scss
+                    code.language-scss.
+                      @import 'node_modules/bootstrap/scss/bootstrap';
+                      @import 'styles.scss';
+                      @import 'bootstrap-icons/font/bootstrap-icons';
+
+            li Using the load-path option with Sass to ensure proper import paths.
+              pre.language-scss
+                code.language-scss.
+                  sass --watch src/scss:public/css --load-path=node_modules/bootstrap/scss
+
+        dt Handling Bootstrap Icons Locally
+        dd
+          p.
+            Serving Bootstrap Icons locally was a critical improvement:
+          ul
+            li Adding a script in
+              code.language-json
+                | package.json
+              | :
+              pre.language-JavaScript
+                code.language-JavaScript.
+                  "scripts": {
+                    "copy-icons": "xcopy ./node_modules/bootstrap-icons/font/* ./public/fonts/bootstrap-icons /s /e"
+                  }
+            li Verifying the icons under
+              code.language-bash
+                | public/fonts/bootstrap-icons
+              |  and updating
+              code.language-html
+                | layout.ejs
+              |  to reference the local file.
+
+        dt Updating the Development Workflow
+        dd
+          p.
+            Enhancing the workflow involved creating a consolidated script:
+          ul
+            li Installing
+              code.language-bash
+                | npm install npm-run-all --save-dev
+            li Adding a
+              code.language-json
+                | start:dev
+              |  script in
+              code.language-json
+                | package.json
+              | :
+              pre.language-json
+                code.language-json.
+                  "scripts": {
+                    "start:dev": "npm-run-all copy-icons build-css watch-css nodemon"
+                  }
+            li Testing to ensure changes were handled seamlessly.
+
+        dt Dynamic Routing with Pages.json
+        dd
+          p.
+            Improving routing with
+              code.language-json
+                | pages.json
+              |  added flexibility:
+          ul
+            li Allowed icons in content fields like headings, text, and body.
+            li Simplified adding new pages with consistent navigation.
+
+        dt Lessons Learned
+        dd
+          p.
+            Key takeaways from this update:
+          ul
+            li Migrating from Sass
+              code.language-css
+                | @import
+              |  to
+              code.language-css
+                | @use
+              | .
+            li Properly serving static assets with correct MIME types.
+            li Balancing automation with simplicity in workflows.
+
+        dt Conclusion
+        dd
+          p.
+            These updates have made my JS Dev Env project more robust, modular,
+            and maintainable.
+            I hope these insights are helpful as you optimize your own projects.
+            Check back for more updates!
