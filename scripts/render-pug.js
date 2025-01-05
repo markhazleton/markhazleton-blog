@@ -17,13 +17,30 @@ module.exports = async function renderPug(filePath) {
     const destPath = filePath.replace(/src\/pug\//, 'docs/').replace(/\.pug$/, '.html');
     const srcPath = upath.resolve(upath.dirname(__filename), '../src');
 
+    // Derive the currentSlug
+    const relativePath = upath.relative(upath.resolve(__dirname, '../src/pug'), filePath);
+    const currentSlug = relativePath.replace(/\.pug$/, '.html');
+
+    // Get the last modified date of the file
+    const fileStats = fs.statSync(filePath);
+    const lastModified = new Date(fileStats.mtime).toISOString(); // Ensure valid ISO string
+    const formattedLastModified = new Date(fileStats.mtime).toLocaleDateString(); // Short date
+
+    console.log(`Rendering: ${filePath}`);
+    console.log(`Current Slug: ${currentSlug}`);
+    console.log(`Last Modified: ${formattedLastModified}`);
+
+
     const html = pug.renderFile(filePath, {
         doctype: 'html',
         filename: filePath,
         basedir: srcPath,
         articles: articles,
-        projects: projects
+        projects: projects,
+        currentSlug: currentSlug,
+        lastModified: formattedLastModified
     });
+
 
     let highlightedHtml = html; // Start with your original HTML
     // Here you would find and replace code snippets with highlighted versions
@@ -33,8 +50,6 @@ module.exports = async function renderPug(filePath) {
         const language = Prism.languages[lang] || Prism.languages.javascript;
         return `<code class="language-${lang}">${Prism.highlight(code, language, lang)}</code>`;
     });
-
-
 
     const destPathDirname = upath.dirname(destPath);
     if (!sh.test('-e', destPathDirname)) {

@@ -20,4 +20,55 @@ mixin renderFooter(links)
           li
             a.text-light(href=`/${link.slug}` target='_self' title=`${link.description}`) #{link.name}
 
+mixin relatedDocuments(articles, currentSlug, lastModified)
+  - let currentArticle = articles.find(article => article.slug === currentSlug);
+  - let relatedArticles = [];
 
+  // Ensure current article exists
+  if currentArticle
+    // Extract and clean currentKeywords
+    - let currentKeywords = [];
+    - if (currentArticle.keywords && currentArticle.keywords.trim())
+        - let rawKeywords = currentArticle.keywords.split(',');
+        - currentKeywords = rawKeywords.map(keyword => keyword.trim().toLowerCase()).filter(keyword => keyword);
+
+    // Only check for related articles if there are valid keywords
+    if currentKeywords.length > 0
+      each article in articles
+        if article.slug !== currentSlug && article.keywords
+          - let articleKeywords = article.keywords.split(',').map(keyword => keyword.trim().toLowerCase());
+          - let hasMatchingKeyword = articleKeywords.some(keyword => currentKeywords.includes(keyword));
+          if hasMatchingKeyword
+            - relatedArticles.push(article);
+
+    // Render current article's keywords as badges
+    if currentKeywords.length > 0
+      div.keywords.mt-3
+        p.text-white Hashtags:
+        div.d-flex.flex-wrap.gap-2
+          each keyword in currentKeywords
+            span.badge.bg-primary.text-uppercase #{keyword}
+
+    // Render related articles in a card layout
+    if relatedArticles.length > 0
+      div.related-articles.mt-4
+        h3.text-white Related Articles
+        div.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4
+          each related in relatedArticles
+            div.col
+              div.card.h-100.bg-dark.text-white
+                div.card-body
+                  h5.card-title
+                    i.bi.bi-arrow-right-circle-fill.me-2
+                    a.text-white(href=`/${related.slug}` title=`${related.description}`) #{related.name}
+                  p.card-text.text-white #{related.description}
+                div.card-footer
+
+    else
+      p.mt-4.text-muted 
+
+    // Render lastModified as a short date string
+    div.mt-4
+      p.text-white Last updated: #{lastModified}
+  else
+    p.text-muted
