@@ -3,21 +3,14 @@ using mwhWebAdmin.Article;
 
 namespace mwhWebAdmin.Pages;
 
-public class ArticlesModel : PageModel
+public class ArticlesModel(ArticleService articleService) : PageModel
 {
-    private readonly ArticleService _articleService;
-
-    public List<ArticleModel> Articles { get; private set; }
-
-    public ArticlesModel(ArticleService articleService)
-    {
-        _articleService = articleService;
-    }
+    public List<ArticleModel> Articles { get; private set; } = [];
 
     public void OnGet()
     {
-        Articles = _articleService.GetArticles();
-        _articleService.GenerateSiteMap();
-        _articleService.GenerateRSSFeed();
+        Articles = articleService.GetArticles();
+        articleService.GenerateSiteMap();
+        articleService.GenerateRSSFeed();
     }
 }

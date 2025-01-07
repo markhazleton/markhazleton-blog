@@ -8,6 +8,17 @@ using mwhWebAdmin.Project;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Setup configuration and User Secrets
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddUserSecrets<Program>();
+builder.Configuration.AddEnvironmentVariables();
+
+
+
+
+
 // Load paths from configuration or fallback to defaults
 var articlesPath = Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json"));
 var projectsPath = Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json"));
@@ -19,8 +30,6 @@ if (!Directory.Exists(imgAssetsPath))
     // You can handle the error here, log it, or throw an exception
 }
 
-
-
 // Logging setup
 builder.Services.AddLogging(configure => configure.AddConsole());
 
@@ -30,8 +39,9 @@ builder.Services.AddRazorPages();
 // Article and Project Services with configuration
 builder.Services.AddSingleton<ArticleService>(provider =>
 {
+    var config = provider.GetRequiredService<IConfiguration>();
     var logger = provider.GetRequiredService<ILogger<ArticleService>>();
-    return new ArticleService(articlesPath, logger);
+    return new ArticleService(articlesPath, logger, config);
 });
 
 builder.Services.AddSingleton<ProjectService>(provider =>
