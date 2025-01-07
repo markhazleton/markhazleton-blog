@@ -41,6 +41,9 @@ mixin relatedDocuments(articles, currentSlug, lastModified)
           if hasMatchingKeyword
             - relatedArticles.push(article);
 
+    // Shuffle related articles and limit to 3
+    - relatedArticles = relatedArticles.sort(() => 0.5 - Math.random()).slice(0, 3);
+
     // Render current article's keywords as badges
     if currentKeywords.length > 0
       div.keywords.mt-3
@@ -63,12 +66,33 @@ mixin relatedDocuments(articles, currentSlug, lastModified)
                     a.text-white(href=`/${related.slug}` title=`${related.description}`) #{related.name}
                   p.card-text.text-white #{related.description}
                 div.card-footer
-
     else
-      p.mt-4.text-muted 
+      p.mt-4.text-muted
 
     // Render lastModified as a short date string
     div.mt-4
       p.text-white Last updated: #{lastModified}
   else
-    p.text-muted
+    p.text-muted 
+
+
+mixin displayArticleInfo(article)
+  if article
+    div.card.bg-light.text-dark.mb-4
+      div.card-body
+        h5.card-title
+          i.bi.bi-file-text.me-2
+          | #{article.name}
+        p.card-text
+          strong Category:
+          | #{article.Section}
+        if article.lastmod
+          p.card-text
+            strong Last Updated:
+            | #{article.lastmod}
+        else
+          p.card-text.text-muted Last Updated: Not available
+  else
+    div.alert.alert-warning(role="alert")
+      i.bi.bi-exclamation-triangle-fill.me-2
+      | Article data is not available.

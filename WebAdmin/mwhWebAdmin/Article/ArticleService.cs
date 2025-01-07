@@ -9,6 +9,7 @@ public class ArticleService
 {
     private List<ArticleModel> _articles = [];
     private readonly string _articlesDirectory;
+    private readonly IConfiguration _configuration;
     private readonly string _filePath;
     private readonly object _lock = new();
     private readonly ILogger<ArticleService> _logger;
@@ -19,12 +20,74 @@ public class ArticleService
     /// </summary>
     /// <param name="filePath">The file path of the articles JSON file.</param>
     /// <param name="logger">The logger instance.</param>
-    public ArticleService(string filePath, ILogger<ArticleService> logger)
+    public ArticleService(string filePath, ILogger<ArticleService> logger, IConfiguration configuration)
     {
         _filePath = filePath;
         _logger = logger;
+        _configuration = configuration;
         _articlesDirectory = Path.Combine(_filePath.Replace("articles.json", string.Empty), "pug", "articles");
         LoadArticles();
+    }
+
+    /// <summary>
+    /// Generates SEO-optimized keywords for the given content using OpenAI's Chat Completions API.
+    /// </summary>
+    /// <param name="content">The body content of the article.</param>
+    /// <returns>A comma-separated string of SEO-optimized keywords.</returns>
+    private async Task<string> GenerateKeywordsFromContentAsync(string content)
+    {
+        try
+        {
+            var openAiApiKey = _configuration["OPENAI_API_KEY"];
+            var openAiApiUrl = "https://api.openai.com/v1/chat/completions";
+
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", openAiApiKey);
+
+            // Prepare the request payload
+            var requestBody = new
+            {
+                model = "gpt-4o",
+                messages = new[]
+                {
+                new
+                {
+                    role = "system",
+                    content = "You are an SEO expert. Calculate SEO-optimized keywords from the provided content. Ignore the header, footer, and any links off the page. Return a comma separated string of keywords."
+                },
+                new
+                {
+                    role = "user",
+                    content = content
+                }
+            },
+                max_tokens = 1000,
+                temperature = 0.5
+            };
+
+            var jsonContent = new StringContent(System.Text.Json.JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
+
+            // Make the API call
+            var response = await httpClient.PostAsync(openAiApiUrl, jsonContent);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseData = System.Text.Json.JsonDocument.Parse(responseContent);
+
+            // Extract the response text
+            var keywords = responseData.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString();
+
+            return keywords?.Trim() ?? string.Empty;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to generate keywords using OpenAI API.");
+            return string.Empty;
+        }
     }
 
     /// <summary>
@@ -89,8 +152,10 @@ public class ArticleService
         {
             try
             {
+                // Task.Run(async () => await GenerateKeywordsAsync()).GetAwaiter().GetResult();
+
                 // call update keywords using task.run
-                Task.Run(async () => await UpdateKeywordsAsync()).GetAwaiter().GetResult();
+                // Task.Run(async () => await UpdateKeywordsAsync()).GetAwaiter().GetResult();
 
                 foreach (var article in _articles)
                 {
@@ -108,6 +173,22 @@ public class ArticleService
                 _logger.LogError(ex, "Failed to save articles.");
             }
         }
+    }
+    /// <summary>
+    /// Validates an article model.
+    /// </summary>
+    /// <param name="article">The article model to validate.</param>
+    /// <returns>True if the article is valid; otherwise, false.</returns>
+    private static bool ValidateArticle(ArticleModel article)
+    {
+        return !string.IsNullOrWhiteSpace(article.Name) &&
+               !string.IsNullOrWhiteSpace(article.Section) &&
+               !string.IsNullOrWhiteSpace(article.Slug);
+    }
+
+    internal List<string> GetKeywords()
+    {
+        return new List<string>();
     }
 
     /// <summary>
@@ -149,42 +230,78 @@ public class ArticleService
     }
 
     /// <summary>
-    /// Generates the site map XML file.
+    /// Converts a string to a DateTime object.
     /// </summary>
-    public void GenerateSiteMap()
+    /// <param name="dateString">The string representation of the date.</param>
+    /// <returns>The DateTime object.</returns>
+    public static DateTime ConvertStringToDate(string dateString)
     {
-        try
+        if (DateTime.TryParse(dateString, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateValue))
         {
-            string siteMapPath = Path.Combine(Path.GetDirectoryName(_filePath), "SiteMap.xml");
-            using (XmlWriter writer = XmlWriter.Create(siteMapPath, new XmlWriterSettings { Indent = true }))
+            return dateValue;
+        }
+        else
+        {
+            return DateTime.Now;
+        }
+    }
+
+
+
+    /// <summary>
+    /// Generates the Keywords property for all articles by fetching the body content from their respective URLs
+    /// and calculating keywords using the GenerateKeywordsFromContentAsync function.
+    /// </summary>
+    /// <summary>
+    /// Generates the Keywords property for all articles by fetching the content from the <section> node with id="post"
+    /// and calculating keywords using the GenerateKeywordsFromContentAsync function.
+    /// </summary>
+    public async Task<string> GenerateKeywordsAsync(string? targetSlug = null)
+    {
+        using var httpClient = new HttpClient();
+
+        foreach (var article in _articles)
+        {
+            if (targetSlug != null && article.Slug != targetSlug)
             {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
-
-                writer.WriteStartElement("url");
-                writer.WriteElementString("loc", $"https://markhazleton.com/");
-                writer.WriteElementString("lastmod", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
-                writer.WriteElementString("changefreq", "weekly");
-                writer.WriteEndElement();
-
-                foreach (var article in _articles)
+                try
                 {
-                    writer.WriteStartElement("url");
-                    writer.WriteElementString("loc", $"https://markhazleton.com/{article.Slug}");
-                    writer.WriteElementString("lastmod", ConvertStringToDate(article.LastModified).ToString("yyyy-MM-ddTHH:mm:sszzz"));
-                    writer.WriteElementString("changefreq", article.ChangeFrequency);
-                    writer.WriteEndElement();
-                }
+                    string url = $"https://markhazleton.com/{article.Slug}";
+                    _logger.LogInformation($"Fetching content for article: {article.Name} from {url}");
 
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
+                    // Fetch the HTML content
+                    var response = await httpClient.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string htmlContent = await response.Content.ReadAsStringAsync();
+
+                    // Parse the HTML to extract the content from <section id="post">
+                    var htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(htmlContent);
+
+                    var sectionNode = htmlDoc.DocumentNode
+                        .SelectSingleNode("//section[@id='post']");
+
+                    var content = sectionNode?.InnerText;
+
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        // Generate keywords using the content from the section
+                        article.Keywords = await GenerateKeywordsFromContentAsync(content);
+                        _logger.LogInformation($"Keywords updated for article: {article.Name}");
+                        return article.Keywords;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"No content found in <section id='post'> for article: {article.Name}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Failed to generate keywords for article: {article.Name}");
+                }
             }
-            _logger.LogInformation("Sitemap generated successfully.");
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to generate sitemap.");
-        }
+        return string.Empty;
     }
 
     public void GenerateRSSFeed()
@@ -243,19 +360,41 @@ public class ArticleService
     }
 
     /// <summary>
-    /// Converts a string to a DateTime object.
+    /// Generates the site map XML file.
     /// </summary>
-    /// <param name="dateString">The string representation of the date.</param>
-    /// <returns>The DateTime object.</returns>
-    public static DateTime ConvertStringToDate(string dateString)
+    public void GenerateSiteMap()
     {
-        if (DateTime.TryParse(dateString, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateValue))
+        try
         {
-            return dateValue;
+            string siteMapPath = Path.Combine(Path.GetDirectoryName(_filePath), "SiteMap.xml");
+            using (XmlWriter writer = XmlWriter.Create(siteMapPath, new XmlWriterSettings { Indent = true }))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
+
+                writer.WriteStartElement("url");
+                writer.WriteElementString("loc", $"https://markhazleton.com/");
+                writer.WriteElementString("lastmod", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
+                writer.WriteElementString("changefreq", "weekly");
+                writer.WriteEndElement();
+
+                foreach (var article in _articles)
+                {
+                    writer.WriteStartElement("url");
+                    writer.WriteElementString("loc", $"https://markhazleton.com/{article.Slug}");
+                    writer.WriteElementString("lastmod", ConvertStringToDate(article.LastModified).ToString("yyyy-MM-ddTHH:mm:sszzz"));
+                    writer.WriteElementString("changefreq", article.ChangeFrequency);
+                    writer.WriteEndElement();
+                }
+
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+            }
+            _logger.LogInformation("Sitemap generated successfully.");
         }
-        else
+        catch (Exception ex)
         {
-            return DateTime.Now;
+            _logger.LogError(ex, "Failed to generate sitemap.");
         }
     }
 
@@ -309,8 +448,10 @@ public class ArticleService
     /// Updates an existing article.
     /// </summary>
     /// <param name="updatedArticle">The updated article model.</param>
-    public void UpdateArticle(ArticleModel updatedArticle)
+    public async Task UpdateArticle(ArticleModel updatedArticle)
     {
+        updatedArticle.Keywords = await GenerateKeywordsAsync(updatedArticle.Slug)??updatedArticle.Keywords;
+
         lock (_lock)
         {
             if (!ValidateArticle(updatedArticle))
@@ -331,6 +472,7 @@ public class ArticleService
                 _logger.LogWarning($"Article with ID {updatedArticle.Id} not found. Update failed.");
             }
         }
+        await Task.CompletedTask;
     }
     /// <summary>
     /// Updates the Keywords property for all articles by fetching meta tag keywords from their respective URLs.
@@ -374,21 +516,5 @@ public class ArticleService
                 _logger.LogError(ex, $"Failed to update keywords for article: {article.Name}");
             }
         }
-    }
-    /// <summary>
-    /// Validates an article model.
-    /// </summary>
-    /// <param name="article">The article model to validate.</param>
-    /// <returns>True if the article is valid; otherwise, false.</returns>
-    private static bool ValidateArticle(ArticleModel article)
-    {
-        return !string.IsNullOrWhiteSpace(article.Name) &&
-               !string.IsNullOrWhiteSpace(article.Section) &&
-               !string.IsNullOrWhiteSpace(article.Slug);
-    }
-
-    internal List<string> GetKeywords()
-    {
-        return new List<string>();
     }
 }

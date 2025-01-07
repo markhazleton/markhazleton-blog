@@ -8,6 +8,7 @@ const sh = require('shelljs');
 const prettier = require('prettier');
 const Prism = require('prismjs');
 require('prismjs/components/')(); // Load all languages
+const { execSync } = require('child_process');
 
 // Get List of Articles
 const articles = require('./../src/articles.json');
@@ -23,13 +24,23 @@ module.exports = async function renderPug(filePath) {
 
     // Get the last modified date of the file
     const fileStats = fs.statSync(filePath);
-    const lastModified = new Date(fileStats.mtime).toISOString(); // Ensure valid ISO string
-    const formattedLastModified = new Date(fileStats.mtime).toLocaleDateString(); // Short date
+
+    const article = articles.find(article => article.slug === currentSlug);
+
+    // Use Git to retrieve the last commit date for the file
+    let lastModified;
+    try {
+        const gitCommand = `git log -1 --format=%cI -- ${filePath}`;
+        lastModified = execSync(gitCommand).toString().trim();
+    } catch (error) {
+        console.error(`Error retrieving last modified date for ${filePath}:`, error.message);
+        lastModified = new Date().toISOString(); // Fallback to current date
+    }
+    const formattedLastModified = new Date(lastModified).toLocaleDateString(); // Short date
 
     console.log(`Rendering: ${filePath}`);
     console.log(`Current Slug: ${currentSlug}`);
     console.log(`Last Modified: ${formattedLastModified}`);
-
 
     const html = pug.renderFile(filePath, {
         doctype: 'html',
@@ -38,7 +49,8 @@ module.exports = async function renderPug(filePath) {
         articles: articles,
         projects: projects,
         currentSlug: currentSlug,
-        lastModified: formattedLastModified
+        lastModified: formattedLastModified,
+        article: article
     });
 
 
