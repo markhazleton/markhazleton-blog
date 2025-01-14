@@ -24,7 +24,6 @@ module.exports = async function renderPug(filePath) {
 
     // Get the last modified date of the file
     const fileStats = fs.statSync(filePath);
-
     const article = articles.find(article => article.slug === currentSlug);
 
     // Use Git to retrieve the last commit date for the file
@@ -38,9 +37,9 @@ module.exports = async function renderPug(filePath) {
     }
     const formattedLastModified = new Date(lastModified).toLocaleDateString(); // Short date
 
-    console.log(`Rendering: ${filePath}`);
-    console.log(`Current Slug: ${currentSlug}`);
-    console.log(`Last Modified: ${formattedLastModified}`);
+//    console.log(`Rendering: ${filePath}`);
+//    console.log(`Current Slug: ${currentSlug}`);
+//    console.log(`Last Modified: ${formattedLastModified}`);
 
     const html = pug.renderFile(filePath, {
         doctype: 'html',
@@ -54,7 +53,8 @@ module.exports = async function renderPug(filePath) {
     });
 
 
-    let highlightedHtml = html; // Start with your original HTML
+    let highlightedHtml = html;
+    // Start with your original HTML
     // Here you would find and replace code snippets with highlighted versions
     // This is a simplified example; you might need a more complex solution
     // based on your HTML structure and how code snippets are represented

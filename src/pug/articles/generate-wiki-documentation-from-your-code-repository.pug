@@ -1,0 +1,291 @@
+extends ../layouts/articles
+
+block pagehead
+  title Development - Generate Wiki Documentation from Your Code Repository
+  meta(name='description', content='Development - Generate Wiki Documentation from Your Code Repository')
+  meta(name="keywords" content="DocSpark, code documentation, wiki generator, developer tools, .NET, Markdown, JSON, API documentation, code repository tools, generate documentation, programming best practices")
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/generate-wiki-documentation-from-your-code-repository.html')
+
+block layout-content
+
+  section#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 Generate Wiki Documentation from Your Code Repository
+      h2.subheading.mb-3 Learn how to create a tool to generate detailed wiki documentation from your code repository. This is a step-by-step guide with best practices for developers.
+      p.
+        Learn how to create a tool to generate detailed wiki documentation from your code repository. This is a step-by-step guide with best practices for developers.
+
+      .container
+        h2.mb-4 What is DocSpark?
+        p
+          | DocSpark is an innovative tool designed to help developers generate detailed, human-readable documentation directly from their code repository.
+          | It combines the power of modern development tools like .NET, Markdown, and JSON to create structured documentation in both JSON and Markdown formats.
+          | With DocSpark, you can automatically generate API documentation, class details, and method summaries with ease.
+
+        h2.mb-4 How Does DocSpark Work?
+        ul
+          li DocSpark analyzes your codebase for class structures, methods, and properties.
+          li It extracts metadata such as XML comments, namespaces, routes, and inheritance details.
+          li Outputs structured data in JSON format for integrations and Markdown format for wikis.
+
+        h2.mb-4 Why Use DocSpark?
+        ul
+          li  Save time: Automate the tedious task of creating documentation.
+          li  Consistency: Ensure uniform documentation across your project.
+          li  Developer-friendly: Generate files ready for use in Markdown wikis and JSON APIs.
+
+        h2.mb-4 Step-by-Step Guide to Build DocSpark
+        p Follow these steps to create and configure your own DocSpark tool:
+
+        ol
+          li.step
+            h3 Step 1: Set Up Your Environment
+            ul
+              li Ensure you have the latest version of .NET SDK installed.
+              li Install a code editor like Visual Studio or Visual Studio Code.
+              li Create a new .NET console application:
+                code.dotnet New .NET Console Application
+
+          li.step
+            h3 Step 2: Implement Core Services
+            ul
+              li Create a `FileService` to handle file I/O operations.
+              li Implement a `SyntaxAnalysisService` to parse your codebase and extract class and method details.
+              li Add a `MarkdownGenerator` to format extracted data into Markdown documentation.
+              li Add a `JSONExporter` to serialize data into JSON format.
+
+          li.step
+            h3 Step 3: Integrate Functionality in Program.cs
+            ul
+              li Use the `FileService` to retrieve source files from your repository.
+              li Call the `SyntaxAnalysisService` to extract structured metadata.
+              li Save structured data to a JSON file for integrations.
+              li Use the `MarkdownGenerator` to create a Markdown document for wikis.
+              li Write files to the designated output paths.
+
+          li.step
+            h3 Step 4: Customize for API Documentation
+            ul
+              li Enhance `ClassInfo` to include route prefixes for API controllers.
+              li Add method-specific routes for public API methods using attributes.
+              li Ensure API-specific documentation is well-organized in both JSON and Markdown outputs.
+
+          li.step
+            h3 Step 5: Test Your Implementation
+            ul
+              li Run the tool against your code repository.
+              li Validate the JSON output for structure and accuracy.
+              li Verify that the Markdown file is well-formatted and includes correct links and routes.
+
+        h2.mb-4 Best Practices
+        ul
+          li Use XML comments extensively in your code to ensure detailed and accurate documentation.
+          li Test the tool on a small subset of your codebase before running it on the entire repository.
+          li Keep your documentation files versioned using Git for traceability and collaboration.
+          li Generate documentation as part of your CI/CD pipeline to ensure it is always up-to-date.
+
+        h2.mb-4 Example Outputs
+        h3 JSON Output
+        pre.language-json.p-3
+          code.language-json.
+            [
+              {
+                "Name": "MyApiController",
+                "Namespace": "MyNamespace",
+                "Comment": "API Controller for managing items.",
+                "InheritedClass": "BaseController",
+                "ImplementedInterfaces": ["ILoggerAware"],
+                "RoutePrefix": "api/items",
+                "Properties": [
+                  {
+                    "Name": "ItemName",
+                    "Type": "string",
+                    "Comment": "The name of the item."
+                  }
+                ],
+                "Methods": [
+                  {
+                    "Name": "GetItem",
+                    "ReturnType": "Item",
+                    "Route": "api/items/{id}",
+                    "Comment": "Fetch an item by its ID."
+                  }
+                ]
+              }
+            ]
+        h3 Markdown Output
+        pre.language-markdown
+          code.language-markdown.
+            ## Class: MyApiController
+            Namespace: MyNamespace
+            **API Controller for managing items.**
+
+            - Route Prefix: api/items
+
+            ### Public Properties:
+            - `ItemName`: `string`
+              - **The name of the item.**
+
+            ### Public Methods:
+            - `GetItem(int id)`: Returns `Item`
+              - Route: `api/items/{id}`
+              - **Fetch an item by its ID.**
+
+        h2.mb-4 Conclusion
+        p.
+          DocSpark empowers developers to focus on coding while ensuring their documentation is detailed, consistent, and always up-to-date.
+          Whether you’re building APIs or maintaining a complex application, DocSpark can streamline your workflow and enhance your team’s productivity.
+          Start building your own DocSpark today and take your documentation process to the next level!
+
+      h1.mb-4 Using Microsoft.CodeAnalysis for API Documentation
+      h2.subheading.mb-3 Learn how Roslyn helps automate the creation of Markdown documentation for .NET APIs.
+      p.text-muted
+        | Microsoft.CodeAnalysis (Roslyn) is a powerful library that allows developers to analyze, modify, and compile .NET code. This article explains how to leverage Roslyn for automatically generating Markdown documentation for APIs.
+
+      // Overview Section
+      section#overview.mt-5
+        h2 Overview
+        p The Microsoft.CodeAnalysis library, commonly referred to as Roslyn, provides powerful APIs to analyze, modify, and compile C# and VB.NET code. By leveraging Roslyn, developers can automate the generation of comprehensive Markdown documentation for .NET API projects.
+
+      // Features Section
+      section#features.mt-5
+        h2 Key Features
+        ul
+          li Syntax analysis using Roslyn to parse `.cs` files and extract key information.
+          li Dynamic route generation by analyzing `[Route]` and HTTP verb attributes like `[HttpGet]` and `[HttpPost]`.
+          li Automated detection of class-level and method-level routes.
+          li Inclusion of HTTP verbs in the documentation for clarity.
+
+      // Implementation Section
+      section#implementation.mt-5
+        h2 Implementation Highlights
+
+        h3 Syntax Analysis
+        pre.language-csharp
+          code.language-csharp.
+            private string GetRoutePrefix(ClassDeclarationSyntax classDeclaration, string className)
+            {
+              var routeAttribute = classDeclaration.AttributeLists
+                .SelectMany(a => a.Attributes)
+                .FirstOrDefault(a => a.Name.ToString().Contains("Route"));
+
+              if (routeAttribute == null)
+                return null;
+
+              var routeArgument = routeAttribute.ArgumentList?.Arguments.FirstOrDefault()?.ToString().Trim('"');
+              return AdjustRoutePrefix(routeArgument, className);
+            }
+
+        h3 Route Combination
+        pre.language-csharp
+          code.language-csharp.
+            private string CombineRoutes(string classRoute, string methodRoute)
+            {
+              if (string.IsNullOrWhiteSpace(classRoute))
+                return methodRoute;
+
+              if (string.IsNullOrWhiteSpace(methodRoute))
+                return classRoute;
+
+              return $"{classRoute.TrimEnd('/')}/{methodRoute.TrimStart('/')}";
+            }
+
+        h3 HTTP Verb Detection
+        pre.language-csharp
+          code.language-csharp.
+            private string GetHttpVerb(MethodDeclarationSyntax method)
+            {
+              var httpVerbAttribute = method.AttributeLists
+                .SelectMany(a => a.Attributes)
+                .FirstOrDefault(a => new[] { "HttpGet", "HttpPost", "HttpPut", "HttpDelete" }.Contains(a.Name.ToString()));
+
+              return httpVerbAttribute?.Name.ToString().Replace("Http", "").ToUpperInvariant() ?? "GET";
+            }
+
+      // Sample Output Section
+      section#sample-output.mt-5
+        h2 Sample Output
+        pre.language-markdown
+          code.language-markdown.
+            ## WorkflowController
+            Namespace: `MyApp.Controllers`
+
+            **Handles workflow operations.**
+
+            ### Public Methods:
+            - `DeleteNode(int nodeId)`: Returns `IActionResult` **Deletes a specific node.**
+              - Route: `DELETE api/workflow/node/delete/{nodeId}`
+
+            - `SetWorkflow()`: Returns `IActionResult` **Sets a workflow.**
+              - Route: `POST api/workflow/set`
+
+            - `GetNode(int nodeId)`: Returns `IActionResult` **Retrieves a specific node.**
+              - Route: `GET api/workflow/node/{nodeId}`
+
+            - `UpdateNode()`: Returns `IActionResult` **Updates a node.**
+              - Route: `PUT api/workflow/node/update`
+
+      h2.text-center.mb-4 History and Legacy of Roslyn
+      .card
+        .card-header.text-center.bg-primary.text-white
+          h5.card-title.mb-0 History of Microsoft.CodeAnalysis (Roslyn)
+        .card-body
+          .accordion#roslynHistoryAccordion
+            .accordion-item
+              h2.accordion-header#headingOne
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne")
+                  | Origins of Roslyn
+              #collapseOne.accordion-collapse.collapse(aria-labelledby="headingOne", data-bs-parent="#roslynHistoryAccordion")
+                .accordion-body
+                  p The code name "Roslyn" was first mentioned by Microsoft engineer Eric Lippert in 2010. The name is inspired by Roslyn, Washington, a filming location for the television series "Northern Exposure."
+
+            .accordion-item
+              h2.accordion-header#headingTwo
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
+                  | Open Source Transition
+              #collapseTwo.accordion-collapse.collapse(aria-labelledby="headingTwo", data-bs-parent="#roslynHistoryAccordion")
+                .accordion-body
+                  p In April 2014, at the Build conference, Microsoft announced Roslyn's transition to open source, releasing it under the Apache License 2.0. This move aimed to foster community collaboration and transparency in compiler development.
+
+            .accordion-item
+              h2.accordion-header#headingThree
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree", aria-expanded="false", aria-controls="collapseThree")
+                  | Integration into Visual Studio
+              #collapseThree.accordion-collapse.collapse(aria-labelledby="headingThree", data-bs-parent="#roslynHistoryAccordion")
+                .accordion-body
+                  p Roslyn was first released with Visual Studio 2015, providing developers with enhanced code analysis tools and real-time feedback within the IDE.
+                  p
+                    | Visual Studio's IntelliSense, powered by Roslyn, offers real-time code suggestions, completions, and error detection. With the integration of
+                    a(href="https://learn.microsoft.com/en-us/visualstudio/intellisense/using-intellisense" target="_blank") IntelliSense
+                    | and Roslyn, developers experience advanced code analysis and enhanced productivity.
+                  p
+                    | Roslyn's APIs enable the creation of custom IntelliSense features, allowing developers to tailor code suggestions and refactoring tools to specific needs. This customization has revolutionized how developers interact with code in Visual Studio.
+                  p
+                    | The Microsoft.CodeAnalysis libraries are at the heart of these improvements, providing robust support for building custom code analyzers, syntax highlighting, and tooling extensions that integrate seamlessly with the Visual Studio ecosystem.
+
+            .accordion-item
+              h2.accordion-header#headingFour
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFour", aria-expanded="false", aria-controls="collapseFour")
+                  | Legacy and Impact
+              #collapseFour.accordion-collapse.collapse(aria-labelledby="headingFour", data-bs-parent="#roslynHistoryAccordion")
+                .accordion-body
+                  p Roslyn has redefined compiler functionality by exposing APIs that allow for deep code analysis, refactoring, and scripting. Its open-source nature has encouraged a vibrant ecosystem of extensions and tools, solidifying its place as a cornerstone in modern .NET development.
+
+            .accordion-item
+              h2.accordion-header#headingFive
+                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFive", aria-expanded="false", aria-controls="collapseFive")
+                  | AI Tools and Roslyn
+              #collapseFive.accordion-collapse.collapse(aria-labelledby="headingFive", data-bs-parent="#roslynHistoryAccordion")
+                .accordion-body
+                  p
+                    | Roslyn has also been instrumental in enabling AI-powered tools for developers. Tools like
+                    a(href="https://github.com/features/copilot" target="_blank") GitHub Copilot
+                    | leverage Roslyn's deep code analysis capabilities to provide intelligent code suggestions and automations.
+                  p
+                    | By combining Roslyn's APIs with machine learning models, these AI tools offer context-aware coding assistance, helping developers write code faster and more efficiently.
+                  p
+                    | Additionally, tools like
+                    a(href="https://www.devexpress.com/products/coderush/" target="_blank") CodeRush
+                    | and Refactor have utilized Roslyn to improve code navigation, refactoring, and overall productivity in the .NET ecosystem.
+
