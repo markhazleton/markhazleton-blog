@@ -15,10 +15,6 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddUserSecrets<Program>();
 builder.Configuration.AddEnvironmentVariables();
 
-
-
-
-
 // Load paths from configuration or fallback to defaults
 var articlesPath = Path.GetFullPath(Path.Combine("..", "..", "src", "articles.json"));
 var projectsPath = Path.GetFullPath(Path.Combine("..", "..", "src", "projects.json"));
