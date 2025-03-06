@@ -36,13 +36,17 @@ public class ArticleEditModel(ArticleService articleService) : PageModel
     /// Handles the POST request for editing an article.
     /// </summary>
     /// <returns>The IActionResult representing the response.</returns>
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPost(CancellationToken ct = default)
     {
         if (!ModelState.IsValid)
         {
             return Page();
         }
-        articleService.UpdateArticle(Article);
+        await articleService.UpdateArticle(Article).ConfigureAwait(true);
+
+        // await articleService.UpdateKeywordsForAllArticlesAsync(ct).ConfigureAwait(true);
+
+
         return RedirectToPage("Articles");
     }
 }

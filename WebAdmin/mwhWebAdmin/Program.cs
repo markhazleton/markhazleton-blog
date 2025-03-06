@@ -25,6 +25,8 @@ if (!Directory.Exists(imgAssetsPath))
     Console.WriteLine($"Directory does not exist: {imgAssetsPath}");
     // You can handle the error here, log it, or throw an exception
 }
+// Add this line to register IHttpClientFactory
+builder.Services.AddHttpClient();
 
 // Logging setup
 builder.Services.AddLogging(configure => configure.AddConsole());
@@ -37,7 +39,8 @@ builder.Services.AddSingleton<ArticleService>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
     var logger = provider.GetRequiredService<ILogger<ArticleService>>();
-    return new ArticleService(articlesPath, logger, config);
+    var factory = provider.GetRequiredService<IHttpClientFactory>();
+    return new ArticleService(articlesPath, logger, config,factory);
 });
 
 builder.Services.AddSingleton<ProjectService>(provider =>
