@@ -8,7 +8,7 @@ namespace mwhWebAdmin.Article
     /// </summary>
     public class ArticleService
     {
-        private List<ArticleModel> _articles = new List<ArticleModel>();
+        private List<ArticleModel> _articles = [];
         private readonly string _articlesDirectory;
         private readonly IConfiguration _configuration;
         private readonly string _filePath;
@@ -134,8 +134,8 @@ namespace mwhWebAdmin.Article
             try
             {
                 string jsonContent = File.ReadAllText(_filePath);
-                _articles = JsonSerializer.Deserialize<List<ArticleModel>>(jsonContent) ?? new List<ArticleModel>();
-                foreach (var article in _articles.OrderBy(o => o.Name))
+                _articles = JsonSerializer.Deserialize<List<ArticleModel>>(jsonContent) ?? [];
+                foreach (var article in _articles.OrderBy(o => o.Id))
                 {
                     article.Id = _articles.IndexOf(article);
                 }
@@ -157,9 +157,19 @@ namespace mwhWebAdmin.Article
             {
                 try
                 {
-                    foreach (var article in _articles)
+                    var startdate = ConvertStringToDate("2023-01-01");
+                    var count = _articles.Count;
+                    // calculate days since startdate and then divide by count to get a change frequency
+                    var daysSinceStart = (DateTime.Now - startdate).TotalDays;
+                    var changeFrequency = (int)(daysSinceStart / count);
+                    // set the LastModified and ChangeFrequency properties for each article based on startddate and daysSinceStart to evenely distribute the articles
+                    foreach (var article in _articles.OrderBy(o => o.Id))
                     {
-                        article.LastModified = ConvertStringToDate(article.LastModified).ToString("yyyy-MM-dd");
+                        var newModifiedDate = startdate.AddDays(changeFrequency * article.Id);
+                        var daysSinceModified = (DateTime.Now - newModifiedDate).TotalDays;
+
+                        article.LastModified = startdate.AddDays(changeFrequency * article.Id).ToString("yyyy-MM-dd");
+                        article.ChangeFrequency = daysSinceModified < 60 ? "daily" : daysSinceModified < 120 ? "weekly" : "monthly";
                     }
                     string jsonContent = JsonSerializer.Serialize(
                         _articles,
@@ -358,7 +368,16 @@ namespace mwhWebAdmin.Article
                     _logger.LogInformation("UpdateKeywordsForAllArticlesAsync operation was cancelled.");
                     break;
                 }
-                await UpdateArticle(_articles[i]).ConfigureAwait(true);
+                if (string.IsNullOrWhiteSpace(_articles[i].Keywords))
+                {
+                    // add 1 second delay to avoid hitting the OpenAI API rate limit
+                    await Task.Delay(1000, cancellationToken).ConfigureAwait(true);
+                    Console.WriteLine($"Updating keywords for article: {_articles[i].Name}");
+                    await UpdateArticle(_articles[i]).ConfigureAwait(true);
+                    Console.WriteLine($"UPDATED keywords for article: {_articles[i].Name}");
+                    await Task.Delay(1000, cancellationToken).ConfigureAwait(true);
+
+                }
             }
         }
 

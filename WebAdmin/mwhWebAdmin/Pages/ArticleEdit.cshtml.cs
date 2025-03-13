@@ -44,7 +44,7 @@ public class ArticleEditModel(ArticleService articleService) : PageModel
         }
         await articleService.UpdateArticle(Article).ConfigureAwait(true);
 
-        // await articleService.UpdateKeywordsForAllArticlesAsync(ct).ConfigureAwait(true);
+        await articleService.UpdateKeywordsForAllArticlesAsync(ct).ConfigureAwait(true);
 
 
         return RedirectToPage("Articles");
