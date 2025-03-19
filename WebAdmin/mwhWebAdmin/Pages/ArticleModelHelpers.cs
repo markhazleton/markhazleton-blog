@@ -2,6 +2,7 @@ public static class ArticleModelHelpers
 {
     public static List<string> Sections { get; } =
         [
+            "Current Events",
             "Case Studies",
             "ChatGPT",
             "Blog Management",
