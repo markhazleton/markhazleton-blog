@@ -12,11 +12,20 @@ const stylesPath = upath.resolve(upath.dirname(__filename), '../src/scss/styles.
 const destPath = upath.resolve(upath.dirname(__filename), '../docs/css/styles.css');
 
 module.exports = function renderSCSS() {
-    // Use the new Dart Sass compile method
+    // Use the new Dart Sass compile method with additional options to suppress warnings
     const result = sass.compile(stylesPath, {
         loadPaths: [
             upath.resolve(upath.dirname(__filename), '../node_modules')
         ],
+        quietDeps: true,      // Suppress deprecation warnings from dependencies
+        logger: {
+            warn: function(message, options) {
+                // Only show warnings that don't contain specific deprecation messages
+                if (!message.includes('deprecated') && !message.includes('Deprecation')) {
+                    console.warn(message);
+                }
+            }
+        }
     });
 
     const destPathDirname = upath.dirname(destPath);
@@ -27,7 +36,7 @@ module.exports = function renderSCSS() {
     // Include cssnano in the PostCSS process for minification with explicit configuration
     postcss([autoprefixer, cssnano(
         {
-            preset: 'default', // This is the default preset that provides good minification. You can choose other presets or customize the options as needed.
+            preset: 'default', // This is the default preset that provides good minification
         })]).process(result.css, { from: undefined }).then(output => {
             output.warnings().forEach(warn => {
                 console.warn(warn.toString());
@@ -36,6 +45,4 @@ module.exports = function renderSCSS() {
         }).catch(error => {
             console.error('Error during CSS processing:', error); // Error handling for the PostCSS process
         });
-
 };
-

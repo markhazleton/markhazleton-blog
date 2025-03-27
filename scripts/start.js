@@ -19,10 +19,10 @@ const sslCertPath = isWindows
     ? "C:\\Program Files\\OpenSSL-Win64\\bin\\localhost.crt"
     : "/usr/local/etc/openssl/localhost.crt";
 
-// BrowserSync command for Windows and macOS/Linux
+// BrowserSync command for Windows and macOS/Linux with explicit open flag
 const browserSyncCommand = isWindows
-    ? `powershell -Command "& '${browserSyncPath}' --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --https --key '${sslKeyPath}' --cert '${sslCertPath}'"`
-    : `${browserSyncPath} --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --https --key ${sslKeyPath} --cert ${sslCertPath}`;
+    ? `powershell -Command "& '${browserSyncPath}' --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --open --https --key '${sslKeyPath}' --cert '${sslCertPath}'"`
+    : `${browserSyncPath} --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --open --https --key ${sslKeyPath} --cert ${sslCertPath}`;
 
 // Run concurrently
 concurrently(
@@ -45,7 +45,7 @@ concurrently(
     }
 );
 
-// Success and failure handlers
+// Success and failure handlers (using event listeners instead of .then())
 function success() {
     console.log("Success");
 }

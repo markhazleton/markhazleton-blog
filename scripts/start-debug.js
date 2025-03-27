@@ -10,8 +10,8 @@ const browserSyncPath = isWindows
     ? upath.resolve(upath.dirname(__filename), "../node_modules/.bin/browser-sync.cmd")
     : upath.resolve(upath.dirname(__filename), "../node_modules/.bin/browser-sync");
 
-// BrowserSync command
-const browserSyncCommand = `${browserSyncPath} docs -w --no-online`;
+// BrowserSync command with explicit open flag
+const browserSyncCommand = `${browserSyncPath} docs -w --no-online --open`;
 
 concurrently(
     [
