@@ -28,15 +28,15 @@ function getChangeFrequency(articleDate) {
     const now = new Date();
     const diffTime = Math.abs(now - articleDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     // Articles less than 30 days old get 'daily'
     if (diffDays < 30) {
         return 'daily';
-    } 
+    }
     // Articles 30-90 days old get 'weekly'
     else if (diffDays < 90) {
         return 'weekly';
-    } 
+    }
     // Older articles get 'monthly'
     else {
         return 'monthly';
@@ -63,22 +63,22 @@ function escapeXml(text) {
  */
 function updateSitemap() {
     console.log('Updating sitemap.xml...');
-    
+
     // Define file paths
     const srcPath = upath.resolve(__dirname, '../src');
     const articlesJsonPath = path.join(srcPath, 'articles.json');
     const sitemapXmlPath = path.join(srcPath, 'sitemap.xml');
-    
+
     try {
         // Load articles.json
         const articlesData = fs.readFileSync(articlesJsonPath, 'utf8');
         const articles = JSON.parse(articlesData);
-        
+
         // Sort articles by date (newest first)
         articles.sort((a, b) => {
             return new Date(b.lastmod) - new Date(a.lastmod);
         });
-        
+
         // Start building the sitemap XML content
         let sitemapContent = `<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -90,7 +90,7 @@ function updateSitemap() {
         // Add homepage as the first entry (always highest priority)
         const now = new Date();
         const formattedNow = formatSitemapDate(now);
-        
+
         sitemapContent += `  <url>
     <loc>https://markhazleton.com/</loc>
     <lastmod>${formattedNow}</lastmod>
@@ -98,28 +98,28 @@ function updateSitemap() {
     <priority>1.0</priority>
   </url>
 `;
-        
+
         // Process all articles
         articles.forEach(article => {
             const fullLink = `https://markhazleton.com/${article.slug}`;
             const articleDate = new Date(article.lastmod);
             const lastmod = formatSitemapDate(article.lastmod);
             const changefreq = getChangeFrequency(articleDate);
-            
+
             // Determine priority based on age (newer articles get higher priority)
             const diffTime = Math.abs(now - articleDate);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
+
             // Calculate priority (newer = higher priority)
             // Priority values range from 0.0 to 1.0
             let priority = 0.5; // Default priority
-            
+
             if (diffDays < 30) {
                 priority = 0.8; // Recent articles (less than a month old)
             } else if (diffDays < 90) {
                 priority = 0.6; // Articles 1-3 months old
             }
-            
+
             sitemapContent += `  <url>
     <loc>${escapeXml(fullLink)}</loc>
     <lastmod>${lastmod}</lastmod>
@@ -128,13 +128,13 @@ function updateSitemap() {
   </url>
 `;
         });
-        
+
         // Close sitemap tag
         sitemapContent += `</urlset>`;
-        
+
         // Write the updated sitemap XML to file
         fs.writeFileSync(sitemapXmlPath, sitemapContent);
-        
+
         console.log(`Sitemap updated successfully with ${articles.length + 1} URLs.`);
     } catch (error) {
         console.error('Error updating sitemap:', error);
