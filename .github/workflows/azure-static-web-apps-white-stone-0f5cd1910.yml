@@ -27,11 +27,16 @@ jobs:
                   node-version: "20" # Specify the Node.js version you want to use
                   cache: "npm" # Enable npm caching for faster builds
 
-            # Install dependencies and run build script
-            - name: Install and Build
+            # Install dependencies
+            - name: Install Dependencies
               run: |
-                  npm ci
-                  npm run build
+                  npm ci --include=dev
+                  # Verify shelljs is installed
+                  npm list shelljs
+
+            # Build project
+            - name: Build Project
+              run: npm run build
               env:
                   NODE_ENV: production
 
