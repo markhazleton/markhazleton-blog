@@ -129,21 +129,21 @@ Both RSS and sitemap files are automatically updated as part of the regular buil
 
 ### npm Scripts
 
--   `npm run build` builds the project - this builds assets, HTML, JS, and CSS into `docs`
--   `npm run build:assets` copies the files in the `src/assets/` directory into `docs`
--   `npm run build:pug` compiles the Pug located in the `src/pug/` directory into `docs`
--   `npm run build:scripts` brings the `src/js/scripts.js` file into `docs`
--   `npm run build:scss` compiles the SCSS files located in the `src/scss/` directory into `docs`
--   `npm run clean` deletes the `docs` directory to prepare for rebuilding the project
--   `npm run start:debug` runs the project in debug mode
--   `npm start` or `npm run start` runs the project, launches a live preview in your default browser, and watches for changes made to files in `src`
+- `npm run build` builds the project - this builds assets, HTML, JS, and CSS into `docs`
+- `npm run build:assets` copies the files in the `src/assets/` directory into `docs`
+- `npm run build:pug` compiles the Pug located in the `src/pug/` directory into `docs`
+- `npm run build:scripts` brings the `src/js/scripts.js` file into `docs`
+- `npm run build:scss` compiles the SCSS files located in the `src/scss/` directory into `docs`
+- `npm run clean` deletes the `docs` directory to prepare for rebuilding the project
+- `npm run start:debug` runs the project in debug mode
+- `npm start` or `npm run start` runs the project, launches a live preview in your default browser, and watches for changes made to files in `src`
 
 ### Simplified Development Scripts
 
 Two simplified scripts are available for local development if you encounter issues with the standard npm scripts:
 
--   `node simple-serve.js` - Uses browser-sync to serve the site with automatic reloading
--   `node http-server.js` - Uses http-server for a lightweight development server
+- `node simple-serve.js` - Uses browser-sync to serve the site with automatic reloading
+- `node http-server.js` - Uses http-server for a lightweight development server
 
 These scripts provide a simpler alternative to the standard build process and can be helpful for troubleshooting.
 
@@ -169,6 +169,7 @@ You must have npm installed in order to use this build environment.
 The site is automatically deployed to Azure Static Web Apps using GitHub Actions. The workflow is configured in `.github/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml`.
 
 The deployment process:
+
 1. Triggers on push to the main branch
 2. Uses the pre-built static files in the `docs/` directory
 3. Deploys them to Azure Static Web Apps

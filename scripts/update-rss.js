@@ -42,26 +42,26 @@ function escapeXml(text) {
  */
 function updateRssFeed() {
     console.log('Updating RSS feed...');
-    
+
     // Define file paths
     const srcPath = upath.resolve(__dirname, '../src');
     const articlesJsonPath = path.join(srcPath, 'articles.json');
     const rssXmlPath = path.join(srcPath, 'rss.xml');
-    
+
     // Load articles.json
     try {
         const articlesData = fs.readFileSync(articlesJsonPath, 'utf8');
         const articles = JSON.parse(articlesData);
-        
+
         // Sort articles by date (newest first)
         articles.sort((a, b) => {
             return new Date(b.lastmod) - new Date(a.lastmod);
         });
-        
+
         // Get current date for lastBuildDate
         const now = new Date();
         const buildDate = now.toUTCString();
-        
+
         // Start building the RSS XML content
         let rssContent = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -78,48 +78,48 @@ function updateRssFeed() {
       <link>https://markhazleton.com/</link>
     </image>
 `;
-        
+
         // Add items (limited to MAX_RSS_ITEMS)
         const itemsToInclude = articles.slice(0, MAX_RSS_ITEMS);
-        
+
         itemsToInclude.forEach(article => {
             const fullLink = `https://markhazleton.com/${article.slug}`;
             const pubDate = formatRssDate(article.lastmod);
             const title = escapeXml(article.name);
             const description = escapeXml(article.description);
             const category = article.Section ? escapeXml(article.Section) : '';
-            
+
             rssContent += `    <item>
       <title>${title}</title>
       <link>${fullLink}</link>
       <description>${description}</description>
       <pubDate>${pubDate}</pubDate>
       <guid isPermaLink="true">${fullLink}</guid>`;
-      
+
             // Add category if available
             if (category) {
                 rssContent += `
       <category>${category}</category>`;
             }
-            
+
             // Add optional content:encoded if content field is not null
             if (article.content) {
                 rssContent += `
       <content:encoded><![CDATA[${article.content}]]></content:encoded>`;
             }
-            
+
             rssContent += `
     </item>
 `;
         });
-        
+
         // Close RSS tags
         rssContent += `  </channel>
 </rss>`;
-        
+
         // Write the updated RSS XML to file
         fs.writeFileSync(rssXmlPath, rssContent);
-        
+
         console.log(`RSS feed updated successfully with ${itemsToInclude.length} articles.`);
     } catch (error) {
         console.error('Error updating RSS feed:', error);
