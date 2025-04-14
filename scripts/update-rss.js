@@ -9,7 +9,7 @@ const path = require('path');
 const upath = require('upath');
 
 // Number of items to include in the RSS feed
-const MAX_RSS_ITEMS = 30;
+const MAX_RSS_ITEMS = 500;
 
 /**
  * Formats a date string in RFC822 format required for RSS
