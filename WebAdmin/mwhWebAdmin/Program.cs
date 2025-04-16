@@ -40,7 +40,7 @@ builder.Services.AddSingleton<ArticleService>(provider =>
     var config = provider.GetRequiredService<IConfiguration>();
     var logger = provider.GetRequiredService<ILogger<ArticleService>>();
     var factory = provider.GetRequiredService<IHttpClientFactory>();
-    return new ArticleService(articlesPath, logger, config,factory);
+    return new ArticleService(articlesPath, logger, config, factory);
 });
 
 builder.Services.AddSingleton<ProjectService>(provider =>
