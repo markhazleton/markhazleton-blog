@@ -10,7 +10,5 @@ public class ArticlesModel(ArticleService articleService) : PageModel
     public void OnGet()
     {
         Articles = articleService.GetArticles();
-        articleService.GenerateSiteMap();
-        articleService.GenerateRSSFeed();
     }
 }

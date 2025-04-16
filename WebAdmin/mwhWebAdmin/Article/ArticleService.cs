@@ -144,7 +144,7 @@ namespace mwhWebAdmin.Article
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load articles.");
-                _articles = new List<ArticleModel>();
+                _articles = [];
             }
         }
 
@@ -175,7 +175,6 @@ namespace mwhWebAdmin.Article
                         _articles,
                         jsonSerializerOptions);
                     File.WriteAllText(_filePath, jsonContent);
-                    GenerateSiteMap();
                     _logger.LogInformation("Articles saved successfully.");
                 }
                 catch (Exception ex)
@@ -199,7 +198,7 @@ namespace mwhWebAdmin.Article
 
         internal List<string> GetKeywords()
         {
-            return new List<string>();
+            return [];
         }
 
         /// <summary>
@@ -517,7 +516,7 @@ namespace mwhWebAdmin.Article
         {
             lock (_lock)
             {
-                return new List<ArticleModel>(_articles); // Return a copy to avoid external modifications
+                return [.. _articles]; // Return a copy to avoid external modifications
             }
         }
 
