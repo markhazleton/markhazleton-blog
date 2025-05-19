@@ -52,7 +52,7 @@
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=20250513" />
+        <link rel="stylesheet" href="/css/styles.css?version=20250519" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -114,8 +114,19 @@
                     <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/FastEndpointApi" target="_blank" title="The full source code for the Fast Endpoints Demo is available on GitHub">The full source code for the Fast Endpoints Demo is available on GitHub</a></p>
                     <h1>Taking FastEndpoints for a Test Drive</h1>
                     <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card mb-4 border-primary">
+                                <div class="card-header bg-primary text-white d-flex align-items-center">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <span>What is FastEndpoints?</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance and productivity. By embracing the REPR (Request-Endpoint-Response) design pattern, it offers an alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.</p>
+                                    <p>This guide introduces you to the FastEndpoints framework through a practical Person Management demo application. By walking through this project, you'll discover how FastEndpoints can help you build clean, maintainable APIs with minimal boilerplate code.</p>
+                                </div>
+                            </div>
+                        </div>
                         <h2>Introduction</h2>
-                        <p>FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance and productivity. By embracing the REPR (Request-Endpoint-Response) design pattern, it offers an alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.</p>
                         <h2>Minimal APIs</h2>
                         <p>Minimal APIs in .NET have marked a significant shift in the way developers approach API development within the ASP.NET Core framework. These APIs offer a streamlined, more efficient method for building HTTP APIs, requiring minimal code and configuration while still allowing for the fully functioning REST endpoints necessary for modern web applications.</p>
                         <p>Introduced in .NET 6, Minimal APIs were designed to reduce the overhead and boilerplate code traditionally associated with setting up new API endpoints in ASP.NET Core. By simplifying the API development process, they enable developers to focus more on the business logic rather than the scaffolding required to set up controllers and actions in a typical MVC application.</p>
@@ -158,11 +169,29 @@
                         <p>Starting with a basic setup, I added FastEndpoints to a new .NET project and configured the necessary services in `Program.cs`. The ease of getting started was impressive, immediately making the development process smoother.</p>
                         <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">FastEndpointApi<span class="token punctuation">.</span>services<span class="token punctuation">.</span>person</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">FastEndpoints</span><span class="token punctuation">;</span>
+
 <span class="token class-name"><span class="token keyword">var</span></span> builder <span class="token operator">=</span> WebApplication<span class="token punctuation">.</span><span class="token function">CreateBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
 builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddFastEndpoints</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddEndpointsApiExplorer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">SwaggerDocument</span><span class="token punctuation">(</span>o <span class="token operator">=></span>
+<span class="token punctuation">{</span>
+  o<span class="token punctuation">.</span>ShortSchemaNames <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  o<span class="token punctuation">.</span>DocumentSettings <span class="token operator">=</span> s <span class="token operator">=></span>
+  <span class="token punctuation">{</span>
+    s<span class="token punctuation">.</span>DocumentName <span class="token operator">=</span> <span class="token string">"v1"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span>AddSingleton<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>IPersonService<span class="token punctuation">,</span> PersonService<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
 <span class="token class-name"><span class="token keyword">var</span></span> app <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-app<span class="token punctuation">.</span><span class="token function">UseFastEndpoints</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+app<span class="token punctuation">.</span><span class="token function">UseFastEndpoints</span><span class="token punctuation">(</span>c <span class="token operator">=></span>
+<span class="token punctuation">{</span>
+  c<span class="token punctuation">.</span>Endpoints<span class="token punctuation">.</span>ShortNames <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">UseSwaggerGen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">UseSwaggerUi</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
 app<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
                         <h2>Creating the Person Service</h2>
@@ -227,6 +256,91 @@ app<span class="token punctuation">.</span><span class="token function">Run</spa
 </code></pre>
                         <h2>Next Steps and Conclusion</h2>
                         <p>The next steps was to finish out the CRUD operations for the Person entity. I created the Read, Update, and Delete endpoints, each following the same pattern as the Create endpoint. The result was a clean, efficient API that showcased the power of FastEndpoints and the REPR pattern.</p>
+                        <div class="card mb-4 border-success">
+                            <div class="card-header bg-success text-white">
+                                <i class="bi bi-key me-2"></i>
+                                <span>Key Features of the Demo Project</span>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check2-square me-2 text-success"></i>
+                                        <strong>CRUD Operations:</strong>
+                                        <span>Complete set of endpoints for creating, reading, updating, and deleting Person entities</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-database me-2 text-success"></i>
+                                        <strong>In-Memory Data Store:</strong>
+                                        <span>A simple in-memory collection to demonstrate data persistence without database complexity</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-layers me-2 text-success"></i>
+                                        <strong>Person Service Layer:</strong>
+                                        <span>A clean abstraction of business logic through service interfaces and implementations</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-arrow-left-right me-2 text-success"></i>
+                                        <strong>Smart Data Mapping:</strong>
+                                        <span>Built-in mapping capabilities for transforming between request models, domain entities, and response DTOs</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-diagram-3 me-2 text-success"></i>
+                                        <strong>Dependency Injection:</strong>
+                                        <span>Practical examples of how DI is used in FastEndpoints to provide services where needed</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-link-45deg me-2 text-success"></i>
+                                        <strong>HATEOAS Links:</strong>
+                                        <span>Implementation of hypermedia links in API responses for improved client navigation</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-file-code me-2 text-success"></i>
+                                        <strong>Interactive Documentation:</strong>
+                                        <span>Integration with Swagger/OpenAPI for easy API exploration and testing</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h3>Running the Project</h3>
+                        <p>Ready to dive in? Here's how to get the project running on your machine:</p>
+                        <div class="card mb-4">
+                            <div class="card-header">Prerequisites</div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>
+                                        <strong>.NET 9.0 SDK</strong>
+                                        <span>or later installed on your machine</span>
+                                    </li>
+                                    <li>
+                                        <strong>An IDE of your choice:</strong>
+                                        <span>Visual Studio, VS Code, or Rider</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">Steps to Run the Project</div>
+                            <div class="card-body">
+                                <ol>
+                                    <li>
+                                        Clone the repository to your local machine:
+                                        <pre class="language-bash bg-dark text-light p-2 mt-2 mb-2"><code>git clone https://github.com/MarkHazleton/FastEndpointDemo.git
+cd FastEndpointDemo</code></pre>
+                                    </li>
+                                    <li>
+                                        Build and run the project:
+                                        <pre class="language-bash bg-dark text-light p-2 mt-2 mb-2"><code>cd FastEndpointApi
+dotnet build
+dotnet run</code></pre>
+                                    </li>
+                                    <li>
+                                        Open your browser and navigate to
+                                        <code>https://localhost:7000/swagger</code>
+                                        <span>to explore the API using the interactive Swagger UI.</span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
                         <p>I added support for Swagger, enabling interactive documentation for the API.</p>
                         <p>
                             I created a GitHub action to build and deploy the API to and Azure Web App on each push to the main branch. Here is the link to FastEndpoints Demo on Azure:
@@ -236,72 +350,288 @@ app<span class="token punctuation">.</span><span class="token function">Run</spa
                             </a>
                         </p>
                         <p>Taking FastEndpoints for a test drive was a fun project to quickly get an understanding of the Fast Endpoint libary. Its adherence to the REPR pattern, combined with ASP.NET's robust ecosystem, presents a compelling approach to API development. Whether you're building a complex system or a simple microservice, FastEndpoints offers the tools and flexibility needed to deliver high-quality APIs efficiently.</p>
-                        <p>FastEndpoints shines in its simplicity and effectiveness. The project we embarked on served as a practical demonstration of how quickly one can get up and running with high-performing APIs in .NET. For developers looking to streamline their API development process, taking FastEndpoints for a test drive might just be the answer.</p>
-                    </div>
-                    <div class="container">
-                        <h5>References</h5>
+                        <p>FastEndpoints shines in its simplicity and effectiveness. The project we embarked on served as a practical demonstration of how quickly one can get up and running with high-performing APIs in .NET. For developers looking to streamline their API development process, taking FastEndpoints for a test drive might just be the answer..container</p>
+                        <h2 class="mt-4">Project Structure</h2>
+                        <p>The demo project follows a clean, organized structure that aligns with the REPR pattern. This structure promotes separation of concerns, with each endpoint having its own dedicated folder containing all related files. This organization makes it easy to navigate and maintain the codebase as it grows.</p>
+                        <div class="card mb-4">
+                            <div class="card-header">File Organization</div>
+                            <div class="card-body">
+                                <pre class="language-text bg-light p-3 border"><code>FastEndpointApi/
+├── Program.cs                       # Application entry point and configuration
+├── endpoints/                       # All API endpoints
+│   ├── LinkResource.cs              # HATEOAS link representation
+│   ├── PersonResponse.cs            # Shared response DTO
+│   ├── create/                      # Create person endpoint
+│   │   ├── CreatePersonEndpoint.cs
+│   │   ├── CreatePersonMapper.cs
+│   │   └── CreatePersonRequest.cs
+│   ├── read/                        # Read person endpoint(s)
+│   │   ├── ReadPersonEndpoint.cs
+│   │   ├── ReadPersonMapper.cs
+│   │   ├── ReadPersonRequest.cs
+│   │   └── ReadPersonsEndpoint.cs
+│   ├── update/                      # Update person endpoint
+│   │   ├── UpdatePersonEndpoint.cs
+│   │   └── UpdatePersonRequest.cs
+│   └── delete/                      # Delete person endpoint
+│       ├── DeletePersonEndpoint.cs
+│       └── DeletePersonRequest.cs
+└── services/                        # Business logic layer
+  ├── IPersonService.cs            # Service interface
+  ├── PersonEntity.cs              # Domain model
+  └── PersonService.cs             # Service implementation
+</code></pre>
+                            </div>
+                        </div>
+                        <h2 class="mt-4">API Endpoints</h2>
+                        <p>Let's explore the available endpoints in our Person Management API. When you run the application and navigate to the Swagger UI, you'll be able to test each of these endpoints interactively.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Endpoint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="badge bg-success">POST</span></td>
+                                        <td><code>/person/create</code></td>
+                                        <td>Create a new person</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-info">GET</span></td>
+                                        <td><code>/person/{id}</code></td>
+                                        <td>Get a person by ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-info">GET</span></td>
+                                        <td><code>/persons</code></td>
+                                        <td>Get all persons</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-warning">PUT</span></td>
+                                        <td><code>/person/{id}</code></td>
+                                        <td>Update a person</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-danger">DELETE</span></td>
+                                        <td><code>/person/{id}</code></td>
+                                        <td>Delete a person</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h2 class="mt-4">Advanced Usage</h2>
+                        <h3>HATEOAS Implementation</h3>
+                        <p>HATEOAS (Hypermedia as the Engine of Application State) improves API discoverability by including relevant links in responses. This demo shows how easy it is to implement with FastEndpoints:</p>
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// From ReadPersonEndpoint.cs</span>
+Response <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PersonResponse</span>
+<span class="token punctuation">{</span>
+  FullName <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">person<span class="token punctuation">.</span>FirstName</span><span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">person<span class="token punctuation">.</span>LastName</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">,</span>
+  IsOver18 <span class="token operator">=</span> person<span class="token punctuation">.</span>Age <span class="token operator">></span> <span class="token number">18</span><span class="token punctuation">,</span>
+  PersonId <span class="token operator">=</span> person<span class="token punctuation">.</span>Id<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  Links <span class="token operator">=</span>
+    <span class="token punctuation">[</span>
+      <span class="token keyword">new</span> <span class="token constructor-invocation class-name">LinkResource</span> <span class="token punctuation">{</span> Rel <span class="token operator">=</span> <span class="token string">"self"</span><span class="token punctuation">,</span> Href <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">baseUrl</span><span class="token punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">person<span class="token punctuation">.</span>Id</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">,</span> Method <span class="token operator">=</span> <span class="token string">"GET"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token keyword">new</span> <span class="token constructor-invocation class-name">LinkResource</span> <span class="token punctuation">{</span> Rel <span class="token operator">=</span> <span class="token string">"delete"</span><span class="token punctuation">,</span> Href <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">baseUrl</span><span class="token punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">person<span class="token punctuation">.</span>Id</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">,</span> Method <span class="token operator">=</span> <span class="token string">"DELETE"</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+                        <p>By including these links, clients can dynamically discover available actions rather than having to know them in advance. This makes your API more self-documenting and flexible.</p>
+                        <h3>Error Handling</h3>
+                        <p>Well-designed APIs need robust error handling. This demo project implements a global exception handler that provides consistent, client-friendly error responses:</p>
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// From Program.cs</span>
+app<span class="token punctuation">.</span><span class="token function">UseExceptionHandler</span><span class="token punctuation">(</span>errorApp <span class="token operator">=></span>
+<span class="token punctuation">{</span>
+  errorApp<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token keyword">async</span> context <span class="token operator">=></span>
+  <span class="token punctuation">{</span>
+    context<span class="token punctuation">.</span>Response<span class="token punctuation">.</span>StatusCode <span class="token operator">=</span> <span class="token number">500</span><span class="token punctuation">;</span>
+    context<span class="token punctuation">.</span>Response<span class="token punctuation">.</span>ContentType <span class="token operator">=</span> <span class="token string">"application/json"</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> error <span class="token operator">=</span> context<span class="token punctuation">.</span>Features<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Get</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IExceptionHandlerFeature<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">?.</span>Error<span class="token punctuation">;</span>
+    <span class="token keyword">await</span> context<span class="token punctuation">.</span>Response<span class="token punctuation">.</span><span class="token function">WriteAsJsonAsync</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token punctuation">{</span> error <span class="token operator">=</span> error<span class="token punctuation">?.</span>Message <span class="token operator">??</span> <span class="token string">"An error occurred."</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                        <p>This approach ensures that even unexpected exceptions are caught and returned in a consistent JSON format, improving the API's reliability and developer experience.</p>
+                        <h2 class="mt-4">Why Use FastEndpoints?</h2>
+                        <div class="card mb-4 border-primary">
+                            <div class="card-header bg-primary text-white">Advantages over MVC Controllers and Minimal APIs</div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <strong>Clean Architecture:</strong>
+                                        <span>Promotes the REPR pattern for organized, maintainable code</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <strong>Performance:</strong>
+                                        <span>Comparable to Minimal APIs and faster than MVC Controllers</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <strong>Reduced Boilerplate:</strong>
+                                        <span>Simplified endpoint creation with minimal setup code</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <strong>Auto-Discovery:</strong>
+                                        <span>Automatic registration of endpoints during application startup</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <strong>Built-in Validation:</strong>
+                                        <span>Seamless integration with FluentValidation</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <strong>Security Support:</strong>
+                                        <span>Easy implementation of authentication and authorization</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <strong>Swagger Integration:</strong>
+                                        <span>Simple API documentation with the FastEndPoints.Swagger package</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h2 class="mt-4">Glossary of Terms</h2>
+                        <p>New to RESTful APIs or .NET development? Here's a handy glossary of terms used in this project:</p>
+                        <div class="accordion" id="glossaryAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">REPR Pattern</button></h2>
+                                <div class="accordion-collapse collapse" id="collapseOne">
+                                    <div class="accordion-body"><p>Request-Endpoint-Response Pattern - An architectural approach where each endpoint has its own request model, handler, and response model, promoting separation of concerns.</p></div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">DTO</button></h2>
+                                <div class="accordion-collapse collapse" id="collapseTwo">
+                                    <div class="accordion-body"><p>Data Transfer Object - A simple object used to transfer data between processes or layers of an application.</p></div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">REST</button></h2>
+                                <div class="accordion-collapse collapse" id="collapseThree">
+                                    <div class="accordion-body"><p>Representational State Transfer - An architectural style for designing networked applications, emphasizing stateless operations and standard HTTP methods.</p></div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">HATEOAS</button></h2>
+                                <div class="accordion-collapse collapse" id="collapseFour">
+                                    <div class="accordion-body"><p>Hypermedia as the Engine of Application State - A REST constraint that provides hyperlinks in API responses, allowing clients to dynamically navigate the API.</p></div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">Swagger/OpenAPI</button></h2>
+                                <div class="accordion-collapse collapse" id="collapseFive">
+                                    <div class="accordion-body"><p>A specification and set of tools for documenting and exploring RESTful APIs.</p></div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix">Dependency Injection (DI)</button></h2>
+                                <div class="accordion-collapse collapse" id="collapseSix">
+                                    <div class="accordion-body"><p>A technique where one object supplies the dependencies of another object, helping to achieve loose coupling between classes.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="mt-5">References</h5>
                         <p>I could not have completed this project without the help of many teachers and mentors both in person and online. Here are some of the resources I used to complete this project.</p>
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="https://fast-endpoints.com/" target="_blank">https://fast-endpoints.com/</a>
-                                <span>The fast-endpoints.com project website</span>
+                                <a href="https://fast-endpoints.com/" target="_blank">
+                                    <i class="bi bi-link me-2"></i>
+                                    https://fast-endpoints.com/
+                                </a>
+                                <span class="ms-2">The fast-endpoints.com project website</span>
                             </li>
                             <li class="list-group-item">
-                                <a href="https://github.com/markhazleton/FastEndpointApi" target="_blank">https://github.com/markhazleton/FastEndpointApi</a>
-                                <span>The full source code for the Fast Endpoints Demo is available on GitHub</span>
+                                <a href="https://github.com/markhazleton/FastEndpointApi" target="_blank">
+                                    <i class="bi bi-github me-2"></i>
+                                    https://github.com/markhazleton/FastEndpointApi
+                                </a>
+                                <span class="ms-2">The full source code for the Fast Endpoints Demo is available on GitHub</span>
                             </li>
                             <li class="list-group-item">
-                                <a href="https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/" target="_blank">https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/</a>
-                                <span>MVC Controllers are Dinosaurs. Embrace API Endpoints an opinion piece by Steve Smith (aka Ardalis)</span>
+                                <a href="https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/" target="_blank">
+                                    <i class="bi bi-file-text me-2"></i>
+                                    https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/
+                                </a>
+                                <span class="ms-2">MVC Controllers are Dinosaurs. Embrace API Endpoints an opinion piece by Steve Smith (aka Ardalis)</span>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="https://github.com/FastEndpoints/FastEndpoints" target="_blank">
+                                    <i class="bi bi-github me-2"></i>
+                                    https://github.com/FastEndpoints/FastEndpoints
+                                </a>
+                                <span class="ms-2">FastEndPoints GitHub Repository</span>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="https://www.nuget.org/packages/FastEndpoints/" target="_blank">
+                                    <i class="bi bi-box-seam me-2"></i>
+                                    https://www.nuget.org/packages/FastEndpoints/
+                                </a>
+                                <span class="ms-2">NuGet Package</span>
                             </li>
                         </ul>
-                    </div>
-                </div>
-                <div class="painteddesert-section-content">
-                    <div class="card card-primarily">
-                        <div class="card-header">GUIDs vs Auto-Incrementing Integers</div>
-                        <div class="card-body">
-                            <p>Choosing between GUIDs and auto-incrementing integers for primary keys is a common decision in database design. While both have their advantages and drawbacks, the choice often depends on the specific requirements of the application. For scenarios where global uniqueness is essential, such as distributed systems or disconnected data creation, GUIDs offer a robust solution. On the other hand, auto-incrementing integers provide better performance and simplicity, making them suitable for large databases with predictable access patterns. When faced with this decision, developers should carefully evaluate the trade-offs and select the option that best aligns with their project's needs.</p>
-                            <p>For the Person entity, I opted to use GUIDs as the primary key. This choice was driven by the need of keeping the active items in memory and not wanting to relay on a system to create auto-incremented integers.</p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <strong>Using GUID</strong>
-                                    <dl>
-                                        <dt>Pros</dt>
-                                        <dd>
-                                            <ul>
-                                                <li>They are globally unique without the need for a centralized authority to manage key allocation.</li>
-                                                <li>They are useful in scenarios where data needs to be created offline and then synchronized with a central database, as they eliminate the risk of key collisions.</li>
-                                            </ul>
-                                        </dd>
-                                        <dt>Cons</dt>
-                                        <dd>
-                                            <ul>
-                                                <li>Larger size may impact database performance and increase index size.</li>
-                                                <li>Alphanumeric nature can complicate debugging and data analysis.</li>
-                                            </ul>
-                                        </dd>
-                                    </dl>
+                        <div class="card card-primarily">
+                            <div class="card-header">GUIDs vs Auto-Incrementing Integers</div>
+                            <div class="card-body">
+                                <p>Choosing between GUIDs and auto-incrementing integers for primary keys is a common decision in database design. While both have their advantages and drawbacks, the choice often depends on the specific requirements of the application. For scenarios where global uniqueness is essential, such as distributed systems or disconnected data creation, GUIDs offer a robust solution. On the other hand, auto-incrementing integers provide better performance and simplicity, making them suitable for large databases with predictable access patterns. When faced with this decision, developers should carefully evaluate the trade-offs and select the option that best aligns with their project's needs.</p>
+                                <p>For the Person entity, I opted to use GUIDs as the primary key. This choice was driven by the need of keeping the active items in memory and not wanting to relay on a system to create auto-incremented integers.</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>Using GUID</strong>
+                                        <dl>
+                                            <dt>Pros</dt>
+                                            <dd>
+                                                <ul>
+                                                    <li>They are globally unique without the need for a centralized authority to manage key allocation.</li>
+                                                    <li>They are useful in scenarios where data needs to be created offline and then synchronized with a central database, as they eliminate the risk of key collisions.</li>
+                                                </ul>
+                                            </dd>
+                                            <dt>Cons</dt>
+                                            <dd>
+                                                <ul>
+                                                    <li>Larger size may impact database performance and increase index size.</li>
+                                                    <li>Alphanumeric nature can complicate debugging and data analysis.</li>
+                                                </ul>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Using Auto-Incrementing Integers</strong>
+                                        <dl>
+                                            <dt>Pros</dt>
+                                            <dd>
+                                                <ul>
+                                                    <li>Better performance and smaller index size, beneficial for large databases.</li>
+                                                    <li>Simplicity and predictability can enhance user experience.</li>
+                                                </ul>
+                                            </dd>
+                                            <dt>Cons</dt>
+                                            <dd>
+                                                <ul>
+                                                    <li>Potential security risks, as sequential patterns can be exploited.</li>
+                                                    <li>Can complicate data integration in distributed database environments.</li>
+                                                </ul>
+                                            </dd>
+                                        </dl>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <strong>Using Auto-Incrementing Integers</strong>
-                                    <dl>
-                                        <dt>Pros</dt>
-                                        <dd>
-                                            <ul>
-                                                <li>Better performance and smaller index size, beneficial for large databases.</li>
-                                                <li>Simplicity and predictability can enhance user experience.</li>
-                                            </ul>
-                                        </dd>
-                                        <dt>Cons</dt>
-                                        <dd>
-                                            <ul>
-                                                <li>Potential security risks, as sequential patterns can be exploited.</li>
-                                                <li>Can complicate data integration in distributed database environments.</li>
-                                            </ul>
-                                        </dd>
-                                    </dl>
-                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <p>The choice between GUIDs and auto-incrementing integers is not a one-size-fits-all decision. It requires careful consideration of the specific needs and constraints of the application at hand.</p>
+                                <p>For the FastEndpoints demo, I chose to use GUIDs for the Person entity to ensure global uniqueness and avoid potential key collisions in a distributed environment.</p>
+                                <p>
+                                    For more information on this topic, check out this stackoverflow thread (now closed)
+                                    <a href="https://stackoverflow.com/questions/50298740/primary-key-type-guid-or-int/" target="_blank">https://stackoverflow.com/questions/50298740/primary-key-type-guid-or-int/</a>
+                                    or the codeing horror article
+                                    <a href="https://blog.codinghorror.com/primary-keys-ids-versus-guids/" target="_blank">https://blog.codinghorror.com/primary-keys-ids-versus-guids/</a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -387,6 +717,18 @@ app<span class="token punctuation">.</span><span class="token function">Run</spa
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <i class="bi bi-arrow-right-circle-fill me-2"></i>
+                                            <a class="text-white" href="/nuget-packages-pros-cons.html" title="The Pros and Cons of Using NuGet Packages in Your Projects">NuGet Package Pros and Cons</a>
+                                        </h5>
+                                        <p class="card-text text-white">The Pros and Cons of Using NuGet Packages in Your Projects</p>
+                                    </div>
+                                    <div class="card-footer"></div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100 bg-dark text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
                                             <a class="text-white" href="/decorator-pattern-http-client.html" title="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.">The Decorator Pattern with Http Client</a>
                                         </h5>
                                         <p class="card-text text-white">Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.</p>
@@ -399,21 +741,9 @@ app<span class="token punctuation">.</span><span class="token function">Run</spa
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" title="In the ever-evolving landscape of web development, the surge in popularity of static websites has been nothing short of remarkable. These sites, known for their speed, security, and simplicity, are increasingly becoming the go-to for developers and businesses alike. My journey with static websites has been transformative, leading me to embrace cloud-based solutions for hosting. Among these, Azure Static Web Apps stands out as a beacon of efficiency and innovation.">Embracing Azure Static Web Apps for Static Site Hosting</a>
+                                            <a class="text-white" href="/articles/wichita-sewer-site-creation.html" title="Discover the journey behind the creation of the Wichita Sewer and Drain website, from initial planning to final launch, and the lessons learned along the way.">From Concept To Live: The Unveiling Of The WichitaSewer.com Website</a>
                                         </h5>
-                                        <p class="card-text text-white">In the ever-evolving landscape of web development, the surge in popularity of static websites has been nothing short of remarkable. These sites, known for their speed, security, and simplicity, are increasingly becoming the go-to for developers and businesses alike. My journey with static websites has been transformative, leading me to embrace cloud-based solutions for hosting. Among these, Azure Static Web Apps stands out as a beacon of efficiency and innovation.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/adding-weather-component-a-typescript-learning-journey.html" title="Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling.">Adding Weather Component: A TypeScript Learning Journey</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling.</p>
+                                        <p class="card-text text-white">Discover the journey behind the creation of the Wichita Sewer and Drain website, from initial planning to final launch, and the lessons learned along the way.</p>
                                     </div>
                                     <div class="card-footer"></div>
                                 </div>
