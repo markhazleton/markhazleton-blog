@@ -27,11 +27,21 @@ block layout-content
         a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/FastEndpointApi' target="_blank" title='The full source code for the Fast Endpoints Demo is available on GitHub') The full source code for the Fast Endpoints Demo is available on GitHub
       h1 Taking FastEndpoints for a Test Drive
       .row.justify-content-center
+        .col-12
+          .card.mb-4.border-primary
+            .card-header.bg-primary.text-white.d-flex.align-items-center
+              i.bi.bi-info-circle.me-2
+              span What is FastEndpoints?
+            .card-body
+              p
+                | FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance
+                | and productivity. By embracing the REPR (Request-Endpoint-Response) design pattern, it offers an
+                | alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.
+              p.
+                This guide introduces you to the FastEndpoints framework through a practical Person Management demo application.
+                By walking through this project, you'll discover how FastEndpoints can help you build clean, maintainable APIs
+                with minimal boilerplate code.
         h2 Introduction
-        p
-          | FastEndpoints is an ASP.NET library designed to minimize boilerplate while maximizing performance
-          | and productivity. By embracing the REPR (Request-Endpoint-Response) design pattern, it offers an
-          | alternative to traditional MVC setups and Minimal APIs, focusing on clarity and efficiency.
         h2 Minimal APIs
         p.
           Minimal APIs in .NET have marked a significant shift in the way developers approach API development within the ASP.NET Core framework.
@@ -132,11 +142,29 @@ block layout-content
           code.language-csharp.
             using FastEndpointApi.services.person;
             using FastEndpoints;
+
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddFastEndpoints();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.SwaggerDocument(o =>
+            {
+              o.ShortSchemaNames = true;
+              o.DocumentSettings = s =>
+              {
+                s.DocumentName = "v1";
+              };
+            });
             builder.Services.AddSingleton&lt;IPersonService, PersonService&gt;();
+
             var app = builder.Build();
-            app.UseFastEndpoints();
+
+            app.UseFastEndpoints(c =>
+            {
+              c.Endpoints.ShortNames = true;
+            });
+            app.UseSwaggerGen();
+            app.UseSwaggerUi();
+
             app.Run();
 
         h2 Creating the Person Service
@@ -227,8 +255,78 @@ block layout-content
           The next steps was to finish out the CRUD operations for the Person entity.
           I created the Read, Update, and Delete endpoints, each following the same pattern as the Create endpoint.
           The result was a clean, efficient API that showcased the power of FastEndpoints and the REPR pattern.
+
+        .card.mb-4.border-success
+          .card-header.bg-success.text-white
+            i.bi.bi-key.me-2
+            span Key Features of the Demo Project
+          .card-body
+            ul.list-group.list-group-flush
+              li.list-group-item
+                i.bi.bi-check2-square.me-2.text-success
+                strong CRUD Operations:
+                span Complete set of endpoints for creating, reading, updating, and deleting Person entities
+              li.list-group-item
+                i.bi.bi-database.me-2.text-success
+                strong In-Memory Data Store:
+                span A simple in-memory collection to demonstrate data persistence without database complexity
+              li.list-group-item
+                i.bi.bi-layers.me-2.text-success
+                strong Person Service Layer:
+                span A clean abstraction of business logic through service interfaces and implementations
+              li.list-group-item
+                i.bi.bi-arrow-left-right.me-2.text-success
+                strong Smart Data Mapping:
+                span Built-in mapping capabilities for transforming between request models, domain entities, and response DTOs
+              li.list-group-item
+                i.bi.bi-diagram-3.me-2.text-success
+                strong Dependency Injection:
+                span Practical examples of how DI is used in FastEndpoints to provide services where needed
+              li.list-group-item
+                i.bi.bi-link-45deg.me-2.text-success
+                strong HATEOAS Links:
+                span Implementation of hypermedia links in API responses for improved client navigation
+              li.list-group-item
+                i.bi.bi-file-code.me-2.text-success
+                strong Interactive Documentation:
+                span Integration with Swagger/OpenAPI for easy API exploration and testing
+
+        h3 Running the Project
         p.
-          I  added support for Swagger, enabling interactive documentation for the API.
+          Ready to dive in? Here's how to get the project running on your machine:
+
+        .card.mb-4
+          .card-header Prerequisites
+          .card-body
+            ul
+              li
+                strong .NET 9.0 SDK
+                span or later installed on your machine
+              li
+                strong An IDE of your choice:
+                span Visual Studio, VS Code, or Rider
+
+        .card.mb-4
+          .card-header Steps to Run the Project
+          .card-body
+            ol
+              li Clone the repository to your local machine:
+                pre.language-bash.bg-dark.text-light.p-2.mt-2.mb-2
+                  code.
+                    git clone https://github.com/MarkHazleton/FastEndpointDemo.git
+                    cd FastEndpointDemo
+              li Build and run the project:
+                pre.language-bash.bg-dark.text-light.p-2.mt-2.mb-2
+                  code.
+                    cd FastEndpointApi
+                    dotnet build
+                    dotnet run
+              li Open your browser and navigate to
+                code https://localhost:7000/swagger
+                span  to explore the API using the interactive Swagger UI.
+
+        p.
+          I added support for Swagger, enabling interactive documentation for the API.
         p I created a GitHub action to build and deploy the API to and Azure Web App on each push to the main branch. Here is the link to FastEndpoints Demo on Azure:
           a(href='https://fastendpointsdemo.azurewebsites.net/swagger/index.html#/Api' target='_blank' rel='noopener noreferrer') https://fastendpointsdemo.azurewebsites.net
             img.img-fluid.d-block.w-90.rounded.border.border-1.border-dark(src='/assets/img/MarkHazleton-FastEndpointsDemo-PersonAPI.png' alt='FastEndpoints Demo Home Page')
@@ -241,64 +339,294 @@ block layout-content
           FastEndpoints shines in its simplicity and effectiveness. The project we embarked on
           served as a practical demonstration of how quickly one can get up and running with
           high-performing APIs in .NET. For developers looking to streamline their API development
-          process, taking FastEndpoints for a test drive might just be the answer.
+          process, taking FastEndpoints for a test drive might just be the answer..container
+        h2.mt-4 Project Structure
+        p.
+          The demo project follows a clean, organized structure that aligns with the REPR pattern.
+          This structure promotes separation of concerns, with each endpoint having its own dedicated folder
+          containing all related files. This organization makes it easy to navigate and maintain the codebase as it grows.
+        .card.mb-4
+          .card-header File Organization
+          .card-body
+            pre.language-text.bg-light.p-3.border
+              code.
+                FastEndpointApi/
+                ├── Program.cs                       # Application entry point and configuration
+                ├── endpoints/                       # All API endpoints
+                │   ├── LinkResource.cs              # HATEOAS link representation
+                │   ├── PersonResponse.cs            # Shared response DTO
+                │   ├── create/                      # Create person endpoint
+                │   │   ├── CreatePersonEndpoint.cs
+                │   │   ├── CreatePersonMapper.cs
+                │   │   └── CreatePersonRequest.cs
+                │   ├── read/                        # Read person endpoint(s)
+                │   │   ├── ReadPersonEndpoint.cs
+                │   │   ├── ReadPersonMapper.cs
+                │   │   ├── ReadPersonRequest.cs
+                │   │   └── ReadPersonsEndpoint.cs
+                │   ├── update/                      # Update person endpoint
+                │   │   ├── UpdatePersonEndpoint.cs
+                │   │   └── UpdatePersonRequest.cs
+                │   └── delete/                      # Delete person endpoint
+                │       ├── DeletePersonEndpoint.cs
+                │       └── DeletePersonRequest.cs
+                └── services/                        # Business logic layer
+                  ├── IPersonService.cs            # Service interface
+                  ├── PersonEntity.cs              # Domain model
+                  └── PersonService.cs             # Service implementation
 
-      .container
-        h5 References
+        h2.mt-4 API Endpoints
+        p.
+          Let's explore the available endpoints in our Person Management API. When you run the application
+          and navigate to the Swagger UI, you'll be able to test each of these endpoints interactively.
+        .table-responsive
+          table.table.table-striped.table-bordered
+            thead.table-primary
+              tr
+                th Method
+                th Endpoint
+                th Description
+            tbody
+              tr
+                td
+                  span.badge.bg-success POST
+                td
+                  code /person/create
+                td Create a new person
+              tr
+                td
+                  span.badge.bg-info GET
+                td
+                  code /person/{id}
+                td Get a person by ID
+              tr
+                td
+                  span.badge.bg-info GET
+                td
+                  code /persons
+                td Get all persons
+              tr
+                td
+                  span.badge.bg-warning PUT
+                td
+                  code /person/{id}
+                td Update a person
+              tr
+                td
+                  span.badge.bg-danger DELETE
+                td
+                  code /person/{id}
+                td Delete a person
+
+        h2.mt-4 Advanced Usage
+
+        h3 HATEOAS Implementation
+        p.
+          HATEOAS (Hypermedia as the Engine of Application State) improves API discoverability by including relevant links
+          in responses. This demo shows how easy it is to implement with FastEndpoints:
+        pre.language-csharp
+          code.language-csharp.
+            // From ReadPersonEndpoint.cs
+            Response = new PersonResponse
+            {
+              FullName = $"{person.FirstName} {person.LastName}",
+              IsOver18 = person.Age > 18,
+              PersonId = person.Id.ToString(),
+              Links =
+                [
+                  new LinkResource { Rel = "self", Href = $"{baseUrl}/{person.Id}", Method = "GET" },
+                  new LinkResource { Rel = "delete", Href = $"{baseUrl}/{person.Id}", Method = "DELETE" }
+                ]
+            };
+
+        p.
+          By including these links, clients can dynamically discover available actions rather than having to know
+          them in advance. This makes your API more self-documenting and flexible.
+
+        h3 Error Handling
+        p.
+          Well-designed APIs need robust error handling. This demo project implements a global exception handler that provides
+          consistent, client-friendly error responses:
+
+        pre.language-csharp
+          code.language-csharp.
+            // From Program.cs
+            app.UseExceptionHandler(errorApp =>
+            {
+              errorApp.Run(async context =>
+              {
+                context.Response.StatusCode = 500;
+                context.Response.ContentType = "application/json";
+                var error = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+                await context.Response.WriteAsJsonAsync(new { error = error?.Message ?? "An error occurred." });
+              });
+            });
+
+        p.
+          This approach ensures that even unexpected exceptions are caught and returned in a consistent JSON format, improving
+          the API's reliability and developer experience.
+
+        h2.mt-4 Why Use FastEndpoints?
+        .card.mb-4.border-primary
+          .card-header.bg-primary.text-white Advantages over MVC Controllers and Minimal APIs
+          .card-body
+            ul.list-group.list-group-flush
+              li.list-group-item
+                i.bi.bi-check-circle-fill.text-success.me-2
+                strong Clean Architecture:
+                span Promotes the REPR pattern for organized, maintainable code
+              li.list-group-item
+                i.bi.bi-check-circle-fill.text-success.me-2
+                strong Performance:
+                span Comparable to Minimal APIs and faster than MVC Controllers
+              li.list-group-item
+                i.bi.bi-check-circle-fill.text-success.me-2
+                strong Reduced Boilerplate:
+                span Simplified endpoint creation with minimal setup code
+              li.list-group-item
+                i.bi.bi-check-circle-fill.text-success.me-2
+                strong Auto-Discovery:
+                span Automatic registration of endpoints during application startup
+              li.list-group-item
+                i.bi.bi-check-circle-fill.text-success.me-2
+                strong Built-in Validation:
+                span Seamless integration with FluentValidation
+              li.list-group-item
+                i.bi.bi-check-circle-fill.text-success.me-2
+                strong Security Support:
+                span Easy implementation of authentication and authorization
+              li.list-group-item
+                i.bi.bi-check-circle-fill.text-success.me-2
+                strong Swagger Integration:
+                span Simple API documentation with the FastEndPoints.Swagger package
+
+        h2.mt-4 Glossary of Terms
+        p.
+          New to RESTful APIs or .NET development? Here's a handy glossary of terms used in this project:
+
+        .accordion#glossaryAccordion
+          .accordion-item
+            h2.accordion-header
+              button.accordion-button(type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne") REPR Pattern
+            #collapseOne.accordion-collapse.collapse
+              .accordion-body
+                p Request-Endpoint-Response Pattern - An architectural approach where each endpoint has its own request model, handler, and response model, promoting separation of concerns.
+
+          .accordion-item
+            h2.accordion-header
+              button.accordion-button.collapsed(type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo") DTO
+            #collapseTwo.accordion-collapse.collapse
+              .accordion-body
+                p Data Transfer Object - A simple object used to transfer data between processes or layers of an application.
+
+          .accordion-item
+            h2.accordion-header
+              button.accordion-button.collapsed(type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree") REST
+            #collapseThree.accordion-collapse.collapse
+              .accordion-body
+                p Representational State Transfer - An architectural style for designing networked applications, emphasizing stateless operations and standard HTTP methods.
+
+          .accordion-item
+            h2.accordion-header
+              button.accordion-button.collapsed(type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour") HATEOAS
+            #collapseFour.accordion-collapse.collapse
+              .accordion-body
+                p Hypermedia as the Engine of Application State - A REST constraint that provides hyperlinks in API responses, allowing clients to dynamically navigate the API.
+
+          .accordion-item
+            h2.accordion-header
+              button.accordion-button.collapsed(type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive") Swagger/OpenAPI
+            #collapseFive.accordion-collapse.collapse
+              .accordion-body
+                p A specification and set of tools for documenting and exploring RESTful APIs.
+
+          .accordion-item
+            h2.accordion-header
+              button.accordion-button.collapsed(type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix") Dependency Injection (DI)
+            #collapseSix.accordion-collapse.collapse
+              .accordion-body
+                p A technique where one object supplies the dependencies of another object, helping to achieve loose coupling between classes.
+
+        h5.mt-5 References
         p.
           I could not have completed this project without the help of many teachers and mentors both in person and online.
           Here are some of the resources I used to complete this project.
         ul.list-group
           li.list-group-item
-            a(href='https://fast-endpoints.com/', target='_blank') https://fast-endpoints.com/
-            span The fast-endpoints.com project website
+            a(href='https://fast-endpoints.com/', target='_blank')
+              i.bi.bi-link.me-2
+              | https://fast-endpoints.com/
+            span.ms-2 The fast-endpoints.com project website
           li.list-group-item
-            a(href='https://github.com/markhazleton/FastEndpointApi', target='_blank') https://github.com/markhazleton/FastEndpointApi
-            span The full source code for the Fast Endpoints Demo is available on GitHub
+            a(href='https://github.com/markhazleton/FastEndpointApi', target='_blank')
+              i.bi.bi-github.me-2
+              | https://github.com/markhazleton/FastEndpointApi
+            span.ms-2 The full source code for the Fast Endpoints Demo is available on GitHub
           li.list-group-item
-            a(href='https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/', target='_blank') https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/
-            span MVC Controllers are Dinosaurs. Embrace API Endpoints an opinion piece by Steve Smith (aka Ardalis)
+            a(href='https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/', target='_blank')
+              i.bi.bi-file-text.me-2
+              | https://ardalis.com/mvc-controllers-are-dinosaurs-embrace-api-endpoints/
+            span.ms-2 MVC Controllers are Dinosaurs. Embrace API Endpoints an opinion piece by Steve Smith (aka Ardalis)
+          li.list-group-item
+            a(href='https://github.com/FastEndpoints/FastEndpoints', target='_blank')
+              i.bi.bi-github.me-2
+              | https://github.com/FastEndpoints/FastEndpoints
+            span.ms-2 FastEndPoints GitHub Repository
+          li.list-group-item
+            a(href='https://www.nuget.org/packages/FastEndpoints/', target='_blank')
+              i.bi.bi-box-seam.me-2
+              | https://www.nuget.org/packages/FastEndpoints/
+            span.ms-2 NuGet Package
+        .card.card-primarily
+          .card-header GUIDs vs Auto-Incrementing Integers
+          .card-body
+            p.
+              Choosing between GUIDs and auto-incrementing integers for primary keys is a common decision in database design.
+              While both have their advantages and drawbacks, the choice often depends on the specific requirements of the application.
+              For scenarios where global uniqueness is essential, such as distributed systems or disconnected data creation,
+              GUIDs offer a robust solution.
+              On the other hand, auto-incrementing integers provide better performance and simplicity,
+              making them suitable for large databases with predictable access patterns.
+              When faced with this decision, developers should carefully evaluate the trade-offs and select the option that best aligns with their project's needs.
+            p.
+              For the Person entity, I opted to use GUIDs as the primary key. This choice was driven by the need of keeping the active items in memory and not wanting
+              to relay on a system to create auto-incremented integers.
+            .row
+              .col-md-6
+                strong Using GUID
+                dl
+                  dt Pros
+                  dd
+                    ul
+                      li They are globally unique without the need for a centralized authority to manage key allocation.
+                      li They are useful in scenarios where data needs to be created offline and then synchronized with a central database, as they eliminate the risk of key collisions.
+                  dt Cons
+                  dd
+                    ul
+                      li Larger size may impact database performance and increase index size.
+                      li Alphanumeric nature can complicate debugging and data analysis.
+              .col-md-6
+                strong Using Auto-Incrementing Integers
+                dl
+                  dt Pros
+                  dd
+                    ul
+                      li Better performance and smaller index size, beneficial for large databases.
+                      li Simplicity and predictability can enhance user experience.
+                  dt Cons
+                  dd
+                    ul
+                      li Potential security risks, as sequential patterns can be exploited.
+                      li Can complicate data integration in distributed database environments.
+          .card-footer
+            p.
+              The choice between GUIDs and auto-incrementing integers is not a one-size-fits-all decision.
+              It requires careful consideration of the specific needs and constraints of the application at hand.
+            p.
+              For the FastEndpoints demo, I chose to use GUIDs for the Person entity to ensure global uniqueness and avoid potential key collisions in a distributed environment.
+            p
+              | For more information on this topic, check out this stackoverflow thread (now closed)
+              a(href='https://stackoverflow.com/questions/50298740/primary-key-type-guid-or-int/' target='_blank') https://stackoverflow.com/questions/50298740/primary-key-type-guid-or-int/
+              | or the codeing horror article
+              a(href='https://blog.codinghorror.com/primary-keys-ids-versus-guids/' target='_blank') https://blog.codinghorror.com/primary-keys-ids-versus-guids/
 
-
-    .painteddesert-section-content
-      .card.card-primarily
-        .card-header GUIDs vs Auto-Incrementing Integers
-        .card-body
-          p.
-            Choosing between GUIDs and auto-incrementing integers for primary keys is a common decision in database design.
-            While both have their advantages and drawbacks, the choice often depends on the specific requirements of the application.
-            For scenarios where global uniqueness is essential, such as distributed systems or disconnected data creation,
-            GUIDs offer a robust solution.
-            On the other hand, auto-incrementing integers provide better performance and simplicity,
-            making them suitable for large databases with predictable access patterns.
-            When faced with this decision, developers should carefully evaluate the trade-offs and select the option that best aligns with their project's needs.
-          p.
-            For the Person entity, I opted to use GUIDs as the primary key. This choice was driven by the need of keeping the active items in memory and not wanting
-            to relay on a system to create auto-incremented integers.
-          .row
-            .col-md-6
-              strong Using GUID
-              dl
-                dt Pros
-                dd
-                  ul
-                    li They are globally unique without the need for a centralized authority to manage key allocation.
-                    li They are useful in scenarios where data needs to be created offline and then synchronized with a central database, as they eliminate the risk of key collisions.
-                dt Cons
-                dd
-                  ul
-                    li Larger size may impact database performance and increase index size.
-                    li Alphanumeric nature can complicate debugging and data analysis.
-            .col-md-6
-              strong Using Auto-Incrementing Integers
-              dl
-                dt Pros
-                dd
-                  ul
-                    li Better performance and smaller index size, beneficial for large databases.
-                    li Simplicity and predictability can enhance user experience.
-                dt Cons
-                dd
-                  ul
-                    li Potential security risks, as sequential patterns can be exploited.
-                    li Can complicate data integration in distributed database environments.
