@@ -1,0 +1,127 @@
+extends ../layouts/articles
+
+block pagehead
+  title From README to Reality: Teaching an Agent to Bootstrap a UI Theme
+  meta(name='description', content='How I used a smart NuGet package README and Visual Studio Code’s agent mode to auto-install and configure a UI theme. See the live demo using WebSpark.Bootswatch.')
+  meta(name='keywords', content='NuGet, WebSpark.Bootswatch, README-driven development, AI agents, Bootstrap themes, Visual Studio Code, automation, PrismJS, Mark Hazleton')
+  meta(name='author', content='Mark Hazleton')
+  link(rel='canonical', href='https://markhazleton.com/articles/from-readme-to-reality.html')
+
+block layout-content
+  article#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+      h1 From README to Reality
+      h2.subheading.mb-3 Teaching an Agent to Bootstrap a UI Theme with Markdown and NuGet
+      p.lead.
+        What happens when a smart editor reads your README like an executable script? I tested that question by writing a NuGet package that configures itself—just from markdown.
+
+      h3 The Lightbulb Moment
+      p.
+        While using Visual Studio Code in agent mode, I pointed it to a NuGet package with a detailed README. It didn’t just highlight it—it followed it. It installed the package, registered the services, updated my `Program.cs`, and made everything work without a manual step. That was the moment I realized:
+      blockquote.text-primary.fs-4
+        | A well-written README isn’t documentation. It’s an interface for automation.
+
+      // GitHub Copilot Agent Mode Breakout Card
+      .card.mb-5.shadow
+        .card-header.bg-dark.text-white
+          h5.mb-0
+            i.bi.bi-robot.me-2
+            | What Is GitHub Copilot Agent Mode?
+        .card-body
+          p.
+            GitHub Copilot's agent mode empowers users to delegate complex tasks to the AI, offering a more autonomous and interactive development experience. It allows Copilot to analyze code, plan changes, execute commands, and even iterate on its output to achieve a desired result.
+          h6.text-primary.mt-3 Key Features and Capabilities:
+          ul
+            li
+              strong Autonomous Development:
+              |  Execute code edits, commands, and planning from high-level prompts.
+            li
+              strong Iteration and Self-Healing:
+              |  Identify, fix, and improve code autonomously.
+            li
+              strong Codebase Search and Analysis:
+              |  Understands context and navigates project files.
+            li
+              strong Tool Integration:
+              |  Supports build/test/run tasks via tools.
+            li
+              strong Interactive Feedback:
+              |  Review, refine, and confirm actions.
+            li
+              strong Custom Instructions and Prompt Files:
+              |  Define behavior with reusable prompt guidance.
+
+          h6.text-primary.mt-3 How to Use It:
+          ol
+            li Enable Agent Mode in VS Code under Tools > Options > GitHub > Copilot.
+            li In the Copilot Chat window, select "Ask", then switch mode to "Agent".
+            li Enter a high-level prompt.
+            li Review suggestions and iterate.
+            li Confirm terminal/tool invocations when prompted.
+
+          h6.text-primary.mt-3 Benefits:
+          ul
+            li Increased productivity through automation.
+            li Faster development cycles.
+            li Improved code quality with automatic fixes.
+            li Enhanced onboarding and collaboration for teams.
+
+      h3 Turning Idea into Action
+      p
+        | I set out to prove this could work with something practical. I created
+        a(href="https://www.nuget.org/packages/WebSpark.Bootswatch/" target="_blank") WebSpark.Bootswatch,
+        | a NuGet package that simplifies adding
+        a(href="https://bootswatch.com/" target="_blank") Bootswatch themes
+        | to ASP.NET projects.
+
+      p.
+        The goal was to let any developer (or smart agent) style a site with one command and a few configuration lines—no asset downloads, no layout hacks.
+
+      h3 What It Does
+      ul
+        li Adds SCSS support and all Bootswatch themes via CDN
+        li Integrates with your layout file for theme switching
+        li Provides dynamic theme routing
+        li Plays nicely with Vite, PrismJS, and modern dev tooling
+
+      h3 Code Sample: Installation
+      p.
+        Here's how easy it is to get started with the package:
+      pre.language-bash
+        code.language-bash.
+          dotnet add package WebSpark.Bootswatch
+
+      pre.language-csharp
+        code.language-csharp.
+          // In Program.cs
+          builder.Services.AddBootswatch();
+
+      h3 Live Demo
+      p
+        | Want to see it in action? Visit the live demo site:
+        br
+        a.btn.btn-primary.mt-2(href='https://bootswatch.markhazleton.com/' target='_blank')
+          i.bi.bi-laptop.me-2
+          | Bootswatch Demo Site
+
+      h3 Why This Matters
+      p.
+        This is more than packaging styles—it's about writing installation instructions that an AI agent can understand and execute. Instead of codegen or scaffolding, you're giving the system a blueprint.
+
+      ul
+        li No need for custom plugins or extensions
+        li The README becomes your install script
+        li The NuGet package becomes a self-deploying module
+
+      h3 The GitHub Repo
+      p
+        | Full source, examples, and README are available on GitHub:
+        br
+        a(href="https://github.com/MarkHazleton/WebSpark.Bootswatch" target="_blank") github.com/MarkHazleton/WebSpark.Bootswatch
+
+      h3 Final Thoughts
+      p.
+        This project changed how I write READMEs. I now structure them as if they're going to be parsed by someone—or something—that can act on them. It's a lightweight, flexible way to guide both human and machine through the installation process.
+
+      p.
+        In an age of AI-assisted development, the best interface might just be your documentation.
