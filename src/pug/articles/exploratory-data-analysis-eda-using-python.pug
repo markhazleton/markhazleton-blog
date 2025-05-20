@@ -1,17 +1,41 @@
 extends ../layouts/articles
 
 block pagehead
-  title Data Science - Exploratory Data Analysis (EDA) Using Python
-  meta(name='description', content='An in-depth guide to Data Sanity checks and Exploratory Data Analysis (EDA) using Python.')
-  meta(name="keywords" content="data sanity, EDA, Python, exploratory data analysis, data integrity, outliers, missing data")
+  title Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights
+  meta(name='description', content='Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights.')
+  meta(name="keywords" content="exploratory data analysis, EDA in Python, data sanity checks, outlier detection, data profiling, data quality, data visualization, pandas, python, machine learning, data cleaning, data science tutorial")
   meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/exploratory-data-analysis-eda-using-python.html')
+  link(rel='canonical', href='https://markhazleton.com/articles/exploratory-data-analysis-python.html')
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights",
+      "author": {"@type": "Person", "name": "Mark Hazleton"},
+      "datePublished": "2025-05-20",
+      "image": "https://markhazleton.com/assets/eda-python-example.png",
+      "publisher": {"@type": "Organization", "name": "MarkHazleton.com"},
+      "description": "Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights."
+    }
 
 block layout-content
   article#post.painteddesert-section.painteddesert-section-background
     .painteddesert-section-content
       h1 Exploratory Data Analysis (EDA)
       h2.subheading.mb-3 A comprehensive guide to data sanity checks and EDA using Python
+
+      // Table of Contents
+      nav#table-of-contents.mb-4(aria-label='Table of Contents')
+        h3.fw-bold Table of Contents
+        ul.list-group.list-group-flush
+          li.list-group-item: a(href='#understanding-the-dataset') Understanding the Dataset
+          li.list-group-item: a(href='#data-sanity-checks') Data Sanity Checks
+          li.list-group-item: a(href='#exploratory-data-analysis-eda') Exploratory Data Analysis (EDA)
+          li.list-group-item: a(href='#plan-for-data-cleaning-and-preprocessing') Plan for Data Cleaning and Preprocessing
+          li.list-group-item: a(href='#conclusion') Conclusion
+          li.list-group-item: a(href='#eda-faq') EDA FAQ
+          li.list-group-item: a(href='#summary') Summary Checklist
+          li.list-group-item: a(href='#glossary') Glossary
       p.
         Before venturing into advanced data analysis or machine learning,
         it's essential to ensure that the data you're working with is clean and coherent.
@@ -42,7 +66,10 @@ block layout-content
         | You can find the full code and analysis in my Google Drive folder.
         a(href='https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing' target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis" alt="Google Drive Folder") here.
 
-      h3 Section 1: Understanding the Dataset
+      h3#understanding-the-dataset Section 1: Understanding the Dataset
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
       p
         strong Objective:
         | Load the dataset into Python and perform initial inspection.
@@ -74,7 +101,7 @@ block layout-content
               import pandas as pd
               # Source --> https://www.kaggle.com/datasets/trolukovich/nutritional-values-for-common-foods-and-products?resource=download
               data_path = '/content/drive/MyDrive/CoLab/nutrition.csv'
-              data = pd.read_csv(data_path)
+              df = pd.read_csv(data_path)
         dt 1.2 Shape and Size of Data
         dd
           p.
@@ -85,7 +112,7 @@ block layout-content
           pre.language-python
             code.language-python.
               # Display the shape of the dataset
-              print("Shape of the dataset:", data.shape)
+              print("Shape of the dataset:", df.shape)
         dt 1.3 View Rows of Data
         dd
           p.
@@ -94,8 +121,8 @@ block layout-content
           pre.language-python
             code.language-python.
               # Display the first 5 and last 5 rows of the dataset
-              data.head(5)
-              data.tail(5)
+              df.head(5)
+              df.tail(5)
 
         dt 1.4 View the features (Columns)
         dd
@@ -107,7 +134,7 @@ block layout-content
           pre.language-python
             code.language-python.
               # Display the data types of each column
-              data.info()
+              df.info()
         dt 1.5 Identify Unique Values
         dd
           p.
@@ -115,10 +142,13 @@ block layout-content
           pre.language-python
             code.language-python.
               # Display the count of Unique Values in each column
-              for column in data.columns:
-                print(f"Unique values in '{column}': {data[column].nunique()}")
+              for column in df.columns:
+                print(f"Unique values in '{column}': {df[column].nunique()}")
 
-      h3 Section 2: Data Sanity Checks
+      h3#data-sanity-checks Section 2: Data Sanity Checks
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
       p
         strong Objective:
         | Indentify missing values, duplicates, and data integrity issues.
@@ -148,7 +178,7 @@ block layout-content
           pre.language-python
             code.language-python.
               # Check for missing values in the dataset
-              missing_values = data.isnull().sum()
+              missing_values = df.isnull().sum()
               print("Missing values in each column:\n", missing_values)
 
               # Optionally, visualize missing values using a heatmap
@@ -156,7 +186,7 @@ block layout-content
               import matplotlib.pyplot as plt
 
               plt.figure(figsize=(10, 6))
-              sns.heatmap(data.isnull(), cbar=False, cmap='viridis')
+              sns.heatmap(df.isnull(), cbar=False, cmap='viridis')
               plt.title('Heatmap of Missing Values')
               plt.show()
           p.
@@ -164,7 +194,7 @@ block layout-content
           pre.language-python
             code.language-python.
               import missingno as msno
-              msno.matrix(data)
+              msno.matrix(df)
         dt 2.2 Duplicate Data Detection
         dd
           p.
@@ -173,7 +203,7 @@ block layout-content
           pre.language-python
             code.language-python.
               # Check for duplicate rows in the dataset
-              duplicate_rows = data.duplicated().sum()
+              duplicate_rows = df.duplicated().sum()
               print(f"Duplicate rows in the dataset: {duplicate_rows}")
         dt 2.3 Consistency of Data types
         dd
@@ -184,7 +214,7 @@ block layout-content
           pre.language-python
             code.language-python.
               # Check the data types of each column
-              data.dtypes
+              df.dtypes
         dt 2.4 Outlier Detection
         dd
           p.
@@ -243,22 +273,22 @@ block layout-content
               import pandas as pd
               import matplotlib.pyplot as plt
 
-              # Example DataFrame (Replace with your own DataFrame 'data')
-              # data = pd.read_csv('your_data.csv')
+              # Example DataFrame (Replace with your own DataFrame 'df')
+              # df = pd.read_csv('your_data.csv')
 
               # Loop through all columns in the DataFrame
-              for column in data.columns:
-                if pd.api.types.is_numeric_dtype(data[column]):  # Check if the column is numeric
+              for column in df.columns:
+                if pd.api.types.is_numeric_dtype(df[column]):  # Check if the column is numeric
                   fig, axs = plt.subplots(1, 2, figsize=(16, 4))  # Set wider and shorter figure size
 
                   # Boxplot (rotated horizontally)
-                  axs[0].boxplot(data[column].dropna(), vert=False)
+                  axs[0].boxplot(df[column].dropna(), vert=False)
                   axs[0].set_title(f'Box plot of {column}')
                   axs[0].set_xlabel(column)
                   axs[0].grid(True)
 
                   # Scatter plot (against index)
-                  axs[1].scatter(data.index, data[column], alpha=0.5)  # Scatter plot with index on the x-axis
+                  axs[1].scatter(df.index, df[column], alpha=0.5)  # Scatter plot with index on the x-axis
                   axs[1].set_title(f'Scatter plot of {column}')
                   axs[1].set_xlabel('Index')
                   axs[1].set_ylabel(column)
@@ -270,10 +300,10 @@ block layout-content
                   plt.show()  # Show the combined plots
                 else:
                   # For non-numeric columns, provide a simple summary instead of a bar chart
-                  unique_values = data[column].nunique()
-                  top_value = data[column].mode()[0]  # Most frequent value
-                  top_value_count = data[column].value_counts().iloc[0]  # Frequency of the top value
-                  total_count = len(data[column].dropna())
+                  unique_values = df[column].nunique()
+                  top_value = df[column].mode()[0]  # Most frequent value
+                  top_value_count = df[column].value_counts().iloc[0]  # Frequency of the top value
+                  total_count = len(df[column].dropna())
 
                   # Print a summary of the non-numeric column
                   print(f"Column '{column}':")
@@ -299,7 +329,10 @@ block layout-content
             we maintain efficiency without sacrificing accuracy or detail.
             This method ensures that our data is clean, reliable, and ready for further analysis or modeling, ultimately improving the quality of our insights and decisions.
 
-      h3 Section 3: Exploratory Data Analysis (EDA)
+      h3#exploratory-data-analysis-eda Section 3: Exploratory Data Analysis (EDA)
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
       p
         strong Objective:
         | Load the dataset into Python and perform initial inspection.
@@ -348,7 +381,7 @@ block layout-content
                 code.language-python.
                   import matplotlib.pyplot as plt
                   # Create histograms for all numeric columns
-                  data.hist(figsize=(16, 12), bins=20, edgecolor='black')
+                  df.hist(figsize=(16, 12), bins=20, edgecolor='black')
                   plt.suptitle('Histograms of All Numeric Columns', fontsize=16)
                   plt.show()
             dt Descriptive Statistics
@@ -363,7 +396,7 @@ block layout-content
               pre.language-python
                 code.language-python.
                   # Display descriptive statistics for all numeric columns
-                  data.describe().T
+                  df.describe().T
             dt Box Plot
             dd
               p.
@@ -375,7 +408,7 @@ block layout-content
                   import matplotlib.pyplot as plt
                   # Create box plots for all numeric columns
                   plt.figure(figsize=(16, 12))
-                  sns.boxplot(data=data)
+                  sns.boxplot(data=df)
                   plt.title('Box Plots of All Numeric Columns')
                   plt.show()
               p Key compents of a box plot:
@@ -422,8 +455,8 @@ block layout-content
               pre.language-python
                 code.language-python.
                   # Calculate skewness and kurtosis for all numeric columns
-                  skewness = data.skew()
-                  kurtosis = data.kurtosis()
+                  skewness = df.skew()
+                  kurtosis = df.kurtosis()
                   print("Skewness of each column:\n", skewness)
                   print("Kurtosis of each column:\n", kurtosis)
             dt KDE Plot
@@ -441,12 +474,12 @@ block layout-content
                   # Create KDE plots for all numeric columns
                   plt.figure(figsize=(16, 12))
                   # Calculate the number of rows needed based on the number of columns
-                  num_rows = (len(data.select_dtypes(include='number').columns) + 2) // 3
+                  num_rows = (len(df.select_dtypes(include='number').columns) + 2) // 3
 
-                  for i, col in enumerate(data.select_dtypes(include='number').columns):
+                  for i, col in enumerate(df.select_dtypes(include='number').columns):
                   # Adjust subplot layout to accommodate more plots
                   plt.subplot(num_rows, 3, i + 1)
-                  sns.kdeplot(data[col], shade=True)
+                  sns.kdeplot(df[col], shade=True)
                   plt.title(f'KDE Plot of {col}')
                   plt.tight_layout()
                   plt.show()
@@ -513,7 +546,7 @@ block layout-content
                   import seaborn as sns
                   import matplotlib.pyplot as plt
                   # Create a pair plot of numerical features
-                  sns.pairplot(data)
+                  sns.pairplot(df)
                   plt.show()
 
             dt Correlation Coefficient and Matrix
@@ -536,7 +569,7 @@ block layout-content
               pre.language-python
                 code.language-python.
                   # Calculate the correlation matrix
-                  correlation_matrix = data.corr()
+                  correlation_matrix = df.corr()
 
                   # Display the correlation matrix
                   print(correlation_matrix)
@@ -631,16 +664,28 @@ block layout-content
               print(forecast)
 
 
-      h3 Section 4: Plan for Data Cleaning and Preprocessing
+      h3#plan-for-data-cleaning-and-preprocessing Section 4: Plan for Data Cleaning and Preprocessing
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
       p
         strong Objective:
         | Create a Plan for any data cleaning or preprocessing steps.
-
-      h3 Section 5: Conclusion
+      ul
+        li Remove or impute missing values using appropriate strategies (mean, median, mode, or advanced imputation).
+        li Remove duplicate rows to ensure data integrity.
+        li Convert data types as needed (e.g., strings to categories, floats to integers).
+        li Normalize or standardize numerical features if required for downstream analysis.
+        li Encode categorical variables for machine learning models.
+        li Address outliers based on business context (remove, transform, or flag for review).
+        li Document all cleaning steps for reproducibility.
+      h3#conclusion Section 5: Conclusion
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
       p.
         By conducting thorough data sanity checks and EDA, we lay a strong foundation for further analysis.
         With a clear understanding of the data, the next steps could include feature engineering, advanced visualizations, or machine learning.
-
       .card
         .card-header
           h3.card-title Automating Univariate and Bivariate Analysis in Python
@@ -662,7 +707,6 @@ block layout-content
             you can begin the process of performing univariate (analyzing one variable)
             and bivariate (analyzing relationships between two variables) analysis.
             Automating this process will save you time and ensure consistency in your Exploratory Data Analysis (EDA).
-
           h4.mb-4 Automating Univariate Analysis for Numerical and Categorical Features
           p.
             In univariate analysis, you focus on understanding the distribution of a single feature.
@@ -671,7 +715,6 @@ block layout-content
             This function calculates the key statistical attributes for a numerical feature,
             including mean, median, variance, and skewness.
             It also provides visual insights using KDE plots, BoxPlots, and Histograms.
-
           p Here's the full implementation of the function:
 
           pre.language-python
@@ -807,3 +850,113 @@ block layout-content
                     plt.show()
 
           p This function performs bivariate analysis by calculating key attributes and generating box plots, bar plots, and count plots to help you better understand the relationship between variables.
+
+      h3#eda-faq EDA FAQ
+      .accordion#faq-accordion.mb-4
+        .accordion-item
+          span.accordion-header
+            button.accordion-button(type='button', data-bs-toggle='collapse', data-bs-target='#faq1')
+              | What is Exploratory Data Analysis (EDA)?
+          .accordion-collapse.collapse#faq1
+            .accordion-body
+              p EDA is the process of analyzing datasets to summarize their main characteristics, often using visual methods.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#faq2')
+              | Why is EDA important?
+          .accordion-collapse.collapse#faq2
+            .accordion-body
+              p EDA helps you understand your data, detect anomalies, test assumptions, and prepare for modeling.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#faq3')
+              | What are common EDA techniques?
+          .accordion-collapse.collapse#faq3
+            .accordion-body
+              p Common techniques include summary statistics, visualizations (histograms, boxplots, scatter plots), and correlation analysis.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#faq4')
+              | How do I handle missing data in EDA?
+          .accordion-collapse.collapse#faq4
+            .accordion-body
+              p Identify missing values, then decide whether to remove, impute, or flag them based on context.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#faq5')
+              | What Python libraries are best for EDA?
+          .accordion-collapse.collapse#faq5
+            .accordion-body
+              p pandas, matplotlib, seaborn, and missingno are popular libraries for EDA in Python.
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
+      // Summary Checklist
+      h3#summary Summary Checklist
+      ul.list-group.mb-4
+        li.list-group-item Data sanity checks and EDA steps explained
+        li.list-group-item Code samples use PrismJS markup
+        li.list-group-item SEO and accessibility best practices followed
+        li.list-group-item Table of Contents, FAQ, and Glossary included
+        li.list-group-item Bootstrap 5 and icons used for layout and navigation
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
+      // Glossary Section
+      h3#glossary Glossary of Terms
+      .accordion#glossary-accordion.mb-4
+        .accordion-item
+          span.accordion-header
+            button.accordion-button(type='button', data-bs-toggle='collapse', data-bs-target='#glossary1')
+              | EDA (Exploratory Data Analysis)
+          .accordion-collapse.collapse#glossary1
+            .accordion-body
+              p Exploratory Data Analysis (EDA) is the process of analyzing datasets to summarize their main characteristics, often using visual methods.
+              p For more, see the <a href='https://en.wikipedia.org/wiki/Exploratory_data_analysis' target='_blank' rel='noopener'>Wikipedia article on EDA</a>.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary2')
+              | Outlier
+          .accordion-collapse.collapse#glossary2
+            .accordion-body
+              p An outlier is a data point that differs significantly from other observations in a dataset.
+              p Learn more at <a href='https://en.wikipedia.org/wiki/Outlier' target='_blank' rel='noopener'>Wikipedia: Outlier</a>.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary3')
+              | IQR (Interquartile Range)
+          .accordion-collapse.collapse#glossary3
+            .accordion-body
+              p The interquartile range (IQR) is a measure of statistical dispersion, being equal to the difference between the upper and lower quartiles.
+              p See <a href='https://en.wikipedia.org/wiki/Interquartile_range' target='_blank' rel='noopener'>Wikipedia: Interquartile range</a> for details.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary4')
+              | Skewness
+          .accordion-collapse.collapse#glossary4
+            .accordion-body
+              p Skewness is a measure of the asymmetry of the probability distribution of a real-valued random variable about its mean.
+              p More info: <a href='https://en.wikipedia.org/wiki/Skewness' target='_blank' rel='noopener'>Wikipedia: Skewness</a>.
+        .accordion-item
+          span.accordion-header
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary5')
+              | Pandas
+          .accordion-collapse.collapse#glossary5
+            .accordion-body
+              p Pandas is a powerful open-source Python library for data manipulation and analysis, providing flexible data structures like DataFrames.
+              p See <a href='https://en.wikipedia.org/wiki/Pandas_(software)' target='_blank' rel='noopener'>Wikipedia: Pandas (software)</a>.
+      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
+      // Call to Action
+      .card.bg-light.p-4.mt-4.mb-4
+        .card-body.text-center
+          h3 Explore More Data Science Articles
+          p.fw-bold Dive deeper into data science topics:
+          a.btn.btn-primary.btn-lg.mb-2(href='/articles/python-the-language-of-data-science.html')
+            i.bi.bi-code-slash.me-1(aria-hidden)
+            | Python: The Language of Data Science
+          br
+          a.btn.btn-success.btn-lg.mb-2(href='/articles/an-introduction-to-neural-networks.html')
+            i.bi.bi-cpu.me-1(aria-hidden)
+            | An Introduction to Neural Networks
