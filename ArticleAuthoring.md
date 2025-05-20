@@ -68,15 +68,78 @@ block layout-content
 
 ## 3. Best Practices for Article Authoring
 
-### SEO Guidelines
+### Embedding YouTube Videos Responsively
 
-- **Title**: Use a clear, descriptive, and keyword-rich title.
-- **Meta Description**: Write a concise summary (150–160 characters) with target keywords.
-- **Keywords**: List relevant keywords in the `meta` tag.
-- **Headings**: Use `h1` for the main title, `h2` for subheadings, and `h3`/`h4` for further structure.
-- **Internal Links**: Link to other relevant articles on the site.
-- **Alt Text**: Add descriptive `alt` text for all images.
-- **Canonical Link**: Ensure the canonical URL is set correctly.
+- **Use Bootstrap’s Responsive Ratio Utility**
+  - Wrap YouTube `iframe` embeds in a `.ratio.ratio-16x9` container for responsive design:
+
+    ```pug
+    .ratio.ratio-16x9
+      iframe(
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Descriptive video title"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      )
+    ```
+
+- **Accessibility and SEO**
+  - Always provide a descriptive `title` attribute for the `iframe`.
+  - Place the video in a visually distinct section, such as inside a `.card` or with a heading, to provide context.
+  - Optionally, add a short caption or summary below the video for users and search engines.
+
+#### Example: Embedding a YouTube Video in a Card
+
+```pug
+.card.mb-3
+  .card-header.bg-primary.text-white
+    h5.card-title Watch the Deep Dive Podcast
+  .card-body
+    .ratio.ratio-16x9
+      iframe(
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Descriptive video title"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      )
+  .card-footer
+    p.card-text Short caption or context for the video.
+```
+
+### Meta Tags for YouTube Videos and Preview Images
+
+When embedding a YouTube video, update your meta tags for best SEO and social sharing:
+
+- **Open Graph (og) tags:**
+
+  ```pug
+  meta(property='og:video', content='https://www.youtube.com/embed/VIDEO_ID')
+  meta(property='og:video:type', content='text/html')
+  meta(property='og:video:width', content='560')
+  meta(property='og:video:height', content='315')
+  meta(property='og:video:url', content='https://www.youtube.com/embed/VIDEO_ID')
+  meta(property='og:video:secure_url', content='https://www.youtube.com/embed/VIDEO_ID')
+  meta(property='og:image', content='https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg')
+  meta(property='og:image:alt', content='Descriptive preview image alt text')
+  ```
+
+- **Twitter Card tags:**
+
+  ```pug
+  meta(name='twitter:card', content='player')
+  meta(name='twitter:player', content='https://www.youtube.com/embed/VIDEO_ID')
+  meta(name='twitter:player:width', content='560')
+  meta(name='twitter:player:height', content='315')
+  meta(name='twitter:image', content='https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg')
+  meta(name='twitter:image:alt', content='Descriptive preview image alt text')
+  ```
+
+- **Best Practices:**
+
+  - Use the YouTube video’s `maxresdefault.jpg` as the preview image for best quality.
+  - Always provide descriptive `alt` text for preview images for accessibility and SEO.
+  - Ensure all video and image URLs are correct and use HTTPS.
+  - Include both video and image meta tags for optimal display on all platforms.
 
 ### Visual Appeal with Bootstrap 5 & Icons
 
@@ -88,6 +151,11 @@ block layout-content
   ```
 
 - Use `.lead`, `.fw-bold`, `.text-primary`, `.bg-light`, etc., for emphasis and readability.
+
+### Image Best Practices
+
+- Always use descriptive `alt` and `title` attributes for images.
+- Use Bootstrap classes like `.img-fluid`, `.rounded`, `.mx-auto`, and `.d-block` for responsive, accessible images.
 
 ### Code Samples with PrismJS
 
