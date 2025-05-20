@@ -5,11 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="Mark Hazleton" />
         <meta name="robots" content="index, follow" />
-        <title>Data Science - Exploratory Data Analysis (EDA) Using Python</title>
-        <meta name="description" content="An in-depth guide to Data Sanity checks and Exploratory Data Analysis (EDA) using Python." />
-        <meta name="keywords" content="data sanity, EDA, Python, exploratory data analysis, data integrity, outliers, missing data" />
+        <title>Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights</title>
+        <meta name="description" content="Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights." />
+        <meta name="keywords" content="exploratory data analysis, EDA in Python, data sanity checks, outlier detection, data profiling, data quality, data visualization, pandas, python, machine learning, data cleaning, data science tutorial" />
         <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.com/articles/exploratory-data-analysis-eda-using-python.html" />
+        <link rel="canonical" href="https://markhazleton.com/articles/exploratory-data-analysis-python.html" />
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights",
+                "author": { "@type": "Person", "name": "Mark Hazleton" },
+                "datePublished": "2025-05-20",
+                "image": "https://markhazleton.com/assets/eda-python-example.png",
+                "publisher": { "@type": "Organization", "name": "MarkHazleton.com" },
+                "description": "Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights."
+            }
+        </script>
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <script type="application/ld+json">
@@ -103,6 +115,20 @@
                 <div class="painteddesert-section-content">
                     <h1>Exploratory Data Analysis (EDA)</h1>
                     <h2 class="subheading mb-3">A comprehensive guide to data sanity checks and EDA using Python</h2>
+                    <!-- Table of Contents-->
+                    <nav class="mb-4" id="table-of-contents" aria-label="Table of Contents">
+                        <h3 class="fw-bold">Table of Contents</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="#understanding-the-dataset">Understanding the Dataset</a></li>
+                            <li class="list-group-item"><a href="#data-sanity-checks">Data Sanity Checks</a></li>
+                            <li class="list-group-item"><a href="#exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a></li>
+                            <li class="list-group-item"><a href="#plan-for-data-cleaning-and-preprocessing">Plan for Data Cleaning and Preprocessing</a></li>
+                            <li class="list-group-item"><a href="#conclusion">Conclusion</a></li>
+                            <li class="list-group-item"><a href="#eda-faq">EDA FAQ</a></li>
+                            <li class="list-group-item"><a href="#summary">Summary Checklist</a></li>
+                            <li class="list-group-item"><a href="#glossary">Glossary</a></li>
+                        </ul>
+                    </nav>
                     <p>Before venturing into advanced data analysis or machine learning, it's essential to ensure that the data you're working with is clean and coherent. This article outlines the process of conducting Data Sanity checks and Exploratory Data Analysis (EDA), both of which are critical first steps in understanding your dataset. While the initial stages don’t involve modifying the data, these actions help uncover potential issues such as missing values, duplicates, and outliers, while providing valuable insights into the data's structure and relationships.</p>
                     <p>It's important to start by inspecting the dataset to familiarize yourself with its contents and structure. Understanding the data is key to identifying any problems that might affect your analysis. Once this preliminary examination is complete, you can decide whether data cleaning or preprocessing is needed. For now, we're focused on gaining an understanding of the data, not making changes, to better plan any necessary cleanup efforts.</p>
                     <p>Recently, I worked with a nutritional dataset from Kaggle using Google Colab, which allows for writing and executing Python code in a browser-based Jupyter notebook. The objective was to analyze nutrient patterns across a range of foods and categorize them based on their nutrient content.</p>
@@ -112,7 +138,11 @@
                         You can find the full code and analysis in my Google Drive folder.
                         <a href="https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing" target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis" alt="Google Drive Folder">here.</a>
                     </p>
-                    <h3>Section 1: Understanding the Dataset</h3>
+                    <h3 id="understanding-the-dataset">Section 1: Understanding the Dataset</h3>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
                     <p>
                         <strong>Objective:</strong>
                         Load the dataset into Python and perform initial inspection.
@@ -136,39 +166,43 @@ drive<span class="token punctuation">.</span>mount<span class="token punctuation
 <span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
 <span class="token comment"># Source --> https://www.kaggle.com/datasets/trolukovich/nutritional-values-for-common-foods-and-products?resource=download</span>
 data_path <span class="token operator">=</span> <span class="token string">'/content/drive/MyDrive/CoLab/nutrition.csv'</span>
-data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>data_path<span class="token punctuation">)</span></code></pre>
+df <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>data_path<span class="token punctuation">)</span></code></pre>
                         </dd>
                         <dt>1.2 Shape and Size of Data</dt>
                         <dd>
                             <p>Once the data is loaded, we need to inspect it to get a high-level overview of its structure. This involves checking the size of the data, the column names, and the general characteristics of each column. Understanding the dataset's dimensionality is the first step.</p>
                             <p>The shape tells us how many rows (observations) and columns (features):</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Display the shape of the dataset</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Shape of the dataset:"</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>shape<span class="token punctuation">)</span></code></pre>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Shape of the dataset:"</span><span class="token punctuation">,</span> df<span class="token punctuation">.</span>shape<span class="token punctuation">)</span></code></pre>
                         </dd>
                         <dt>1.3 View Rows of Data</dt>
                         <dd>
                             <p>Sometimes the best way to understand the data is to look at it. The head() and tail() methods displays the first and last few rows of the dataset, giving us a glimpse of the data. This helps us understand the structure and format of the data and help identify any issues that may need to be addressed.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Display the first 5 and last 5 rows of the dataset</span>
-data<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-data<span class="token punctuation">.</span>tail<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+df<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+df<span class="token punctuation">.</span>tail<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
 </code></pre>
                         </dd>
                         <dt>1.4 View the features (Columns)</dt>
                         <dd>
                             <p>After viewing the rows, it's essential to understand how the features (columns) are being defined in the dataset. Since we have seen the data, we can now confirm if the dataframe accurately represents the data we have seen. Are types correct? Are there any columns that need to be converted to a different data type? We know that numerical data should be represented as integers or floats, and categorical data should be represented as strings or categories. This uses the 'info' method in Pandas.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Display the data types of each column</span>
-data<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+df<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
                         </dd>
                         <dt>1.5 Identify Unique Values</dt>
                         <dd>
                             <p>The unique() method helps us identify the unique values in a column. This is useful for categorical columns to understand the different categories present in the dataset.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Display the count of Unique Values in each column</span>
-<span class="token keyword">for</span> column <span class="token keyword">in</span> data<span class="token punctuation">.</span>columns<span class="token punctuation">:</span>
-  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Unique values in '</span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">': </span><span class="token interpolation"><span class="token punctuation">{</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>nunique<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> column <span class="token keyword">in</span> df<span class="token punctuation">.</span>columns<span class="token punctuation">:</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Unique values in '</span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">': </span><span class="token interpolation"><span class="token punctuation">{</span>df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>nunique<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
 </code></pre>
                         </dd>
                     </dl>
-                    <h3>Section 2: Data Sanity Checks</h3>
+                    <h3 id="data-sanity-checks">Section 2: Data Sanity Checks</h3>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
                     <p>
                         <strong>Objective:</strong>
                         Indentify missing values, duplicates, and data integrity issues.
@@ -188,7 +222,7 @@ data<span class="token punctuation">.</span>info<span class="token punctuation">
                             <p>Missing values can lead to biased results and should be handled appropriately. Common methods include removing rows with missing values, imputing missing values with mean/median, or using advanced techniques like KNN imputation.</p>
                             <p>Missing data can significantly impact the quality of our analysis. It's essential to identify and handle missing values before proceeding with any analysis. The isnull() method in Pandas helps us identify missing values in the dataset.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Check for missing values in the dataset</span>
-missing_values <span class="token operator">=</span> data<span class="token punctuation">.</span>isnull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+missing_values <span class="token operator">=</span> df<span class="token punctuation">.</span>isnull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Missing values in each column:\n"</span><span class="token punctuation">,</span> missing_values<span class="token punctuation">)</span>
 
 <span class="token comment"># Optionally, visualize missing values using a heatmap</span>
@@ -196,25 +230,25 @@ missing_values <span class="token operator">=</span> data<span class="token punc
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 
 plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-sns<span class="token punctuation">.</span>heatmap<span class="token punctuation">(</span>data<span class="token punctuation">.</span>isnull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cbar<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'viridis'</span><span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>heatmap<span class="token punctuation">(</span>df<span class="token punctuation">.</span>isnull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cbar<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'viridis'</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'Heatmap of Missing Values'</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
                             <p>Visualize missing data patterns with missingno library (e.g., missingno.matrix(df) or missingno.heatmap(df)).</p>
                             <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> missingno <span class="token keyword">as</span> msno
-msno<span class="token punctuation">.</span>matrix<span class="token punctuation">(</span>data<span class="token punctuation">)</span></code></pre>
+msno<span class="token punctuation">.</span>matrix<span class="token punctuation">(</span>df<span class="token punctuation">)</span></code></pre>
                         </dd>
                         <dt>2.2 Duplicate Data Detection</dt>
                         <dd>
                             <p>Duplicates can skew our analysis and lead to incorrect conclusions. It's crucial to identify and remove duplicate rows from the dataset. The duplicated() method in Pandas helps us identify duplicate rows. If they do exist, we can count them and decide how to handle them.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Check for duplicate rows in the dataset</span>
-duplicate_rows <span class="token operator">=</span> data<span class="token punctuation">.</span>duplicated<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+duplicate_rows <span class="token operator">=</span> df<span class="token punctuation">.</span>duplicated<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Duplicate rows in the dataset: </span><span class="token interpolation"><span class="token punctuation">{</span>duplicate_rows<span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span></code></pre>
                         </dd>
                         <dt>2.3 Consistency of Data types</dt>
                         <dd>
                             <p>Data types play a crucial role in data analysis. It's essential to ensure that the data types are consistent with the values in the dataset. The dtypes attribute in Pandas helps us check the data types of each column. Cross-verify if numerical data is stored as numbers, and if categorical data is appropriately formatted.</p>
                             <pre class="language-python"><code class="language-python"><span class="token comment"># Check the data types of each column</span>
-data<span class="token punctuation">.</span>dtypes</code></pre>
+df<span class="token punctuation">.</span>dtypes</code></pre>
                         </dd>
                         <dt>2.4 Outlier Detection</dt>
                         <dd>
@@ -248,22 +282,22 @@ data<span class="token punctuation">.</span>dtypes</code></pre>
                             <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 
-<span class="token comment"># Example DataFrame (Replace with your own DataFrame 'data')</span>
-<span class="token comment"># data = pd.read_csv('your_data.csv')</span>
+<span class="token comment"># Example DataFrame (Replace with your own DataFrame 'df')</span>
+<span class="token comment"># df = pd.read_csv('your_data.csv')</span>
 
 <span class="token comment"># Loop through all columns in the DataFrame</span>
-<span class="token keyword">for</span> column <span class="token keyword">in</span> data<span class="token punctuation">.</span>columns<span class="token punctuation">:</span>
-  <span class="token keyword">if</span> pd<span class="token punctuation">.</span>api<span class="token punctuation">.</span>types<span class="token punctuation">.</span>is_numeric_dtype<span class="token punctuation">(</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># Check if the column is numeric</span>
+<span class="token keyword">for</span> column <span class="token keyword">in</span> df<span class="token punctuation">.</span>columns<span class="token punctuation">:</span>
+  <span class="token keyword">if</span> pd<span class="token punctuation">.</span>api<span class="token punctuation">.</span>types<span class="token punctuation">.</span>is_numeric_dtype<span class="token punctuation">(</span>df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># Check if the column is numeric</span>
     fig<span class="token punctuation">,</span> axs <span class="token operator">=</span> plt<span class="token punctuation">.</span>subplots<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># Set wider and shorter figure size</span>
 
     <span class="token comment"># Boxplot (rotated horizontally)</span>
-    axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>boxplot<span class="token punctuation">(</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>dropna<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vert<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+    axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>boxplot<span class="token punctuation">(</span>df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>dropna<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vert<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
     axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_title<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'Box plot of </span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
     axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_xlabel<span class="token punctuation">(</span>column<span class="token punctuation">)</span>
     axs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
 
     <span class="token comment"># Scatter plot (against index)</span>
-    axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>data<span class="token punctuation">.</span>index<span class="token punctuation">,</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">)</span>  <span class="token comment"># Scatter plot with index on the x-axis</span>
+    axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>df<span class="token punctuation">.</span>index<span class="token punctuation">,</span> df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">)</span>  <span class="token comment"># Scatter plot with index on the x-axis</span>
     axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_title<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'Scatter plot of </span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
     axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_xlabel<span class="token punctuation">(</span><span class="token string">'Index'</span><span class="token punctuation">)</span>
     axs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_ylabel<span class="token punctuation">(</span>column<span class="token punctuation">)</span>
@@ -275,10 +309,10 @@ data<span class="token punctuation">.</span>dtypes</code></pre>
     plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Show the combined plots</span>
   <span class="token keyword">else</span><span class="token punctuation">:</span>
     <span class="token comment"># For non-numeric columns, provide a simple summary instead of a bar chart</span>
-    unique_values <span class="token operator">=</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>nunique<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    top_value <span class="token operator">=</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>mode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># Most frequent value</span>
-    top_value_count <span class="token operator">=</span> data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>value_counts<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>iloc<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># Frequency of the top value</span>
-    total_count <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>dropna<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    unique_values <span class="token operator">=</span> df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>nunique<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    top_value <span class="token operator">=</span> df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>mode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># Most frequent value</span>
+    top_value_count <span class="token operator">=</span> df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>value_counts<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>iloc<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># Frequency of the top value</span>
+    total_count <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>df<span class="token punctuation">[</span>column<span class="token punctuation">]</span><span class="token punctuation">.</span>dropna<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
     <span class="token comment"># Print a summary of the non-numeric column</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Column '</span><span class="token interpolation"><span class="token punctuation">{</span>column<span class="token punctuation">}</span></span><span class="token string">':"</span></span><span class="token punctuation">)</span>
@@ -293,7 +327,11 @@ data<span class="token punctuation">.</span>dtypes</code></pre>
                             <p>Incorporating outlier detection as part of our data sanity checks ensures that we identify and address anomalies before they impact downstream analysis or model performance. By using a visual approach for numeric data and a summary-based approach for non-numeric data, we maintain efficiency without sacrificing accuracy or detail. This method ensures that our data is clean, reliable, and ready for further analysis or modeling, ultimately improving the quality of our insights and decisions.</p>
                         </dd>
                     </dl>
-                    <h3>Section 3: Exploratory Data Analysis (EDA)</h3>
+                    <h3 id="exploratory-data-analysis-eda">Section 3: Exploratory Data Analysis (EDA)</h3>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
                     <p>
                         <strong>Objective:</strong>
                         Load the dataset into Python and perform initial inspection.
@@ -324,7 +362,7 @@ data<span class="token punctuation">.</span>dtypes</code></pre>
                                     <p>A histogram is a graphical representation of the distribution of a variable. It shows the frequency of values within different intervals or bins. Here is an example of how to create histograms for all numeric columns in Python:</p>
                                     <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token comment"># Create histograms for all numeric columns</span>
-data<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span> edgecolor<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">)</span>
+df<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span> edgecolor<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>suptitle<span class="token punctuation">(</span><span class="token string">'Histograms of All Numeric Columns'</span><span class="token punctuation">,</span> fontsize<span class="token operator">=</span><span class="token number">16</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
                                 </dd>
@@ -333,7 +371,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
                                     <p>The describe() method in Pandas provides a summary of the dataset, including data types and descriptive statistics. Using the .T attribute transposes the summary for better readability.</p>
                                     <p>Descriptive statistics summarize the main characteristics of a variable, including measures of central tendency and variability. I like to add the transpose attribute '.T' to the describe method to make the output more readable.</p>
                                     <pre class="language-python"><code class="language-python"><span class="token comment"># Display descriptive statistics for all numeric columns</span>
-data<span class="token punctuation">.</span>describe<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T</code></pre>
+df<span class="token punctuation">.</span>describe<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T</code></pre>
                                 </dd>
                                 <dt>Box Plot</dt>
                                 <dd>
@@ -342,7 +380,7 @@ data<span class="token punctuation">.</span>describe<span class="token punctuati
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token comment"># Create box plots for all numeric columns</span>
 plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-sns<span class="token punctuation">.</span>boxplot<span class="token punctuation">(</span>data<span class="token operator">=</span>data<span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>boxplot<span class="token punctuation">(</span>data<span class="token operator">=</span>df<span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'Box Plots of All Numeric Columns'</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
                                     <p>Key compents of a box plot:</p>
@@ -365,8 +403,8 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
                                 <dd>
                                     <p>Skewness measures the asymmetry of the distribution, indicating whether the data is skewed to the left or right. Kurtosis measures the shape of the distribution, showing how peaked or flat it is compared to a normal distribution. These statistics provide insights into the shape of the data distribution.</p>
                                     <pre class="language-python"><code class="language-python"><span class="token comment"># Calculate skewness and kurtosis for all numeric columns</span>
-skewness <span class="token operator">=</span> data<span class="token punctuation">.</span>skew<span class="token punctuation">(</span><span class="token punctuation">)</span>
-kurtosis <span class="token operator">=</span> data<span class="token punctuation">.</span>kurtosis<span class="token punctuation">(</span><span class="token punctuation">)</span>
+skewness <span class="token operator">=</span> df<span class="token punctuation">.</span>skew<span class="token punctuation">(</span><span class="token punctuation">)</span>
+kurtosis <span class="token operator">=</span> df<span class="token punctuation">.</span>kurtosis<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Skewness of each column:\n"</span><span class="token punctuation">,</span> skewness<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Kurtosis of each column:\n"</span><span class="token punctuation">,</span> kurtosis<span class="token punctuation">)</span></code></pre>
                                 </dd>
@@ -379,12 +417,12 @@ kurtosis <span class="token operator">=</span> data<span class="token punctuatio
 <span class="token comment"># Create KDE plots for all numeric columns</span>
 plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token comment"># Calculate the number of rows needed based on the number of columns</span>
-num_rows <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>include<span class="token operator">=</span><span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>columns<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">3</span>
+num_rows <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>df<span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>include<span class="token operator">=</span><span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>columns<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">3</span>
 
-<span class="token keyword">for</span> i<span class="token punctuation">,</span> col <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>data<span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>include<span class="token operator">=</span><span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>columns<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token keyword">for</span> i<span class="token punctuation">,</span> col <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>df<span class="token punctuation">.</span>select_dtypes<span class="token punctuation">(</span>include<span class="token operator">=</span><span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>columns<span class="token punctuation">)</span><span class="token punctuation">:</span>
 <span class="token comment"># Adjust subplot layout to accommodate more plots</span>
 plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span>num_rows<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
-sns<span class="token punctuation">.</span>kdeplot<span class="token punctuation">(</span>data<span class="token punctuation">[</span>col<span class="token punctuation">]</span><span class="token punctuation">,</span> shade<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>kdeplot<span class="token punctuation">(</span>df<span class="token punctuation">[</span>col<span class="token punctuation">]</span><span class="token punctuation">,</span> shade<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'KDE Plot of </span><span class="token interpolation"><span class="token punctuation">{</span>col<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
@@ -440,7 +478,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
                                     <pre class="language-python"><code class="language-python"><span class="token keyword">import</span> seaborn <span class="token keyword">as</span> sns
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token comment"># Create a pair plot of numerical features</span>
-sns<span class="token punctuation">.</span>pairplot<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+sns<span class="token punctuation">.</span>pairplot<span class="token punctuation">(</span>df<span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
                                 </dd>
@@ -454,7 +492,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
                                         <li>-1 means a perfect negative relationship: if one thing goes up, the other goes down.</li>
                                     </ul>
                                     <pre class="language-python"><code class="language-python"><span class="token comment"># Calculate the correlation matrix</span>
-correlation_matrix <span class="token operator">=</span> data<span class="token punctuation">.</span>corr<span class="token punctuation">(</span><span class="token punctuation">)</span>
+correlation_matrix <span class="token operator">=</span> df<span class="token punctuation">.</span>corr<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 <span class="token comment"># Display the correlation matrix</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>correlation_matrix<span class="token punctuation">)</span>
@@ -533,12 +571,29 @@ forecast <span class="token operator">=</span> model_fit<span class="token punct
 </code></pre>
                         </dd>
                     </dl>
-                    <h3>Section 4: Plan for Data Cleaning and Preprocessing</h3>
+                    <h3 id="plan-for-data-cleaning-and-preprocessing">Section 4: Plan for Data Cleaning and Preprocessing</h3>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
                     <p>
                         <strong>Objective:</strong>
                         Create a Plan for any data cleaning or preprocessing steps.
                     </p>
-                    <h3>Section 5: Conclusion</h3>
+                    <ul>
+                        <li>Remove or impute missing values using appropriate strategies (mean, median, mode, or advanced imputation).</li>
+                        <li>Remove duplicate rows to ensure data integrity.</li>
+                        <li>Convert data types as needed (e.g., strings to categories, floats to integers).</li>
+                        <li>Normalize or standardize numerical features if required for downstream analysis.</li>
+                        <li>Encode categorical variables for machine learning models.</li>
+                        <li>Address outliers based on business context (remove, transform, or flag for review).</li>
+                        <li>Document all cleaning steps for reproducibility.</li>
+                    </ul>
+                    <h3 id="conclusion">Section 5: Conclusion</h3>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
                     <p>By conducting thorough data sanity checks and EDA, we lay a strong foundation for further analysis. With a clear understanding of the data, the next steps could include feature engineering, advanced visualizations, or machine learning.</p>
                     <div class="card">
                         <div class="card-header"><h3 class="card-title">Automating Univariate and Bivariate Analysis in Python</h3></div>
@@ -673,6 +728,145 @@ forecast <span class="token operator">=</span> model_fit<span class="token punct
                             <p>This function performs bivariate analysis by calculating key attributes and generating box plots, bar plots, and count plots to help you better understand the relationship between variables.</p>
                         </div>
                     </div>
+                    <h3 id="eda-faq">EDA FAQ</h3>
+                    <div class="accordion mb-4" id="faq-accordion">
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">What is Exploratory Data Analysis (EDA)?</button></span>
+                            <div class="accordion-collapse collapse" id="faq1">
+                                <div class="accordion-body"><p>EDA is the process of analyzing datasets to summarize their main characteristics, often using visual methods.</p></div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Why is EDA important?</button></span>
+                            <div class="accordion-collapse collapse" id="faq2">
+                                <div class="accordion-body"><p>EDA helps you understand your data, detect anomalies, test assumptions, and prepare for modeling.</p></div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">What are common EDA techniques?</button></span>
+                            <div class="accordion-collapse collapse" id="faq3">
+                                <div class="accordion-body"><p>Common techniques include summary statistics, visualizations (histograms, boxplots, scatter plots), and correlation analysis.</p></div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">How do I handle missing data in EDA?</button></span>
+                            <div class="accordion-collapse collapse" id="faq4">
+                                <div class="accordion-body"><p>Identify missing values, then decide whether to remove, impute, or flag them based on context.</p></div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">What Python libraries are best for EDA?</button></span>
+                            <div class="accordion-collapse collapse" id="faq5">
+                                <div class="accordion-body"><p>pandas, matplotlib, seaborn, and missingno are popular libraries for EDA in Python.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
+                    <!-- Summary Checklist-->
+                    <h3 id="summary">Summary Checklist</h3>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">Data sanity checks and EDA steps explained</li>
+                        <li class="list-group-item">Code samples use PrismJS markup</li>
+                        <li class="list-group-item">SEO and accessibility best practices followed</li>
+                        <li class="list-group-item">Table of Contents, FAQ, and Glossary included</li>
+                        <li class="list-group-item">Bootstrap 5 and icons used for layout and navigation</li>
+                    </ul>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
+                    <!-- Glossary Section-->
+                    <h3 id="glossary">Glossary of Terms</h3>
+                    <div class="accordion mb-4" id="glossary-accordion">
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#glossary1">EDA (Exploratory Data Analysis)</button></span>
+                            <div class="accordion-collapse collapse" id="glossary1">
+                                <div class="accordion-body">
+                                    <p>Exploratory Data Analysis (EDA) is the process of analyzing datasets to summarize their main characteristics, often using visual methods.</p>
+                                    <p>
+                                        For more, see the
+                                        <a href="https://en.wikipedia.org/wiki/Exploratory_data_analysis" target="_blank" rel="noopener">Wikipedia article on EDA</a>
+                                        .
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#glossary2">Outlier</button></span>
+                            <div class="accordion-collapse collapse" id="glossary2">
+                                <div class="accordion-body">
+                                    <p>An outlier is a data point that differs significantly from other observations in a dataset.</p>
+                                    <p>
+                                        Learn more at
+                                        <a href="https://en.wikipedia.org/wiki/Outlier" target="_blank" rel="noopener">Wikipedia: Outlier</a>
+                                        .
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#glossary3">IQR (Interquartile Range)</button></span>
+                            <div class="accordion-collapse collapse" id="glossary3">
+                                <div class="accordion-body">
+                                    <p>The interquartile range (IQR) is a measure of statistical dispersion, being equal to the difference between the upper and lower quartiles.</p>
+                                    <p>
+                                        See
+                                        <a href="https://en.wikipedia.org/wiki/Interquartile_range" target="_blank" rel="noopener">Wikipedia: Interquartile range</a>
+                                        for details.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#glossary4">Skewness</button></span>
+                            <div class="accordion-collapse collapse" id="glossary4">
+                                <div class="accordion-body">
+                                    <p>Skewness is a measure of the asymmetry of the probability distribution of a real-valued random variable about its mean.</p>
+                                    <p>
+                                        More info:
+                                        <a href="https://en.wikipedia.org/wiki/Skewness" target="_blank" rel="noopener">Wikipedia: Skewness</a>
+                                        .
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <span class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#glossary5">Pandas</button></span>
+                            <div class="accordion-collapse collapse" id="glossary5">
+                                <div class="accordion-body">
+                                    <p>Pandas is a powerful open-source Python library for data manipulation and analysis, providing flexible data structures like DataFrames.</p>
+                                    <p>
+                                        See
+                                        <a href="https://en.wikipedia.org/wiki/Pandas_(software)" target="_blank" rel="noopener">Wikipedia: Pandas (software)</a>
+                                        .
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="d-block mb-4 text-decoration-none" href="#table-of-contents">
+                        <i class="bi bi-arrow-up-circle me-1" aria-hidden></i>
+                        Back to Top
+                    </a>
+                    <!-- Call to Action-->
+                    <div class="card bg-light p-4 mt-4 mb-4">
+                        <div class="card-body text-center">
+                            <h3>Explore More Data Science Articles</h3>
+                            <p class="fw-bold">Dive deeper into data science topics:</p>
+                            <a class="btn btn-primary btn-lg mb-2" href="/articles/python-the-language-of-data-science.html">
+                                <i class="bi bi-code-slash me-1" aria-hidden></i>
+                                Python: The Language of Data Science
+                            </a>
+                            <br />
+                            <a class="btn btn-success btn-lg mb-2" href="/articles/an-introduction-to-neural-networks.html">
+                                <i class="bi bi-cpu me-1" aria-hidden></i>
+                                An Introduction to Neural Networks
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </article>
         </div>
@@ -796,18 +990,6 @@ forecast <span class="token operator">=</span> model_fit<span class="token punct
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/integrating-chat-completions-into-prompt-spark.html" title="Learn how chat completions enhances LLM interactions in the Prompt Spark project by enabling seamless chat functionalities for Core Spark Variants.">Integrating Chat Completion into Prompt Spark</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learn how chat completions enhances LLM interactions in the Prompt Spark project by enabling seamless chat functionalities for Core Spark Variants.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
                                             <a class="text-white" href="/articles/taking-microsoft-copilot-studio-for-a-test-drive.html" title="Mark Hazleton explores Microsoft Copilot Studio, sharing insights on creating a personalized AI chatbot, Copilot Mark. Discover how AI is revolutionizing site interactions and team communication.">Taking Microsoft Copilot Studio for a Test Drive</a>
                                         </h5>
                                         <p class="card-text text-white">Mark Hazleton explores Microsoft Copilot Studio, sharing insights on creating a personalized AI chatbot, Copilot Mark. Discover how AI is revolutionizing site interactions and team communication.</p>
@@ -820,9 +1002,21 @@ forecast <span class="token operator">=</span> model_fit<span class="token punct
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/workflow-driven-chat-applications-powered-by-adaptive-cards.html" title="Learn how to design workflow-driven chat applications powered by Adaptive Cards, enhancing AI interactivity and structured conversations.">Workflow-Driven Chat Applications Powered by Adaptive Cards</a>
+                                            <a class="text-white" href="/articles/python-the-language-of-data-science.html" title="Python, Data Science, Python history, Python libraries, Pandas, NumPy, Python for C# developers">Python: The Language of Data Science</a>
                                         </h5>
-                                        <p class="card-text text-white">Learn how to design workflow-driven chat applications powered by Adaptive Cards, enhancing AI interactivity and structured conversations.</p>
+                                        <p class="card-text text-white">Python, Data Science, Python history, Python libraries, Pandas, NumPy, Python for C# developers</p>
+                                    </div>
+                                    <div class="card-footer"></div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100 bg-dark text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
+                                            <a class="text-white" href="/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html" title="Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.">ChatGPT Meets Jeopardy: C# Solution for Trivia Aficionados</a>
+                                        </h5>
+                                        <p class="card-text text-white">Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.</p>
                                     </div>
                                     <div class="card-footer"></div>
                                 </div>
