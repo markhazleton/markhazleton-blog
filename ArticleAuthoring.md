@@ -186,6 +186,95 @@ When embedding a YouTube video, update your meta tags for best SEO and social sh
 - Add images, diagrams, or videos to illustrate key points.
 - Proofread for grammar, spelling, and clarity.
 
+### Table of Contents for Long Articles
+
+- For articles with multiple sections, include a Table of Contents at the top using a Bootstrap-styled list or navigation. This improves navigation and user experience, especially for in-depth or reference articles.
+- Example:
+
+```pug
+nav#table-of-contents.mb-4(aria-label='Table of Contents')
+  h3.fw-bold Table of Contents
+  ul.list-group.list-group-flush
+    li.list-group-item: a(href='#section1') Section 1
+    li-list-group-item: a(href='#section2') Section 2
+    // ...
+```
+
+### Section Navigation
+
+- For long articles, add "Back to Top" links after major sections to help users quickly return to the Table of Contents.
+- Example:
+
+```pug
+a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+  i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+  | Back to Top
+```
+
+### Accordions for Principles, Timelines, or FAQs
+
+- Use Bootstrap accordions to present lists of principles, historical timelines, FAQs, or code comparisons. This keeps the page organized and allows users to expand only the sections they are interested in.
+- Example:
+
+```pug
+.accordion#example-accordion
+  .accordion-item
+    span.accordion-header
+      button.accordion-button(type='button', data-bs-toggle='collapse', data-bs-target='#collapseOne')
+        | Principle 1
+    .accordion-collapse.collapse#collapseOne
+      .accordion-body
+        p Principle details here.
+```
+
+### Code Comparison for Multi-Language Readers
+
+- When comparing code between languages (e.g., Python vs. C#), use side-by-side or accordion-based code blocks with PrismJS highlighting for each language.
+- Example:
+
+```pug
+pre.language-csharp
+  code.language-csharp.
+    // C# code here
+pre.language-python
+  code.language-python.
+    # Python code here
+```
+
+### Use of Bootstrap Icons
+
+- Use Bootstrap Icons for visual cues, such as next to navigation links or section headers, to enhance clarity and user experience.
+- Example:
+
+```pug
+i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+```
+
+### Glossary for Technical Terms
+
+- For technical or educational articles, include a glossary section at the end using a Bootstrap accordion. Define key terms and link to reputable sources (e.g., Wikipedia) for further reading.
+- Example:
+
+```pug
+h2.mt-5.mb-3 Glossary of Key Terms
+.accordion#glossaryAccordion
+  .accordion-item
+    h2.accordion-header#glossaryTerm
+      button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTerm') Term
+    .accordion-collapse.collapse#collapseTerm
+      .accordion-body
+        p Definition and context. See more on 
+          a(href='https://en.wikipedia.org/wiki/Term' target='_blank' rel='noopener') Wikipedia
+```
+
+### General Writing and Layout
+
+- Use clear, descriptive headings for each section.
+- Use `.lead` for introductory paragraphs.
+- Use `.fw-bold`, `.mb-3`, `.mb-4`, etc., for spacing and emphasis.
+- For historical or process-oriented content, use timelines or step-by-step accordions.
+- For FAQs, use accordions for each question/answer pair.
+
 ---
 
 ## 4. Build and Preview

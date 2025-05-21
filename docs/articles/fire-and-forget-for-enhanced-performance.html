@@ -15,10 +15,14 @@
         <meta property="og:url" content="https://markhazleton.com/articles/fire-and-forget-for-enhanced-performance.html" />
         <meta property="og:type" content="article" />
         <meta property="og:image" content="/assets/img/MarkHazleton-Fire-And-Forget.png" />
+        <meta property="og:image:alt" content="Illustration representing fire-and-forget asynchronous programming for performance." />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Development - Fire and Forget for Enhanced Performance" />
         <meta name="twitter:description" content="Explore the use of Fire and Forget technique for improving API performance in tasks like Service Bus updates on user login." />
         <meta name="twitter:image" content="/assets/img/MarkHazleton-MarkHazleton-Fire-And-Forget.png" />
+        <meta name="twitter:image:alt" content="Illustration representing fire-and-forget asynchronous programming for performance." />
+        <meta property="og:locale" content="en_US" />
+        <meta property="article:published_time" content="2025-05-20" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
@@ -113,13 +117,33 @@
         <div class="container-fluid p-0 painteddesert-background">
             <article class="painteddesert-section painteddesert-section-background" id="post">
                 <div class="painteddesert-section-content">
-                    <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/webspark/" target="_blank" title="The full source code for the Async Demo is available on GitHub">The full source code for the Async Demo is available on GitHub</a></p>
+                    <div class="d-flex justify-content-center mb-4"><img class="img-fluid rounded shadow-lg max-width-600px w-100" style="max-width: 600px; height: auto" src="/assets/img/MarkHazleton-Fire-And-Forget.png" alt="Illustration representing fire-and-forget asynchronous programming for performance." title="Fire-and-Forget for Enhanced Performance" /></div>
+                    <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/HttpClientUtility/" target="_blank" title="The full source code for the Fire and Forget Utility is available on GitHub">The full source code for the Fire and Forget Utility is available on GitHub</a></p>
                     <h1>Fire and Forget</h1>
                     <p class="card-text lead mb-5">
-                        While working on a project, I encountered a practical challenge: how do I call an async method without waiting for it to process. I decided to explore the use of Fire and Forget technique in my AsyncSpark demon in my WebSpark project.
-                        <a href="https://github.com/markhazleton/webspark">https://github.com/markhazleton/webspark</a>
+                        While working on a project, I encountered a practical challenge: how do I call an async method without waiting for it to process. I decided to explore the use of Fire and Forget technique in my AsyncSpark demo, which is now part of the HttpClientUtility library and NuGet package.
+                        <a href="https://github.com/markhazleton/HttpClientUtility">https://github.com/markhazleton/HttpClientUtility</a>
                         . Fire-and-forget is a programming approach where tasks are sent off to be processed independently, without the initiating program tracking or waiting for the results of these tasks.
                     </p>
+                    <h2>Introducing the HttpClientUtility NuGet Package</h2>
+                    <p>
+                        The Fire and Forget functionality is now part of the open-source
+                        <a href="https://github.com/markhazleton/HttpClientUtility" target="_blank">HttpClientUtility</a>
+                        library, available as a NuGet package for easy integration into your .NET projects.
+                    </p>
+                    <ul>
+                        <li>
+                            GitHub Repository:
+                            <a href="https://github.com/markhazleton/HttpClientUtility" target="_blank">https://github.com/markhazleton/HttpClientUtility</a>
+                        </li>
+                        <li>
+                            NuGet Package:
+                            <a href="https://www.nuget.org/packages/WebSpark.HttpClientUtility" target="_blank">WebSpark.HttpClientUtility</a>
+                        </li>
+                    </ul>
+                    <p>To install the package, use the following command in your terminal:</p>
+                    <pre class="language-powershell"><code class="language-powershell"><span class="token function">Install-Package</span> WebSpark<span class="token punctuation">.</span>HttpClientUtility</code></pre>
+                    <p>The library provides robust utilities for HTTP client operations, including the Fire and Forget pattern, with built-in exception handling and logging. This makes it easy to enhance your application's performance and reliability with minimal effort.</p>
                     <h2>The Risks Of Not Waiting</h2>
                     <p>Fire-and-forget may call multiple methods without awaiting the completion of the methods. While this technique can be useful in certain scenarios, it can also lead to a number of issues, including:</p>
                     <dl>
@@ -142,7 +166,7 @@
                     <p>Implementing a Fire and Forget class in this context allows these non-urgent tasks to be handled asynchronously. This means the API can swiftly return a response to the user, confirming a successful login, while the system quietly takes care of the updates in the background. It's an elegant solution that balances the need for efficiency and thoroughness.</p>
                     <p>Moreover, in a landscape where every millisecond counts, optimizing API performance with techniques like Fire and Forget is not just a technical consideration - it's a strategic one. By ensuring our systems are responsive and efficient, we're aligning technology more closely with business outcomes and user satisfaction.</p>
                     <p>In summary, the Fire and Forget pattern is more than a technical solution; it's a strategic tool that can significantly enhance the performance and user experience of APIs. It's an approach that aligns well with my philosophy of practical, business-driven technology solutions - ensuring that we deliver not only in terms of technical performance but also in terms of tangible business value.</p>
-                    <div class="card w-50 mx-auto mb-5">
+                    <div class="card mx-auto mb-5" style="max-width: 100%">
                         <div class="card-header"><h5 class="card-title">Example: Online Order Processing</h5></div>
                         <div class="card-body">
                             <p>Let`s explore how the fire-and-forget pattern can be applied in a real-world scenario: online order processing. When a user places an order, immediate feedback is crucial for a good user experience. This is where our fire-and-forget method comes into play.</p>
@@ -192,9 +216,11 @@
                         <dt>Cancellation Handling</dt>
                         <dd>The method also handles task cancellation scenarios, logging a message if the task is canceled or if the cancellation token is requested.</dd>
                         <dt>Conclusion</dt>
-                        <dd>
-                            This utility class is a robust tool for handling tasks that don't require direct synchronization with the main execution flow, enhancing application performance and responsiveness.
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token operator">|</span> <span class="token keyword">public</span> <span class="token keyword">sealed</span> <span class="token keyword">class</span> <span class="token class-name">FireAndForgetUtility</span>
+                        <dd>This utility class is a robust tool for handling tasks that don't require direct synchronization with the main execution flow, enhancing application performance and responsiveness.</dd>
+                    </dl>
+                    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#fireAndForgetCode">Show/Hide Code Example</button>
+                    <div class="collapse" id="fireAndForgetCode">
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token operator">|</span> <span class="token keyword">public</span> <span class="token keyword">sealed</span> <span class="token keyword">class</span> <span class="token class-name">FireAndForgetUtility</span>
 <span class="token operator">|</span> <span class="token punctuation">{</span>
 <span class="token operator">|</span>     <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">ILogger</span> _logger<span class="token punctuation">;</span>
 <span class="token operator">|</span>
@@ -240,8 +266,7 @@
 <span class="token operator">|</span>         <span class="token punctuation">}</span>
 <span class="token operator">|</span>     <span class="token punctuation">}</span>
 <span class="token operator">|</span> <span class="token punctuation">}</span></code></pre>
-                        </dd>
-                    </dl>
+                    </div>
                 </div>
             </article>
         </div>
@@ -310,9 +335,9 @@
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/cancellation-token.html" title="Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming">CancellationToken</a>
+                                            <a class="text-white" href="/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html" title="Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.">ChatGPT Meets Jeopardy: C# Solution for Trivia Aficionados</a>
                                         </h5>
-                                        <p class="card-text text-white">Harnessing the Power of CancellationToken for Efficient and Safe Asynchronous Programming</p>
+                                        <p class="card-text text-white">Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.</p>
                                     </div>
                                     <div class="card-footer"></div>
                                 </div>
@@ -322,9 +347,9 @@
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/projectmechanics/leadership/evolution-over-revolution.html" title="Description for Evolution Over Revolution">Evolution Over Revolution</a>
+                                            <a class="text-white" href="/crafting-chatgpt-prompt.html" title="Explore the art of crafting effective ChatGPT prompts with Mark Hazleton. Discover the significance of context, learn prompt engineering techniques, and unlock the potential of ChatGPT for better AI-powered conversations and code generation.">Crafting ChatGPT Prompt</a>
                                         </h5>
-                                        <p class="card-text text-white">Description for Evolution Over Revolution</p>
+                                        <p class="card-text text-white">Explore the art of crafting effective ChatGPT prompts with Mark Hazleton. Discover the significance of context, learn prompt engineering techniques, and unlock the potential of ChatGPT for better AI-powered conversations and code generation.</p>
                                     </div>
                                     <div class="card-footer"></div>
                                 </div>
@@ -334,9 +359,9 @@
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/computer-vision-in-machine-learning.html" title="Explore the transformative role of computer vision in machine learning, its applications, and future potential">Computer Vision in Machine Learning</a>
+                                            <a class="text-white" href="/articles/getting-started-with-pug-history-background-and-future.html" title="Learn the history, background, and future prospects of PUG, a high-performance template engine for Node.js. Discover its features, community, and maintenance.">Getting Started with PUG - History, Background, and Future</a>
                                         </h5>
-                                        <p class="card-text text-white">Explore the transformative role of computer vision in machine learning, its applications, and future potential</p>
+                                        <p class="card-text text-white">Learn the history, background, and future prospects of PUG, a high-performance template engine for Node.js. Discover its features, community, and maintenance.</p>
                                     </div>
                                     <div class="card-footer"></div>
                                 </div>
