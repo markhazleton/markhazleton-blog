@@ -181,4 +181,4 @@ Start Bootstrap is based on the [Bootstrap](https://getbootstrap.com/) framework
 
 ## Copyright and License
 
-Copyright 2013-2025 d.b.a. Control Origins. Code released under the [MIT](https://github.com/markhazleton/markhazleton-blog/blob/main/LICENSE) license.
+Copyright 2013-2025 Mark Hazleton. Code released under the [MIT](https://github.com/markhazleton/markhazleton-blog/blob/main/LICENSE) license.
