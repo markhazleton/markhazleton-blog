@@ -1,630 +1,838 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
+
+block variables
+  - var pageTitle = 'ReactSpark: A Modern React Portfolio Showcase | Mark Hazleton'
+  - var pageDescription = 'Explore ReactSpark: a modern React 19 portfolio website with TypeScript and Vite that demonstrates contemporary web development best practices and serves as part of the WebSpark ecosystem.'
+  - var pageKeywords = 'React 19, TypeScript, Vite, portfolio website, WebSpark, responsive design, modern web development, component-based architecture, React Context API, Bootstrap 5, dark mode, theme toggle, React Router, Axios, web development best practices'
+  - var pageCanonical = 'https://markhazleton.com/articles/reactspark-a-comprehensive-portfolio-showcase.html'
+  - var pageAuthor = 'Mark Hazleton'
+  - var publishedDate = '2024-12-01'
+  - var modifiedDate = '2025-05-28'
+  - var estimatedReadTime = '15'
 
 block pagehead
-  title ReactSpark - A Modern React Portfolio Showcase
-  meta(name='description', content='Explore ReactSpark: a modern React 19 portfolio website with TypeScript and Vite that demonstrates contemporary web development best practices and serves as part of the WebSpark ecosystem.')
-  meta(name='keywords', content='React 19, TypeScript, Vite, portfolio website, WebSpark, responsive design, modern web development, component-based architecture, React Context API, Bootstrap 5, dark mode, theme toggle, React Router, Axios, web development best practices')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/reactspark-a-comprehensive-portfolio-showcase.html')
-  meta(name='og:title', content='ReactSpark - A Modern React Portfolio Showcase')
-  meta(name='og:description', content='Explore ReactSpark: a modern React 19 portfolio website with TypeScript and Vite that demonstrates contemporary web development best practices and serves as part of the WebSpark ecosystem.')
-  meta(name='og:type', content='video.other')
-  meta(name='og:video:url', content='https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4')
-  meta(name='og:video:secure_url', content='https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4')
-  meta(name='og:video:type', content='text/html')
-  meta(name='og:video:width', content='560')
-  meta(name='og:video:height', content='315')
-  meta(name='og:image', content='https://img.youtube.com/vi/jOQHPafhW5Y/hqdefault.jpg')
-  meta(name='og:image:alt', content='Explore ReactSpark: a modern React 19 portfolio website with TypeScript and Vite that demonstrates contemporary web development best practices and serves as part of the WebSpark ecosystem.')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content=pageAuthor)
+  meta(name='article:published_time', content=publishedDate)
+  meta(name='article:modified_time', content=modifiedDate)
+  meta(name='article:author', content=pageAuthor)
+  meta(name='article:section', content='Web Development')
+  meta(name='article:tag', content='React, TypeScript, Portfolio Development')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='video.other')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:video:url', content='https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4')
+  meta(property='og:video:secure_url', content='https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4')
+  meta(property='og:video:type', content='text/html')
+  meta(property='og:video:width', content='560')
+  meta(property='og:video:height', content='315')
+  meta(property='og:image', content='https://img.youtube.com/vi/jOQHPafhW5Y/hqdefault.jpg')
+  meta(property='og:image:alt', content='ReactSpark portfolio showcase video demonstration')
+  meta(property='article:author', content='Mark Hazleton')
+  meta(property='article:published_time', content=publishedDate)
+  meta(property='article:modified_time', content=modifiedDate)
+  meta(property='article:section', content='Web Development')
+  meta(property='article:tag', content='React')
+  meta(property='article:tag', content='TypeScript')
+  meta(property='article:tag', content='Portfolio Development')
+
+block twitter_overrides
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
   meta(name='twitter:card', content='player')
-  meta(name='twitter:title', content='ReactSpark - A Modern React Portfolio Showcase')
-  meta(name='twitter:description', content='Explore ReactSpark: a modern React 19 portfolio website with TypeScript and Vite that demonstrates contemporary web development best practices and serves as part of the WebSpark ecosystem.')
   meta(name='twitter:player', content='https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4')
   meta(name='twitter:player:width', content='560')
   meta(name='twitter:player:height', content='315')
   meta(name='twitter:image', content='https://img.youtube.com/vi/jOQHPafhW5Y/hqdefault.jpg')
+  meta(name='twitter:image:alt', content='ReactSpark portfolio showcase video demonstration')
+  meta(name='twitter:label1', content='Reading time')
+  meta(name='twitter:data1', content=estimatedReadTime + ' min read')
+  meta(name='twitter:label2', content='Written by')
+  meta(name='twitter:data2', content='Mark Hazleton')
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "url": "#{pageCanonical}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://img.youtube.com/vi/jOQHPafhW5Y/hqdefault.jpg",
+        "width": 1200,
+        "height": 630,
+        "alt": "ReactSpark portfolio showcase video demonstration"
+      },
+      "video": {
+        "@type": "VideoObject",
+        "name": "ReactSpark: A Comprehensive Portfolio Showcase",
+        "description": "Deep dive into ReactSpark - a modern React 19 portfolio website",
+        "thumbnailUrl": "https://img.youtube.com/vi/jOQHPafhW5Y/hqdefault.jpg",
+        "uploadDate": "#{publishedDate}",
+        "embedUrl": "https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "jobTitle": "Solutions Architect",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://www.youtube.com/@markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com"
+      },
+      "datePublished": "#{publishedDate}",
+      "dateModified": "#{modifiedDate}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "#{pageCanonical}"
+      },
+      "articleSection": "Web Development",
+      "keywords": "#{pageKeywords}",
+      "wordCount": 2500,
+      "timeRequired": "PT#{estimatedReadTime}M",
+      "about": {
+        "@type": "Thing",
+        "name": "React Portfolio Development",
+        "description": "Modern web development practices using React, TypeScript, and Vite"
+      }
+    }
 block layout-content
+  // Breadcrumb Navigation
+  nav.bg-light.py-2(aria-label='breadcrumb')
+    .container
+      ol.breadcrumb.mb-0
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles') Articles
+        li.breadcrumb-item.active(aria-current='page') ReactSpark Portfolio Showcase
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 ReactSpark: A Comprehensive Portfolio Showcase
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-code-slash.me-3
+            | ReactSpark: A Comprehensive Portfolio Showcase
+          h2.h3.mb-4 Modern React 19 Development with TypeScript and Vite
+          p.lead.mb-5
+            | A modern, responsive portfolio website meticulously crafted using React 19 with TypeScript,
+            | and built with the lightning-fast Vite build tool. Serving as a tangible demonstration of
+            | contemporary web development best practices, it functions as a robust reference implementation
+            | for building applications with React.
 
-      .card.mb-4
-        .card-header
-          h3.card-title Deep Dive into ReactSpark
-          p.lead.
-            ReactSpark is a modern, responsive portfolio website meticulously crafted using React 19 with TypeScript,
-            and built with the lightning-fast Vite build tool. Serving as a tangible demonstration of contemporary
-            web development best practices, it also functions as a robust reference implementation for
-            building applications with React. As an integral component of the broader WebSpark suite, ReactSpark
-            effectively illustrates how dynamic web frontends can be seamlessly powered by well-structured APIs.
-        .card-body
-          .ratio.ratio-16x9
-            iframe(src="https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4"
-              title="Deep Deive: ReactSpark- A Comprehensive Portfolio Showcase" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen)
-        .card-footer.text-muted
-          p.
-            Video by Mark Hazleton - Audio Overview by NotebookLM by Google. Made with Microsoft Clipchamp.
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Featured Video Section
+          section.mb-5
+            .card.shadow-sm
+              .card-header.bg-primary.text-white
+                h3.card-title.mb-0
+                  i.bi.bi-play-circle.me-2
+                  | Deep Dive into ReactSpark
+              .card-body.p-0
+                .ratio.ratio-16x9
+                  iframe(
+                    src="https://www.youtube.com/embed/jOQHPafhW5Y?si=fY1H0XsZh8GmwKz4"
+                    title="Deep Dive: ReactSpark - A Comprehensive Portfolio Showcase"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                  )
+              .card-footer.text-muted
+                p.mb-0.small
+                  | Video by Mark Hazleton - Audio Overview by NotebookLM by Google. Made with Microsoft Clipchamp.
 
-      p.lead.
-        As a solutions architect and full-stack developer with over 20 years of experience, I've created ReactSpark
-        to demonstrate my expertise in modern frontend development. This project showcases my ability to architect
-        scalable applications using industry best practices, strong typing principles, and component-based design.
-        Beyond just code, ReactSpark represents my commitment to creating maintainable, accessible, and performance-optimized
-        solutions that deliver real business value without getting "sidetracked by sizzle."
+          // Introduction Section
+          section.mb-5
+            header.mb-4
+              .article-meta.text-muted.mb-3
+                time(datetime=publishedDate) #{new Date(publishedDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
+                span.mx-2 •
+                span by #{pageAuthor}
+                span.mx-2 •
+                span #{estimatedReadTime} min read
 
-      //- Developer Skills Showcase
-      section.mb-5.p-4.border.border-primary.rounded.bg-dark.text-white
-        h3.h4.mb-4
-          i.bi.bi-stars.text-warning.me-2
-          | Developer Capabilities Demonstrated
-        .row.gy-4
-          .col-md-6
-            ul.list-unstyled
-              li.mb-3
-                i.bi.bi-check-circle-fill.text-success.me-2
-                strong.text-primary Modern Frontend Architecture:
-                span.text-white  Design patterns, state management, and code organization for scalable applications
-              li.mb-3
-                i.bi.bi-check-circle-fill.text-success.me-2
-                strong.text-primary TypeScript Mastery:
-                span.text-white  Strong typing, interfaces, and generics for type-safe, error-resistant code
-              li.mb-3
-                i.bi.bi-check-circle-fill.text-success.me-2
-                strong.text-primary API Integration:
-                span.text-white  Seamless data fetching, error handling, and state management with RESTful APIs
-          .col-md-6
-            ul.list-unstyled
-              li.mb-3
-                i.bi.bi-check-circle-fill.text-success.me-2
-                strong.text-primary Performance Optimization:
-                span.text-white  Efficient rendering, bundle optimization, and code splitting
-              li.mb-3
-                i.bi.bi-check-circle-fill.text-success.me-2
-                strong.text-primary Responsive Design:
-                span.text-white  Mobile-first approaches and adaptive layouts for all device sizes
-              li.mb-3
-                i.bi.bi-check-circle-fill.text-success.me-2
-                strong.text-primary Cloud Deployment:
-                span.text-white  CI/CD pipeline setup and infrastructure configuration for GitHub Pages and Azure
+            p.lead.mb-4
+              | As a solutions architect and full-stack developer with over 20 years of experience, I've created ReactSpark
+              | to demonstrate my expertise in modern frontend development. This project showcases my ability to architect
+              | scalable applications using industry best practices, strong typing principles, and component-based design.
 
-      p.
-        ReactSpark is a modern, responsive portfolio website meticulously crafted using React 19 with TypeScript,
-        and built with the lightning-fast Vite build tool. Serving as a tangible demonstration of contemporary
-        web development best practices, it also functions as a robust reference implementation for
-        building applications with React. As an integral component of the broader WebSpark suite, ReactSpark
-        effectively illustrates how dynamic web frontends can be seamlessly powered by well-structured APIs.
-        The full source code is openly available on GitHub, and you can explore the live
-        application on GitHub Pages.
+            p.mb-4
+              | Beyond just code, ReactSpark represents my commitment to creating maintainable, accessible, and
+              | performance-optimized solutions that deliver real business value without getting "sidetracked by sizzle."
 
-      //- Hero Section
-      section#home.hero-section.bg-gradient-primary.text-white
-        .container
-          .row.align-items-center
-            .col-lg-6.mb-5.mb-lg-0
-              h1.display-4.fw-bold.mb-4 ReactSpark
-              h2.h3.mb-4 A Comprehensive Portfolio Showcase
-              p.lead.mb-5
-                | A modern, responsive portfolio website meticulously crafted using
-                span.fw-bold  React 19
-                | with
-                span.fw-bold  TypeScript
-                | , and built with the lightning-fast
-                span.fw-bold  Vite
-                | build tool.
-              .d-flex.flex-wrap
-                a.btn.btn-light.btn-lg.me-3.mb-3(href="#overview")
-                  i.bi.bi-arrow-right-circle.me-2
-                  | Learn More
-                a.btn.btn-outline-light.btn-lg.mb-3(href="https://github.com/markhazleton/reactsparkportfolio" target="_blank")
-                  i.bi.bi-github.me-2
-                  | View Source
+          // Developer Skills Showcase
+          section.mb-5
+            .card.bg-dark.text-white.border-primary
+              .card-header.bg-primary
+                h3.h4.mb-0
+                  i.bi.bi-stars.text-warning.me-2
+                  | Developer Capabilities Demonstrated
+              .card-body
+                .row.g-4
+                  .col-md-6
+                    ul.list-unstyled.mb-0
+                      li.mb-3
+                        i.bi.bi-check-circle-fill.text-success.me-2
+                        strong.text-info Modern Frontend Architecture:
+                        |  Design patterns, state management, and code organization for scalable applications
+                      li.mb-3
+                        i.bi.bi-check-circle-fill.text-success.me-2
+                        strong.text-info TypeScript Mastery:
+                        |  Strong typing, interfaces, and generics for type-safe, error-resistant code
+                      li.mb-3
+                        i.bi.bi-check-circle-fill.text-success.me-2
+                        strong.text-info API Integration:
+                        |  Seamless data fetching, error handling, and state management with RESTful APIs
+                  .col-md-6
+                    ul.list-unstyled.mb-0
+                      li.mb-3
+                        i.bi.bi-check-circle-fill.text-success.me-2
+                        strong.text-info Performance Optimization:
+                        |  Efficient rendering, bundle optimization, and code splitting
+                      li.mb-3
+                        i.bi.bi-check-circle-fill.text-success.me-2
+                        strong.text-info Responsive Design:
+                        |  Mobile-first approaches and adaptive layouts for all device sizes
+                      li.mb-3
+                        i.bi.bi-check-circle-fill.text-success.me-2
+                        strong.text-info Cloud Deployment:
+                        |  CI/CD pipeline setup and infrastructure configuration for GitHub Pages and Azure
 
-            .col-lg-6
-              .card.shadow.border-0
-                .card-body.p-5.text-center
-                  i.bi.bi-code-slash.display-1.text-primary.mb-4
-                  h3.h4.mb-4 Modern Web Development
-                  p.text-muted.mb-0 Serving as a tangible demonstration of contemporary web development best practices and a robust reference implementation for building applications with React.
+          // Project Overview
+          section.mb-5
+            p.mb-4
+              | ReactSpark is an integral component of the broader WebSpark suite that effectively illustrates how
+              | dynamic web frontends can be seamlessly powered by well-structured APIs. The full source code is
+              | openly available on GitHub, and you can explore the live application on GitHub Pages.
 
-      //- Overview Section
-      section#overview.py-5.bg-light
-        .container.py-5
-          .row
-            .col-lg-8.mx-auto.text-center
-              h2.section-title.text-center.mb-5 Overview
-              p.lead.mb-4
-                | ReactSpark presents a clean and professional design, optimized for responsiveness across all device sizes thanks to the integration of
-                span.fw-bold  Bootstrap 5.3
-                | .
-              p.mb-4
-                | It offers a compelling showcase of a developer's skills and projects, incorporating dynamic content fetching and interactive components. The project also features a
-                span.text-highlight  dark/light mode theme toggle
-                | managed with the React Context API, providing users with a personalized viewing experience.
+            .d-flex.flex-wrap.gap-3.mb-4
+              a.btn.btn-primary.btn-lg(href="https://reactspark.markhazleton.com" target="_blank" rel="noopener")
+                i.bi.bi-box-arrow-up-right.me-2
+                | View Live Demo
+              a.btn.btn-outline-primary.btn-lg(href="https://github.com/markhazleton/reactsparkportfolio" target="_blank" rel="noopener")
+                i.bi.bi-github.me-2
+                | View Source Code          // Architecture and Technology Stack
+          section#architecture.mb-5
+            h2.h3.mb-4
+              i.bi.bi-diagram-3.me-2
+              | Architecture and Technology Stack
+            p.lead.mb-4
+              | ReactSpark presents a clean and professional design, optimized for responsiveness across all device sizes
+              | thanks to the integration of Bootstrap 5.3. It offers a compelling showcase of a developer's skills and projects,
+              | incorporating dynamic content fetching and interactive components.
 
-      //- Architecture Section
-      section#architecture.py-5
-        .container.py-5
-          h2.section-title Architecture and Technology Stack
-          .row.gy-4
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.mb-4
-                    i.bi.bi-layers.text-primary.me-2
-                    | Frontend Framework
-                  p.card-text
-                    | React 19.1 with TypeScript 5.8 leveraging strict type checking for enhanced developer experience and code maintainability.
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.mb-4
-                    i.bi.bi-lightning.text-primary.me-2
-                    | Build Tool
-                  p.card-text
-                    | Vite 6.3, ensuring rapid development cycles with features like
-                    span.fw-bold  hot module replacement (HMR)
-                    | .
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.mb-4
-                    i.bi.bi-palette.text-primary.me-2
-                    | Styling
-                  p.card-text A combination of Bootstrap 5.3.5, SCSS/Sass for customizable component-level styles, React Bootstrap 2.10.9, and Bootstrap Icons 1.11.3.
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.mb-4
-                    i.bi.bi-diagram-3.text-primary.me-2
-                    | State Management
-                  p.card-text The React Context API is employed for managing application-wide state, such as the theme.
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.mb-4
-                    i.bi.bi-signpost.text-primary.me-2
-                    | Routing
-                  p.card-text React Router v7.5 enables seamless navigation between different sections of the portfolio.
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.mb-4
-                    i.bi.bi-cloud-arrow-down.text-primary.me-2
-                    | HTTP Client
-                  p.card-text Axios 1.8.4 is used for efficient API interactions.
+            .row.g-4.mb-5
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-layers.text-primary.me-2
+                      | Frontend Framework
+                    p.card-text
+                      | React 19.1 with TypeScript 5.8 leveraging strict type checking for enhanced
+                      | developer experience and code maintainability.
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-lightning.text-primary.me-2
+                      | Build Tool
+                    p.card-text
+                      | Vite 6.3, ensuring rapid development cycles with features like
+                      strong hot module replacement (HMR)
+                      | .
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-palette.text-primary.me-2
+                      | Styling
+                    p.card-text
+                      | A combination of Bootstrap 5.3.5, SCSS/Sass for customizable component-level styles,
+                      | React Bootstrap 2.10.9, and Bootstrap Icons 1.11.3.
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-diagram-3.text-primary.me-2
+                      | State Management
+                    p.card-text The React Context API is employed for managing application-wide state, such as the theme.
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-signpost.text-primary.me-2
+                      | Routing
+                    p.card-text React Router v7.5 enables seamless navigation between different sections of the portfolio.
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-cloud-arrow-down.text-primary.me-2
+                      | HTTP Client
+                    p.card-text Axios 1.8.4 is used for efficient API interactions.
 
-          .mt-5
-            h4.mb-4 Example Component Type Definition
-            pre.line-numbers
-              code.language-typescript.
-                // Hero component type definition
-                interface HeroProps {
-                  profile: {
-                    name: string;
-                    title: string;
-                    description: string;
-                    socialLinks: {
-                      github?: string;
-                      linkedin?: string;
-                      twitter?: string;
-                    };
-                  };
-                  isLoading: boolean;
-                  error?: Error | null;
-                }
-
-                const Hero: React.FC<HeroProps> = ({
-                  profile,
-                  isLoading,
-                  error
-                }) => {
-                  // Component implementation
-                  return (
-                    // JSX markup
-                  );
-                };
-
-      //- Features Section
-      section#features.py-5.bg-light
-        .container.py-5
-          h2.section-title Key Features
-          .row.gy-4
-            .col-md-4
-              .text-center.mb-4
-                .feature-icon.mx-auto.mb-3
-                  i.bi.bi-person-vcard
-                h3.h5 Hero Section
-                p A compelling introduction with profile information and quick navigation links.
-
-            .col-md-4
-              .text-center.mb-4
-                .feature-icon.mx-auto.mb-3
-                  i.bi.bi-kanban
-                h3.h5 Projects
-                p Displays project cards with descriptions, technologies used, and direct links.
-
-            .col-md-4
-              .text-center.mb-4
-                .feature-icon.mx-auto.mb-3
-                  i.bi.bi-newspaper
-                h3.h5 Articles
-                p Dynamically fetches and displays the latest blog posts from an RSS feed.
-
-            .col-md-4
-              .text-center.mb-4
-                .feature-icon.mx-auto.mb-3
-                  i.bi.bi-cloud-sun
-                h3.h5 Weather Forecast
-                p Interactive component for current weather conditions by city name.
-
-            .col-md-4
-              .text-center.mb-4
-                .feature-icon.mx-auto.mb-3
-                  i.bi.bi-emoji-laughing
-                h3.h5 Joke Generator
-                p Fetches random jokes from an API with share functionality.
-
-            .col-md-4
-              .text-center.mb-4
-                .feature-icon.mx-auto.mb-3
-                  i.bi.bi-chat-dots
-                h3.h5 Chat
-                p Real-time chat interface powered by SignalR.
-
-          .row.mt-5
-            .col-lg-10.mx-auto
-              .card.bg-white
-                .card-body.p-4
-                  h4.mb-4 Weather Component Example
-                  pre.line-numbers
-                    code.language-typescript.
-                      // Weather component with TypeScript and Axios
-                      interface WeatherData {
-                        main: {
-                          temp: number;
-                          humidity: number;
-                          feels_like: number;
-                        };
-                        wind: {
-                          speed: number;
-                        };
-                        weather: Array<{
-                          description: string;
-                          icon: string;
-                        }>;
+            .card.mb-4
+              .card-header.bg-dark.text-white
+                h4.mb-0
+                  i.bi.bi-code.me-2
+                  | Example Component Type Definition
+              .card-body
+                pre.language-typescript
+                  code.language-typescript.
+                    // Hero component type definition
+                    interface HeroProps {
+                      profile: {
                         name: string;
-                        coord: {
-                          lat: number;
-                          lon: number;
+                        title: string;
+                        description: string;
+                        socialLinks: {
+                          github?: string;
+                          linkedin?: string;
+                          twitter?: string;
                         };
-                      }
+                      };
+                      isLoading: boolean;
+                      error?: Error | null;
+                    }
 
-                      const Weather: React.FC = () => {
-                        const [city, setCity] = useState<string>("");
-                        const [weather, setWeather] = useState<WeatherData | null>(null);
-                        const [loading, setLoading] = useState<boolean>(false);
-                        const [error, setError] = useState<string | null>(null);
+                    const Hero: React.FC<HeroProps> = ({
+                      profile,
+                      isLoading,
+                      error
+                    }) => {
+                      // Component implementation
+                      return (
+                        // JSX markup
+                      );
+                    };
 
-                        const fetchWeather = async () => {
-                          setLoading(true);
-                          setError(null);
+          // Key Features Section
+          section#features.mb-5
+            h2.h3.mb-4
+              i.bi.bi-star.me-2
+              | Key Features
+            .row.g-4.mb-5
+              .col-md-4.text-center
+                .mb-4
+                  i.bi.bi-person-vcard.display-4.text-primary.mb-3
+                  h3.h5 Hero Section
+                  p A compelling introduction with profile information and quick navigation links.
 
-                          try {
-                            const response = await axios.get(
-                              `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
-                            );
-                            setWeather(response.data);
+              .col-md-4.text-center
+                .mb-4
+                  i.bi.bi-kanban.display-4.text-primary.mb-3
+                  h3.h5 Projects
+                  p Displays project cards with descriptions, technologies used, and direct links.
 
-                            // Save to recent searches in localStorage
-                            saveToRecentSearches(city);
-                          } catch (err) {
-                            setError("Failed to fetch weather data. Please check the city name.");
-                          } finally {
-                            setLoading(false);
-                          }
-                        };
+              .col-md-4.text-center
+                .mb-4
+                  i.bi.bi-newspaper.display-4.text-primary.mb-3
+                  h3.h5 Articles
+                  p Dynamically fetches and displays the latest blog posts from an RSS feed.
 
-                        // Component JSX implementation
+              .col-md-4.text-center
+                .mb-4
+                  i.bi.bi-cloud-sun.display-4.text-primary.mb-3
+                  h3.h5 Weather Forecast
+                  p Interactive component for current weather conditions by city name.
+
+              .col-md-4.text-center
+                .mb-4
+                  i.bi.bi-emoji-laughing.display-4.text-primary.mb-3
+                  h3.h5 Joke Generator
+                  p Fetches random jokes from an API with share functionality.
+
+              .col-md-4.text-center
+                .mb-4
+                  i.bi.bi-chat-dots.display-4.text-primary.mb-3
+                  h3.h5 Chat
+                  p Real-time chat interface powered by SignalR.
+
+            .card
+              .card-header.bg-info.text-white
+                h4.mb-0
+                  i.bi.bi-cloud-sun.me-2
+                  | Weather Component Example
+              .card-body
+                pre.language-typescript
+                  code.language-typescript.
+                    // Weather component with TypeScript and Axios
+                    interface WeatherData {
+                      main: {
+                        temp: number;
+                        humidity: number;
+                        feels_like: number;
+                      };
+                      wind: {
+                        speed: number;
+                      };
+                      weather: Array<{
+                        description: string;
+                        icon: string;
+                      }>;
+                      name: string;
+                      coord: {
+                        lat: number;
+                        lon: number;
+                      };
+                    }
+
+                    const Weather: React.FC = () => {
+                      const [city, setCity] = useState<string>("");
+                      const [weather, setWeather] = useState<WeatherData | null>(null);
+                      const [loading, setLoading] = useState<boolean>(false);
+                      const [error, setError] = useState<string | null>(null);
+
+                      const fetchWeather = async () => {
+                        setLoading(true);
+                        setError(null);
+
+                        try {
+                          const response = await axios.get(
+                            `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+                          );
+                          setWeather(response.data);
+
+                          // Save to recent searches in localStorage
+                          saveToRecentSearches(city);
+                        } catch (err) {
+                          setError("Failed to fetch weather data. Please check the city name.");
+                        } finally {
+                          setLoading(false);
+                        }
                       };
 
-      //- Components Section
-      section#components.py-5
-        .container.py-5
-          h2.section-title Project Components
-          p.lead.mb-5
-            | The ReactSpark project is organized into a set of reusable components, contributing to its modular and maintainable structure:
+                      // Component JSX implementation
+                    };          // Project Components Section
+          section#components.mb-5
+            h2.h3.mb-4
+              i.bi.bi-puzzle.me-2
+              | Project Components
+            p.lead.mb-4
+              | The ReactSpark project is organized into a set of reusable components, contributing to its modular
+              | and maintainable structure:
 
-          .row.gy-4
-            .col-lg-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title
-                    i.bi.bi-person-vcard.text-primary.me-2
-                    | Hero
-                  p.card-text The main introductory component.
-                  .d-flex.flex-wrap.mt-3
-                    span.badge.tech-badge TypeScript
-                    span.badge.tech-badge React FC
-                    span.badge.tech-badge Props Interface
+            .row.g-4.mb-5
+              .col-lg-6
+                .card.h-100.shadow-sm
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-person-vcard.text-primary.me-2
+                      | Hero
+                    p.card-text The main introductory component.
+                    .d-flex.flex-wrap.gap-2.mt-3
+                      span.badge.bg-primary TypeScript
+                      span.badge.bg-secondary React FC
+                      span.badge.bg-info Props Interface
 
-            .col-lg-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title
-                    i.bi.bi-newspaper.text-primary.me-2
-                    | Articles
-                  p.card-text Fetches and displays blog posts from an RSS feed.
-                  .d-flex.flex-wrap.mt-3
-                    span.badge.tech-badge Axios
-                    span.badge.tech-badge XML2JS
-                    span.badge.tech-badge Type Safety
+              .col-lg-6
+                .card.h-100.shadow-sm
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-newspaper.text-primary.me-2
+                      | Articles
+                    p.card-text Fetches and displays blog posts from an RSS feed.
+                    .d-flex.flex-wrap.gap-2.mt-3
+                      span.badge.bg-primary Axios
+                      span.badge.bg-secondary XML2JS
+                      span.badge.bg-info Type Safety
 
-            .col-lg-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title
-                    i.bi.bi-kanban.text-primary.me-2
-                    | Projects
-                  p.card-text Showcases the developer's projects.
-                  .d-flex.flex-wrap.mt-3
-                    span.badge.tech-badge React Router
-                    span.badge.tech-badge Interface Definitions
-                    span.badge.tech-badge Image Optimization
+              .col-lg-6
+                .card.h-100.shadow-sm
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-kanban.text-primary.me-2
+                      | Projects
+                    p.card-text Showcases the developer's projects.
+                    .d-flex.flex-wrap.gap-2.mt-3
+                      span.badge.bg-primary React Router
+                      span.badge.bg-secondary Interface Definitions
+                      span.badge.bg-info Image Optimization
 
-            .col-lg-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title
-                    i.bi.bi-cloud-sun.text-primary.me-2
-                    | Weather Forecast
-                  p.card-text Provides interactive weather lookup functionality.
-                  .d-flex.flex-wrap.mt-3
-                    span.badge.tech-badge OpenWeather API
-                    span.badge.tech-badge LocalStorage
-                    span.badge.tech-badge Error Handling
+              .col-lg-6
+                .card.h-100.shadow-sm
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-cloud-sun.text-primary.me-2
+                      | Weather Forecast
+                    p.card-text Provides interactive weather lookup functionality.
+                    .d-flex.flex-wrap.gap-2.mt-3
+                      span.badge.bg-primary OpenWeather API
+                      span.badge.bg-secondary LocalStorage
+                      span.badge.bg-info Error Handling
 
-            .col-lg-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title
-                    i.bi.bi-emoji-laughing.text-primary.me-2
-                    | Joke Generator
-                  p.card-text Fetches and displays random jokes.
-                  .d-flex.flex-wrap.mt-3
-                    span.badge.tech-badge JokeAPI
-                    span.badge.tech-badge Social Sharing
-                    span.badge.tech-badge Async/Await
+              .col-lg-6
+                .card.h-100.shadow-sm
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-emoji-laughing.text-primary.me-2
+                      | Joke Generator
+                    p.card-text Fetches and displays random jokes.
+                    .d-flex.flex-wrap.gap-2.mt-3
+                      span.badge.bg-primary JokeAPI
+                      span.badge.bg-secondary Social Sharing
+                      span.badge.bg-info Async/Await
 
-            .col-lg-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title
-                    i.bi.bi-chat-dots.text-primary.me-2
-                    | Chat
-                  p.card-text Enables real-time communication.
-                  .d-flex.flex-wrap.mt-3
-                    span.badge.tech-badge SignalR
-                    span.badge.tech-badge React Markdown
-                    span.badge.tech-badge Real-time Updates
+              .col-lg-6
+                .card.h-100.shadow-sm
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-chat-dots.text-primary.me-2
+                      | Chat
+                    p.card-text Enables real-time communication.
+                    .d-flex.flex-wrap.gap-2.mt-3
+                      span.badge.bg-primary SignalR
+                      span.badge.bg-secondary React Markdown
+                      span.badge.bg-info Real-time Updates
 
-      //- Workflow Section
-      section#workflow.py-5.bg-light
-        .container.py-5
-          h2.section-title Development Workflow
-          .row.align-items-center
-            .col-lg-6.mb-4.mb-lg-0
-              p.mb-4 The development workflow for ReactSpark is streamlined for efficiency:
-              ul.list-group.list-group-flush.bg-transparent
-                li.list-group-item.bg-transparent.ps-0
-                  i.bi.bi-lightning.text-primary.me-2
-                  | Hot module replacement (HMR) provided by Vite enables rapid development
-                li.list-group-item.bg-transparent.ps-0
-                  i.bi.bi-shield-check.text-primary.me-2
-                  | TypeScript ensures type safety throughout the codebase
-                li.list-group-item.bg-transparent.ps-0
-                  i.bi.bi-eyeglasses.text-primary.me-2
-                  | ESLint maintains code quality and consistency
-                li.list-group-item.bg-transparent.ps-0
-                  i.bi.bi-braces.text-primary.me-2
-                  | SCSS compilation with watch mode for styling
-                li.list-group-item.bg-transparent.ps-0
-                  i.bi.bi-box-seam.text-primary.me-2
-                  | Optimized production builds targeting the docs folder
+          // Development Workflow Section
+          section#workflow.mb-5
+            .row.align-items-center
+              .col-lg-6.mb-4.mb-lg-0
+                h2.h3.mb-4
+                  i.bi.bi-gear.me-2
+                  | Development Workflow
+                p.mb-4 The development workflow for ReactSpark is streamlined for efficiency:
+                ul.list-group.list-group-flush
+                  li.list-group-item.d-flex.align-items-start.ps-0.border-0
+                    i.bi.bi-lightning.text-primary.me-3.mt-1
+                    div
+                      strong Hot module replacement (HMR)
+                      div.text-muted provided by Vite enables rapid development
+                  li.list-group-item.d-flex.align-items-start.ps-0.border-0
+                    i.bi.bi-shield-check.text-primary.me-3.mt-1
+                    div
+                      strong TypeScript ensures type safety
+                      div.text-muted throughout the codebase
+                  li.list-group-item.d-flex.align-items-start.ps-0.border-0
+                    i.bi.bi-eyeglasses.text-primary.me-3.mt-1
+                    div
+                      strong ESLint maintains code quality
+                      div.text-muted and consistency
+                  li.list-group-item.d-flex.align-items-start.ps-0.border-0
+                    i.bi.bi-braces.text-primary.me-3.mt-1
+                    div
+                      strong SCSS compilation
+                      div.text-muted with watch mode for styling
+                  li.list-group-item.d-flex.align-items-start.ps-0.border-0
+                    i.bi.bi-box-seam.text-primary.me-3.mt-1
+                    div
+                      strong Optimized production builds
+                      div.text-muted targeting the docs folder
 
-            .col-lg-6
-              .card.shadow-sm
-                .card-body.p-4
-                  h4.mb-3 Vite Configuration Example
-                  pre.line-numbers
-                    code.language-javascript.
-                      // vite.config.ts
-                      import { defineConfig } from 'vite';
-                      import react from '@vitejs/plugin-react';
-                      import tsconfigPaths from 'vite-tsconfig-paths';
+              .col-lg-6
+                .card.shadow-sm
+                  .card-header.bg-success.text-white
+                    h4.mb-0
+                      i.bi.bi-tools.me-2
+                      | Vite Configuration Example
+                  .card-body
+                    pre.language-javascript
+                      code.language-javascript.
+                        // vite.config.ts
+                        import { defineConfig } from 'vite';
+                        import react from '@vitejs/plugin-react';
+                        import tsconfigPaths from 'vite-tsconfig-paths';
 
-                      export default defineConfig({
-                        plugins: [react(), tsconfigPaths()],
-                        build: {
-                          outDir: 'docs',
-                          sourcemap: true,
-                          minify: 'terser',
-                          terserOptions: {
-                            compress: {
-                              drop_console: true,
+                        export default defineConfig({
+                          plugins: [react(), tsconfigPaths()],
+                          build: {
+                            outDir: 'docs',
+                            sourcemap: true,
+                            minify: 'terser',
+                            terserOptions: {
+                              compress: {
+                                drop_console: true,
+                              },
                             },
                           },
-                        },
-                        server: {
-                          port: 3000,
-                          open: true,
-                          cors: true,
-                        },
-                      });
+                          server: {
+                            port: 3000,
+                            open: true,
+                            cors: true,
+                          },
+                        });
 
-      //- Deployment Section
-      section#deployment.py-5
-        .container.py-5
-          h2.section-title Deployment
-          .row.gy-4
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.d-flex.align-items-center.mb-4
-                    i.bi.bi-github.text-primary.me-2
-                    | GitHub Pages
-                  p The project is set up for easy deployment to GitHub Pages by outputting the production build to the docs folder.
-                  p This allows serving the site directly from the docs folder by default on GitHub Pages.
+          // Deployment Section
+          section#deployment.mb-5
+            h2.h3.mb-4
+              i.bi.bi-cloud-upload.me-2
+              | Deployment
+            .row.g-4.mb-5
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-header.bg-primary.text-white
+                    h3.h5.mb-0
+                      i.bi.bi-github.me-2
+                      | GitHub Pages
+                  .card-body
+                    p The project is set up for easy deployment to GitHub Pages by outputting the production build to the docs folder.
+                    p.mb-0 This allows serving the site directly from the docs folder by default on GitHub Pages.
 
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.d-flex.align-items-center.mb-4
-                    i.bi.bi-cloud.text-primary.me-2
-                    | Azure Static Web Apps
-                  p Includes configuration files and a CI/CD pipeline defined with GitHub Actions for automated deployments.
-                  p Enables features like a global CDN, free SSL certificates, and built-in API backend through Azure Functions.
+              .col-md-6
+                .card.h-100.border-info
+                  .card-header.bg-info.text-white
+                    h3.h5.mb-0
+                      i.bi.bi-cloud.me-2
+                      | Azure Static Web Apps
+                  .card-body
+                    p Includes configuration files and a CI/CD pipeline defined with GitHub Actions for automated deployments.
+                    p.mb-0 Enables features like a global CDN, free SSL certificates, and built-in API backend through Azure Functions.
 
-          .row.mt-5
-            .col-lg-10.mx-auto
-              .card.bg-white
-                .card-body.p-4
-                  h4.mb-4 GitHub Actions Workflow
-                  pre.line-numbers
-                    code.language-yaml.
-                      # .github/workflows/azure-static-web-apps.yml
-                      name: Deploy to Azure Static Web Apps
+            .card
+              .card-header.bg-warning.text-dark
+                h4.mb-0
+                  i.bi.bi-play-circle.me-2
+                  | GitHub Actions Workflow
+              .card-body
+                pre.language-yaml
+                  code.language-yaml.
+                    # .github/workflows/azure-static-web-apps.yml
+                    name: Deploy to Azure Static Web Apps
 
-                      on:
-                        push:
-                          branches:
-                            - main
+                    on:
+                      push:
+                        branches:
+                          - main
 
-                      jobs:
-                        build_and_deploy:
-                          runs-on: ubuntu-latest
-                          steps:
-                            - uses: actions/checkout@v3
+                    jobs:
+                      build_and_deploy:
+                        runs-on: ubuntu-latest
+                        steps:
+                          - uses: actions/checkout@v3
 
-                            - name: Setup Node.js
-                              uses: actions/setup-node@v3
-                              with:
-                                node-version: 18
+                          - name: Setup Node.js
+                            uses: actions/setup-node@v3
+                            with:
+                              node-version: 18
 
-                            - name: Install dependencies
-                              run: npm ci
+                          - name: Install dependencies
+                            run: npm ci
 
-                            - name: Build
-                              run: npm run build
+                          - name: Build
+                            run: npm run build
 
-                            - name: Deploy
-                              uses: Azure/static-web-apps-deploy@v1
-                              with:
-                                azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-                                repo_token: ${{ secrets.GITHUB_TOKEN }}
-                                action: "upload"
-                                app_location: "docs"
-                                api_location: "api"
-                                output_location: ""
+                          - name: Deploy
+                            uses: Azure/static-web-apps-deploy@v1
+                            with:
+                              azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+                              repo_token: ${{ secrets.GITHUB_TOKEN }}
+                              action: "upload"
+                              app_location: "docs"
+                              api_location: "api"
+                              output_location: ""          // Integration with WebSpark Suite
+          section#integration.mb-5
+            h2.h3.mb-4
+              i.bi.bi-diagram-2.me-2
+              | Integration with WebSpark Suite
+            p.lead.mb-4
+              | ReactSpark serves as a crucial component in the broader WebSpark ecosystem, integrating with other projects:
 
-      //- Integration with WebSpark Suite Section
-      section.py-5.bg-light
-        .container.py-5
-          h2.section-title Integration with WebSpark Suite
-          p.lead.mb-4 ReactSpark serves as a crucial component in the broader WebSpark ecosystem, integrating with other projects:
+            .row.g-4.mb-5
+              .col-md-6
+                .card.h-100.border-success
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-chat-square-text.text-success.me-2
+                      | PromptSpark
+                    p.card-text
+                      | Connects with PromptSpark for integrated LLM-driven chat functionality and content generation capabilities.
 
-          .row.gy-4
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.d-flex.align-items-center.mb-3
-                    i.bi.bi-chat-square-text.text-primary.me-2
-                    | PromptSpark
-                  p.card-text Connects with PromptSpark for integrated LLM-driven chat functionality and content generation capabilities.
+              .col-md-6
+                .card.h-100.border-info
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-hdd-network.text-info.me-2
+                      | WebSpark API
+                    p.card-text
+                      | Consumes the WebSpark API for retrieving portfolio data, project information, and user settings.
 
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.d-flex.align-items-center.mb-3
-                    i.bi.bi-hdd-network.text-primary.me-2
-                    | WebSpark API
-                  p.card-text Consumes the WebSpark API for retrieving portfolio data, project information, and user settings.
+              .col-md-6
+                .card.h-100.border-warning
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-signpost-split.text-warning.me-2
+                      | SignalR Hub
+                    p.card-text
+                      | Utilizes a centralized SignalR hub for real-time communication features throughout the application.
 
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.d-flex.align-items-center.mb-3
-                    i.bi.bi-signpost-split.text-primary.me-2
-                    | SignalR Hub
-                  p.card-text Utilizes a centralized SignalR hub for real-time communication features throughout the application.
+              .col-md-6
+                .card.h-100.border-danger
+                  .card-body
+                    h3.h5.card-title.mb-3
+                      i.bi.bi-shield-check.text-danger.me-2
+                      | Identity Management
+                    p.card-text
+                      | Implements shared identity management components for consistent authentication across the WebSpark ecosystem.
 
-            .col-md-6
-              .card.h-100
-                .card-body
-                  h3.h5.card-title.d-flex.align-items-center.mb-3
-                    i.bi.bi-shield-check.text-primary.me-2
-                    | Identity Management
-                  p.card-text Implements shared identity management components for consistent authentication across the WebSpark ecosystem.
+          // SEO & Accessibility Section
+          section#seo-accessibility.mb-5
+            .row.align-items-center
+              .col-lg-6.mb-4.mb-lg-0
+                h2.h3.mb-4
+                  i.bi.bi-universal-access.me-2
+                  | SEO & Accessibility
+                p.mb-4 ReactSpark prioritizes both search engine visibility and accessibility standards:
+                ul.list-group.list-group-flush
+                  li.list-group-item.d-flex.align-items-center.ps-0.border-0
+                    i.bi.bi-check-circle-fill.text-success.me-3
+                    | Semantic HTML5 structure
+                  li.list-group-item.d-flex.align-items-center.ps-0.border-0
+                    i.bi.bi-check-circle-fill.text-success.me-3
+                    | Comprehensive meta tags and Open Graph data
+                  li.list-group-item.d-flex.align-items-center.ps-0.border-0
+                    i.bi.bi-check-circle-fill.text-success.me-3
+                    | Proper heading hierarchy for screen readers
+                  li.list-group-item.d-flex.align-items-center.ps-0.border-0
+                    i.bi.bi-check-circle-fill.text-success.me-3
+                    | ARIA attributes for interactive elements
+                  li.list-group-item.d-flex.align-items-center.ps-0.border-0
+                    i.bi.bi-check-circle-fill.text-success.me-3
+                    | Keyboard navigation support
+                  li.list-group-item.d-flex.align-items-center.ps-0.border-0
+                    i.bi.bi-check-circle-fill.text-success.me-3
+                    | Color contrast compliance with WCAG guidelines
 
-      //- SEO & Accessibility Section
-      section.py-5
-        .container.py-5
-          .row.align-items-center
-            .col-lg-6
-              h2.h3.mb-4 SEO & Accessibility
-              p ReactSpark prioritizes both search engine visibility and accessibility standards:
-              ul.list-unstyled
-                li.mb-3
-                  i.bi.bi-check-circle-fill.text-success.me-2
-                  | Semantic HTML5 structure
-                li.mb-3
-                  i.bi.bi-check-circle-fill.text-success.me-2
-                  | Comprehensive meta tags and Open Graph data
-                li.mb-3
-                  i.bi.bi-check-circle-fill.text-success.me-2
-                  | Proper heading hierarchy for screen readers
-                li.mb-3
-                  i.bi.bi-check-circle-fill.text-success.me-2
-                  | ARIA attributes for interactive elements
-                li.mb-3
-                  i.bi.bi-check-circle-fill.text-success.me-2
-                  | Keyboard navigation support
-                li.mb-3
-                  i.bi.bi-check-circle-fill.text-success.me-2
-                  | Color contrast compliance with WCAG guidelines
+              .col-lg-6
+                .card.shadow-sm
+                  .card-header.bg-primary.text-white
+                    h5.mb-0
+                      i.bi.bi-link-45deg.me-2
+                      | Related Articles
+                  .card-body
+                    p.card-text Explore detailed articles about ReactSpark development:
+                    ul.list-group.list-group-flush
+                      li.list-group-item.border-0.ps-0
+                        a.text-decoration-none(href="/articles/building-my-first-react-site-using-vite.html")
+                          i.bi.bi-arrow-right.me-2
+                          | Building My First React Site Using Vite and GitHub
+                      li.list-group-item.border-0.ps-0
+                        a.text-decoration-none(href="/articles/adding-weather-component-a-typescript-learning-journey.html")
+                          i.bi.bi-arrow-right.me-2
+                          | Adding Weather to My Profile Application
+                      li.list-group-item.border-0.ps-0
+                        a.text-decoration-none(href="/articles/building-real-time-chat-with-react-signalr-and-markdown-streaming.html")
+                          i.bi.bi-arrow-right.me-2
+                          | Building Real-Time Chat with React, SignalR, and Markdown Streaming
 
-            .col-lg-6
-              .card.h-100
+          // Conclusion Section
+          section.mb-5
+            .card.bg-dark.text-white
+              .card-body.py-5.text-center
+                h2.h3.mb-4.text-white
+                  i.bi.bi-trophy.text-warning.me-2
+                  | Conclusion
+                p.lead.mb-4.text-white
+                  | ReactSpark stands as a comprehensive and well-engineered portfolio showcase, effectively demonstrating
+                  | modern web development principles through the power of React, the type safety of TypeScript, and the
+                  | efficiency of Vite. As part of the WebSpark ecosystem, it provides a tangible example of how contemporary
+                  | frontend development can integrate with robust API services for a complete web solution.
+                .d-flex.justify-content-center.flex-wrap.gap-3
+                  a.btn.btn-primary.btn-lg(href="https://github.com/markhazleton/reactsparkportfolio" target="_blank" rel="noopener")
+                    i.bi.bi-github.me-2
+                    | Explore the Source Code
+                  a.btn.btn-outline-light.btn-lg(href="https://reactspark.markhazleton.com" target="_blank" rel="noopener")
+                    i.bi.bi-box-arrow-up-right.me-2
+                    | View Live Demo
+
+        .col-lg-4
+          aside.sticky-top(style="top: 2rem;")
+            // Table of Contents
+            nav.mb-4(aria-label='Table of Contents')
+              .card.shadow-sm
                 .card-header.bg-primary.text-white
-                  h5.mb-0 Related Articles
+                  h3.card-title.mb-0
+                    i.bi.bi-list-ul.me-2
+                    | Table of Contents
                 .card-body
-                  p.card-text Explore detailed articles about ReactSpark development:
-                  ul.list-group.list-group-flush
-                    li.list-group-item
-                      a.text-decoration-none(href="/articles/building-my-first-react-site-using-vite.html" target="_blank")
-                        i.bi.bi-link-45deg.me-2
-                        | Building My First React Site Using Vite and GitHub
-                    li.list-group-item
-                      a.text-decoration-none(href="/articles/adding-weather-component-a-typescript-learning-journey.html" target="_blank")
-                        i.bi.bi-link-45deg.me-2
-                        | Adding Weather to My Profile Application
-                    li.list-group-item
-                      a.text-decoration-none(href="/articles/building-real-time-chat-with-react-signalr-and-markdown-streaming.html" target="_blank")
-                        i.bi.bi-link-45deg.me-2
-                        | Building Real-Time Chat with React, SignalR, and Markdown Streaming
+                  ol.list-group.list-group-numbered.list-group-flush
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#architecture') Architecture & Tech Stack
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#features') Key Features
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#components') Project Components
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#workflow') Development Workflow
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#deployment') Deployment
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#integration') WebSpark Integration
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#seo-accessibility') SEO & Accessibility
 
-      //- Conclusion Section
-      section.py-5.bg-dark.text-white
-        .container.py-5.text-center
-          h2.mb-4.text-white Conclusion
-          p.lead.mb-5.text-white
-            | ReactSpark stands as a comprehensive and well-engineered portfolio showcase, effectively demonstrating modern web development principles through the power of React, the type safety of TypeScript, and the efficiency of Vite. As part of the WebSpark ecosystem, it provides a tangible example of how contemporary frontend development can integrate with robust API services for a complete web solution.
-          .d-flex.justify-content-center.flex-wrap
-            a.btn.btn-primary.btn-lg.me-3.mb-3(href="https://github.com/markhazleton/reactsparkportfolio" target="_blank")
-              i.bi.bi-github.me-2
-              | Explore the Source Code
-            a.btn.btn-outline-light.btn-lg.mb-3(href="https://reactspark.markhazleton.com" target="_blank")
-              i.bi.bi-box-arrow-up-right.me-2
-              | View Live Demo
+            // Quick Links
+            .card.shadow-sm.mb-4
+              .card-header.bg-success.text-white
+                h5.mb-0
+                  i.bi.bi-rocket-takeoff.me-2
+                  | Quick Links
+              .card-body
+                .d-grid.gap-2
+                  a.btn.btn-outline-primary(href="https://reactspark.markhazleton.com" target="_blank" rel="noopener")
+                    i.bi.bi-eye.me-2
+                    | Live Demo
+                  a.btn.btn-outline-secondary(href="https://github.com/markhazleton/reactsparkportfolio" target="_blank" rel="noopener")
+                    i.bi.bi-github.me-2
+                    | Source Code
+
+            // Technology Stack
+            .card.shadow-sm.mb-4
+              .card-header.bg-info.text-white
+                h5.mb-0
+                  i.bi.bi-stack.me-2
+                  | Technology Stack
+              .card-body
+                .d-flex.flex-wrap.gap-2
+                  span.badge.bg-primary React 19
+                  span.badge.bg-secondary TypeScript 5.8
+                  span.badge.bg-success Vite 6.3
+                  span.badge.bg-info Bootstrap 5.3
+                  span.badge.bg-warning.text-dark Axios
+                  span.badge.bg-danger SignalR
+                  span.badge.bg-dark React Router
+
+            // Related WebSpark Projects
+            .card.shadow-sm
+              .card-header.bg-dark.text-white
+                h5.mb-0
+                  i.bi.bi-collection.me-2
+                  | WebSpark Ecosystem
+              .card-body
+                ul.list-unstyled.mb-0
+                  li.mb-2
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/articles/webspark-api-integration.html") WebSpark API
+                  li.mb-2
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/articles/promptspark-integration.html") PromptSpark
+                  li.mb-2
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/articles/signalr-chat-integration.html") SignalR Hub
+                  li
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/articles/webspark-overview.html") Complete Ecosystem
