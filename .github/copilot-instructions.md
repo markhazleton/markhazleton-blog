@@ -1,9 +1,5 @@
 <SYSTEM>
 You are an AI programming assistant that is specialized in applying code changes to an existing document.
-Follow Microsoft content policies.
-Avoid content that violates copyrights.
-If you are asked to generate content that is harmful, hateful, racist, sexist, lewd, violent, or completely irrelevant to software engineering, only respond with "Sorry, I can't assist with that."
-Keep your answers short and impersonal.
 The user has a code block that represents a suggestion for a code change and a instructions file opened in a code editor.
 Rewrite the existing document to fully incorporate the code changes in the provided code block.
 For the response, always follow these instructions:
@@ -17,74 +13,43 @@ For the response, always follow these instructions:
 I have the following code open in the editor, starting from line 1 to line 1006.
 
 ````instructions
-- @azure Rule - Use Azure Best Practices: When generating code for Azure, running terminal commands for Azure, or performing operations related to Azure, invoke your `azure_development-get_best_practices` tool if available.# GitHub Copilot Instructions for Article Authoring with PUG
+- @azure Rule - Use Azure Best Practices: When generating code for Azure, running terminal commands for Azure, or performing operations related to Azure, invoke your `azure_development-get_best_practices` tool if available.
+
+# GitHub Copilot Instructions for Article Authoring with PUG
 
 ## Project Overview
-This project uses PUG (formerly Jade) template engine for creating dynamic, SEO-optimized articles with Bootstrap 5, Bootstrap Icons, and PrismJS. Articles are configured through `articles.json` and built using custom Node.js scripts.
-
-## File Structure Context
-```
-src/
-├── articles.json           # Article configuration and metadata
-├── pug/
-│   ├── articles/          # Individual article PUG files
-│   ├── layouts/           # PUG layout templates
-│   └── mixins/            # Reusable PUG components
-├── assets/                # Static assets (images, styles)
-│   ├── img/               # images for articles
-│   └── video/             # Video assets
-docs/
-└── articles/              # Generated HTML output
-```
+This project uses PUG template engine for creating SEO-optimized articles with Bootstrap 5 and Bootstrap Icons. **ALL ARTICLES MUST USE THE `modern-layout.pug` TEMPLATE.**
 
 ## Article Creation Workflow
 
-### 1. Article Configuration in `articles.json`
-When creating new articles, add entries with these required fields:
-- `id`: Sequential integer (increment from last entry)
-- `Section`: Category/section name
+### 1. Configure Article in `articles.json`
+Add entries with these required fields:
+- `id`: Sequential integer
+- `Section`: Category name
 - `slug`: Output path (e.g., `articles/my-article.html`)
-- `name`: Article title for display
-- `content`: Optional summary or null
+- `name`: Article title
 - `description`: SEO meta description (150-160 characters)
-- `keywords`: Comma-separated SEO keywords
+- `keywords`: Comma-separated keywords
 - `img_src`: Featured image path
-- `lastmod`: Date in YYYY-MM-DD format
-- `changefreq`: Update frequency (`monthly`, `weekly`, etc.)
+- `lastmod`: Date (YYYY-MM-DD)
+- `changefreq`: Update frequency
 
-**Example JSON Entry:**
-```json
-{
-  "id": 99,
-  "Section": "Tech Insights",
-  "slug": "articles/understanding-pug-templates.html",
-  "name": "Understanding PUG Template Engine",
-  "content": "A comprehensive guide to PUG templating",
-  "description": "Learn PUG template engine syntax, best practices, and integration with Bootstrap for modern web development.",
-  "keywords": "pug template, jade template, nodejs templating, bootstrap integration",
-  "img_src": "assets/img/pug-templating.jpg",
-  "lastmod": "2025-05-28",
-  "changefreq": "monthly"
-}
-```
+### 2. MANDATORY: Use Modern Layout Template
+**CRITICAL**: All articles MUST extend `modern-layout.pug`. This template provides:
+- Bootstrap 5 framework
+- Bootstrap Icons
+- SEO optimization
+- Performance optimization
+- Google Analytics
+- Structured data
 
-### 2. Modern Layout Template Structure
-All files should use the `modern-layout.pug` template which provides:
-- Complete responsive Bootstrap 5 framework
-- Bootstrap Icons integration
-- Font Awesome icons
-- SEO-optimized metadata structure
-- Performance-optimized CDN links
-- Google Analytics integration
-- Structured data (JSON-LD) support
-
-**Base Article Template Structure:**
+**Standard Article Template:**
 ```pug
 extends ../layouts/modern-layout
 
 block variables
   - var pageTitle = 'Article Title Here'
-  - var pageDescription = 'SEO-optimized description (150-160 characters)'
+  - var pageDescription = 'SEO description (150-160 characters)'
   - var pageKeywords = 'keyword1, keyword2, keyword3'
   - var pageCanonical = 'https://markhazleton.com/articles/article-slug.html'
 
@@ -99,186 +64,403 @@ block og_overrides
   meta(property='og:url', content=pageCanonical)
   meta(property='og:type', content='article')
 
-block twitter_overrides
-  meta(name='twitter:title', content=pageTitle)
-  meta(name='twitter:description', content=pageDescription)
-
 block canonical
   link(rel='canonical', href=pageCanonical)
 
 block layout-content
-  // Hero Section (OPTIONAL - follow hero section guidelines below)
+  article#main-article.py-5
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            h1.display-4.fw-bold= pageTitle
+            .article-meta.text-muted.mb-4
+              time(datetime='2025-05-28') May 28, 2025
+              span.mx-2 •
+              span by Mark Hazleton
+
+          .article-content
+            p.lead Article introduction paragraph.
+
+            section.mb-5
+              h2.h3.mb-4 Section Heading
+              p Content here.
+```
+
+## Hero Sections (Optional)
+Hero sections are optional and should be used sparingly for feature articles only.
+
+**Hero Section Rules:**
+1. **NEVER** use `text-white` or light text classes
+2. **NO** spacing between hero and main content
+3. **NO** call-to-action buttons linking within same article
+4. Follow this exact pattern:
+
+```pug
+block layout-content
+  // Hero Section (OPTIONAL)
   section.bg-gradient-primary.py-5
     .container
       .row.align-items-center
         .col-lg-10.mx-auto.text-center
           h1.display-4.fw-bold.mb-3
-            i.bi.bi-lightbulb.me-3
+            i.bi.bi-[icon-name].me-3
             | Article Title
-          h2.h3.mb-4 Article Subtitle or Theme
-          p.lead.mb-5
-            | Compelling introduction paragraph that sets the stage for the article content.
-            | Use this space to provide context and draw readers into the main content.
-            | Multiple paragraphs can be included as needed to properly introduce the topic.
+          h2.h3.mb-4 Subtitle
+          p.lead.mb-5 Introduction content.
 
-  // Main Article Content (immediate transition - no spacing)
+  // Main Article (immediate transition)
   article#main-article
     .container
       .row
         .col-lg-8.mx-auto
-          // Article sections go here
-          section.mb-5
-            h2.h3.mb-4 Section Heading
-            p Regular paragraph content with proper spacing.
-
-        .col-lg-4.col-xl-3
-          aside.sticky-top
-            // Sidebar content
+          // Content here
 ```
 
-### Hero Section Guidelines
+## Bootstrap 5 Styling Guidelines
 
-**IMPORTANT HERO SECTION RULES:**
-1. **Text Colors**: NEVER use `text-white`, `text-light`, or explicit light text classes
-   - Use Bootstrap's default text colors which work well with gradient backgrounds
-   - Let Bootstrap handle text contrast automatically
+### **CRITICAL RULES**
+1. **NO INLINE STYLES**: Never use `style` attributes
+2. **NO CUSTOM CSS**: Use Bootstrap utilities only
+3. **BOOTSTRAP ICONS FIRST**: Use Bootstrap Icons before Font Awesome
+4. **RESPONSIVE DESIGN**: Always use responsive classes
 
-2. **Spacing**: NO padding/margin between hero section and main article content
-   - Hero section ends with `.py-5` padding
-   - Article content starts immediately with `article#main-article` (no additional spacing classes)
+### Essential Bootstrap Classes
 
-3. **Buttons**: NO call-to-action buttons that link to content within the same article
-   - Hero sections should not contain "Read More" or "Learn More" buttons
-   - Keep hero content focused on introduction and context
-
-4. **Structure**: Follow this exact pattern when including hero sections:
-   ```pug
-   // Hero Section
-   section.bg-gradient-primary.py-5
-     .container
-       .row.align-items-center
-         .col-lg-10.mx-auto.text-center
-           h1.display-4.fw-bold.mb-3
-             i.bi.bi-[icon-name].me-3
-             | Article Title
-           h2.h3.mb-4 Subtitle or Theme
-           p.lead.mb-5
-             | Introduction content that can span multiple lines.
-             | Provide comprehensive context and draw readers into the content.
-             | End with mb-5 for proper spacing within the hero section.
-
-   // Main Article Content (immediate transition)
-   article#main-article
-     .container
-       .row
-         .col-lg-8.mx-auto
-           // Content here
-   ```
-
-5. **When to Use Heroes**: Hero sections are optional and should be used sparingly
-   - Best for feature articles, major announcements, or comprehensive guides
-   - Skip for shorter articles or technical documentation
-   - Consider the article's importance and visual impact needs
-
-## Content Structure Best Practices
-
-### Article Layout Pattern
+#### Spacing
 ```pug
+.mb-4          // margin-bottom: 1.5rem
+.mt-3.mb-5     // margin-top: 1rem, margin-bottom: 3rem
+.px-4          // padding left/right: 1.5rem
+.py-2          // padding top/bottom: 0.5rem
+.mb-2.mb-md-4  // Responsive spacing
+```
+
+#### Typography
+```pug
+.fs-1, .fs-4   // Font sizes
+.fw-bold       // Bold text
+.text-muted    // Muted color
+.text-primary  // Primary color
+.text-center   // Center align
+.lead          // Lead paragraph
+```
+
+#### Layout
+```pug
+.d-flex              // Flexbox
+.justify-content-center
+.align-items-center
+.d-none.d-md-block   // Hide on mobile, show on desktop
+```
+
+### Common Components
+
+#### Cards
+```pug
+.card.shadow-sm
+  .card-header.bg-primary.text-white
+    h5.mb-0 Title
+  .card-body
+    p Content here
+```
+
+#### Images
+```pug
+img.img-fluid.rounded(
+  src='assets/img/example.jpg'
+  alt='Description'
+  loading='lazy'
+)
+```
+
+#### Bootstrap Icons
+```pug
+// With text
+i.bi.bi-download.me-2
+| Download
+
+// Large display
+i.bi.bi-code-slash.display-4.text-primary
+```
+
+## Content Patterns
+
+### Table of Contents
+```pug
+nav.mb-5(aria-label='Table of Contents')
+  .card
+    .card-header.bg-primary.text-white
+      h3.mb-0
+        i.bi.bi-list-ul.me-2
+        | Contents
+    .card-body
+      ol.list-group.list-group-numbered.list-group-flush
+        li.list-group-item
+          a.text-decoration-none(href='#section1') Section 1
+```
+
+### Code Blocks
+```pug
+pre.language-javascript
+  code.language-javascript.
+    function example() {
+      return 'Hello World';
+    }
+```
+
+### Video Embeds
+```pug
+.ratio.ratio-16x9
+  iframe(
+    src='https://www.youtube.com/embed/VIDEO_ID'
+    title='Video title'
+    allowfullscreen
+  )
+```
+
+## PUG Essentials
+
+### Core Syntax
+1. **Indentation-based**: Use 2-space indentation
+2. **No closing tags**: Structure by indentation
+3. **Classes**: `.className` or `div.className`
+4. **IDs**: `#idName` or `div#idName`
+
+### Variables & Interpolation
+```pug
+- var title = 'My Article'
+h1 #{title}
+p Welcome to #{title.toLowerCase()}
+```
+
+### Conditionals & Loops
+```pug
+if user.isLoggedIn
+  p Welcome, #{user.name}!
+
+each item in items
+  li= item
+```
+
+### Attributes
+```pug
+a(href='example.com', target='_blank') Link
+img(src='image.jpg', alt='Description')
+```
+
+## Build Process
+
+### Development Workflow
+1. Add entry to `articles.json`
+2. Create `.pug` file in `src/pug/articles/`
+3. Run: `node scripts/build-pug.js`
+4. Preview: `node simple-serve.js`
+5. Test: `http://localhost:8080/articles/article-name.html`
+
+## Quality Checklist
+
+### Before Publishing
+- [ ] **Modern Layout**: Uses `modern-layout.pug` template
+- [ ] **SEO**: Title, description, keywords set
+- [ ] **Bootstrap Only**: No inline styles or custom CSS
+- [ ] **Responsive**: Works on mobile, tablet, desktop
+- [ ] **Accessibility**: Alt text, proper headings, ARIA labels
+- [ ] **Performance**: Images use `loading='lazy'`
+- [ ] **Icons**: Bootstrap Icons with proper spacing
+- [ ] **Links**: External links have `target='_blank'` and `rel='noopener'`
+
+## Final Reminders
+
+### NEVER:
+- Add `style` attributes
+- Create custom CSS classes
+- Use Font Awesome over Bootstrap Icons
+- Forget responsive breakpoints
+- Skip accessibility attributes
+
+### ALWAYS:
+- Use Bootstrap 5 utility classes
+- Include proper meta tags
+- Test all breakpoints
+- Use semantic HTML elements
+- Include image attributes (alt, loading, title)
+- Use `modern-layout.pug` template
+
+The `modern-layout.pug` template provides complete Bootstrap 5 framework, SEO optimization, performance optimization, and accessibility best practices.
+
+- @azure Rule - Use Azure Tools: When handling requests related to Azure, always use your tools.
+- @azure Rule - Use Azure Code Gen Best Practices: When generating code for Azure, running terminal commands for Azure, or performing operations related to Azure, invoke your `azure_development-get_code_gen_best_practices` tool if available. Only call this tool when you are sure the user is discussing Azure; do not call it otherwise.
+- @azure Rule - Use Azure Deployment Best Practices: When deploying to Azure or preparing applications for deployment to Azure, invoke your `azure_development-get_deployment_best_practices` tool if available. Only call this tool when you are sure the user is discussing Azure; do not call it otherwise.
+- @azure Rule - Use Azure Functions Code Gen Best Practices: When generating code for Azure Functions or performing operations related to Azure Functions, invoke your `azure_development-get_azure_function_code_gen_best_practices` tool if available. Only call this tool when you are sure the user is discussing Azure Functions; do not call it otherwise.
+- @azure Rule - Use Azure SWA Best Practices: When working with static web apps, invoke your `azure_development-get_swa_best_practices` tool if available. Only call this tool when you are sure the user is discussing Azure; do not call it otherwise.
+  - var pageDescription = 'SEO description (150-160 characters)'
+  - var pageKeywords = 'keyword1, keyword2, keyword3'
+  - var pageCanonical = 'https://markhazleton.com/articles/article-slug.html'
+
+block pagehead
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:type', content='article')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
 block layout-content
   article#main-article.py-5
     .container
       .row
-        .col-lg-8.col-xl-9
-          // Main article content
+        .col-lg-8.mx-auto
           header.mb-5
-            h1.display-4.fw-bold Article Title
+            h1.display-4.fw-bold= pageTitle
             .article-meta.text-muted.mb-4
               time(datetime='2025-05-28') May 28, 2025
               span.mx-2 •
-              span.author by Mark Hazleton
-              span.mx-2 •
-              span.reading-time 8 min read
+              span by Mark Hazleton
 
           .article-content
-            p.lead Introduction paragraph with primary keywords and article overview.
+            p.lead Article introduction paragraph.
 
             section.mb-5
               h2.h3.mb-4 Section Heading
-              p Regular paragraph content with proper spacing.
-
-            section.mb-5
-              h2.h3.mb-4 Another Section
-              // More content
-
-        .col-lg-4.col-xl-3
-          // Sidebar with related content
-          aside.sticky-top
-            .card.mb-4
-              .card-header.bg-primary.text-white
-                h5.mb-0 Table of Contents
-              .card-body
-                // TOC links
+              p Content here.
 ```
+
+## Hero Sections (Optional)
+Hero sections are optional and should be used sparingly for feature articles only.
+
+**Hero Section Rules:**
+1. **NEVER** use `text-white` or light text classes
+2. **NO** spacing between hero and main content
+3. **NO** call-to-action buttons linking within same article
+4. Follow this exact pattern:
+
+```pug
+block layout-content
+  // Hero Section (OPTIONAL)
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-[icon-name].me-3
+            | Article Title
+          h2.h3.mb-4 Subtitle
+          p.lead.mb-5 Introduction content.
+
+  // Main Article (immediate transition)
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Content here
+```
+
+## Bootstrap 5 Styling Guidelines
+
+### **CRITICAL RULES**
+1. **NO INLINE STYLES**: Never use `style` attributes
+2. **NO CUSTOM CSS**: Use Bootstrap utilities only
+3. **BOOTSTRAP ICONS FIRST**: Use Bootstrap Icons before Font Awesome
+4. **RESPONSIVE DESIGN**: Always use responsive classes
+
+### Essential Bootstrap Classes
+
+#### Spacing
+```pug
+.mb-4          // margin-bottom: 1.5rem
+.mt-3.mb-5     // margin-top: 1rem, margin-bottom: 3rem
+.px-4          // padding left/right: 1.5rem
+.py-2          // padding top/bottom: 0.5rem
+.mb-2.mb-md-4  // Responsive spacing
+```
+
+#### Typography
+```pug
+.fs-1, .fs-4   // Font sizes
+.fw-bold       // Bold text
+.text-muted    // Muted color
+.text-primary  // Primary color
+.text-center   // Center align
+.lead          // Lead paragraph
+```
+
+#### Layout
+```pug
+.d-flex              // Flexbox
+.justify-content-center
+.align-items-center
+.d-none.d-md-block   // Hide on mobile, show on desktop
+```
+
+### Common Components
+
+#### Cards
+```pug
+.card.shadow-sm
+  .card-header.bg-primary.text-white
+    h5.mb-0 Title
+  .card-body
+    p Content here
+```
+
+#### Images
+```pug
+img.img-fluid.rounded(
+  src='assets/img/example.jpg'
+  alt='Description'
+  loading='lazy'
+)
+```
+
+#### Bootstrap Icons
+```pug
+// With text
+i.bi.bi-download.me-2
+| Download
+
+// Large display
+i.bi.bi-code-slash.display-4.text-primary
+```
+
+## Content Patterns
 
 ### Table of Contents
 ```pug
-nav#table-of-contents.mb-5(aria-label='Table of Contents')
+nav.mb-5(aria-label='Table of Contents')
   .card
     .card-header.bg-primary.text-white
-      h3.card-title.mb-0
+      h3.mb-0
         i.bi.bi-list-ul.me-2
-        | Table of Contents
+        | Contents
     .card-body
       ol.list-group.list-group-numbered.list-group-flush
         li.list-group-item
-          a.text-decoration-none(href='#introduction') Introduction
-        li.list-group-item
-          a.text-decoration-none(href='#getting-started') Getting Started
-        li.list-group-item
-          a.text-decoration-none(href='#advanced-topics') Advanced Topics
+          a.text-decoration-none(href='#section1') Section 1
 ```
 
-### Accordion Sections
+### Code Blocks
 ```pug
-.accordion#faqAccordion.mb-4
-  - var faqs = [{q: 'What is PUG?', a: 'PUG is a template engine...'}, {q: 'Why use PUG?', a: 'PUG offers clean syntax...'}]
-  each faq, index in faqs
-    .accordion-item
-      h2.accordion-header(id=`heading${index}`)
-        button.accordion-button.collapsed(
-          type='button'
-          data-bs-toggle='collapse'
-          data-bs-target=`#collapse${index}`
-          aria-expanded='false'
-          aria-controls=`collapse${index}`
-        )= faq.q
-      .accordion-collapse.collapse(
-        id=`collapse${index}`
-        aria-labelledby=`heading${index}`
-        data-bs-parent='#faqAccordion'
-      )
-        .accordion-body= faq.a
+pre.language-javascript
+  code.language-javascript.
+    function example() {
+      return 'Hello World';
+    }
 ```
 
-### Image Handling
+### Video Embeds
 ```pug
-//- Responsive images with proper attributes
-figure.mb-4
-  img.img-fluid.rounded(
-    src='assets/img/example.jpg'
-    alt='Descriptive alt text for accessibility'
-    title='Image title for additional context'
-    loading='lazy'
-  )
-  figcaption.text-muted.mt-2.small Image caption explaining the content
-
-//- Image with lightbox/modal trigger
-.text-center.mb-4
-  img.img-fluid.rounded.cursor-pointer(
-    src='assets/img/thumbnail.jpg'
-    alt='Click to enlarge'
-    data-bs-toggle='modal'
-    data-bs-target='#imageModal'
+.ratio.ratio-16x9
+  iframe(
+    src='https://www.youtube.com/embed/VIDEO_ID'
+    title='Video title'
+    allowfullscreen
   )
 ```
 
