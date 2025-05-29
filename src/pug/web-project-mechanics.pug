@@ -1,104 +1,381 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Web Project Mechanics: 20+ Years of Evolution | Mark Hazleton'
+  - var pageDescription = 'Explore the 20+ year journey of Web Project Mechanics, from JSP beginnings to modern .NET Framework. Learn about the evolution of this web content management system and the websites it powers.'
+  - var pageKeywords = 'web project mechanics, content management system, CMS, Mark Hazleton, JSP, Microsoft .NET, web development, GitHub, software evolution, website management'
+  - var pageCanonical = 'https://markhazleton.com/web-project-mechanics.html'
+  - var pageAuthor = 'Mark Hazleton'
+  - var publishedDate = '2023-01-15'
+  - var modifiedDate = '2025-05-28'
+  - var estimatedReadTime = '12'
 
 block pagehead
-  title Mark Hazleton - History of Web Project Mechanics
-  meta(name='description', content='Mark Hazleton - The History of Web Project Mechanics')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/web-project-mechanics.html')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content=pageAuthor)
+  meta(name='article:published_time', content=publishedDate)
+  meta(name='article:modified_time', content=modifiedDate)
+  meta(name='article:author', content=pageAuthor)
+  meta(name='article:section', content='Software Development')
+  meta(name='article:tag', content='Content Management, Web Development, Software Evolution')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='article')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg')
+  meta(property='og:image:alt', content='Mark Hazleton discussing Web Project Mechanics evolution')
+  meta(property='article:author', content='Mark Hazleton')
+  meta(property='article:published_time', content=publishedDate)
+  meta(property='article:modified_time', content=modifiedDate)
+  meta(property='article:section', content='Software Development')
+  meta(property='article:tag', content='Content Management')
+  meta(property='article:tag', content='Web Development')
+  meta(property='article:tag', content='Software Evolution')
+
+block twitter_overrides
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg')
+  meta(name='twitter:image:alt', content='Mark Hazleton discussing Web Project Mechanics evolution')
+  meta(name='twitter:label1', content='Reading time')
+  meta(name='twitter:data1', content=estimatedReadTime + ' min read')
+  meta(name='twitter:label2', content='Written by')
+  meta(name='twitter:data2', content='Mark Hazleton')
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "url": "#{pageCanonical}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg",
+        "width": 1200,
+        "height": 630,
+        "alt": "Mark Hazleton discussing Web Project Mechanics evolution"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "jobTitle": "Solutions Architect",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://www.youtube.com/@markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com"
+      },
+      "datePublished": "#{publishedDate}",
+      "dateModified": "#{modifiedDate}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "#{pageCanonical}"
+      },
+      "articleSection": "Software Development",
+      "keywords": "#{pageKeywords}",
+      "wordCount": 1800,
+      "timeRequired": "PT#{estimatedReadTime}M",
+      "about": {
+        "@type": "Thing",
+        "name": "Web Content Management System",
+        "description": "Evolution and development of Web Project Mechanics over 20+ years"
+      }
+    }
 
 block layout-content
+  // Breadcrumb Navigation
+  .container.mt-4
+    nav(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles.html') Articles
+        li.breadcrumb-item.active(aria-current='page') Web Project Mechanics
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 Web Project Mechanics
-      .subheading.mb-3 Looking back on the history of my first Web Content Management System
-      p.lead.
-        Web Project Mechanics is a web content management system that I have developed and maintained
-        for over 20 years. What started as an internally motivated effort to learn new technologies
-        and create websites has become a successful and powerful tool for website management.
-        Throughout the years, Web Project Mechanics has helped me and my friends with their projects,
-        including Project Palette, Reflection Fine Art Gallery, and City Information Centers.
-      ul
-        li
-          a(href='https://github.com/markhazleton/WebProjectMechanics') Web Project Mechanics GitHub Repository
-      p.
-        This web content management
-        system has been my passion project since its creation in 2003.
-        In this blog post, I'll take you on a journey through the development history of
-        Web Project Mechanics, highlighting key milestones and showcasing some of the websites it powers,
-        like Frogsfolly.com, DallasInformationCenter.com, and JMShawminerals.com.
-      p.
-        Twenty years ago, I created my first web content management system and called it Web Project Mechanics
-        I tried serval technologies, starting with Front Page and then Java Server Pages (JSP).
-        Since then, the system has evolved tremendously, and today it runs on the Microsoft platform, targeting the .NET Framework 4.8.
-      p.
-        One of the biggest milestones in the history of Web Project Mechanics was the migration from JSP to the Microsoft platform.
-        This allowed me to take advantage of the robust tools and resources offered by the Microsoft ecosystem and enabled me to
-        provide a more seamless and efficient experience for my users.
-      p.
-        Over the years, the code for Web Project Mechanics has been hosted in several different places,
-        including file backups, Codeplex, Azure DevOps, and finally, in 2008, on GitHub. The GitHub repository
-        has been a crucial part of the system's development and has allowed me to manage the codebase more effectively.
-      p.
-        If you take a look at the first commit in my GitHub repository in 2008, you can see how far I've come.
-        From that first commit to today, I've made countless improvements, added new features, and optimized the
-        system for better performance and scalability.
-      p.
-        As I celebrate 20 years of Web Project Mechanics being on the Microsoft platform,
-        I want to thank everyone who has been a part of my journey.
-        I look forward to continuing to evolve Web Project Mechanics to meet the changing needs of the web content management
-        landscape for many years to come.
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-gear-wide-connected.me-3
+            | Web Project Mechanics
+          h2.h3.mb-4 20+ Years of Web Content Management Evolution
+          p.lead.mb-5
+            | A comprehensive look at the evolution of my web content management system,
+            | from its humble JSP beginnings in 2003 to today's modern .NET Framework implementation.
+            | Discover the journey of continuous improvement, technological adaptation, and the websites it powers.
 
-      dl
-        dt Introduction: Setting the Stage for Web Project Mechanics
-        dd.
-          In 2003, I created my first web content management system using Java Server Pages (JSP).
-          This was the start of Web Project Mechanics.
-          At that time, I was backing up my code on files, a system that was not ideal, but it worked.
-          Web Project Mechanics was built to manage multiple websites using a single MS-Access (.mdb) database.
-          It was designed to make website management more efficient and user-friendly.
-        dt Early Days: JSP and File Backups
-        dd.
-          In the early days, Web Project Mechanics was built using JSP and backed up on files.
-          This was not an ideal system, but it worked.
-          The system was designed to manage multiple websites using a single MS Access (.mdb) database.
-          It was built to make website management more efficient and user-friendly.
-        dt Migrating to the Microsoft Platform: A Turning Point
-        dd.
-          In 2008, after years of using JSP, I decided to migrate Web Project Mechanics to the Microsoft platform.
-          This was a major turning point in the development history of the project.
-          The migration allowed me to take advantage of the robust tools and resources offered by the
-          Microsoft ecosystem. It also enabled me to provide a more seamless and efficient experience for my users.
-          This move led to the first commit on GitHub in 2008.
-        dt Web Project Mechanics Today: GitHub and the .NET Framework
-        dd.
-          Today, Web Project Mechanics is maintained on GitHub and targets the .NET Framework 4.8.
-          The GitHub repository has been crucial in the system's development,
-          allowing me to manage the codebase more effectively, collaborate with others,
-          and ensure the highest quality of code.
-          The current version of Web Project Mechanics includes a caching implementation for better performance.
-        dt Featured Websites: Frogsfolly.com, DallasInformationCenter.com, and JMShawminerals.com
-        dd.
-          Web Project Mechanics powers numerous websites, but three stand out: Frogsfolly.com,
-          DallasInformationCenter.com, and JMShawminerals.com.
-          These websites showcase the versatility and efficiency of Web Project Mechanics.
-          They also represent a few of the many satisfied users of the system.
-        dt Conclusion: Celebrating 20 Years of Web Project Mechanics
-        dd.
-          Frogsfolly.com is a travel guide website that provides visitors with information
-          about different cities and tourist attractions.
-          DallasInformationCenter.com is a directory of local businesses in the Dallas, Texas area.
-          JMShawminerals.com is a website that sells minerals and gems online.
-          All of these websites are powered by Web Project Mechanics and have been for several years.
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Article metadata
+          .article-meta.text-muted.mb-4.pb-3.border-bottom
+            .row.align-items-center
+              .col-md-8
+                .d-flex.flex-wrap.gap-3
+                  .d-flex.align-items-center
+                    i.bi.bi-calendar3.me-2
+                    time(datetime=modifiedDate) May 28, 2025
+                  .d-flex.align-items-center
+                    i.bi.bi-person.me-2
+                    span by Mark Hazleton
+                  .d-flex.align-items-center
+                    i.bi.bi-clock.me-2
+                    span= estimatedReadTime + ' min read'
+              .col-md-4.text-md-end
+                .d-flex.flex-wrap.gap-2.justify-content-md-end
+                  span.badge.bg-primary Software Development
+                  span.badge.bg-secondary CMS
 
+          // Introduction
+          section.mb-5
+            p.lead.
+              Web Project Mechanics is a web content management system that I have developed and maintained
+              for over 20 years. What started as an internally motivated effort to learn new technologies
+              and create websites has become a successful and powerful tool for website management.
+              Throughout the years, Web Project Mechanics has helped me and my friends with their projects,
+              including Project Palette, Reflection Fine Art Gallery, and City Information Centers.
 
-      .subheading.mb-3 Conclusion:
-      p.
-        As Web Project Mechanics approaches its 21st anniversary, it is a testament to the power of self-motivation
-        and the drive to learn and improve. This project has not only helped me gain new skills but has also
-        been instrumental in helping others with their websites. The system's success is a reflection of its
-        dedication to its development and refinement, as well as a passion for technology. As I look to the
-        future of website management, I know that Web Project Mechanics will continue to be a valuable
-        tool for creating and managing websites efficiently and effectively.
-  hr.m-0
-  hr.m-0
+            .alert.alert-info.d-flex.align-items-center.mb-4
+              i.bi.bi-github.fs-4.me-3
+              div
+                h6.alert-heading.mb-1 GitHub Repository
+                p.mb-0
+                  | Explore the complete source code and development history:
+                  a.ms-2.fw-bold(href='https://github.com/markhazleton/WebProjectMechanics', target='_blank', rel='noopener')
+                    | Web Project Mechanics on GitHub
+                    i.bi.bi-box-arrow-up-ne.ms-1
+
+          // Origins and Evolution
+          section.mb-5
+            h2.h3.mb-4.text-primary The Journey Begins
+            p.
+              This web content management system has been my passion project since its creation in 2003.
+              In this article, I'll take you on a journey through the development history of
+              Web Project Mechanics, highlighting key milestones and showcasing some of the websites it powers,
+              like Frogsfolly.com, DallasInformationCenter.com, and JMShawminerals.com.
+
+            p.
+              Twenty years ago, I created my first web content management system and called it Web Project Mechanics.
+              I tried several technologies, starting with Front Page and then Java Server Pages (JSP).
+              Since then, the system has evolved tremendously, and today it runs on the Microsoft platform, targeting the .NET Framework 4.8.
+
+          // Technology Migration
+          section.mb-5
+            h2.h3.mb-4.text-primary The Microsoft Platform Migration
+            p.
+              One of the biggest milestones in the history of Web Project Mechanics was the migration from JSP to the Microsoft platform.
+              This allowed me to take advantage of the robust tools and resources offered by the Microsoft ecosystem and enabled me to
+              provide a more seamless and efficient experience for my users.
+
+            p.
+              Over the years, the code for Web Project Mechanics has been hosted in several different places,
+              including file backups, Codeplex, Azure DevOps, and finally, in 2008, on GitHub. The GitHub repository
+              has been a crucial part of the system's development and has allowed me to manage the codebase more effectively.
+
+            p.
+              If you take a look at the first commit in my GitHub repository in 2008, you can see how far I've come.
+              From that first commit to today, I've made countless improvements, added new features, and optimized the
+              system for better performance and scalability.
+
+          // Timeline
+          section.mb-5
+            h2.h3.mb-4.text-primary Development Timeline
+            .timeline-container
+              .card.mb-4.border-start.border-4.border-primary
+                .card-body
+                  h5.card-title.text-primary
+                    i.bi.bi-play-circle.me-2
+                    | 2003: The Beginning
+                  p.card-text.
+                    In 2003, I created my first web content management system using Java Server Pages (JSP).
+                    This was the start of Web Project Mechanics.
+                    At that time, I was backing up my code on files, a system that was not ideal, but it worked.
+                    Web Project Mechanics was built to manage multiple websites using a single MS-Access (.mdb) database.
+                    It was designed to make website management more efficient and user-friendly.
+
+              .card.mb-4.border-start.border-4.border-info
+                .card-body
+                  h5.card-title.text-info
+                    i.bi.bi-database.me-2
+                    | Early Days: JSP and File Backups
+                  p.card-text.
+                    In the early days, Web Project Mechanics was built using JSP and backed up on files.
+                    This was not an ideal system, but it worked.
+                    The system was designed to manage multiple websites using a single MS Access (.mdb) database.
+                    It was built to make website management more efficient and user-friendly.
+
+              .card.mb-4.border-start.border-4.border-success
+                .card-body
+                  h5.card-title.text-success
+                    i.bi.bi-arrow-repeat.me-2
+                    | 2008: Microsoft Platform Migration
+                  p.card-text.
+                    In 2008, after years of using JSP, I decided to migrate Web Project Mechanics to the Microsoft platform.
+                    This was a major turning point in the development history of the project.
+                    The migration allowed me to take advantage of the robust tools and resources offered by the
+                    Microsoft ecosystem. It also enabled me to provide a more seamless and efficient experience for my users.
+                    This move led to the first commit on GitHub in 2008.
+
+              .card.mb-4.border-start.border-4.border-warning
+                .card-body
+                  h5.card-title.text-warning
+                    i.bi.bi-github.me-2
+                    | Present: GitHub and .NET Framework
+                  p.card-text.
+                    Today, Web Project Mechanics is maintained on GitHub and targets the .NET Framework 4.8.
+                    The GitHub repository has been crucial in the system's development,
+                    allowing me to manage the codebase more effectively, collaborate with others,
+                    and ensure the highest quality of code.
+                    The current version of Web Project Mechanics includes a caching implementation for better performance.
+
+          // Featured Websites
+          section.mb-5
+            h2.h3.mb-4.text-primary Featured Websites Powered by Web Project Mechanics
+            p.mb-4.
+              Web Project Mechanics powers numerous websites, but three stand out: Frogsfolly.com,
+              DallasInformationCenter.com, and JMShawminerals.com.
+              These websites showcase the versatility and efficiency of Web Project Mechanics.
+              They also represent a few of the many satisfied users of the system.
+
+            .row.g-4
+              .col-md-4
+                .card.h-100.shadow-sm
+                  .card-body.text-center
+                    i.bi.bi-compass.display-4.text-primary.mb-3
+                    h5.card-title Frogsfolly.com
+                    p.card-text.
+                      A travel guide website that provides visitors with information
+                      about different cities and tourist attractions.
+
+              .col-md-4
+                .card.h-100.shadow-sm
+                  .card-body.text-center
+                    i.bi.bi-building.display-4.text-info.mb-3
+                    h5.card-title DallasInformationCenter.com
+                    p.card-text.
+                      A directory of local businesses in the Dallas, Texas area,
+                      connecting community members with local services.
+
+              .col-md-4
+                .card.h-100.shadow-sm
+                  .card-body.text-center
+                    i.bi.bi-gem.display-4.text-success.mb-3
+                    h5.card-title JMShawminerals.com
+                    p.card-text.
+                      A specialized e-commerce website that sells minerals and gems online,
+                      serving collectors and enthusiasts worldwide.
+
+          // Conclusion
+          section.mb-5
+            h2.h3.mb-4.text-primary Celebrating Two Decades of Innovation
+
+            .key-takeaway.mb-4
+              h4.h5.mb-3
+                i.bi.bi-lightbulb.me-2
+                | Key Achievements
+              ul.list-unstyled
+                li.mb-2
+                  i.bi.bi-check-circle.text-success.me-2
+                  | 20+ years of continuous development and improvement
+                li.mb-2
+                  i.bi.bi-check-circle.text-success.me-2
+                  | Successful migration from JSP to .NET Framework
+                li.mb-2
+                  i.bi.bi-check-circle.text-success.me-2
+                  | Powers multiple production websites
+                li.mb-2
+                  i.bi.bi-check-circle.text-success.me-2
+                  | Open-source availability on GitHub
+                li.mb-2
+                  i.bi.bi-check-circle.text-success.me-2
+                  | Proven scalability and performance optimizations
+
+            p.
+              As Web Project Mechanics approaches its 21st anniversary, it stands as a testament to the power of self-motivation
+              and the drive to learn and improve. This project has not only helped me gain new skills but has also
+              been instrumental in helping others with their websites. The system's success reflects its
+              dedication to development and refinement, as well as a passion for technology.
+
+            p.
+              As I look to the future of website management, I know that Web Project Mechanics will continue to be a valuable
+              tool for creating and managing websites efficiently and effectively. The journey continues, with new challenges
+              and opportunities for growth and innovation.
+
+        .col-lg-4.col-xl-3
+          aside.sticky-top
+            // Table of Contents
+            nav.mb-4(aria-label='Table of Contents')
+              .card
+                .card-header.bg-primary.text-white
+                  h5.card-title.mb-0
+                    i.bi.bi-list-ul.me-2
+                    | Table of Contents
+                .card-body
+                  ol.list-group.list-group-numbered.list-group-flush
+                    li.list-group-item.border-0.px-0
+                      a.text-decoration-none(href='#the-journey-begins') The Journey Begins
+                    li.list-group-item.border-0.px-0
+                      a.text-decoration-none(href='#microsoft-platform-migration') Microsoft Platform Migration
+                    li.list-group-item.border-0.px-0
+                      a.text-decoration-none(href='#development-timeline') Development Timeline
+                    li.list-group-item.border-0.px-0
+                      a.text-decoration-none(href='#featured-websites') Featured Websites
+                    li.list-group-item.border-0.px-0
+                      a.text-decoration-none(href='#celebrating-innovation') Celebrating Innovation
+
+            // Related Links
+            .card.mb-4
+              .card-header.bg-secondary.text-white
+                h5.card-title.mb-0
+                  i.bi.bi-link-45deg.me-2
+                  | Related Resources
+              .card-body
+                ul.list-unstyled.mb-0
+                  li.mb-2
+                    a.text-decoration-none(href='https://github.com/markhazleton/WebProjectMechanics', target='_blank', rel='noopener')
+                      i.bi.bi-github.me-2
+                      | GitHub Repository
+                      i.bi.bi-box-arrow-up-ne.ms-1
+                  li.mb-2
+                    a.text-decoration-none(href='/articles.html')
+                      i.bi.bi-journal-text.me-2
+                      | More Articles
+                  li.mb-2
+                    a.text-decoration-none(href='/projects.html')
+                      i.bi.bi-collection.me-2
+                      | Other Projects
+
+            // Technologies Used
+            .card
+              .card-header.bg-info.text-white
+                h5.card-title.mb-0
+                  i.bi.bi-stack.me-2
+                  | Technologies
+              .card-body
+                .d-flex.flex-wrap.gap-2
+                  span.badge.bg-primary JSP
+                  span.badge.bg-success .NET Framework
+                  span.badge.bg-info MS Access
+                  span.badge.bg-warning GitHub
+                  span.badge.bg-secondary Azure DevOps
+                  span.badge.bg-primary Bootstrap

@@ -1,127 +1,440 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
+
+block variables
+  - var pageTitle = 'From README to Reality: Teaching an Agent to Bootstrap a UI Theme | Mark Hazleton'
+  - var pageDescription = 'How I used a smart NuGet package README and Visual Studio Code\'s agent mode to auto-install and configure a UI theme. See the live demo using WebSpark.Bootswatch.'
+  - var pageKeywords = 'NuGet, WebSpark.Bootswatch, README-driven development, AI agents, Bootstrap themes, Visual Studio Code, automation, PrismJS, Mark Hazleton'
+  - var pageCanonical = 'https://markhazleton.com/articles/from-readme-to-reality-teaching-an-agent-to-bootstrap-a-ui-theme.html'
+  - var pageAuthor = 'Mark Hazleton'
+  - var publishedDate = '2024-12-10'
+  - var modifiedDate = '2025-05-28'
+  - var estimatedReadTime = '6'
 
 block pagehead
-  title From README to Reality: Teaching an Agent to Bootstrap a UI Theme
-  meta(name='description', content='How I used a smart NuGet package README and Visual Studio Code’s agent mode to auto-install and configure a UI theme. See the live demo using WebSpark.Bootswatch.')
-  meta(name='keywords', content='NuGet, WebSpark.Bootswatch, README-driven development, AI agents, Bootstrap themes, Visual Studio Code, automation, PrismJS, Mark Hazleton')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/from-readme-to-reality-teaching-an-agent-to-bootstrap-a-ui-theme.html')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content=pageAuthor)
+  meta(name='article:published_time', content=publishedDate)
+  meta(name='article:modified_time', content=modifiedDate)
+  meta(name='article:author', content=pageAuthor)
+  meta(name='article:section', content='Technology')
+  meta(name='article:tag', content='AI Agents, NuGet, Bootstrap, Automation')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='article')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg')
+  meta(property='og:image:alt', content='Mark Hazleton discussing README-driven development and AI agents')
+  meta(property='article:author', content='Mark Hazleton')
+  meta(property='article:published_time', content=publishedDate)
+  meta(property='article:modified_time', content=modifiedDate)
+  meta(property='article:section', content='Technology')
+  meta(property='article:tag', content='AI Agents')
+  meta(property='article:tag', content='NuGet')
+  meta(property='article:tag', content='Bootstrap')
+  meta(property='article:tag', content='Automation')
+
+block twitter_overrides
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg')
+  meta(name='twitter:image:alt', content='Mark Hazleton discussing README-driven development and AI agents')
+  meta(name='twitter:label1', content='Reading time')
+  meta(name='twitter:data1', content=estimatedReadTime + ' min read')
+  meta(name='twitter:label2', content='Written by')
+  meta(name='twitter:data2', content='Mark Hazleton')
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "url": "#{pageCanonical}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg",
+        "width": 1200,
+        "height": 630,
+        "alt": "Mark Hazleton discussing README-driven development and AI agents"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "jobTitle": "Solutions Architect",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://www.youtube.com/@markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com"
+      },
+      "datePublished": "#{publishedDate}",
+      "dateModified": "#{modifiedDate}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "#{pageCanonical}"
+      },
+      "articleSection": "Technology",
+      "keywords": "#{pageKeywords}",
+      "wordCount": 1100,
+      "timeRequired": "PT#{estimatedReadTime}M",
+      "about": {
+        "@type": "Thing",
+        "name": "README-driven development and AI automation",
+        "description": "How to leverage AI agents and smart documentation for automated software setup"
+      }
+    }
 
 block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 From README to Reality
-      h2.subheading.mb-3 Teaching an Agent to Bootstrap a UI Theme with Markdown and NuGet
-      p.lead.
-        What happens when a smart editor reads your README like an executable script? I tested that question by writing a NuGet package that configures itself—just from markdown.
+  // Breadcrumb Navigation
+  nav.bg-light.py-2(aria-label='breadcrumb')
+    .container
+      ol.breadcrumb.mb-0
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles') Articles
+        li.breadcrumb-item.active(aria-current='page') From README to Reality
 
-      h3 The Lightbulb Moment
-      p.
-        While using Visual Studio Code in agent mode, I pointed it to a NuGet package with a detailed README. It didn’t just highlight it—it followed it. It installed the package, registered the services, updated my `Program.cs`, and made everything work without a manual step. That was the moment I realized:
-      blockquote.text-primary.fs-4
-        | A well-written README isn’t documentation. It’s an interface for automation.
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-file-earmark-text.me-3
+            | From README to Reality
+          h2.h3.mb-4 Teaching an Agent to Bootstrap a UI Theme with Markdown and NuGet
+          p.lead.mb-5
+            | What happens when a smart editor reads your README like an executable script?
+            | I tested that question by writing a NuGet package that configures itself—just from markdown.
+            | This is the story of how documentation became automation.
 
-      // GitHub Copilot Agent Mode Breakout Card
-      .card.mb-5.shadow
-        .card-header.bg-dark.text-white
-          h5.mb-0
-            i.bi.bi-robot.me-2
-            | What Is GitHub Copilot Agent Mode?
-        .card-body
-          p.
-            GitHub Copilot's agent mode empowers users to delegate complex tasks to the AI, offering a more autonomous and interactive development experience. It allows Copilot to analyze code, plan changes, execute commands, and even iterate on its output to achieve a desired result.
-          h6.text-primary.mt-3 Key Features and Capabilities:
-          ul
-            li
-              strong Autonomous Development:
-              |  Execute code edits, commands, and planning from high-level prompts.
-            li
-              strong Iteration and Self-Healing:
-              |  Identify, fix, and improve code autonomously.
-            li
-              strong Codebase Search and Analysis:
-              |  Understands context and navigates project files.
-            li
-              strong Tool Integration:
-              |  Supports build/test/run tasks via tools.
-            li
-              strong Interactive Feedback:
-              |  Review, refine, and confirm actions.
-            li
-              strong Custom Instructions and Prompt Files:
-              |  Define behavior with reusable prompt guidance.
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Article Metadata
+          header.mb-4
+            .article-meta.text-muted.mb-3.pb-3.border-bottom
+              time(datetime=publishedDate) #{new Date(publishedDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
+              span.mx-2 •
+              span by #{pageAuthor}
+              span.mx-2 •
+              span #{estimatedReadTime} min read
 
-          h6.text-primary.mt-3 How to Use It:
-          ol
-            li Enable Agent Mode in VS Code under Tools > Options > GitHub > Copilot.
-            li In the Copilot Chat window, select "Ask", then switch mode to "Agent".
-            li Enter a high-level prompt.
-            li Review suggestions and iterate.
-            li Confirm terminal/tool invocations when prompted.
+          // Introduction
+          section.mb-5
+            h2.h3.mb-4
+              i.bi.bi-lightbulb.me-2
+              | The Lightbulb Moment
+            p.mb-4
+              | While using Visual Studio Code in agent mode, I pointed it to a NuGet package with a detailed README.
+              | It didn't just highlight it—it followed it. It installed the package, registered the services,
+              | updated my <code>Program.cs</code>, and made everything work without a manual step.
+              | That was the moment I realized:
 
-          h6.text-primary.mt-3 Benefits:
-          ul
-            li Increased productivity through automation.
-            li Faster development cycles.
-            li Improved code quality with automatic fixes.
-            li Enhanced onboarding and collaboration for teams.
+            blockquote.blockquote.text-center.bg-light.p-4.rounded
+              p.mb-0.fs-5.text-primary.fw-bold
+                | A well-written README isn't documentation. It's an interface for automation.
 
-      h3 Turning Idea into Action
-      p
-        | I set out to prove this could work with something practical. I created
-        a(href="https://www.nuget.org/packages/WebSpark.Bootswatch/" target="_blank") WebSpark.Bootswatch,
-        | a NuGet package that simplifies adding
-        a(href="https://bootswatch.com/" target="_blank") Bootswatch themes
-        | to ASP.NET projects.
+          // GitHub Copilot Agent Mode Section
+          section#agent-mode.mb-5
+            .card.shadow-sm.border-primary
+              .card-header.bg-primary.text-white
+                h3.card-title.mb-0
+                  i.bi.bi-robot.me-2
+                  | What Is GitHub Copilot Agent Mode?
+              .card-body
+                p.mb-4
+                  | GitHub Copilot's agent mode empowers users to delegate complex tasks to the AI,
+                  | offering a more autonomous and interactive development experience. It allows
+                  | Copilot to analyze code, plan changes, execute commands, and even iterate on
+                  | its output to achieve a desired result.
 
-      p.
-        The goal was to let any developer (or smart agent) style a site with one command and a few configuration lines—no asset downloads, no layout hacks.
+                h4.text-primary.mb-3 Key Features and Capabilities:
+                .row.g-3.mb-4
+                  .col-md-6
+                    .card.h-100.border-info
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-gear.text-info.me-2
+                          | Autonomous Development
+                        p.card-text.small Execute code edits, commands, and planning from high-level prompts.
+                  .col-md-6
+                    .card.h-100.border-success
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-arrow-repeat.text-success.me-2
+                          | Iteration and Self-Healing
+                        p.card-text.small Identify, fix, and improve code autonomously.
+                  .col-md-6
+                    .card.h-100.border-warning
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-search.text-warning.me-2
+                          | Codebase Analysis
+                        p.card-text.small Understands context and navigates project files.
+                  .col-md-6
+                    .card.h-100.border-danger
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-tools.text-danger.me-2
+                          | Tool Integration
+                        p.card-text.small Supports build/test/run tasks via tools.
 
-      h3 What It Does
-      ul
-        li Adds SCSS support and all Bootswatch themes via CDN
-        li Integrates with your layout file for theme switching
-        li Provides dynamic theme routing
-        li Plays nicely with Vite, PrismJS, and modern dev tooling
+                h4.text-primary.mb-3 How to Use It:
+                ol.list-group.list-group-numbered.list-group-flush.mb-4
+                  li.list-group-item.border-0 Enable Agent Mode in VS Code under Tools > Options > GitHub > Copilot.
+                  li.list-group-item.border-0 In the Copilot Chat window, select "Ask", then switch mode to "Agent".
+                  li.list-group-item.border-0 Enter a high-level prompt.
+                  li.list-group-item.border-0 Review suggestions and iterate.
+                  li.list-group-item.border-0 Confirm terminal/tool invocations when prompted.
 
-      h3 Code Sample: Installation
-      p.
-        Here's how easy it is to get started with the package:
-      pre.language-bash
-        code.language-bash.
-          dotnet add package WebSpark.Bootswatch
+                .alert.alert-success
+                  h5.alert-heading
+                    i.bi.bi-trophy.me-2
+                    | Benefits
+                  ul.mb-0
+                    li Increased productivity through automation
+                    li Faster development cycles
+                    li Improved code quality with automatic fixes
+                    li Enhanced onboarding and collaboration for teams
 
-      pre.language-csharp
-        code.language-csharp.
-          // In Program.cs
-          builder.Services.AddBootswatch();
+          // Turning Idea into Action
+          section#project-overview.mb-5
+            h2.h3.mb-4
+              i.bi.bi-rocket.me-2
+              | Turning Idea into Action
+            p.mb-4
+              | I set out to prove this could work with something practical. I created
+              a.text-decoration-none(href="https://www.nuget.org/packages/WebSpark.Bootswatch/" target="_blank" rel="noopener") WebSpark.Bootswatch
+              | , a NuGet package that simplifies adding
+              a.text-decoration-none(href="https://bootswatch.com/" target="_blank" rel="noopener") Bootswatch themes
+              |  to ASP.NET projects.
 
-      h3 Live Demo
-      p
-        | Want to see it in action? Visit the live demo site:
-        br
-        a.btn.btn-primary.mt-2(href='https://bootswatch.markhazleton.com/' target='_blank')
-          i.bi.bi-laptop.me-2
-          | Bootswatch Demo Site
+            p.mb-4
+              | The goal was to let any developer (or smart agent) style a site with one command
+              | and a few configuration lines—no asset downloads, no layout hacks.
 
-      h3 Why This Matters
-      p.
-        This is more than packaging styles—it's about writing installation instructions that an AI agent can understand and execute. Instead of codegen or scaffolding, you're giving the system a blueprint.
+            .card.bg-light.mb-4
+              .card-body
+                h4.mb-3
+                  i.bi.bi-check-circle.text-success.me-2
+                  | What It Does
+                ul.list-unstyled.mb-0
+                  li.mb-2
+                    i.bi.bi-check2.text-success.me-2
+                    | Adds SCSS support and all Bootswatch themes via CDN
+                  li.mb-2
+                    i.bi.bi-check2.text-success.me-2
+                    | Integrates with your layout file for theme switching
+                  li.mb-2
+                    i.bi.bi-check2.text-success.me-2
+                    | Provides dynamic theme routing
+                  li
+                    i.bi.bi-check2.text-success.me-2
+                    | Plays nicely with Vite, PrismJS, and modern dev tooling
 
-      ul
-        li No need for custom plugins or extensions
-        li The README becomes your install script
-        li The NuGet package becomes a self-deploying module
+          // Code Sample Section
+          section#installation.mb-5
+            h2.h3.mb-4
+              i.bi.bi-code-slash.me-2
+              | Code Sample: Installation
+            p.mb-4 Here's how easy it is to get started with the package:
 
-      h3 The GitHub Repo
-      p
-        | Full source, examples, and README are available on GitHub:
-        br
-        a(href="https://github.com/MarkHazleton/WebSpark.Bootswatch" target="_blank") github.com/MarkHazleton/WebSpark.Bootswatch
+            .row.g-4.mb-4
+              .col-md-6
+                .card.h-100
+                  .card-header.bg-dark.text-white
+                    h5.mb-0
+                      i.bi.bi-terminal.me-2
+                      | Package Installation
+                  .card-body.p-0
+                    pre.language-bash.mb-0
+                      code.language-bash.
+                        dotnet add package WebSpark.Bootswatch
 
-      h3 Final Thoughts
-      p.
-        This project changed how I write READMEs. I now structure them as if they're going to be parsed by someone—or something—that can act on them. It's a lightweight, flexible way to guide both human and machine through the installation process.
+              .col-md-6
+                .card.h-100
+                  .card-header.bg-primary.text-white
+                    h5.mb-0
+                      i.bi.bi-file-earmark-code.me-2
+                      | Service Registration
+                  .card-body.p-0
+                    pre.language-csharp.mb-0
+                      code.language-csharp.
+                        // In Program.cs
+                        builder.Services.AddBootswatch();
 
-      p.
-        In an age of AI-assisted development, the best interface might just be your documentation.
+          // Live Demo Section
+          section#demo.mb-5
+            .card.text-center.border-success
+              .card-body.py-5
+                i.bi.bi-laptop.display-4.text-success.mb-3
+                h3.card-title Live Demo
+                p.card-text.mb-4 Want to see it in action? Visit the live demo site to explore different Bootswatch themes.
+                a.btn.btn-success.btn-lg(href='https://bootswatch.markhazleton.com/' target='_blank' rel="noopener")
+                  i.bi.bi-box-arrow-up-ne.me-2
+                  | Bootswatch Demo Site
+
+          // Why This Matters Section
+          section#significance.mb-5
+            h2.h3.mb-4
+              i.bi.bi-lightbulb-fill.me-2
+              | Why This Matters
+            p.mb-4
+              | This is more than packaging styles—it's about writing installation instructions
+              | that an AI agent can understand and execute. Instead of codegen or scaffolding,
+              | you're giving the system a blueprint.
+
+            .row.g-4.mb-4
+              .col-md-4
+                .card.h-100.text-center.border-primary
+                  .card-body
+                    i.bi.bi-plugin.display-4.text-primary.mb-3
+                    h5.card-title No Custom Plugins
+                    p.card-text.small No need for custom plugins or extensions
+              .col-md-4
+                .card.h-100.text-center.border-success
+                  .card-body
+                    i.bi.bi-file-earmark-text.display-4.text-success.mb-3
+                    h5.card-title README as Script
+                    p.card-text.small The README becomes your install script
+              .col-md-4
+                .card.h-100.text-center.border-info
+                  .card-body
+                    i.bi.bi-box.display-4.text-info.mb-3
+                    h5.card-title Self-Deploying Module
+                    p.card-text.small The NuGet package becomes a self-deploying module
+
+          // GitHub Repo Section
+          section#github.mb-5
+            .card.border-dark
+              .card-header.bg-dark.text-white
+                h3.card-title.mb-0
+                  i.bi.bi-github.me-2
+                  | The GitHub Repository
+              .card-body
+                p.mb-3
+                  | Full source, examples, and README are available on GitHub.
+                  | The repository demonstrates the complete implementation and provides
+                  | detailed documentation for both human and AI consumption.
+                a.btn.btn-dark(href="https://github.com/MarkHazleton/WebSpark.Bootswatch" target="_blank" rel="noopener")
+                  i.bi.bi-github.me-2
+                  | View on GitHub
+
+          // Conclusion
+          section.mb-5
+            .card.bg-dark.text-white
+              .card-body.py-5
+                h2.h3.mb-4.text-center
+                  i.bi.bi-chat-quote.text-warning.me-2
+                  | Final Thoughts
+
+                p.lead.text-center.mb-4
+                  | This project changed how I write READMEs. I now structure them as if they're
+                  | going to be parsed by someone—or something—that can act on them.
+
+                blockquote.blockquote.text-center.mb-4
+                  p.mb-3.fs-5
+                    | "It's a lightweight, flexible way to guide both human and machine through the installation process."
+                  footer.blockquote-footer.text-light
+                    | In an age of AI-assisted development,
+                    cite(title="Source Title") the best interface might just be your documentation
+
+        .col-lg-4
+          aside.sticky-top
+            // Table of Contents
+            nav.mb-4(aria-label='Table of Contents')
+              .card.shadow-sm
+                .card-header.bg-primary.text-white
+                  h3.card-title.mb-0
+                    i.bi.bi-list-ul.me-2
+                    | Table of Contents
+                .card-body
+                  ol.list-group.list-group-numbered.list-group-flush
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#agent-mode') GitHub Copilot Agent Mode
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#project-overview') Project Overview
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#installation') Installation Guide
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#demo') Live Demo
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#significance') Why This Matters
+                    li.list-group-item.border-0.ps-0
+                      a.text-decoration-none(href='#github') GitHub Repository
+
+            // Quick Links
+            .card.shadow-sm.mb-4
+              .card-header.bg-success.text-white
+                h5.mb-0
+                  i.bi.bi-link-45deg.me-2
+                  | Quick Links
+              .card-body
+                ul.list-unstyled.mb-0
+                  li.mb-2
+                    i.bi.bi-box.text-primary.me-2
+                    a.text-decoration-none(href="https://www.nuget.org/packages/WebSpark.Bootswatch/" target="_blank" rel="noopener") WebSpark.Bootswatch NuGet
+                  li.mb-2
+                    i.bi.bi-laptop.text-success.me-2
+                    a.text-decoration-none(href="https://bootswatch.markhazleton.com/" target="_blank" rel="noopener") Live Demo Site
+                  li.mb-2
+                    i.bi.bi-github.text-dark.me-2
+                    a.text-decoration-none(href="https://github.com/MarkHazleton/WebSpark.Bootswatch" target="_blank" rel="noopener") GitHub Repository
+                  li
+                    i.bi.bi-palette.text-info.me-2
+                    a.text-decoration-none(href="https://bootswatch.com/" target="_blank" rel="noopener") Bootswatch Themes
+
+            // Technology Stack
+            .card.shadow-sm.mb-4
+              .card-header.bg-info.text-white
+                h5.mb-0
+                  i.bi.bi-stack.me-2
+                  | Technology Stack
+              .card-body
+                .d-flex.flex-wrap.gap-2
+                  span.badge.bg-primary.text-white NuGet
+                  span.badge.bg-secondary.text-white ASP.NET Core
+                  span.badge.bg-success.text-white Bootstrap
+                  span.badge.bg-warning.text-dark SCSS
+                  span.badge.bg-info.text-white Bootswatch
+                  span.badge.bg-danger.text-white Visual Studio Code
+                  span.badge.bg-dark.text-white GitHub Copilot
+
+            // Related Articles
+            .card.shadow-sm
+              .card-header.bg-dark.text-white
+                h5.mb-0
+                  i.bi.bi-collection.me-2
+                  | Related Articles
+              .card-body
+                ul.list-unstyled.mb-0
+                  li.mb-2
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/articles/ai-assisted-development-claude-and-github-copilot.html") AI-Assisted Development
+                  li.mb-2
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/articles/nuget-packages-pros-cons.html") NuGet Packages Best Practices
+                  li.mb-2
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/sidetrackedbysizzle.html") Sidetracked by Sizzle
+                  li
+                    i.bi.bi-arrow-right.text-primary.me-2
+                    a.text-decoration-none(href="/articles/the-new-era-of-individual-agency-how-ai-tools-are-empowering-the-self-starter.html") AI Tools Empowering Self-Starters
