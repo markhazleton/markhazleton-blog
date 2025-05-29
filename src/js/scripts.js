@@ -22,20 +22,30 @@ window.addEventListener("DOMContentLoaded", (event) => {
         });
     });
 
-    var myAccordion = new bootstrap.Collapse(document.getElementById('accordionArticles'), {
-        toggle: false // This prevents the default behavior of toggling an item when clicked
-      });
-
-    Prism.highlightAll();
-
-
-    document.querySelectorAll('.accordion-button').forEach(button => {
-        button.addEventListener('click', function() {
-          const icon = this.querySelector('i');
-          icon.classList.toggle('fa-plus');
-          icon.classList.toggle('fa-minus');
+    // Initialize accordion if it exists
+    const accordionArticlesEl = document.getElementById('accordionArticles');
+    if (accordionArticlesEl) {
+        var myAccordion = new bootstrap.Collapse(accordionArticlesEl, {
+            toggle: false // This prevents the default behavior of toggling an item when clicked
         });
-      });
+    }    // Initialize Prism if it exists
+    if (typeof Prism !== 'undefined') {
+        Prism.highlightAll();
+    }
+
+    // Handle accordion buttons (toggle icons) if they exist
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+    if (accordionButtons.length > 0) {
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-plus');
+                    icon.classList.toggle('fa-minus');
+                }
+            });
+        });
+    }
 
 
 });
