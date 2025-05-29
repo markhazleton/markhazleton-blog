@@ -1,0 +1,160 @@
+//- Modern Projects Module
+//- Designed to match the style and UI of modern-index.pug
+
+//- Mixin for individual project card
+mixin modern-project-card(project)
+  .col-lg-4.col-md-6.mb-4
+    .card.project-card.h-100
+      img.card-img-top.project-image(
+        src=project.image,
+        alt=project.p,
+        title=project.p,
+        onerror=`this.src='https://via.placeholder.com/400x200?text=${encodeURIComponent(project.p)}'`
+      )
+      .card-body.d-flex.flex-column
+        h5.card-title= project.p
+        p.card-text.flex-grow-1= project.d
+        .mt-auto
+          a.btn.btn-primary.btn-sm(
+            href=project.h,
+            target='_blank',
+            rel='noopener noreferrer',
+            title=`Visit ${project.p}`
+          )
+            i.bi.bi-arrow-up-right.me-2
+            | View Project
+
+//- Mixin for featured project card (larger display)
+mixin modern-featured-project-card(project)
+  .col-lg-6.col-md-12.mb-4
+    .card.project-card.h-100
+      .row.g-0
+        .col-md-5
+          img.img-fluid.project-image.h-100(
+            src=project.image,
+            alt=project.p,
+            title=project.p,
+            style="object-fit: cover;",
+            onerror=`this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(project.p)}'`
+          )
+        .col-md-7
+          .card-body.d-flex.flex-column.h-100
+            h4.card-title= project.p
+            p.card-text.flex-grow-1= project.d
+            .mt-auto
+              a.btn.btn-primary(
+                href=project.h,
+                target='_blank',
+                rel='noopener noreferrer',
+                title=`Visit ${project.p}`
+              )
+                i.bi.bi-arrow-up-right.me-2
+                | View Project
+
+//- Main projects section
+section.py-5.bg-light#projects
+  .container
+    .row.mb-5
+      .col-12.text-center
+        h2.section-title Featured Projects
+        p.lead.text-muted Showcasing innovative solutions and modern web development
+
+    //- Featured Projects (first 2 projects displayed prominently)
+    if projects && projects.length > 0
+      .row.mb-5
+        each project, index in projects.slice(0, 2)
+          +modern-featured-project-card(project)
+
+    //- Regular Project Grid
+    if projects && projects.length > 2
+      .row.mb-4
+        .col-12
+          h3.text-center.mb-4 All Projects
+      .row.g-4
+        each project in projects.slice(2)
+          +modern-project-card(project)
+
+    //- GitHub CTA Section
+    .row.mt-5
+      .col-12.text-center
+        .bg-white.p-4.rounded.shadow-sm
+          h4.mb-3 Explore More on GitHub
+          p.text-muted.mb-4
+            | View source code, documentation, and additional projects on my GitHub profile
+          a.btn.btn-outline-primary.btn-lg(
+            href='https://github.com/markhazleton',
+            target='_blank',
+            rel='noopener noreferrer'
+          )
+            i.fab.fa-github.me-2
+            | Visit GitHub Profile
+
+//- Technology Stack section
+section.py-5#tech-stack
+  .container
+    .row
+      .col-12.text-center.mb-5
+        h2.section-title Technology Stack
+        p.lead.text-muted Technologies and frameworks I work with
+
+    .row.justify-content-center
+      .col-lg-10
+        .row.g-3.text-center
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fab.fa-microsoft.fa-3x.text-primary.mb-3
+              h5 .NET
+              p.small Modern enterprise solutions
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fab.fa-microsoft.fa-3x.text-info.mb-3
+              h5 Azure
+              p.small Cloud infrastructure & services
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fab.fa-react.fa-3x.text-primary.mb-3
+              h5 React
+              p.small Interactive user interfaces
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fab.fa-bootstrap.fa-3x.text-purple.mb-3
+              h5 Bootstrap
+              p.small Responsive design framework
+
+        .row.g-3.text-center.mt-3
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fab.fa-node-js.fa-3x.text-success.mb-3
+              h5 Node.js
+              p.small Server-side JavaScript
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fab.fa-js.fa-3x.text-warning.mb-3
+              h5 JavaScript
+              p.small Dynamic web applications
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fas.fa-database.fa-3x.text-secondary.mb-3
+              h5 SQL Server
+              p.small Enterprise data management
+          .col-md-3.col-sm-6
+            .tech-stack-item.p-3
+              i.fab.fa-git-alt.fa-3x.text-danger.mb-3
+              h5 Git
+              p.small Version control & collaboration
+
+//- Custom styles (these would typically be in the CSS file)
+style.
+  .tech-stack-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 0.5rem;
+  }
+
+  .tech-stack-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .text-purple {
+    color: #7c3aed !important;
+  }
