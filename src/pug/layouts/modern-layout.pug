@@ -7,21 +7,62 @@ doctype html
 - var dateString = '' + yyyy + mm + dd;
 html(lang='en')
   head
-    block pagehead
-
+    // Essential Meta Tags
     meta(charset="UTF-8")
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='author', content='Mark Hazleton')
+    meta(name='robots', content='index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
+
+    // Default metadata (can be overridden in child templates)
+    title Mark Hazleton - Solutions Architect & Technology Leader
     meta(name='description', content='Mark Hazleton - Solutions Architect, lifelong learner, passionate for solutions which make technology work for business. Specializing in .NET, cloud solutions, and project management.')
     meta(name='keywords', content='Mark Hazleton, Solutions Architect, .NET, Azure, project management, web development, technology solutions, business goals')
-    meta(name='author', content='Mark Hazleton')
-    meta(property='og:title', content='Mark Hazleton - Solutions Architect')
+
+    // Page-specific metadata block
+    block pagehead
+
+    // Default canonical (can be overridden)
+    block canonical
+      link(rel='canonical', href='https://markhazleton.com/')
+
+    // Open Graph Meta Tags (defaults)
+    meta(property='og:title', content='Mark Hazleton - Solutions Architect & Technology Leader')
     meta(property='og:description', content='Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle.')
     meta(property='og:type', content='website')
-    meta(property='og:url', content='https://markhazleton.com')
+    meta(property='og:url', content='https://markhazleton.com/')
     meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazleton.jpg')
-    meta(name='twitter:card', content='summary_large_image')
+    meta(property='og:image:width', content='1200')
+    meta(property='og:image:height', content='630')
+    meta(property='og:image:alt', content='Mark Hazleton - Solutions Architect')
+    meta(property='og:site_name', content='Mark Hazleton')
+    meta(property='og:locale', content='en_US')
 
-    title Mark Hazleton - Solutions Architect & Technology Leader
+    // Additional Open Graph overrides
+    block og_overrides
+
+    // Twitter Card Meta Tags (defaults)
+    meta(name='twitter:card', content='summary_large_image')
+    meta(name='twitter:site', content='@markhazleton')
+    meta(name='twitter:creator', content='@markhazleton')
+    meta(name='twitter:title', content='Mark Hazleton - Solutions Architect & Technology Leader')
+    meta(name='twitter:description', content='Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle.')
+    meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazleton.jpg')
+    meta(name='twitter:image:alt', content='Mark Hazleton - Solutions Architect')
+
+    // Additional Twitter Card overrides
+    block twitter_overrides
+
+    // Performance optimization - DNS prefetch and preconnect
+    link(rel='dns-prefetch', href='//cdnjs.cloudflare.com')
+    link(rel='preconnect', href='https://cdnjs.cloudflare.com', crossorigin)
+
+    // Favicon and app icons
+    link(rel="shortcut icon", href="/assets/img/favicon.ico")
+    link(rel='icon', type='image/x-icon', href='assets/img/favicon.ico')
+    link(rel='apple-touch-icon', sizes='180x180', href='/apple-touch-icon.png')
+    link(rel='icon', type='image/png', sizes='32x32', href='/favicon-32x32.png')
+    link(rel='icon', type='image/png', sizes='16x16', href='/favicon-16x16.png')
+    link(rel='manifest', href='/site.webmanifest')
 
     // Bootstrap 5 CSS
     link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css', rel='stylesheet')
@@ -30,201 +71,229 @@ html(lang='en')
     // Font Awesome
     link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', rel='stylesheet')
 
-    // Favicon
-    link(rel="shortcut icon", href="/assets/img/favicon.ico")
-    link(rel='icon', type='image/x-icon', href='assets/img/favicon.ico')
-
-    // JSON-LD Structured Data
+    // Enhanced JSON-LD Structured Data for SEO
     script(type="application/ld+json").
       {
-          "@context": "https://schema.org",
-          "@type": "Person",
-          "name": "Mark Hazleton",
-          "jobTitle": "Solutions Architect",
-          "description": "Solutions Architect passionate for solutions which make technology work for business",
-          "url": "https://markhazleton.com",
-          "image": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
-          "sameAs": [
-              "https://www.linkedin.com/in/markhazleton/",
-              "https://github.com/markhazleton/",
-              "https://twitter.com/markhazleton/"
-          ],
-          "knowsAbout": [
-              ".NET Framework",
-              "ASP.NET",
-              "Microsoft Azure",
-              "Project Management",
-              "Web Development",
-              "Solution Architecture"
-          ]
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "givenName": "Mark",
+        "familyName": "Hazleton",
+        "jobTitle": "Solutions Architect",
+        "description": "Solutions Architect passionate for solutions which make technology work for business",
+        "url": "https://markhazleton.com",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+          "width": 400,
+          "height": 400
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton/",
+          "https://twitter.com/markhazleton/",
+          "https://www.youtube.com/@MarkHazleton"
+        ],
+        "knowsAbout": [
+          ".NET Framework",
+          "ASP.NET Core",
+          "Microsoft Azure",
+          "Project Management",
+          "Web Development",
+          "Solution Architecture",
+          "Software Engineering",
+          "Cloud Computing",
+          "Artificial Intelligence",
+          "Machine Learning"
+        ],
+        "alumniOf": {
+          "@type": "Organization",
+          "name": "University of North Texas"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Wichita,
+          "addressRegion": "KS",
+          "addressCountry": "US"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://markhazleton.com/"
+        }
       }
+
+    // Additional structured data for specific pages
+    block additional_structured_data
+
+    // Additional page-specific CSS
+    block additional_css
 
     style.
       :root {
-          --primary-color: #2c3e50;
-          --secondary-color: #3498db;
-          --accent-color: #e74c3c;
-          --text-color: #333;
-          --light-bg: #f8f9fa;
-          --border-color: #dee2e6;
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e74c3c;
+        --text-color: #333;
+        --light-bg: #f8f9fa;
+        --border-color: #dee2e6;
       }
 
       body {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          line-height: 1.6;
-          color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
       }
 
       .navbar-brand {
-          font-weight: 700;
-          font-size: 1.5rem;
+        font-weight: 700;
+        font-size: 1.5rem;
       }
 
       .hero-section {
-          background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-          color: white;
-          padding: 100px 0;
-          min-height: 60vh;
-          display: flex;
-          align-items: center;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        padding: 100px 0;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
       }
 
       .hero-content {
-          text-align: center;
+        text-align: center;
       }
 
       .hero-image {
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          border: 5px solid white;
-          margin: 0 auto 2rem;
-          display: block;
-          object-fit: cover;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 5px solid white;
+        margin: 0 auto 2rem;
+        display: block;
+        object-fit: cover;
       }
 
       .section-title {
-          color: var(--primary-color);
-          margin-bottom: 2rem;
-          font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+        font-weight: 600;
       }
 
       .project-card {
-          border: none;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          height: 100%;
-          border-radius: 0.75rem;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        border-radius: 0.75rem;
       }
 
       .project-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
       }
 
       .project-image {
-          height: 200px;
-          object-fit: cover;
-          width: 100%;
-          border-radius: 0.75rem 0.75rem 0 0;
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+        border-radius: 0.75rem 0.75rem 0 0;
       }
 
       .tech-badge {
-          background-color: var(--secondary-color);
-          color: white;
-          padding: 0.25rem 0.75rem;
-          border-radius: 50px;
-          font-size: 0.875rem;
-          margin: 0.25rem;
-          display: inline-block;
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.875rem;
+        margin: 0.25rem;
+        display: inline-block;
       }
 
       .article-card {
-          border: none;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-          transition: transform 0.3s ease;
-          margin-bottom: 1.5rem;
-          border-radius: 0.5rem;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
       }
 
       .article-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       }
 
       .social-icons a {
-          color: white;
-          font-size: 1.5rem;
-          margin: 0 0.5rem;
-          transition: color 0.3s ease;
+        color: white;
+        font-size: 1.5rem;
+        margin: 0 0.5rem;
+        transition: color 0.3s ease;
       }
 
       .social-icons a:hover {
-          color: var(--accent-color);
+        color: var(--accent-color);
       }
 
       .experience-item {
-          border-left: 3px solid var(--secondary-color);
-          padding-left: 2rem;
-          margin-bottom: 2rem;
-          position: relative;
+        border-left: 3px solid var(--secondary-color);
+        padding-left: 2rem;
+        margin-bottom: 2rem;
+        position: relative;
       }
 
       .experience-item::before {
-          content: '';
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          background-color: var(--secondary-color);
-          position: absolute;
-          left: -8px;
-          top: 0.5rem;
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--secondary-color);
+        position: absolute;
+        left: -8px;
+        top: 0.5rem;
       }
 
       .stats-section {
-          background-color: var(--light-bg);
-          padding: 4rem 0;
+        background-color: var(--light-bg);
+        padding: 4rem 0;
       }
 
       .stat-card {
-          text-align: center;
-          padding: 2rem;
+        text-align: center;
+        padding: 2rem;
       }
 
       .stat-number {
-          font-size: 3rem;
-          font-weight: bold;
-          color: var(--secondary-color);
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--secondary-color);
       }
 
       footer {
-          background-color: var(--primary-color);
-          color: white;
-          padding: 3rem 0 1rem;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 3rem 0 1rem;
       }
 
       .footer-links a {
-          color: #bdc3c7;
-          text-decoration: none;
-          transition: color 0.3s ease;
+        color: #bdc3c7;
+        text-decoration: none;
+        transition: color 0.3s ease;
       }
 
       .footer-links a:hover {
-          color: white;
+        color: white;
       }
 
       @media (max-width: 768px) {
-          .hero-section {
-              padding: 60px 0;
-          }
+        .hero-section {
+          padding: 60px 0;
+        }
 
-          .hero-section h1 {
-              font-size: 2.5rem;
-          }
+        .hero-section h1 {
+          font-size: 2.5rem;
+        }
       }
 
     // Global site tag (gtag.js) - Google Analytics
-    script(src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B",Async)
+    script(src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B", async)
     script.
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -235,24 +304,24 @@ html(lang='en')
     // Navigation
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top(role='navigation', aria-label='Main navigation')
       .container
-        a.navbar-brand(href='#', aria-label='Mark Hazleton homepage') Mark Hazleton
+        a.navbar-brand(href='/#', aria-label='Mark Hazleton homepage') Mark Hazleton
 
         button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav',
-                aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
-          span.navbar-toggler-icon
+          aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
 
         #navbarNav.collapse.navbar-collapse
           ul.navbar-nav.me-auto
             li.nav-item
-              a.nav-link.active(href='#about', aria-current='page') About
+              a.nav-link.active(href='/#about', aria-current='page') About
             li.nav-item
-              a.nav-link(href='#experience') Experience
+              a.nav-link(href='/#experience') Experience
             li.nav-item
-              a.nav-link(href='#projects') Projects
+              a.nav-link(href='/#projects') Projects
             li.nav-item
-              a.nav-link(href='#articles') Articles
+              a.nav-link(href='articles.html') Articles
             li.nav-item
-              a.nav-link(href='#contact') Contact
+              a.nav-link(href='/#contact') Contact
 
           .social-icons
             a(href='https://www.linkedin.com/in/markhazleton/', target='_blank', rel='noopener noreferrer', title='LinkedIn')
@@ -264,5 +333,45 @@ html(lang='en')
 
     block layout-content
 
+    // Footer
+    footer
+      .container
+        .row
+          .col-md-6.mb-4
+            h5.mb-3 Mark Hazleton
+            p.text-light Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.
+            .social-icons
+              a(href='https://www.linkedin.com/in/markhazleton/', target='_blank', rel='noopener noreferrer', aria-label='LinkedIn')
+                i.fab.fa-linkedin-in
+              a(href='https://github.com/markhazleton/', target='_blank', rel='noopener noreferrer', aria-label='GitHub')
+                i.fab.fa-github
+              a(href='https://www.youtube.com/@MarkHazleton', target='_blank', rel='noopener noreferrer', aria-label='YouTube')
+                i.fab.fa-youtube
+              a(href='https://twitter.com/markhazleton/', target='_blank', rel='noopener noreferrer', aria-label='Twitter')
+                i.fab.fa-twitter
+          .col-md-3.mb-4
+            h6.mb-3 Quick Links
+            ul.list-unstyled.footer-links
+              li: a(href='/#about') About
+              li: a(href='/#experience') Experience
+              li: a(href='/#projects') Projects
+              li: a(href='/articles.html') Articles
+              li: a(href='/#contact') Contact
+          .col-md-3.mb-4
+            h6.mb-3 Resources
+            ul.list-unstyled.footer-links
+              li: a(href='/projectmechanics/') Project Mechanics
+              li: a(href='https://webspark.markhazleton.com') WebSpark
+              li: a(href='/rss.xml') RSS Feed
+              li: a(href='/sitemap.xml') Sitemap
+
+        hr.my-4
+        .row
+          .col-12.text-center
+            p.mb-0 &copy; #{new Date().getFullYear()} Mark Hazleton. All rights reserved.
+
     // Bootstrap 5 JS
     script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js')
+
+    // Additional page-specific JavaScript
+    block additional_js
