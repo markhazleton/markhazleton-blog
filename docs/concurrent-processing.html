@@ -1,48 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Essential Meta Tags-->
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mark Hazleton" />
-        <meta name="robots" content="index, follow" />
-        <title>Concurrent Processing in C#: Mark Hazleton</title>
-        <meta name="description" content="Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Delve into a real-world project and learn how to effectively manage multiple tasks in C#. Explore now!" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <!-- Default metadata (can be overridden in child templates)-->
+        <title>Mark Hazleton - Solutions Architect & Technology Leader</title>
+        <meta name="description" content="Mark Hazleton - Solutions Architect, lifelong learner, passionate for solutions which make technology work for business. Specializing in .NET, cloud solutions, and project management." />
+        <meta name="keywords" content="Mark Hazleton, Solutions Architect, .NET, Azure, project management, web development, technology solutions, business goals" />
+        <!-- Page-specific metadata block-->
+        <title>Concurrent Processing in C#: Learning Through Code | Mark Hazleton</title>
+        <meta name="description" content="Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Learn how to effectively manage multiple tasks in C#." />
         <meta name="keywords" content="Concurrent Processing, C# Concurrency, Task Autonomy, Synchronization, Thread Safety, Scalability, Error Handling, Load Balancing, Deadlocks, Livelocks, Resource Management, C# Programming" />
         <meta name="author" content="Mark Hazleton" />
+        <meta name="article:published_time" content="2023-06-20" />
+        <meta name="article:modified_time" content="2025-05-29" />
+        <meta name="article:author" content="Mark Hazleton" />
+        <meta name="article:section" content="Software Development" />
+        <meta name="article:tag" content="Concurrent Processing, C#, Threading, Task Management" />
+        <!-- Default canonical (can be overridden)-->
         <link rel="canonical" href="https://markhazleton.com/concurrent-processing.html" />
+        <!-- Open Graph Meta Tags (defaults)-->
+        <meta property="og:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta property="og:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://markhazleton.com/" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <meta property="og:site_name" content="Mark Hazleton" />
+        <meta property="og:locale" content="en_US" />
+        <!-- Additional Open Graph overrides-->
+        <meta property="og:title" content="Concurrent Processing in C#: Learning Through Code | Mark Hazleton" />
+        <meta property="og:description" content="Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Learn how to effectively manage multiple tasks in C#." />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://markhazleton.com/concurrent-processing.html" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg" />
+        <meta property="og:image:alt" content="Mark Hazleton discussing concurrent processing and C# development" />
+        <meta property="article:author" content="Mark Hazleton" />
+        <meta property="article:published_time" content="2023-06-20" />
+        <meta property="article:modified_time" content="2025-05-29" />
+        <meta property="article:section" content="Software Development" />
+        <meta property="article:tag" content="Concurrent Processing" />
+        <meta property="article:tag" content="C#" />
+        <meta property="article:tag" content="Threading" />
+        <meta property="article:tag" content="Task Management" />
+        <!-- Twitter Card Meta Tags (defaults)-->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@markhazleton" />
+        <meta name="twitter:creator" content="@markhazleton" />
+        <meta name="twitter:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta name="twitter:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta name="twitter:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <!-- Additional Twitter Card overrides-->
+        <meta name="twitter:title" content="Concurrent Processing in C#: Learning Through Code | Mark Hazleton" />
+        <meta name="twitter:description" content="Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Learn how to effectively manage multiple tasks in C#." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg" />
+        <meta name="twitter:image:alt" content="Mark Hazleton discussing concurrent processing and C# development" />
+        <meta name="twitter:label1" content="Reading time" />
+        <meta name="twitter:data1" content="12 min read" />
+        <meta name="twitter:label2" content="Written by" />
+        <meta name="twitter:data2" content="Mark Hazleton" />
+        <!-- Performance optimization - DNS prefetch and preconnect-->
+        <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+        <!-- Favicon and app icons-->
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "Person",
-                "name": "Mark Hazleton",
-                "familyName": "Hazleton",
-                "givenName": "Mark",
-                "jobTitle": "Solutions Architect",
-                "alumniOf": "University of North Texas",
-                "affiliation": {
-                    "@type": "Organization",
-                    "name": "Control Origins"
-                },
-                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
-                "url": "https://markhazleton.com"
-            }
-        </script>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <!-- Bootstrap 5 CSS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+        <!-- Bootstrap Icons-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet" />
+        <!-- Font Awesome-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+        <!-- Enhanced JSON-LD Structured Data for SEO-->
         <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
-                "@type": "Organization",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "givenName": "Mark",
+                "familyName": "Hazleton",
+                "jobTitle": "Solutions Architect",
+                "description": "Solutions Architect passionate for solutions which make technology work for business",
                 "url": "https://markhazleton.com",
-                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/@MarkHazleton"],
+                "knowsAbout": [".NET Framework", "ASP.NET Core", "Microsoft Azure", "Project Management", "Web Development", "Solution Architecture", "Software Engineering", "Cloud Computing", "Artificial Intelligence", "Machine Learning"],
+                "alumniOf": {
+                    "@type": "Organization",
+                    "name": "University of North Texas"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Wichita",
+                    "addressRegion": "KS",
+                    "addressCountry": "US"
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/"
+                }
             }
         </script>
-        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=20250528" />
+        <!-- Additional structured data for specific pages-->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "Concurrent Processing in C#: Learning Through Code | Mark Hazleton",
+                "description": "Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Learn how to effectively manage multiple tasks in C#.",
+                "url": "https://markhazleton.com/concurrent-processing.html",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg",
+                    "width": 1200,
+                    "height": 630
+                },
+                "author": {
+                    "@type": "Person",
+                    "name": "Mark Hazleton",
+                    "url": "https://markhazleton.com"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "Mark Hazleton",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+                    }
+                },
+                "datePublished": "2023-06-20",
+                "dateModified": "2025-05-29",
+                "mainEntityOfPage": "https://markhazleton.com/concurrent-processing.html",
+                "articleSection": "Software Development",
+                "keywords": "Concurrent Processing, C# Concurrency, Task Autonomy, Synchronization, Thread Safety, Scalability, Error Handling, Load Balancing, Deadlocks, Livelocks, Resource Management, C# Programming"
+            }
+        </script>
+        <!-- Additional page-specific CSS-->
+        <style>
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --accent-color: #e74c3c;
+                --text-color: #333;
+                --light-bg: #f8f9fa;
+                --border-color: #dee2e6;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+            }
+
+            .navbar-brand {
+                font-weight: 700;
+                font-size: 1.5rem;
+            }
+
+            .hero-section {
+                background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+                color: white;
+                padding: 100px 0;
+                min-height: 60vh;
+                display: flex;
+                align-items: center;
+            }
+
+            .hero-content {
+                text-align: center;
+            }
+
+            .hero-image {
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                border: 5px solid white;
+                margin: 0 auto 2rem;
+                display: block;
+                object-fit: cover;
+            }
+
+            .section-title {
+                color: var(--primary-color);
+                margin-bottom: 2rem;
+                font-weight: 600;
+            }
+
+            .project-card {
+                border: none;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition:
+                    transform 0.3s ease,
+                    box-shadow 0.3s ease;
+                height: 100%;
+                border-radius: 0.75rem;
+            }
+
+            .project-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            }
+
+            .project-image {
+                height: 200px;
+                object-fit: cover;
+                width: 100%;
+                border-radius: 0.75rem 0.75rem 0 0;
+            }
+
+            .tech-badge {
+                background-color: var(--secondary-color);
+                color: white;
+                padding: 0.25rem 0.75rem;
+                border-radius: 50px;
+                font-size: 0.875rem;
+                margin: 0.25rem;
+                display: inline-block;
+            }
+
+            .article-card {
+                border: none;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease;
+                margin-bottom: 1.5rem;
+                border-radius: 0.5rem;
+            }
+
+            .article-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            }
+
+            .social-icons a {
+                color: white;
+                font-size: 1.5rem;
+                margin: 0 0.5rem;
+                transition: color 0.3s ease;
+            }
+
+            .social-icons a:hover {
+                color: var(--accent-color);
+            }
+
+            .experience-item {
+                border-left: 3px solid var(--secondary-color);
+                padding-left: 2rem;
+                margin-bottom: 2rem;
+                position: relative;
+            }
+
+            .experience-item::before {
+                content: '';
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background-color: var(--secondary-color);
+                position: absolute;
+                left: -8px;
+                top: 0.5rem;
+            }
+
+            .stats-section {
+                background-color: var(--light-bg);
+                padding: 4rem 0;
+            }
+
+            .stat-card {
+                text-align: center;
+                padding: 2rem;
+            }
+
+            .stat-number {
+                font-size: 3rem;
+                font-weight: bold;
+                color: var(--secondary-color);
+            }
+
+            footer {
+                background-color: var(--primary-color);
+                color: white;
+                padding: 3rem 0 1rem;
+            }
+
+            .footer-links a {
+                color: #bdc3c7;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .footer-links a:hover {
+                color: white;
+            }
+
+            @media (max-width: 768px) {
+                .hero-section {
+                    padding: 60px 0;
+                }
+
+                .hero-section h1 {
+                    font-size: 2.5rem;
+                }
+            }
+        </style>
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -53,101 +327,242 @@
             gtag('js', new Date());
             gtag('config', 'G-L8GVZNDH0B');
         </script>
-        <script>
-            (function (c, l, a, r, i, t, y) {
-                c[a] =
-                    c[a] ||
-                    function () {
-                        (c[a].q = c[a].q || []).push(arguments);
-                    };
-                t = l.createElement(r);
-                t.async = 1;
-                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
-                y = l.getElementsByTagName(r)[0];
-                y.parentNode.insertBefore(t, y);
-            })(window, document, 'clarity', 'script', 'd628hovv63');
-        </script>
     </head>
-    <body class="sidetracked-body" id="page-top">
-        <nav class="navbar navbar-dark bg-primary p-1">
-            <div class="container-fluid justify-content-end">
-                <div class="social-icons d-flex">
-                    <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram text-light" style="font-size: 2rem"></i></a>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <a class="navbar-brand" href="/#" aria-label="Mark Hazleton homepage">Mark Hazleton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/#about" aria-current="page">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#experience">Experience</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
+                    </ul>
+                    <div class="social-icons">
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
             </div>
         </nav>
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
-                <span class="d-block d-lg-none">Mark Hazleton</span>
-                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#articles">Articles</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
-                </ul>
-            </div>
-        </nav>
-        <!-- Page Content-->
-        <div class="container-fluid p-0 painteddesert-background">
-            <article class="painteddesert-section painteddesert-section-background" id="post">
-                <div class="painteddesert-section-content">
-                    <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/concurrentprocessing/" target="_blank" title="The full source code for the Concurrent Processing Demo is available on GitHub" rel="noopener">The full source code for the Concurrent Processing Demo is available on GitHub</a></p>
-                    <h1 class="mb-0" id="top">Concurrent Processing</h1>
-                    <div class="subheading mb-3">Learning Concurrent Processing Through Code</div>
-                    <p class="lead">As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques. Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.</p>
-                    <p>The idea of managing multiple tasks simultaneously has always fascinated me. However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like race conditions and deadlocks. To dive into this topic, I decided to develop a C# console application that would allow me to experiment and learn practically.</p>
-                    <h2>Considerations for Concurrent Processing</h2>
-                    <dl>
-                        <dt>Task Autonomy and Independence</dt>
-                        <dd>For multiple tasks to effectively run concurrently, each task must encapsulate an autonomous and self-contained unit of functionality. Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources. By embodying its inputs, logic, and outputs, an autonomous task can be executed without hindrance, allowing it to be scheduled and managed alongside other tasks concurrently. This approach not only enhances the efficiency and responsiveness of the overall system but also minimizes the potential for contention and synchronization issues.</dd>
-                        <dt>Synchronization</dt>
-                        <dd>Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency among multiple threads or tasks. Techniques like locks, semaphores, and monitors can be used to control access to shared resources.</dd>
-                        <dt>Scalability</dt>
-                        <dd>Consider the scalability of your concurrent processing solution. Will it perform well as the number of concurrent tasks or threads increases? Design your system to handle increased load without degrading performance.</dd>
-                        <dt>Deadlocks and Livelocks</dt>
-                        <dd>Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release to prevent these issues.</dd>
-                        <dt>Resource Management</dt>
-                        <dd>Properly manage resources such as memory, file handles, and network connections. Failing to release resources can lead to resource exhaustion and degrade system performance.</dd>
-                        <dt>Thread Safety</dt>
-                        <dd>Ensure that your code is thread-safe. Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously. Use techniques like immutable data, synchronization, and thread-local storage.</dd>
-                        <dt>Load Balancing</dt>
-                        <dd>Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources. Load balancing helps prevent scenarios where some threads are idle while others are overloaded.</dd>
-                        <dt>Task Granularity</dt>
-                        <dd>Determine the appropriate level of task granularity. Too fine-grained tasks can lead to overhead due to thread management, while too coarse-grained tasks might not fully utilize available resources.</dd>
-                        <dt>Error Handling</dt>
-                        <dd>Implement robust error-handling mechanisms for concurrent tasks. Unhandled exceptions in one task should not crash the entire application.</dd>
-                        <dt>Testing and Debugging</dt>
-                        <dd>Testing concurrent code is challenging. Consider using techniques like stress testing and race condition detection tools to identify issues. Debugging concurrent issues can be complex, so use tools and techniques that help diagnose problems.</dd>
-                        <dt>Communication and Coordination</dt>
-                        <dd>Threads or tasks might need to communicate and coordinate with each other. Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.</dd>
-                    </dl>
-                    <h2>Potential Drawbacks in Concurrent Programming</h2>
-                    <p>While concurrent programming boosts performance and resource utilization, it comes with challenges:</p>
-                    <ul>
-                        <li>Risk of Deadlocks and Livelocks.</li>
-                        <li>Difficulty in Debugging and Testing.</li>
-                        <li>Potential for Race Conditions.</li>
-                        <li>Increased Memory Consumption.</li>
-                        <li>Complexity in Code Management and Maintenance.</li>
-                    </ul>
-                    <p>By understanding these challenges, developers can employ strategies to mitigate risks and harness the benefits of concurrency in their projects.</p>
-                    <p>
-                        Since this was a one-off project, I didn't want to spend too much time on the user interface. I created a repository to create a simple console application that would allow me to focus on the core functionality.
-                        <a href="https://github.com/markhazleton/ConcurrentProcessing" title="Concurrent Processing C# Project on GitHub by Mark Hazleton" target="_blank" rel="noopener noreferrer">View the Concurrent Processing C# Project on GitHub</a>
-                    </p>
-                    <p>I started with a ChatGPT prompt that introduced me to the basics of concurrent processing. Armed with this initial guidance, I started writing the code. Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.</p>
-                    <a href="#SemaphoreSlimClass">More on the SemaphoreSlim Class</a>
-                    <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">int</span></span> maxConcurrency <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span> <span class="token comment">// Maximum concurrent tasks allowed</span>
+        <!-- Breadcrumb Navigation-->
+        <div class="container mt-4">
+            <nav class="breadcrumb-modern" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="/articles">Articles</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Concurrent Processing</li>
+                </ol>
+            </nav>
+        </div>
+        <!-- Article Content-->
+        <article class="py-5" id="main-article">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <header class="mb-5">
+                            <div class="alert alert-info text-center mb-4">
+                                <i class="bi bi-github me-2"></i>
+                                <a class="text-decoration-none fw-bold" href="https://github.com/markhazleton/concurrentprocessing/" target="_blank" rel="noopener">
+                                    View the complete source code on GitHub
+                                    <i class="bi bi-box-arrow-up-ne ms-1"></i>
+                                </a>
+                            </div>
+                            <h1 class="display-4 fw-bold" id="top">Concurrent Processing in C#</h1>
+                            <div class="subheading h4 text-muted mb-4">Learning Concurrent Processing Through Code</div>
+                            <div class="article-meta text-muted mb-4">
+                                <time datetime="2023-06-20">June 19, 2023</time>
+                                <span class="mx-2">•</span>
+                                <span>by Mark Hazleton</span>
+                                <span class="mx-2">•</span>
+                                <span>12 min read</span>
+                            </div>
+                        </header>
+                        <div class="article-content">
+                            p.leadAs a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques. Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.
+                            <p class="mb-4">The idea of managing multiple tasks simultaneously has always fascinated me. However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like race conditions and deadlocks. To dive into this topic, I decided to develop a C# console application that would allow me to experiment and learn practically.</p>
+                            <section class="mb-5">
+                                <h2 class="h3 mb-4">
+                                    <i class="bi bi-list-check me-2 text-primary"></i>
+                                    Considerations for Concurrent Processing
+                                </h2>
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-gear me-2 text-success"></i>
+                                                    Task Autonomy and Independence
+                                                </h5>
+                                                <p class="card-text">For multiple tasks to effectively run concurrently, each task must encapsulate an autonomous and self-contained unit of functionality. Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-arrow-repeat me-2 text-primary"></i>
+                                                    Synchronization
+                                                </h5>
+                                                <p class="card-text">Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency among multiple threads or tasks. Techniques like locks, semaphores, and monitors can be used to control access to shared resources.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-bar-chart me-2 text-info"></i>
+                                                    Scalability
+                                                </h5>
+                                                <p class="card-text">Consider the scalability of your concurrent processing solution. Will it perform well as the number of concurrent tasks or threads increases? Design your system to handle increased load without degrading performance.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-exclamation-triangle me-2 text-warning"></i>
+                                                    Deadlocks and Livelocks
+                                                </h5>
+                                                <p class="card-text">Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-memory me-2 text-secondary"></i>
+                                                    Resource Management
+                                                </h5>
+                                                <p class="card-text">Properly manage resources such as memory, file handles, and network connections. Failing to release resources can lead to resource exhaustion and degrade system performance.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-shield-check me-2 text-success"></i>
+                                                    Thread Safety
+                                                </h5>
+                                                <p class="card-text">Ensure that your code is thread-safe. Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously. Use techniques like immutable data, synchronization, and thread-local storage.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-diagram-3 me-2 text-primary"></i>
+                                                    Load Balancing
+                                                </h5>
+                                                <p class="card-text">Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources. Load balancing helps prevent scenarios where some threads are idle while others are overloaded.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-puzzle me-2 text-info"></i>
+                                                    Task Granularity
+                                                </h5>
+                                                <p class="card-text">Determine the appropriate level of task granularity. Too fine-grained tasks can lead to overhead due to thread management, while too coarse-grained tasks might not fully utilize available resources.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-bug me-2 text-danger"></i>
+                                                    Error Handling
+                                                </h5>
+                                                <p class="card-text">Implement robust error-handling mechanisms for concurrent tasks. Unhandled exceptions in one task should not crash the entire application.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-search me-2 text-secondary"></i>
+                                                    Testing and Debugging
+                                                </h5>
+                                                <p class="card-text">Testing concurrent code is challenging. Consider using techniques like stress testing and race condition detection tools to identify issues. Debugging concurrent issues can be complex.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <i class="bi bi-chat-dots me-2 text-primary"></i>
+                                                    Communication and Coordination
+                                                </h5>
+                                                <p class="card-text">Threads or tasks might need to communicate and coordinate with each other. Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="mb-5">
+                                <h2 class="h3 mb-4">
+                                    <i class="bi bi-exclamation-circle me-2 text-warning"></i>
+                                    Potential Drawbacks in Concurrent Programming
+                                </h2>
+                                <div class="alert alert-warning mb-4">
+                                    <h5 class="alert-heading">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        Challenges to Consider
+                                    </h5>
+                                    <p class="mb-2">While concurrent programming boosts performance and resource utilization, it comes with challenges:</p>
+                                    <ul class="mb-0">
+                                        <li>Risk of Deadlocks and Livelocks</li>
+                                        <li>Difficulty in Debugging and Testing</li>
+                                        <li>Potential for Race Conditions</li>
+                                        <li>Increased Memory Consumption</li>
+                                        <li>Complexity in Code Management and Maintenance</li>
+                                    </ul>
+                                </div>
+                                <p class="mb-4">By understanding these challenges, developers can employ strategies to mitigate risks and harness the benefits of concurrency in their projects.</p>
+                            </section>
+                            <section class="mb-5">
+                                <h2 class="h3 mb-4">
+                                    <i class="bi bi-code-slash me-2 text-primary"></i>
+                                    Building the Concurrent Processing Demo
+                                </h2>
+                                <p class="mb-4">
+                                    Since this was a one-off project, I didn't want to spend too much time on the user interface. I created a repository to create a simple console application that would allow me to focus on the core functionality.
+                                    <a class="text-decoration-none" href="https://github.com/markhazleton/ConcurrentProcessing" target="_blank" rel="noopener">
+                                        View the Concurrent Processing C# Project on GitHub
+                                        <i class="bi bi-box-arrow-up-ne ms-1"></i>
+                                    </a>
+                                </p>
+                                <p class="mb-4">I started with a ChatGPT prompt that introduced me to the basics of concurrent processing. Armed with this initial guidance, I started writing the code. Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.</p>
+                                <p class="mb-3">
+                                    Check out the
+                                    <a class="text-decoration-none" href="#SemaphoreSlimClass">SemaphoreSlim Class section</a>
+                                    for more details.
+                                </p>
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-code-slash me-2"></i>
+                                            Core Concurrent Processing Logic
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre class="language-csharp mb-0"><code class="language-csharp"><span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">int</span></span> maxConcurrency <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span> <span class="token comment">// Maximum concurrent tasks allowed</span>
 <span class="token class-name">SemaphoreSlim</span> semaphore <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span>maxConcurrency<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">List<span class="token punctuation">&lt;</span>Task<span class="token punctuation">></span></span> tasks <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> taskId <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -164,10 +579,19 @@
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">WhenAll</span><span class="token punctuation">(</span>tasks<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
 </code></pre>
-                    <p>I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.</p>
-                    <pre class="language-csharp"><code class="language-csharp"><span class="token comment">//  Wait for semaphore to be released so that next task can start</span>
+                                    </div>
+                                </div>
+                                <p class="mb-4">I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.</p>
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-stopwatch me-2"></i>
+                                            Semaphore Wait Function
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre class="language-csharp mb-0"><code class="language-csharp"><span class="token comment">//  Wait for semaphore to be released so that next task can start</span>
 <span class="token keyword">static</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span><span class="token keyword">long</span><span class="token punctuation">></span></span> <span class="token function">AwaitSemaphoreAsync</span><span class="token punctuation">(</span><span class="token class-name">SemaphoreSlim</span> semaphore<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token class-name">Stopwatch</span> stopwatch <span class="token operator">=</span> Stopwatch<span class="token punctuation">.</span><span class="token function">StartNew</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -176,8 +600,22 @@
   <span class="token keyword">return</span> stopwatch<span class="token punctuation">.</span>ElapsedTicks<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-                    <p>I created a mock async processing method that simulates work by delaying for a random amount of time. I also added telemetry data so that I could track the task ID, task count, semaphore count, and wait time. I used the `Task.Delay` method to simulate work, but in a real-world application, this would be replaced with actual work. The random delay was added to simulate the dynamic nature of concurrent processing.</p>
-                    <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Mock Async Task to simulate work</span>
+                                    </div>
+                                </div>
+                                <p class="mb-4">
+                                    I created a mock async processing method that simulates work by delaying for a random amount of time. I also added telemetry data so that I could track the task ID, task count, semaphore count, and wait time. I used the
+                                    <code>Task.Delay</code>
+                                    method to simulate work, but in a real-world application, this would be replaced with actual work.
+                                </p>
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-play-circle me-2"></i>
+                                            Mock Processing Task
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre class="language-csharp mb-0"><code class="language-csharp"><span class="token comment">// Mock Async Task to simulate work</span>
 <span class="token keyword">static</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">ProcessAsync</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> taskId<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">int</span></span> taskCount<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">long</span></span> waitTicks<span class="token punctuation">,</span> <span class="token class-name">SemaphoreSlim</span> semaphore<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">try</span>
@@ -190,236 +628,241 @@
     semaphore<span class="token punctuation">.</span><span class="token function">Release</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-
 </code></pre>
-                    <p>Finally, I created a function to generate the next task ID. This is how I controlled the number of tasks that were created.</p>
-                    <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Get Next Task ID</span>
+                                    </div>
+                                </div>
+                                <p class="mb-4">Finally, I created a function to generate the next task ID. This is how I controlled the number of tasks that were created.</p>
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-arrow-right-circle me-2"></i>
+                                            Task ID Generator
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre class="language-csharp mb-0"><code class="language-csharp"><span class="token comment">// Get Next Task ID</span>
 <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> <span class="token function">GetNextTaskId</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> taskId<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>taskId <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span> <span class="token number">1000</span><span class="token punctuation">)</span> <span class="token keyword">return</span> taskId <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>taskId <span class="token operator">&lt;</span> <span class="token number">1000</span><span class="token punctuation">)</span> <span class="token keyword">return</span> taskId <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
   <span class="token keyword">else</span> <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-                    <h2>Iterating and Learning</h2>
-                    <p>As I dove into the code, I realized that understanding concurrent processing goes beyond just knowing how to create threads or tasks. I needed to comprehend the concept of synchronization and how to manage the number of concurrently executing tasks. The code I had started with was a great foundation, but it required iteration and refinement to achieve my goals.</p>
-                    <p>The heart of the application was the use of the `SemaphoreSlim` class, which acted as a gatekeeper to control the number of tasks running concurrently. This was a crucial lesson in managing shared resources and preventing resource exhaustion.</p>
-                    <h2>Experimenting and Observing</h2>
-                    <p>With each iteration of the code, I ran the application and observed its behavior. The output of the program provided valuable insights into how tasks were being managed, the time each task spent waiting for a semaphore, and the overall concurrency control.</p>
-                    <pre class="language-json"><code class="language-json">...
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="mb-5">
+                                <h2 class="h3 mb-4">
+                                    <i class="bi bi-arrow-repeat me-2 text-primary"></i>
+                                    Iterating and Learning
+                                </h2>
+                                <p class="mb-4">As I dove into the code, I realized that understanding concurrent processing goes beyond just knowing how to create threads or tasks. I needed to comprehend the concept of synchronization and how to manage the number of concurrently executing tasks. The code I had started with was a great foundation, but it required iteration and refinement to achieve my goals.</p>
+                                <p class="mb-4">
+                                    The heart of the application was the use of the
+                                    <strong>SemaphoreSlim</strong>
+                                    class, which acted as a gatekeeper to control the number of tasks running concurrently. This was a crucial lesson in managing shared resources and preventing resource exhaustion.
+                                </p>
+                            </section>
+                            <section class="mb-5">
+                                <h2 class="h3 mb-4">
+                                    <i class="bi bi-eye me-2 text-primary"></i>
+                                    Experimenting and Observing
+                                </h2>
+                                <p class="mb-4">With each iteration of the code, I ran the application and observed its behavior. The output of the program provided valuable insights into how tasks were being managed, the time each task spent waiting for a semaphore, and the overall concurrency control.</p>
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-dark text-white">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-terminal me-2"></i>
+                                            Sample Output
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre class="language-json mb-0"><code class="language-json">...
 Task<span class="token operator">:</span><span class="token number">061</span> T<span class="token operator">:</span><span class="token number">61</span> S<span class="token operator">:</span><span class="token number">2</span> W<span class="token operator">:</span><span class="token number">2</span>
 Task<span class="token operator">:</span><span class="token number">070</span> T<span class="token operator">:</span><span class="token number">70</span> S<span class="token operator">:</span><span class="token number">0</span> W<span class="token operator">:</span><span class="token number">4</span>
 Task<span class="token operator">:</span><span class="token number">037</span> T<span class="token operator">:</span><span class="token number">37</span> S<span class="token operator">:</span><span class="token number">0</span> W<span class="token operator">:</span><span class="token number">2</span>
 Task<span class="token operator">:</span><span class="token number">018</span> T<span class="token operator">:</span><span class="token number">18</span> S<span class="token operator">:</span><span class="token number">3</span> W<span class="token operator">:</span><span class="token number">2</span>
 Task<span class="token operator">:</span><span class="token number">023</span> T<span class="token operator">:</span><span class="token number">23</span> S<span class="token operator">:</span><span class="token number">1</span> W<span class="token operator">:</span><span class="token number">2</span>
 Task<span class="token operator">:</span><span class="token number">026</span> T<span class="token operator">:</span><span class="token number">26</span> S<span class="token operator">:</span><span class="token number">2</span> W<span class="token operator">:</span><span class="token number">3</span>
-...</code></pre>
-                    <p>The output highlighted the dynamic nature of concurrent processing, where tasks were processed and released in a controlled manner, ensuring that the maximum concurrency was maintained while avoiding resource contention.</p>
-                    <h2>Celebrating Success</h2>
-                    <p>After several iterations, moments of frustration, and numerous debug sessions, I finally achieved my desired result. The application was now a well-functioning demonstration of concurrent processing, showcasing my newfound understanding of synchronization and resource management.</p>
-                    <p>The journey was not just about the code; it was about the learning process itself. Developing this console application was a great learning tool that allowed me to grasp the intricacies of concurrent processing hands-on. It transformed abstract concepts into tangible knowledge.</p>
-                    <h2>Conclusion</h2>
-                    <p>The world of concurrent processing is complex and fascinating. Through the development of this C# console application, I gained valuable insights into managing multiple tasks simultaneously while avoiding common pitfalls. The iterative process of refining the code helped me internalize the concepts and apply them effectively.</p>
-                    <p>I encourage fellow developers to try learning through practical coding. It's one thing to read about a topic, but a whole different experience to see it in action and work through challenges firsthand. With the right resources, curiosity, and determination, you can turn any coding endeavor into a powerful learning tool.</p>
-                    <p>Happy coding and exploring the world of concurrency!</p>
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title" id="SemaphoreSlimClass">The SemaphoreSlim Class</h3>
-                            <a href="#top">Back to Top</a>
-                        </div>
-                        <div class="card-body">
-                            <p>
-                                The
-                                <strong>SemaphoreSlim</strong>
-                                class in .NET presents a robust solution for fine-tuning resource utilization. This lightweight semaphore is designed for scenarios where wait times are expected to be short, making it ideal for controlling the number of tasks executing in parallel within a single process.
-                            </p>
-                            <p>
-                                The
-                                <strong>SemaphoreSlim</strong>
-                                class offers a simple, yet effective way to limit the number of threads that can access a specific resource or a pool of resources concurrently. This is particularly useful in scenarios where you need to throttle the usage of resources like network bandwidth or CPU time, preventing the system from being overwhelmed.
-                            </p>
-                            <p>
-                                When integrating
-                                <strong>SemaphoreSlim</strong>
-                                into the Task List Processor, it allows precise control over the number of tasks running simultaneously. By setting the maximum concurrent tasks, we ensure efficient execution without overloading the system, especially crucial in high-load situations.
-                            </p>
-                            <p>
-                                For more detailed information on
-                                <strong>SemaphoreSlim</strong>
-                                , its usage, and examples, visit the
-                                <a href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim">Microsoft Documentation on SemaphoreSlim</a>
-                                .
-                            </p>
-                            <h3 class="card-title">Semaphore vs SemaphoreSlim in .NET</h3>
-                            <p>Choose Semaphore when you need inter-process synchronization or when dealing with named semaphores for system-wide visibility. Opt for SemaphoreSlim for more lightweight, intra-process synchronization where performance and efficiency are key considerations</p>
-                            <div class="row">
-                                <div class="col-6">
-                                    <p class="lead">Semaphore</p>
-                                    <dl>
-                                        <dt>Nature</dt>
-                                        <dd>A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.</dd>
-                                        <dt>Usage</dt>
-                                        <dd>Ideal for thread synchronization across multiple processes or for inter-process communication.</dd>
-                                        <dt>Performance</dt>
-                                        <dd>Slower and more resource-intensive, relying on the system's kernel mode.</dd>
-                                        <dt>Functionality</dt>
-                                        <dd>Supports system-wide visibility and waiting on multiple semaphores.</dd>
-                                        <dt>Example</dt>
-                                        <dd>Synchronizing resource access across different applications on the same system.</dd>
-                                        <dt>Pros</dt>
-                                        <dd>Visibility across processes, suitable for complex synchronization.</dd>
-                                        <dt>Cons</dt>
-                                        <dd>Heavier, slower, and suitable for long wait times. Involves kernel transitions.</dd>
-                                    </dl>
-                                </div>
-                                <div class="col-6">
-                                    <p class="lead">SemaphoreSlim</p>
-                                    <dl>
-                                        <dt>Nature</dt>
-                                        <dd>Lightweight and fast, designed for use within a single process.</dd>
-                                        <dt>Usage</dt>
-                                        <dd>Best for short wait times and scenarios confined to a single process.</dd>
-                                        <dt>Performance</dt>
-                                        <dd>More efficient in memory and speed, using CLR synchronization primitives.</dd>
-                                        <dt>Functionality</dt>
-                                        <dd>Does not support named semaphores or system-wide visibility.</dd>
-                                        <dt>Example</dt>
-                                        <dd>Limiting concurrent calls to an external service in a web server application.</dd>
-                                        <dt>Pros</dt>
-                                        <dd>Faster, more memory-efficient, suited for fine-grained control within an app.</dd>
-                                        <dt>Cons</dt>
-                                        <dd>Not suitable for inter-process communication, lacks system-wide visibility.</dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer"></div>
-                    </div>
-                </div>
-            </article>
-        </div>
-        <footer class="navbar-dark bg-primary">
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 text-left">
-                    <br />
-                    <!-- Ensure current article exists-->
-                    <!-- Extract and clean currentKeywords-->
-                    <!-- Only check for related articles if there are valid keywords-->
-                    <!-- Shuffle related articles and limit to 3-->
-                    <!-- Render current article's keywords as badges-->
-                    <div class="keywords mt-3">
-                        <p class="text-white">Hashtags:</p>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-primary text-uppercase">concurrent processing</span>
-                            <span class="badge bg-primary text-uppercase">c# console application</span>
-                            <span class="badge bg-primary text-uppercase">synchronization</span>
-                            <span class="badge bg-primary text-uppercase">race conditions</span>
-                            <span class="badge bg-primary text-uppercase">deadlocks</span>
-                            <span class="badge bg-primary text-uppercase">semaphoreslim</span>
-                            <span class="badge bg-primary text-uppercase">task autonomy</span>
-                            <span class="badge bg-primary text-uppercase">scalability</span>
-                            <span class="badge bg-primary text-uppercase">resource management</span>
-                            <span class="badge bg-primary text-uppercase">thread safety</span>
-                            <span class="badge bg-primary text-uppercase">load balancing</span>
-                            <span class="badge bg-primary text-uppercase">task granularity</span>
-                            <span class="badge bg-primary text-uppercase">error handling</span>
-                            <span class="badge bg-primary text-uppercase">communication</span>
-                            <span class="badge bg-primary text-uppercase">coordination</span>
-                            <span class="badge bg-primary text-uppercase">debugging</span>
-                            <span class="badge bg-primary text-uppercase">testing</span>
-                            <span class="badge bg-primary text-uppercase">semaphore</span>
-                            <span class="badge bg-primary text-uppercase">resource utilization</span>
-                            <span class="badge bg-primary text-uppercase">concurrency control</span>
-                            <span class="badge bg-primary text-uppercase">.net</span>
-                            <span class="badge bg-primary text-uppercase">semaphoreslim class</span>
-                            <span class="badge bg-primary text-uppercase">inter-process synchronization</span>
-                            <span class="badge bg-primary text-uppercase">intra-process synchronization</span>
-                            <span class="badge bg-primary text-uppercase">microsoft documentation</span>
-                            <span class="badge bg-primary text-uppercase">concurrency</span>
-                            <span class="badge bg-primary text-uppercase">multithreading</span>
-                            <span class="badge bg-primary text-uppercase">programming</span>
-                            <span class="badge bg-primary text-uppercase">developer</span>
-                            <span class="badge bg-primary text-uppercase">learning</span>
-                            <span class="badge bg-primary text-uppercase">code management</span>
-                            <span class="badge bg-primary text-uppercase">performance</span>
-                            <span class="badge bg-primary text-uppercase">efficiency</span>
-                            <span class="badge bg-primary text-uppercase">resource contention</span>
-                            <span class="badge bg-primary text-uppercase">semaphore release</span>
-                            <span class="badge bg-primary text-uppercase">telemetry</span>
-                            <span class="badge bg-primary text-uppercase">task management</span>
-                            <span class="badge bg-primary text-uppercase">semaphore count</span>
-                            <span class="badge bg-primary text-uppercase">thread management</span>
-                            <span class="badge bg-primary text-uppercase">debugging concurrent code</span>
-                            <span class="badge bg-primary text-uppercase">semaphore vs semaphoreslim</span>
-                        </div>
-                    </div>
-                    <!-- Render related articles in a card layout-->
-                    <div class="related-articles mt-4">
-                        <h3 class="text-white">Related Articles</h3>
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/i-know-ap-the-transformative-power-of-mcp.html" title="Explore how the Model Context Protocol (MCP) enables AI to adapt dynamically, transforming repetitive tasks and business intelligence processes.">I Know AP: The Transformative Power of MCP</a>
-                                        </h5>
-                                        <p class="card-text text-white">Explore how the Model Context Protocol (MCP) enables AI to adapt dynamically, transforming repetitive tasks and business intelligence processes.</p>
+...
+</code></pre>
                                     </div>
-                                    <div class="card-footer"></div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
+                                <p class="mb-4">The output highlighted the dynamic nature of concurrent processing, where tasks were processed and released in a controlled manner, ensuring that the maximum concurrency was maintained while avoiding resource contention.</p>
+                            </section>
+                            <section class="mb-5">
+                                <h2 class="h3 mb-4">
+                                    <i class="bi bi-trophy me-2 text-success"></i>
+                                    Celebrating Success
+                                </h2>
+                                <p class="mb-4">After several iterations, moments of frustration, and numerous debug sessions, I finally achieved my desired result. The application was now a well-functioning demonstration of concurrent processing, showcasing my newfound understanding of synchronization and resource management.</p>
+                                <p class="mb-4">The journey was not just about the code; it was about the learning process itself. Developing this console application was a great learning tool that allowed me to grasp the intricacies of concurrent processing hands-on. It transformed abstract concepts into tangible knowledge.</p>
+                            </section>
+                            <section class="mb-5">
+                                <h2 class="h3 mb-4">
+                                    <i class="bi bi-check-circle me-2 text-success"></i>
+                                    Conclusion
+                                </h2>
+                                <div class="card bg-light border-0">
                                     <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/using-chatgpt-for-developers.html" title="Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.">Using ChatGPT for C# Development</a>
-                                        </h5>
-                                        <p class="card-text text-white">Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.</p>
+                                        <p class="mb-3">The world of concurrent processing is complex and fascinating. Through the development of this C# console application, I gained valuable insights into managing multiple tasks simultaneously while avoiding common pitfalls. The iterative process of refining the code helped me internalize the concepts and apply them effectively.</p>
+                                        <p class="mb-3">I encourage fellow developers to try learning through practical coding. It's one thing to read about a topic, but a whole different experience to see it in action and work through challenges firsthand.</p>
+                                        <p class="mb-0"><strong>Happy coding and exploring the world of concurrency!</strong></p>
                                     </div>
-                                    <div class="card-footer"></div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
+                            </section>
+                            <section class="mb-5" id="SemaphoreSlimClass">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="card-title mb-0">
+                                            <i class="bi bi-shield-check me-2"></i>
+                                            The SemaphoreSlim Class
+                                        </h3>
+                                        <div class="text-end">
+                                            <a class="text-white text-decoration-none" href="#top">
+                                                <i class="bi bi-arrow-up me-1"></i>
+                                                Back to Top
+                                            </a>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/projectmechanics/leadership/" title="Project Mechanics Leadership Overview">Leadership</a>
-                                        </h5>
-                                        <p class="card-text text-white">Project Mechanics Leadership Overview</p>
+                                        <p class="mb-3">
+                                            The
+                                            <strong>SemaphoreSlim</strong>
+                                            class in .NET presents a robust solution for fine-tuning resource utilization. This lightweight semaphore is designed for scenarios where wait times are expected to be short, making it ideal for controlling the number of tasks executing in parallel within a single process.
+                                        </p>
+                                        <p class="mb-3">
+                                            The
+                                            <strong>SemaphoreSlim</strong>
+                                            class offers a simple, yet effective way to limit the number of threads that can access a specific resource or a pool of resources concurrently. This is particularly useful in scenarios where you need to throttle the usage of resources like network bandwidth or CPU time, preventing the system from being overwhelmed.
+                                        </p>
+                                        <p class="mb-3">
+                                            When integrating
+                                            <strong>SemaphoreSlim</strong>
+                                            into the Task List Processor, it allows precise control over the number of tasks running simultaneously. By setting the maximum concurrent tasks, we ensure efficient execution without overloading the system, especially crucial in high-load situations.
+                                        </p>
+                                        <p class="mb-4">
+                                            For more detailed information on
+                                            <strong>SemaphoreSlim</strong>
+                                            , its usage, and examples, visit the
+                                            <a class="text-decoration-none" href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim" target="_blank" rel="noopener">
+                                                Microsoft Documentation on SemaphoreSlim
+                                                <i class="bi bi-box-arrow-up-ne ms-1"></i>
+                                            </a>
+                                            .
+                                        </p>
+                                        <h4 class="mb-3">
+                                            <i class="bi bi-diagram-2 me-2 text-primary"></i>
+                                            Semaphore vs SemaphoreSlim in .NET
+                                        </h4>
+                                        <p class="mb-4">Choose Semaphore when you need inter-process synchronization or when dealing with named semaphores for system-wide visibility. Opt for SemaphoreSlim for more lightweight, intra-process synchronization where performance and efficiency are key considerations.</p>
+                                        <div class="row g-4">
+                                            <div class="col-md-6">
+                                                <div class="card h-100 border-warning">
+                                                    <div class="card-header bg-warning text-dark">
+                                                        <h5 class="mb-0">
+                                                            <i class="bi bi-cpu me-2"></i>
+                                                            Semaphore
+                                                        </h5>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <dl class="mb-0">
+                                                            <dt>Nature</dt>
+                                                            <dd>A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.</dd>
+                                                            <dt>Usage</dt>
+                                                            <dd>Ideal for thread synchronization across multiple processes or for inter-process communication.</dd>
+                                                            <dt>Performance</dt>
+                                                            <dd>Slower and more resource-intensive, relying on the system's kernel mode.</dd>
+                                                            <dt>Functionality</dt>
+                                                            <dd>Supports system-wide visibility and waiting on multiple semaphores.</dd>
+                                                            <dt>Example</dt>
+                                                            <dd>Synchronizing resource access across different applications on the same system.</dd>
+                                                            <dt class="text-success">Pros</dt>
+                                                            <dd>Visibility across processes, suitable for complex synchronization.</dd>
+                                                            <dt class="text-danger">Cons</dt>
+                                                            <dd>Heavier, slower, and suitable for long wait times. Involves kernel transitions.</dd>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card h-100 border-success">
+                                                    <div class="card-header bg-success text-white">
+                                                        <h5 class="mb-0">
+                                                            <i class="bi bi-lightning me-2"></i>
+                                                            SemaphoreSlim
+                                                        </h5>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <dl class="mb-0">
+                                                            <dt>Nature</dt>
+                                                            <dd>Lightweight and fast, designed for use within a single process.</dd>
+                                                            <dt>Usage</dt>
+                                                            <dd>Best for short wait times and scenarios confined to a single process.</dd>
+                                                            <dt>Performance</dt>
+                                                            <dd>More efficient in memory and speed, using CLR synchronization primitives.</dd>
+                                                            <dt>Functionality</dt>
+                                                            <dd>Does not support named semaphores or system-wide visibility.</dd>
+                                                            <dt>Example</dt>
+                                                            <dd>Limiting concurrent calls to an external service in a web server application.</dd>
+                                                            <dt class="text-success">Pros</dt>
+                                                            <dd>Faster, more memory-efficient, suited for fine-grained control within an app.</dd>
+                                                            <dt class="text-danger">Cons</dt>
+                                                            <dd>Not suitable for inter-process communication, lacks system-wide visibility.</dd>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-footer"></div>
                                 </div>
-                            </div>
+                            </section>
                         </div>
-                    </div>
-                    <div class="mt-4"><p class="text-white"></p></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 justify-content-end">
-                    <br />
-                    <div class="social-icons d-flex">
-                        <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
-                        <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
-                        <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
-                        <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
-                        <br />
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12"><br /></div>
+        </article>
+        <!-- Footer-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="mb-3">Mark Hazleton</h5>
+                        <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                            <a href="https://twitter.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Quick Links</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#about">About</a></li>
+                            <li><a href="/#experience">Experience</a></li>
+                            <li><a href="/#projects">Projects</a></li>
+                            <li><a href="/articles.html">Articles</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/projectmechanics/">Project Mechanics</a></li>
+                            <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
+                            <li><a href="/rss.xml">RSS Feed</a></li>
+                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" />
+                <div class="row">
+                    <div class="col-12 text-center"><p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p></div>
+                </div>
             </div>
         </footer>
-        <!-- Core theme JS-->
-        <script src="/js/scripts.js"></script>
+        <!-- Bootstrap 5 JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Additional page-specific JavaScript-->
     </body>
 </html>

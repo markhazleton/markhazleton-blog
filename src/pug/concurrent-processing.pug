@@ -1,309 +1,506 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Concurrent Processing in C#: Learning Through Code | Mark Hazleton'
+  - var pageDescription = 'Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Learn how to effectively manage multiple tasks in C#.'
+  - var pageKeywords = 'Concurrent Processing, C# Concurrency, Task Autonomy, Synchronization, Thread Safety, Scalability, Error Handling, Load Balancing, Deadlocks, Livelocks, Resource Management, C# Programming'
+  - var pageCanonical = 'https://markhazleton.com/concurrent-processing.html'
+  - var pageAuthor = 'Mark Hazleton'
+  - var publishedDate = '2023-06-20'
+  - var modifiedDate = '2025-05-29'
+  - var estimatedReadTime = '12'
 
 block pagehead
-  title Concurrent Processing in C#: Mark Hazleton
-  meta(name='description', content='Dive into the intricacies of concurrent processing through C# code with Mark Hazleton. Explore synchronization, task autonomy, error handling, and much more in a hands-on journey. Delve into a real-world project and learn how to effectively manage multiple tasks in C#. Explore now!')
-  meta(name='keywords', content='Concurrent Processing, C# Concurrency, Task Autonomy, Synchronization, Thread Safety, Scalability, Error Handling, Load Balancing, Deadlocks, Livelocks, Resource Management, C# Programming')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/concurrent-processing.html')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content=pageAuthor)
+  meta(name='article:published_time', content=publishedDate)
+  meta(name='article:modified_time', content=modifiedDate)
+  meta(name='article:author', content=pageAuthor)
+  meta(name='article:section', content='Software Development')
+  meta(name='article:tag', content='Concurrent Processing, C#, Threading, Task Management')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='article')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg')
+  meta(property='og:image:alt', content='Mark Hazleton discussing concurrent processing and C# development')
+  meta(property='article:author', content='Mark Hazleton')
+  meta(property='article:published_time', content=publishedDate)
+  meta(property='article:modified_time', content=modifiedDate)
+  meta(property='article:section', content='Software Development')
+  meta(property='article:tag', content='Concurrent Processing')
+  meta(property='article:tag', content='C#')
+  meta(property='article:tag', content='Threading')
+  meta(property='article:tag', content='Task Management')
+
+block twitter_overrides
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg')
+  meta(name='twitter:image:alt', content='Mark Hazleton discussing concurrent processing and C# development')
+  meta(name='twitter:label1', content='Reading time')
+  meta(name='twitter:data1', content=estimatedReadTime + ' min read')
+  meta(name='twitter:label2', content='Written by')
+  meta(name='twitter:data2', content='Mark Hazleton')
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "url": "#{pageCanonical}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mark Hazleton",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+        }
+      },
+      "datePublished": "#{publishedDate}",
+      "dateModified": "#{modifiedDate}",
+      "mainEntityOfPage": "#{pageCanonical}",
+      "articleSection": "Software Development",
+      "keywords": "#{pageKeywords}"
+    }
 
 block layout-content
+  // Breadcrumb Navigation
+  .container.mt-4
+    nav.breadcrumb-modern(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles') Articles
+        li.breadcrumb-item.active(aria-current='page') Concurrent Processing
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      p.fw-bold.text-primary.text-center.bg-primary.text-white
-        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/concurrentprocessing/' target="_blank" title='The full source code for the Concurrent Processing Demo is available on GitHub' rel='noopener') The full source code for the Concurrent Processing Demo is available on GitHub
-      h1.mb-0(id='top') Concurrent Processing
-      .subheading.mb-3 Learning Concurrent Processing Through Code
-      p.lead.
-        As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques.
-        Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.
-      p.
-        The idea of managing multiple tasks simultaneously has always fascinated me.
-        However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like
-        race conditions and deadlocks.
-        To dive into this topic, I decided to develop a C# console application that would allow me to experiment
-        and learn practically.
+  // Article Content
+  article#main-article.py-5
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            .alert.alert-info.text-center.mb-4
+              i.bi.bi-github.me-2
+              a.text-decoration-none.fw-bold(href='https://github.com/markhazleton/concurrentprocessing/', target='_blank', rel='noopener')
+                | View the complete source code on GitHub
+                i.bi.bi-box-arrow-up-ne.ms-1
 
-      h2 Considerations for Concurrent Processing
-      dl
-        dt Task Autonomy and Independence
-        dd.
-          For multiple tasks to effectively run concurrently,
-          each task must encapsulate an autonomous and self-contained unit of functionality.
-          Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources.
-          By embodying its inputs, logic, and outputs, an autonomous task can be executed without hindrance,
-          allowing it to be scheduled and managed alongside other tasks concurrently.
-          This approach not only enhances the efficiency and responsiveness of the overall system
-          but also minimizes the potential for contention and synchronization issues.
-        dt Synchronization
-        dd.
-          Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency
-          among multiple threads or tasks. Techniques like locks, semaphores,
-          and monitors can be used to control access to shared resources.
+            h1.display-4.fw-bold#top Concurrent Processing in C#
+            .subheading.h4.text-muted.mb-4 Learning Concurrent Processing Through Code
+            .article-meta.text-muted.mb-4
+              time(datetime=publishedDate) #{new Date(publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              span.mx-2 •
+              span by Mark Hazleton
+              span.mx-2 •
+              span #{estimatedReadTime} min read
 
-        dt Scalability
-        dd.
-          Consider the scalability of your concurrent processing solution.
-          Will it perform well as the number of concurrent tasks or threads increases?
-          Design your system to handle increased load without degrading performance.
+          .article-content            p.lead
+            | As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques. Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.
 
-        dt Deadlocks and Livelocks
-        dd.
-          Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources
-          that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release to prevent these issues.
+            p.mb-4
+              | The idea of managing multiple tasks simultaneously has always fascinated me. However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like race conditions and deadlocks. To dive into this topic, I decided to develop a C# console application that would allow me to experiment and learn practically.
 
-        dt Resource Management
-        dd.
-          Properly manage resources such as memory, file handles, and network connections.
-          Failing to release resources can lead to resource exhaustion and degrade system performance.
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-list-check.me-2.text-primary
+                | Considerations for Concurrent Processing
 
-        dt Thread Safety
-        dd.
-          Ensure that your code is thread-safe.
-          Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously.
-          Use techniques like immutable data, synchronization, and thread-local storage.
+              .row.g-4
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-gear.me-2.text-success
+                        | Task Autonomy and Independence
+                      p.card-text For multiple tasks to effectively run concurrently, each task must encapsulate an autonomous and self-contained unit of functionality. Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources.
 
-        dt Load Balancing
-        dd.
-          Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources.
-          Load balancing helps prevent scenarios where some threads are idle while others are overloaded.
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-arrow-repeat.me-2.text-primary
+                        | Synchronization
+                      p.card-text Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency among multiple threads or tasks. Techniques like locks, semaphores, and monitors can be used to control access to shared resources.
 
-        dt Task Granularity
-        dd.
-          Determine the appropriate level of task granularity.
-          Too fine-grained tasks can lead to overhead due to thread management,
-          while too coarse-grained tasks might not fully utilize available resources.
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-bar-chart.me-2.text-info
+                        | Scalability
+                      p.card-text Consider the scalability of your concurrent processing solution. Will it perform well as the number of concurrent tasks or threads increases? Design your system to handle increased load without degrading performance.
 
-        dt Error Handling
-        dd.
-          Implement robust error-handling mechanisms for concurrent tasks.
-          Unhandled exceptions in one task should not crash the entire application.
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-exclamation-triangle.me-2.text-warning
+                        | Deadlocks and Livelocks
+                      p.card-text Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release.
 
-        dt Testing and Debugging
-        dd.
-          Testing concurrent code is challenging.
-          Consider using techniques like stress testing and race condition detection tools to identify issues.
-          Debugging concurrent issues can be complex, so use tools and techniques that help diagnose problems.
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-memory.me-2.text-secondary
+                        | Resource Management
+                      p.card-text Properly manage resources such as memory, file handles, and network connections. Failing to release resources can lead to resource exhaustion and degrade system performance.
 
-        dt Communication and Coordination
-        dd.
-          Threads or tasks might need to communicate and coordinate with each other.
-          Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-shield-check.me-2.text-success
+                        | Thread Safety
+                      p.card-text Ensure that your code is thread-safe. Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously. Use techniques like immutable data, synchronization, and thread-local storage.
 
-      h2 Potential Drawbacks in Concurrent Programming
-      p.
-        While concurrent programming boosts performance and resource utilization, it comes with challenges:
-      ul
-        li Risk of Deadlocks and Livelocks.
-        li Difficulty in Debugging and Testing.
-        li Potential for Race Conditions.
-        li Increased Memory Consumption.
-        li Complexity in Code Management and Maintenance.
-      p.
-        By understanding these challenges, developers can employ strategies to mitigate risks
-        and harness the benefits of concurrency in their projects.
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-diagram-3.me-2.text-primary
+                        | Load Balancing
+                      p.card-text Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources. Load balancing helps prevent scenarios where some threads are idle while others are overloaded.
 
-      p.
-        Since this was a one-off project, I didn't want to spend too much time on the user interface.
-        I created a repository to create a simple console application that would allow me to focus on the core functionality.
-        <a href="https://github.com/markhazleton/ConcurrentProcessing" title="Concurrent Processing C# Project on GitHub by Mark Hazleton" target='_blank' rel='noopener noreferrer'>View the Concurrent Processing C# Project on GitHub</a>
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-puzzle.me-2.text-info
+                        | Task Granularity
+                      p.card-text Determine the appropriate level of task granularity. Too fine-grained tasks can lead to overhead due to thread management, while too coarse-grained tasks might not fully utilize available resources.
 
-      p.
-        I started with a ChatGPT prompt that introduced me to the basics of concurrent processing.
-        Armed with this initial guidance, I started writing the code.
-        Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.
-      a(href="#SemaphoreSlimClass") More on the SemaphoreSlim Class
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-bug.me-2.text-danger
+                        | Error Handling
+                      p.card-text Implement robust error-handling mechanisms for concurrent tasks. Unhandled exceptions in one task should not crash the entire application.
 
-      pre.language-csharp
-        code.language-csharp.
-          const int maxConcurrency = 100; // Maximum concurrent tasks allowed
-          SemaphoreSlim semaphore = new(maxConcurrency);
-          List<Task> tasks = new();
-          int? taskId = 0;
-          while (taskId is not null)
-          {
-            Task task = ProcessAsync(taskId.Value, tasks.Count, await AwaitSemaphoreAsync(semaphore), semaphore);
-            tasks.Add(task);
-            taskId = GetNextTaskId(taskId);
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-search.me-2.text-secondary
+                        | Testing and Debugging
+                      p.card-text Testing concurrent code is challenging. Consider using techniques like stress testing and race condition detection tools to identify issues. Debugging concurrent issues can be complex.
 
-            if (tasks.Count >= maxConcurrency)
-            {
-              Task finishedTask = await Task.WhenAny(tasks);
-              tasks.Remove(finishedTask);
-            }
-          }
-          await Task.WhenAll(tasks);
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-chat-dots.me-2.text-primary
+                        | Communication and Coordination
+                      p.card-text Threads or tasks might need to communicate and coordinate with each other. Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.
 
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-exclamation-circle.me-2.text-warning
+                | Potential Drawbacks in Concurrent Programming
 
-      p.
-        I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.
-      pre.language-csharp
-        code.language-csharp.
+              .alert.alert-warning.mb-4
+                h5.alert-heading
+                  i.bi.bi-info-circle.me-2
+                  | Challenges to Consider
+                p.mb-2 While concurrent programming boosts performance and resource utilization, it comes with challenges:
+                ul.mb-0
+                  li Risk of Deadlocks and Livelocks
+                  li Difficulty in Debugging and Testing
+                  li Potential for Race Conditions
+                  li Increased Memory Consumption
+                  li Complexity in Code Management and Maintenance
 
-          //  Wait for semaphore to be released so that next task can start
-          static async Task<long> AwaitSemaphoreAsync(SemaphoreSlim semaphore)
-          {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            await semaphore.WaitAsync();
-            stopwatch.Stop();
-            return stopwatch.ElapsedTicks;
-          }
+              p.mb-4 By understanding these challenges, developers can employ strategies to mitigate risks and harness the benefits of concurrency in their projects.
 
-      p.
-        I created a mock async processing method that simulates work by delaying for a random amount of time.
-        I also added telemetry data so that I could track the task ID, task count, semaphore count, and wait time.
-        I used the `Task.Delay` method to simulate work, but in a real-world application, this would be replaced with actual work.
-        The random delay was added to simulate the dynamic nature of concurrent processing.
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-code-slash.me-2.text-primary
+                | Building the Concurrent Processing Demo
 
-      pre.language-csharp
-        code.language-csharp.
+              p.mb-4
+                | Since this was a one-off project, I didn't want to spend too much time on the user interface. I created a repository to create a simple console application that would allow me to focus on the core functionality.
+                a.text-decoration-none(href='https://github.com/markhazleton/ConcurrentProcessing', target='_blank', rel='noopener')
+                  | View the Concurrent Processing C# Project on GitHub
+                  i.bi.bi-box-arrow-up-ne.ms-1
 
-          // Mock Async Task to simulate work
-          static async Task ProcessAsync(int taskId, int taskCount, long waitTicks, SemaphoreSlim semaphore)
-          {
-            try
-            {
-              await Task.Delay(TimeSpan.FromMilliseconds(new Random().Next(1, 500)));
-              Console.WriteLine($"Task:{taskId:D3} T:{taskCount} S:{semaphore.CurrentCount} W:{waitTicks}");
-            }
-            finally
-            {
-              semaphore.Release();
-            }
-          }
+              p.mb-4 I started with a ChatGPT prompt that introduced me to the basics of concurrent processing. Armed with this initial guidance, I started writing the code. Before long I had the basic scaffolding in place, and I was ready to start iterating and learning.
 
+              p.mb-3
+                | Check out the
+                a.text-decoration-none(href='#SemaphoreSlimClass') SemaphoreSlim Class section
+                |  for more details.
 
-      p.
-        Finally, I created a function to generate the next task ID.  This is how I controlled the number of tasks that were created.
+              .card.shadow-sm.mb-4
+                .card-header.bg-primary.text-white
+                  h5.mb-0
+                    i.bi.bi-code-slash.me-2
+                    | Core Concurrent Processing Logic
+                .card-body
+                  pre.language-csharp.mb-0
+                    code.language-csharp.
+                      const int maxConcurrency = 100; // Maximum concurrent tasks allowed
+                      SemaphoreSlim semaphore = new(maxConcurrency);
+                      List<Task> tasks = new();
+                      int? taskId = 0;
+                      while (taskId is not null)
+                      {
+                        Task task = ProcessAsync(taskId.Value, tasks.Count, await AwaitSemaphoreAsync(semaphore), semaphore);
+                        tasks.Add(task);
+                        taskId = GetNextTaskId(taskId);
 
-      pre.language-csharp
-        code.language-csharp.
+                        if (tasks.Count >= maxConcurrency)
+                        {
+                          Task finishedTask = await Task.WhenAny(tasks);
+                          tasks.Remove(finishedTask);
+                        }
+                      }
+                      await Task.WhenAll(tasks);
 
-          // Get Next Task ID
-          static int? GetNextTaskId(int? taskId)
-          {
-            if (taskId &lt; 1000) return taskId + 1;
-            else return null;
-          }
+              p.mb-4 I created a function to wait for a semaphore to be released and added some telemetry to track the time spent waiting.
 
-      h2 Iterating and Learning
-      p.
-        As I dove into the code, I realized that understanding concurrent processing goes beyond just knowing how to create threads or tasks.
-        I needed to comprehend the concept of synchronization and how to manage the number of concurrently executing tasks.
-        The code I had started with was a great foundation, but it required iteration and refinement to achieve my goals.
-      p.
-        The heart of the application was the use of the `SemaphoreSlim` class, which acted as a gatekeeper to control the
-        number of tasks running concurrently. This was a crucial lesson in managing shared resources and preventing resource exhaustion.
-      h2 Experimenting and Observing
-      p.
-        With each iteration of the code, I ran the application and observed its behavior.
-        The output of the program provided valuable insights into how tasks were being managed,
-        the time each task spent waiting for a semaphore, and the overall concurrency control.
-      pre.language-json
-        code.language-json.
-          ...
-          Task:061 T:61 S:2 W:2
-          Task:070 T:70 S:0 W:4
-          Task:037 T:37 S:0 W:2
-          Task:018 T:18 S:3 W:2
-          Task:023 T:23 S:1 W:2
-          Task:026 T:26 S:2 W:3
-          ...
-      p.
-        The output highlighted the dynamic nature of concurrent processing,
-        where tasks were processed and released in a controlled manner,
-        ensuring that the maximum concurrency was maintained while avoiding resource contention.
-      h2 Celebrating Success
-      p.
-        After several iterations, moments of frustration, and numerous debug sessions,
-        I finally achieved my desired result.
-        The application was now a well-functioning demonstration of concurrent processing,
-        showcasing my newfound understanding of synchronization and resource management.
-      p.
-        The journey was not just about the code; it was about the learning process itself.
-        Developing this console application was a great learning tool that allowed me to
-        grasp the intricacies of concurrent processing hands-on.
-        It transformed abstract concepts into tangible knowledge.
+              .card.shadow-sm.mb-4
+                .card-header.bg-secondary.text-white
+                  h5.mb-0
+                    i.bi.bi-stopwatch.me-2
+                    | Semaphore Wait Function
+                .card-body
+                  pre.language-csharp.mb-0
+                    code.language-csharp.
+                      //  Wait for semaphore to be released so that next task can start
+                      static async Task<long> AwaitSemaphoreAsync(SemaphoreSlim semaphore)
+                      {
+                        Stopwatch stopwatch = Stopwatch.StartNew();
+                        await semaphore.WaitAsync();
+                        stopwatch.Stop();
+                        return stopwatch.ElapsedTicks;
+                      }
 
-      h2 Conclusion
-      p.
-        The world of concurrent processing is complex and fascinating.
-        Through the development of this C# console application,
-        I gained valuable insights into managing multiple tasks simultaneously while avoiding common pitfalls.
-        The iterative process of refining the code helped me internalize the concepts and apply them effectively.
-      p.
-        I encourage fellow developers to try learning through practical coding.
-        It's one thing to read about a topic, but a whole different experience to see it in action
-        and work through challenges firsthand. With the right resources, curiosity, and determination,
-        you can turn any coding endeavor into a powerful learning tool.
-      p.
-        Happy coding and exploring the world of concurrency!
+              p.mb-4
+                | I created a mock async processing method that simulates work by delaying for a random amount of time. I also added telemetry data so that I could track the task ID, task count, semaphore count, and wait time. I used the
+                code Task.Delay
+                |  method to simulate work, but in a real-world application, this would be replaced with actual work.
 
+              .card.shadow-sm.mb-4
+                .card-header.bg-success.text-white
+                  h5.mb-0
+                    i.bi.bi-play-circle.me-2
+                    | Mock Processing Task
+                .card-body
+                  pre.language-csharp.mb-0
+                    code.language-csharp.
+                      // Mock Async Task to simulate work
+                      static async Task ProcessAsync(int taskId, int taskCount, long waitTicks, SemaphoreSlim semaphore)
+                      {
+                        try
+                        {
+                          await Task.Delay(TimeSpan.FromMilliseconds(new Random().Next(1, 500)));
+                          Console.WriteLine($"Task:{taskId:D3} T:{taskCount} S:{semaphore.CurrentCount} W:{waitTicks}");
+                        }
+                        finally
+                        {
+                          semaphore.Release();
+                        }
+                      }
 
-      .card
-        .card-header
-          h3.card-title(id="SemaphoreSlimClass") The SemaphoreSlim Class
-          a(href='#top') Back to Top
-        .card-body
-          p
-            | The
-            strong SemaphoreSlim
-            |  class in .NET presents a robust solution for fine-tuning resource utilization. This lightweight semaphore is designed for scenarios where wait times are expected to be short, making it ideal for controlling the number of tasks executing in parallel within a single process.
-          p
-            | The
-            strong SemaphoreSlim
-            | class offers a simple, yet effective way to limit the number of threads that can access a specific resource or a pool of resources concurrently. This is particularly useful in scenarios where you need to throttle the usage of resources like network bandwidth or CPU time, preventing the system from being overwhelmed.
-          p
-            | When integrating
-            strong SemaphoreSlim
-            | into the Task List Processor, it allows precise control over the number of tasks running simultaneously. By setting the maximum concurrent tasks, we ensure efficient execution without overloading the system, especially crucial in high-load situations.
-          p
-            | For more detailed information on
-            strong SemaphoreSlim
-            | , its usage, and examples, visit the
-            a(href='https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim') Microsoft Documentation on SemaphoreSlim
-            | .
-          h3.card-title Semaphore vs SemaphoreSlim in .NET
-          p.
-            Choose Semaphore when you need inter-process synchronization or when dealing with named
-            semaphores for system-wide visibility. Opt for SemaphoreSlim for more lightweight,
-            intra-process synchronization where performance and efficiency are key considerations
-          div.row
-            div.col-6
-              p.lead Semaphore
-              dl
-                dt Nature
-                dd A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.
-                dt Usage
-                dd Ideal for thread synchronization across multiple processes or for inter-process communication.
-                dt Performance
-                dd Slower and more resource-intensive, relying on the system's kernel mode.
-                dt Functionality
-                dd Supports system-wide visibility and waiting on multiple semaphores.
-                dt Example
-                dd Synchronizing resource access across different applications on the same system.
-                dt Pros
-                dd Visibility across processes, suitable for complex synchronization.
-                dt Cons
-                dd Heavier, slower, and suitable for long wait times. Involves kernel transitions.
-            div.col-6
-              p.lead SemaphoreSlim
-              dl
-                dt Nature
-                dd Lightweight and fast, designed for use within a single process.
-                dt Usage
-                dd Best for short wait times and scenarios confined to a single process.
-                dt Performance
-                dd More efficient in memory and speed, using CLR synchronization primitives.
-                dt Functionality
-                dd Does not support named semaphores or system-wide visibility.
-                dt Example
-                dd Limiting concurrent calls to an external service in a web server application.
-                dt Pros
-                dd Faster, more memory-efficient, suited for fine-grained control within an app.
-                dt Cons
-                dd Not suitable for inter-process communication, lacks system-wide visibility.
+              p.mb-4 Finally, I created a function to generate the next task ID. This is how I controlled the number of tasks that were created.
 
-        .card-footer
+              .card.shadow-sm.mb-4
+                .card-header.bg-info.text-white
+                  h5.mb-0
+                    i.bi.bi-arrow-right-circle.me-2
+                    | Task ID Generator
+                .card-body
+                  pre.language-csharp.mb-0
+                    code.language-csharp.
+                      // Get Next Task ID
+                      static int? GetNextTaskId(int? taskId)
+                      {
+                        if (taskId < 1000) return taskId + 1;
+                        else return null;
+                      }
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-arrow-repeat.me-2.text-primary
+                | Iterating and Learning
+
+              p.mb-4 As I dove into the code, I realized that understanding concurrent processing goes beyond just knowing how to create threads or tasks. I needed to comprehend the concept of synchronization and how to manage the number of concurrently executing tasks. The code I had started with was a great foundation, but it required iteration and refinement to achieve my goals.
+
+              p.mb-4
+                | The heart of the application was the use of the
+                strong SemaphoreSlim
+                |  class, which acted as a gatekeeper to control the number of tasks running concurrently. This was a crucial lesson in managing shared resources and preventing resource exhaustion.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-eye.me-2.text-primary
+                | Experimenting and Observing
+
+              p.mb-4 With each iteration of the code, I ran the application and observed its behavior. The output of the program provided valuable insights into how tasks were being managed, the time each task spent waiting for a semaphore, and the overall concurrency control.
+
+              .card.shadow-sm.mb-4
+                .card-header.bg-dark.text-white
+                  h5.mb-0
+                    i.bi.bi-terminal.me-2
+                    | Sample Output
+                .card-body
+                  pre.language-json.mb-0
+                    code.language-json.
+                      ...
+                      Task:061 T:61 S:2 W:2
+                      Task:070 T:70 S:0 W:4
+                      Task:037 T:37 S:0 W:2
+                      Task:018 T:18 S:3 W:2
+                      Task:023 T:23 S:1 W:2
+                      Task:026 T:26 S:2 W:3
+                      ...
+
+              p.mb-4 The output highlighted the dynamic nature of concurrent processing, where tasks were processed and released in a controlled manner, ensuring that the maximum concurrency was maintained while avoiding resource contention.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-trophy.me-2.text-success
+                | Celebrating Success
+
+              p.mb-4 After several iterations, moments of frustration, and numerous debug sessions, I finally achieved my desired result. The application was now a well-functioning demonstration of concurrent processing, showcasing my newfound understanding of synchronization and resource management.
+
+              p.mb-4 The journey was not just about the code; it was about the learning process itself. Developing this console application was a great learning tool that allowed me to grasp the intricacies of concurrent processing hands-on. It transformed abstract concepts into tangible knowledge.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-check-circle.me-2.text-success
+                | Conclusion
+
+              .card.bg-light.border-0
+                .card-body
+                  p.mb-3 The world of concurrent processing is complex and fascinating. Through the development of this C# console application, I gained valuable insights into managing multiple tasks simultaneously while avoiding common pitfalls. The iterative process of refining the code helped me internalize the concepts and apply them effectively.
+
+                  p.mb-3 I encourage fellow developers to try learning through practical coding. It's one thing to read about a topic, but a whole different experience to see it in action and work through challenges firsthand.
+
+                  p.mb-0
+                    strong Happy coding and exploring the world of concurrency!
+
+            section.mb-5#SemaphoreSlimClass
+              .card.shadow-sm
+                .card-header.bg-primary.text-white
+                  h3.card-title.mb-0
+                    i.bi.bi-shield-check.me-2
+                    | The SemaphoreSlim Class
+                  .text-end
+                    a.text-white.text-decoration-none(href='#top')
+                      i.bi.bi-arrow-up.me-1
+                      | Back to Top
+
+                .card-body
+                  p.mb-3
+                    | The
+                    strong SemaphoreSlim
+                    |  class in .NET presents a robust solution for fine-tuning resource utilization. This lightweight semaphore is designed for scenarios where wait times are expected to be short, making it ideal for controlling the number of tasks executing in parallel within a single process.
+
+                  p.mb-3
+                    | The
+                    strong SemaphoreSlim
+                    |  class offers a simple, yet effective way to limit the number of threads that can access a specific resource or a pool of resources concurrently. This is particularly useful in scenarios where you need to throttle the usage of resources like network bandwidth or CPU time, preventing the system from being overwhelmed.
+
+                  p.mb-3
+                    | When integrating
+                    strong SemaphoreSlim
+                    |  into the Task List Processor, it allows precise control over the number of tasks running simultaneously. By setting the maximum concurrent tasks, we ensure efficient execution without overloading the system, especially crucial in high-load situations.
+
+                  p.mb-4
+                    | For more detailed information on
+                    strong SemaphoreSlim
+                    | , its usage, and examples, visit the
+                    a.text-decoration-none(href='https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim', target='_blank', rel='noopener')
+                      | Microsoft Documentation on SemaphoreSlim
+                      i.bi.bi-box-arrow-up-ne.ms-1
+                    | .
+
+                  h4.mb-3
+                    i.bi.bi-diagram-2.me-2.text-primary
+                    | Semaphore vs SemaphoreSlim in .NET
+
+                  p.mb-4 Choose Semaphore when you need inter-process synchronization or when dealing with named semaphores for system-wide visibility. Opt for SemaphoreSlim for more lightweight, intra-process synchronization where performance and efficiency are key considerations.
+
+                  .row.g-4
+                    .col-md-6
+                      .card.h-100.border-warning
+                        .card-header.bg-warning.text-dark
+                          h5.mb-0
+                            i.bi.bi-cpu.me-2
+                            | Semaphore
+                        .card-body
+                          dl.mb-0
+                            dt Nature
+                            dd A wrapper around the Win32 semaphore object, suitable for local or system-wide named semaphores.
+
+                            dt Usage
+                            dd Ideal for thread synchronization across multiple processes or for inter-process communication.
+
+                            dt Performance
+                            dd Slower and more resource-intensive, relying on the system's kernel mode.
+
+                            dt Functionality
+                            dd Supports system-wide visibility and waiting on multiple semaphores.
+
+                            dt Example
+                            dd Synchronizing resource access across different applications on the same system.
+
+                            dt.text-success Pros
+                            dd Visibility across processes, suitable for complex synchronization.
+
+                            dt.text-danger Cons
+                            dd Heavier, slower, and suitable for long wait times. Involves kernel transitions.
+
+                    .col-md-6
+                      .card.h-100.border-success
+                        .card-header.bg-success.text-white
+                          h5.mb-0
+                            i.bi.bi-lightning.me-2
+                            | SemaphoreSlim
+                        .card-body
+                          dl.mb-0
+                            dt Nature
+                            dd Lightweight and fast, designed for use within a single process.
+
+                            dt Usage
+                            dd Best for short wait times and scenarios confined to a single process.
+
+                            dt Performance
+                            dd More efficient in memory and speed, using CLR synchronization primitives.
+
+                            dt Functionality
+                            dd Does not support named semaphores or system-wide visibility.
+
+                            dt Example
+                            dd Limiting concurrent calls to an external service in a web server application.
+
+                            dt.text-success Pros
+                            dd Faster, more memory-efficient, suited for fine-grained control within an app.
+
+                            dt.text-danger Cons
+                            dd Not suitable for inter-process communication, lacks system-wide visibility.
 
