@@ -46,9 +46,7 @@
         <meta name="twitter:description" content="Learn how to build efficient APIs using FastEndpoints with the REPR pattern. A comprehensive guide through a practical Person Management demo application with .NET 9." />
         <meta name="twitter:image" content="https://markhazleton.com/assets/img/MarkHazleton-FastEndpointsDemo-PersonAPI.png" />
         <meta name="twitter:creator" content="@markhazleton" />
-        <!-- Performance optimization - DNS prefetch and preconnect-->
-        <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+        <!-- Performance optimization - No external CDN dependencies-->
         <!-- Favicon and app icons-->
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
@@ -56,12 +54,8 @@
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <!-- Bootstrap 5 CSS-->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
-        <!-- Bootstrap Icons-->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet" />
-        <!-- Font Awesome-->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+        <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
+        <link href="/css/modern-styles.css" rel="stylesheet" />
         <!-- Enhanced JSON-LD Structured Data for SEO-->
         <script type="application/ld+json">
             {
@@ -99,172 +93,6 @@
         </script>
         <!-- Additional structured data for specific pages-->
         <!-- Additional page-specific CSS-->
-        <style>
-            :root {
-                --primary-color: #2c3e50;
-                --secondary-color: #3498db;
-                --accent-color: #e74c3c;
-                --text-color: #333;
-                --light-bg: #f8f9fa;
-                --border-color: #dee2e6;
-            }
-
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                line-height: 1.6;
-                color: var(--text-color);
-            }
-
-            .navbar-brand {
-                font-weight: 700;
-                font-size: 1.5rem;
-            }
-
-            .hero-section {
-                background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-                color: white;
-                padding: 100px 0;
-                min-height: 60vh;
-                display: flex;
-                align-items: center;
-            }
-
-            .hero-content {
-                text-align: center;
-            }
-
-            .hero-image {
-                width: 200px;
-                height: 200px;
-                border-radius: 50%;
-                border: 5px solid white;
-                margin: 0 auto 2rem;
-                display: block;
-                object-fit: cover;
-            }
-
-            .section-title {
-                color: var(--primary-color);
-                margin-bottom: 2rem;
-                font-weight: 600;
-            }
-
-            .project-card {
-                border: none;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                transition:
-                    transform 0.3s ease,
-                    box-shadow 0.3s ease;
-                height: 100%;
-                border-radius: 0.75rem;
-            }
-
-            .project-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            }
-
-            .project-image {
-                height: 200px;
-                object-fit: cover;
-                width: 100%;
-                border-radius: 0.75rem 0.75rem 0 0;
-            }
-
-            .tech-badge {
-                background-color: var(--secondary-color);
-                color: white;
-                padding: 0.25rem 0.75rem;
-                border-radius: 50px;
-                font-size: 0.875rem;
-                margin: 0.25rem;
-                display: inline-block;
-            }
-
-            .article-card {
-                border: none;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease;
-                margin-bottom: 1.5rem;
-                border-radius: 0.5rem;
-            }
-
-            .article-card:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            }
-
-            .social-icons a {
-                color: white;
-                font-size: 1.5rem;
-                margin: 0 0.5rem;
-                transition: color 0.3s ease;
-            }
-
-            .social-icons a:hover {
-                color: var(--accent-color);
-            }
-
-            .experience-item {
-                border-left: 3px solid var(--secondary-color);
-                padding-left: 2rem;
-                margin-bottom: 2rem;
-                position: relative;
-            }
-
-            .experience-item::before {
-                content: '';
-                width: 12px;
-                height: 12px;
-                border-radius: 50%;
-                background-color: var(--secondary-color);
-                position: absolute;
-                left: -8px;
-                top: 0.5rem;
-            }
-
-            .stats-section {
-                background-color: var(--light-bg);
-                padding: 4rem 0;
-            }
-
-            .stat-card {
-                text-align: center;
-                padding: 2rem;
-            }
-
-            .stat-number {
-                font-size: 3rem;
-                font-weight: bold;
-                color: var(--secondary-color);
-            }
-
-            footer {
-                background-color: var(--primary-color);
-                color: white;
-                padding: 3rem 0 1rem;
-            }
-
-            .footer-links a {
-                color: #bdc3c7;
-                text-decoration: none;
-                transition: color 0.3s ease;
-            }
-
-            .footer-links a:hover {
-                color: white;
-            }
-
-            @media (max-width: 768px) {
-                .hero-section {
-                    padding: 60px 0;
-                }
-
-                .hero-section h1 {
-                    font-size: 2.5rem;
-                }
-            }
-        </style>
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -1046,8 +874,7 @@ app<span class="token punctuation">.</span><span class="token function">UseExcep
                         <ul class="list-unstyled footer-links">
                             <li><a href="/projectmechanics/">Project Mechanics</a></li>
                             <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
-                            <li><a href="/rss.xml">RSS Feed</a></li>
-                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                            <li><a href="/rss.xml">RSS Feed li: a(href='/sitemap.xml') Sitemap</a></li>
                         </ul>
                     </div>
                 </div>
@@ -1057,8 +884,6 @@ app<span class="token punctuation">.</span><span class="token function">UseExcep
                 </div>
             </div>
         </footer>
-        <!-- Bootstrap 5 JS-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-        <!-- Additional page-specific JavaScript-->
+        <script src="/js/scripts.js"></script>
     </body>
 </html>
