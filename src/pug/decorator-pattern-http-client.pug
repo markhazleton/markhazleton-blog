@@ -1,388 +1,528 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Decorator Design Pattern: Adding Telemetry to HttpClient'
+  - var pageDescription = 'Learn how to implement the Decorator Design Pattern with HttpClient in ASP.NET Core. Explore telemetry, logging, and caching decorators with practical C# examples.'
+  - var pageKeywords = 'Decorator Pattern, HttpClient, ASP.NET Core, Design Patterns, Telemetry, C#, Solutions Architecture, Mark Hazleton'
+  - var pageCanonical = 'https://markhazleton.com/decorator-pattern-http-client.html'
 
 block pagehead
-  title Decorator Pattern with HttpClient | Mark Hazleton
-  meta(name="description" content="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.")
-  meta(name="keywords" content="Decorator Pattern, HttpClient, ASP.NET, Design Patterns, Solutions Architect, Mark Hazleton")
-  link(rel='canonical', href='https://markhazleton.com/decorator-pattern-http-client.html')
+  title= pageTitle + ' | Mark Hazleton'
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:type', content='article')
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazleton-DecoratorPattern-Home.png')
+
+block twitter_overrides
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazleton-DecoratorPattern-Home.png')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
 
 block layout-content
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-layers.me-3
+            | Decorator Design Pattern
+          h2.h3.mb-4 Adding Telemetry to HttpClient in ASP.NET Core
+          p.lead.mb-5 Master the Decorator Pattern to enhance HttpClient functionality with telemetry, logging, and caching capabilities while maintaining clean, maintainable code architecture.
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 Decorator Design Pattern:
-      .subheading.mb-3 Adding Telemetry to HttpClient
-      p.lead.
-        The Decorator Design Pattern is a structural design pattern that allows
-        behavior to be added to an individual object,
-        either statically or dynamically, without affecting the behavior of other objects from the same class.
-        This pattern works by dynamically wrapping objects in a series of decorator objects
-        that add new functionality to the original object.
-        This pattern provides a flexible alternative to sub-classing and is especially
-        useful when you want to add a single feature to an object, rather than an entire hierarchy of features.
-      p.
-        The decorator pattern involves creating a base class/interface that defines the basic behavior
-        and then defining one or
-        more decorator classes that add additional behavior to the base class/interface.
-        Each decorator class wraps an instance
-        of the base class/interface and provides its implementation of the additional behavior.
-      p.
-        The current version of the demonstration is hosted on my WebSpark site.
-      ul
-        li <a href='https://webspark.markhazleton.com/asyncspark' target='_blank' rel='noopener noreferrer'>AsyncSpark on WebSpark Site</a>
+  // Main Article
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            .article-meta.text-muted.mb-4
+              time(datetime='2025-01-12') January 12, 2025
+              span.mx-2 •
+              span 12 min read
+              span.mx-2 •
+              span by Mark Hazleton
 
-      dl
-        dt What is a Design Pattern?
-        dd.
-          Design patterns are solutions to common software design problems that have been discovered, refined,
-          and documented by experienced software developers over time. The concept of design patterns was first
-          introduced in the book "Design Patterns: Elements of Reusable Object-Oriented Software"
-          by the "Gang of Four" (Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides) in 1994.
-          This book identified 23 design patterns that were widely used in object-oriented software development.
-          Since then, many other design patterns have been discovered and documented by the software development community.
-          The use of design patterns has become an important part of software engineering, enabling developers
-          to write code that is more maintainable, reusable, and scalable.
+          // Table of Contents
+          nav.mb-5(aria-label='Table of Contents')
+            .card.shadow-sm
+              .card-header.bg-primary.text-white
+                h3.mb-0
+                  i.bi.bi-list-ul.me-2
+                  | Contents
+              .card-body
+                ol.list-group.list-group-numbered.list-group-flush
+                  li.list-group-item
+                    a.text-decoration-none(href='#introduction') Introduction to Decorator Pattern
+                  li.list-group-item
+                    a.text-decoration-none(href='#concepts') Core Concepts & Definitions
+                  li.list-group-item
+                    a.text-decoration-none(href='#interfaces') Interface Design
+                  li.list-group-item
+                    a.text-decoration-none(href='#implementations') Service Implementations
+                  li.list-group-item
+                    a.text-decoration-none(href='#integration') Integration & Configuration
+                  li.list-group-item
+                    a.text-decoration-none(href='#use-cases') Additional Use Cases
+                  li.list-group-item
+                    a.text-decoration-none(href='#conclusion') Conclusion
 
-        dt What is HTTP?
-        dd.
-          Hypertext Transfer Protocol (a.k.a. HTTP), is the protocol used for communication between a client and a server
-          over the internet. It is the foundation of data communication for the World Wide Web.
-          HTTP is a request-response protocol, meaning that a client sends a request to a server,
-          and the server responds with a message containing the requested information.
-          HTTP messages consist of headers and a message body, which can contain data such as HTML, images, or JSON.
-          By understanding HTTP, developers can create more efficient and effective web applications.
+          // Introduction Section
+          section#introduction.mb-5
+            h2.h3.mb-4
+              i.bi.bi-info-circle.me-2
+              | Introduction to the Decorator Pattern            .alert.alert-info.mb-4
+              .d-flex.align-items-start
+                i.bi.bi-lightbulb.me-3.fs-4.text-primary
+                div
+                  h5.alert-heading Pattern Overview
+                  p.mb-0 The Decorator Design Pattern is a structural design pattern that allows behavior to be added to individual objects, either statically or dynamically, without affecting other objects from the same class.
 
-        dt What is an HTTP Client?
-        dd.
-          In basic terms, an HTTP client is a software component that allows your program to send HTTP requests to a server
-          and receive HTTP responses from the server. It is used to interact with web-based applications and APIs that
-          use the HTTP protocol.
+            p.lead The Decorator Pattern provides a flexible alternative to sub-classing by dynamically wrapping objects in decorator objects that add new functionality while preserving the original interface.
 
-        dt What is HttpClient Class?
-        dd.
-          'HttpClient' is a class in the System.Net.Http namespace that provides a high-level API for making HTTP requests.
-          It enables you to send HTTP requests and receive HTTP responses
-          and provides several features to make it easy to work
-          with HTTP-based services.  It provides methods for reading the response and processing the response data.
-          The HttpClient wraps the lower-level functionality available on each platform where it runs.
-          This means that it provides a consistent, platform-independent implementation
-          for processing HTTP requests while taking advantage of platform-specific features where available.
-        dt What is Telemetry?
-        dd.
-          Telemetry is the collection, transmission, and analysis of data related to the performance
-          and usage of an application.
-          Telemetry helps us to monitor the performance of an application and can be used to identify
-          and troubleshoot issues,
-          as well as to understand how an application is being used.
+            p This pattern works by creating a base class/interface that defines the basic behavior and then defining decorator classes that add additional behavior. Each decorator wraps an instance of the base interface and provides its implementation of enhanced functionality.
 
-      p.
-        Let us explore how to use the decorator design pattern to add telemetry to an HttpClient in C#.
-        By the end of this activity, you'll have a good understanding of the decorator pattern and how to use it to add
-        telemetry to an HttpClient.
+            .card.border-info.mb-4
+              .card-header.bg-info.text-white
+                h5.mb-0
+                  i.bi.bi-code-square.me-2
+                  | Live Demo
+              .card-body
+                p.mb-3 The current demonstration is hosted on my WebSpark site:
+                .d-grid.gap-2.d-md-block
+                  a.btn.btn-primary(href='https://webspark.markhazleton.com/asyncspark' target='_blank' rel='noopener noreferrer')
+                    i.bi.bi-box-arrow-up-ne.me-2
+                    | View AsyncSpark Demo
 
-      a(href='https://github.com/markhazleton/samplemvccrud/' target='_blank' rel='noopener noreferrer')
-        img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-DecoratorPattern-Home.png' alt='DecoratorPattern Home Page')
+          // Core Concepts Section
+          section#concepts.mb-5
+            h2.h3.mb-4
+              i.bi.bi-book.me-2
+              | Core Concepts & Definitions
 
-      p.
-        Full Souce code for this post is available on
-        GitHub: <a href="https://github.com/markhazleton/webspark">WebSpark</a>
+            .row.g-4.mb-4
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-header.bg-primary.text-white
+                    h5.mb-0
+                      i.bi.bi-puzzle.me-2
+                      | Design Patterns
+                  .card-body
+                    p Design patterns are proven solutions to common software design problems, discovered and refined by experienced developers over time.
+                    p.mb-0 First documented by the "Gang of Four" in 1994, these patterns enable more maintainable, reusable, and scalable code.
 
+              .col-md-6
+                .card.h-100.border-success
+                  .card-header.bg-success.text-white
+                    h5.mb-0
+                      i.bi.bi-globe.me-2
+                      | HTTP Protocol
+                  .card-body
+                    p Hypertext Transfer Protocol (HTTP) is the foundation of data communication for the World Wide Web.
+                    p.mb-0 It's a request-response protocol where clients send requests to servers and receive responses containing requested information.
 
-      h2 The Interfaces
-      p.
-        The decorator pattern uses an Interface for both the concrete and decorator classes.
-        For this example, we will use
-        the following interfaces:
+            .row.g-4.mb-4
+              .col-md-6
+                .card.h-100.border-warning
+                  .card-header.bg-warning.text-white
+                    h5.mb-0
+                      i.bi.bi-laptop.me-2
+                      | HTTP Client
+                  .card-body
+                    p An HTTP client is a software component that allows programs to send HTTP requests and receive responses.
+                    p.mb-0 Essential for interacting with web-based applications and APIs using the HTTP protocol.
 
-      dl
-        dt IHttpGetCallService
-        dd This interface defines the methods for making a request to a URL and returning the response data using generics.
+              .col-md-6
+                .card.h-100.border-info
+                  .card-header.bg-info.text-white
+                    h5.mb-0
+                      i.bi.bi-gear.me-2
+                      | HttpClient Class
+                  .card-body
+                    p The .NET HttpClient class provides a high-level API for making HTTP requests with platform-independent implementation.
+                    p.mb-0 Offers consistent functionality across platforms while leveraging platform-specific optimizations.
 
-          pre.language-csharp
-            code.language-csharp.
+            .alert.alert-warning.border-warning
+              .d-flex.align-items-start
+                i.bi.bi-graph-up.me-3.fs-4.text-warning
+                div
+                  h5.alert-heading Telemetry Importance
+                  p.mb-0 Telemetry involves collecting, transmitting, and analyzing application performance data. It's crucial for monitoring performance, identifying issues, and understanding usage patterns.
 
-              public interface IHttpGetCallService
-              {
-                Task<HttpGetCallResults<T>> GetAsync<T>(HttpGetCallResults<T> callResults);
-              }
+          // Interface Design Section
+          section#interfaces.mb-5
+            h2.h3.mb-4
+              i.bi.bi-diagram-3.me-2
+              | Interface Design
 
-        dt IHttpGetCallResults
-        dd This interface defines the properties for the response from the HTTP call.
-          | The implementation of this interface is the class, HttpGetCallResults&lt;T&gt;,
-          | a generic class that is used to store the results (response)of an HTTP Request call.
-          | It has properties to store the completion date and time, elapsed time in milliseconds,
-          | error message (if any), iteration number, number of retries, status path, and results of the HTTP Response.
-          | The class also has a property to store the unique identifier for the record, which is auto-generated.
+            p.mb-4 The decorator pattern relies on well-defined interfaces that both concrete and decorator classes implement. Our implementation uses two key interfaces:
 
-          pre.language-csharp
-            code.language-csharp.
+            .row.g-4.mb-4
+              .col-lg-6
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h5.mb-0
+                      i.bi.bi-play-circle.me-2
+                      | IHttpGetCallService
+                  .card-body
+                    p Defines methods for making HTTP requests and returning response data using generics.
+                    pre.language-csharp.bg-light.p-3.rounded
+                      code.language-csharp.
+                        public interface IHttpGetCallService
+                        {
+                          Task&lt;HttpGetCallResults&lt;T&gt;&gt; GetAsync&lt;T&gt;(
+                            HttpGetCallResults&lt;T&gt; callResults
+                          );
+                        }
 
-              public interface IHttpGetCallResults<T>
-              {
-                DateTime? CompletionDate { get; set; }
-                long ElapsedMilliseconds { get; set; }
-                string? ErrorMessage { get; set; }
-                int Id { get; set; }
-                int Iteration { get; set; }
-                string RequestPath { get; set; }
-                T? ResponseResults { get; set; }
-                int Retries { get; set; }
-              }
+              .col-lg-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h5.mb-0
+                      i.bi.bi-clipboard-data.me-2
+                      | IHttpGetCallResults
+                  .card-body
+                    p Defines properties for HTTP call response data including timing, errors, and results.
+                    pre.language-csharp.bg-light.p-3.rounded
+                      code.language-csharp.
+                        public interface IHttpGetCallResults&lt;T&gt;
+                        {
+                          DateTime? CompletionDate { get; set; }
+                          long ElapsedMilliseconds { get; set; }
+                          string? ErrorMessage { get; set; }
+                          int Id { get; set; }
+                          int Iteration { get; set; }
+                          string RequestPath { get; set; }
+                          T? ResponseResults { get; set; }
+                          int Retries { get; set; }
+                        }
 
+            .alert.alert-info.border-info
+              .d-flex.align-items-start
+                i.bi.bi-info-circle.me-3.fs-4.text-info
+                div
+                  h5.alert-heading Generic Type Benefits
+                  p.mb-0 The HttpGetCallResults&lt;T&gt; generic implementation provides compile-time type checking, improved IntelliSense, and strongly-typed response handling, making code cleaner and more maintainable.
 
-      h2  Service Implementations
-      p.
-        In the context of the Decorator Design Pattern, there are two types of implementations:
-        the concrete implementation and the decorator implementation.
-      p.
-        In other words, the concrete implementation provides the core functionality of the object,
-        while the decorator implementation adds extra behavior and functionality to the object without
-        changing its core functionality. The decorator implementation is interchangeable with the concrete implementation,
-        meaning that both can be used interchangeably in the code, making it easier to extend the functionality of
-        an object without having to modify the original implementation.
+          // Service Implementations Section
+          section#implementations.mb-5
+            h2.h3.mb-4
+              i.bi.bi-tools.me-2
+              | Service Implementations
 
-      h3.mb-0 The Concrete Implementation
-      p.
-        The concrete implementation is the original implementation of the object that is being decorated.
-        It provides the basic functionality and behavior of the object.
+            p.mb-4 The Decorator Pattern involves two implementation types: concrete and decorator implementations that work together seamlessly.
 
-      p   The concrete implementation method is defined as follows:
+            .card.border-primary.mb-4
+              .card-header.bg-primary.text-white
+                h4.mb-0
+                  i.bi.bi-box.me-2
+                  | Concrete Implementation
+              .card-body
+                p.mb-3 The concrete implementation provides core functionality - the original object being decorated with basic HTTP request capabilities.
 
-      pre.language-csharp
-        code.language-csharp.
-          public async Task<HttpGetCallResults> GetAsync<T>(HttpGetCallResults callResults)
-          {
-            if (callResults == null)
-            {
-              throw new ArgumentNullException(nameof(callResults),"The parameter 'callResults' cannot be null.");
-            }
-            if (string.IsNullOrWhiteSpace(callResults.GetPath))
-            {
-              throw new ArgumentException("The URL path specified in 'callResults' cannot be null or empty.", nameof(callResults));
-            }
+                .alert.alert-light.border-left-primary
+                  h6.fw-bold Key Features:
+                  ul.mb-0
+                    li Error handling with null checks
+                    li JSON deserialization with fallback
+                    li HttpClient factory integration
+                    li Comprehensive logging
 
-            try
-            {
-              using var httpClient = _clientFactory.CreateClient();
-              var request = new HttpRequestMessage(HttpMethod.Get, callResults.GetPath);
-              var response = await httpClient.SendAsync(request);
-              response.EnsureSuccessStatusCode();
-              var statusResults = await response.Content.ReadAsStringAsync();
-              try
-              {
-                callResults.GetResults = JsonSerializer.Deserialize<T>(statusResults);
-              }
-              catch (Exception ex)
-              {
-                _logger.LogCritical("HttpGetCallService:GetAsync:DeserializeException", ex.Message);
-                callResults.GetResults = JsonSerializer.Deserialize<dynamic>(statusResults);
-              }
+                pre.language-csharp.bg-light.p-3.rounded
+                  code.language-csharp.
+                    public async Task&lt;HttpGetCallResults&lt;T&gt;&gt; GetAsync&lt;T&gt;(
+                      HttpGetCallResults&lt;T&gt; callResults)
+                    {
+                      if (callResults == null)
+                      {
+                        throw new ArgumentNullException(nameof(callResults));
+                      }
 
-            }
-            catch (Exception ex)
-            {
-              _logger.LogCritical("HttpGetCallService:GetAsync:Exception", ex.Message);
-            }
-            return callResults;
-          }
+                      try
+                      {
+                        using var httpClient = _clientFactory.CreateClient();
+                        var request = new HttpRequestMessage(
+                          HttpMethod.Get, callResults.RequestPath);
+                        var response = await httpClient.SendAsync(request);
+                        response.EnsureSuccessStatusCode();
 
-      p.
-        The advantage of using a generic model of HttpGetCallResults&lt;T&gt; instead of HttpGetCallResults is that it
-        allows you to specify the type of the expected response data, T, at the time of making the GET request.
-      p.
-        By using a generic model, I can take advantage of compile-time type checking, which helps to ensure that
-        the code using the response data is correct and to avoid unexpected runtime errors due to type mismatches.
-        This approach will also improve the IntelliSense in Visual Studio making it easier to write and maintain the code.
-      p.
-        For example, if you expect the response data to be a list of objects,
-        you can define HttpGetCallResults&lt;List&lt;MyDataObject&gt;&gt;,
-        and then access the response data as a strongly-typed list,
-        rather than as a string or an object of an unknown type.
-      p.
-        Overall, using a generic model of HttpGetCallResults&lt;T&gt; makes the code cleaner,
-        more readable, and more maintainable, and reduces the likelihood of errors.
+                        var content = await response.Content.ReadAsStringAsync();
+                        callResults.ResponseResults =
+                          JsonSerializer.Deserialize&lt;T&gt;(content);
+                      }
+                      catch (Exception ex)
+                      {
+                        _logger.LogCritical(ex.Message);
+                        callResults.ErrorMessage = ex.Message;
+                      }
 
-      h3.mb-0 The Decorator Implementation
-      p.
-        The decorator implementation is an object that wraps the concrete implementation
-        and adds new behavior or functionality to it. The decorator implementation is responsible for
-        forwarding calls to the original object and adding new functionality before or after the call.
-      p.
-        To add telemetry to an HttpClient, we'll use the decorator pattern to wrap the concrete implementation
-        in a decorator class that
-        adds the telemetry functionality. The decorator class will implement the same Interface
-        and act as a wrapper around the concrete
-        implementation. This allows us to add the telemetry functionality without modifying the concrete implementation.
-      p.
-        The decorator class is initialized with an existing implementation of the interface.
-        When the decorator class is called, it will
-        call the existing implementation and then add the telemetry functionality and pass the results back to the caller.
+                      return callResults;
+                    }
 
-      pre.language-csharp
-        code.language-csharp.
-          public async Task<HttpGetCallResults<T>> GetAsync<T>(HttpGetCallResults<T> callResults)
-          {
-            Stopwatch sw = new();
-            sw.Start();
-            var response = new HttpGetCallResults<T>(callResults);
-            try
-            {
-              response = await _service.GetAsync<T>(callResults);
-            }
-            catch (Exception ex)
-            {
-              _logger.LogCritical("Telemetry:GetAsync:Exception", ex.Message);
-            }
-            sw.Stop();
-            response.ElapsedMilliseconds = sw.ElapsedMilliseconds;
-            response.CompletionDate = DateTime.Now;
-            return response;
-          }
+            .card.border-success.mb-4
+              .card-header.bg-success.text-white
+                h4.mb-0
+                  i.bi.bi-layers.me-2
+                  | Decorator Implementation
+              .card-body
+                p.mb-3 The decorator wraps the concrete implementation, adding telemetry functionality while maintaining the same interface.
 
-      h2.mb-0 Putting it all together
-      p.
-        Now that we have the implementations defined, we can configure the decorator pattern in our program.cs file.
-        The following code snippet shows how to configure the decorator pattern in the program.cs file.
+                .alert.alert-light.border-left-success
+                  h6.fw-bold Telemetry Features:
+                  ul.mb-0
+                    li Performance timing with Stopwatch
+                    li Completion timestamp tracking
+                    li Exception handling and logging
+                    li Transparent call forwarding
 
-      pre.language-csharp
-        code.language-csharp.
-          ... snip ...
+                pre.language-csharp.bg-light.p-3.rounded
+                  code.language-csharp.
+                    public async Task&lt;HttpGetCallResults&lt;T&gt;&gt; GetAsync&lt;T&gt;(
+                      HttpGetCallResults&lt;T&gt; callResults)
+                    {
+                      Stopwatch sw = new();
+                      sw.Start();
 
-          // Add Http Client Factory Implementation
-          builder.Services.AddHttpClient("webspark.markhazleton.com", client =&gt;
-          {
-            client.Timeout = TimeSpan.FromMilliseconds(1500);
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Add("User-Agent", "webspark.markhazleton.com");
-            client.DefaultRequestHeaders.Add("X-Request-ID", Guid.NewGuid().ToString());
-            client.DefaultRequestHeaders.Add("X-Request-Source", "webspark.markhazleton.com");
-          });
+                      var response = new HttpGetCallResults&lt;T&gt;(callResults);
 
-          // Register the decorator implementation via dependency injection.
-          // Wrap the base (concrete) implementation with the Telemetry decorator implementation.
-          builder.Services.AddSingleton&lt;IHttpGetCallService&gt;(serviceProvider =&gt;
-          {
-            var logger = serviceProvider.GetRequiredService&lt;ILogger&lt;HttpGetCallService&gt;&gt;();
-            var telemetryLogger = serviceProvider.GetRequiredService&lt;ILogger&lt;HttpGetCallServiceTelemetry&gt;&gt;();
-            var httpClientFactory = serviceProvider.GetRequiredService&lt;IHttpClientFactory&gt;();
-            IHttpGetCallService baseService = new HttpGetCallService(logger, httpClientFactory);
-            IHttpGetCallService telemetryService = new HttpGetCallServiceTelemetry(telemetryLogger, baseService);
-            return telemetryService;
-          });
-          ... snip ...
+                      try
+                      {
+                        response = await _service.GetAsync&lt;T&gt;(callResults);
+                      }
+                      catch (Exception ex)
+                      {
+                        _logger.LogCritical("Telemetry:GetAsync:Exception",
+                          ex.Message);
+                      }
 
-      p.
-        This is a C# Razor Page code behind for retrieving a random joke from the Joke API using an HTTP GET request.
-        The class JokeModel inherits from the PageModel class and has an ILogger and IHttpGetCallService injected into
-        it via the constructor using dependency injection.
-        The OnGet method is called when the page is requested and it creates an instance of HttpGetCallResults class
-        to store the results of the HTTP GET call. The HttpGetCallService's GetAsync method is then called to
-        retrieve the joke from the Joke API, passing in the HttpGetCallResults instance and a CancellationToken for cancellation.
-        The retrieved joke is then stored in the TheJoke property if the response from the API was successful.
-        The HttpClientFacotry is injected into the IHttpGetCallService implementation via the constructor
-        when the application starts, making it available for use in the GetAsync method.
+                      sw.Stop();
+                      response.ElapsedMilliseconds = sw.ElapsedMilliseconds;
+                      response.CompletionDate = DateTime.Now;
 
-      pre.language-csharp
-        code.language-csharp.
+                      return response;
+                    }
 
-          private readonly ILogger&lt;JokeModel&gt; _logger;
-          private readonly IHttpGetCallService _service;
-          public HttpGetCallResults&lt;Joke&gt; JokeResult { get; set; } = default!;
-          public Joke TheJoke { get; set; } = new Joke();
-          public JokeModel(ILogger&lt;JokeModel&gt; logger, IHttpGetCallService getCallService)
-          {
-            _logger = logger;
-            _service = getCallService;
-          }
+          // Integration Section
+          section#integration.mb-5
+            h2.h3.mb-4
+              i.bi.bi-puzzle-fill.me-2
+              | Integration & Configuration
 
-          /// &lt;summary&gt;
-          /// This method retrieves a random joke from the Joke API
-          /// &lt;/summary&gt;
-          public async Task OnGet(CancellationToken ct = default)
-          {
-            JokeResult = new HttpGetCallResults&lt;Joke&gt;();
+            p.mb-4 Configure the decorator pattern in your Program.cs file using dependency injection to seamlessly integrate telemetry capabilities.
 
-            if (JokeResult == null)
-            {
-              _logger.LogError("JokeResult is null");
-              throw new Exception("JokeResult is null");
-            }
+            .card.border-info.mb-4
+              .card-header.bg-info.text-white
+                h5.mb-0
+                  i.bi.bi-gear-fill.me-2
+                  | Dependency Injection Setup
+              .card-body
+                pre.language-csharp.bg-light.p-3.rounded
+                  code.language-csharp.
+                    // Configure HttpClient with timeout and headers
+                    builder.Services.AddHttpClient("webspark.markhazleton.com",
+                      client =&gt;
+                    {
+                      client.Timeout = TimeSpan.FromMilliseconds(1500);
+                      client.DefaultRequestHeaders.Add("Accept", "application/json");
+                      client.DefaultRequestHeaders.Add("User-Agent",
+                        "webspark.markhazleton.com");
+                      client.DefaultRequestHeaders.Add("X-Request-ID",
+                        Guid.NewGuid().ToString());
+                    });
 
-            JokeResult.RequestPath = "https://v2.jokeapi.dev/joke/Any?safe-mode";
-            JokeResult = await _service.GetAsync(JokeResult, ct).ConfigureAwait(false);
+                    // Register decorator pattern with telemetry wrapper
+                    builder.Services.AddSingleton&lt;IHttpGetCallService&gt;(
+                      serviceProvider =&gt;
+                    {
+                      var logger = serviceProvider
+                        .GetRequiredService&lt;ILogger&lt;HttpGetCallService&gt;&gt;();
+                      var telemetryLogger = serviceProvider
+                        .GetRequiredService&lt;ILogger&lt;HttpGetCallServiceTelemetry&gt;&gt;();
+                      var httpClientFactory = serviceProvider
+                        .GetRequiredService&lt;IHttpClientFactory&gt;();
 
-            if (_service == null)
-            {
-              _logger.LogError("_service is null");
-              throw new NullReferenceException(nameof(_service));
-            }
+                      IHttpGetCallService baseService =
+                        new HttpGetCallService(logger, httpClientFactory);
+                      IHttpGetCallService telemetryService =
+                        new HttpGetCallServiceTelemetry(telemetryLogger, baseService);
 
-            if (JokeResult?.ResponseResults is null)
-            {
-              _logger.LogError("jokeResult.ResponseResults is null");
-              TheJoke = new Joke()
-              {
-                error = true
-              };
-            }
-            else
-            {
-              _logger.LogInformation("Good Response from Joke API");
-              TheJoke = JokeResult.ResponseResults;
-            }
-          }
-      h2.mb-0 Additional Use Cases
-      p.
-        In addition to this telemetry decorator pattern implementation for the HTTP client,
-        there are several other common use cases for the decorator pattern in this context.
-        Some of these include:
-      dl
-        dt Logging:
-        dd.
-          Adding logging to your HTTP client can be useful for debugging and auditing purposes.
-          A logging decorator can be used to automatically log requests and responses,
-          including details such as request/response headers, status codes, and payloads.
-        dt Caching:
-        dd.
-          Adding caching to your HTTP client can improve performance by reducing the number of requests
-          that need to be made to the server. A caching decorator can be used to automatically cache
-          responses and serve them from the cache when possible,
-          rather than making a new request to the server.
-        dt Retry calls via Polly:
-        dd.
-          In some cases, it may be desirable to automatically retry failed requests.
-          The Polly library provides a convenient way to add retry logic to your
-          HTTP client by wrapping the client in a decorator that uses a configurable policy
-          to determine when and how to retry failed requests.
-      p.
-        These additional decorator pattern implementations can be combined with the basic decorator pattern implementation
-        described earlier to create a powerful and flexible HTTP client with a wide range of capabilities.
+                      return telemetryService;
+                    });
 
-      h2.mb-0 Conclusion
-      p.
-        The Decorator Design Pattern is a powerful pattern that provides a flexible and dynamic way to add behavior
-        and functionality to individual objects without affecting the behavior of other objects from the same class.
-        This pattern offers a more efficient alternative to sub-classing and is especially useful when you want to
-        add a single feature to an object, rather than an entire hierarchy of features.
+            .card.border-warning.mb-4
+              .card-header.bg-warning.text-white
+                h5.mb-0
+                  i.bi.bi-code-slash.me-2
+                  | Razor Page Implementation
+              .card-body
+                p.mb-3 Example implementation using the decorated service in a Razor Page to fetch jokes from an API:
 
-      p.
-        In this article, we explored how to use the decorator pattern to add telemetry to an HttpClient in C#.
-        By wrapping an HttpClient instance with telemetry-related decorators, we were able to easily collect data
-        related to the performance and usage of the HTTP requests being made.
-        By implementing two interfaces, IHttpGetCallService and IHttpGetCallResults, we were able to define the methods
-        for making an HTTP request to a URL and returning the response data,
-        and also defining the properties for the response from the HTTP call.
+                pre.language-csharp.bg-light.p-3.rounded
+                  code.language-csharp.
+                    public class JokeModel : PageModel
+                    {
+                      private readonly ILogger&lt;JokeModel&gt; _logger;
+                      private readonly IHttpGetCallService _service;
 
-      p.
-        We also discussed the different types of implementations in the context of the decorator pattern,
-        including the concrete implementation and the decorator implementation.
-        The concrete implementation provides the core functionality of the object, while the decorator implementation
-        adds extra behavior and functionality to the object without changing its core functionality.
-        The decorator implementation is interchangeable with the concrete implementation,
-        making it easier to extend the functionality of an object without having to modify the original implementation.
+                      public HttpGetCallResults&lt;Joke&gt; JokeResult { get; set; }
+                      public Joke TheJoke { get; set; } = new Joke();
 
-      p.
-        Overall, the decorator pattern is a powerful tool for extending the functionality of objects,
-        and it can be used in a wide range of scenarios. By applying the principles of the decorator pattern,
-        you can create more efficient and effective applications that are better able to meet the needs of your users.
+                      public JokeModel(ILogger&lt;JokeModel&gt; logger,
+                        IHttpGetCallService getCallService)
+                      {
+                        _logger = logger;
+                        _service = getCallService;
+                      }
+
+                      public async Task OnGet(CancellationToken ct = default)
+                      {
+                        JokeResult = new HttpGetCallResults&lt;Joke&gt;
+                        {
+                          RequestPath = "https://v2.jokeapi.dev/joke/Any?safe-mode"
+                        };
+
+                        JokeResult = await _service.GetAsync(JokeResult, ct);
+
+                        TheJoke = JokeResult?.ResponseResults ?? new Joke
+                        {
+                          error = true
+                        };
+                      }
+                    }
+
+          // Additional Use Cases Section
+          section#use-cases.mb-5
+            h2.h3.mb-4
+              i.bi.bi-lightning-charge.me-2
+              | Additional Use Cases & Extensions
+
+            p.mb-4 The decorator pattern's flexibility allows for multiple enhancements to HttpClient functionality beyond telemetry:
+
+            .row.g-4.mb-4
+              .col-md-4
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h5.mb-0
+                      i.bi.bi-journal-text.me-2
+                      | Logging Decorator
+                  .card-body
+                    p.small.text-muted Debugging & Auditing
+                    p Automatically log all HTTP requests and responses including headers, status codes, and payloads.
+                    ul.small
+                      li Request/response logging
+                      li Header inspection
+                      li Status code tracking
+                      li Payload monitoring
+
+              .col-md-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h5.mb-0
+                      i.bi.bi-lightning.me-2
+                      | Caching Decorator
+                  .card-body
+                    p.small.text-muted Performance Optimization
+                    p Improve performance by caching responses and serving from cache when possible.
+                    ul.small
+                      li Response caching
+                      li Cache invalidation
+                      li TTL management
+                      li Memory optimization
+
+              .col-md-4
+                .card.border-warning.h-100
+                  .card-header.bg-warning.text-white
+                    h5.mb-0
+                      i.bi.bi-arrow-repeat.me-2
+                      | Retry Decorator
+                  .card-body
+                    p.small.text-muted Resilience & Reliability
+                    p Automatically retry failed requests using Polly library with configurable policies.
+                    ul.small
+                      li Exponential backoff
+                      li Circuit breaker
+                      li Timeout handling
+                      li Policy configuration
+
+            .alert.alert-success.border-success
+              .d-flex.align-items-start
+                i.bi.bi-lightbulb.me-3.fs-4.text-success
+                div
+                  h5.alert-heading Decorator Composition
+                  p.mb-0 These decorators can be combined and layered to create a powerful, feature-rich HTTP client with telemetry, logging, caching, and retry capabilities all working together seamlessly.
+
+          // Source Code Section
+          .card.border-dark.mb-5
+            .card-header.bg-dark.text-white
+              h4.mb-0
+                i.bi.bi-github.me-2
+                | Source Code & Demo
+            .card-body.text-center
+              p.mb-4 Complete source code and working examples are available on GitHub:
+              .d-grid.gap-2.d-md-flex.justify-content-md-center
+                a.btn.btn-primary(href='https://github.com/markhazleton/webspark' target='_blank' rel='noopener noreferrer')
+                  i.bi.bi-github.me-2
+                  | View WebSpark Repository
+                a.btn.btn-outline-primary(href='https://github.com/markhazleton/samplemvccrud/' target='_blank' rel='noopener noreferrer')
+                  i.bi.bi-code-slash.me-2
+                  | Sample MVC Implementation
+
+          // Conclusion Section
+          section#conclusion.mb-5
+            h2.h3.mb-4
+              i.bi.bi-check-circle.me-2
+              | Conclusion
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h5.mb-0
+                      i.bi.bi-award.me-2
+                      | Pattern Benefits
+                  .card-body
+                    ul.mb-0
+                      li Dynamic behavior addition
+                      li No sub-classing required
+                      li Flexible object composition
+                      li Single responsibility principle
+                      li Open/closed principle adherence
+
+              .col-md-6
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h5.mb-0
+                      i.bi.bi-gear-wide-connected.me-2
+                      | Implementation Advantages
+                  .card-body
+                    ul.mb-0
+                      li Clean separation of concerns
+                      li Easy to test and maintain
+                      li Interchangeable components
+                      li Enhanced functionality without modification
+                      li Scalable architecture
+
+            p.lead.text-center.mb-4 The Decorator Design Pattern provides a powerful and flexible way to enhance object functionality dynamically while maintaining clean, maintainable code architecture.
+
+            .alert.alert-primary.border-primary
+              .d-flex.align-items-start
+                i.bi.bi-trophy.me-3.fs-4.text-primary
+                div
+                  h5.alert-heading Key Takeaways
+                  p.mb-2 By implementing the decorator pattern with HttpClient, we've demonstrated how to:
+                  ul.mb-0
+                    li Add telemetry capabilities without modifying core functionality
+                    li Create reusable, composable components
+                    li Maintain clean separation between concerns
+                    li Build scalable, maintainable applications
+                    li Apply proven design patterns to real-world scenarios
 

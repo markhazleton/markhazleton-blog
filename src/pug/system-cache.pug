@@ -1,225 +1,441 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'System Cache: Enhancing Web API Performance'
+  - var pageDescription = 'Learn how to implement system-cached lists for web API performance optimization. Explore memory caching strategies, background refresh patterns, and efficient resource usage in ASP.NET Core.'
+  - var pageKeywords = 'System Cache, Web API Performance, Memory Caching, ASP.NET Core, Performance Optimization, Background Refresh, C#, Caching Strategy'
+  - var pageCanonical = 'https://markhazleton.com/system-cache.html'
 
 block pagehead
-  title Mark Hazleton - System Cached List
-  meta(name='description', content='Mark Hazleton - System Cache List - Enhancing Web API Performance')
+  title= pageTitle + ' | Mark Hazleton'
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
   meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/system-cache.html')
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:type', content='article')
+
+block twitter_overrides
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
 
 block layout-content
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-speedometer2.me-3
+            | System Cache Performance
+          h2.h3.mb-4 Enhancing Web API Performance with Smart Caching
+          p.lead.mb-5.
+            Discover how to implement system-cached lists that deliver sub-second response times
+            for high-traffic APIs while maintaining data freshness and system efficiency.
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 System Cache
-      .subheading.mb-3 Enhancing Web API Performance with a System-Cached List
-      p.lead.
-        In the world of web development, performance optimization is a critical aspect
-        that directly influences user experience and overall system efficiency.
-        Caching is a technique that helps to mitigate the load on backend services,
-        reducing response times and enhancing the user experience.
-        One particular approach, the System Cached List, offers a smart and efficient way
-        to cache data and deliver it seamlessly to users.
-        In this article, I will discuss the System Cached List and explore
-        its advantages and disadvantages.
+  // Main Article
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            .article-meta.text-muted.mb-4
+              time(datetime='2025-01-15') January 15, 2025
+              span.mx-2 •
+              span 10 min read
+              span.mx-2 •
+              span by Mark Hazleton
 
-      h2 The Challenge: Sub-Second Response Times for a Weather API
-      blockquote.
-        You're running a Web API that provides weather forecasts to a large number of users.
-        Each forecast request takes approximately 10 seconds to complete.
-        Your consumers expect near-instantaneous responses and your API is handling
-        thousands of hits every minute.
+          .article-content
+            p.lead.
+              In the world of web development, performance optimization is a critical aspect
+              that directly influences user experience and overall system efficiency.
+              Caching is a technique that helps to mitigate the load on backend services,
+              reducing response times and enhancing the user experience.
+              One particular approach, the System Cached List, offers a smart and efficient way
+              to cache data and deliver it seamlessly to users.
 
-      h2 Caching Strategy:
-      dl
-        dt Data Retrieval:
-        dd
-          ul
-            li.
-              When a weather forecast request comes in, the API checks the cache for existing forecast data.
-            li.
-              If cached data is present the API directly serves the cached data to the user.
+            // Table of Contents
+            nav.mb-5(aria-label='Table of Contents')
+              .card
+                .card-header.bg-primary.text-white
+                  h3.mb-0
+                    i.bi.bi-list-ul.me-2
+                    | Contents
+                .card-body
+                  ol.list-group.list-group-numbered.list-group-flush
+                    li.list-group-item
+                      a.text-decoration-none(href='#challenge') The Performance Challenge
+                    li.list-group-item
+                      a.text-decoration-none(href='#strategy') Caching Strategy
+                    li.list-group-item
+                      a.text-decoration-none(href='#understanding') Understanding System Cached Lists
+                    li.list-group-item
+                      a.text-decoration-none(href='#advantages') Advantages
+                    li.list-group-item
+                      a.text-decoration-none(href='#disadvantages') Disadvantages
+                    li.list-group-item
+                      a.text-decoration-none(href='#implementation') Implementation
+                    li.list-group-item
+                      a.text-decoration-none(href='#conclusion') Conclusion
 
-        dt Cache Miss:
-        dd
-          ul
-            li.
-              If the cache is empty, the API waits for the weather forecast data to be retrieved.
-            li.
-              If the cache is past the refresh time, the API serves the stale data to ensure a quick response
-              and backend refresh is initiated.
+            // Challenge Section
+            section#challenge.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-danger.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-exclamation-triangle.me-2
+                    | The Challenge: Sub-Second Response Times for a Weather API
+                .card-body
+                  .alert.alert-warning
+                    h5.alert-heading
+                      i.bi.bi-clock.me-2
+                      | Performance Requirements
+                    blockquote.mb-0.
+                      You're running a Web API that provides weather forecasts to a large number of users.
+                      Each forecast request takes approximately 10 seconds to complete.
+                      Your consumers expect near-instantaneous responses and your API is handling
+                      thousands of hits every minute.
 
-        dt Background Cache Refresh:
-        dd
-          ul
-            li.
-              The API kicks off an asynchronous cache refresh process,
-              updating the forecast data in the cache for future requests.
-            li.
-              This refresh process does not block the main thread,
-              ensuring the API remains responsive.
-            li.
-              A static boolean is used to ensure only one refresh process is running at a time.
+            // Strategy Section
+            section#strategy.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-success.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-diagram-3.me-2
+                    | Caching Strategy
+                .card-body
+                  .row.g-4
+                    .col-md-4
+                      .card.h-100.border-info
+                        .card-header.bg-info.text-white
+                          h4.mb-0
+                            i.bi.bi-download.me-2
+                            | Data Retrieval
+                        .card-body
+                          ul.list-unstyled.mb-0
+                            li.mb-2
+                              i.bi.bi-check-circle.text-success.me-2
+                              | Check cache for existing data
+                            li.mb-0
+                              i.bi.bi-check-circle.text-success.me-2
+                              | Serve cached data directly
 
-      h2  Understanding the System Cached List
-      p.
-        The System Cached List is a caching mechanism that maintains a cached dataset,
-        periodically updating it while ensuring minimal impact on the application's performance.
-        This technique employs the power of the MemoryCache class and a custom CachedData class
-        to manage cached data efficiently.
-      p.
-        I used a minimal Api sample project to start this solution.  I then added a
-        generic implementation of caching a list of T using system memory as the caching mechanism.
-        You can view the source for this article in my sandbox repository on GitHub.
-        <a href='https://github.com/markhazleton/sandbox/tree/main/WebApiCache'>WebApiCache</a>
+                    .col-md-4
+                      .card.h-100.border-warning
+                        .card-header.bg-warning.text-dark
+                          h4.mb-0
+                            i.bi.bi-x-circle.me-2
+                            | Cache Miss
+                        .card-body
+                          ul.list-unstyled.mb-0
+                            li.mb-2
+                              i.bi.bi-arrow-right.text-primary.me-2
+                              | Wait for data if cache empty
+                            li.mb-0
+                              i.bi.bi-arrow-right.text-primary.me-2
+                              | Serve stale data if past refresh time
 
-      h2 Advantages of the System Cached List
-      dl
-        dt Improved Performance:
-        dd.
-          One of the most significant advantages of the System Cached List is its ability to significantly
-          improve performance by reducing the load on the backend.
-          Instead of hitting the data source every time a request is made, cached data is provided,
-          resulting in faster response times and a smoother user experience.
+                    .col-md-4
+                      .card.h-100.border-secondary
+                        .card-header.bg-secondary.text-white
+                          h4.mb-0
+                            i.bi.bi-arrow-repeat.me-2
+                            | Background Refresh
+                        .card-body
+                          ul.list-unstyled.mb-0
+                            li.mb-2
+                              i.bi.bi-gear.text-info.me-2
+                              | Asynchronous cache refresh
+                            li.mb-2
+                              i.bi.bi-gear.text-info.me-2
+                              | Non-blocking main thread
+                            li.mb-0
+                              i.bi.bi-gear.text-info.me-2
+                              | Single refresh process control
 
-        dt Reduced Latency:
-        dd.
-          With cached data readily available, there's a notable reduction in latency.
-          Users experience quicker load times, leading to higher satisfaction and engagement levels.
+            // Understanding Section
+            section#understanding.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-info.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-lightbulb.me-2
+                    | Understanding the System Cached List
+                .card-body
+                  p.
+                    The System Cached List is a caching mechanism that maintains a cached dataset,
+                    periodically updating it while ensuring minimal impact on the application's performance.
+                    This technique employs the power of the MemoryCache class and a custom CachedData class
+                    to manage cached data efficiently.
 
-        dt Efficient Resource Usage:
-        dd.
-          By utilizing memory caching, the System Cached List optimizes resource usage.
-          Cached data remains in memory, reducing the need for repeated database queries
-          and subsequent resource consumption.
+                  .alert.alert-info
+                    h5.alert-heading
+                      i.bi.bi-github.me-2
+                      | Sample Implementation
+                    p.mb-0.
+                      I used a minimal Api sample project to start this solution. I then added a
+                      generic implementation of caching a list of T using system memory as the caching mechanism.
+                      You can view the source for this article in my
+                      a.text-decoration-none(href='https://github.com/markhazleton/sandbox/tree/main/WebApiCache' target='_blank' rel='noopener noreferrer') sandbox repository on GitHub
+                      | .
 
-        dt Customizability:
-        dd.
-          The approach allows customization of cache expiration times.
-          Different datasets might have varying levels of volatility,
-          and the ability to set cache durations accordingly ensures freshness
-          when needed while avoiding unnecessary updates.
+            // Advantages Section
+            section#advantages.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-success.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-plus-circle.me-2
+                    | Advantages of the System Cached List
+                .card-body
+                  .row.g-4
+                    .col-md-6
+                      .card.h-100.border-light
+                        .card-header.bg-light
+                          h5.mb-0
+                            i.bi.bi-speedometer2.me-2
+                            | Improved Performance
+                        .card-body
+                          p.card-text.
+                            Significantly improves performance by reducing backend load.
+                            Cached data provides faster response times and smoother user experience.
 
-        dt Concurrency Handling:
-        dd.
-          The use of synchronization locks in the implementation prevents potential concurrency
-          issues when updating the cache. This ensures that only one thread updates the cache at a time,
-          maintaining data integrity.
+                    .col-md-6
+                      .card.h-100.border-light
+                        .card-header.bg-light
+                          h5.mb-0
+                            i.bi.bi-clock-history.me-2
+                            | Reduced Latency
+                        .card-body
+                          p.card-text.
+                            With cached data readily available, there's notable latency reduction.
+                            Users experience quicker load times and higher satisfaction levels.
 
-        dt Graceful Update Process:
-        dd.
-          The System Cached List employs a smart update process. Instead of blocking the application
-          during data update, it runs the update process asynchronously,
-          thus avoiding any negative impact on user interactions.
+                    .col-md-6
+                      .card.h-100.border-light
+                        .card-header.bg-light
+                          h5.mb-0
+                            i.bi.bi-cpu.me-2
+                            | Efficient Resource Usage
+                        .card-body
+                          p.card-text.
+                            Memory caching optimizes resource usage and reduces database queries,
+                            leading to lower resource consumption.
 
-      h2 Disadvantages of the System Cached List
+                    .col-md-6
+                      .card.h-100.border-light
+                        .card-header.bg-light
+                          h5.mb-0
+                            i.bi.bi-sliders.me-2
+                            | Customizability
+                        .card-body
+                          p.card-text.
+                            Allows customization of cache expiration times based on data volatility,
+                            ensuring freshness while avoiding unnecessary updates.
 
-      dl
-        dt Stale Data Risk:
-        dd.
-          Depending on the cache expiration settings,
-          there's a risk of serving stale data to users if updates are infrequent or delayed.
-          Careful consideration of cache expiration times is essential to strike the right
-          balance between freshness and efficiency.
+                    .col-md-6
+                      .card.h-100.border-light
+                        .card-header.bg-light
+                          h5.mb-0
+                            i.bi.bi-shield-check.me-2
+                            | Concurrency Handling
+                        .card-body
+                          p.card-text.
+                            Synchronization locks prevent concurrency issues during cache updates,
+                            ensuring data integrity with single-threaded updates.
 
-        dt Increased Complexity:
-        dd.
-          Implementing a System Cached List requires careful consideration of thread safety,
-          cache management, and update scheduling. This complexity can sometimes lead to potential bugs
-          or challenges in maintenance.
+                    .col-md-6
+                      .card.h-100.border-light
+                        .card-header.bg-light
+                          h5.mb-0
+                            i.bi.bi-arrow-up-right.me-2
+                            | Graceful Updates
+                        .card-body
+                          p.card-text.
+                            Smart asynchronous update process avoids blocking the application,
+                            maintaining responsive user interactions.
 
-        dt Memory Usage:
-        dd.
-          While memory caching is efficient, it's essential to monitor memory consumption.
-          Storing large datasets in memory can lead to increased memory usage,
-          potentially affecting the overall system's performance.
+            // Disadvantages Section
+            section#disadvantages.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-warning.text-dark
+                  h2.card-title.mb-0
+                    i.bi.bi-exclamation-triangle.me-2
+                    | Disadvantages of the System Cached List
+                .card-body
+                  .row.g-4
+                    .col-md-6
+                      .card.h-100.border-danger
+                        .card-header.bg-danger.text-white
+                          h5.mb-0
+                            i.bi.bi-clock-history.me-2
+                            | Stale Data Risk
+                        .card-body
+                          p.card-text.
+                            Risk of serving outdated information if cache expiration settings
+                            are not properly configured or updates are delayed.
 
-        dt Cold Start Overhead:
-        dd.
-          When the application starts or the cache expires,
-          there might be a slight overhead as the cache is repopulated.
-          This initial delay could impact the user experience momentarily.
+                    .col-md-6
+                      .card.h-100.border-warning
+                        .card-header.bg-warning.text-dark
+                          h5.mb-0
+                            i.bi.bi-gear-wide-connected.me-2
+                            | Increased Complexity
+                        .card-body
+                          p.card-text.
+                            Requires careful consideration of thread safety, cache management,
+                            and update scheduling, potentially leading to maintenance challenges.
 
-      h2  Implementing the System Cached List
-      p.
-        The provided code snippet showcases the implementation of the System Cached List.
-        The primary components include:
-      dl
-        dt CachedData Class:
-        dd
-          p.
-            This class encapsulates the cached data along with metadata such as the last update time
-            and the expected next update time.
-          pre.language-csharp
-            code.language-csharp.
-              class CachedData
-                {
-                  public DateTime LastUpdated { get; set; }
-                  public DateTime NextUpdate { get; set; }
-                  public object Data { get; set; }
-                }
+                    .col-md-6
+                      .card.h-100.border-info
+                        .card-header.bg-info.text-white
+                          h5.mb-0
+                            i.bi.bi-memory.me-2
+                            | Memory Usage
+                        .card-body
+                          p.card-text.
+                            Large datasets in memory can increase consumption,
+                            potentially affecting overall system performance.
 
-        dt SystemValuesCache Class:
-        dd
-          p.
-            This static class acts as the core of the caching mechanism.
-            It initializes a MemoryCache instance and provides the GetCachedData method
-            to fetch and manage cached data. It also uses a synchronization lock to ensure thread safety.
-          p.
-            The GetCachedData method's fetchDataFunction argument plays a crucial role in the functionality
-            of the System Cached List. It is a delegate (a type that references a method) that defines
-            a function responsible for retrieving the data that will be cached.
-            This argument essentially tells the caching mechanism how to obtain the fresh data
-            that needs to be cached.
+                    .col-md-6
+                      .card.h-100.border-secondary
+                        .card-header.bg-secondary.text-white
+                          h5.mb-0
+                            i.bi.bi-thermometer-half.me-2
+                            | Cold Start Overhead
+                        .card-body
+                          p.card-text.
+                            Initial cache population creates slight overhead during application
+                            start or cache expiration, momentarily impacting user experience.            // Implementation Section
+            section#implementation.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-dark.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-code-slash.me-2
+                    | Implementing the System Cached List
+                .card-body
+                  p.lead.
+                    The implementation showcases two primary components that work together to provide
+                    efficient memory caching with smart update strategies.
 
-          p.
-            In the context of the System Cached List, the fetchDataFunction argument is a
-            callback function provided by the caller of the GetCachedData method.
-            This function is expected to perform the actual data retrieval from the data source,
-            which could be a database, a web API, a file, or any other data repository.
-            The function is asynchronous (Task&lt;List&lt;T&gt;&gt;), indicating that it can
-            be executed in a non-blocking manner, allowing the application to continue functioning
-            while the data retrieval is in progress.
+                  // CachedData Class Section
+                  .card.mb-4.border-primary
+                    .card-header.bg-primary.text-white
+                      h3.card-title.mb-0
+                        i.bi.bi-braces.me-2
+                        | CachedData Class
+                    .card-body
+                      p.
+                        This class encapsulates the cached data along with metadata such as the last update time
+                        and the expected next update time, providing a complete picture of cache state.
 
-          pre.language-csharp
-            code.language-csharp.
+                      pre.language-csharp
+                        code.language-csharp.
+                          class CachedData
+                          {
+                            public DateTime LastUpdated { get; set; }
+                            public DateTime NextUpdate { get; set; }
+                            public object Data { get; set; }
+                          }
 
-              public static CachedData&lt;T&gt; GetCachedData&lt;T&gt;(
-                string cacheKey,
-                Func&lt;Task&lt;List&lt;T&gt;&gt;&gt; fetchDataFunction,
-                double cacheTimeInSeconds)
-              {
-                List&lt;T&gt; cachedValues = _cache.Get(cacheKey) as List&lt;T&gt; ?? new List&lt;T&gt;();
-                if (cachedValues.Count == 0 || DateTime.Now - _lastUpdateTime &gt; TimeSpan.FromSeconds(cacheTimeInSeconds))
-                {
-                  lock (LockObject)
-                  {
-                    Task.Run(async () =&gt;
-                    {
-                      var data = await fetchDataFunction();
-                      cachedValues.Clear();
-                      cachedValues.AddRange(data);
-                      var cachePolicy = new CacheItemPolicy
-                      {
-                        AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(cacheTimeInSeconds)
-                      };
-                      _cache.Set(cacheKey, cachedValues, cachePolicy);
-                      _lastUpdateTime = DateTime.Now;
-                    }).Wait();
-                  }
-                }
-                return new CachedData&lt;T&gt;()
-                {
-                  Data = cachedValues,
-                  LastUpdateTime = _lastUpdateTime,
-                  NextUpdateTime = _lastUpdateTime.AddSeconds(cacheTimeInSeconds)
-                };
-              }
+                  // SystemValuesCache Class Section
+                  .card.mb-4.border-info
+                    .card-header.bg-info.text-white
+                      h3.card-title.mb-0
+                        i.bi.bi-gear-wide-connected.me-2
+                        | SystemValuesCache Class
+                    .card-body
+                      p.
+                        This static class acts as the core of the caching mechanism. It initializes a MemoryCache
+                        instance and provides the GetCachedData method to fetch and manage cached data. It also uses
+                        a synchronization lock to ensure thread safety.
 
-      h2 Conclusion
-      p.
-        The System Cached List is one approach to enhance the performance of web applications by
-        managing and serving cached data. It combines the efficiency of memory caching with smart update
-        strategies, ensuring users receive quick responses while reducing the load on backend resources.
-        While it offers numerous advantages, it's crucial to carefully consider cache expiration times
-        and handle potential complexities to reap the full benefits of this caching technique.
+                      .alert.alert-info.mb-4
+                        h5.alert-heading
+                          i.bi.bi-lightbulb.me-2
+                          | FetchDataFunction Delegate
+                        p.mb-2.
+                          The GetCachedData method's fetchDataFunction argument plays a crucial role in the functionality.
+                          It is a delegate that defines a function responsible for retrieving the data that will be cached.
+                        p.mb-0.
+                          This callback function performs the actual data retrieval from any data source (database, web API, file)
+                          and is asynchronous (Task&lt;List&lt;T&gt;&gt;), allowing non-blocking execution.
+
+                      pre.language-csharp
+                        code.language-csharp.
+                          public static CachedData&lt;T&gt; GetCachedData&lt;T&gt;(
+                            string cacheKey,
+                            Func&lt;Task&lt;List&lt;T&gt;&gt;&gt; fetchDataFunction,
+                            double cacheTimeInSeconds)
+                          {
+                            List&lt;T&gt; cachedValues = _cache.Get(cacheKey) as List&lt;T&gt; ?? new List&lt;T&gt;();
+                            if (cachedValues.Count == 0 || DateTime.Now - _lastUpdateTime > TimeSpan.FromSeconds(cacheTimeInSeconds))
+                            {
+                              lock (LockObject)
+                              {
+                                Task.Run(async () =>
+                                {
+                                  var data = await fetchDataFunction();
+                                  cachedValues.Clear();
+                                  cachedValues.AddRange(data);
+                                  var cachePolicy = new CacheItemPolicy
+                                  {
+                                    AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(cacheTimeInSeconds)
+                                  };
+                                  _cache.Set(cacheKey, cachedValues, cachePolicy);
+                                  _lastUpdateTime = DateTime.Now;
+                                }).Wait();
+                              }
+                            }
+                            return new CachedData&lt;T&gt;()
+                            {
+                              Data = cachedValues,
+                              LastUpdateTime = _lastUpdateTime,
+                              NextUpdateTime = _lastUpdateTime.AddSeconds(cacheTimeInSeconds)
+                            };
+                          }
+
+            // Conclusion Section
+            section#conclusion.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-success.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-check-circle.me-2
+                    | Conclusion
+                .card-body
+                  p.lead.
+                    The System Cached List provides an effective approach to enhance web application performance
+                    by intelligently managing and serving cached data.
+
+                  .row.g-4.mb-4
+                    .col-md-6
+                      .card.h-100.bg-light
+                        .card-body.text-center
+                          i.bi.bi-speedometer2.display-6.text-success.mb-3
+                          h5.card-title Performance Enhancement
+                          p.card-text.
+                            Combines memory caching efficiency with smart update strategies for optimal performance.
+
+                    .col-md-6
+                      .card.h-100.bg-light
+                        .card-body.text-center
+                          i.bi.bi-shield-check.display-6.text-primary.mb-3
+                          h5.card-title Reduced Backend Load
+                          p.card-text.
+                            Ensures users receive quick responses while significantly reducing backend resource usage.
+
+                  .alert.alert-warning
+                    h5.alert-heading
+                      i.bi.bi-exclamation-triangle.me-2
+                      | Implementation Considerations
+                    p.mb-0.
+                      While offering numerous advantages, it's crucial to carefully consider cache expiration times
+                      and handle potential complexities to reap the full benefits of this caching technique.
+                      Proper configuration and monitoring are essential for optimal results.
 

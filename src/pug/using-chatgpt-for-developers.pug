@@ -1,251 +1,342 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Using ChatGPT for C# Development | Mark Hazleton'
+  - var pageDescription = 'Unlock the potential of ChatGPT for C# development with Mark Hazleton. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT.'
+  - var pageKeywords = 'ChatGPT, C# development, AI tools, code quality, developer productivity, Mark Hazleton, GitHub Copilot, software engineering, OpenAI'
+  - var pageCanonical = 'https://markhazleton.com/using-chatgpt-for-developers.html'
+  - var pageAuthor = 'Mark Hazleton'
+  - var publishedDate = '2023-04-15'
+  - var modifiedDate = '2025-05-30'
+  - var estimatedReadTime = '10'
 
 block pagehead
-  title Using ChatGPT for C# Development
-  meta(name='description', content='Unlock the potential of ChatGPT for C# development with Mark Hazleton. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/using-chatgpt-for-developers.html')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content=pageAuthor)
+  meta(name='article:published_time', content=publishedDate)
+  meta(name='article:modified_time', content=modifiedDate)
+  meta(name='article:author', content=pageAuthor)
+  meta(name='article:section', content='AI & Software Development')
+  meta(name='article:tag', content='ChatGPT, C#, AI, Developer Productivity, Software Engineering')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='article')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazleton-ChatGPT-Dev.png')
+  meta(property='og:image:alt', content='Mark Hazleton using ChatGPT for C# development')
+  meta(property='article:author', content=pageAuthor)
+  meta(property='article:published_time', content=publishedDate)
+  meta(property='article:modified_time', content=modifiedDate)
+  meta(property='article:section', content='AI & Software Development')
+  meta(property='article:tag', content='ChatGPT')
+  meta(property='article:tag', content='C#')
+  meta(property='article:tag', content='AI')
+  meta(property='article:tag', content='Developer Productivity')
+
+block twitter_overrides
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazleton-ChatGPT-Dev.png')
+  meta(name='twitter:image:alt', content='Mark Hazleton using ChatGPT for C# development')
+  meta(name='twitter:label1', content='Reading time')
+  meta(name='twitter:data1', content=estimatedReadTime + ' min read')
+  meta(name='twitter:label2', content='Written by')
+  meta(name='twitter:data2', content=pageAuthor)
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "url": "#{pageCanonical}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://markhazleton.com/assets/img/MarkHazleton-ChatGPT-Dev.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "Mark Hazleton using ChatGPT for C# development"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "jobTitle": "Solutions Architect",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://www.youtube.com/@markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com"
+      },
+      "datePublished": "#{publishedDate}",
+      "dateModified": "#{modifiedDate}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "#{pageCanonical}"
+      },
+      "articleSection": "AI & Software Development",
+      "keywords": "#{pageKeywords}",
+      "wordCount": 1800,
+      "timeRequired": "PT#{estimatedReadTime}M",
+      "about": {
+        "@type": "Thing",
+        "name": "ChatGPT for C# Development",
+        "description": "How ChatGPT accelerates C# development and improves code quality."
+      }
+    }
 
 block layout-content
+  // Breadcrumb Navigation
+  .container.mt-4
+    nav(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles.html') Articles
+        li.breadcrumb-item.active(aria-current='page') Using ChatGPT for C# Development
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 Using ChatGPT for C# Development
-      .subheading.mb-3 Writing C# Code with ChatGPT
-      p.lead.
-        I have another post on creating a Trivia Application using ChatGPT.
-        It is an ongoing story on how I use ChatGPT to accelerate the development of
-        an ASP.Net C# web-based trivia application.
-        <a href="/trivia-spark-development.html" target="_self">Trivia Spark:Igniting Creativity With ChatGPT</a>
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-chat-dots.me-3
+            | Using ChatGPT for C# Development
+          h2.h3.mb-4 Accelerate Your Coding with AI
+          p.lead.mb-5
+            | Discover how ChatGPT can help you write, refactor, and document C# code faster and more effectively. Explore real-world examples and best practices for integrating AI into your workflow.
 
-      h2.mb-0 What is ChatGPT
-      p.
-        ChatGPT (short for Chat Generative Pre-trained Transformer) is a natural language processing (NLP) model
-        developed by <a href="https://openai.com" target="_blank">OpenAI</a>. OpenAI is an artificial
-        intelligence (AI) research laboratory. It is designed to be able to generate human-like responses to text
-        input and has been trained on a large dataset of text in order to learn the patterns and nuances of human language.
-      p.
-        The language model can answer questions, and assist you with tasks such as composing emails, essays, and code.
-        Usage is currently open to the public free of charge because ChatGPT is in its research and feedback-collection phase.
-      p.
-        While some of the underlying technology behind ChatGPT is open source, the specific model and its trained parameters
-        are likely proprietary to OpenAI.  Currently, ChatGPT is only available as a cloud-based service and is not
-        available for installation on an internal network.
-      p.
-        ChatGPT learns through a process called training, where it is fed a large dataset of text and uses this data
-        to learn patterns and relationships in language. It then uses this knowledge to generate responses to new text input.
-      p.
-        For more information on ChatGPT, see the <a href="https://openai.com/blog/chatting-with-ai/" target="_blank">OpenAI Blog</a>.
-        or just watch the video below.
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Article metadata
+          .article-meta.text-muted.mb-4.pb-3.border-bottom
+            .row.align-items-center
+              .col-md-8
+                .d-flex.flex-wrap.gap-3
+                  .d-flex.align-items-center
+                    i.bi.bi-calendar3.me-2
+                    time(datetime=modifiedDate) May 30, 2025
+                  .d-flex.align-items-center
+                    i.bi.bi-person.me-2
+                    span by Mark Hazleton
+                  .d-flex.align-items-center
+                    i.bi.bi-clock.me-2
+                    span= estimatedReadTime + ' min read'
+              .col-md-4.text-md-end
+                .d-flex.flex-wrap.gap-2.justify-content-md-end
+                  span.badge.bg-primary AI
+                  span.badge.bg-secondary C#
+                  span.badge.bg-success Productivity
 
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/JTxsNm9IdYU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          // Table of Contents
+          nav#table-of-contents.mb-5(aria-label='Table of Contents')
+            .card
+              .card-header.bg-primary.text-white
+                h3.card-title.mb-0
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                ol.list-group.list-group-numbered.list-group-flush
+                  li.list-group-item
+                    a.text-decoration-none(href='#introduction') Introduction
+                  li.list-group-item
+                    a.text-decoration-none(href='#what-is-chatgpt') What is ChatGPT
+                  li.list-group-item
+                    a.text-decoration-none(href='#developer-perspective') ChatGPT for C# Developers
+                  li.list-group-item
+                    a.text-decoration-none(href='#examples') Real-World Examples
+                  li.list-group-item
+                    a.text-decoration-none(href='#conclusion') Conclusion
 
-      h2.mb-1  ChatGPT for C# Developers
-      p.
-        There has been much chatter about the new Artificial intelligence tool and how it will impact teachers, artists, writers, and
-        web search.  For this post, I wanted to look at the tool from a developer's perspective.
-      p.
-        ChatGPT can be used to improve developer productivity.
-        It can be used to answer technical questions and provide information about the development process.
-      p.
-        Not every response from ChatGPT is correct or even runnable.  It does however provide another tool for the developer
-        to use to improve their productivity.  Along with tools like GitHub Co-Pilot and Stack Overflow, developers are now
-        to be more productive.
-      dl
-        dt.col-sm-12.h3 Explaining existing code blocks
-        dd.col-sm-12
-          p.
-            One of the most helpful ways I've used ChatGPT is to ask it to explain code that I don't fully understand.
-            This can be especially useful when working with code written by someone else,
-            or when dealing with particularly convoluted code.
-            Here's an example of how ChatGPT can explain some C# code:
-          pre.language-csharp
-            code.language-csharp.
-              // Input:
-              // Can you explain this C# code to me?
-              public class MyClass
-              {
-                public int Property { get; set; }
-              }
-              // Output:
-              // This code defines a class called "MyClass" with a single property called "Property".
-              // The property is of type "int" and is publicly accessible using the "get" and "set" accessors.
+          // Introduction
+          section#introduction.mb-5
+            p.lead
+              | ChatGPT is transforming how developers write and improve code. This article explores how you can use ChatGPT to accelerate C# development, improve code quality, and boost productivity.
+            .alert.alert-info.d-flex.align-items-center.mb-4
+              i.bi.bi-lightbulb.fs-4.me-3
+              div
+                h6.alert-heading.mb-1 Related Article
+                p.mb-0
+                  | See also:
+                  a.ms-2.fw-bold(href='/trivia-spark-development.html', target='_self') Trivia Spark: Igniting Creativity With ChatGPT
 
-        dt.col-sm-12.h3 Improve existing code
-        dd.col-sm-12
-          p.
-            Another useful feature of ChatGPT is its ability to help you improve existing code.
-            Simply describe what you want to accomplish, and ChatGPT will provide you with instructions on
-            how to do it, including the modified code. For example:
+          // What is ChatGPT
+          section#what-is-chatgpt.mb-5
+            h2.h3.mb-4.text-primary What is ChatGPT?
+            p
+              | ChatGPT (short for Chat Generative Pre-trained Transformer) is a natural language processing (NLP) model developed by
+              a(href='https://openai.com', target='_blank', rel='noopener') OpenAI
+              | . It generates human-like responses to text input and has been trained on a large dataset to learn the patterns and nuances of language.
+            p
+              | The model can answer questions, assist with tasks like composing emails, essays, and code. It is currently open to the public for research and feedback collection.
+            p
+              | While some technology behind ChatGPT is open source, the specific model and its parameters are proprietary. ChatGPT is only available as a cloud-based service.
+            p
+              | ChatGPT learns through training on large datasets, enabling it to generate responses to new text input.
+            p
+              | For more information, see the
+              a(href='https://openai.com/blog/chatting-with-ai/', target='_blank', rel='noopener') OpenAI Blog
+              |  or watch the video below.
+            .ratio.ratio-16x9.mb-4
+              iframe(src='https://www.youtube.com/embed/JTxsNm9IdYU' title='What is ChatGPT?' allowfullscreen)
 
-          include modules/improve-exising-code.html
+          // ChatGPT for C# Developers
+          section#developer-perspective.mb-5
+            h2.h3.mb-4.text-primary ChatGPT for C# Developers
+            p
+              | ChatGPT can be used to answer technical questions, provide information about the development process, and improve productivity. It is a valuable tool alongside GitHub Copilot and Stack Overflow.
+            p
+              | Not every response from ChatGPT is correct or runnable, but it provides another tool for developers to improve their workflow.
 
-          p.
-            This refactored version includes:
-          ul
-            li Braces around all of the code blocks to make the structure of the code more explicit
-            li Variable names that are more descriptive of their purpose
-            li White space to separate logical blocks of code
-          p.
-            The refactored version is more readable and maintainable for future developers.
+          // Real-World Examples
+          section#examples.mb-5
+            h2.h3.mb-4.text-primary Real-World Examples
+            dl
+              dt.h4.mb-2 Explaining Existing Code Blocks
+              dd.mb-4
+                p
+                  | ChatGPT can explain code you don't fully understand. This is especially useful for legacy or complex code.
+                pre.language-csharp
+                  code.language-csharp.
+                    // Input:
+                    // Can you explain this C# code to me?
+                    public class MyClass
+                    {
+                      public int Property { get; set; }
+                    }
+                    // Output:
+                    // This code defines a class called "MyClass" with a single property called "Property".
+                    // The property is of type "int" and is publicly accessible using the "get" and "set" accessors.
 
+              dt.h4.mb-2 Improving Existing Code
+              dd.mb-4
+                p
+                  | ChatGPT can help you improve code by suggesting modifications and refactoring for clarity and maintainability.
+                include modules/improve-exising-code.html
+                p.mt-2
+                  | The refactored version includes clearer variable names, explicit code blocks, and improved readability.
 
-        dt.col-sm-12.h3 Rewriting code for style
-        dd.col-sm-12
-          p.
-            It can be frustrating to work with code that doesn't follow the usual conventions and standards.
-            It can be especially challenging when the code was written by a junior C# developer who may be unfamiliar
-            with the best practices and conventions of the language.
-          p.
-            Fortunately, ChatGPT can help you rewrite code to follow the correct style and conventions.
-            Simply describe what you want to accomplish and ChatGPT will provide you with the updated code,
-            along with explanations for the changes it made.
-          p.
-            Here's an example of how ChatGPT can help you rewrite code to follow the correct style:
-          pre.language-csharp
-            code.language-csharp.
-              // Input:
-              // Can you help me rewrite this code to follow C# naming conventions?
-              // This code defines a class with an improperly named property and method
-              public class MyClass
-              {
-                public int Prop { get; set; }
-                public void Do_Something()
-                {
-                  // Method body
-                }
-              }
+              dt.h4.mb-2 Rewriting Code for Style
+              dd.mb-4
+                p
+                  | ChatGPT can help rewrite code to follow C# conventions and best practices.
+                pre.language-csharp
+                  code.language-csharp.
+                    // Input:
+                    // Can you help me rewrite this code to follow C# naming conventions?
+                    public class MyClass
+                    {
+                      public int Prop { get; set; }
+                      public void Do_Something()
+                      {
+                        // Method body
+                      }
+                    }
+                    // Output:
+                    public class MyClass
+                    {
+                      public int Prop { get; set; }
+                      public void DoSomething()
+                      {
+                        // Method body
+                      }
+                    }
+                p.mt-2
+                  | ChatGPT renames properties and methods to follow C# naming conventions, improving code style and maintainability.
 
-              // Output:
-              // This code defines a class with a properly named property and method
-              public class MyClass
-              {
-                public int Prop { get; set; }
+              dt.h4.mb-2 Rewriting Code with Idiomatic Constructs
+              dd.mb-4
+                p
+                  | ChatGPT can refactor code to use idiomatic C# constructs, making it more readable and efficient.
+                pre.language-csharp
+                  code.language-csharp.
+                    // Input:
+                    // Can you help me rewrite this code to use C# idiomatic constructs?
+                    public int SumArray(int[] array)
+                    {
+                      int sum = 0;
+                      for (int i = 0; i < array.Length; i++)
+                      {
+                        sum += array[i];
+                      }
+                      return sum;
+                    }
+                    // Output:
+                    public int SumArray(int[] array)
+                    {
+                      int sum = 0;
+                      foreach (int element in array)
+                      {
+                        sum += element;
+                      }
+                      return sum;
+                    }
+                p.mt-2
+                  | Using idiomatic constructs makes code more concise and easier to understand.
 
-                public void DoSomething()
-                {
-                  // Method body
-                }
-              }
-          p.
-            As you can see, ChatGPT correctly renamed the Prop property to follow the camelCase naming convention
-            and renamed the Do_Something method to remove the underscore and use PascalCase instead.
-          p.
-            By using ChatGPT to rewrite code to follow the correct style, you can save time and effort and improve
-            the readability and maintainability of your code.
+              dt.h4.mb-2 Simplifying Existing Code
+              dd.mb-4
+                p
+                  | ChatGPT can suggest alternative implementations that are more efficient or easier to understand.
+                include modules/simplifying-existing-code.html
 
-        dt.col-sm-12.h3 Rewriting code with idiomatic constructs
-        dd.col-sm-12
-          p.
-            ChatGPT can be particularly helpful when reviewing and refactoring code written
-            by inexperienced C# developers. One of the challenges of working with existing code is
-            that it may not always follow the best practices and conventions of the language.
-            This can make the code more difficult to read and maintain, and it can take more time
-            and effort to review and refactor it.
-          p.
-            You can use ChatGPT to rewrite code using idiomatic constructs to ensure that your code follows
-            the best practices and conventions of C#, making it more readable and maintainable.
-          p.
-            Here's an example of how ChatGPT can help you rewrite code using idiomatic constructs:
+              dt.h4.mb-2 Writing Test Cases
+              dd.mb-4
+                p
+                  | ChatGPT can generate test cases for your C# code, saving time and improving coverage.
+                include modules/writing-test-cases.html
 
-          pre.language-csharp
-            code.language-csharp.
-              // Input:
-              // Can you help me rewrite this code to use C# idiomatic constructs?
+              dt.h4.mb-2 Writing Documentation
+              dd.mb-4
+                p
+                  | ChatGPT can generate documentation for your code using XML comments and summaries.
+                include modules/writing-documentation.html
 
-              // This code defines a function that uses a non-idiomatic loop to sum the elements of an array
-              public int SumArray(int[] array)
-              {
-                int sum = 0;
-                for (int i = 0; i < array.Length; i++)
-                {
-                  sum += array[i];
-                }
-                return sum;
-              }
+              dt.h4.mb-2 Scaffolding Code
+              dd.mb-4
+                p
+                  | ChatGPT can scaffold code structures or templates to speed up development.
+                include modules/scafolding-code.html
+                p.mt-2
+                  | The generated code is concise and ready for customization and refactoring.
+                p.mt-2
+                  | Example: Limiting concurrent REST calls with SemaphoreSlim and Task.WhenAll.
+                include modules/generate-code.pug
 
-              // Output:
-              // This code defines a function that uses an idiomatic loop to sum the elements of an array
-              public int SumArray(int[] array)
-              {
-                int sum = 0;
-                foreach (int element in array)
-                {
-                  sum += element;
-                }
-                return sum;
-              }
-          p.
-            In this example, ChatGPT changed the loop from a traditional for loop to a for each loop,
-            which is more idiomatic in C#. This not only makes the code more readable but makes
-            it more concise and easier to understand.
-          p.
-            By using ChatGPT to rewrite code using idiomatic constructs, you can ensure that your code
-            follows best practices and is easier to read and maintain. This can save you hours of work
-            every day, and it can help you stay competitive with other developers who are using AI
-            effectively to improve their efficiency.
-
-        dt.col-sm-12.h3 Simplifying existing code
-        dd.col-sm-12
-          p.
-            ChatGPT can be used to simplify C# code by suggesting alternative implementations
-            that are more efficient or easier to understand.
-            You could prompt ChatGPT with the following:
-
-          include modules/simplifying-existing-code.html
-
-          p.
-            This is a way that ChatGPT can help you to improve the efficiency and readability of your code.
-
-        dt.col-sm-12.h3 Writing test cases
-        dd.col-sm-12
-          p.
-            ChatGPT can be used to generate test cases for C# code. For example, suppose you want to generate
-            a test case for a C# method that calculates the average of a list of integers. You could prompt
-            ChatGPT with the following:
-
-          include modules/writing-test-cases.html
-
-        dt.col-sm-12.h3 Writing documentation
-        dd.col-sm-12
-          p.
-            ChatGPT can be used to generate documentation for existing C# code by
-            prompting it with descriptions of the code and its intended behavior.
-
-          include modules/writing-documentation.html
-
-          p.
-            This documentation uses C#'s XML documentation comments to provide a
-            summary of the method's behavior and describe its input and output parameters.
-
-        dt.col-sm-12.h3 Scaffolding code
-        dd.col-sm-12
-          p.
-            Scaffolding is the process of generating basic code structures or templates that can be customized
-            and built upon by a developer. ChatGPT can be used for scaffolding code to speed up development by
-            generating code snippets or templates based on a developer's prompts.
-          p.
-            For example, suppose you are building a C# application that needs to make HTTP requests to a REST API.
-            You could use ChatGPT to generate the basic structure of a class that handles the HTTP requests,
-            as well as methods for making common types of requests such as GET, POST, PUT, and DELETE.
-          p.
-            You give the prompt: "Write a C# class that can be used to make HTTP requests to a REST API. The class should
-              include methods for making GET and POST requests." and get the following output:
-
-          include modules/scafolding-code.html
-
-          p.
-            The generated code is concise and easy to understand, and it would likely take a C# developer
-            much longer to write it manually.
-            By no means is the code done, but it is ready to start refactoring and customizing to fit your needs.
-            This can save you hours of work every day, and it can help you stay competitive with other developers
-            who are using AI effectively to improve their efficiency.
-
-          p.
-            Here is another prompt to ChatGPT:
-          p.
-            "as a c# developer write a method to make 1000 REST calls but no more than 10 concurrent requests at a time.
-            Use SemaphoreSlim to limit the number of concurrent requests.
-            Use Task.WhenAll to log a message when all calls are complete"  and the output is:
-
-          include modules/generate-code.pug
+          // Conclusion
+          section#conclusion.mb-5
+            h2.h3.mb-4.text-primary Conclusion
+            .key-takeaway.mb-4
+              h4.h5.mb-3
+                i.bi.bi-lightbulb.me-2
+                | Key Takeaways
+              ul.list-unstyled
+                li.mb-2
+                  | ChatGPT accelerates C# development and improves code quality.
+                li.mb-2
+                  | Combining ChatGPT and GitHub Copilot enhances productivity.
+                li.mb-2
+                  | AI tools are essential for modern software engineering.
+            p
+              | ChatGPT is a valuable partner for developers, enabling faster prototyping, better code, and continuous learning. As AI tools evolve, their role in software development will only grow.
+            p
+              | For more on AI-assisted development, see:
+              a(href='/trivia-spark-development.html', target='_self') Trivia Spark: Igniting Creativity With ChatGPT

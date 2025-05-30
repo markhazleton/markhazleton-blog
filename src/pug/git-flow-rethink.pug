@@ -1,182 +1,357 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Git Flow Rethink: Reevaluating Continuous in CI/CD'
+  - var pageDescription = 'Rethinking Git Flow branching for modern DevOps. Explore single-branch strategies, CI/CD integration, and how to evolve from traditional Git Flow to streamlined development workflows.'
+  - var pageKeywords = 'Git Flow, DevOps, CI/CD, Continuous Integration, Branch Strategy, Single Branch, Azure DevOps, GitHub, GitLab, Software Development, Mark Hazleton'
+  - var pageCanonical = 'https://markhazleton.com/git-flow-rethink.html'
 
 block pagehead
-  title Mark Hazleton - Git Flow Rethink
-  meta(name='description', content='Mark Hazleton - Git Flow Rethink')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/git-flow-rethink.html')
+  title= pageTitle + ' | Mark Hazleton'
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:type', content='article')
+
+block twitter_overrides
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
 
 block layout-content
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-git.me-3
+            | Git Flow Rethink
+          h2.h3.mb-4 Reevaluating the Meaning of Continuous in CI/CD
+          p.lead.mb-5 Evolving from traditional Git Flow to modern DevOps practices with single-branch strategies and automated tooling for streamlined development workflows.
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 Git Flow Rethink
-      h2.subheading.mb-3 Revaluating the meaning of Continuous in CI/CD
-      p.lead.
-        As a developer, I have spent years embracing the Git Flow branching methodology.
-        It has served me well, providing structure and clarity when working with version control and
-        collaborating with others.
-        Moreover, it has served as an excellent model for effective communication among developers.
-        However, the world of software development and DevOps has been evolving
-        at an unprecedented pace over the past few years.
-      p.
-        The challenge I face is how to adapt and evolve my practices to leverage the efficiencies
-        offered by modern DevOps tools.
-        Instead of discarding the tried-and-true principles and starting anew,
-        what if we could leverage the wisdom gained from years of employing Git Flow
-        and apply it to harness the capabilities of today's DevOps tools?
+  // Main Article
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            .article-meta.text-muted.mb-4
+              time(datetime='2025-05-30') May 30, 2025
+              span.mx-2 •
+              span 8 min read
+              span.mx-2 •
+              span by Mark Hazleton
 
-      div.card
-        div.card-header
-          h3.mb-3 Git Flow Recap
-        div.card-body
-          p.
-            The Git Flow branching methodology, created by Vincent Driessen and popularized through his blog post
-            titled  <a href='https://nvie.com/posts/a-successful-git-branching-model/' target="_blank">"A successful Git branching model"</a>,
-            has been widely adopted by software development shops
-            as the formal way to manage changes. Its structured approach provided a clear workflow for version control
-            and collaboration. It has served me well as my go-to branching model for many years.  But as we embrace
-            the power of continuous integration and deployment, some of the aspects of Git Flow seem to introduce unnecessary
-            ceremony into the development process.
-          p.
-            In a recent update to the original blog post, Vincent Driessen states:
-          blockquote If your team is doing continuous delivery of software, I would suggest adopting a much simpler workflow instead of trying to shoehorn git-flow into your team.
+          // Table of Contents
+          nav.mb-5(aria-label='Table of Contents')
+            .card.shadow-sm
+              .card-header.bg-primary.text-white
+                h3.mb-0
+                  i.bi.bi-list-ul.me-2
+                  | Contents
+              .card-body
+                ol.list-group.list-group-numbered.list-group-flush
+                  li.list-group-item
+                    a.text-decoration-none(href='#introduction') Introduction & Evolution
+                  li.list-group-item
+                    a.text-decoration-none(href='#git-flow-recap') Git Flow Recap
+                  li.list-group-item
+                    a.text-decoration-none(href='#rethinking') Rethinking Git Flow
+                  li.list-group-item
+                    a.text-decoration-none(href='#challenges') Git Flow Challenges
+                  li.list-group-item
+                    a.text-decoration-none(href='#single-branch') Single Permanent Branch Strategy
+                  li.list-group-item
+                    a.text-decoration-none(href='#modern-tools') Modern DevOps Tooling
+                  li.list-group-item
+                    a.text-decoration-none(href='#conclusion') Conclusion
 
-      h2.mb-3 Rethinking Git Flow
-      p.
-        I propose that we take a fresh perspective on the Git Flow branching strategy.
-        Let's explore ways to enhance our processes without forsaking the strong foundation we've established.
-        As we observe the transformation of the software development landscape,
-        we need to acknowledge that the primary concerns that Git Flow addressed might not be as prevalent in today's context.
-        However, there is a clear path to adapting and evolving our practices to embrace the efficiencies
-        provided by modern DevOps tools.
-      p.
-        A pivotal shift in my approach has been the embrace of continuous integration and deployment (CI/CD) practices.
-        I have discovered that by capitalizing on the potential of CI/CD,
-        I can streamline workflows while upholding the essential measures of quality assurance.
-        It's akin to a delicate balancing act: incorporating the strengths of Git Flow and seamlessly integrating
-        them with the capabilities of contemporary tooling.
-      p.
-        After using the model for years, I took a step back and had to ask if git-flow was the best branching model for my team.
-        Or was I following it because it was the way I had always done it?   In many projects, I found
-        that I did not need much of the ceremony of Git Flow. On my projects,
-        we did not have multiple teams working in the same
-        repository on features that spanned multiple iterations.
-        Web applications that continuously improve, did not need the
-        rigor or ability to quickly restore older product versions.
-      p.
-        After many discussions on the merits of Git Flow, particularly the use of permanent development
-        and main branches and branch creation for each release with a merge back into both develop and main branches
-        has created tasks that seem to add more form than substance.
-        The DevOps tooling does not support the Git Flow branching model out of the box, requiring manual intervention
-        and enforcement via processes and procedures.  This manual intervention can lead to inconsistencies.
-      dl
-        dt Branch Policies and Protection
-        dd
-          p.
-            In the Git Flow branching model, temporary branches such as release and hotfix branches
-            play a crucial role in managing specific features or addressing critical issues.
-            However, implementing branch policies on these temporary branches can pose challenges,
-            particularly in certain DevOps platforms like Azure DevOps.
-            The difficulty arises from the manual application of default
-            and comparing branch attributes
-            to each new branch, which can result in release and hotfix branches lacking the same level
-            of protection as permanent branches.
+          // Introduction Section
+          section#introduction.mb-5
+            h2.h3.mb-4
+              i.bi.bi-clock-history.me-2
+              | Introduction & Evolution
 
-        dt What is in Production?
-        dd
-          p.
-            One of the challenges with the traditional Git Flow branching model is determining what
-            exactly is in production by simply looking at the repository.
-            In Git Flow, temporary branches are often created for releases and hotfixes,
-            which are subsequently merged back into the development and main branches.
-            However, in many cases, the release or hotfix branch remains open after deployment,
-            allowing for quick fixes if necessary.
-            This practice can make it difficult to identify the exact state of the production environment
-            by examining the repository alone.
-          p.
-            The ambiguity surrounding what is in production becomes a concern,
-            particularly when trying to trace back specific changes or identify the codebase associated
-            with a particular release. Without clear indicators or references, developers
-            and team members may find it challenging to pinpoint the exact code deployed
-            in the production environment.
-            This lack of visibility can hinder troubleshooting efforts and make it harder to establish
-            a comprehensive understanding of the software's state.
+            p.lead As a developer with years of experience embracing Git Flow branching methodology, I've witnessed its value in providing structure and clarity for version control and team collaboration. However, the rapid evolution of software development and DevOps demands a fresh perspective.
 
-        dt False Sense of Security
-        dd
-          p.
-            The Git Flow branching model's reliance on two branches, develop and main,
-            can lead to a false sense of security.
-            In this model, any commit merged into the develop branch will become part
-            of main branch and production.
-            However, this means that the develop branch requires the same level of control
-            and scrutiny as the main branch.
-            Unfortunately, the develop branch often becomes a temporary workspace for ongoing development,
-            making it susceptible to inconsistencies and lax code quality controls.
-            Additionally, the lack of branch policies on temporary branches complicates
-            maintaining code integrity throughout the development process.
+            .alert.alert-info.mb-4
+              .d-flex.align-items-start
+                i.bi.bi-lightbulb.me-3.fs-4.text-info
+                div
+                  h5.alert-heading The Challenge
+                  p.mb-0 How do we adapt and evolve our practices to leverage modern DevOps efficiencies while preserving the wisdom gained from years of Git Flow experience?
 
-      h2.mb-3 A Single Permanent Branch
-      p.
-        In response to the limitations and challenges posed by Git Flow,
-        an alternative approach gaining momentum is the adoption of a single-branch strategy.
-        This approach involves using a single branch for all pull requests, streamlining the development process
-        and simplifying the codebase management.
-        But how can this single-branch approach overcome the weaknesses of Git Flow and ensure efficient
-        and controlled development?
-      p.
-        The answer lies in leveraging the power of modern DevOps tooling.
-        The tooling available today provides robust features and automation capabilities that can
-        offset the manual processes and policies traditionally required in Git Flow.
-        Let's explore how these tools can address the weaknesses and enhance the efficiency
-        of the single-branch approach.
-      dl
-        dt Automated branch policies
-        dd
-          p.
-            DevOps platforms such as Azure DevOps, GitHub, and GitLab offer automated branch policies.
-            These policies can be easily configured to enforce code reviews, unit tests,
-            and other quality checks for every pull request.
-            By configuring these policies on your permanent branch,
-            developers can focus on coding while the tooling ensures the
-            necessary quality assurance measures are in place.
-        dt Continuous Integration and Deployment (CI/CD) pipelines
-        dd
-          p.
-            Modern CI/CD pipelines provide seamless integration with version control systems.
-            They can be configured to trigger automated builds, tests, and deployments
-            for every pull request and merge into a single branch.
-            This ensures that code changes are continuously integrated, validated, and deployed to development
-            , staging, and ultimately production environments, enabling rapid feedback loops and early identification
-            of issues.
-        dt Versioning
-        dd
-          p.
-            You can configure your project to increment the version upon every build.
-            This means you can
-            look at the assemblies and easily know when they were built and what version they are.
-            This is a huge
-            benefit when trying to determine what is in production.
-            With a single-branch approach, the tooling can facilitate automated versioning, tagging,
-            and release creation based on specific commits within the single branch.
-            This simplifies the process of identifying what is in production and enables teams to track
-            and manage releases more effectively.
-      p.
-        By embracing the single-branch approach and utilizing the advanced tooling available,
-        we can optimize our development processes and mitigate the
-        weaknesses associated with Git Flow. The automated branch policies, CI/CD pipelines,
-        and release management features empower teams to enforce quality controls,
-        ensure continuous integration and deployment, and streamline the identification of code in production.
-      p.
-        The reliance on manual processes and policies in Git Flow can be
-        significantly reduced.
-        This enables developers to focus on delivering value more rapidly without sacrificing code quality.
-        By leveraging the advancements in DevOps tooling, the single-branch approach becomes a powerful
-        strategy for efficient and controlled software development, ultimately leading to
-        improved productivity and software delivery.
-      p.
-        This rethink of the Git Flow branching model opens up new possibilities for teams to innovate, collaborate,
-        and accelerate their development processes. It liberates developers from unnecessary complexities and allows
-        them to concentrate on what truly matters—building great software.
+            p The challenge isn't about discarding proven principles but rather leveraging accumulated wisdom to harness today's DevOps capabilities. Instead of starting anew, we can build upon our foundation to create more efficient workflows.
+
+          // Git Flow Recap Section
+          section#git-flow-recap.mb-5
+            h2.h3.mb-4
+              i.bi.bi-diagram-2.me-2
+              | Git Flow Recap
+
+            .card.border-primary.mb-4
+              .card-header.bg-primary.text-white
+                h4.mb-0
+                  i.bi.bi-info-circle.me-2
+                  | Git Flow Background
+              .card-body
+                p The Git Flow branching methodology, created by Vincent Driessen in his influential blog post
+                  a.text-decoration-none(href='https://nvie.com/posts/a-successful-git-branching-model/' target='_blank' rel='noopener noreferrer')
+                    | "A successful Git branching model"
+                    i.bi.bi-box-arrow-up-ne.ms-1
+                  | , has been widely adopted as the formal approach to managing code changes.
+
+                p Its structured workflow provided clear version control and collaboration guidelines, serving as my go-to branching model for many years. However, as we embrace continuous integration and deployment, some Git Flow aspects introduce unnecessary ceremony.
+
+                .alert.alert-warning.border-left-warning.mt-3
+                  .d-flex.align-items-start
+                    i.bi.bi-exclamation-triangle.me-3.text-warning
+                    div
+                      h6.fw-bold Vincent Driessen's Update
+                      blockquote.mb-0.fst-italic "If your team is doing continuous delivery of software, I would suggest adopting a much simpler workflow instead of trying to shoehorn git-flow into your team."
+
+          // Rethinking Section
+          section#rethinking.mb-5
+            h2.h3.mb-4
+              i.bi.bi-arrows-angle-expand.me-2
+              | Rethinking Git Flow
+
+            p.mb-4 I propose taking a fresh perspective on Git Flow branching strategy. Let's explore enhancing our processes without forsaking our established foundation.
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h5.mb-0
+                      i.bi.bi-check-circle.me-2
+                      | What's Working
+                  .card-body
+                    ul.mb-0
+                      li Strong foundation and structure
+                      li Clear communication patterns
+                      li Team collaboration guidelines
+                      li Quality assurance measures
+                      li Version control clarity
+
+              .col-md-6
+                .card.border-warning.h-100
+                  .card-header.bg-warning.text-white
+                    h5.mb-0
+                      i.bi.bi-gear.me-2
+                      | What Needs Evolution
+                  .card-body
+                    ul.mb-0
+                      li Excessive ceremony for simple projects
+                      li Manual processes and policies
+                      li DevOps tooling misalignment
+                      li Inconsistent branch protection
+                      li Production visibility challenges
+
+            p A pivotal shift has been embracing continuous integration and deployment (CI/CD) practices. By leveraging CI/CD potential, we can streamline workflows while maintaining quality assurance—a delicate balance integrating Git Flow strengths with contemporary tooling capabilities.
+
+            .alert.alert-primary.border-primary
+              .d-flex.align-items-start
+                i.bi.bi-question-circle.me-3.fs-4.text-primary
+                div
+                  h5.alert-heading Key Questions
+                  p.mb-0 After years of using Git Flow, I had to ask: Is it the best branching model for my team, or am I following it simply because it's how I've always done it?
+
+          // Challenges Section
+          section#challenges.mb-5
+            h2.h3.mb-4
+              i.bi.bi-exclamation-triangle.me-2
+              | Git Flow Challenges in Modern DevOps
+
+            p.mb-4 Through experience and team discussions, several challenges with Git Flow have become apparent, particularly regarding permanent development and main branches with release merges:
+
+            .row.g-4.mb-4
+              .col-lg-4
+                .card.border-danger.h-100
+                  .card-header.bg-danger.text-white
+                    h5.mb-0
+                      i.bi.bi-shield-exclamation.me-2
+                      | Branch Policies
+                  .card-body
+                    .mb-3
+                      h6.fw-bold The Problem
+                      p.small.text-muted Temporary branch protection challenges
+                    p.small In Git Flow, temporary branches like release and hotfix branches are crucial, but implementing branch policies poses challenges in platforms like Azure DevOps.
+                    p.small.mb-0 Manual application of default branch attributes can result in temporary branches lacking the same protection as permanent branches.
+
+              .col-lg-4
+                .card.border-warning.h-100
+                  .card-header.bg-warning.text-white
+                    h5.mb-0
+                      i.bi.bi-search.me-2
+                      | Production Visibility
+                  .card-body
+                    .mb-3
+                      h6.fw-bold The Problem
+                      p.small.text-muted Determining production state
+                    p.small Traditional Git Flow makes it difficult to identify what's in production by examining the repository alone.
+                    p.small Temporary branches often remain open after deployment, creating ambiguity about the exact production environment state.
+                    p.small.mb-0 This hinders troubleshooting and comprehensive software state understanding.
+
+              .col-lg-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h5.mb-0
+                      i.bi.bi-shield-check.me-2
+                      | False Security
+                  .card-body
+                    .mb-3
+                      h6.fw-bold The Problem
+                      p.small.text-muted Develop branch vulnerabilities
+                    p.small Git Flow's reliance on develop and main branches creates false security. Any commit merged into develop eventually reaches main and production.
+                    p.small The develop branch requires the same control as main but often becomes a temporary workspace with inconsistent quality controls.
+                    p.small.mb-0 Lack of policies on temporary branches complicates code integrity maintenance.
+
+          // Single Branch Section
+          section#single-branch.mb-5
+            h2.h3.mb-4
+              i.bi.bi-arrow-down-up.me-2
+              | A Single Permanent Branch Strategy
+
+            .alert.alert-success.border-success.mb-4
+              .d-flex.align-items-start
+                i.bi.bi-lightbulb.me-3.fs-4.text-success
+                div
+                  h5.alert-heading The Solution
+                  p.mb-0 An alternative approach gaining momentum: adopting a single-branch strategy using one branch for all pull requests, streamlining development and simplifying codebase management.
+
+            p.mb-4 But how can this single-branch approach overcome Git Flow weaknesses while ensuring efficient, controlled development? The answer lies in leveraging modern DevOps tooling power.
+
+            p The tooling available today provides robust automation capabilities that offset the manual processes traditionally required in Git Flow. Let's explore how these tools address weaknesses and enhance single-branch efficiency.
+
+          // Modern Tools Section
+          section#modern-tools.mb-5
+            h2.h3.mb-4
+              i.bi.bi-tools.me-2
+              | Modern DevOps Tooling Advantages
+
+            .row.g-4.mb-4
+              .col-md-4
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h5.mb-0
+                      i.bi.bi-shield-check.me-2
+                      | Automated Policies
+                  .card-body
+                    p.small DevOps platforms (Azure DevOps, GitHub, GitLab) offer automated branch policies.
+                    ul.small
+                      li Code review enforcement
+                      li Automated unit testing
+                      li Quality check integration
+                      li Pull request validation
+                    p.small.mb-0 Configure these on your permanent branch while developers focus on coding.
+
+              .col-md-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h5.mb-0
+                      i.bi.bi-arrow-repeat.me-2
+                      | CI/CD Pipelines
+                  .card-body
+                    p.small Modern CI/CD provides seamless version control integration with automated triggers.
+                    ul.small
+                      li Automated builds and tests
+                      li Multi-environment deployment
+                      li Rapid feedback loops
+                      li Early issue identification
+                    p.small.mb-0 Continuous integration, validation, and deployment from a single branch.
+
+              .col-md-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h5.mb-0
+                      i.bi.bi-tags.me-2
+                      | Smart Versioning
+                  .card-body
+                    p.small Configure automatic version incrementation on every build.
+                    ul.small
+                      li Assembly version tracking
+                      li Build timestamp identification
+                      li Production state clarity
+                      li Automated tagging and releases
+                    p.small.mb-0 Easily determine production contents and track releases effectively.
+
+            .card.border-success.mb-4
+              .card-header.bg-success.text-white
+                h4.mb-0
+                  i.bi.bi-trophy.me-2
+                  | Benefits of Modern Approach
+              .card-body
+                .row.g-3
+                  .col-md-6
+                    h6.fw-bold
+                      i.bi.bi-check-circle.me-2
+                      | Process Optimization
+                    ul.small
+                      li Automated quality controls
+                      li Reduced manual intervention
+                      li Streamlined workflows
+                      li Enhanced team productivity
+
+                  .col-md-6
+                    h6.fw-bold
+                      i.bi.bi-speedometer2.me-2
+                      | Development Speed
+                    ul.small
+                      li Faster value delivery
+                      li Maintained code quality
+                      li Simplified release management
+                      li Improved collaboration
+
+          // Conclusion Section
+          section#conclusion.mb-5
+            h2.h3.mb-4
+              i.bi.bi-check-circle.me-2
+              | Conclusion: Embracing Modern Development
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h5.mb-0
+                      i.bi.bi-award.me-2
+                      | Key Benefits
+                  .card-body
+                    ul.mb-0
+                      li Optimized development processes
+                      li Mitigated Git Flow weaknesses
+                      li Automated quality enforcement
+                      li Streamlined production visibility
+                      li Enhanced team productivity
+
+              .col-md-6
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h5.mb-0
+                      i.bi.bi-lightbulb.me-2
+                      | Innovation Opportunities
+                  .card-body
+                    ul.mb-0
+                      li Team innovation acceleration
+                      li Enhanced collaboration
+                      li Reduced complexity overhead
+                      li Focus on software quality
+                      li Rapid delivery capabilities
+
+            p.lead.text-center.mb-4 The single-branch approach, powered by modern DevOps tooling, becomes a powerful strategy for efficient, controlled software development.
+
+            .alert.alert-primary.border-primary
+              .d-flex.align-items-start
+                i.bi.bi-rocket.me-3.fs-4.text-primary
+                div
+                  h5.alert-heading Final Thoughts
+                  p.mb-2 This Git Flow rethink opens new possibilities for teams to innovate, collaborate, and accelerate development processes. It liberates developers from unnecessary complexities, allowing them to concentrate on what truly matters—building great software.
+                  p.mb-0 By embracing advancement in DevOps tooling, we can maintain the principles that made Git Flow successful while adapting to modern development realities.
 

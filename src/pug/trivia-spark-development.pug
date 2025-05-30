@@ -1,191 +1,313 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Trivia Spark: Igniting Creativity with ChatGPT | Mark Hazleton'
+  - var pageDescription = 'Discover how Trivia Spark leverages ChatGPT for rapid prototyping and creative development. Explore the journey, collaboration, and tools that power this innovative trivia app.'
+  - var pageKeywords = 'Trivia Spark, ChatGPT, AI collaboration, trivia app, rapid prototyping, Mark Hazleton, software development, GitHub Copilot, OpenAI, C#'
+  - var pageCanonical = 'https://markhazleton.com/trivia-spark-development.html'
+  - var pageAuthor = 'Mark Hazleton'
+  - var publishedDate = '2023-05-01'
+  - var modifiedDate = '2025-05-30'
+  - var estimatedReadTime = '8'
 
 block pagehead
-  title Mark Hazleton - Igniting Creativity with ChatGPT
-  meta(name='description', content='Mark Hazleton - Trivia Spark: Igniting Creativity with ChatGPT')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/trivia-spark-development.html')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content=pageAuthor)
+  meta(name='article:published_time', content=publishedDate)
+  meta(name='article:modified_time', content=modifiedDate)
+  meta(name='article:author', content=pageAuthor)
+  meta(name='article:section', content='AI & Software Development')
+  meta(name='article:tag', content='ChatGPT, Trivia, AI, Collaboration, Software Development')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='article')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazleton-ChatGPT-TriviaSparkMatch.png')
+  meta(property='og:image:alt', content='Trivia Spark app screenshot with ChatGPT collaboration')
+  meta(property='article:author', content=pageAuthor)
+  meta(property='article:published_time', content=publishedDate)
+  meta(property='article:modified_time', content=modifiedDate)
+  meta(property='article:section', content='AI & Software Development')
+  meta(property='article:tag', content='ChatGPT')
+  meta(property='article:tag', content='Trivia')
+  meta(property='article:tag', content='AI')
+  meta(property='article:tag', content='Collaboration')
+
+block twitter_overrides
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazleton-ChatGPT-TriviaSparkMatch.png')
+  meta(name='twitter:image:alt', content='Trivia Spark app screenshot with ChatGPT collaboration')
+  meta(name='twitter:label1', content='Reading time')
+  meta(name='twitter:data1', content=estimatedReadTime + ' min read')
+  meta(name='twitter:label2', content='Written by')
+  meta(name='twitter:data2', content=pageAuthor)
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "url": "#{pageCanonical}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://markhazleton.com/assets/img/MarkHazleton-ChatGPT-TriviaSparkMatch.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "Trivia Spark app screenshot with ChatGPT collaboration"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "jobTitle": "Solutions Architect",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://www.youtube.com/@markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com"
+      },
+      "datePublished": "#{publishedDate}",
+      "dateModified": "#{modifiedDate}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "#{pageCanonical}"
+      },
+      "articleSection": "AI & Software Development",
+      "keywords": "#{pageKeywords}",
+      "wordCount": 1200,
+      "timeRequired": "PT#{estimatedReadTime}M",
+      "about": {
+        "@type": "Thing",
+        "name": "Trivia Spark Application",
+        "description": "A trivia app developed with ChatGPT collaboration."
+      }
+    }
 
 block layout-content
+  // Breadcrumb Navigation
+  .container.mt-4
+    nav(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles.html') Articles
+        li.breadcrumb-item.active(aria-current='page') Trivia Spark
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 Trivia Spark:
-      .subheading.mb-3 Igniting Creativity with ChatGPT
-      p.lead.
-        Welcome to the kickoff of the Trivia Spark application!
-        Trivia Spark is my experiment in using ChatGPT to help me develop a trivia application.
-        My goal here is to document the collaboration with ChatGPT as the project develops.
-        I will be updating this page as the project progresses.
-      p.
-        You can follow along with the project on GitHub.
-      ul
-        li <a href="https://github.com/controlorigins/triviaspark">Trivia Spark GitHub Repositroy(old)</a>
-        li <a href="https://webspark.markhazleton.com/TriviaSpark">Trivia Spark Website </a>
-        li <a href="https://markhazleton.com/using-chatgpt-for-developers.html">Article - Using ChatGPT for devlopers</a>
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-lightning-charge.me-3
+            | Trivia Spark
+          h2.h3.mb-4 Igniting Creativity with ChatGPT
+          p.lead.mb-5
+            | Follow the journey of building a trivia app with the help of ChatGPT—rapid prototyping, creative problem solving, and AI-powered development.
 
-      img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-TriviaSparkMatch.png' alt='Trivia Spark Early Screenshot')
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Article metadata
+          .article-meta.text-muted.mb-4.pb-3.border-bottom
+            .row.align-items-center
+              .col-md-8
+                .d-flex.flex-wrap.gap-3
+                  .d-flex.align-items-center
+                    i.bi.bi-calendar3.me-2
+                    time(datetime=modifiedDate) May 30, 2025
+                  .d-flex.align-items-center
+                    i.bi.bi-person.me-2
+                    span by Mark Hazleton
+                  .d-flex.align-items-center
+                    i.bi.bi-clock.me-2
+                    span= estimatedReadTime + ' min read'
+              .col-md-4.text-md-end
+                .d-flex.flex-wrap.gap-2.justify-content-md-end
+                  span.badge.bg-primary AI
+                  span.badge.bg-secondary Trivia
+                  span.badge.bg-success Collaboration
 
-      dl
-        dt  Collaboration with ChatGPT (a.k.a. Chat)
-        dd
-          p.
-            The Trivia Spark application came about when I was working with open public APIs.
-            I found the Open Trivia database API and saw that it had an easy-to-use endpoint to get trivia questions.
-            I wanted to see how using the Open Trivia Db as a starting point, I could use Chat to help quickly build
-            an application to present trivia questions and show the result.
-          p.
-            Chat was able to provide suggestions and ideas for different approaches to
-            take when I got stuck on a particular problem. I would explain the issue by asking leading questions, and then
-            Chat would provide suggestions on how to resolve them.  Many times Chat would provide a code snippet.
-          p.
-            Chat was also able to help me speed up development by creating code snippets that I could use in the project.
-            This allowed me to spend less time on repetitive tasks and more time on more complex parts of the project.
-          p.
-            One of the most significant benefits of collaborating with Chat was the ability to quickly
-            prototype different ideas. I would come up with a concept and Chat would provide feedback
-            and help iterate on it until I had a working code.
+          // Table of Contents
+          nav#table-of-contents.mb-5(aria-label='Table of Contents')
+            .card
+              .card-header.bg-primary.text-white
+                h3.card-title.mb-0
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                ol.list-group.list-group-numbered.list-group-flush
+                  li.list-group-item
+                    a.text-decoration-none(href='#introduction') Introduction
+                  li.list-group-item
+                    a.text-decoration-none(href='#collaboration') Collaboration with ChatGPT
+                  li.list-group-item
+                    a.text-decoration-none(href='#trusted-advisor') Chat as Trusted Advisor
+                  li.list-group-item
+                    a.text-decoration-none(href='#copilot') ChatGPT vs GitHub Copilot
+                  li.list-group-item
+                    a.text-decoration-none(href='#screenshots') Chat In Action
+                  li.list-group-item
+                    a.text-decoration-none(href='#conclusion') Parting Thoughts
 
-        dt Chat As Trusted Advisor
-        dd
-          p.
-            In the development of Trivia Spark, Chat and I were able to work together to create a
-            successful prototype in a short amount of time. One example of a discussion was
-            around the concept of Match Mode and how to implement it in a flexible and maintainable way.
-          p.
-            At the start of the project, I was unsure about how to handle the different modes of play in the
-            Trivia Spark game. Chat suggested using an enum and a dictionary to map the enum values to different
-            implementations of the IMatchService interface. I was able to quickly implement this approach and it
-            provided a great foundation for the project moving forward.
-          p.
-            In looking at the Match Mode (type of play) I was trying to figure out how to best handle the creation and management
-            of a Match Model instance. Chat suggested using a lazy loading approach with error checking to ensure
-            that the model was properly initialized before use.
-          p.
-            Throughout the development process, we were able to quickly iterate on different approaches to tackle
-            various challenges. Chat's expertise in software development and ability to provide clear and concise solutions
-            proved invaluable to the project's success.
-          p.
-            Overall, the collaboration highlights the benefits of working with experts in the field
-            to accelerate development and create successful software projects.  Unlike other developers,
-            I have collaborated with,
-            Chat was able to take criticism and make adjustments without getting snippy.
+          // Introduction
+          section#introduction.mb-5
+            p.lead
+              | Welcome to the kickoff of the Trivia Spark application! Trivia Spark is my experiment in using ChatGPT to help develop a trivia application. This page documents the collaboration and progress as the project evolves.
+            .alert.alert-info.d-flex.align-items-center.mb-4
+              i.bi.bi-github.fs-4.me-3
+              div
+                h6.alert-heading.mb-1 Project Links
+                ul.mb-0.ps-3
+                  li
+                    a(href='https://github.com/controlorigins/triviaspark', target='_blank', rel='noopener') Trivia Spark GitHub Repository (old)
+                  li
+                    a(href='https://webspark.markhazleton.com/TriviaSpark', target='_blank', rel='noopener') Trivia Spark Website
+                  li
+                    a(href='https://markhazleton.com/using-chatgpt-for-developers.html', target='_self') Article – Using ChatGPT for Developers
+            figure.mb-4
+              img.img-fluid.rounded(src='assets/img/MarkHazleton-ChatGPT-TriviaSparkMatch.png' alt='Trivia Spark Early Screenshot' loading='lazy' title='Trivia Spark Early Screenshot')
+              figcaption.text-muted.mt-2.small Early Trivia Spark prototype screenshot
 
-        dt ChatGPT vs GitHub copilot
-        dd
-          p.
-            I have also been using GitHub Copilot to help with the development of the Trivia Spark application.
-            I have found that GitHub Copilot is a great tool for helping with the development of the application.
-          p.
-            GitHub Copilot is a new AI-powered code auto-completion tool that was released by GitHub in 2021. It uses
-            advanced machine learning models to suggest code snippets and entire functions as you type,
-            making it faster and easier to write code.
-          p.
-            In using Copilot, it works like traditional Intellisense in Visual Studio by providing suggestions
-            based on the current context in the code editor. It offers suggestions for class names, methods, properties,
-            and other elements that are available in the current scope.  The difference between the two is that GitHub Copilot
-            uses advanced AI models that can suggest entire functions or even multiple lines of code based on the context
-            and your coding style.  GitHub Copilot takes things a step further by leveraging AI to offer more comprehensive
-              and context-aware suggestions.
+          // Collaboration with ChatGPT
+          section#collaboration.mb-5
+            h2.h3.mb-4.text-primary Collaboration with ChatGPT
+            p
+              | The Trivia Spark application began as an exploration of public APIs, specifically the Open Trivia Database. ChatGPT provided suggestions, code snippets, and creative solutions to overcome development challenges and accelerate prototyping.
+            p
+              | ChatGPT helped brainstorm approaches, debug issues, and iterate on features. Its ability to quickly generate code and offer alternative solutions made it an invaluable collaborator.
+            p
+              | Rapid prototyping and feedback cycles allowed for experimentation and refinement, resulting in a more robust and flexible trivia app.
 
-      h2.mb-5 Chat In Action
-      p.
-        Here are a few screenshots of the types of collaboration that Chat and I had while working on the Trivia Spark application.
+          // Chat as Trusted Advisor
+          section#trusted-advisor.mb-5
+            h2.h3.mb-4.text-primary Chat as Trusted Advisor
+            p
+              | ChatGPT acted as a trusted advisor throughout the project, suggesting architectural patterns like enums and dictionaries for flexible game modes, and lazy loading for model management. Its feedback and willingness to iterate led to better design decisions and maintainable code.
+            p
+              | The collaboration highlighted the value of AI as a development partner—offering expertise, adapting to feedback, and accelerating progress without ego.
 
-      #carouselControlOrigins.carousel.slide(data-bs-ride='carousel')
-        .carousel-indicators
-          button.active(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='0' aria-label='Slide 1')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='1' aria-label='Slide 2')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='2' aria-label='Slide 3')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='3' aria-label='Slide 4')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='4' aria-label='Slide 5')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='5' aria-label='Slide 6')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='6' aria-label='Slide 7')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='7' aria-label='Slide 8')
-          button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='8' aria-label='Slide 9')
+          // ChatGPT vs GitHub Copilot
+          section#copilot.mb-5
+            h2.h3.mb-4.text-primary ChatGPT vs GitHub Copilot
+            p
+              | Both ChatGPT and GitHub Copilot were used in developing Trivia Spark. Copilot excels at code completion and context-aware suggestions, while ChatGPT provides broader architectural advice and problem-solving support. Together, they form a powerful toolkit for modern developers.
+            p
+              | Copilot’s AI-driven code suggestions complement ChatGPT’s conversational guidance, enabling faster, higher-quality development.
 
-        .carousel-inner(style={color: 'red', background: 'transparent'})
-          .carousel-item.active
-            .container.text-center
-              h5 Get Unanswered Questions
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-GetUnAnsweredQuestions.png' alt='Get Unanswered Questions')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5 Lazy Loading Example
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-LazyLoadingExample.png' alt='Lazy Loading Example')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5 Pros and Cons of Virtual Methods
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-ProConVirtualMethods.png' alt='Pros and Cons of Virtual Methods')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5  Refactor With Suggestions
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-RefactorWithInput.png' alt='Refactor With Suggestions')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5  Optimize With Hashset
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-OptimizeWithHashSet.png' alt='Optimize With Hashset')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5 Rapid Prototyping
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-RapidPrototyping.png' alt='RapidPrototyping')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5 Get Incorrect Questions
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-GetIncorrectQuestions.png' alt='Get Incorrect Questions')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5 Game Play Modes
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-GamePlayModes.png' alt='Game Play Modes')
-              br(clear='both')
-          .carousel-item
-            .container.text-center
-              h5 ENUM Parse from String
-              img.img-fluid.d-block.w-100(src='assets/img/MarkHazleton-ChatGPT-EnumParse.png' alt='Enum Parse from String')
-              br(clear='both')
+          // Chat In Action (Screenshots)
+          section#screenshots.mb-5
+            h2.h3.mb-4.text-primary Chat In Action
+            p
+              | Here are a few screenshots illustrating the collaboration with ChatGPT during Trivia Spark’s development.
+            .carousel.slide#carouselControlOrigins(data-bs-ride='carousel')
+              .carousel-indicators
+                button.active(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='0' aria-label='Slide 1')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='1' aria-label='Slide 2')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='2' aria-label='Slide 3')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='3' aria-label='Slide 4')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='4' aria-label='Slide 5')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='5' aria-label='Slide 6')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='6' aria-label='Slide 7')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='7' aria-label='Slide 8')
+                button(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide-to='8' aria-label='Slide 9')
+              .carousel-inner
+                .carousel-item.active
+                  .container.text-center
+                    h5 Get Unanswered Questions
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-GetUnAnsweredQuestions.png' alt='Get Unanswered Questions' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 Lazy Loading Example
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-LazyLoadingExample.png' alt='Lazy Loading Example' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 Pros and Cons of Virtual Methods
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-ProConVirtualMethods.png' alt='Pros and Cons of Virtual Methods' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 Refactor With Suggestions
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-RefactorWithInput.png' alt='Refactor With Suggestions' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 Optimize With Hashset
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-OptimizeWithHashSet.png' alt='Optimize With Hashset' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 Rapid Prototyping
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-RapidPrototyping.png' alt='Rapid Prototyping' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 Get Incorrect Questions
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-GetIncorrectQuestions.png' alt='Get Incorrect Questions' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 Game Play Modes
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-GamePlayModes.png' alt='Game Play Modes' loading='lazy')
+                .carousel-item
+                  .container.text-center
+                    h5 ENUM Parse from String
+                    img.img-fluid.rounded.mx-auto.d-block(src='assets/img/MarkHazleton-ChatGPT-EnumParse.png' alt='Enum Parse from String' loading='lazy')
+              button.carousel-control-prev(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide='prev')
+                span.carousel-control-prev-icon(aria-hidden='true')
+                span.visually-hidden Previous
+              button.carousel-control-next(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide='next')
+                span.carousel-control-next-icon(aria-hidden='true')
+                span.visually-hidden Next
 
-        button.carousel-control-prev(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide='prev')
-          span.carousel-control-prev-icon(aria-hidden='true')
-          span.visually-hidden Previous
-        button.carousel-control-next(type='button' data-bs-target='#carouselControlOrigins' data-bs-slide='next' )
-          span.carousel-control-next-icon(aria-hidden='true')
-          span.visually-hidden Next
-
-
-      h2 Parting Thoughts
-      p.
-        The kickoff of the Trivia Spark application was a collaborative effort with ChatGPT.
-        Working with ChatGPT, I was able to prototype ideas quickly, overcome obstacles,
-        and come up with a working application in a relatively short amount of time.
-      p.
-        Collaboration between humans and AI models like ChatGPT is becoming increasingly common in the software
-        development industry.
-      p.
-        New tools come along all the time, some of which are more useful than others. ChatGPT is a tool that I will
-        continue to evaluate to find ways to improve my development process.
-      p.
-        The tools that I use are constantly evolving, here are a few of the other tools I currently use:
-      ul
-        li <a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2022</a>
-        li <a href="https://www.devexpress.com/products/coderush/">Coderush by DevExpress </a>
-        li <a href="https://en.wikipedia.org/wiki/GitHub_Copilot">GitHub Copilot </a>
-
-      p.
-        For now, ChatGPT falls more into the reference tool category.
-        Which means I use it outside of my primary development
-        tool like Visual Studio or VS Code.  Here are other reference sources I use:
-      ul
-        li <a href="https://stackoverflow.com/">Stack Overflow</a>
-        li <a href="https://www.dotnetrocks.com/">.NET Rocks</a>
-        li <a href="https://wilderminds.com/">Shawn Wildermuth - Wilder Minds</a>
-        li <a href="https://www.hanselman.com/">Scott Hanselman</a>
-        li <a href="https://nickchapsas.com/">Nick Chapsas - Keep Coding</a>
-
+          // Conclusion
+          section#conclusion.mb-5
+            h2.h3.mb-4.text-primary Parting Thoughts
+            .key-takeaway.mb-4
+              h4.h5.mb-3
+                i.bi.bi-lightbulb.me-2
+                | Key Takeaways
+              ul.list-unstyled
+                li.mb-2
+                  | Collaboration with ChatGPT enabled rapid prototyping and creative problem solving.
+                li.mb-2
+                  | Combining ChatGPT and GitHub Copilot accelerates development and improves code quality.
+                li.mb-2
+                  | AI tools are valuable partners for modern software development.
+            p
+              | The kickoff of the Trivia Spark application was a collaborative effort with ChatGPT. Working with AI enabled quick prototyping, overcoming obstacles, and building a working app in a short time.
+            p
+              | Collaboration between humans and AI models like ChatGPT is becoming increasingly common in software development. The tools I use are constantly evolving, and I continue to evaluate new ways to improve my process.
+            p
+              | Here are a few of the other tools and reference sources I use:
+            ul
+              li
+                a(href='https://visualstudio.microsoft.com/vs/', target='_blank', rel='noopener') Visual Studio 2022
+              li
+                a(href='https://www.devexpress.com/products/coderush/', target='_blank', rel='noopener') Coderush by DevExpress
+              li
+                a(href='https://en.wikipedia.org/wiki/GitHub_Copilot', target='_blank', rel='noopener') GitHub Copilot
+              li
+                a(href='https://stackoverflow.com/', target='_blank', rel='noopener') Stack Overflow
+              li
+                a(href='https://www.dotnetrocks.com/', target='_blank', rel='noopener') .NET Rocks
+              li
+                a(href='https://wilderminds.com/', target='_blank', rel='noopener') Shawn Wildermuth – Wilder Minds
+              li
+                a(href='https://www.hanselman.com/', target='_blank', rel='noopener') Scott Hanselman
+              li
+                a(href='https://nickchapsas.com/', target='_blank', rel='noopener') Nick Chapsas – Keep Coding
   hr.m-0

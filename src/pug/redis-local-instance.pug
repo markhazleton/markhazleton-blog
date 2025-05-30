@@ -1,68 +1,283 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Running Redis Locally with Docker'
+  - var pageDescription = 'Complete guide to setting up and running Redis locally using Docker. Learn container configuration, data persistence, and Redis CLI interaction for development and testing.'
+  - var pageKeywords = 'Redis, Docker, local development, in-memory database, caching, container, Docker Hub, Redis CLI, data persistence'
+  - var pageCanonical = 'https://markhazleton.com/redis-local-instance.html'
 
 block pagehead
-  title Mark Hazleton - Running Redis Locally with Docker
-  meta(name='description', content='Mark Hazleton - Running Redis Locally with Docker')
+  title= pageTitle + ' | Mark Hazleton'
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
   meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/redis-local-instance.html')
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:type', content='article')
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazleton-Redis-Docker.png')
+
+block twitter_overrides
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/MarkHazleton-Redis-Docker.png')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
 
 block layout-content
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-database.me-3
+            | Redis Local Instance
+          h2.h3.mb-4 A Quick Guide to Running Redis Locally with Docker
+          p.lead.mb-5.
+            Redis, an open-source in-memory data store, is a powerful tool for caching,
+            session management, and more. With Docker, setting up a local Redis
+            environment becomes a breeze.
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 Redis Local Instance
-      .subheading.mb-3 A Quick Guide to Running Redis Locally with Docker
-      p.lead.
-        Redis, an open-source in-memory data store, is a powerful tool for caching,
-        session management, and more. With Docker, setting up a local Redis
-        environment becomes a breeze.
+  // Main Article
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          .article-meta.text-muted.mb-4
+            time(datetime='2024-05-30') May 30, 2024
+            span.mx-2 •
+            span 8 min read
+            span.mx-2 •
+            span by Mark Hazleton
 
-      h2 Getting Started: Setting Up Redis Docker Image
+          // Table of Contents
+          nav.mb-5(aria-label='Table of Contents')
+            .card
+              .card-header.bg-primary.text-white
+                h3.mb-0
+                  i.bi.bi-list-ul.me-2
+                  | Contents
+              .card-body
+                ol.list-group.list-group-numbered.list-group-flush
+                  li.list-group-item
+                    a.text-decoration-none(href='#getting-started') Getting Started: Setting Up Redis Docker Image
+                  li.list-group-item
+                    a.text-decoration-none(href='#running-container') Running Redis Container
+                  li.list-group-item
+                    a.text-decoration-none(href='#configuration') Configuration Options
+                  li.list-group-item
+                    a.text-decoration-none(href='#interaction') Interact with Redis
+                  li.list-group-item
+                    a.text-decoration-none(href='#conclusion') Conclusion
 
-      p.
-        To start, ensure you have Docker installed. Open your terminal and pull
-        the Redis image with the command:
+          // Getting Started Section
+          section#getting-started.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-success.text-white
+                h2.card-title.mb-0
+                  i.bi.bi-download.me-2
+                  | Getting Started: Setting Up Redis Docker Image
+              .card-body
+                p.
+                  To start, ensure you have Docker installed. Open your terminal and pull
+                  the Redis image with the command:
 
-      code.docker docker pull redis
+                .alert.alert-info.d-flex.align-items-center.mb-3
+                  i.bi.bi-info-circle.me-2
+                  div
+                    strong Prerequisites:
+                    | Make sure Docker is installed and running on your system before proceeding.
 
-      p.
-        fetches the latest Redis image from the Docker Hub repository.
+                .bg-dark.text-light.p-3.rounded.mb-3
+                  code.text-light docker pull redis
 
-      h2 Running Redis Container
+                p.
+                  This command fetches the latest Redis image from the Docker Hub repository.
 
-      p Once the image is downloaded, create a Redis container using:
+          // Running Container Section
+          section#running-container.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-primary.text-white
+                h2.card-title.mb-0
+                  i.bi.bi-play-circle.me-2
+                  | Running Redis Container
+              .card-body
+                p Once the image is downloaded, create a Redis container using:
 
-      code.docker docker run --name my-redis-container -d redis
+                .bg-dark.text-light.p-3.rounded.mb-3
+                  code.text-light docker run --name my-redis-container -d redis
 
-      p.
-        This command names the container "my-redis-container" and runs it in the
-        background ("-d" flag). You can adjust the name and other options as needed.
+                p.
+                  This command names the container "my-redis-container" and runs it in the
+                  background ("-d" flag). You can adjust the name and other options as needed.
 
-      h2 Configuration Options
+                .row.mt-4
+                  .col-md-6
+                    .card.h-100.border-info
+                      .card-header.bg-info.text-white.text-center
+                        h4.mb-0
+                          i.bi.bi-gear.me-2
+                          | Command Options
+                      .card-body
+                        ul.list-unstyled
+                          li.mb-2
+                            i.bi.bi-tag.text-primary.me-2
+                            code --name
+                            | : Set container name
+                          li.mb-2
+                            i.bi.bi-eye-slash.text-secondary.me-2
+                            code -d
+                            | : Run in background (detached)
+                          li
+                            i.bi.bi-box.text-success.me-2
+                            code redis
+                            | : Docker image to use
 
-      p.
-        Redis offers configuration through command-line arguments or a
-        configuration file. To bind the container's port to your host, use:
+                  .col-md-6
+                    .card.h-100.border-warning
+                      .card-header.bg-warning.text-dark.text-center
+                        h4.mb-0
+                          i.bi.bi-lightbulb.me-2
+                          | Best Practices
+                      .card-body
+                        ul.list-unstyled
+                          li.mb-2
+                            i.bi.bi-check-circle.text-success.me-2
+                            | Use descriptive container names
+                          li.mb-2
+                            i.bi.bi-shield-check.text-info.me-2
+                            | Run containers in detached mode
+                          li
+                            i.bi.bi-arrow-repeat.text-primary.me-2
+                            | Configure restart policies
 
-      code.docker docker run --name my-redis -d -p 6379:6379 redis
+          // Configuration Section
+          section#configuration.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-warning.text-dark
+                h2.card-title.mb-0
+                  i.bi.bi-sliders.me-2
+                  | Configuration Options
+              .card-body
+                p.
+                  Redis offers configuration through command-line arguments or a
+                  configuration file. To bind the container's port to your host, use:
 
-      p.
-        This maps port 6379 from the container to your host machine, allowing
-        local access.
+                .bg-dark.text-light.p-3.rounded.mb-4
+                  code.text-light docker run --name my-redis -d -p 6379:6379 redis
 
-      p To persist data beyond container removal, employ a volume:
-      code.docker docker run --name my-redis -d -p 6379:6379 -v redis_data:/data  redis
-      p.
-        Here, "redis_data" is the volume name, and "/data" is the mount point
-        inside the container.
-      h2 Interact with Redis
-      p Access the Redis container's shell with:
-      code.docker docker exec -it my-redis-container sh
-      p From the shell, you can launch the Redis CLI:
-      code.redis redis-cli
-      h2 Wrapping Up
-      p.
-        Redis simplifies in-memory data storage, and Docker makes its setup and
-        management convenient. With a few commands, you can have a local Redis
-        instance ready for development or testing.
+                p.
+                  This maps port 6379 from the container to your host machine, allowing
+                  local access.
+
+                .alert.alert-warning.d-flex.align-items-center.mb-4
+                  i.bi.bi-exclamation-triangle.me-2
+                  div
+                    strong Port Mapping:
+                    | The -p flag maps container port 6379 to host port 6379, enabling local connections.
+
+                h4.mb-3
+                  i.bi.bi-hdd.text-primary.me-2
+                  | Data Persistence
+
+                p To persist data beyond container removal, employ a volume:
+
+                .bg-dark.text-light.p-3.rounded.mb-3
+                  code.text-light docker run --name my-redis -d -p 6379:6379 -v redis_data:/data redis
+
+                .row.mt-4
+                  .col-md-6
+                    .card.border-primary
+                      .card-header.bg-primary.text-white
+                        h5.mb-0
+                          i.bi.bi-database.me-2
+                          | Volume Configuration
+                      .card-body
+                        ul.list-unstyled.mb-0
+                          li.mb-2
+                            strong Volume Name:
+                            code redis_data
+                          li
+                            strong Mount Point:
+                            code /data
+
+                  .col-md-6
+                    .card.border-success
+                      .card-header.bg-success.text-white
+                        h5.mb-0
+                          i.bi.bi-shield-check.me-2
+                          | Persistence Benefits
+                      .card-body
+                        ul.list-unstyled.mb-0
+                          li.mb-2
+                            i.bi.bi-check-circle.text-success.me-2
+                            | Data survives container restarts
+                          li
+                            i.bi.bi-save.text-info.me-2
+                            | Easy backup and restore
+
+          // Interaction Section
+          section#interaction.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-info.text-white
+                h2.card-title.mb-0
+                  i.bi.bi-terminal.me-2
+                  | Interact with Redis
+              .card-body
+                p Access the Redis container's shell with:
+
+                .bg-dark.text-light.p-3.rounded.mb-3
+                  code.text-light docker exec -it my-redis-container sh
+
+                p From the shell, you can launch the Redis CLI:
+
+                .bg-dark.text-light.p-3.rounded.mb-4
+                  code.text-light redis-cli
+
+                .alert.alert-success.d-flex.align-items-center
+                  i.bi.bi-lightbulb.me-2
+                  div
+                    strong Pro Tip:
+                    | You can also connect to Redis directly from your host machine using redis-cli if you have it installed locally.
+
+          // Conclusion Section
+          section#conclusion.mb-5
+            .card.border-0.shadow-lg
+              .card-header.bg-gradient-primary.text-white.text-center
+                h2.card-title.mb-0
+                  i.bi.bi-check-circle.me-2
+                  | Wrapping Up
+              .card-body.p-4
+                p.lead.text-center.mb-4.
+                  Redis simplifies in-memory data storage, and Docker makes its setup and
+                  management convenient. With a few commands, you can have a local Redis
+                  instance ready for development or testing.
+
+                .row.g-4.mb-4
+                  .col-md-4.text-center
+                    .p-3
+                      i.bi.bi-download.display-4.text-primary.mb-3
+                      h4 Quick Setup
+                      p.small Pull Redis image and run container in minutes
+
+                  .col-md-4.text-center
+                    .p-3
+                      i.bi.bi-sliders.display-4.text-success.mb-3
+                      h4 Flexible Configuration
+                      p.small Customize ports, volumes, and container settings
+
+                  .col-md-4.text-center
+                    .p-3
+                      i.bi.bi-terminal.display-4.text-info.mb-3
+                      h4 Easy Interaction
+                      p.small Access Redis CLI and manage your data efficiently
+
+                .text-center.mt-4
+                  p.text-muted.small.
+                    Ready to enhance your development workflow with Redis? Start implementing these Docker commands today and experience the power of in-memory data storage!
 
