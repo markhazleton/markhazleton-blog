@@ -1,509 +1,790 @@
-extends layouts/articles
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Master Concurrent Async Tasks with TaskListProcessor'
+  - var pageDescription = 'Learn to manage multiple async tasks in .NET with TaskListProcessor. Dive into error handling, telemetry, and scalability for robust applications.'
+  - var pageKeywords = 'TaskListProcessor, .NET concurrency, async tasks, error handling, task telemetry, application scalability, .NET async patterns, C# task management'
+  - var pageCanonical = 'https://markhazleton.com/task-list-processor.html'
 
 block pagehead
-  title Master Concurrent Async Tasks with TaskListProcessor
-  meta(name="description" content="Learn to manage multiple async tasks in .NET with TaskListProcessor. Dive into error handling, telemetry, and scalability for robust applications.")
-  meta(name="keywords" content="TaskListProcessor, .NET concurrency, async tasks, error handling, task telemetry, application scalability, .NET async patterns, C# task management")
-  meta(name="author" content="Mark Hazleton")
-  link(rel="canonical" href="https://markhazleton.com/task-list-processor.html")
-  //- Open Graph tags
-  meta(property="og:title" content="Master Concurrent Async Tasks with TaskListProcessor")
-  meta(property="og:description" content="Step up your .NET game by mastering concurrent async tasks using TaskListProcessor. Perfect for building scalable and robust .NET applications.")
-  meta(property="og:url" content="https://markhazleton.com/task-list-processor.html")
-  meta(property="og:type" content="article")
-  meta(property="og:image" content="assets/img/Task-List-Processor-Dashboard.png")
-  //- Twitter Card data
-  meta(name="twitter:card" content="summary_large_image")
-  meta(name="twitter:title" content="Master Concurrent Async Tasks with TaskListProcessor")
-  meta(name="twitter:description" content="Exclusive insights into managing async tasks in .NET with efficiency. Learn about TaskListProcessor's advanced error handling and performance tracking.")
-  meta(name="twitter:image" content="assets/img/Task-List-Processor-Dashboard.png")
-  //- Additional tags
-  meta(name="robots" content="index, follow")
-  meta(name="language" content="English")
-  meta(name="revisit-after" content="7 days")
+  title= pageTitle + ' | Mark Hazleton'
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content='Mark Hazleton')
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content='Step up your .NET game by mastering concurrent async tasks using TaskListProcessor. Perfect for building scalable and robust .NET applications.')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:type', content='article')
+  meta(property='og:image', content='https://markhazleton.com/assets/img/Task-List-Processor-Dashboard.png')
+
+block twitter_overrides
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content='Exclusive insights into managing async tasks in .NET with efficiency. Learn about TaskListProcessor\'s advanced error handling and performance tracking.')
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/Task-List-Processor-Dashboard.png')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
 
 block layout-content
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-list-task.me-3
+            | TaskListProcessor
+          h2.h3.mb-4 Mastering Concurrent Operations in .NET
+          p.lead.mb-5 Handle multiple asynchronous operations with grace and precision. Build scalable and maintainable .NET applications with advanced error handling and telemetry.
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      p.fw-bold.text-primary.text-center.bg-primary.text-white
-        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/TaskListProcessor' target="_blank" title='The full source code for the Task List Processor is available on GitHub') The full source code for the Task List Processor is available on GitHub
-      h1.mb-0 Task List Processing
-      .subheading.mb-3 Mastering Concurrent Operations in .NET with TaskListProcessor
-      p.lead.
-        In application development, efficiency is not just a goal; it's a necessity.
-        As .NET developers, we often encounter scenarios where we must juggle multiple operations simultaneously.
-        The TaskListProcessor class addresses these issues with efficiency, handling multiple asynchronous operations with grace and precision.
-        It offers a structured approach to running concurrent tasks, each potentially returning different types of results,
-        which is a significant step towards writing scalable and maintainable code in .Net applications.
+  // Main Article
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            .article-meta.text-muted.mb-4
+              time(datetime='2025-05-30') May 30, 2025
+              span.mx-2 •
+              span 15 min read
 
-      dl
-        dt Issue: Diverse Return Types
-        dd.
-          A common issue with concurrent async methods in .Net is the handling of different return types.
-          Traditional approaches often lead to tangled code, where the management of various tasks becomes cumbersome and error-prone.
+            .alert.alert-primary.mb-4
+              h5.alert-heading
+                i.bi.bi-github.me-2
+                | Source Code Available
+              p.mb-0
+                | The source code for
+                a.text-decoration-none(href='https://github.com/markhazleton/TaskListProcessor' target='_blank' rel='noopener noreferrer') TaskListProcessor is available on GitHub
+                | . Clone the repository to follow along with the examples.
 
-        dt Issue: Error Propagation
-        dd.
-          Without proper structure, errors from individual tasks can propagate and cause widespread failures.
-          This necessitates a robust mechanism to encapsulate errors and handle them without affecting the entire task set.
+          .article-content
+            p.lead.
+              In application development, efficiency is not just a goal; it's a necessity.
+              As .NET developers, we often encounter scenarios where we must juggle multiple operations simultaneously.
+              The TaskListProcessor class addresses these issues with efficiency, handling multiple asynchronous operations with grace and precision.
 
-        dt Solution: TaskListProcessor
-        dd.
-          The TaskListProcessor class addresses these issues head-on. It provides a cohesive way to manage a list of tasks,
-          regardless of their return types, and includes built-in error handling to log exceptions and continue operation.
+            // Table of Contents
+            nav.mb-5(aria-label='Table of Contents')
+              .card
+                .card-header.bg-primary.text-white
+                  h3.card-title.mb-0
+                    i.bi.bi-list-ul.me-2
+                    | Contents
+                .card-body
+                  ol.list-group.list-group-numbered.list-group-flush
+                    li.list-group-item
+                      a.text-decoration-none(href='#challenges') Development Challenges
+                    li.list-group-item
+                      a.text-decoration-none(href='#comparison') Task.WhenAll vs Parallel Methods
+                    li.list-group-item
+                      a.text-decoration-none(href='#use-case') Travel Website Use Case
+                    li.list-group-item
+                      a.text-decoration-none(href='#technical-terms') Technical Jargon Explained
+                    li.list-group-item
+                      a.text-decoration-none(href='#whenall-method') WhenAllWithLoggingAsync Method
+                    li.list-group-item
+                      a.text-decoration-none(href='#gettask-method') GetTaskResultAsync Method
+                    li.list-group-item
+                      a.text-decoration-none(href='#taskresult-class') TaskResult Class
+                    li.list-group-item
+                      a.text-decoration-none(href='#weather-service') WeatherService Implementation
+                    li.list-group-item
+                      a.text-decoration-none(href='#dashboard-demo') Travel Dashboard Demo
+                    li.list-group-item
+                      a.text-decoration-none(href='#conclusion') Test Drive & Conclusion
 
-        dt Benefit: Enhanced Error Handling
-        dd.
-          It features methods like WhenAllWithLoggingAsync, which waits for all tasks to complete and logs any occurring errors,
-          thereby enhancing the standard Task.WhenAll with much-needed error oversight.
+            // Development Challenges Section
+            section#challenges.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-warning.text-dark
+                  h2.card-title.mb-0
+                    i.bi.bi-exclamation-triangle.me-2
+                    | Development Challenges
+                .card-body
+                  p.
+                    The TaskListProcessor addresses common challenges in .NET concurrent programming,
+                    providing a structured approach to running concurrent tasks with different return types.
 
-        dt Benefit: Flexibility and Scalability
-        dd.
-          By using generics and encapsulating results in a TaskResult object, it offers flexibility and scalability,
-          allowing for various tasks to be processed concurrently — a perfect match for the demands of modern software development.
+                  .row.g-4
+                    .col-md-6
+                      .card.h-100.border-danger
+                        .card-header.bg-danger.text-white
+                          h5.mb-0
+                            i.bi.bi-code-slash.me-2
+                            | Issue: Diverse Return Types
+                        .card-body
+                          p.card-text.
+                            A common issue with concurrent async methods in .NET is handling different return types.
+                            Traditional approaches often lead to tangled code, where task management becomes cumbersome and error-prone.
 
-      section.parallel-vs-task-when-all
-        div.card.mb-3
-          div.card-header
-            .card-title Task.WhenAll vs. Parallel Methods
-          div.card-body
-            div.row
-              div.col-3
-                img.img-fluid.d-block.w-100(src='assets/img/Task-List-Processor-WhenAll-vs-Parallel.png' alt='Task.WhenAll vs Parallel.ForEach' title='Task.WhenAll vs Parallel.ForEach. Image Credit ChatGPT with DALL-E')
-              div.col-9
-                p.lead.
-                  The choice between using Task.WhenAll and Parallel methods can be effectively illustrated through the metaphor of
-                  runners on a track and a tug-of-war contest.
-                p.
-                  There are two common approaches to managing concurrent tasks in .NET.
-                  The Parallel.ForEach and Task.WhenAll methods are both designed to handle multiple tasks simultaneously,
-                  but they differ in their implementation.
-                  Understanding these differences will help us appreciate the benefits of the TaskListProcessor.
-            div.row
-              div.col-12
-                dl
-                  dt Task.WhenAll as Runners on a Track
-                  dd Imagine a group of runners, each in their own lane on a track. This scene represents the nature of Task.WhenAll for handling asynchronous, I/O-bound tasks. Just like these runners, each task runs independently in its own 'lane'. They move forward at their own pace, without blocking each other, symbolizing the non-blocking nature of asynchronous operations. This approach ensures efficiency in scenarios where tasks, like network requests or file I/O, don’t need to wait for each other to complete, thus maintaining the responsiveness and scalability of the application.
-                  dt Parallel Methods as a Tug-of-War Contest
-                  dd Contrast this with a tug-of-war contest, where two teams pull on opposite ends of a rope. This represents the Parallel methods used for CPU-bound tasks. The tug-of-war requires synchronized, collective effort, much like Parallel.ForEach and similar methods distribute the computational 'weight' across multiple threads. Each participant in the tug-of-war contributes to a single unified effort, analogous to how parallel processing maximizes CPU utilization by working on different parts of a task simultaneously.
-                p Hopefully, this metaphor helps clarify the distinction between using Task.WhenAll for independent, asynchronous tasks and Parallel methods for coordinated, CPU-intensive tasks. Understanding this difference is crucial for optimizing performance and resource management in .NET applications. Selecting the right approach depends on whether your tasks are akin to runners — independent and non-blocking — or like a tug-of-war team, where combined effort and synchronization are key.
+                    .col-md-6
+                      .card.h-100.border-warning
+                        .card-header.bg-warning.text-dark
+                          h5.mb-0
+                            i.bi.bi-exclamation-circle.me-2
+                            | Issue: Error Propagation
+                        .card-body
+                          p.card-text.
+                            Without proper structure, errors from individual tasks can propagate and cause widespread failures.
+                            This necessitates a robust mechanism to encapsulate errors and handle them gracefully.
 
-      section.travel-website-use-case
-        h2 Use Case: Travel Website Dashboard
-        div.row
-          div.col-2
-            img.img-fluid.d-block.w-100(src='assets/img/Task-List-Processor-Use-Case.png' alt='Task List Processor Use Case' title='Task List Processor Use Case. Image Credit ChatGPT with DALL-E')
-          div.col-10
-            p.
-              Consider a travel website displaying a dashboard of top destination cities,
-              aggregating data like weather, attractions, events, and flights.
-            p Performance Challenges:
-            ul
-              li Handling diverse data sources with different response times can slow down the dashboard's loading speed.
-              li Inconsistent data retrieval from these sources adds complexity to maintaining a user-friendly interface.
-            p TaskListProcessor Solution:
-            ul
-              li  Concurrently manages data retrieval tasks, enhancing overall loading speed.
-              li  Offers robust error handling to prevent one data source failure from impacting the entire dashboard.
-            p Business Benefits:
-            ul
-              li Ensures a responsive dashboard, displaying available data like city weather, even if other data like activities are delayed.
-              li Avoids empty dashboard scenarios, maintaining user engagement and trust by providing partial but timely information.
+                    .col-md-6
+                      .card.h-100.border-success
+                        .card-header.bg-success.text-white
+                          h5.mb-0
+                            i.bi.bi-check-circle.me-2
+                            | Solution: TaskListProcessor
+                        .card-body
+                          p.card-text.
+                            The TaskListProcessor class addresses these issues head-on, providing a cohesive way to manage
+                            a list of tasks regardless of their return types, with built-in error handling and logging.
 
-      section.technical-jargon
-        h2 Technical Jargon Explained
-        p.
-          I wanted to clarify some of the technical terms used in our discussion about TaskListProcessor.
-          Understanding these concepts will help you understand how TaskListProcessor enhances concurrent task management in .NET applications.
-        dl
-          dt Concurrent Asynchronous Tasks
-          dd
-            | Tasks that are executed simultaneously, but each task operates independently and completes at its own pace. This is crucial in a multi-threading environment.
-          dt Error Propagation
-          dd
-            | This refers to the process where an error in one part of the system spreads to other parts, potentially causing wider system failure. Effective error handling is essential to prevent this.
-          dt Telemetry
-          dd
-            | The process of collecting and analyzing data about the performance of a system or application. This can include metrics like task execution time and error rates.
-          dt ILogger
-          dd
-            | An interface used in .NET for logging information, errors, and other significant events within an application.
-          dt TaskResult
-          dd
-            | A custom object designed to encapsulate the outcome of a task, storing details like the result, the task's name, and any errors encountered.
+                    .col-md-6
+                      .card.h-100.border-info
+                        .card-header.bg-info.text-white
+                          h5.mb-0
+                            i.bi.bi-speedometer2.me-2
+                            | Benefit: Enhanced Performance
+                        .card-body
+                          p.card-text.
+                            Features methods like WhenAllWithLoggingAsync, which enhance the standard Task.WhenAll
+                            with error oversight, flexibility, and scalability using generics and TaskResult objects.
 
-      h2 The WhenAllWithLoggingAsync Method
-      pre.language-csharp
-        code.language-csharp.
-          public static async Task WhenAllWithLoggingAsync(IEnumerable&lt;Task&gt; tasks, ILogger logger)
-          {
-            ArgumentNullException.ThrowIfNull(logger);
-            try
-            {
-              await Task.WhenAll(tasks);
-            }
-            catch (Exception ex)
-            {
-              logger.LogError(ex, &quot;TLP: An error occurred while executing one or more tasks.&quot;);
-            }
-          }
-      dl
-        dt Enhanced Error Handling
-        dd.
-          The WhenAllWithLoggingAsync method improves upon Task.WhenAll by providing robust error handling.
-          Instead of allowing exceptions to propagate and potentially crash the application, it catches exceptions and uses an ILogger to log them,
-          ensuring that all task exceptions are noted and can be reviewed later for debugging and analysis.
+            // Comparison Section
+            section#comparison.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-info.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-arrow-left-right.me-2
+                    | Task.WhenAll vs. Parallel Methods
+                .card-body
+                  .row.align-items-center.mb-4
+                    .col-md-4
+                      img.img-fluid.rounded(
+                        src='assets/img/Task-List-Processor-WhenAll-vs-Parallel.png'
+                        alt='Task.WhenAll vs Parallel.ForEach comparison'
+                        title='Task.WhenAll vs Parallel.ForEach. Image Credit ChatGPT with DALL-E'
+                        loading='lazy'
+                      )
+                    .col-md-8
+                      p.lead.
+                        The choice between using Task.WhenAll and Parallel methods can be effectively illustrated through the metaphor of
+                        runners on a track and a tug-of-war contest.
+                      p.
+                        Understanding these differences will help us appreciate the benefits of the TaskListProcessor
+                        and select the right approach for your concurrent processing needs.
 
-        dt Consolidated Task Logging
-        dd.
-          By taking an ILogger as a parameter, this method allows for centralized logging of task exceptions.
-          This means that all errors across various tasks can be logged in a consistent manner, which is essential for maintaining a coherent log file format
-          and integrating with centralized logging solutions or services.
+                  .row.g-4
+                    .col-md-6
+                      .card.h-100.border-success
+                        .card-header.bg-success.text-white
+                          h5.mb-0
+                            i.bi.bi-person-walking.me-2
+                            | Task.WhenAll as Runners
+                        .card-body
+                          p.card-text.
+                            Imagine runners, each in their own lane on a track. This represents Task.WhenAll for handling
+                            asynchronous, I/O-bound tasks. Each task runs independently without blocking others,
+                            ensuring efficiency for network requests or file I/O operations.
 
-        dt Non-Blocking Error Notification
-        dd.
-          When a task within Task.WhenAll fails, it throws an AggregateException which can halt the execution flow if not handled properly.
-          WhenAllWithLoggingAsync method, on the other hand, logs the error internally and allows the program to continue execution,
-          which is particularly beneficial for non-critical tasks that should not block the overall process.
+                    .col-md-6
+                      .card.h-100.border-warning
+                        .card-header.bg-warning.text-dark
+                          h5.mb-0
+                            i.bi.bi-people.me-2
+                            | Parallel Methods as Tug-of-War
+                        .card-body
+                          p.card-text.
+                            A tug-of-war contest represents Parallel methods for CPU-bound tasks. Teams work together
+                            with synchronized effort, similar to how parallel processing distributes computational
+                            weight across multiple threads for maximum CPU utilization.
 
-        dt Improved Debugging and Maintenance
-        dd.
-          With detailed error information logged by WhenAllWithLoggingAsync, developers can more easily pinpoint the source of issues.
-          This level of detail aids in faster debugging and simplifies maintenance, especially in complex systems with many concurrent tasks.
+            // Use Case Section
+            section#use-case.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-primary.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-map.me-2
+                    | Use Case: Travel Website Dashboard
+                .card-body
+                  .row.align-items-center.mb-4
+                    .col-md-3
+                      img.img-fluid.rounded(
+                        src='assets/img/Task-List-Processor-Use-Case.png'
+                        alt='Task List Processor Use Case for travel website'
+                        title='Task List Processor Use Case. Image Credit ChatGPT with DALL-E'
+                        loading='lazy'
+                      )
+                    .col-md-9
+                      p.
+                        Consider a travel website displaying a dashboard of top destination cities,
+                        aggregating data like weather, attractions, events, and flights from multiple sources.
 
-      h2 The GetTaskResultAsync Method
-      pre.language-csharp
-        code.language-csharp.
-          public async Task GetTaskResultAsync&lt;T&gt;(string taskName, Task&lt;T&gt; task) where T : class
-          {
-            var sw = new Stopwatch();
-            sw.Start();
-            var taskResult = new TaskResult { Name = taskName };
-            try
-            {
-              taskResult.Data = await task;
-              sw.Stop();
-              Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds));
-            }
-            catch (Exception ex)
-            {
-              sw.Stop();
-              Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds, &quot;Exception&quot;, ex.Message));
-              taskResult.Data = null;
-            }
-            finally
-            {
-              TaskResults.Add(taskResult);
-            }
-          }
-      dl
-        dt Method Signature
-        dd.
-          The GetTaskResultAsync method enhances a simple async call by wrapping it with telemetry features.
-          It utilizes a Stopwatch to measure and record the time taken for the task's execution, providing valuable performance metrics.
-        dt Detail error checking and logging
-        dd.
-          Error checking is robustly integrated into the method. It captures any exceptions thrown during the task's execution,
-          logging the error along with the task's name and the elapsed time. This ensures that errors are not only caught but are also
-          recorded for further analysis.
-        dt Explain execution isolation
-        dd.
-          Execution isolation is achieved by managing each task's execution in a separate logical block, allowing for independent handling.
-          This means the failure of one task does not impede the execution of others, promoting better fault tolerance within the system.
-        dt Discuss the result object flexibility
-        dd.
-          The method is designed to be generic, enabling the return of various types of objects from different tasks within a single list.
-          By encapsulating the result in a TaskResult object, it allows for heterogeneous task processing, making the method highly versatile.
+                  .row.g-4
+                    .col-md-4
+                      .card.h-100.border-danger
+                        .card-header.bg-danger.text-white
+                          h5.mb-0
+                            i.bi.bi-exclamation-triangle.me-2
+                            | Performance Challenges
+                        .card-body
+                          ul.list-unstyled
+                            li.mb-2
+                              i.bi.bi-clock.text-danger.me-2
+                              | Diverse data sources with different response times
+                            li.mb-0
+                              i.bi.bi-gear.text-danger.me-2
+                              | Inconsistent data retrieval complexity
 
-      h2 TaskResult Class Overview
-      p.
-        The TaskResult class is a cornerstone within the TaskListProcessor architecture, designed to encapsulate the outcome of asynchronous tasks. It provides a unified structure for storing the result data and metadata about the task's execution, such as the task's name, and whether it completed successfully or encountered errors.
-      pre.language-csharp
-        code.language-csharp.
-          public class TaskResult<T> : ITaskResult
-          {
-            public TaskResult()
-            {
-              Name = 'UNKNOWN';
-              Data = null;
-            }
+                    .col-md-4
+                      .card.h-100.border-success
+                        .card-header.bg-success.text-white
+                          h5.mb-0
+                            i.bi.bi-check-circle.me-2
+                            | TaskListProcessor Solution
+                        .card-body
+                          ul.list-unstyled
+                            li.mb-2
+                              i.bi.bi-speedometer2.text-success.me-2
+                              | Concurrent data retrieval for faster loading
+                            li.mb-0
+                              i.bi.bi-shield-check.text-success.me-2
+                              | Robust error handling prevents cascade failures
 
-            public TaskResult(string name, T data)
-            {
-              Name = name;
-              Data = data;
-            }
-            public T? Data { get; set; }
-            public string Name { get; set; }
-          }
+                    .col-md-4
+                      .card.h-100.border-info
+                        .card-header.bg-info.text-white
+                          h5.mb-0
+                            i.bi.bi-graph-up.me-2
+                            | Business Benefits
+                        .card-body
+                          ul.list-unstyled
+                            li.mb-2
+                              i.bi.bi-display.text-info.me-2
+                              | Responsive dashboard with partial data display
+                            li.mb-0
+                              i.bi.bi-heart.text-info.me-2
+                              | Maintains user engagement and trust
 
+            // Technical Terms Section
+            section#technical-terms.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-secondary.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-book.me-2
+                    | Technical Jargon Explained
+                .card-body
+                  p.
+                    Understanding these technical concepts will help you grasp how TaskListProcessor enhances
+                    concurrent task management in .NET applications.
 
-      dl
-        dt Purpose
-        dd.
-          The primary goal of the TaskResult class is to offer a standardized object that can be used to represent the outcome of any task, regardless of its nature or the type of data it returns.
-        dt Flexibility
-        dd.
-          Thanks to its generic design, the TaskResult class can hold any type of result data, making it incredibly versatile. It can be used across different projects and scenarios, wherever task execution results need to be captured and processed.
-        dt Error Handling
-        dd.
-          In cases where a task fails, the TaskResult class can store the error details alongside the original task information. This makes it an invaluable tool for error tracking and debugging.
-        dt Telemetry and Logging
-        dd.
-          The TaskResult class can also be extended to include telemetry data, such as execution duration, which is crucial for performance monitoring and optimization efforts in complex systems.
-      p.
-        The TaskResult class is a testament to the thoughtful design of the TaskListProcessor, embodying the principles of robustness and scalability. It not only simplifies result management but also enhances the maintainability and readability of asynchronous task processing in .NET applications.
+                  .row.g-4
+                    .col-md-6
+                      .card.border-light
+                        .card-body
+                          h5.card-title
+                            i.bi.bi-cpu.text-primary.me-2
+                            | Concurrent Asynchronous Tasks
+                          p.card-text.
+                            Tasks executed simultaneously, each operating independently and completing at its own pace.
+                            Essential in multi-threading environments for optimal performance.
 
-      h2 The WeatherService Class
-      dl
-        dt Simulation of Real-World Scenarios
-        dd.
-          The WeatherService class is designed to mimic real-world external service calls by introducing artificial latency and potential failures.
-          This is achieved through the use of the Random class, which adds a random delay to each call to simulate network or service latency.
+                    .col-md-6
+                      .card.border-light
+                        .card-body
+                          h5.card-title
+                            i.bi.bi-exclamation-diamond.text-warning.me-2
+                            | Error Propagation
+                          p.card-text.
+                            The process where errors spread from one system part to others, potentially causing
+                            wider failures. Effective error handling prevents this cascade effect.
 
-        dt Randomized Error Injection
-        dd.
-          By employing a conditional check against a randomly generated number, the WeatherService class can throw exceptions deliberately
-          to simulate failures that might occur in an actual service environment. This feature allows developers to ensure that the consuming
-          application handles intermittent failures gracefully.
+                    .col-md-6
+                      .card.border-light
+                        .card-body
+                          h5.card-title
+                            i.bi.bi-graph-up-arrow.text-success.me-2
+                            | Telemetry
+                          p.card-text.
+                            Collection and analysis of system performance data, including metrics like
+                            task execution time and error rates for monitoring and optimization.
 
-        dt Adjustable Failure Rate
-        dd.
-          The likelihood of a simulated failure is adjustable, providing flexibility in how often errors are introduced.
-          This allows for thorough testing of the application's resilience and error handling mechanisms under various conditions of stress and instability.
+                    .col-md-6
+                      .card.border-light
+                        .card-body
+                          h5.card-title
+                            i.bi.bi-journal-text.text-info.me-2
+                            | ILogger & TaskResult
+                          p.card-text.
+                            ILogger: .NET interface for logging events. TaskResult: Custom object encapsulating
+                            task outcomes, storing results, names, and error details.
 
-        dt Realistic Testing Conditions
-        dd.
-          By incorporating randomness in latency and failures, the WeatherService class provides a more realistic testing environment for developers.
-          It ensures that applications consuming the WeatherService are not only coded to handle success scenarios but are also robust enough
-          to cope with unexpected delays and errors.
+            // WhenAllWithLoggingAsync Method Section
+            section#whenall-method.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-dark.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-code-slash.me-2
+                    | The WhenAllWithLoggingAsync Method
+                .card-body
+                  p.
+                    The WhenAllWithLoggingAsync method enhances the standard Task.WhenAll with robust error handling
+                    and centralized logging capabilities.
 
-      h2 A Travel Dashbaord Using `TaskListProcessor`
-      p Let's roll up our sleeves and get coding. Here's a snippet that demonstrates fetching weather forecasts for several cities concurrently:
-      img.img-fluid.d-block.w-25(src='assets/img/Task-List-Processor-Dashboard.png' alt='Task List Processor Dashboard')
+                  pre.language-csharp.mb-4
+                    code.language-csharp.
+                      public static async Task WhenAllWithLoggingAsync(IEnumerable&lt;Task&gt; tasks, ILogger logger)
+                      {
+                        ArgumentNullException.ThrowIfNull(logger);
+                        try
+                        {
+                          await Task.WhenAll(tasks);
+                        }
+                        catch (Exception ex)
+                        {
+                          logger.LogError(ex, "TLP: An error occurred while executing one or more tasks.");
+                        }
+                      }
 
-      dl
-        dt Real-World Dashboard Simulation
-        dd.
-          The program.cs console application emulates a travel site dashboard by concurrently fetching weather data for multiple cities.
-          Each city represents a section on the dashboard page, and their weather data is loaded simultaneously to enhance performance
-          and user experience, reflecting the non-blocking nature of real-time dashboards.
+                  .row.g-4
+                    .col-md-6
+                      .card.border-success
+                        .card-header.bg-success.text-white
+                          h6.mb-0
+                            i.bi.bi-shield-check.me-2
+                            | Enhanced Error Handling
+                        .card-body
+                          p.card-text.small.
+                            Instead of allowing exceptions to propagate and potentially crash the application,
+                            it catches exceptions and logs them for debugging and analysis.
 
-        dt Concurrent Data Retrieval
-        dd.
-          Utilizing asynchronous programming, the application makes non-blocking calls to the WeatherService for each city in the list.
-          This concurrent approach demonstrates how a live site could efficiently load data in parallel, reducing the total wait time
-          for all the information to display.
+                    .col-md-6
+                      .card.border-info
+                        .card-header.bg-info.text-white
+                          h6.mb-0
+                            i.bi.bi-journal-text.me-2
+                            | Consolidated Logging
+                        .card-body
+                          p.card-text.small.
+                            Centralized logging of task exceptions with consistent formatting,
+                            essential for integrating with logging solutions and services.
 
-        dt Console Logging for Demonstration
-        dd.
-          Console.WriteLine is used within the application to output the progress and results of each task, providing a clear and sequential
-          log of events in the console. This visual representation in development mimics how a user would see the data loading on a web dashboard.
+                    .col-md-6
+                      .card.border-warning
+                        .card-header.bg-warning.text-dark
+                          h6.mb-0
+                            i.bi.bi-play-circle.me-2
+                            | Non-Blocking Operation
+                        .card-body
+                          p.card-text.small.
+                            Logs errors internally and allows program continuation,
+                            beneficial for non-critical tasks that shouldn't block overall process.
 
-        dt Production Logging Considerations
-        dd.
-          While console logging serves as a simple demonstration tool, a production environment would require a more sophisticated logging solution.
-          In a live setting, the ILogger interface would be implemented to integrate with a logging framework that supports structured logging,
-          log levels, and persistent storage, ensuring comprehensive monitoring and troubleshooting capabilities.
-        pre.language-csharp
-          code.language-csharp.
-            Console.WriteLine(TimeProvider.System.GetLocalNow());
-            var loggerFactory = LoggerFactory.Create(builder =&gt; builder.AddConsole());
-            var logger = loggerFactory.CreateLogger&lt;Program&gt;();
-            var weatherService = new WeatherService();
-            var weatherCities = new TaskListProcessing.TaskListProcessor();
-            var cities = new List&lt;string&gt; { &quot;London&quot;, &quot;Paris&quot;, &quot;New York&quot;, &quot;Tokyo&quot;, &quot;Sydney&quot;,&quot;Chicago&quot;,&quot;Dallas&quot;,&quot;Wichita&quot; };
-            var tasks = new List&lt;Task&gt;();
-            foreach (var city in cities)
-            {
-              tasks.Add(weatherCities.GetTaskResultAsync(city, weatherService.GetWeather(city)));
-            }
-            await TaskListProcessing.TaskListProcessor.WhenAllWithLoggingAsync(tasks, logger);
-            Console.WriteLine(&quot;All tasks completed\n\n&quot;);
-            Console.WriteLine(&quot;Telemetry:&quot;);
-            foreach (var cityTelemetry in weatherCities.Telemetry)
-            {
-              Console.WriteLine(cityTelemetry);
-            }
-            Console.WriteLine(&quot;\n\nResults:&quot;);
-            foreach (var city in weatherCities.TaskResults)
-            {
-              Console.WriteLine($&quot;{city.Name}:&quot;);
-              if (city.Data is not null)
-              {
-                foreach (var forecast in city.Data as IEnumerable&lt;WeatherForecast&gt;)
-                {
-                  Console.WriteLine(forecast);
-                }
-              }
-              else
-              {
-                Console.WriteLine(&quot;No data&quot;);
-              }
-              Console.WriteLine();
-            }
-            Console.WriteLine(TimeProvider.System.GetLocalNow());
-            Console.WriteLine();
+                    .col-md-6
+                      .card.border-primary
+                        .card-header.bg-primary.text-white
+                          h6.mb-0
+                            i.bi.bi-gear.me-2
+                            | Improved Maintenance
+                        .card-body
+                          p.card-text.small.
+                            Detailed error information aids in faster debugging and simplifies maintenance
+                            in complex systems with many concurrent tasks.
 
-      h3 The Output
-      pre.language-json
-        code.language-json.
-          All tasks completed
+            // GetTaskResultAsync Method Section
+            section#gettask-method.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-primary.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-stopwatch.me-2
+                    | The GetTaskResultAsync Method
+                .card-body
+                  p.
+                    The GetTaskResultAsync method wraps async calls with telemetry features,
+                    measuring execution time and providing performance metrics.
 
-          Telemetry:
-          Chicago: Task completed in 602 ms with ERROR Exception: Random failure occurred fetching weather data.
-          Paris: Task completed in 723 ms with ERROR Exception: Random failure occurred fetching weather data.
-          New York: Task completed in 818 ms with ERROR Exception: Random failure occurred fetching weather data.
-          Dallas: Task completed in 1,009 ms
-          Sydney: Task completed in 1,318 ms
-          Tokyo: Task completed in 1,921 ms
-          Wichita: Task completed in 2,672 ms with ERROR Exception: Random failure occurred fetching weather data.
-          London: Task completed in 2,789 ms
+                  pre.language-csharp.mb-4
+                    code.language-csharp.
+                      public async Task GetTaskResultAsync&lt;T&gt;(string taskName, Task&lt;T&gt; task) where T : class
+                      {
+                        var sw = new Stopwatch();
+                        sw.Start();
+                        var taskResult = new TaskResult { Name = taskName };
+                        try
+                        {
+                          taskResult.Data = await task;
+                          sw.Stop();
+                          Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds));
+                        }
+                        catch (Exception ex)
+                        {
+                          sw.Stop();
+                          Telemetry.Add(GetTelemetry(taskName, sw.ElapsedMilliseconds, "Exception", ex.Message));
+                          taskResult.Data = null;
+                        }
+                        finally
+                        {
+                          TaskResults.Add(taskResult);
+                        }
+                      }
 
+                  .row.g-4
+                    .col-md-6
+                      .card.border-info
+                        .card-header.bg-info.text-white
+                          h6.mb-0
+                            i.bi.bi-clock-history.me-2
+                            | Performance Metrics
+                        .card-body
+                          p.card-text.small.
+                            Utilizes Stopwatch to measure and record task execution time,
+                            providing valuable performance insights for optimization.
 
-          Results:
-          Chicago:
-          No data
+                    .col-md-6
+                      .card.border-warning
+                        .card-header.bg-warning.text-dark
+                          h6.mb-0
+                            i.bi.bi-exclamation-triangle.me-2
+                            | Error Tracking
+                        .card-body
+                          p.card-text.small.
+                            Captures exceptions during task execution, logging errors with task names
+                            and elapsed time for comprehensive analysis.
 
-          Paris:
-          No data
+                    .col-md-6
+                      .card.border-success
+                        .card-header.bg-success.text-white
+                          h6.mb-0
+                            i.bi.bi-shield.me-2
+                            | Execution Isolation
+                        .card-body
+                          p.card-text.small.
+                            Each task executes in a separate logical block, allowing independent handling
+                            where one task failure doesn't impede others.
 
-          New York:
-          No data
+                    .col-md-6
+                      .card.border-primary
+                        .card-header.bg-primary.text-white
+                          h6.mb-0
+                            i.bi.bi-box.me-2
+                            | Generic Flexibility
+                        .card-body
+                          p.card-text.small.
+                            Designed to return various object types from different tasks within a single list,
+                            enabling heterogeneous task processing.
 
-          Dallas:
-          City: Dallas, Date: 2023-11-10, Temp (F): 40, Summary: Cool
-          City: Dallas, Date: 2023-11-11, Temp (F): 87, Summary: Balmy
-          City: Dallas, Date: 2023-11-12, Temp (F): 18, Summary: Chilly
-          City: Dallas, Date: 2023-11-13, Temp (F): 31, Summary: Chilly
-          City: Dallas, Date: 2023-11-14, Temp (F): 105, Summary: Sweltering
+            // TaskResult Class Section
+            section#taskresult-class.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-success.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-box-seam.me-2
+                    | TaskResult Class Overview
+                .card-body
+                  p.
+                    The TaskResult class is a cornerstone within the TaskListProcessor architecture,
+                    designed to encapsulate the outcome of asynchronous tasks with unified structure.
 
-          Sydney:
-          City: Sydney, Date: 2023-11-10, Temp (F): 116, Summary: Sweltering
-          City: Sydney, Date: 2023-11-11, Temp (F): 49, Summary: Cool
-          City: Sydney, Date: 2023-11-12, Temp (F): 123, Summary: Scorching
-          City: Sydney, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
-          City: Sydney, Date: 2023-11-14, Temp (F): -2, Summary: Bracing
+                  pre.language-csharp.mb-4
+                    code.language-csharp.
+                      public class TaskResult&lt;T&gt; : ITaskResult
+                      {
+                        public TaskResult()
+                        {
+                          Name = "UNKNOWN";
+                          Data = null;
+                        }
 
-          Tokyo:
-          City: Tokyo, Date: 2023-11-10, Temp (F): 75, Summary: Warm
-          City: Tokyo, Date: 2023-11-11, Temp (F): 120, Summary: Sweltering
-          City: Tokyo, Date: 2023-11-12, Temp (F): 27, Summary: Chilly
-          City: Tokyo, Date: 2023-11-13, Temp (F): 57, Summary: Mild
-          City: Tokyo, Date: 2023-11-14, Temp (F): 7, Summary: Bracing
+                        public TaskResult(string name, T data)
+                        {
+                          Name = name;
+                          Data = data;
+                        }
+                        public T? Data { get; set; }
+                        public string Name { get; set; }
+                      }
 
-          Wichita:
-          No data
+                  .row.g-4
+                    .col-md-6
+                      .card.border-primary
+                        .card-header.bg-primary.text-white
+                          h6.mb-0
+                            i.bi.bi-bullseye.me-2
+                            | Purpose & Standardization
+                        .card-body
+                          p.card-text.small.
+                            Offers a standardized object representing any task outcome, regardless of nature
+                            or return data type, promoting consistency across applications.
 
-          London:
-          City: London, Date: 2023-11-10, Temp (F): 16, Summary: Chilly
-          City: London, Date: 2023-11-11, Temp (F): -3, Summary: Freezing
-          City: London, Date: 2023-11-12, Temp (F): 125, Summary: Scorching
-          City: London, Date: 2023-11-13, Temp (F): 16, Summary: Chilly
-          City: London, Date: 2023-11-14, Temp (F): 84, Summary: Warm
+                    .col-md-6
+                      .card.border-info
+                        .card-header.bg-info.text-white
+                          h6.mb-0
+                            i.bi.bi-arrows-fullscreen.me-2
+                            | Generic Flexibility
+                        .card-body
+                          p.card-text.small.
+                            Thanks to generic design, can hold any result data type, making it versatile
+                            across projects and scenarios for capturing task execution results.
 
+                    .col-md-6
+                      .card.border-warning
+                        .card-header.bg-warning.text-dark
+                          h6.mb-0
+                            i.bi.bi-bug.me-2
+                            | Error Handling
+                        .card-body
+                          p.card-text.small.
+                            When tasks fail, stores error details alongside original task information,
+                            making it invaluable for error tracking and debugging processes.
 
-      h2 Take the TaskListProcessor for a Test Drive
-      p.lead.
-        In the realm of .Net, orchestrating concurrent asynchronous tasks is a common challenge with the potential to become a learning journey.
-        The TaskListProcessor class emerges as a powerful tool to manage such diversity with elegance. It's a testament to the principle that
-        the key to lifelong learning is to constantly challenge yourself with new techniques and paradigms. You can experience this first-hand
-        by taking the code for a test drive, available for cloning at the GitHub repository.
-      p Test Drive
-        | To truly grasp the power of the TaskListProcessor, I invite you to clone the GitHub repository at
-        a(href="https://github.com/markhazleton/TaskListProcessor" target='_blank') https://github.com/markhazleton/TaskListProcessor
-        | and take the code for a spin. It's a practical step in the lifelong learning journey for any .Net developer looking to master concurrent operations.
+                    .col-md-6
+                      .card.border-success
+                        .card-header.bg-success.text-white
+                          h6.mb-0
+                            i.bi.bi-graph-up.me-2
+                            | Telemetry Integration
+                        .card-body
+                          p.card-text.small.
+                            Can be extended to include telemetry data like execution duration,
+                            crucial for performance monitoring and optimization in complex systems.
 
-      h2.mb-0 Update
-      .subheading.mb-3 Adding the CityThingsToDo Service
-      img.img-fluid.d-block.w-25(src='assets/img/Task-List-Processor-Dashboard-Update.png' alt='Task List Processor Updated Dashboard')
+            // WeatherService Implementation Section
+            section#weather-service.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-info.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-cloud-sun.me-2
+                    | WeatherService Implementation
+                .card-body
+                  p.
+                    The WeatherService class simulates real-world external service calls with artificial latency
+                    and potential failures for comprehensive testing scenarios.
 
-      p.
-        Our latest enhancement to the Task List Processor project is the introduction of the CityThingsToDo service.
-        This new service showcases the power and flexibility of our existing architecture to seamlessly integrate
-        different types of services and return types within the same framework.
-        With a focus on expandability and practical use, the CityThingsToDo service provides a vivid example of how the TaskListProcessor can handle
-        diverse data, reflecting real-world use cases like a travel site dashboard that provides both weather forecasts and activities for different cities.
-      p.
-        The new service aligns perfectly with the existing WeatherService, illustrating the processor's ability to manage asynchronous tasks concurrently
-        for multiple cities. It demonstrates how a single class can orchestrate different services,
-        each returning a different type of data from weather information to lists of recommended activities
-        and process them with uniform error handling and telemetry.
-      p.
-        The updated console application code now calls upon the CityThingsToDo service to retrieve a curated list of activities for each city alongside the
-        weather forecast. This simulates a real-world scenario where a user can view a comprehensive dashboard of information for planning their travel.
-      p.
-        With the Task List Processor at its core, the updated application reflects a robust, real-world application scenario, demonstrating the full potential
-        of concurrent task processing in .NET. It's a leap forward in our journey to provide developers with a tool that not only simplifies complex operations
-        but also enriches the end-user experience with a wealth of information at their fingertips.
-      pre.language-csharp
-        code.language-csharp.
-          var thingsToDoService = new CityThingsToDoService();
-          var weatherService = new WeatherService();
-          var cityDashboards = new TaskListProcessorGeneric();
-          var cities = new List<string> { "London", "Paris", "New York", "Tokyo", "Sydney", "Chicago", "Dallas", "Wichita" };
-          var tasks = new List<Task>();
-          foreach (var city in cities)
-          {
-            tasks.Add(cityDashboards.GetTaskResultAsync($"{city} Weather", weatherService.GetWeather(city)));
-            tasks.Add(cityDashboards.GetTaskResultAsync($"{city} Things To Do", thingsToDoService.GetThingsToDoAsync(city)));
-          }
-          await cityDashboards.WhenAllWithLoggingAsync(tasks, logger);
+                  .row.g-4
+                    .col-md-6
+                      .card.border-primary
+                        .card-header.bg-primary.text-white
+                          h6.mb-0
+                            i.bi.bi-clock.me-2
+                            | Real-World Simulation
+                        .card-body
+                          p.card-text.small.
+                            Mimics external service calls by introducing artificial latency using Random class,
+                            simulating network or service delays developers encounter in production.
 
-      h3 The Output
-      pre.language-json
-        code.language-json.
-          11/10/2023 8:28:47 AM -06:00
-          All tasks completed
+                    .col-md-6
+                      .card.border-danger
+                        .card-header.bg-danger.text-white
+                          h6.mb-0
+                            i.bi.bi-x-circle.me-2
+                            | Randomized Error Injection
+                        .card-body
+                          p.card-text.small.
+                            Deliberately throws exceptions based on random conditions to simulate
+                            real service failures, ensuring applications handle intermittent failures gracefully.
 
-          Telemetry:
-          Chicago Things To Do: Task completed in 963 ms
-          Chicago Weather: Task completed in 2,263 ms
-          Dallas Things To Do: Task completed in 969 ms
-          Dallas Weather: Task completed in 2,163 ms with ERROR Exception: Random failure occurred fetching weather data.
-          London Things To Do: Task completed in 497 ms
-          London Weather: Task completed in 2,273 ms with ERROR Exception: Random failure occurred fetching weather data.
+                    .col-md-6
+                      .card.border-warning
+                        .card-header.bg-warning.text-dark
+                          h6.mb-0
+                            i.bi.bi-sliders.me-2
+                            | Adjustable Failure Rate
+                        .card-body
+                          p.card-text.small.
+                            Customizable failure likelihood provides flexibility in error introduction frequency,
+                            allowing thorough testing under various stress and instability conditions.
 
+                    .col-md-6
+                      .card.border-success
+                        .card-header.bg-success.text-white
+                          h6.mb-0
+                            i.bi.bi-check-circle.me-2
+                            | Realistic Testing
+                        .card-body
+                          p.card-text.small.
+                            Incorporates randomness in latency and failures for realistic testing environments,
+                            ensuring applications handle both success scenarios and unexpected delays.
 
-          Results:
-          Chicago Things To Do:
-          Visit the Art Institute of Chicago - $25.00
-          Take an architecture river cruise - $40.00
-          Stand on the Skydeck at Willis Tower - $23.00
-          Explore Millennium Park - $0.00
+            // Dashboard Demo Section
+            section#dashboard-demo.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-dark.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-display.me-2
+                    | Travel Dashboard Demo
+                .card-body
+                  .row.align-items-center.mb-4
+                    .col-md-3
+                      img.img-fluid.rounded(
+                        src='assets/img/Task-List-Processor-Dashboard.png'
+                        alt='Task List Processor Dashboard demonstration'
+                        title='Task List Processor Dashboard showing concurrent data loading'
+                        loading='lazy'
+                      )
+                    .col-md-9
+                      p.
+                        Let's examine a practical implementation that demonstrates fetching weather forecasts
+                        for multiple cities concurrently, simulating a real-world travel dashboard.
 
-          Chicago Weather:
-          City: Chicago, Date: 2023-11-11, Temp (F): 2, Summary: Bracing
-          City: Chicago, Date: 2023-11-12, Temp (F): 29, Summary: Chilly
-          City: Chicago, Date: 2023-11-13, Temp (F): 89, Summary: Balmy
-          City: Chicago, Date: 2023-11-14, Temp (F): 93, Summary: Balmy
-          City: Chicago, Date: 2023-11-15, Temp (F): 105, Summary: Sweltering
+                  .row.g-4.mb-4
+                    .col-md-6
+                      .card.border-info
+                        .card-header.bg-info.text-white
+                          h6.mb-0
+                            i.bi.bi-speedometer2.me-2
+                            | Concurrent Data Retrieval
+                        .card-body
+                          p.card-text.small.
+                            Asynchronous programming makes non-blocking calls to WeatherService for each city,
+                            demonstrating parallel data loading for reduced total wait time.
 
-          Dallas Things To Do:
-          Visit the Sixth Floor Museum at Dealey Plaza - $18.00
-          Stroll through the Dallas Arboretum and Botanical Garden - $15.00
-          Experience the Perot Museum of Nature and Science - $20.00
-          Explore the Dallas World Aquarium - $25.00
+                    .col-md-6
+                      .card.border-primary
+                        .card-header.bg-primary.text-white
+                          h6.mb-0
+                            i.bi.bi-terminal.me-2
+                            | Console Logging Demo
+                        .card-body
+                          p.card-text.small.
+                            Console.WriteLine outputs progress and results, providing clear sequential logs
+                            that mimic how users see data loading on web dashboards.
 
-          Dallas Weather:
-          No data
+                  // Code Example
+                  pre.language-csharp.mb-4
+                    code.language-csharp.
+                      var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                      var logger = loggerFactory.CreateLogger&lt;Program&gt;();
+                      var weatherService = new WeatherService();
+                      var weatherCities = new TaskListProcessing.TaskListProcessor();
+                      var cities = new List&lt;string&gt; { "London", "Paris", "New York", "Tokyo", "Sydney", "Chicago", "Dallas", "Wichita" };
+                      var tasks = new List&lt;Task&gt;();
 
-          London Things To Do:
-          Ride the London Eye - $30.00
-          Tour the Tower of London - $25.00
-          Visit the British Museum - $0.00
-          Explore Camden Market - $0.00
+                      foreach (var city in cities)
+                      {
+                        tasks.Add(weatherCities.GetTaskResultAsync(city, weatherService.GetWeather(city)));
+                      }
 
-          London Weather:
-          No data
+                      await TaskListProcessing.TaskListProcessor.WhenAllWithLoggingAsync(tasks, logger);
 
+                  // Output Example
+                  .card.bg-light.mb-4
+                    .card-header
+                      h6.mb-0
+                        i.bi.bi-terminal.me-2
+                        | Sample Output
+                    .card-body
+                      pre.language-json.mb-0
+                        code.language-json.
+                          Telemetry:
+                          Chicago: Task completed in 602 ms with ERROR Exception: Random failure occurred fetching weather data.
+                          Paris: Task completed in 723 ms with ERROR Exception: Random failure occurred fetching weather data.
+                          Dallas: Task completed in 1,009 ms
+                          Sydney: Task completed in 1,318 ms
+                          Tokyo: Task completed in 1,921 ms
+                          London: Task completed in 2,789 ms
 
-      section.version-compatibility-updates
-        h2 Version Compatibility and Updates
-        p The TaskListProcessor is currently developed for .NET version 8. This version offers the latest features and optimizations in the .NET framework.
-        p Future Updates:
-        ul
-          li Our project is committed to staying up-to-date with the .NET ecosystem. As new versions of the .NET framework and NuGet packages are released, we will update our codebase accordingly.
-          li Regular updates will ensure compatibility with the latest .NET features and performance enhancements.
-        p Follow our GitHub repository for the latest updates and to access the most current version of the TaskListProcessor.
+                          Results:
+                          Dallas: City: Dallas, Date: 2023-11-10, Temp (F): 40, Summary: Cool
+                          Sydney: City: Sydney, Date: 2023-11-10, Temp (F): 116, Summary: Sweltering
+                          Tokyo: City: Tokyo, Date: 2023-11-10, Temp (F): 75, Summary: Warm
+                          London: City: London, Date: 2023-11-10, Temp (F): 16, Summary: Chilly
+
+            // Updated Implementation Section
+            section#updates.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-warning.text-dark
+                  h2.card-title.mb-0
+                    i.bi.bi-arrow-clockwise.me-2
+                    | Enhanced Implementation: CityThingsToDo Service
+                .card-body
+                  .row.align-items-center.mb-4
+                    .col-md-3
+                      img.img-fluid.rounded(
+                        src='assets/img/Task-List-Processor-Dashboard-Update.png'
+                        alt='Updated Task List Processor Dashboard with activities'
+                        title='Enhanced dashboard showing both weather and activities'
+                        loading='lazy'
+                      )
+                    .col-md-9
+                      p.
+                        The latest enhancement introduces the CityThingsToDo service, showcasing the power and flexibility
+                        of our architecture to seamlessly integrate different service types and return types.
+
+                  .alert.alert-info.mb-4
+                    h6.alert-heading
+                      i.bi.bi-lightbulb.me-2
+                      | Architecture Benefits
+                    p.mb-0.
+                      This enhancement demonstrates how TaskListProcessor handles diverse data sources,
+                      reflecting real-world scenarios like travel dashboards that provide weather forecasts
+                      and activities for different cities with uniform error handling and telemetry.
+
+                  // Enhanced Code Example
+                  pre.language-csharp.mb-4
+                    code.language-csharp.
+                      var thingsToDoService = new CityThingsToDoService();
+                      var weatherService = new WeatherService();
+                      var cityDashboards = new TaskListProcessorGeneric();
+                      var cities = new List&lt;string&gt; { "London", "Paris", "New York", "Tokyo", "Sydney", "Chicago", "Dallas", "Wichita" };
+                      var tasks = new List&lt;Task&gt;();
+
+                      foreach (var city in cities)
+                      {
+                        tasks.Add(cityDashboards.GetTaskResultAsync($"{city} Weather", weatherService.GetWeather(city)));
+                        tasks.Add(cityDashboards.GetTaskResultAsync($"{city} Things To Do", thingsToDoService.GetThingsToDoAsync(city)));
+                      }
+
+                      await cityDashboards.WhenAllWithLoggingAsync(tasks, logger);
+
+            // Conclusion Section
+            section#conclusion.mb-5
+              .card.border-0.shadow-sm
+                .card-header.bg-success.text-white
+                  h2.card-title.mb-0
+                    i.bi.bi-rocket-takeoff.me-2
+                    | Take TaskListProcessor for a Test Drive
+                .card-body
+                  p.lead.
+                    In the realm of .NET, orchestrating concurrent asynchronous tasks is a common challenge
+                    with the potential to become a transformative learning journey.
+
+                  .row.g-4.mb-4
+                    .col-md-6
+                      .card.h-100.bg-light
+                        .card-body.text-center
+                          i.bi.bi-github.display-6.text-primary.mb-3
+                          h5.card-title Test Drive Experience
+                          p.card-text.
+                            Clone the repository and experience the power of TaskListProcessor firsthand.
+                            A practical step in the lifelong learning journey for .NET developers.
+                          a.btn.btn-primary(
+                            href='https://github.com/markhazleton/TaskListProcessor'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          )
+                            i.bi.bi-github.me-2
+                            | View on GitHub
+
+                    .col-md-6
+                      .card.h-100.bg-light
+                        .card-body.text-center
+                          i.bi.bi-award.display-6.text-success.mb-3
+                          h5.card-title Learning Outcomes
+                          p.card-text.
+                            Master concurrent operations, understand error handling strategies,
+                            and implement performance monitoring in your .NET applications.
+
+                  .alert.alert-success
+                    h6.alert-heading
+                      i.bi.bi-check-circle.me-2
+                      | Version Compatibility
+                    p.mb-2.
+                      TaskListProcessor is developed for .NET 9, offering the latest framework features and optimizations.
+                      Regular updates ensure compatibility with new .NET releases and performance enhancements.
+                    p.mb-0.
+                      Follow our GitHub repository for the latest updates and access to the most current version
+                      with ongoing improvements and community contributions.
