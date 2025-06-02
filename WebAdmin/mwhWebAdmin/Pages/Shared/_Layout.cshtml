@@ -1,51 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - mwhWebAdmin</title>
+    <title>@ViewData["Title"] - Mark Hazleton Blog Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/mwhWebAdmin.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Articles">Articles</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/ArticleAdd">Add Article</a>
+
+<body class="admin-body">
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary admin-navbar fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#" onclick="toggleSidebar()">
+                <i class="fas fa-bars me-2"></i>
+                <i class="fas fa-blog me-2"></i>
+                Blog Admin
+            </a>
+
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Mark Hazleton
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Projects">Projects</a>
-                        </li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - mwhWebAdmin 
         </div>
-    </footer>
+    </nav>
 
+    <!-- Sidebar -->
+    <nav class="sidebar bg-dark" id="sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")"
+                        asp-page="/Index">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Content Management</span>
+                    </h6>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Articles" ? "active" : "")"
+                        asp-page="/Articles">
+                        <i class="fas fa-newspaper me-2"></i>
+                        Articles
+                        <span class="badge bg-primary ms-auto">@(ViewData["ArticleCount"] ?? 0)</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/ArticleAdd" ? "active" : "")"
+                        asp-page="/ArticleAdd">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Add Article
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Projects" ? "active" : "")"
+                        asp-page="/Projects">
+                        <i class="fas fa-project-diagram me-2"></i>
+                        Projects
+                        <span class="badge bg-success ms-auto">@(ViewData["ProjectCount"] ?? 0)</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/ProjectAdd" ? "active" : "")"
+                        asp-page="/ProjectAdd">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Add Project
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Site Management</span>
+                    </h6>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="refreshSite()">
+                        <i class="fas fa-sync-alt me-2"></i>
+                        Refresh Site
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="https://markhazleton.com" target="_blank">
+                        <i class="fas fa-external-link-alt me-2"></i>
+                        View Live Site
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @RenderBody()
+        </div>
+    </main>
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

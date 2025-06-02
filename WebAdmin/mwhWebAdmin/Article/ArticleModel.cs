@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace mwhWebAdmin.Article;
 
 /// <summary>
@@ -19,12 +21,11 @@ public class ArticleModel
     /// </summary>
     [JsonPropertyName("id")]
     public int Id { get; set; }
-    ///
-    /// <summary>
+    ///    /// <summary>
     /// Gets or sets the section to which the article belongs.
     /// </summary>
     [JsonPropertyName("Section")]
-    public string Section { get; set; }
+    public string Section { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the slug (URL-friendly string) for the article.
@@ -36,19 +37,19 @@ public class ArticleModel
     /// Gets or sets the name of the article.
     /// </summary>
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the content of the article.
     /// </summary>
     [JsonPropertyName("content")]
-    public string ArticleContent { get; set; }
+    public string ArticleContent { get; set; } = string.Empty;
     ///
     /// <summary>
     /// Gets or sets the description of the article.
     /// </summary>
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the keywords for the article.
@@ -74,5 +75,52 @@ public class ArticleModel
     /// </summary>
     [JsonPropertyName("changefreq")]
     public string ChangeFrequency { get; set; } = "monthly";
+
+    /// <summary>
+    /// Gets or sets the source PUG file path for the article.
+    /// </summary>
+    [JsonPropertyName("source")]
+    public string Source { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets a value indicating whether the source PUG file exists.
+    /// </summary>
+    [JsonIgnore]
+    public bool SourceFileExists => !string.IsNullOrEmpty(Source) && File.Exists(GetFullSourcePath());    /// <summary>
+                                                                                                          /// Gets the full path to the source PUG file.
+                                                                                                          /// </summary>
+                                                                                                          /// <returns>The full path to the source PUG file.</returns>
+    private string GetFullSourcePath()
+    {
+        if (string.IsNullOrEmpty(Source))
+            return string.Empty;
+
+        // Source paths start with /src/pug/, we need to convert to absolute path
+        // Remove leading slash and convert to Windows path
+        string relativePath = Source.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+
+        // Get the workspace root by going up from the WebAdmin directory
+        var assemblyLocation = typeof(ArticleModel).Assembly.Location;
+        if (string.IsNullOrEmpty(assemblyLocation))
+            return string.Empty;
+
+        var webAdminPath = Path.GetDirectoryName(assemblyLocation);
+        if (string.IsNullOrEmpty(webAdminPath))
+            return string.Empty;
+
+        // Navigate up to the workspace root (c:\GitHub\MarkHazleton\markhazleton-blog)
+        var workspaceRoot = webAdminPath;
+        while (!string.IsNullOrEmpty(workspaceRoot) && !Directory.Exists(Path.Combine(workspaceRoot, "src")))
+        {
+            var parent = Directory.GetParent(workspaceRoot);
+            if (parent == null) break;
+            workspaceRoot = parent.FullName;
+        }
+
+        if (string.IsNullOrEmpty(workspaceRoot) || !Directory.Exists(Path.Combine(workspaceRoot, "src")))
+            return string.Empty;
+
+        return Path.Combine(workspaceRoot, relativePath);
+    }
 }
 

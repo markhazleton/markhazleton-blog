@@ -121,9 +121,12 @@ block layout-content
                         option(value='Project Mechanics') Project Mechanics
                         option(value='Development') Development
                         option(value='Case Studies') Case Studies
-                        option(value='ReactSpark') ReactSpark
+                        option(value='ChatGPT') ChatGPT
                         option(value='PromptSpark') PromptSpark
-                        option(value='WebSpark') WebSpark
+                        option(value='Data Science') Data Science
+                        option(value='Blog Management') Blog Management
+                        option(value='ReactSpark') ReactSpark
+                        option(value='Open Source') Open Source
                   #searchStats.text-muted.small.mt-2
 
 
@@ -202,13 +205,14 @@ block additional_js
           </div>
         </div>
       `).join('');
-    }
-
-    // Display section statistics
+    }    // Display section statistics
     function displaySectionStats() {
       const sections = {};
       articlesData.forEach(article => {
-        sections[article.Section] = (sections[article.Section] || 0) + 1;
+        // Ensure article has a Section field
+        if (article.Section) {
+          sections[article.Section] = (sections[article.Section] || 0) + 1;
+        }
       });
 
       const statsContainer = document.getElementById('sectionStats');
@@ -217,7 +221,7 @@ block additional_js
         .map(([section, count]) => `
           <div class="d-flex justify-content-between align-items-center mb-2">
             <button class="btn btn-sm btn-outline-primary text-start flex-grow-1"
-              onclick="filterBySection('${section}')">
+              onclick="filterBySection('${section.replace(/'/g, "\\'")}')">
               ${section}
             </button>
             <span class="badge bg-secondary ms-2">${count}</span>
@@ -264,9 +268,7 @@ block additional_js
       `;
 
       displayPagination();
-    }
-
-    // Display pagination
+    }    // Display pagination
     function displayPagination() {
       const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
       const paginationContainer = document.getElementById('pagination');
@@ -281,9 +283,9 @@ block additional_js
       // Previous button
       paginationHTML += `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-          <a class="page-link" href="#" onclick="changePage(${currentPage - 1})" aria-label="Previous">
+          <button class="page-link" onclick="changePage(${currentPage - 1})" aria-label="Previous" ${currentPage === 1 ? 'disabled' : ''}>
             <span aria-hidden="true">&laquo;</span>
-          </a>
+          </button>
         </li>
       `;
 
@@ -292,7 +294,7 @@ block additional_js
       const endPage = Math.min(totalPages, currentPage + 2);
 
       if (startPage > 1) {
-        paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>`;
+        paginationHTML += `<li class="page-item"><button class="page-link" onclick="changePage(1)">1</button></li>`;
         if (startPage > 2) {
           paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
         }
@@ -301,7 +303,7 @@ block additional_js
       for (let i = startPage; i <= endPage; i++) {
         paginationHTML += `
           <li class="page-item ${i === currentPage ? 'active' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+            <button class="page-link" onclick="changePage(${i})" ${i === currentPage ? 'aria-current="page"' : ''}>${i}</button>
           </li>
         `;
       }
@@ -310,57 +312,67 @@ block additional_js
         if (endPage < totalPages - 1) {
           paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
         }
-        paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a></li>`;
+        paginationHTML += `<li class="page-item"><button class="page-link" onclick="changePage(${totalPages})">${totalPages}</button></li>`;
       }
 
       // Next button
       paginationHTML += `
         <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-          <a class="page-link" href="#" onclick="changePage(${currentPage + 1})" aria-label="Next">
+          <button class="page-link" onclick="changePage(${currentPage + 1})" aria-label="Next" ${currentPage === totalPages ? 'disabled' : ''}>
             <span aria-hidden="true">&raquo;</span>
-          </a>
+          </button>
         </li>
       `;
 
       paginationHTML += '</ul>';
       paginationContainer.innerHTML = paginationHTML;
-    }
-
-    // Change page
+    }    // Change page
     function changePage(page) {
       if (page < 1 || page > Math.ceil(filteredArticles.length / articlesPerPage)) return;
+
+      // Store current scroll position relative to articles container
+      const articlesContainer = document.getElementById('articlesContainer');
+      const containerTop = articlesContainer.offsetTop;
+
       currentPage = page;
       displayArticles();
-      document.getElementById('articlesContainer').scrollIntoView({ behavior: 'smooth' });
-    }
 
-    // Filter articles
+      // Smooth scroll to articles container without jumping to top
+      window.scrollTo({
+        top: containerTop - 100, // Offset for fixed navbar
+        behavior: 'smooth'
+      });
+    }// Filter articles
     function filterArticles() {
       const searchTerm = document.getElementById('searchInput').value.toLowerCase();
       const sectionFilter = document.getElementById('sectionFilter').value;
-
       filteredArticles = articlesData.filter(article => {
+        // Ensure all fields exist and are strings before searching
+        const name = (article.name || '').toLowerCase();
+        const description = (article.description || '').toLowerCase();
+        const keywords = (article.keywords || '').toLowerCase();
+        const section = (article.Section || '').toLowerCase();
+
         const matchesSearch = !searchTerm ||
-          article.name.toLowerCase().includes(searchTerm) ||
-          article.description.toLowerCase().includes(searchTerm) ||
-          article.keywords.toLowerCase().includes(searchTerm) ||
-          article.Section.toLowerCase().includes(searchTerm);
+          name.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          keywords.includes(searchTerm) ||
+          section.includes(searchTerm);
 
-        const matchesSection = !sectionFilter || article.Section === sectionFilter;
-
-        return matchesSearch && matchesSection;
+        const matchesSection = !sectionFilter || article.Section === sectionFilter;        return matchesSearch && matchesSection;
       });
 
       currentPage = 1;
       displayArticles();
       updateSearchStats();
-    }
-
-    // Filter by section
+    }    // Filter by section
     function filterBySection(section) {
       document.getElementById('sectionFilter').value = section;
       document.getElementById('searchInput').value = '';
       filterArticles();
+
+      // Scroll to articles section
+      document.getElementById('articlesContainer').scrollIntoView({ behavior: 'smooth' });
     }
 
     // Update search statistics
@@ -407,7 +419,6 @@ block additional_js
 
       sectionFilter.addEventListener('change', filterArticles);
     });
-
   // Add hover effects CSS
   style.
     .hover-card {
@@ -429,6 +440,25 @@ block additional_js
     }
     .hover-card:hover .card-img-wrapper img {
       transform: scale(1.05);
+    }
+    .pagination .page-link {
+      border: none;
+      background: none;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+    }
+    .pagination .page-link:hover:not(:disabled) {
+      background-color: #e9ecef;
+      border-color: #dee2e6;
+    }
+    .pagination .page-item.active .page-link {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      color: white;
+    }
+    .pagination .page-link:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
     @media (max-width: 768px) {
       .display-4 {

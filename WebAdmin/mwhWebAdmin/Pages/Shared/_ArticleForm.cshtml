@@ -1,0 +1,136 @@
+@using mwhWebAdmin.Article
+@using System.IO
+@model ArticleModel
+@{
+    var sections = ArticleModelHelpers.Sections;
+    var frequencies = ArticleModelHelpers.ChangeFrequency;
+    var isEdit = ViewBag.IsEdit ?? false;
+    var availableImages = ViewBag.AvailableImages as List<string> ?? new List<string>();
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Article Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="Section" class="form-label fw-bold">Section:</label>
+                        <select class="form-select" asp-for="Section">
+                            @if (!isEdit)
+                            {
+                                <option value="">Choose a section...</option>
+                            }
+                            @foreach (var item in sections.OrderBy(o => o))
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="ChangeFrequency" class="form-label fw-bold">Change Frequency:</label>
+                        <select class="form-select" asp-for="ChangeFrequency">
+                            @foreach (var item in frequencies.OrderBy(o => 0))
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Name" class="form-label fw-bold">Article Name:</label>
+                    <input type="text" class="form-control" asp-for="Name" placeholder="Enter article title..." />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Description" class="form-label fw-bold">Description:</label>
+                    <textarea class="form-control" asp-for="Description" rows="3" placeholder="Brief description of the article..."></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Keywords" class="form-label fw-bold">Keywords:</label>
+                    <input type="text" class="form-control" asp-for="Keywords" placeholder="Comma-separated keywords..." />
+                    <div class="form-text">Separate multiple keywords with commas</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ArticleContent" class="form-label fw-bold">Content:</label>
+                    <textarea class="form-control" asp-for="ArticleContent" rows="6" placeholder="Article content..."></textarea>
+                </div>
+
+                @if (isEdit)
+                {
+                    <div class="mb-3">
+                        <label for="Slug" class="form-label fw-bold">Slug:</label>
+                        <input type="text" class="form-control" asp-for="Slug" />
+                        <div class="form-text">URL-friendly version of the article name</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-image me-2"></i>Article Image</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="ImgSrc" class="form-label fw-bold">Image Path:</label>
+                    <select class="form-select" asp-for="ImgSrc">
+                        <option value="">Select an image...</option>                        @foreach (var image in availableImages)
+                        {
+                            <option value="@image">@System.IO.Path.GetFileName(image)</option>
+                        }
+                    </select>
+                    <div class="form-text">Choose from available images or enter custom path</div>
+                </div>
+
+                <div class="mb-3">
+                    <small class="text-muted">Custom path:</small>
+                    <input type="text" class="form-control form-control-sm" asp-for="ImgSrc" placeholder="assets/img/custom-image.jpg" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImgSrc))
+                {
+                    <div class="text-center">
+                        <img src="/@Model.ImgSrc" alt="Article Image" class="img-fluid rounded" style="max-height: 200px;" />
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (isEdit)
+        {
+            <!-- Source File Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-file-code me-2"></i>Source File</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.SourceFileExists)
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>Source file found
+                            <br><small class="text-muted">@Model.Source</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Source file not found
+                            @if (!string.IsNullOrEmpty(Model.Source))
+                            {
+                                <br><small class="text-muted">Expected: @Model.Source</small>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

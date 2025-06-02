@@ -1,9 +1,221 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "Blog Admin";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Blog Admin</h1>
+<!-- Page Header -->
+<div class="page-header fade-in-up">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="fas fa-tachometer-alt me-3"></i>Dashboard</h1>
+            <p class="lead mb-0">Welcome to your blog administration panel</p>
+        </div>
+        <div>
+            <span class="text-muted">Last updated: @DateTime.Now.ToString("MMM dd, yyyy HH:mm")</span>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Stats -->
+<div class="row mb-4 fade-in-up">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="dashboard-card card-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-white-50 small">Total Articles</div>
+                        <div class="h2 mb-0 font-weight-bold">@(ViewData["ArticleCount"] ?? 0)</div>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="/Articles" class="btn btn-light btn-sm">
+                        <i class="fas fa-arrow-right me-1"></i>View Articles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="dashboard-card card-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-white-50 small">Active Projects</div>
+                        <div class="h2 mb-0 font-weight-bold">@(ViewData["ProjectCount"] ?? 0)</div>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="/Projects" class="btn btn-light btn-sm">
+                        <i class="fas fa-arrow-right me-1"></i>View Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="dashboard-card card-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-white-50 small">Images</div>
+                        <div class="h2 mb-0 font-weight-bold">@(ViewData["ImageCount"] ?? 0)</div>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="text-white-50 small">Available for projects</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="dashboard-card card-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-white-50 small">Site Status</div>
+                        <div class="h5 mb-0 font-weight-bold">Online</div>
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="https://markhazleton.com" target="_blank" class="btn btn-light btn-sm">
+                        <i class="fas fa-external-link-alt me-1"></i>Visit Site
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4 fade-in-up">
+    <div class="col-md-8">
+        <div class="admin-table">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-grid">
+                            <a href="/ArticleAdd" class="btn btn-admin-primary">
+                                <i class="fas fa-plus-circle me-2"></i>Create New Article
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-grid">
+                            <a href="/ProjectAdd" class="btn btn-admin-secondary">
+                                <i class="fas fa-plus-circle me-2"></i>Add New Project
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-grid">
+                            <button onclick="refreshSite()" class="btn btn-outline-primary">
+                                <i class="fas fa-sync-alt me-2"></i>Refresh Site
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-grid">
+                            <a href="https://markhazleton.com" target="_blank" class="btn btn-outline-secondary">
+                                <i class="fas fa-external-link-alt me-2"></i>View Live Site
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="admin-table">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>System Info</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-12 mb-3">
+                        <div class="text-muted small">Application Version</div>
+                        <div class="fw-bold">v2.0.0</div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="text-muted small">Last Build</div>
+                        <div class="fw-bold">@DateTime.Now.ToString("yyyy-MM-dd")</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-muted small">Environment</div>
+                        <div class="fw-bold">
+                            <span class="badge bg-success">Development</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row fade-in-up">
+    <div class="col-12">
+        <div class="admin-table">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Recent Activity</h5>
+                <small class="text-muted">Last 24 hours</small>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 40px; height: 40px;">
+                                <i class="fas fa-plus text-white"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold">Dashboard Updated</div>
+                            <div class="text-muted small">Modern admin interface implemented</div>
+                            <div class="text-muted small">Just now</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 40px; height: 40px;">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold">System Ready</div>
+                            <div class="text-muted small">Admin panel is ready for content management</div>
+                            <div class="text-muted small">2 minutes ago</div>
+                        </div>
+                    </div>
+
+                    <div class="text-center py-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-history me-1"></i>View Full Activity Log
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

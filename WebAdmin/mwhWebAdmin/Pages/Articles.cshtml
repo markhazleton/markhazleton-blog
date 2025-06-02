@@ -3,30 +3,236 @@
 @{
     ViewData["Title"] = "Articles";
     var sortedSections = Model.Articles.Select(article => article.Section).Distinct().OrderBy(section => section);
+    var totalArticles = Model.Articles.Count;
 }
 
-<h1>Articles</h1>
-<div class="accordion" id="accordionSections">
-    @foreach (var item in sortedSections)
-    {
-        var itemId = item?.Replace(" ", "-"); // Replace spaces with hyphens
-
-        <div class="accordion-item">
-            <h2 class="accordion-header" id=@($"heading{itemId}")>
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target=@($"#collapse{itemId}") aria-expanded="true" aria-controls=@($"collapse{itemId}")>
-                    @item
+<!-- Page Header -->
+<div class="page-header fade-in-up">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="fas fa-newspaper me-3"></i>@ViewData["Title"]</h1>
+            <p class="lead mb-0">Manage your blog articles and content</p>
+        </div>
+        <div>
+            <form method="post" class="d-inline-block me-2">
+                <button type="submit" asp-page-handler="UpdateSourcePaths" class="btn btn-outline-secondary"
+                    title="Update source file paths for articles">
+                    <i class="fas fa-file-code me-2"></i>Update Source Paths
                 </button>
-            </h2>
-            <div id=@($"collapse{itemId}") class="accordion-collapse collapse" aria-labelledby=@($"heading{itemId}") data-bs-parent="#accordionSections">
-                <div class="accordion-body">
-                    <ul>
-                        @foreach (var article in Model.Articles.Where(article => article.Section == item).OrderBy(article => article.Name))
-                        {
-                            <li><a href="/ArticleEdit/@article.Id">@article.Name</a></li>
-                        }
-                    </ul>
+            </form>
+            <form method="post" class="d-inline-block me-2">
+                <button type="submit" asp-page-handler="DebugSourcePath" class="btn btn-outline-warning"
+                    title="Debug source path calculation">
+                    <i class="fas fa-bug me-2"></i>Debug
+                </button>
+            </form>
+            <form method="post" class="d-inline-block me-2">
+                <button type="submit" asp-page-handler="TestDirectorySlugProcessing" class="btn btn-outline-info"
+                    title="Test directory-based slug processing">
+                    <i class="fas fa-folder me-2"></i>Test Directory Slugs
+                </button>
+            </form>
+            <a asp-page="./ArticleAdd" class="btn btn-admin-primary">
+                <i class="fas fa-plus-circle me-2"></i>Add New Article
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (totalArticles == 0)
+{
+    <div class="admin-form text-center py-5 fade-in-up">
+        <i class="fas fa-newspaper text-muted mb-3" style="font-size: 4rem;"></i>
+        <h4>No articles found</h4>
+        <p class="text-muted mb-4">Start building your content library by creating your first article.</p>
+        <a asp-page="./ArticleAdd" class="btn btn-admin-primary">
+            <i class="fas fa-plus-circle me-2"></i>Create Your First Article
+        </a>
+    </div>
+}
+else
+{
+    <!-- Articles Statistics -->
+    <div class="row mb-4 fade-in-up">
+        <div class="col-md-3">
+            <div class="admin-card bg-primary">
+                <div class="admin-card-body">
+                    <div class="admin-card-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="admin-card-content">
+                        <h3>@totalArticles</h3>
+                        <p>Total Articles</p>
+                    </div>
                 </div>
             </div>
         </div>
-    }
+        <div class="col-md-3">
+            <div class="admin-card bg-success">
+                <div class="admin-card-body">
+                    <div class="admin-card-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="admin-card-content">
+                        <h3>@sortedSections.Count()</h3>
+                        <p>Categories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="admin-card bg-info">
+                <div class="admin-card-body">
+                    <div class="admin-card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="admin-card-content">
+                        <h3>@Model.Articles.Where(a => !string.IsNullOrEmpty(a.LastModified) &&
+                                                    DateTime.TryParse(a.LastModified, out var date) && date > DateTime.Now.AddDays(-30)).Count()
+                    </h3>
+                    <p>Recent Articles</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-card bg-warning">
+            <div class="admin-card-body">
+                <div class="admin-card-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <div class="admin-card-content">
+                    <h3>@Model.Articles.Where(a => string.IsNullOrEmpty(a.LastModified) || a.LastModified == "1/1/1900"
+                                                || a.LastModified == "1900-01-01").Count()</h3>
+                    <p>Draft Articles</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+    <!-- Articles by Category -->
+    <div class="admin-form fade-in-up">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Articles by Category</h5>
+                    <div class="d-flex align-items-center">
+                        <input type="text" class="form-control me-3" placeholder="Search articles..." id="articleSearch"
+                            style="width: 250px;">
+                        <span class="badge bg-secondary">@totalArticles articles</span>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion accordion-flush" id="accordionSections">
+            @foreach (var section in sortedSections)
+                {
+                    var sectionId = section?.Replace(" ", "-").Replace("/", "-"); // Replace spaces and slashes with hyphens
+                    var sectionArticles = Model.Articles.Where(article => article.Section == section).OrderBy(article =>
+                    article.Name);
+                    var sectionCount = sectionArticles.Count();
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading@(sectionId)">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse@(sectionId)" aria-expanded="false"
+                                aria-controls="collapse@(sectionId)">
+                                <div class="d-flex justify-content-between align-items-center w-100 me-3">
+                                    <span><i class="fas fa-folder me-2"></i>@(section)</span>
+                                    <span class="badge bg-primary">@sectionCount</span>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="collapse@(sectionId)" class="accordion-collapse collapse" aria-labelledby="heading@(sectionId)"
+                            data-bs-parent="#accordionSections">
+                            <div class="accordion-body">
+                                <div class="row"> @foreach (var article in sectionArticles)
+                                    {
+                                        <div class="col-md-6 col-lg-4 mb-3">
+                                            <div class="article-card clickable-card"
+                                                onclick="window.location.href='/ArticleEdit/@article.Id'" style="cursor: pointer;">
+                                                <div class="article-card-body">
+                                                    <h6 class="article-title">
+                                                        @article.Name
+                                                    </h6>
+                                                    <div class="article-meta">
+                                                        @if (!string.IsNullOrEmpty(article.LastModified) && article.LastModified !=
+                                                                                                    "1/1/1900" && article.LastModified != "1900-01-01")
+                                                        {
+                                                            <span class="badge bg-success me-1">
+                                                                <i class="fas fa-calendar me-1"></i>Published
+                                                            </span>
+                                                            <small class="text-muted">@article.LastModified</small>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-warning me-1">
+                                                                <i class="fas fa-edit me-1"></i>Draft
+                                                            </span>
+                                                        }
+
+                                                        @if (article.SourceFileExists)
+                                                        {
+                                                            <span class="badge bg-info me-1" title="PUG source file: @article.Source">
+                                                                <i class="fas fa-file-code me-1"></i>PUG
+                                                            </span>
+                                                        }
+                                                        else if (!string.IsNullOrEmpty(article.Source))
+                                                        {
+                                                            <span class="badge bg-secondary me-1"
+                                                                title="PUG source file not found: @article.Source">
+                                                                <i class="fas fa-file-times me-1"></i>Missing
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary me-1" title="No PUG source file configured">
+                                                                <i class="fas fa-file-slash me-1"></i>No Source
+                                                            </span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function ()
+        {
+            const searchInput = document.getElementById('articleSearch');
+
+            if (searchInput)
+            {
+                searchInput.addEventListener('input', function ()
+                {
+                    const searchTerm = this.value.toLowerCase();
+                    const articleCards = document.querySelectorAll('.article-card');
+
+                    articleCards.forEach(card =>
+                    {
+                        const title = card.querySelector('.article-title').textContent.toLowerCase();
+                        const cardContainer = card.closest('.col-md-6');
+
+                        if (title.includes(searchTerm))
+                        {
+                            cardContainer.style.display = '';
+                        } else
+                        {
+                            cardContainer.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+}
