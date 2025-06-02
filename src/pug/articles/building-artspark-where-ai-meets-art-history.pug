@@ -1,0 +1,642 @@
+extends ../layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Building ArtSpark: Where AI Meets Art History'
+  - var pageDescription = 'Discover how I built ArtSpark, an innovative AI platform that enables conversations with museum artworks. Learn about the technical implementation using .NET 9, Microsoft Semantic Kernel, GPT-4 Vision, and the Art Institute of Chicago API to create immersive cultural experiences.'
+  - var pageKeywords = 'ArtSpark, AI art platform, GPT-4 Vision, Microsoft Semantic Kernel, .NET 9, Art Institute of Chicago API, cultural technology, museum AI, conversational AI, art history, IIIF, OpenAI, machine learning'
+  - var pageCanonical = 'https://markhazleton.com/articles/building-artspark-where-ai-meets-art-history.html'
+
+block pagehead
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content='Mark Hazleton')
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='article')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/painteddesert.jpg')
+  meta(property='og:image:alt', content='ArtSpark - AI-powered art conversation platform')
+
+block twitter_overrides
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/painteddesert.jpg')
+  meta(name='twitter:image:alt', content='ArtSpark - AI-powered art conversation platform')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block layout-content
+  br
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-palette.me-3
+            | Building ArtSpark: Where AI Meets Art History
+          h2.h3.mb-4 Creating an AI-Powered Platform for Conversational Art Experiences
+          p.lead.mb-5
+            | When I discovered the Art Institute of Chicago's public API, I envisioned something revolutionary:
+            | What if museum visitors could have actual conversations with the artworks themselves? This question
+            | became the spark for ArtSpark—a project exploring the intersection of AI, cultural preservation,
+            | and interactive education.
+
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            .article-meta.text-muted.mb-4
+              time(datetime='2025-06-02') June 2, 2025
+              span.mx-2 •
+              span.author by Mark Hazleton
+              span.mx-2 •
+              span.reading-time 15 min read
+
+          .article-content
+            section.mb-5
+              p.mb-4.lead
+                | Museums have always faced a fundamental challenge: how do you make ancient artifacts relevant
+                | and engaging to modern audiences? Traditional museum labels provide facts, but they don't capture
+                | the emotional resonance or cultural depth that makes these objects truly meaningful.
+
+              blockquote.blockquote
+                    | "What if visitors could have actual conversations with the artworks themselves? Not just read about
+                    | a West African mask, but chat with it about its ceremonial significance, its journey to the museum,
+                    | or how it feels about being displayed thousands of miles from home."
+
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-lightbulb.me-2
+                | The Vision: Making Art Accessible Through Conversation
+
+              p.mb-4
+                | I envisioned something different from traditional museum experiences. The concept was ambitious:
+                | create AI personas that could embody not just the artwork itself, but also the artist who created it,
+                | the curator who studies it, and the historian who contextualizes it.
+
+              .row.g-4.mb-4
+                .col-md-6
+                  .card.h-100.border-primary
+                    .card-header.bg-primary.text-white
+                      h4.card-title.mb-0
+                        i.bi.bi-chat-dots.me-2
+                        | Interactive Conversations
+                    .card-body
+                      p.card-text
+                        | Direct dialogue with artworks, artists, curators, and historians through AI personas
+                        | that provide unique perspectives on cultural treasures.
+
+                .col-md-6
+                  .card.h-100.border-info
+                    .card-header.bg-info.text-white
+                      h4.card-title.mb-0
+                        i.bi.bi-globe.me-2
+                        | Cultural Bridge
+                    .card-body
+                      p.card-text
+                        | AI that translates complex artistic and historical concepts into accessible,
+                        | engaging conversations across cultures and time periods.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-gear.me-2
+                | Technical Foundation: Building on Solid Ground
+
+              h3.h4.mb-3 The API Discovery
+
+              p.mb-4
+                | The Art Institute of Chicago's API is a developer's dream. It provides comprehensive data
+                | on over 120,000 artworks, including detailed metadata, high-resolution images via IIIF
+                | (International Image Interoperability Framework), and rich descriptive content.
+
+              pre.language-json.mb-4
+                code.language-json.
+                  {
+                    "id": 111628,
+                    "title": "Helmet Mask (Ndoli Jowei)",
+                    "artist_display": "Attributed to Mustafa Ado Dassama",
+                    "place_of_origin": "Sierra Leone",
+                    "date_display": "First half of the 20th century",
+                    "medium_display": "Wood, metal, and pigment",
+                    "description": "This helmet mask represents the water spirit..."
+                  }
+
+              h3.h4.mb-3 Choosing the Right Tech Stack
+
+              .row.g-4.mb-4
+                .col-lg-6
+                  .card.border-success
+                    .card-header.bg-success.text-white
+                      h5.card-title.mb-0
+                        i.bi.bi-code-square.me-2
+                        | Core Application
+                    .card-body
+                      ul.list-unstyled
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          strong .NET 9 and MVC
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Familiar, robust structure
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Focus on innovation over framework learning
+
+                .col-lg-6
+                  .card.border-warning
+                    .card-header.bg-warning.text-dark
+                      h5.card-title.mb-0
+                        i.bi.bi-robot.me-2
+                        | AI Orchestration
+                    .card-body
+                      ul.list-unstyled
+                        li.mb-2
+                          i.bi.bi-check-circle.text-warning.me-2
+                          strong Microsoft Semantic Kernel
+                        li.mb-2
+                          i.bi.bi-check-circle.text-warning.me-2
+                          | Robust conversation management
+                        li.mb-2
+                          i.bi.bi-check-circle.text-warning.me-2
+                          | Plugin architecture for extensibility
+
+              h3.h4.mb-3 The GPT-4 Vision Breakthrough
+
+              p.mb-4
+                | Initially, my AI agents could only work with text metadata. Then OpenAI released GPT-4 Vision,
+                | and everything changed. Suddenly, my AI personas could analyze the actual visual elements of artworks:
+
+              .card.mb-4.border-primary
+                .card-header.bg-primary.text-white
+                  h5.card-title.mb-0
+                    i.bi.bi-chat-quote.me-2
+                    | Example Conversation
+                .card-body
+                  .mb-3
+                    strong.text-primary User:
+                    | "What colors do you see in yourself?"
+                  .mb-3
+                    strong.text-success Helmet Mask:
+                    | "Looking at myself, I can see my deep brown wooden base with vibrant red ochre around
+                    | my mouth area, white kaolin clay highlighting my eyes, and black charcoal creating the
+                    | linear patterns across my forehead. These aren't just decorative choices—each color
+                    | carries spiritual meaning in Mende culture..."
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-people.me-2
+                | The Four Personas: Multiple Perspectives on Art
+
+              p.mb-4
+                | The heart of ArtSpark lies in its four distinct AI personas, each offering a unique conversational experience:
+
+              .accordion#personaAccordion.mb-4
+                .accordion-item
+                  h2.accordion-header#headingArtwork
+                    button.accordion-button(type='button', data-bs-toggle='collapse', data-bs-target='#collapseArtwork')
+                      i.bi.bi-palette.me-2
+                      strong 1. The Artwork Persona
+                  .accordion-collapse.collapse.show#collapseArtwork(data-bs-parent='#personaAccordion')
+                    .accordion-body
+                      p.mb-3
+                        | The most innovative aspect—the artwork speaks in first person:
+                      blockquote.blockquote.border-start.border-4.border-primary.ps-3.mb-0
+                        p.fst-italic
+                          | "I am a Helmet Mask, carved in early 20th century Sierra Leone. I was created for sacred
+                          | Sande society ceremonies, and I carry the spiritual essence of the water spirit Ndoli Jowei.
+                          | I remember the hands that carved me, the ceremonies where I danced, and the long journey
+                          | that brought me to this museum..."
+
+                .accordion-item
+                  h2.accordion-header#headingArtist
+                    button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseArtist')
+                      i.bi.bi-brush.me-2
+                      strong 2. The Artist Persona
+                  .accordion-collapse.collapse#collapseArtist(data-bs-parent='#personaAccordion')
+                    .accordion-body
+                      p.mb-3
+                        | When known, the artist's voice brings technical and cultural expertise:
+                      blockquote.blockquote.border-start.border-4.border-success.ps-3.mb-0
+                        p.fst-italic
+                          | "I am Mustafa Ado Dassama, and I carved this mask using traditional Mende techniques
+                          | passed down through generations. The geometric patterns you see aren't random—each line
+                          | represents spiritual concepts that connect the physical and spiritual worlds..."
+
+                .accordion-item
+                  h2.accordion-header#headingCurator
+                    button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseCurator')
+                      i.bi.bi-building.me-2
+                      strong 3. The Curator Persona
+                  .accordion-collapse.collapse#collapseCurator(data-bs-parent='#personaAccordion')
+                    .accordion-body
+                      p.mb-3
+                        | The museum professional perspective provides scholarly context:
+                      blockquote.blockquote.border-start.border-4.border-info.ps-3.mb-0
+                        p.fst-italic
+                          | "As a curator specializing in West African art, I can tell you this mask represents
+                          | one of the finest examples of Sande society craftsmanship in our collection. The
+                          | provenance traces back to early 20th century Sierra Leone..."
+
+                .accordion-item
+                  h2.accordion-header#headingHistorian
+                    button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseHistorian')
+                      i.bi.bi-clock-history.me-2
+                      strong 4. The Historian Persona
+                  .accordion-collapse.collapse#collapseHistorian(data-bs-parent='#personaAccordion')
+                    .accordion-body
+                      p.mb-3
+                        | The broadest perspective, connecting artworks to their historical moment:
+                      blockquote.blockquote.border-start.border-4.border-warning.ps-3.mb-0
+                        p.fst-italic
+                          | "When this mask was created in early 20th century Sierra Leone, the region was
+                          | experiencing significant cultural changes due to colonial influence. Yet this piece
+                          | demonstrates the resilience of traditional spiritual practices..."
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-code-slash.me-2
+                | Technical Implementation: The Magic Behind the Scenes
+
+              h3.h4.mb-3 Smart Vision Integration
+
+              p.mb-4
+                | Not every conversation needs visual analysis, so I implemented intelligent detection:
+
+              pre.language-csharp.mb-4
+                code.language-csharp.
+                  private bool IsVisualAnalysisRequest(string message)
+                  {
+                    var visualKeywords = new[]
+                    {
+                      "see", "look", "color", "shape", "pattern", "design",
+                      "visual", "appearance", "texture", "describe"
+                    };
+
+                    return visualKeywords.Any(keyword =>
+                      message.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                  }
+
+              .alert.alert-info.d-flex.align-items-center.mb-4
+                i.bi.bi-info-circle.me-3.fs-5
+                div
+                  | When users ask about visual elements, the system automatically includes the artwork image
+                  | in the AI prompt. For general questions, it relies on metadata to keep costs manageable.
+
+              h3.h4.mb-3 Memory and Context Management
+
+              p.mb-4
+                | Conversations feel natural because the system maintains context across multiple exchanges:
+
+              pre.language-csharp.mb-4
+                code.language-csharp.
+                  public class ChatRequest
+                  {
+                    public int ArtworkId { get; set; }
+                    public string Message { get; set; }
+                    public ChatPersona Persona { get; set; }
+                    public List&lt;ChatMessage&gt; ConversationHistory { get; set; }
+                    public bool IncludeVisualAnalysis { get; set; }
+                  }
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-exclamation-triangle.me-2
+                | Challenges and Solutions
+
+              .row.g-4.mb-4
+                .col-md-6
+                  .card.h-100.border-danger
+                    .card-header.bg-danger.text-white
+                      h4.card-title.mb-0
+                        i.bi.bi-heart.me-2
+                        | Cultural Sensitivity
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2
+                          i.bi.bi-check.text-success.me-2
+                          | Respectful representation of sacred objects
+                        li.mb-2
+                          i.bi.bi-check.text-success.me-2
+                          | Educational focus over entertainment
+                        li.mb-2
+                          i.bi.bi-check.text-success.me-2
+                          | Clear AI interpretation transparency
+
+                .col-md-6
+                  .card.h-100.border-warning
+                    .card-header.bg-warning.text-dark
+                      h4.card-title.mb-0
+                        i.bi.bi-speedometer2.me-2
+                        | Performance Optimization
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2
+                          i.bi.bi-check.text-success.me-2
+                          | Smart image inclusion for visual analysis
+                        li.mb-2
+                          i.bi.bi-check.text-success.me-2
+                          | Conversation caching to minimize API calls
+                        li.mb-2
+                          i.bi.bi-check.text-success.me-2
+                          | Response streaming for user engagement
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-diagram-3.me-2
+                | Scalability Architecture
+
+              p.mb-4
+                | The library design ensures the system can grow:
+
+              pre.language-csharp.mb-4
+                code.language-csharp.
+                  // Easy to swap data providers
+                  services.AddArtSparkAgent&lt;CustomDataProvider&gt;(configuration);
+
+                  // Pluggable memory systems
+                  services.AddArtSparkAgentWithMemory&lt;RedisMemory&gt;(configuration);
+
+                  // Configurable AI models
+                  config.OpenAI.ModelId = "gpt-4o"; // or any compatible model
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-stars.me-2
+                | The User Experience: Where Technology Meets Wonder
+
+              p.mb-4
+                | The final interface feels magical precisely because the technology fades into the background.
+                | Users see a familiar chat interface, but behind it lies sophisticated AI orchestration.
+
+              .card.mb-4.border-primary
+                .card-header.bg-primary.text-white
+                  h5.card-title.mb-0
+                    i.bi.bi-chat-text.me-2
+                    | Typical Interaction Flow
+                .card-body
+                  .row.g-3
+                    .col-12
+                      .bg-light.p-3.rounded
+                        strong.text-primary User:
+                        | "Hello! What should I know about you?"
+                    .col-12
+                      .bg-success.bg-opacity-10.p-3.rounded
+                        strong.text-success Helmet Mask:
+                        | "Greetings! I am a Helmet Mask from Sierra Leone, created for the sacred Sande society
+                        | ceremonies. I represent Ndoli Jowei, a water spirit who embodies beauty, fertility, and wisdom.
+                        | Would you like to know about the intricate patterns carved into my surface, or perhaps the
+                        | spiritual significance of my role in coming-of-age ceremonies?"
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-journal-check.me-2
+                | Lessons Learned and Future Directions
+
+              h3.h4.mb-3 What Worked Well
+
+              .row.g-4.mb-4
+                .col-md-6
+                  ul.list-group.list-group-flush
+                    li.list-group-item.d-flex.align-items-center
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Persona-based approach provides rich understanding
+                    li.list-group-item.d-flex.align-items-center
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Vision integration transforms conversation quality
+
+                .col-md-6
+                  ul.list-group.list-group-flush
+                    li.list-group-item.d-flex.align-items-center
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Cultural sensitivity builds trust and value
+                    li.list-group-item.d-flex.align-items-center
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Modular architecture enables extension and reuse
+
+              h3.h4.mb-3 Future Enhancements
+
+              .row.g-4.mb-4
+                .col-md-6
+                  .card.border-info
+                    .card-header.bg-info.text-white
+                      h5.card-title.mb-0 Near-term Goals
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2
+                          i.bi.bi-translate.me-2
+                          | Multi-language support
+                        li.mb-2
+                          i.bi.bi-mic.me-2
+                          | Audio integration with voice conversations
+                        li.mb-2
+                          i.bi.bi-people.me-2
+                          | Collaborative filtering features
+
+                .col-md-6
+                  .card.border-warning
+                    .card-header.bg-warning.text-dark
+                      h5.card-title.mb-0 Long-term Vision
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2
+                          i.bi.bi-phone.me-2
+                          | Augmented reality museum integration
+                        li.mb-2
+                          i.bi.bi-share.me-2
+                          | Community conversation sharing
+                        li.mb-2
+                          i.bi.bi-building.me-2
+                          | Multi-institution expansion
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-github.me-2
+                | Open Source and Community
+
+              p.mb-4
+                | True to my commitment to knowledge sharing, the core concepts and architecture patterns are
+                | documented and shareable. The WebSpark.ArtSpark.Agent library demonstrates patterns that
+                | could be applied to any cultural institution with digital collections.
+
+              .row.g-4.mb-4
+                .col-md-4
+                  .card.text-center.border-primary
+                    .card-body
+                      i.bi.bi-bank.display-6.text-primary.mb-3
+                      h5.card-title Historical Societies
+                      p.card-text.small Enable conversations with historical figures
+
+                .col-md-4
+                  .card.text-center.border-success
+                    .card-body
+                      i.bi.bi-flask.display-6.text-success.mb-3
+                      h5.card-title Science Museums
+                      p.card-text.small Let exhibits explain complex concepts
+
+                .col-md-4
+                  .card.text-center.border-info
+                    .card-body
+                      i.bi.bi-book.display-6.text-info.mb-3
+                      h5.card-title Libraries
+                      p.card-text.small Make rare books and manuscripts interactive
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-tools.me-2
+                | Technical Details for Fellow Developers
+
+              .row.g-4.mb-4
+                .col-lg-6
+                  .card.border-secondary
+                    .card-header.bg-secondary.text-white
+                      h5.card-title.mb-0
+                        i.bi.bi-stack.me-2
+                        | Technology Stack
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2
+                          strong Frontend:
+                          | .NET 9 MVC with responsive JavaScript
+                        li.mb-2
+                          strong AI Framework:
+                          | Microsoft Semantic Kernel
+                        li.mb-2
+                          strong Data Source:
+                          | Art Institute of Chicago API
+                        li.mb-2
+                          strong Architecture:
+                          | Clean separation with DI
+
+                .col-lg-6
+                  .card.border-secondary
+                    .card-header.bg-secondary.text-white
+                      h5.card-title.mb-0
+                        i.bi.bi-gear.me-2
+                        | Key Features
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2
+                          strong Performance:
+                          | Intelligent caching and optimization
+                        li.mb-2
+                          strong Security:
+                          | API key protection and rate limiting
+                        li.mb-2
+                          strong Extensibility:
+                          | Swappable components and providers
+                        li.mb-2
+                          strong Monitoring:
+                          | Comprehensive logging and metrics
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-lightbulb.me-2
+                | Conclusion: Where Art Meets AI
+
+              p.mb-4
+                | ArtSpark represents more than a technical achievement—it's a new way of experiencing cultural heritage.
+                | By giving artworks their own voices, we transform passive observation into active dialogue.
+
+              .card.mb-4.border-primary
+                .card-body.bg-primary.bg-opacity-10
+                  p.mb-3
+                    | The project showcases the potential of AI to serve as a cultural bridge, translating complex
+                    | artistic and historical concepts into accessible, engaging conversations. It demonstrates that
+                    | when we combine technical sophistication with cultural sensitivity, we can create experiences
+                    | that honor both innovation and tradition.
+
+                  p.mb-0
+                    | As AI continues to evolve, projects like ArtSpark point toward a future where technology
+                    | doesn't distance us from our cultural heritage—it brings us closer to it.
+
+              .text-center.mb-4
+                a.btn.btn-primary.btn-lg(href="https://ArtSpark.MarkHazleton.com", target="_blank", rel="noopener")
+                  i.bi.bi-palette.me-2
+                  | Experience ArtSpark Live
+
+            section.mb-5
+              .row.g-4
+                .col-md-6
+                  .card.border-info
+                    .card-header.bg-info.text-white
+                      h5.card-title.mb-0
+                        i.bi.bi-bar-chart.me-2
+                        | Project Statistics
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2
+                          i.bi.bi-people.me-2
+                          strong 4 AI Personas
+                          | (Artwork, Artist, Curator, Historian)
+                        li.mb-2
+                          i.bi.bi-collection.me-2
+                          strong 120,000+ Available Artworks
+                        li.mb-2
+                          i.bi.bi-chat-dots.me-2
+                          | Multi-turn Conversation Support
+                        li.mb-2
+                          i.bi.bi-eye.me-2
+                          | Visual Analysis Capabilities
+
+                .col-md-6
+                  .card.border-success
+                    .card-header.bg-success.text-white
+                      h5.card-title.mb-0
+                        i.bi.bi-code-square.me-2
+                        | Technology Highlights
+                    .card-body
+                      ul.list-unstyled.mb-0
+                        li.mb-2 .NET 9 / C# 12
+                        li.mb-2 Microsoft Semantic Kernel
+                        li.mb-2 OpenAI GPT-4 Vision API
+                        li.mb-2 IIIF Image Standards
+                        li.mb-2 Cultural Sensitivity Framework
+
+          aside.col-lg-4
+            .card.sticky-top.shadow-sm
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                nav#table-of-contents
+                  ul.list-unstyled.mb-0
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") The Vision
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") Technical Foundation
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") Four AI Personas
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") Implementation Details
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") Challenges & Solutions
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") User Experience
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") Lessons Learned
+                    li.mb-2
+                      a.text-decoration-none(href="#main-article") Conclusion
+
+  script.
+    // Smooth scrolling for table of contents links
+    document.querySelectorAll('#table-of-contents a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
