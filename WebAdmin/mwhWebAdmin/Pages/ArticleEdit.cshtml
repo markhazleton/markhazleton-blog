@@ -37,14 +37,107 @@
         <div class="mb-3">
             <label for="ArticleContent" class="form-label">Content:</label>
             <input type="text" class="form-control" asp-for="Article.ArticleContent" />
-        </div>
-        <div class="mb-3">
+        </div>        <div class="mb-3">
             <label for="Slug" class="form-label">Slug:</label>
             <input type="text" class="form-control" asp-for="Article.Slug" />
         </div>
+
+        <!-- Source File Information -->
         <div class="mb-3">
-            <label for="ImgSrc" class="form-label">Image Source:</label>
-            <input type="text" class="form-control" asp-for="Article.ImgSrc" />
+            <label class="form-label fw-bold">PUG Source File:</label>
+            <div class="card">
+                <div class="card-body">
+                    @if (Model.Article.SourceFileExists)
+                    {
+                        <div class="d-flex align-items-center text-success">
+                            <i class="fas fa-file-code me-2"></i>
+                            <span class="me-2">Source file found:</span>
+                            <code class="bg-light px-2 py-1 rounded">@Model.Article.Source</code>
+                        </div>
+                    }
+                    else if (!string.IsNullOrEmpty(Model.Article.Source))
+                    {
+                        <div class="d-flex align-items-center text-warning">
+                            <i class="fas fa-file-times me-2"></i>
+                            <span class="me-2">Source file not found:</span>
+                            <code class="bg-light px-2 py-1 rounded">@Model.Article.Source</code>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center text-muted">
+                            <i class="fas fa-file-slash me-2"></i>
+                            <span>No PUG source file configured for this article</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Selection Section -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Image Source:</label>
+
+            <!-- Current/Selected Image Preview -->
+            <div class="mb-3">
+                <div class="image-preview-container text-center">
+                    @{
+                        string imageUrl = !string.IsNullOrEmpty(Model.Article.ImgSrc) ? "/" + Model.Article.ImgSrc : "/assets/img/placeholder.svg";
+                        string imageName = !string.IsNullOrEmpty(Model.Article.ImgSrc) ? Model.Article.ImgSrc : "No image selected";
+                    }
+                    <img id="selectedImagePreview"
+                         src="@imageUrl"
+                         alt="@imageName"
+                         class="img-fluid rounded border"
+                         style="max-height: 200px; object-fit: cover; width: 100%;"
+                         onerror="this.src='/assets/img/placeholder.svg'; this.alt='No image selected';" />
+                    <div class="mt-2">
+                        <small id="selectedImageName" class="text-muted">@imageName</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden input for form submission -->
+            <input asp-for="Article.ImgSrc" type="hidden" id="selectedImageInput" />
+            <span asp-validation-for="Article.ImgSrc" class="text-danger"></span>
+        </div>
+
+        <!-- Image Selection Grid -->
+        <div class="mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-images me-2"></i>Choose an Image</h6>
+                </div>
+                <div class="card-body">
+                    <div class="image-grid">
+                        <!-- No Image Option -->
+                        <div class="image-option @(string.IsNullOrEmpty(Model.Article.ImgSrc) ? "border-primary selected" : "")" data-image-path="">
+                            <div class="image-option-content">
+                                <div class="image-placeholder">
+                                    <i class="fas fa-ban text-muted"></i>
+                                </div>
+                                <small class="image-name">No Image</small>
+                            </div>
+                        </div>
+
+                        <!-- Available Images -->
+                        @foreach (var imagePath in Model.AvailableImages)
+                        {
+                            <div class="image-option @(imagePath == Model.Article.ImgSrc ? "border-primary selected" : "")" data-image-path="@imagePath">
+                                <div class="image-option-content">
+                                    <img src="/@imagePath"
+                                         alt="@System.IO.Path.GetFileName(imagePath)"
+                                         class="image-thumbnail"
+                                         onerror="this.parentElement.innerHTML='<div class=\'image-error\'><i class=\'fas fa-exclamation-triangle\'></i></div>';" />
+                                    <small class="image-name" title="@imagePath">
+                                        @System.IO.Path.GetFileName(imagePath)
+                                    </small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="ChangeFrequency" class="form-label">Change Frequency:</label>
@@ -54,10 +147,53 @@
                     <option value="@item">@item</option>
                 }
             </select>
-        </div>
-
-        <div>
+        </div>        <div>
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageOptions = document.querySelectorAll('.image-option');
+            const selectedImageInput = document.getElementById('selectedImageInput');
+            const selectedImagePreview = document.getElementById('selectedImagePreview');
+            const selectedImageName = document.getElementById('selectedImageName');
+
+            imageOptions.forEach(function(option) {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    imageOptions.forEach(opt => opt.classList.remove('selected'));
+
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+
+                    // Get the image path
+                    const imagePath = this.getAttribute('data-image-path');
+
+                    // Update hidden input
+                    selectedImageInput.value = imagePath;
+
+                    // Update preview
+                    if (imagePath) {
+                        selectedImagePreview.src = '/' + imagePath;
+                        selectedImagePreview.alt = 'Selected Image: ' + imagePath;
+                        selectedImageName.textContent = imagePath;
+                    } else {
+                        selectedImagePreview.src = '/assets/img/placeholder.svg';
+                        selectedImagePreview.alt = 'No image selected';
+                        selectedImageName.textContent = 'No image selected';
+                    }
+
+                    // Handle image load errors
+                    selectedImagePreview.onerror = function() {
+                        this.src = '/assets/img/placeholder.svg';
+                        this.alt = 'Image not found';
+                        selectedImageName.textContent = imagePath ? imagePath + ' (not found)' : 'No image selected';
+                    };
+                });
+            });
+        });
+    </script>
+}

@@ -4,26 +4,171 @@
     ViewData["Title"] = "Projects";
 }
 
-<h1>@ViewData["Title"]</h1>
+<!-- Page Header -->
+<div class="page-header fade-in-up">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="fas fa-project-diagram me-3"></i>@ViewData["Title"]</h1>
+            <p class="lead mb-0">Manage your portfolio projects</p>
+        </div>
+        <div>
+            <a asp-page="./ProjectAdd" class="btn btn-admin-primary">
+                <i class="fas fa-plus-circle me-2"></i>Add New Project
+            </a>
+        </div>
+    </div>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var project in Model.Projects)
+@if (Model.Projects.Count == 0)
+{
+    <div class="admin-form text-center py-5 fade-in-up">
+        <i class="fas fa-project-diagram text-muted mb-3" style="font-size: 4rem;"></i>
+        <h4>No projects found</h4>
+        <p class="text-muted mb-4">Get started by creating your first project to showcase your work.</p>
+        <a asp-page="./ProjectAdd" class="btn btn-admin-primary">
+            <i class="fas fa-plus-circle me-2"></i>Create Your First Project
+        </a>
+    </div>
+}
+else
+{
+    <!-- Projects Table -->
+    <div class="admin-table fade-in-up">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-0">All Projects</h5>
+                <small class="text-muted">@Model.Projects.Count project(s) total</small>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <input type="text" class="form-control table-search" placeholder="Search projects..."
+                        style="width: 250px;">
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-filter me-1"></i>Filter
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="filterProjects('all')">All Projects</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="filterProjects('active')">Active</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="filterProjects('archived')">Archived</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Image</th>
+                        <th>Project Details</th>
+                        <th style="width: 150px;">Link</th>
+                        <th style="width: 120px;" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in Model.Projects)
+                    {
+                        <tr data-project-id="@project.Id">
+                            <td>
+                                <div class="project-image-thumb">
+                                    @if (!string.IsNullOrEmpty(project.Image))
+                                    {
+                                        <img src="/@project.Image" alt="@project.Title" class="img-thumbnail"
+                                            style="width: 60px; height: 60px; object-fit: cover;"
+                                            onerror="this.src='/img/placeholder.svg';" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light border rounded d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px;">
+                                            <i class="fas fa-image text-muted"></i>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="project-details">
+                                    <h6 class="mb-1 fw-bold">@project.Title</h6>
+                                    <p class="mb-1 text-muted small">@project.Description</p>
+                                    <div class="project-meta">
+                                        <span class="badge bg-primary me-1">ID: @project.Id</span>
+                                        @if (!string.IsNullOrEmpty(project.Image))
+                                        {
+                                            <span class="badge bg-success me-1">
+                                                <i class="fas fa-image me-1"></i>Has Image
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(project.Link))
+                                {
+                                    <a href="@project.Link" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-external-link-alt me-1"></i>View
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">No link</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="action-buttons">
+                                    <a asp-page="./ProjectEdit" asp-route-id="@project.Id"
+                                        class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" title="Edit Project">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@project.Id" class="d-inline"
+                                        data-delete-id="@project.Id">
+                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip"
+                                            title="Delete Project" onclick="deleteItem(@project.Id, 'project')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    Showing @Model.Projects.Count of @Model.Projects.Count projects
+                </small>
+                <div>
+                    <a asp-page="./ProjectAdd" class="btn btn-admin-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i>Add Project
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function filterProjects(filter)
         {
-            <tr>
-                <td><img src="@project.Image" alt="@project.Title" width="100" /></td>
-                <td><a href="@project.Link" target="_blank">Visit @project.Title</a></td>
-                <td>@project.Description</td>
-                <td><a asp-page="./ProjectEdit" asp-route-id="@project.Id">Edit</a></td>
-            </tr>
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row =>
+            {
+                if (filter === 'all')
+                {
+                    row.style.display = '';
+                } else
+                {
+                    // Add your filtering logic here
+                    row.style.display = '';
+                }
+            });
         }
-    </tbody>
-</table>
+    </script>
+}

@@ -1,0 +1,190 @@
+@page
+@model ProjectAddModel
+@using System.IO
+@{
+    ViewData["Title"] = "Add Project";
+}
+
+<!-- Page Header -->
+<div class="page-header fade-in-up">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="fas fa-plus-circle me-3"></i>@ViewData["Title"]</h1>
+            <p class="lead mb-0">Create a new project for your portfolio</p>
+        </div>
+        <div>
+            <a asp-page="./Projects" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Projects
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show fade-in-up" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <strong>Please correct the following errors:</strong>
+        <div asp-validation-summary="All" class="text-danger mt-2"></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<<!-- Project Form -->
+<div class="admin-form fade-in-up">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Project Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Project.Title" class="form-label fw-bold"></label>
+                            <input asp-for="Project.Title" class="form-control" placeholder="Enter project title..." />
+                            <span asp-validation-for="Project.Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Project.Description" class="form-label fw-bold"></label>
+                            <textarea asp-for="Project.Description" class="form-control" rows="4" placeholder="Describe your project..."></textarea>
+                            <span asp-validation-for="Project.Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Project.Link" class="form-label fw-bold"></label>
+                            <input asp-for="Project.Link" class="form-control" type="url" placeholder="https://example.com" />
+                            <span asp-validation-for="Project.Link" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-image me-2"></i>Project Image</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Current/Selected Image Preview -->
+                        <div class="mb-3">
+                            <div class="image-preview-container text-center">
+                                <img id="selectedImagePreview"
+                                     src="/assets/img/placeholder.svg"
+                                     alt="No image selected"
+                                     class="img-fluid rounded border"
+                                     style="max-height: 200px; object-fit: cover; width: 100%;"
+                                     onerror="this.src='/assets/img/placeholder.svg'; this.alt='No image selected';" />
+                                <div class="mt-2">
+                                    <small id="selectedImageName" class="text-muted">No image selected</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hidden input for form submission -->
+                        <input asp-for="Project.Image" type="hidden" id="selectedImageInput" />
+                        <span asp-validation-for="Project.Image" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>        <!-- Image Selection Grid -->
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-images me-2"></i>Choose an Image</h6>
+                </div>
+                <div class="card-body">
+                    <div class="image-grid">
+                        <!-- No Image Option -->
+                        <div class="image-option border-primary selected" data-image-path="">
+                            <div class="image-option-content">
+                                <div class="image-placeholder">
+                                    <i class="fas fa-ban text-muted"></i>
+                                </div>
+                                <small class="image-name">No Image</small>
+                            </div>
+                        </div>
+
+                        <!-- Available Images -->
+                        @foreach (var imagePath in Model.AvailableImages)
+                        {
+                            <div class="image-option" data-image-path="@imagePath">
+                                <div class="image-option-content">
+                                    <img src="/@imagePath"
+                                         alt="@System.IO.Path.GetFileName(imagePath)"
+                                         class="image-thumbnail"
+                                         onerror="this.parentElement.innerHTML='<div class=\'image-error\'><i class=\'fas fa-exclamation-triangle\'></i></div>';" />
+                                    <small class="image-name" title="@imagePath">
+                                        @System.IO.Path.GetFileName(imagePath)
+                                    </small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <a asp-page="/Projects" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                    <button type="submit" class="btn btn-admin-primary">
+                        <i class="fas fa-save me-2"></i>Save Project
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageOptions = document.querySelectorAll('.image-option');
+            const selectedImageInput = document.getElementById('selectedImageInput');
+            const selectedImagePreview = document.getElementById('selectedImagePreview');
+            const selectedImageName = document.getElementById('selectedImageName');
+
+            imageOptions.forEach(function(option) {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    imageOptions.forEach(opt => opt.classList.remove('selected'));
+
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+
+                    // Get the image path
+                    const imagePath = this.getAttribute('data-image-path');
+
+                    // Update hidden input
+                    selectedImageInput.value = imagePath;
+
+                    // Update preview
+                    if (imagePath) {
+                        selectedImagePreview.src = '/' + imagePath;
+                        selectedImagePreview.alt = 'Selected Image: ' + imagePath;
+                        selectedImageName.textContent = imagePath;
+                    } else {
+                        selectedImagePreview.src = '/assets/img/placeholder.svg';
+                        selectedImagePreview.alt = 'No image selected';
+                        selectedImageName.textContent = 'No image selected';
+                    }
+
+                    // Handle image load errors
+                    selectedImagePreview.onerror = function() {
+                        this.src = '/assets/img/placeholder.svg';
+                        this.alt = 'Image not found';
+                        selectedImageName.textContent = imagePath ? imagePath + ' (not found)' : 'No image selected';
+                    };
+                });
+            });
+        });
+    </script>
+}

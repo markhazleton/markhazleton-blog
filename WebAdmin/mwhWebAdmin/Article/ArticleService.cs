@@ -124,11 +124,9 @@ namespace mwhWebAdmin.Article
                 _logger.LogError(ex, "Failed to generate Pug content for article: {ArticleName}", article.Name);
                 return string.Empty;
             }
-        }
-
-        /// <summary>
-        /// Loads the articles from the JSON file.
-        /// </summary>
+        }        /// <summary>
+                 /// Loads the articles from the JSON file.
+                 /// </summary>
         private void LoadArticles()
         {
             try
@@ -138,6 +136,12 @@ namespace mwhWebAdmin.Article
                 foreach (var article in _articles.OrderBy(o => o.Id))
                 {
                     article.Id = _articles.IndexOf(article);
+
+                    // Calculate source file path if not already set
+                    if (string.IsNullOrEmpty(article.Source))
+                    {
+                        article.Source = CalculateSourceFilePath(article.Slug);
+                    }
                 }
                 _logger.LogInformation("Articles loaded successfully.");
             }
@@ -194,11 +198,33 @@ namespace mwhWebAdmin.Article
             return !string.IsNullOrWhiteSpace(article.Name) &&
                    !string.IsNullOrWhiteSpace(article.Section) &&
                    !string.IsNullOrWhiteSpace(article.Slug);
-        }
-
+        }    /// <summary>
+             /// Gets a list of unique keywords from all articles.
+             /// </summary>
+             /// <returns>A list of unique keywords.</returns>
         internal List<string> GetKeywords()
         {
-            return [];
+            lock (_lock)
+            {
+                try
+                {
+                    var allKeywords = _articles
+                        .Where(a => !string.IsNullOrWhiteSpace(a.Keywords))
+                        .SelectMany(a => a.Keywords.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                        .Select(k => k.Trim())
+                        .Where(k => !string.IsNullOrWhiteSpace(k))
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .OrderBy(k => k)
+                        .ToList();
+
+                    return allKeywords;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error getting keywords from articles");
+                    return [];
+                }
+            }
         }
 
         /// <summary>
@@ -214,11 +240,14 @@ namespace mwhWebAdmin.Article
                     _logger.LogWarning("Invalid article data. Article not added.");
                     return;
                 }
-
                 try
                 {
                     newArticle.Slug = "articles/" + GenerateSlug(newArticle.Name) + ".html";
                     newArticle.Id = _articles.Count != 0 ? _articles.Max(article => article.Id) + 1 : 1; // Assign a new ID
+
+                    // Calculate source file path
+                    newArticle.Source = CalculateSourceFilePath(newArticle.Slug);
+
                     _articles.Add(newArticle);
 
                     string pugContent = GeneratePugFileContent(newArticle);
@@ -227,6 +256,9 @@ namespace mwhWebAdmin.Article
                         // Save the .pug file
                         string pugFilePath = Path.Combine(_articlesDirectory, $"{newArticle.Slug.Replace(".html", string.Empty).Replace("articles/", string.Empty)}.pug");
                         File.WriteAllText(pugFilePath, pugContent);
+
+                        // Recalculate source path after creating the file
+                        newArticle.Source = CalculateSourceFilePath(newArticle.Slug);
                     }
 
                     SaveArticles();
@@ -302,7 +334,7 @@ namespace mwhWebAdmin.Article
                     _logger.LogError(ex, "Failed to generate keywords for article: {ArticleName}", article.Name);
                 }
             }
-            return article.Keywords;
+            return article?.Keywords ?? string.Empty;
         }
 
         /// <summary>
@@ -384,7 +416,14 @@ namespace mwhWebAdmin.Article
         {
             try
             {
-                string rssFeedPath = Path.Combine(Path.GetDirectoryName(_filePath), "rss.xml");
+                string? directoryPath = Path.GetDirectoryName(_filePath);
+                if (string.IsNullOrEmpty(directoryPath))
+                {
+                    _logger.LogError("Unable to determine directory path for RSS feed generation");
+                    return;
+                }
+
+                string rssFeedPath = Path.Combine(directoryPath, "rss.xml");
                 var recentArticles = _articles.OrderByDescending(a => ConvertStringToDate(a.LastModified)).Take(10).ToList();
 
                 using (XmlWriter writer = XmlWriter.Create(rssFeedPath, new XmlWriterSettings { Indent = true }))
@@ -442,7 +481,14 @@ namespace mwhWebAdmin.Article
         {
             try
             {
-                string siteMapPath = Path.Combine(Path.GetDirectoryName(_filePath), "SiteMap.xml");
+                string? directoryPath = Path.GetDirectoryName(_filePath);
+                if (string.IsNullOrEmpty(directoryPath))
+                {
+                    _logger.LogError("Unable to determine directory path for sitemap generation");
+                    return;
+                }
+
+                string siteMapPath = Path.Combine(directoryPath, "SiteMap.xml");
                 using (XmlWriter writer = XmlWriter.Create(siteMapPath, new XmlWriterSettings { Indent = true }))
                 {
                     writer.WriteStartDocument();
@@ -518,15 +564,20 @@ namespace mwhWebAdmin.Article
             {
                 return [.. _articles]; // Return a copy to avoid external modifications
             }
-        }
-
-        /// <summary>
-        /// Updates an existing article.
-        /// </summary>
-        /// <param name="updatedArticle">The updated article model.</param>
+        }        /// <summary>
+                 /// Updates an existing article.
+                 /// </summary>
+                 /// <param name="updatedArticle">The updated article model.</param>
         public async Task UpdateArticle(ArticleModel updatedArticle)
         {
             updatedArticle.Keywords = await GenerateKeywordsAsync(updatedArticle) ?? updatedArticle.Keywords;
+
+            // Calculate source file path if not already set or if slug has changed
+            if (string.IsNullOrEmpty(updatedArticle.Source))
+            {
+                updatedArticle.Source = CalculateSourceFilePath(updatedArticle.Slug);
+            }
+
             lock (_lock)
             {
                 if (!ValidateArticle(updatedArticle))
@@ -548,6 +599,236 @@ namespace mwhWebAdmin.Article
                 }
             }
             await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Updates source file paths for all articles that don't have them set.
+        /// This method helps populate existing articles with source information.
+        /// </summary>
+        public void UpdateMissingSourcePaths()
+        {
+            lock (_lock)
+            {
+                try
+                {
+                    bool hasChanges = false;
+                    foreach (var article in _articles)
+                    {
+                        if (string.IsNullOrEmpty(article.Source))
+                        {
+                            string calculatedSource = CalculateSourceFilePath(article.Slug);
+                            if (!string.IsNullOrEmpty(calculatedSource))
+                            {
+                                article.Source = calculatedSource;
+                                hasChanges = true;
+                                _logger.LogInformation("Updated source path for article '{ArticleName}': {SourcePath}",
+                                    article.Name, article.Source);
+                            }
+                        }
+                    }
+
+                    if (hasChanges)
+                    {
+                        SaveArticles();
+                        _logger.LogInformation("Updated source paths for articles saved successfully.");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("No articles required source path updates.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to update missing source paths.");
+                }
+            }
+        }        /// <summary>
+                 /// Calculates the source file path for a PUG file based on the article slug.
+                 /// Follows the same logic as the JavaScript findPugFileFromSlug function.
+                 /// </summary>
+                 /// <param name="slug">The article slug.</param>
+                 /// <returns>The full path to the PUG source file starting with /src/pug/, or empty string if not found.</returns>
+        private string CalculateSourceFilePath(string slug)
+        {
+            try
+            {
+                // If the slug is empty, return empty string
+                if (string.IsNullOrEmpty(slug))
+                    return string.Empty;                // If the slug ends with .html, replace it with .pug
+                // If the slug ends with /, assume it's an index.html
+                string pugFileName;
+                if (slug.EndsWith(".html"))
+                {
+                    pugFileName = slug.Replace(".html", ".pug");
+                }
+                else if (slug.EndsWith("/"))
+                {
+                    pugFileName = slug + "index.pug";
+                }
+                else
+                {
+                    pugFileName = slug + ".pug";
+                }
+
+                // Remove any leading / from slug
+                string cleanedSlug = pugFileName.StartsWith("/")
+                    ? pugFileName.Substring(1)
+                    : pugFileName;
+
+                // Extract path components
+                string[] slugParts = cleanedSlug.Split('/');
+                string fileNamePart = slugParts.LastOrDefault() ?? string.Empty;
+
+                // If the filename part is still empty after handling directory-based URLs, log and return
+                if (string.IsNullOrEmpty(fileNamePart))
+                {
+                    _logger.LogWarning("Could not extract a valid filename from slug after processing: {Slug}", slug);
+                    return string.Empty;
+                }
+
+                // Get the base directory path (same as _articlesDirectory but up one level to get to pug folder)
+                string pugBaseDir = Path.Combine(_filePath.Replace("articles.json", string.Empty), "pug");
+
+                // Build candidate paths to check
+                List<string> candidatePaths = new();
+
+                // Build full path from slug directory structure
+                if (slugParts.Length > 1)
+                {
+                    // Try the exact path from the slug
+                    string[] pathParts = slugParts.Take(slugParts.Length - 1).ToArray();
+                    candidatePaths.Add(Path.Combine(pugBaseDir, Path.Combine(pathParts), fileNamePart));
+                }
+
+                // Try the articles directory
+                candidatePaths.Add(Path.Combine(pugBaseDir, "articles", fileNamePart));
+
+                // Try the root pug directory
+                candidatePaths.Add(Path.Combine(pugBaseDir, fileNamePart));
+
+                // Check all candidate paths
+                foreach (string candidatePath in candidatePaths)
+                {
+                    if (File.Exists(candidatePath) && !Directory.Exists(candidatePath))
+                    {
+                        // Return path in the format /src/pug/...
+                        string relativePath = Path.GetRelativePath(pugBaseDir, candidatePath).Replace('\\', '/');
+                        return $"/src/pug/{relativePath}";
+                    }
+
+                    // Also check with .pug extension if not already present
+                    if (!candidatePath.EndsWith(".pug"))
+                    {
+                        string pathWithExt = candidatePath + ".pug";
+                        if (File.Exists(pathWithExt) && !Directory.Exists(pathWithExt))
+                        {
+                            // Return path in the format /src/pug/...
+                            string relativePath = Path.GetRelativePath(pugBaseDir, pathWithExt).Replace('\\', '/');
+                            return $"/src/pug/{relativePath}";
+                        }
+                    }
+                }
+
+                // If direct path lookup failed, search all pug files to find a match by filename
+                string[] searchDirectories = new[]
+                {
+                    Path.Combine(pugBaseDir, "articles"),
+                    pugBaseDir
+                };
+
+                foreach (string searchDir in searchDirectories)
+                {
+                    if (!Directory.Exists(searchDir)) continue;
+
+                    string[] pugFiles = Directory.GetFiles(searchDir, "*.pug");
+
+                    // Find a file that matches the slug's filename part
+                    string? matchingFile = pugFiles.FirstOrDefault(file =>
+                    {
+                        string fileName = Path.GetFileName(file);
+                        return fileName == fileNamePart || fileName == fileNamePart + ".pug";
+                    });
+
+                    if (!string.IsNullOrEmpty(matchingFile))
+                    {
+                        // Return path in the format /src/pug/...
+                        string relativePath = Path.GetRelativePath(pugBaseDir, matchingFile).Replace('\\', '/');
+                        return $"/src/pug/{relativePath}";
+                    }
+                }
+
+                _logger.LogWarning("Could not find a matching Pug file for slug: {Slug}", slug);
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error finding Pug file for slug {Slug}", slug);
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of available images from the assets directory.
+        /// </summary>
+        /// <returns>A list of relative image paths.</returns>
+        public List<string> GetAvailableImages()
+        {
+            try
+            {
+                var baseDirectory = Path.GetDirectoryName(_filePath);
+                if (string.IsNullOrEmpty(baseDirectory))
+                {
+                    _logger.LogError("Unable to determine base directory for image loading");
+                    return [];
+                }
+
+                var imagesDirectory = Path.Combine(baseDirectory, "assets", "img");
+
+                if (Directory.Exists(imagesDirectory))
+                {
+                    var images = Directory.GetFiles(imagesDirectory, "*.*", SearchOption.TopDirectoryOnly)
+                        .Where(file => IsImageFile(file))
+                        .Select(imagePath => imagePath.Replace(baseDirectory, string.Empty).Replace("\\", "/").TrimStart('/'))
+                        .ToList();
+
+                    return images;
+                }
+                else
+                {
+                    _logger.LogWarning("Images directory not found: {ImagesDirectory}", imagesDirectory);
+                    return [];
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading available images");
+                return [];
+            }
+        }
+
+        /// <summary>
+        /// Determines if a file is an image based on its extension.
+        /// </summary>
+        /// <param name="fileName">The file name to check.</param>
+        /// <returns>True if the file is an image; otherwise, false.</returns>
+        private static bool IsImageFile(string fileName)
+        {
+            var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp" };
+            return imageExtensions.Contains(Path.GetExtension(fileName).ToLowerInvariant());
+        }
+
+        /// <summary>
+        /// Tests the slug-to-source-path conversion logic for various slug formats.
+        /// This method is useful for debugging and validation.
+        /// </summary>
+        /// <param name="testSlug">The slug to test</param>
+        /// <returns>The calculated source path</returns>
+        public string TestSlugToSourcePath(string testSlug)
+        {
+            _logger.LogInformation("Testing slug conversion: {Slug}", testSlug);
+            var result = CalculateSourceFilePath(testSlug);
+            _logger.LogInformation("Result for slug '{Slug}': {SourcePath}", testSlug, result);
+            return result;
         }
     }
 }
