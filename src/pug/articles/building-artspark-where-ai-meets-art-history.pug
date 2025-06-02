@@ -1,10 +1,12 @@
 extends ../layouts/modern-layout
 
 block variables
-  - var pageTitle = 'Building ArtSpark: Where AI Meets Art History'
-  - var pageDescription = 'Discover how I built ArtSpark, an innovative AI platform that enables conversations with museum artworks. Learn about the technical implementation using .NET 9, Microsoft Semantic Kernel, GPT-4 Vision, and the Art Institute of Chicago API to create immersive cultural experiences.'
-  - var pageKeywords = 'ArtSpark, AI art platform, GPT-4 Vision, Microsoft Semantic Kernel, .NET 9, Art Institute of Chicago API, cultural technology, museum AI, conversational AI, art history, IIIF, OpenAI, machine learning'
+  - var pageTitle = 'Building ArtSpark: Where AI Meets Art History - Video Demo & Technical Deep Dive'
+  - var pageDescription = 'Watch ArtSpark in action! Discover how I built this innovative AI platform that enables conversations with museum artworks. Complete technical implementation guide using .NET 9, Microsoft Semantic Kernel, GPT-4 Vision, and the Art Institute of Chicago API. Includes video demonstration of AI personas bringing art to life.'
+  - var pageKeywords = 'ArtSpark demo, AI art platform video, GPT-4 Vision demo, Microsoft Semantic Kernel tutorial, .NET 9 AI project, Art Institute of Chicago API, cultural technology demo, museum AI video, conversational AI tutorial, art history AI, IIIF implementation, OpenAI GPT-4, machine learning art, AI museum guide, interactive art experience'
   - var pageCanonical = 'https://markhazleton.com/articles/building-artspark-where-ai-meets-art-history.html'
+  - var videoUrl = 'https://www.youtube.com/watch?v=fXy1DSW2ee0'
+  - var videoThumbnail = 'https://img.youtube.com/vi/fXy1DSW2ee0/maxresdefault.jpg'
 
 block pagehead
   title= pageTitle
@@ -12,23 +14,149 @@ block pagehead
   meta(name='keywords', content=pageKeywords)
   meta(name='author', content='Mark Hazleton')
 
+  // Enhanced SEO for video content
+  meta(name='video_url', content=videoUrl)
+  meta(name='video_type', content='application/x-shockwave-flash')
+  meta(name='video_height', content='315')
+  meta(name='video_width', content='560')
+
+  // Additional SEO metadata
+  meta(name='robots', content='index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1')
+  meta(name='googlebot', content='index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1')
+  meta(name='article:published_time', content='2025-06-02T00:00:00+00:00')
+  meta(name='article:modified_time', content='2025-06-02T00:00:00+00:00')
+  meta(name='article:author', content='Mark Hazleton')
+  meta(name='article:section', content='Technology')
+  meta(name='article:tag', content='AI, Machine Learning, .NET, Azure, Museum Technology, Cultural Heritage')
+
 block og_overrides
+  // Enhanced Open Graph for video content
   meta(property='og:title', content=pageTitle)
   meta(property='og:description', content=pageDescription)
   meta(property='og:type', content='article')
   meta(property='og:url', content=pageCanonical)
-  meta(property='og:image', content='https://markhazleton.com/assets/img/painteddesert.jpg')
-  meta(property='og:image:alt', content='ArtSpark - AI-powered art conversation platform')
+  meta(property='og:image', content=videoThumbnail)
+  meta(property='og:image:alt', content='ArtSpark Demo - AI Conversations with Museum Art')
+  meta(property='og:image:width', content='1280')
+  meta(property='og:image:height', content='720')
+  meta(property='og:video', content=videoUrl)
+  meta(property='og:video:url', content=videoUrl)
+  meta(property='og:video:secure_url', content=videoUrl)
+  meta(property='og:video:type', content='text/html')
+  meta(property='og:video:width', content='1280')
+  meta(property='og:video:height', content='720')
+  meta(property='og:site_name', content='Mark Hazleton - Solutions Architect')
+  meta(property='og:locale', content='en_US')
+  meta(property='article:author', content='https://markhazleton.com')
+  meta(property='article:published_time', content='2025-06-02T00:00:00+00:00')
+  meta(property='article:modified_time', content='2025-06-02T00:00:00+00:00')
+  meta(property='article:section', content='Technology')
+  meta(property='article:tag', content='AI')
+  meta(property='article:tag', content='Machine Learning')
+  meta(property='article:tag', content='.NET')
+  meta(property='article:tag', content='Museum Technology')
 
 block twitter_overrides
-  meta(name='twitter:card', content='summary_large_image')
+  // Enhanced Twitter Cards for video content
+  meta(name='twitter:card', content='player')
+  meta(name='twitter:site', content='@markhazleton')
+  meta(name='twitter:creator', content='@markhazleton')
   meta(name='twitter:title', content=pageTitle)
   meta(name='twitter:description', content=pageDescription)
-  meta(name='twitter:image', content='https://markhazleton.com/assets/img/painteddesert.jpg')
-  meta(name='twitter:image:alt', content='ArtSpark - AI-powered art conversation platform')
+  meta(name='twitter:image', content=videoThumbnail)
+  meta(name='twitter:image:alt', content='ArtSpark Demo - AI Conversations with Museum Art')
+  meta(name='twitter:player', content='https://www.youtube.com/embed/fXy1DSW2ee0')
+  meta(name='twitter:player:width', content='1280')
+  meta(name='twitter:player:height', content='720')
+  meta(name='twitter:player:stream', content=videoUrl)
+  meta(name='twitter:app:name:iphone', content='YouTube')
+  meta(name='twitter:app:id:iphone', content='544007664')
+  meta(name='twitter:app:name:ipad', content='YouTube')
+  meta(name='twitter:app:id:ipad', content='544007664')
+  meta(name='twitter:app:name:googleplay', content='YouTube')
+  meta(name='twitter:app:id:googleplay', content='com.google.android.youtube')
 
 block canonical
   link(rel='canonical', href=pageCanonical)
+
+block additional_structured_data
+  // Enhanced structured data for video content and article
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "#{videoThumbnail}",
+        "width": 1280,
+        "height": 720
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://twitter.com/markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mark Hazleton",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg"
+        }
+      },
+      "datePublished": "2025-06-02T00:00:00+00:00",
+      "dateModified": "2025-06-02T00:00:00+00:00",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "#{pageCanonical}"
+      },
+      "video": {
+        "@type": "VideoObject",
+        "name": "ArtSpark Demo: AI Conversations with Art",
+        "description": "Watch ArtSpark in action as AI personas bring museum artworks to life through interactive conversations. Demonstration of AI-powered cultural technology using GPT-4 Vision and Microsoft Semantic Kernel.",
+        "thumbnailUrl": "#{videoThumbnail}",
+        "uploadDate": "2025-06-02T00:00:00+00:00",
+        "duration": "PT10M",
+        "contentUrl": "#{videoUrl}",
+        "embedUrl": "https://www.youtube.com/embed/fXy1DSW2ee0",
+        "interactionStatistic": {
+          "@type": "InteractionCounter",
+          "interactionType": { "@type": "WatchAction" },
+          "userInteractionCount": 0
+        }
+      },
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Artificial Intelligence",
+          "sameAs": "https://en.wikipedia.org/wiki/Artificial_intelligence"
+        },
+        {
+          "@type": "Thing",
+          "name": "Museum Technology",
+          "sameAs": "https://en.wikipedia.org/wiki/Museum_informatics"
+        },
+        {
+          "@type": "Thing",
+          "name": "Cultural Heritage",
+          "sameAs": "https://en.wikipedia.org/wiki/Cultural_heritage"
+        }
+      ],
+      "keywords": "#{pageKeywords}",
+      "articleSection": "Technology",
+      "wordCount": 3500,
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [".article-content h2", ".article-content h3"]
+      }
+    }
 
 block layout-content
   br
@@ -45,6 +173,26 @@ block layout-content
             | What if museum visitors could have actual conversations with the artworks themselves? This question
             | became the spark for ArtSpark—a project exploring the intersection of AI, cultural preservation,
             | and interactive education.
+          strong.text-warning.d-block.mt-3
+            i.bi.bi-play-circle.me-2
+              | Watch the complete demo video below to see ArtSpark's AI personas in action!
+          .card.mb-5
+            .card-header.bg-dark.text-white
+              h3.card-title.mb-0
+                i.bi.bi-play-circle.me-2
+                | ArtSpark Demo: AI Conversations with Art
+            .card-body.p-0
+              .ratio.ratio-16x9
+                iframe(
+                  src='https://www.youtube.com/embed/fXy1DSW2ee0?si=tYzFrhFtbigTddZj'
+                  title='ArtSpark Demo: AI Conversations with Art'
+                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                  referrerpolicy='strict-origin-when-cross-origin'
+                  allowfullscreen
+                )
+            .card-footer.text-muted
+              p.mb-0.
+                Watch ArtSpark in action as AI personas bring museum artworks to life through interactive conversations.
 
   article#main-article
     .container
@@ -66,9 +214,9 @@ block layout-content
                 | the emotional resonance or cultural depth that makes these objects truly meaningful.
 
               blockquote.blockquote
-                    | "What if visitors could have actual conversations with the artworks themselves? Not just read about
-                    | a West African mask, but chat with it about its ceremonial significance, its journey to the museum,
-                    | or how it feels about being displayed thousands of miles from home."
+                | "What if visitors could have actual conversations with the artworks themselves? Not just read about
+                | a West African mask, but chat with it about its ceremonial significance, its journey to the museum,
+                | or how it feels about being displayed thousands of miles from home."
 
 
             section.mb-5
@@ -99,10 +247,9 @@ block layout-content
                       h4.card-title.mb-0
                         i.bi.bi-globe.me-2
                         | Cultural Bridge
-                    .card-body
-                      p.card-text
-                        | AI that translates complex artistic and historical concepts into accessible,
-                        | engaging conversations across cultures and time periods.
+                    .card-body                      p.card-text
+                      | AI that translates complex artistic and historical concepts into accessible,
+                      | engaging conversations across cultures and time periods.
 
             section.mb-5
               h2.h3.mb-4
