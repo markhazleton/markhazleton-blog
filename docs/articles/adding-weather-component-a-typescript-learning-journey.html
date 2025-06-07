@@ -1,46 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Essential Meta Tags-->
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mark Hazleton" />
-        <meta name="robots" content="index, follow" />
-        <title>Adding Weather Component: A TypeScript Learning Journey</title>
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <!-- Page-specific metadata block-->
+        <title>Adding Weather Component: A TypeScript Learning Journey | Mark Hazleton</title>
         <meta name="description" content="Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling." />
-        <meta name="keywords" content="TypeScript, React Native, Weather API, Async Data Fetching, State Management" />
+        <meta name="keywords" content="TypeScript, React Native, Weather API, Async Data Fetching, State Management, JavaScript, Web Development, Component Architecture" />
         <meta name="author" content="Mark Hazleton" />
+        <meta name="article:published_time" content="2024-03-15" />
+        <meta name="article:modified_time" content="2025-06-02" />
+        <meta name="article:author" content="Mark Hazleton" />
+        <meta name="article:section" content="Web Development" />
+        <meta name="article:tag" content="TypeScript, React Native, Weather API" />
+        <!-- Default canonical (can be overridden)-->
         <link rel="canonical" href="https://markhazleton.com/articles/adding-weather-component-a-typescript-learning-journey.html" />
+        <!-- Open Graph Meta Tags (defaults)-->
+        <meta property="og:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta property="og:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://markhazleton.com/" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <meta property="og:site_name" content="Mark Hazleton" />
+        <meta property="og:locale" content="en_US" />
+        <!-- Additional Open Graph overrides-->
+        <!-- Enhanced Open Graph for article-->
+        <meta property="og:title" content="Adding Weather Component: A TypeScript Learning Journey | Mark Hazleton" />
+        <meta property="og:description" content="Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling." />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://markhazleton.com/articles/adding-weather-component-a-typescript-learning-journey.html" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/typescript-weather-component.jpg" />
+        <meta property="og:image:alt" content="TypeScript Weather Component Development" />
+        <meta property="article:author" content="Mark Hazleton" />
+        <meta property="article:published_time" content="2024-03-15" />
+        <meta property="article:modified_time" content="2025-06-02" />
+        <meta property="article:section" content="Web Development" />
+        <meta property="article:tag" content="TypeScript" />
+        <meta property="article:tag" content="React Native" />
+        <meta property="article:tag" content="Weather API" />
+        <!-- Twitter Card Meta Tags (defaults)-->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@markhazleton" />
+        <meta name="twitter:creator" content="@markhazleton" />
+        <meta name="twitter:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta name="twitter:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta name="twitter:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <!-- Additional Twitter Card overrides-->
+        <!-- Enhanced Twitter Cards for article-->
+        <meta name="twitter:title" content="Adding Weather Component: A TypeScript Learning Journey | Mark Hazleton" />
+        <meta name="twitter:description" content="Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/typescript-weather-component.jpg" />
+        <meta name="twitter:image:alt" content="TypeScript Weather Component Development" />
+        <meta name="twitter:label1" content="Reading time" />
+        <meta name="twitter:data1" content="12 min read" />
+        <meta name="twitter:label2" content="Written by" />
+        <meta name="twitter:data2" content="Mark Hazleton" />
+        <!-- Performance optimization - No external CDN dependencies-->
+        <!-- Favicon and app icons-->
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "Person",
-                "name": "Mark Hazleton",
-                "familyName": "Hazleton",
-                "givenName": "Mark",
-                "jobTitle": "Solutions Architect",
-                "alumniOf": "University of North Texas",
-                "affiliation": {
-                    "@type": "Organization",
-                    "name": "Control Origins"
-                },
-                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
-                "url": "https://markhazleton.com"
-            }
-        </script>
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
+        <link href="/css/modern-styles.css" rel="stylesheet" />
+        <!-- Enhanced JSON-LD Structured Data for SEO-->
         <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
-                "@type": "Organization",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "givenName": "Mark",
+                "familyName": "Hazleton",
+                "jobTitle": "Solutions Architect",
+                "description": "Solutions Architect passionate for solutions which make technology work for business",
                 "url": "https://markhazleton.com",
-                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/@MarkHazleton"],
+                "knowsAbout": [".NET Framework", "ASP.NET Core", "Microsoft Azure", "Project Management", "Web Development", "Solution Architecture", "Software Engineering", "Cloud Computing", "Artificial Intelligence", "Machine Learning"],
+                "alumniOf": {
+                    "@type": "Organization",
+                    "name": "University of North Texas"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Wichita",
+                    "addressRegion": "KS",
+                    "addressCountry": "US"
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/"
+                }
             }
         </script>
-        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- No external font dependencies - using system fonts-->
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=20250602" />
+        <!-- Additional structured data for specific pages-->
+        <!-- Article-specific Schema.org-->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "Adding Weather Component: A TypeScript Learning Journey | Mark Hazleton",
+                "description": "Learn how to integrate a weather forecast and map feature using TypeScript in a React Native application, while practicing key TypeScript concepts like typed components and error handling.",
+                "url": "https://markhazleton.com/articles/adding-weather-component-a-typescript-learning-journey.html",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/typescript-weather-component.jpg",
+                    "width": 1200,
+                    "height": 630,
+                    "alt": "TypeScript Weather Component Development"
+                },
+                "author": {
+                    "@type": "Person",
+                    "name": "Mark Hazleton",
+                    "url": "https://markhazleton.com",
+                    "jobTitle": "Solutions Architect",
+                    "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton", "https://www.youtube.com/@markhazleton"]
+                },
+                "publisher": {
+                    "@type": "Person",
+                    "name": "Mark Hazleton",
+                    "url": "https://markhazleton.com"
+                },
+                "datePublished": "2024-03-15",
+                "dateModified": "2025-06-02",
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/articles/adding-weather-component-a-typescript-learning-journey.html"
+                },
+                "articleSection": "Web Development",
+                "keywords": "TypeScript, React Native, Weather API, Async Data Fetching, State Management, JavaScript, Web Development, Component Architecture",
+                "wordCount": 2200,
+                "timeRequired": "PT12M",
+                "about": {
+                    "@type": "Thing",
+                    "name": "TypeScript Development",
+                    "description": "Learning TypeScript through practical React Native component development"
+                }
+            }
+        </script>
+        <!-- Additional page-specific CSS-->
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -51,98 +163,88 @@
             gtag('js', new Date());
             gtag('config', 'G-L8GVZNDH0B');
         </script>
-        <script>
-            (function (c, l, a, r, i, t, y) {
-                c[a] =
-                    c[a] ||
-                    function () {
-                        (c[a].q = c[a].q || []).push(arguments);
-                    };
-                t = l.createElement(r);
-                t.async = 1;
-                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
-                y = l.getElementsByTagName(r)[0];
-                y.parentNode.insertBefore(t, y);
-            })(window, document, 'clarity', 'script', 'd628hovv63');
-        </script>
     </head>
-    <body class="sidetracked-body" id="page-top">
-        <nav class="navbar navbar-dark bg-primary p-1">
-            <div class="container-fluid justify-content-end">
-                <div class="social-icons d-flex">
-                    <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram text-light" style="font-size: 2rem"></i></a>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <a class="navbar-brand" href="/#" aria-label="Mark Hazleton homepage">Mark Hazleton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/#about" aria-current="page">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#experience">Experience</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
+                    </ul>
+                    <div class="social-icons">
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
             </div>
         </nav>
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
-                <span class="d-block d-lg-none">Mark Hazleton</span>
-                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/articles.html">Articles</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
-                </ul>
+        <br />
+        <article class="py-5" id="main-article">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <header class="mb-5">
+                            <h1 class="display-4 fw-bold">
+                                <i class="bi bi-lightbulb me-3"></i>
+                                Adding Weather React Component:
+                            </h1>
+                            <p class="lead">A TypeScript Learning Journey</p>
+                        </header>
+                    </div>
+                </div>
             </div>
-        </nav>
-        <!-- Page Content-->
-        <div class="container-fluid p-0 painteddesert-background">
-            <article class="painteddesert-section painteddesert-section-background" id="post">
-                <div class="painteddesert-section-content">
-                    <p class="fw-bold text-primary text-center bg-primary text-white">
-                        <a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/reactsparkportfolio" target="_blank" title="The full source code for the ReactSparkPortfolio is available on GitHub">The full source code for the ReactSparkPortfolio is available on GitHub</a>
-                        <br />
-                        <a href="https://reactspark.markhazleton.com" target="_blank" title="ReactSpark Portfolio Site">ReactSpark Portfolio Site</a>
-                    </p>
-                    <h1>Adding Weather to My Profile Application: A TypeScript Learning Journey</h1>
-                    <h2 class="subheading mb-3">Demonstrating TypeScript in Real-World Applications</h2>
-                    <p class="lead">
-                        As I work on the project, GitHub pages will be the place to view the application:
-                        <a href="https://reactspark.markhazleton.com" target="_blank" title="ReactSpark Portfolio Site">ReactSpark Portfolio Site</a>
-                    </p>
-                    <p>As a developer on a learning path with TypeScript, one of my goals is to build meaningful, real-world applications while demonstrating key TypeScript skills. My Profile Application serves as a sandbox for practicing and refining my React Native skills, specifically focusing on TypeScript. Recently, I decided to enrich this project by adding a Weather Forecast feature, which includes fetching live weather data and displaying a map of the user’s location.</p>
-                    <dl>
-                        <dt>Why TypeScript?</dt>
-                        <dd><p>TypeScript is a superset of JavaScript that adds static types. It catches errors at compile time, helping avoid runtime failures, especially useful in large, complex applications. This strict control over data types and structure makes TypeScript invaluable for handling data-fetching operations and managing state effectively in React Native apps.</p></dd>
-                        <dt>Setting the Scene: The Profile Application</dt>
-                        <dd><p>My Profile Application is a project where I display personal details, hobbies, and now, weather forecasts. Integrating weather forecasts allows me to demonstrate TypeScript's role in data-fetching, state management, and UI component creation, such as mapping user locations.</p></dd>
-                        <dt>TypeScript Skills Demonstrated</dt>
-                        <dd>
-                            <p>The Weather Forecast and Map components demonstrate important TypeScript concepts:</p>
-                            <ul>
-                                <li>Typed React Components</li>
-                                <li>Interface Definitions for Props</li>
-                                <li>Strongly Typed State Management</li>
-                                <li>Type-Safe Event Handling</li>
-                                <li>Handling Asynchronous Data Fetching</li>
-                                <li>Type Checking for Conditional Rendering</li>
-                                <li>Error Handling and Debugging</li>
-                            </ul>
-                        </dd>
-                        <dt>1. Typed React Components</dt>
-                        <dd>
-                            <p>React components can be typed using React.FC (Functional Component) to ensure that the component accepts and manages the right props. In my Weather Forecast component, I used React.FC to define a functional component structure with TypeScript, ensuring that I get proper type inference for props and state.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> WeatherForecast<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+            <div class="container">
+                <p class="fw-bold text-primary text-center bg-primary text-white">
+                    <a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/reactsparkportfolio" target="_blank" title="The full source code for the ReactSparkPortfolio is available on GitHub">The full source code for the ReactSparkPortfolio is available on GitHub</a>
+                    <br />
+                    <a href="https://reactspark.markhazleton.com" target="_blank" title="ReactSpark Portfolio Site">ReactSpark Portfolio Site</a>
+                </p>
+                <h2 class="subheading mb-3">Demonstrating TypeScript in Real-World Applications</h2>
+                <p class="lead">
+                    As I work on the project, GitHub pages will be the place to view the application:
+                    <a href="https://reactspark.markhazleton.com" target="_blank" title="ReactSpark Portfolio Site">ReactSpark Portfolio Site</a>
+                </p>
+                <p>As a developer on a learning path with TypeScript, one of my goals is to build meaningful, real-world applications while demonstrating key TypeScript skills. My Profile Application serves as a sandbox for practicing and refining my React Native skills, specifically focusing on TypeScript. Recently, I decided to enrich this project by adding a Weather Forecast feature, which includes fetching live weather data and displaying a map of the user’s location.</p>
+                <dl>
+                    <dt>Why TypeScript?</dt>
+                    <dd><p>TypeScript is a superset of JavaScript that adds static types. It catches errors at compile time, helping avoid runtime failures, especially useful in large, complex applications. This strict control over data types and structure makes TypeScript invaluable for handling data-fetching operations and managing state effectively in React Native apps.</p></dd>
+                    <dt>Setting the Scene: The Profile Application</dt>
+                    <dd><p>My Profile Application is a project where I display personal details, hobbies, and now, weather forecasts. Integrating weather forecasts allows me to demonstrate TypeScript's role in data-fetching, state management, and UI component creation, such as mapping user locations.</p></dd>
+                    <dt>TypeScript Skills Demonstrated</dt>
+                    <dd>
+                        <p>The Weather Forecast and Map components demonstrate important TypeScript concepts:</p>
+                        <ul>
+                            <li>Typed React Components</li>
+                            <li>Interface Definitions for Props</li>
+                            <li>Strongly Typed State Management</li>
+                            <li>Type-Safe Event Handling</li>
+                            <li>Handling Asynchronous Data Fetching</li>
+                            <li>Type Checking for Conditional Rendering</li>
+                            <li>Error Handling and Debugging</li>
+                        </ul>
+                    </dd>
+                    <dt>1. Typed React Components</dt>
+                    <dd>
+                        <p>React components can be typed using React.FC (Functional Component) to ensure that the component accepts and manages the right props. In my Weather Forecast component, I used React.FC to define a functional component structure with TypeScript, ensuring that I get proper type inference for props and state.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> WeatherForecast<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token comment">// Component logic here</span>
 <span class="token punctuation">}</span>
 </code></pre>
-                            <p>Using React.FC in TypeScript gives me type safety for props and ensures that I avoid common pitfalls such as forgetting required props or passing the wrong data types into components. This is a foundational skill for building robust, maintainable React Native applications.</p>
-                        </dd>
-                        <dt>2. Interface Definitions for Props</dt>
-                        <dd>
-                            <p>When building reusable components, defining interfaces for props ensures that you pass the correct types of data. For example, the MapComponent needs latitude and longitude values, so I created a MapComponentProps interface to specify the type of these props:</p>
-                            <p>Defining interfaces for component props ensures type safety. The MapComponent, for example, receives latitude and longitude values:</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">MapComponentProps</span> <span class="token punctuation">{</span>
+                        <p>Using React.FC in TypeScript gives me type safety for props and ensures that I avoid common pitfalls such as forgetting required props or passing the wrong data types into components. This is a foundational skill for building robust, maintainable React Native applications.</p>
+                    </dd>
+                    <dt>2. Interface Definitions for Props</dt>
+                    <dd>
+                        <p>When building reusable components, defining interfaces for props ensures that you pass the correct types of data. For example, the MapComponent needs latitude and longitude values, so I created a MapComponentProps interface to specify the type of these props:</p>
+                        <p>Defining interfaces for component props ensures type safety. The MapComponent, for example, receives latitude and longitude values:</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">MapComponentProps</span> <span class="token punctuation">{</span>
   latitude<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
   longitude<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -154,32 +256,32 @@
     <span class="token operator">&lt;</span><span class="token operator">/</span>MapContainer<span class="token operator">></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
-                            <p>By defining this interface, I make sure that the MapComponent always receives numeric values for latitude and longitude. If someone tries to pass in a string or other invalid data type, TypeScript will immediately throw an error during development, helping me avoid bugs before they happen.</p>
-                        </dd>
-                        <dt>3. Strongly Typed State Management</dt>
-                        <dd>
-                            <p>In the WeatherForecast component, I used useState hooks with explicit type annotations to ensure that the state variables are strongly typed. This is particularly important when handling different kinds of data, such as user input, fetched weather data, or UI states like loading indicators.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> <span class="token punctuation">[</span>city<span class="token punctuation">,</span> setCity<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <p>By defining this interface, I make sure that the MapComponent always receives numeric values for latitude and longitude. If someone tries to pass in a string or other invalid data type, TypeScript will immediately throw an error during development, helping me avoid bugs before they happen.</p>
+                    </dd>
+                    <dt>3. Strongly Typed State Management</dt>
+                    <dd>
+                        <p>In the WeatherForecast component, I used useState hooks with explicit type annotations to ensure that the state variables are strongly typed. This is particularly important when handling different kinds of data, such as user input, fetched weather data, or UI states like loading indicators.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> <span class="token punctuation">[</span>city<span class="token punctuation">,</span> setCity<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> <span class="token punctuation">[</span>loading<span class="token punctuation">,</span> setLoading<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">boolean</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> <span class="token punctuation">[</span>weatherData<span class="token punctuation">,</span> setWeatherData<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> <span class="token punctuation">[</span>error<span class="token punctuation">,</span> setError<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-                            <p>This explicit type declaration ensures that these variables only store data of the expected type. For example, city can only be a string, and trying to assign any other type will raise a TypeScript error, preventing type-related bugs early in development.</p>
-                        </dd>
-                        <dt>4. Type-Safe Event Handling</dt>
-                        <dd>
-                            <p>Capturing and responding to user input in forms is a common task in React applications. By typing event handlers in TypeScript, I ensure that the form behaves predictably. Here’s how I typed the event in the input field for entering the city name:</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token operator">&lt;</span>Form<span class="token punctuation">.</span>Control
+                        <p>This explicit type declaration ensures that these variables only store data of the expected type. For example, city can only be a string, and trying to assign any other type will raise a TypeScript error, preventing type-related bugs early in development.</p>
+                    </dd>
+                    <dt>4. Type-Safe Event Handling</dt>
+                    <dd>
+                        <p>Capturing and responding to user input in forms is a common task in React applications. By typing event handlers in TypeScript, I ensure that the form behaves predictably. Here’s how I typed the event in the input field for entering the city name:</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token operator">&lt;</span>Form<span class="token punctuation">.</span>Control
   type<span class="token operator">=</span><span class="token string">"text"</span>
   placeholder<span class="token operator">=</span><span class="token string">"Enter city"</span>
   value<span class="token operator">=</span><span class="token punctuation">{</span>city<span class="token punctuation">}</span>
   onChange<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span>e<span class="token operator">:</span> React<span class="token punctuation">.</span>ChangeEvent<span class="token operator">&lt;</span>HTMLInputElement<span class="token operator">></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">setCity</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">}</span>
 <span class="token operator">/</span><span class="token operator">></span></code></pre>
-                            <p>TypeScript ensures that the event is correctly typed as React.ChangeEvent&lt;HTMLInputElement&gt;, which means the function knows exactly what kind of event to expect. This prevents issues like mistakenly accessing properties that don’t exist on the event object.</p>
-                        </dd>
-                        <dt>5. Handling Asynchronous Data Fetching</dt>
-                        <dd>
-                            <p>The Weather Forecast feature involves fetching data from a weather API. I used async/await in combination with TypeScript's strong typing to handle the API response and possible errors.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> <span class="token function-variable function">fetchWeather</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+                        <p>TypeScript ensures that the event is correctly typed as React.ChangeEvent&lt;HTMLInputElement&gt;, which means the function knows exactly what kind of event to expect. This prevents issues like mistakenly accessing properties that don’t exist on the event object.</p>
+                    </dd>
+                    <dt>5. Handling Asynchronous Data Fetching</dt>
+                    <dd>
+                        <p>The Weather Forecast feature involves fetching data from a weather API. I used async/await in combination with TypeScript's strong typing to handle the API response and possible errors.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> <span class="token function-variable function">fetchWeather</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token function">setLoading</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token function">setError</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -198,12 +300,12 @@
     <span class="token function">setLoading</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
-                            <p>Handling asynchronous operations properly is a critical skill in web development. By typing the error as any (catch (err: any)), I ensure that any error object caught will be properly typed and can be inspected. The result is clear, concise error handling, with informative messages passed back to the user when something goes wrong. TypeScript ensures that I handle the API response and error cases correctly, making the code more robust and reliable. By explicitly typing the error object as any, I can access its properties without TypeScript complaining about unknown types.</p>
-                        </dd>
-                        <dt>6. Type Checking for Conditional Rendering</dt>
-                        <dd>
-                            <p>When dealing with fetched data, conditional rendering is crucial to ensure that the app doesn’t attempt to render undefined or null values. In the Weather Forecast component, I only render the forecast and map if the weatherData is available.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token punctuation">{</span>weatherData <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>
+                        <p>Handling asynchronous operations properly is a critical skill in web development. By typing the error as any (catch (err: any)), I ensure that any error object caught will be properly typed and can be inspected. The result is clear, concise error handling, with informative messages passed back to the user when something goes wrong. TypeScript ensures that I handle the API response and error cases correctly, making the code more robust and reliable. By explicitly typing the error object as any, I can access its properties without TypeScript complaining about unknown types.</p>
+                    </dd>
+                    <dt>6. Type Checking for Conditional Rendering</dt>
+                    <dd>
+                        <p>When dealing with fetched data, conditional rendering is crucial to ensure that the app doesn’t attempt to render undefined or null values. In the Weather Forecast component, I only render the forecast and map if the weatherData is available.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token punctuation">{</span>weatherData <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>
   <span class="token operator">&lt;</span><span class="token operator">></span>
     <span class="token operator">&lt;</span>Card<span class="token operator">></span><span class="token operator">...</span>Weather Details<span class="token operator">...</span><span class="token operator">&lt;</span><span class="token operator">/</span>Card<span class="token operator">></span>
     <span class="token operator">&lt;</span>MapComponent
@@ -212,146 +314,74 @@
     <span class="token operator">/</span><span class="token operator">></span>
   <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token operator">></span>
 <span class="token punctuation">)</span><span class="token punctuation">}</span></code></pre>
-                            <p>By adding this conditional check, TypeScript ensures that I won’t accidentally try to access properties of weatherData before it’s been set, preventing potential runtime errors from undefined values.</p>
-                        </dd>
-                        <dt>7. Error Handling and Debugging</dt>
-                        <dd>
-                            <p>One of the key advantages of TypeScript is that it forces you to think about edge cases like errors or missing data. In the Weather Forecast component, I handle errors both in the API request and in user interaction (e.g., if no city is entered or the API call fails). This improves the user experience by displaying meaningful error messages when things go wrong.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token punctuation">{</span>error <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"alert alert-danger"</span><span class="token operator">></span><span class="token punctuation">{</span>error<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><span class="token punctuation">}</span></code></pre>
-                            <p>TypeScript helps ensure that all errors are properly handled. With clear types, it’s easier to trace where an error comes from, making debugging much more efficient.</p>
-                        </dd>
-                        <dt>Demonstrating My TypeScript Growth</dt>
-                        <dd>
-                            <p>Through the development of the Weather Forecast and Map components, I have sharpened several important TypeScript skills, particularly in building robust, type-safe React components. Here’s a summary of the key skills demonstrated:</p>
-                            <ul>
-                                <li>Typed components using React.FC to ensure type safety for functional components.</li>
-                                <li>Interfaces for defining prop types, ensuring reusable components receive the correct data structure.</li>
-                                <li>Strongly typed state management with useState, ensuring that state variables only hold values of the expected type.</li>
-                                <li>Type-safe event handling to capture user input without runtime errors.</li>
-                                <li>Asynchronous data fetching with proper error handling, ensuring robustness when dealing with external APIs.</li>
-                                <li>Type checking for conditional rendering, ensuring the app doesn’t attempt to render undefined or null values.</li>
-                                <li>Clear error handling to improve the user experience with informative feedback.</li>
-                            </ul>
-                        </dd>
-                        <dt>What’s Next?</dt>
-                        <dd>
-                            <p>With the weather and map components successfully integrated into my Profile Application, I’m eager to continue exploring more advanced TypeScript topics, such as custom hooks, generic types, and state management libraries like Redux. Each new feature provides another opportunity to refine my TypeScript skills while building something tangible.</p>
-                            <p>By making small but meaningful improvements to my application, I can demonstrate the practical benefits of TypeScript, not just in theory but in real-world scenarios that other developers can appreciate and learn from.</p>
-                        </dd>
-                    </dl>
-                </div>
-            </article>
-        </div>
-        <footer class="navbar-dark bg-primary">
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 text-left">
-                    <br />
-                    <!-- Ensure current article exists-->
-                    <!-- Extract and clean currentKeywords-->
-                    <!-- Only check for related articles if there are valid keywords-->
-                    <!-- Shuffle related articles and limit to 3-->
-                    <!-- Render current article's keywords as badges-->
-                    <div class="keywords mt-3">
-                        <p class="text-white">Hashtags:</p>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-primary text-uppercase">typescript</span>
-                            <span class="badge bg-primary text-uppercase">react</span>
-                            <span class="badge bg-primary text-uppercase">react native</span>
-                            <span class="badge bg-primary text-uppercase">weather forecast</span>
-                            <span class="badge bg-primary text-uppercase">github</span>
-                            <span class="badge bg-primary text-uppercase">github pages</span>
-                            <span class="badge bg-primary text-uppercase">profile application</span>
-                            <span class="badge bg-primary text-uppercase">static types</span>
-                            <span class="badge bg-primary text-uppercase">data fetching</span>
-                            <span class="badge bg-primary text-uppercase">state management</span>
-                            <span class="badge bg-primary text-uppercase">ui component</span>
-                            <span class="badge bg-primary text-uppercase">typed react components</span>
-                            <span class="badge bg-primary text-uppercase">interface definitions</span>
-                            <span class="badge bg-primary text-uppercase">strongly typed state</span>
-                            <span class="badge bg-primary text-uppercase">type-safe event handling</span>
-                            <span class="badge bg-primary text-uppercase">asynchronous data fetching</span>
-                            <span class="badge bg-primary text-uppercase">type checking</span>
-                            <span class="badge bg-primary text-uppercase">error handling</span>
-                            <span class="badge bg-primary text-uppercase">debugging</span>
-                            <span class="badge bg-primary text-uppercase">functional component</span>
-                            <span class="badge bg-primary text-uppercase">usestate</span>
-                            <span class="badge bg-primary text-uppercase">event handling</span>
-                            <span class="badge bg-primary text-uppercase">api response</span>
-                            <span class="badge bg-primary text-uppercase">conditional rendering</span>
-                            <span class="badge bg-primary text-uppercase">error messages</span>
-                            <span class="badge bg-primary text-uppercase">custom hooks</span>
-                            <span class="badge bg-primary text-uppercase">generic types</span>
-                            <span class="badge bg-primary text-uppercase">redux</span>
+                        <p>By adding this conditional check, TypeScript ensures that I won’t accidentally try to access properties of weatherData before it’s been set, preventing potential runtime errors from undefined values.</p>
+                    </dd>
+                    <dt>7. Error Handling and Debugging</dt>
+                    <dd>
+                        <p>One of the key advantages of TypeScript is that it forces you to think about edge cases like errors or missing data. In the Weather Forecast component, I handle errors both in the API request and in user interaction (e.g., if no city is entered or the API call fails). This improves the user experience by displaying meaningful error messages when things go wrong.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token punctuation">{</span>error <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"alert alert-danger"</span><span class="token operator">></span><span class="token punctuation">{</span>error<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><span class="token punctuation">}</span></code></pre>
+                        <p>TypeScript helps ensure that all errors are properly handled. With clear types, it’s easier to trace where an error comes from, making debugging much more efficient.</p>
+                    </dd>
+                    <dt>Demonstrating My TypeScript Growth</dt>
+                    <dd>
+                        <p>Through the development of the Weather Forecast and Map components, I have sharpened several important TypeScript skills, particularly in building robust, type-safe React components. Here’s a summary of the key skills demonstrated:</p>
+                        <ul>
+                            <li>Typed components using React.FC to ensure type safety for functional components.</li>
+                            <li>Interfaces for defining prop types, ensuring reusable components receive the correct data structure.</li>
+                            <li>Strongly typed state management with useState, ensuring that state variables only hold values of the expected type.</li>
+                            <li>Type-safe event handling to capture user input without runtime errors.</li>
+                            <li>Asynchronous data fetching with proper error handling, ensuring robustness when dealing with external APIs.</li>
+                            <li>Type checking for conditional rendering, ensuring the app doesn’t attempt to render undefined or null values.</li>
+                            <li>Clear error handling to improve the user experience with informative feedback.</li>
+                        </ul>
+                    </dd>
+                    <dt>What’s Next?</dt>
+                    <dd>
+                        <p>With the weather and map components successfully integrated into my Profile Application, I’m eager to continue exploring more advanced TypeScript topics, such as custom hooks, generic types, and state management libraries like Redux. Each new feature provides another opportunity to refine my TypeScript skills while building something tangible.</p>
+                        <p>By making small but meaningful improvements to my application, I can demonstrate the practical benefits of TypeScript, not just in theory but in real-world scenarios that other developers can appreciate and learn from.</p>
+                    </dd>
+                </dl>
+            </div>
+        </article>
+        <!-- Footer-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="mb-3">Mark Hazleton</h5>
+                        <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
-                    <!-- Render related articles in a card layout-->
-                    <div class="related-articles mt-4">
-                        <h3 class="text-white">Related Articles</h3>
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/concurrent-processing.html" title="Learning Concurrent Processing Through Code with ChatGPT">Concurrent Processing</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learning Concurrent Processing Through Code with ChatGPT</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/windows-to-mac-broadening-my-horizons.html" title="My journey from Windows to macOS, learning to use a MacBook Pro and enhancing my tech toolkit.">Windows to Mac: Broadening My Horizons</a>
-                                        </h5>
-                                        <p class="card-text text-white">My journey from Windows to macOS, learning to use a MacBook Pro and enhancing my tech toolkit.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/workflow-driven-chat-applications-powered-by-adaptive-cards.html" title="Learn how to design workflow-driven chat applications powered by Adaptive Cards, enhancing AI interactivity and structured conversations.">Workflow-Driven Chat Applications Powered by Adaptive Cards</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learn how to design workflow-driven chat applications powered by Adaptive Cards, enhancing AI interactivity and structured conversations.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Quick Links</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#about">About</a></li>
+                            <li><a href="/#experience">Experience</a></li>
+                            <li><a href="/#projects">Projects</a></li>
+                            <li><a href="/articles.html">Articles</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
                     </div>
-                    <div class="mt-4"><p class="text-white"></p></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 justify-content-end">
-                    <br />
-                    <div class="social-icons d-flex">
-                        <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
-                        <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
-                        <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
-                        <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
-                        <br />
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/projectmechanics/">Project Mechanics</a></li>
+                            <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
+                            <li><a href="/rss.xml">RSS Feed</a></li>
+                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12"><br /></div>
+                <hr class="my-4" />
+                <div class="row">
+                    <div class="col-12 text-center"><p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p></div>
+                </div>
             </div>
         </footer>
-        <!-- Core theme JS-->
         <script src="/js/scripts.js"></script>
     </body>
 </html>

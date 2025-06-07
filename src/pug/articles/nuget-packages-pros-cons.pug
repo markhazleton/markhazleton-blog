@@ -1,149 +1,588 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
+
+block variables
+  - var pageTitle = 'NuGet Package Pros and Cons: A Comprehensive Analysis | Mark Hazleton'
+  - var pageDescription = 'Comprehensive analysis of the pros and cons of using NuGet packages in .NET projects. Learn about security considerations, dependency management, and best practices for package selection.'
+  - var pageKeywords = 'NuGet packages, .NET development, package manager, software dependencies, security vulnerabilities, development costs, productivity, licensing, risk assessment, third-party libraries'
+  - var pageCanonical = 'https://markhazleton.com/articles/nuget-packages-pros-cons.html'
+  - var pageAuthor = 'Mark Hazleton'
+  - var publishedDate = '2023-04-10'
+  - var modifiedDate = '2025-06-02'
+  - var estimatedReadTime = '6'
 
 block pagehead
-  title Mark Hazleton - NuGet Packages Pros and Cons
-  meta(name='description', content='Mark Hazleton - The Pros and Cons of Using NuGet Packages in Your Projects')
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/nuget-packages-pros-cons.html')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+  meta(name='author', content=pageAuthor)
+  meta(name='article:published_time', content=publishedDate)
+  meta(name='article:modified_time', content=modifiedDate)
+  meta(name='article:author', content=pageAuthor)
+  meta(name='article:section', content='Development')
+  meta(name='article:tag', content='NuGet, Package Management, .NET Development')
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block og_overrides
+  // Enhanced Open Graph for article
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:type', content='article')
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/ArgostoliGreeceBeach.jpg')
+  meta(property='og:image:alt', content='NuGet package management and development best practices')
+  meta(property='article:author', content='Mark Hazleton')
+  meta(property='article:published_time', content=publishedDate)
+  meta(property='article:modified_time', content=modifiedDate)
+  meta(property='article:section', content='Development')
+  meta(property='article:tag', content='NuGet')
+  meta(property='article:tag', content='Package Management')
+  meta(property='article:tag', content='.NET Development')
+
+block twitter_overrides
+  // Enhanced Twitter Cards for article
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
+  meta(name='twitter:image', content='https://markhazleton.com/assets/img/ArgostoliGreeceBeach.jpg')
+  meta(name='twitter:image:alt', content='NuGet package management and development best practices')
+  meta(name='twitter:label1', content='Reading time')
+  meta(name='twitter:data1', content=estimatedReadTime + ' min read')
+  meta(name='twitter:label2', content='Written by')
+  meta(name='twitter:data2', content='Mark Hazleton')
+
+block additional_structured_data
+  // Article-specific Schema.org
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "#{pageTitle}",
+      "description": "#{pageDescription}",
+      "url": "#{pageCanonical}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://markhazleton.com/assets/img/ArgostoliGreeceBeach.jpg",
+        "width": 1200,
+        "height": 630,
+        "alt": "NuGet package management and development best practices"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "jobTitle": "Solutions Architect",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://www.youtube.com/@markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com"
+      },
+      "datePublished": "#{publishedDate}",
+      "dateModified": "#{modifiedDate}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "#{pageCanonical}"
+      },
+      "articleSection": "Development",
+      "keywords": "#{pageKeywords}",
+      "wordCount": 1200,
+      "timeRequired": "PT#{estimatedReadTime}M",
+      "about": {
+        "@type": "Thing",
+        "name": "NuGet Package Management",
+        "description": "Best practices for evaluating and using NuGet packages in .NET development projects"
+      }
+    }
+
+block additional_css
+  style.
+    .hero-article {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 4rem 0;
+      margin-top: 4rem;
+    }
+
+    .article-meta {
+      color: #6c757d;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .article-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    .article-content h2 {
+      color: var(--primary-color);
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .pros-cons-card {
+      border: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .pros-cons-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .pros-card {
+      border-left: 4px solid #28a745;
+    }
+
+    .cons-card {
+      border-left: 4px solid #dc3545;
+    }
+
+    .assessment-card {
+      border-left: 4px solid #ffc107;
+    }
+
+    .risk-warning {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+
+    .key-takeaway {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-left: 5px solid var(--accent-color);
+      padding: 2rem;
+      margin: 2rem 0;
+      border-radius: 0.5rem;
+    }
+
+    .nuget-logo {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .breadcrumb-modern {
+      background: none;
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+
+    .breadcrumb-modern .breadcrumb-item a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    .breadcrumb-modern .breadcrumb-item.active {
+      color: var(--text-color);
+    }
 
 block layout-content
+  // Breadcrumb Navigation
+  .container.mt-4
+    nav.breadcrumb-modern(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a(href='/') Home
+        li.breadcrumb-item
+          a(href='/articles.html') Articles
+        li.breadcrumb-item.active(aria-current='page') NuGet Package Pros and Cons
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 NuGet Packages
-      .subheading.mb-3 The Pros and Cons of Using NuGet Packages in Your Projects
-      p.lead.
-        NuGet packages can be a valuable resource when building software projects.
-        They allow developers to easily add new functionality to their projects without having
-        to write code from scratch. However, there are also risks associated with using
-        NuGet packages. In this blog post, we will discuss the pros and cons of using NuGet
-        packages in your projects and how to assess the risks involved.
+  // Hero Section
+  section.hero-article
+    .container
+      .row.justify-content-center
+        .col-lg-8.text-center
+          h1.display-4.fw-bold.mb-3 NuGet Package Pros and Cons
+          p.lead.mb-4 A Comprehensive Analysis of Using NuGet Packages in Your Projects
+          .d-flex.justify-content-center.flex-wrap.gap-2.mb-4
+            span.badge.bg-light.text-dark.px-3.py-2 NuGet
+            span.badge.bg-light.text-dark.px-3.py-2 Package Management
+            span.badge.bg-light.text-dark.px-3.py-2 .NET Development
+            span.badge.bg-light.text-dark.px-3.py-2 Security
 
-      .subheading.mb-3 What is a NuGet, and why should businesses care about it?
-      p.
-        A package manager is a tool that automates the process of installing,
-        updating, configuring, and removing software packages.
-        A software package is a collection of code,
-        libraries, and other dependencies that implement a piece of functionality.
-        Package managers make it easy for developers to manage dependencies and keep their projects up-to-date.
-      img.img-fluid.d-block.w-100(src='/assets/img/nuget_org_screenshot.png' alt='Nuget Website')
-      p.
-        NuGet is a package manager for the .NET framework that allows developers to easily install,
-        manage, and update packages in their projects. It was first introduced in 2010 and has become
-        the standard package manager for .NET. In the package manager space, NuGet competes with
-        other package managers such as NPM for Node.js, Composer for PHP, and RubyGems for Ruby.
-        These package managers provide similar functionality, allowing developers to easily manage
-        and share packages with their projects.
-      p.
-        Using NuGet packages can be a cost-effective way to speed up development and
-        reduce the amount of custom code. By leveraging existing libraries
-        and components, developers can focus on building the unique parts of their application that
-        provide the most value to the project.
-      p.
-        However, as with any tool or technology, there are risks and considerations that businesses
-        need to be aware of when using NuGet packages.
+  // Article Content
+  article.py-5
+    .container
+      .row.justify-content-center
+        .col-lg-8
+          // Article Metadata
+          .article-meta
+            .row.align-items-center
+              .col-md-8
+                .d-flex.align-items-center.flex-wrap.gap-3
+                  .d-flex.align-items-center
+                    i.fas.fa-user.me-2
+                    span Written by Mark Hazleton
+                  .d-flex.align-items-center
+                    i.fas.fa-calendar.me-2
+                    span Published #{publishedDate}
+                  .d-flex.align-items-center
+                    i.fas.fa-clock.me-2
+                    span #{estimatedReadTime} min read
+              .col-md-4.text-md-end.mt-2.mt-md-0
+                .d-flex.justify-content-md-end.gap-2
+                  a.btn.btn-sm.btn-outline-primary(href='https://www.linkedin.com/in/markhazleton/', target='_blank', title='Share on LinkedIn')
+                    i.fab.fa-linkedin
+                  a.btn.btn-sm.btn-outline-danger(href='https://www.youtube.com/@markhazleton', target='_blank', title='Visit YouTube Channel')
+                    i.fab.fa-youtube
+          // Article Body
+          .article-content
+            p.lead.
+              NuGet packages can be a valuable resource when building software projects.
+              They allow developers to easily add new functionality to their projects without having
+              to write code from scratch. However, there are also risks associated with using
+              NuGet packages. In this comprehensive analysis, we'll explore the pros and cons of using NuGet
+              packages in your projects and how to assess the risks involved.
 
-      .subheading.mb-3 Pros of Using NuGet Packages:
-      dl
-        dt Easy to add new functionality:
-        dd.
-          NuGet packages provide a quick and easy way to add new functionality to your project.
-          This saves time and effort, especially for complex features.
-        dt Reduces development costs:
-        dd.
-          By using NuGet packages, developers can reduce the cost of development as they
-          do not have to write code from scratch.
-          This allows them to focus on other critical aspects of the project.
-        dt Increases productivity:
-        dd.
-          NuGet packages allow developers to work more efficiently and deliver projects faster.
-          This is because they can reuse code that has already been developed and tested.
+            h2.mb-4
+              i.fas.fa-cube.me-2
+              | What is NuGet, and why should businesses care about it?
 
-      .subheading.mb-3 Cons of Using NuGet Packages:
-      dl
-        dt Risk of maintaining the current version:
-        dd.
-          NuGet packages are developed by third-party vendors and the responsibility of
-          maintaining the current version of the package falls on the developer.
-          This can be a risk as it requires additional effort to keep up with updates and potential breaking changes.
-        dt Dependency on external sources:
-        dd.
-          NuGet packages introduce external dependencies into the project,
-          which can be problematic if the package is discontinued or the organization supporting it is not reliable.
-        dt Potential security vulnerabilities:
-        dd.
-          NuGet packages are developed by third-party vendors,
-          and the security of the package is dependent on the organization supporting it.
-          This can be a risk as it requires additional effort to keep up with updates and potential security vulnerabilities.
+            p.
+              A package manager is a tool that automates the process of installing,
+              updating, configuring, and removing software packages.
+              A software package is a collection of code,
+              libraries, and other dependencies that implement a piece of functionality.
+              Package managers make it easy for developers to manage dependencies and keep their projects up-to-date.
 
-      .subheading.mb-3 Assessing the Risks of Using NuGet Packages:
-      dl
-        dt Organization supporting the package:
-        dd.
-          Before using a NuGet package, it is important to research the organization
-          that is supporting it. It is advisable to choose a package that is supported
-          by a reputable organization with a track record of maintaining their packages.
-        dt Popularity of the package:
-        dd.
-          Popular NuGet packages are likely to be more stable and reliable than less popular ones.
-          It is recommended to choose a package that has a high number of downloads and a large user community.
-        dt Frequency of updates:
-        dd.
-          Regular updates to a NuGet package are an indication that the package is being
-          actively maintained and developed. It is advisable to choose a package that is
-          updated frequently to ensure that it remains compatible with the latest version of the platform.
-        dt Number of contributors:
-        dd.
-          The number of contributors to a NuGet package is an indication of the level of support and maintenance
-          that the package is receiving. It is advisable to choose a package that has a large number
-          of contributors to ensure that it remains reliable and secure.
-        dt Number of open issues:
-        dd.
-          The number of open issues for a NuGet package is an indication of the level of support
-          and maintenance that the package is receiving.
-          It is advisable to choose a package that has a low number of open issues to ensure
-          that it remains reliable and secure.
-        dt Software Costs:
-        dd.
-          The cost of using a NuGet package is an important consideration when choosing a package.
-          It is advisable to choose a package that is free or has a low cost to ensure that it is
-          cost-effective for your project.
-        dt Licensing terms:
-        dd.
-          The license of the NuGet package can affect the license of the product you build with it.
-          For example, if a NuGet package has a permissive license like the MIT License,
-          you can typically use it in your product without affecting your product's license.
-          However, if a NuGet package has a copyleft license like the GPL License,
-          you may need to use a copyleft license for your product as well.
-          This is because the copyleft license requires that derivative works
-          (including products built with the package) are licensed under the same terms.
-          Therefore, it's important to review the licensing terms of any NuGet package you use
-          and ensure that it aligns with the licensing terms you want for your product.
+            .text-center.my-4
+              img.img-fluid.nuget-logo(src='/assets/img/nuget_org_screenshot.png' alt='NuGet.org Website Screenshot showing the official NuGet package repository')
 
-      .subheading.mb-3 Risks of Not Updating NuGet Packages:
-      p.
-        It is important to keep your NuGet packages up to date to avoid potential security vulnerabilities and
-        incompatibilities with newer versions of the platform.
-      dl
-        dt Security vulnerabilities:
-        dd.
-          Not updating NuGet packages can lead to the exposure of security vulnerabilities that
-          could be exploited by attackers. This can result in data breaches and other security incidents.
-        dt  Incompatibility with newer versions:
-        dd.
-          Not updating NuGet packages can also lead to incompatibility with newer
-          versions of the platform. This can cause issues with the project's functionality and performance.
-        dt  Potential loss of support:
-        dd.
-          Not updating NuGet packages can also lead to the loss of support from the organization
-          that is supporting the package. This can result in the package being discontinued, which can
-          cause issues with the project's functionality and performance.
+            p.
+              NuGet is a package manager for the .NET framework that allows developers to easily install,
+              manage, and update packages in their projects. It was first introduced in 2010 and has become
+              the standard package manager for .NET. In the package manager space, NuGet competes with
+              other package managers such as NPM for Node.js, Composer for PHP, and RubyGems for Ruby.
+              These package managers provide similar functionality, allowing developers to easily manage
+              and share packages with their projects.
 
-      .subheading.mb-3 Conclusion:
-      p.
-        NuGet packages can be a valuable resource for developers, but it is important to weigh the pros and cons
-        before incorporating them into your project. Assessing the risks of using a particular NuGet package
-        is crucial to ensure that it is reliable and secure. It is also important to keep your NuGet packages
-        up to date to avoid potential security vulnerabilities and incompatibilities with newer versions of the platform.
-  hr.m-0
-  hr.m-0
+            .key-takeaway
+              h5.fw-bold.mb-3
+                i.fas.fa-lightbulb.me-2
+                | Business Value
+                p.mb-0.
+                  Using NuGet packages can be a cost-effective way to speed up development and
+                  reduce the amount of custom code. By leveraging existing libraries
+                  and components, developers can focus on building the unique parts of their application that
+                  provide the most value to the project.
+
+            p.
+              However, as with any tool or technology, there are risks and considerations that businesses
+              need to be aware of when using NuGet packages.
+
+            h2.mb-4
+              i.fas.fa-thumbs-up.me-2.text-success
+              | Pros of Using NuGet Packages
+
+            .row.g-4.mb-5
+              .col-md-6
+                .card.pros-cons-card.pros-card.h-100
+                  .card-body
+                    .d-flex.align-items-center.mb-3
+                      i.fas.fa-rocket.text-success.me-3.fs-4
+                      h5.card-title.mb-0 Easy to add new functionality
+                    p.card-text.
+                      NuGet packages provide a quick and easy way to add new functionality to your project.
+                      This saves time and effort, especially for complex features.
+
+              .col-md-6
+                .card.pros-cons-card.pros-card.h-100
+                  .card-body
+                    .d-flex.align-items-center.mb-3
+                      i.fas.fa-dollar-sign.text-success.me-3.fs-4
+                      h5.card-title.mb-0 Reduces development costs
+                    p.card-text.
+                      By using NuGet packages, developers can reduce the cost of development as they
+                      do not have to write code from scratch.
+                      This allows them to focus on other critical aspects of the project.
+
+              .col-md-6
+                .card.pros-cons-card.pros-card.h-100
+                  .card-body
+                    .d-flex.align-items-center.mb-3
+                      i.fas.fa-chart-line.text-success.me-3.fs-4
+                      h5.card-title.mb-0 Increases productivity
+                    p.card-text.
+                      NuGet packages allow developers to work more efficiently and deliver projects faster.
+                      This is because they can reuse code that has already been developed and tested.
+
+            h2.mb-4
+              i.fas.fa-exclamation-triangle.me-2.text-danger
+              | Cons of Using NuGet Packages
+
+            .row.g-4.mb-5
+              .col-md-6
+                .card.pros-cons-card.cons-card.h-100
+                  .card-body
+                    .d-flex.align-items-center.mb-3
+                      i.fas.fa-tools.text-danger.me-3.fs-4
+                      h5.card-title.mb-0 Risk of maintaining the current version
+                    p.card-text.
+                      NuGet packages are developed by third-party vendors and the responsibility of
+                      maintaining the current version of the package falls on the developer.
+                      This can be a risk as it requires additional effort to keep up with updates and potential breaking changes.
+
+              .col-md-6
+                .card.pros-cons-card.cons-card.h-100
+                  .card-body
+                    .d-flex.align-items-center.mb-3
+                      i.fas.fa-link.text-danger.me-3.fs-4
+                      h5.card-title.mb-0 Dependency on external sources
+                    p.card-text.
+                      NuGet packages introduce external dependencies into the project,
+                      which can be problematic if the package is discontinued or the organization supporting it is not reliable.
+
+              .col-md-6
+                .card.pros-cons-card.cons-card.h-100
+                  .card-body
+                    .d-flex.align-items-center.mb-3
+                      i.fas.fa-shield-alt.text-danger.me-3.fs-4
+                      h5.card-title.mb-0 Potential security vulnerabilities
+                      p.card-text.
+                        NuGet packages are developed by third-party vendors,
+                        and the security of the package is dependent on the organization supporting it.
+                        This can be a risk as it requires additional effort to keep up with updates and potential security vulnerabilities.
+
+            h2.mb-4
+              i.fas.fa-search.me-2.text-warning
+              | Assessing the Risks of Using NuGet Packages
+
+            p.lead.mb-4.
+              Before adopting any NuGet package, it's crucial to evaluate several key factors
+              that indicate the package's reliability, security, and long-term viability.
+
+            .accordion#riskAssessmentAccordion.mb-5
+              .accordion-item
+                h3.accordion-header#headingOrganization
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseOrganization'
+                    aria-expanded='false'
+                    aria-controls='collapseOrganization'
+                  )
+                    i.fas.fa-building.me-2
+                    | Organization supporting the package
+                .accordion-collapse.collapse#collapseOrganization(
+                  aria-labelledby='headingOrganization'
+                  data-bs-parent='#riskAssessmentAccordion'
+                )
+                  .accordion-body
+                    p.
+                      Before using a NuGet package, it is important to research the organization
+                      that is supporting it. It is advisable to choose a package that is supported
+                      by a reputable organization with a track record of maintaining their packages.
+
+              .accordion-item
+                h3.accordion-header#headingPopularity
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapsePopularity'
+                    aria-expanded='false'
+                    aria-controls='collapsePopularity'
+                  )
+                    i.fas.fa-users.me-2
+                    | Popularity of the package
+                .accordion-collapse.collapse#collapsePopularity(
+                  aria-labelledby='headingPopularity'
+                  data-bs-parent='#riskAssessmentAccordion'
+                )
+                  .accordion-body
+                    p.
+                      Popular NuGet packages are likely to be more stable and reliable than less popular ones.
+                      It is recommended to choose a package that has a high number of downloads and a large user community.
+
+              .accordion-item
+                h3.accordion-header#headingUpdates
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseUpdates'
+                    aria-expanded='false'
+                    aria-controls='collapseUpdates'
+                  )
+                    i.fas.fa-sync-alt.me-2
+                    | Frequency of updates
+                .accordion-collapse.collapse#collapseUpdates(
+                  aria-labelledby='headingUpdates'
+                  data-bs-parent='#riskAssessmentAccordion'
+                )
+                  .accordion-body
+                    p.
+                      Regular updates to a NuGet package are an indication that the package is being
+                      actively maintained and developed. It is advisable to choose a package that is
+                      updated frequently to ensure that it remains compatible with the latest version of the platform.
+
+              .accordion-item
+                h3.accordion-header#headingContributors
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseContributors'
+                    aria-expanded='false'
+                    aria-controls='collapseContributors'
+                  )
+                    i.fas.fa-user-friends.me-2
+                    | Number of contributors
+                .accordion-collapse.collapse#collapseContributors(
+                  aria-labelledby='headingContributors'
+                  data-bs-parent='#riskAssessmentAccordion'
+                )
+                  .accordion-body
+                    p.
+                      The number of contributors to a NuGet package is an indication of the level of support and maintenance
+                      that the package is receiving. It is advisable to choose a package that has a large number
+                      of contributors to ensure that it remains reliable and secure.
+
+              .accordion-item
+                h3.accordion-header#headingIssues
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseIssues'
+                    aria-expanded='false'
+                    aria-controls='collapseIssues'
+                  )
+                    i.fas.fa-bug.me-2
+                    | Number of open issues
+                .accordion-collapse.collapse#collapseIssues(
+                  aria-labelledby='headingIssues'
+                  data-bs-parent='#riskAssessmentAccordion'
+                )
+                  .accordion-body
+                    p.
+                      The number of open issues for a NuGet package is an indication of the level of support
+                      and maintenance that the package is receiving.
+                      It is advisable to choose a package that has a low number of open issues to ensure
+                      that it remains reliable and secure.
+
+              .accordion-item
+                h3.accordion-header#headingCosts
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseCosts'
+                    aria-expanded='false'
+                    aria-controls='collapseCosts'
+                  )
+                    i.fas.fa-money-bill-wave.me-2
+                    | Software costs
+                .accordion-collapse.collapse#collapseCosts(
+                  aria-labelledby='headingCosts'
+                  data-bs-parent='#riskAssessmentAccordion'
+                )
+                  .accordion-body
+                    p.
+                      The cost of using a NuGet package is an important consideration when choosing a package.
+                      It is advisable to choose a package that is free or has a low cost to ensure that it is
+                      cost-effective for your project.
+
+              .accordion-item
+                h3.accordion-header#headingLicensing
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseLicensing'
+                    aria-expanded='false'
+                    aria-controls='collapseLicensing'
+                  )
+                    i.fas.fa-file-contract.me-2
+                    | Licensing terms
+                .accordion-collapse.collapse#collapseLicensing(
+                  aria-labelledby='headingLicensing'
+                  data-bs-parent='#riskAssessmentAccordion'
+                )
+                  .accordion-body
+                    p.
+                      The license of the NuGet package can affect the license of the product you build with it.
+                      For example, if a NuGet package has a permissive license like the MIT License,
+                      you can typically use it in your product without affecting your product's license.
+                      However, if a NuGet package has a copyleft license like the GPL License,
+                      you may need to use a copyleft license for your product as well.                    p.mb-0.
+                      This is because the copyleft license requires that derivative works
+                      (including products built with the package) are licensed under the same terms.
+                      Therefore, it's important to review the licensing terms of any NuGet package you use
+                      and ensure that it aligns with the licensing terms you want for your product.
+
+            h2.mb-4
+              i.fas.fa-exclamation-circle.me-2.text-danger
+              | Risks of Not Updating NuGet Packages
+
+            .risk-warning.mb-4
+              h5.fw-bold.mb-3
+                i.fas.fa-warning.me-2
+                | Critical Update Considerations
+              p.mb-0.
+                It is important to keep your NuGet packages up to date to avoid potential security vulnerabilities and
+                incompatibilities with newer versions of the platform.
+
+            .row.g-4.mb-5
+              .col-md-4
+                .card.pros-cons-card.cons-card.h-100
+                  .card-body.text-center
+                    i.fas.fa-shield-virus.text-danger.mb-3.fs-1
+                    h5.card-title Security vulnerabilities
+                    p.card-text.
+                      Not updating NuGet packages can lead to the exposure of security vulnerabilities that
+                      could be exploited by attackers. This can result in data breaches and other security incidents.
+
+              .col-md-4
+                .card.pros-cons-card.cons-card.h-100
+                  .card-body.text-center
+                    i.fas.fa-puzzle-piece.text-danger.mb-3.fs-1
+                    h5.card-title Incompatibility with newer versions
+                    p.card-text.
+                      Not updating NuGet packages can also lead to incompatibility with newer
+                      versions of the platform. This can cause issues with the project's functionality and performance.
+
+              .col-md-4
+                .card.pros-cons-card.cons-card.h-100
+                  .card-body.text-center
+                    i.fas.fa-life-ring.text-danger.mb-3.fs-1
+                    h5.card-title Potential loss of support
+                    p.card-text.
+                      Not updating NuGet packages can also lead to the loss of support from the organization
+                      that is supporting the package. This can result in the package being discontinued, which can
+                      cause issues with the project's functionality and performance.
+
+            h2.mb-4
+              i.fas.fa-lightbulb.me-2.text-primary
+              | Conclusion
+
+            .key-takeaway
+              h5.fw-bold.mb-3
+                i.fas.fa-key.me-2
+                | Key Takeaways
+              ul.mb-0
+                li Choose packages from reputable organizations with proven track records
+                li Evaluate popularity, update frequency, and community support
+                li Understand licensing implications for your project
+                li Maintain regular update schedules to address security vulnerabilities
+                li Balance the benefits of rapid development against dependency risks
+
+            p.
+              NuGet packages can be a valuable resource for developers, but it is important to weigh the pros and cons
+              before incorporating them into your project. Assessing the risks of using a particular NuGet package
+              is crucial to ensure that it is reliable and secure. It is also important to keep your NuGet packages
+              up to date to avoid potential security vulnerabilities and incompatibilities with newer versions of the platform.
+
+            // Back to Top Link
+            .text-center.mt-5
+              a.btn.btn-outline-primary(href='#top')
+                i.fas.fa-arrow-up.me-2
+                | Back to Top

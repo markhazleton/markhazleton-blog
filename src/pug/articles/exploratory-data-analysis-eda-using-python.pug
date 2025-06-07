@@ -1,720 +1,185 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights'
+  - var pageDescription = 'Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights.'
+  - var pageKeywords = 'exploratory data analysis, EDA in Python, data sanity checks, outlier detection, data profiling, data quality, data visualization, pandas, python, machine learning, data cleaning, data science tutorial'
+  - var pageCanonical = 'https://markhazleton.com/articles/exploratory-data-analysis-eda-using-python.html'
 
 block pagehead
-  title Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights
-  meta(name='description', content='Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights.')
-  meta(name="keywords" content="exploratory data analysis, EDA in Python, data sanity checks, outlier detection, data profiling, data quality, data visualization, pandas, python, machine learning, data cleaning, data science tutorial")
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
   meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/exploratory-data-analysis-eda-using-python.html')
-  script(type='application/ld+json').
-    {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights",
-      "author": {"@type": "Person", "name": "Mark Hazleton"},
-      "datePublished": "2025-05-20",
-      "image": "https://markhazleton.com/assets/eda-python-example.png",
-      "publisher": {"@type": "Organization", "name": "MarkHazleton.com"},
-      "description": "Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights."
-    }
-  meta(property='og:video', content='https://www.youtube.com/embed/3KO0GuTkPew')
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:type', content='article')
+  meta(property='og:video:url', content='https://www.youtube.com/embed/3KO0GuTkPew')
+  meta(property='og:video:secure_url', content='https://www.youtube.com/embed/3KO0GuTkPew')
   meta(property='og:video:type', content='text/html')
   meta(property='og:video:width', content='560')
   meta(property='og:video:height', content='315')
-  meta(property='og:video:url', content='https://www.youtube.com/embed/3KO0GuTkPew')
-  meta(property='og:video:secure_url', content='https://www.youtube.com/embed/3KO0GuTkPew')
   meta(property='og:image', content='https://img.youtube.com/vi/3KO0GuTkPew/maxresdefault.jpg')
   meta(property='og:image:alt', content='Exploratory Data Analysis (EDA) in Python - YouTube Video Preview')
+
+block twitter_overrides
   meta(name='twitter:card', content='player')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
   meta(name='twitter:player', content='https://www.youtube.com/embed/3KO0GuTkPew')
   meta(name='twitter:player:width', content='560')
   meta(name='twitter:player:height', content='315')
   meta(name='twitter:image', content='https://img.youtube.com/vi/3KO0GuTkPew/maxresdefault.jpg')
   meta(name='twitter:image:alt', content='Exploratory Data Analysis (EDA) in Python - YouTube Video Preview')
 
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Exploratory Data Analysis (EDA) in Python: Step-by-Step Guide for Data Sanity & Insights",
+      "description": "Learn how to perform Exploratory Data Analysis (EDA) in Python. Step-by-step guide to data sanity checks, outlier detection, and actionable insights.",
+      "image": "https://img.youtube.com/vi/3KO0GuTkPew/maxresdefault.jpg",
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton"
+      },
+      "datePublished": "2025-05-20",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Mark Hazleton Blog",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://img.youtube.com/vi/3KO0GuTkPew/maxresdefault.jpg"
+        }
+      }
+    }
+
 block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 Exploratory Data Analysis (EDA)
-      h2.subheading.mb-3 A comprehensive guide to data sanity checks and EDA using Python
+  .container.py-4
+    .row.justify-content-center
+      .col-12.col-lg-10
+        article
+          header.text-center.mb-5
+            h1.display-4.fw-bold.text-primary Exploratory Data Analysis (EDA)
+            p.lead.text-muted.mb-0 A comprehensive guide to data sanity checks and EDA using Python          // Embedded YouTube Video Card
+          .card.mb-5.shadow-sm
+            .card-header.bg-primary.text-white
+              h5.card-title.mb-0
+                i.bi.bi-play-circle.me-2(aria-hidden='true')
+                | Exploratory Data Analysis (EDA) in Python – Video Guide
+            .card-body
+              .ratio.ratio-16x9
+                iframe(
+                  src="https://www.youtube.com/embed/3KO0GuTkPew?si=8lRQ25ujRZOpquR_"
+                  title="Exploratory Data Analysis (EDA) in Python – YouTube Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                )
+            .card-footer.bg-light
+              p.card-text.mb-0
+                | Watch this video for a step-by-step walkthrough of EDA in Python, including practical code demonstrations and tips for effective data analysis.          // Table of Contents
+          .card.mb-5.shadow-sm
+            .card-header.bg-secondary.text-white
+              h3.card-title.mb-0
+                i.bi.bi-list-ul.me-2(aria-hidden='true')
+                | Table of Contents
+            .card-body
+              .list-group.list-group-flush
+                a.list-group-item.list-group-item-action(href='#understanding-the-dataset')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | Understanding the Dataset
+                a.list-group-item.list-group-item-action(href='#data-sanity-checks')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | Data Sanity Checks
+                a.list-group-item.list-group-item-action(href='#exploratory-data-analysis-eda')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | Exploratory Data Analysis (EDA)
+                a.list-group-item.list-group-item-action(href='#plan-for-data-cleaning-and-preprocessing')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | Plan for Data Cleaning and Preprocessing
+                a.list-group-item.list-group-item-action(href='#conclusion')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | Conclusion
+                a.list-group-item.list-group-item-action(href='#eda-faq')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | EDA FAQ
+                a.list-group-item.list-group-item-action(href='#summary')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | Summary Checklist
+                a.list-group-item.list-group-item-action(href='#glossary')
+                  i.bi.bi-chevron-right.me-2(aria-hidden='true')
+                  | Glossary
+          // Introduction Section
+          .card.mb-5.shadow-sm
+            .card-body
+              .row
+                .col-lg-8
+                  p.lead
+                    | Before venturing into advanced data analysis or machine learning,
+                    | it's essential to ensure that the data you're working with is clean and coherent.
+                    | This article outlines the process of conducting Data Sanity checks and Exploratory Data Analysis (EDA),
+                    | both of which are critical first steps in understanding your dataset.
+                  p
+                    | While the initial stages don't involve modifying the data, these actions help uncover potential issues
+                    | such as missing values, duplicates, and outliers, while providing valuable insights into the data's structure and relationships.
+                  p
+                    | It's important to start by inspecting the dataset to familiarize yourself with its contents and structure.
+                    | Understanding the data is key to identifying any problems that might affect your analysis.
+                    | Once this preliminary examination is complete, you can decide whether data cleaning or preprocessing is needed.
+                .col-lg-4
+                  .bg-light.p-3.rounded
+                    h5.text-primary
+                      i.bi.bi-info-circle.me-2(aria-hidden='true')
+                      | Key Focus Areas
+                    ul.list-unstyled.mb-0
+                      li
+                        i.bi.bi-check-circle.text-success.me-2(aria-hidden='true')
+                        | Data sanity checks
+                      li
+                        i.bi.bi-check-circle.text-success.me-2(aria-hidden='true')
+                        | Exploratory data analysis
+                      li
+                        i.bi.bi-check-circle.text-success.me-2(aria-hidden='true')
+                        | Missing value detection
+                      li
+                        i.bi.bi-check-circle.text-success.me-2(aria-hidden='true')
+                        | Outlier identification
 
-      // Embedded YouTube Video Card
-      .card.mb-4
-        .card-header.bg-primary.text-white
-          h5.card-title.mb-0
-            i.bi.bi-play-circle.me-2(aria-hidden)
-            | Exploratory Data Analysis (EDA) in Python – Video Guide
-        .card-body
-          .ratio.ratio-16x9
-            iframe(
-              src="https://www.youtube.com/embed/3KO0GuTkPew?si=8lRQ25ujRZOpquR_"
-              title="Exploratory Data Analysis (EDA) in Python – YouTube Video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            )
-        .card-footer
-          p.card-text
-            | Watch this video for a step-by-step walkthrough of EDA in Python, including practical code demonstrations and tips for effective data analysis.
+          // Dataset Context Section
+          .card.mb-5.shadow-sm
+            .card-header.bg-info.text-white
+              h4.card-title.mb-0
+                i.bi.bi-database.me-2(aria-hidden='true')
+                | Dataset Context
+            .card-body
+              p
+                | Recently, I worked with a nutritional dataset from Kaggle using Google Colab,
+                | which allows for writing and executing Python code in a browser-based Jupyter notebook.
+                | The objective was to analyze nutrient patterns across a range of foods and categorize
+                | them based on their nutrient content.
+              p
+                | Kaggle is a fantastic resource for data scientists and enthusiasts,
+                | offering a wealth of datasets across different fields.
+                | Whether you're looking to explore healthcare, finance, or more specialized areas like nutrition,
+                | Kaggle provides an excellent platform to practice data analysis and machine learning techniques.
+              .alert.alert-info.mb-0
+                p.mb-2
+                  strong
+                    i.bi.bi-lightbulb.me-2(aria-hidden='true')
+                    | Dataset Details:
+                p.mb-0
+                  | The dataset I explored included nutritional values for various
+                  | foods and products, detailing their protein, fat, vitamin C, and fiber content.
+                  | You can find the full code and analysis in my
+                  a.alert-link(href='https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing' target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis") Google Drive folder.
 
-      // Table of Contents
-      nav#table-of-contents.mb-4(aria-label='Table of Contents')
-        h3.fw-bold Table of Contents
-        ul.list-group.list-group-flush
-          li.list-group-item: a(href='#understanding-the-dataset') Understanding the Dataset
-          li.list-group-item: a(href='#data-sanity-checks') Data Sanity Checks
-          li.list-group-item: a(href='#exploratory-data-analysis-eda') Exploratory Data Analysis (EDA)
-          li.list-group-item: a(href='#plan-for-data-cleaning-and-preprocessing') Plan for Data Cleaning and Preprocessing
-          li.list-group-item: a(href='#conclusion') Conclusion
-          li.list-group-item: a(href='#eda-faq') EDA FAQ
-          li.list-group-item: a(href='#summary') Summary Checklist
-          li.list-group-item: a(href='#glossary') Glossary
-      p.
-        Before venturing into advanced data analysis or machine learning,
-        it's essential to ensure that the data you're working with is clean and coherent.
-        This article outlines the process of conducting Data Sanity checks and Exploratory Data Analysis (EDA),
-        both of which are critical first steps in understanding your dataset.
-        While the initial stages don’t involve modifying the data, these actions help uncover potential issues
-        such as missing values, duplicates, and outliers, while providing valuable insights into the data's structure and relationships.
-      p.
-        It's important to start by inspecting the dataset to familiarize yourself with its contents and structure.
-        Understanding the data is key to identifying any problems that might affect your analysis.
-        Once this preliminary examination is complete, you can decide whether data cleaning or preprocessing is needed.
-        For now, we're focused on gaining an understanding of the data, not making changes, to better plan any necessary cleanup efforts.
-      p.
-        Recently, I worked with a nutritional dataset from Kaggle using Google Colab,
-        which allows for writing and executing Python code in a browser-based Jupyter notebook.
-        The objective was to analyze nutrient patterns across a range of foods and categorize
-        them based on their nutrient content.
-      p.
-        Kaggle is a fantastic resource for data scientists and enthusiasts,
-        offering a wealth of datasets across different fields.
-        Whether you're looking to explore healthcare, finance, or more specialized areas like nutrition,
-        Kaggle provides an excellent platform to practice data analysis and machine learning techniques.
-        Additionally, Kaggle hosts competitions that allow you to test your skills and learn from the broader community.
-      p.
-        The dataset I explored included nutritional values for various
-        foods and products, detailing their protein, fat, vitamin C, and fiber content.
-      p
-        | You can find the full code and analysis in my Google Drive folder.
-        a(href='https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing' target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis" alt="Google Drive Folder") here.
-
-      h3#understanding-the-dataset Section 1: Understanding the Dataset
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-      p
-        strong Objective:
-        | Load the dataset into Python and perform initial inspection.
-      ul
-        li Use pandas.read_csv() or equivalent loading functions.
-        li Inspect the first few rows using df.head() and df.tail() for a snapshot of the dataset.
-        li Check dataset structure and basic metadata with df.info().
-        li View basic statistics with df.describe() to understand the distribution of numerical columns.
-
-      dl
-        dt 1.1 Data Loading and Initial Exploration
-        dd
-          p.
-            To load a CSV file into a Google Colab Jupyter Notebook, you can use Google Drive to
-            access files stored in your account. But first, you need to mount your Google Drive
-            by running a code snippet that authorizes the notebook to access to your files.
-            This process allows seamless integration of data stored in Google Drive,
-            making it convenient to analyze datasets stored in your cloud storage within the Colab environment.
-          p.
-            The first step in any analysis is understanding the data itself.
-            I begin by loading the dataset into Python using the `pandas` library using the read_csv() method from pandas.
-          pre.language-python
-            code.language-python.
-              # Mount Google Drive to access files
-              from google.colab import drive
-              drive.mount('/content/drive')
-
-              # Load the data using Pandas
-              import pandas as pd
-              # Source --> https://www.kaggle.com/datasets/trolukovich/nutritional-values-for-common-foods-and-products?resource=download
-              data_path = '/content/drive/MyDrive/CoLab/nutrition.csv'
-              df = pd.read_csv(data_path)
-        dt 1.2 Shape and Size of Data
-        dd
-          p.
-            Once the data is loaded, we need to inspect it to get a high-level overview of its structure.
-            This involves checking the size of the data, the column names, and the general characteristics of each column.
-            Understanding the dataset's dimensionality is the first step.
-          p The shape tells us how many rows (observations) and columns (features):
-          pre.language-python
-            code.language-python.
-              # Display the shape of the dataset
-              print("Shape of the dataset:", df.shape)
-        dt 1.3 View Rows of Data
-        dd
-          p.
-            Sometimes the best way to understand the data is to look at it.  The head() and tail() methods displays the first and last few rows of the dataset, giving us a glimpse of the data.
-            This helps us understand the structure and format of the data and help identify any issues that may need to be addressed.
-          pre.language-python
-            code.language-python.
-              # Display the first 5 and last 5 rows of the dataset
-              df.head(5)
-              df.tail(5)
-
-        dt 1.4 View the features (Columns)
-        dd
-          p.
-            After viewing the rows, it's essential to understand how the features (columns) are being defined in the dataset.   Since we have seen the data, we can now confirm if the dataframe
-            accurately represents the data we have seen.  Are types correct?  Are there any columns that need to be converted to a different data type?   We know that numerical data should be
-            represented as integers or floats, and categorical data should be represented as strings or categories.  This uses the 'info' method in Pandas.
-
-          pre.language-python
-            code.language-python.
-              # Display the data types of each column
-              df.info()
-        dt 1.5 Identify Unique Values
-        dd
-          p.
-            The unique() method helps us identify the unique values in a column.  This is useful for categorical columns to understand the different categories present in the dataset.
-          pre.language-python
-            code.language-python.
-              # Display the count of Unique Values in each column
-              for column in df.columns:
-                print(f"Unique values in '{column}': {df[column].nunique()}")
-
-      h3#data-sanity-checks Section 2: Data Sanity Checks
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-      p
-        strong Objective:
-        | Indentify missing values, duplicates, and data integrity issues.
-      p.
-        Before analyzing the dataset, it's essential to perform sanity checks to ensure data integrity.
-        These checks help identify missing values, duplicates, and inconsistent data types.
-        Data Sanity Checks are essential steps to ensure the quality and integrity of a dataset before performing any analysis.
-        These checks help identify and address issues such as missing values, outliers, and inconsistencies.
-
-      dl
-        dt 2.1 Missing Data Detection
-        dd
-          p.
-            Missing values can affect the quality of our analysis and results. It's essential to check for missing values and decide how to handle them.
-            Common strategies include removing rows with missing values, imputing missing values, or using advanced imputation techniques.
-          p Handling missing values could involve:
-          ul
-            li Dropping rows or columns with too many missing values
-            li Imputation, where you fill missing values using the mean, median, mode, or other statistical methods
-            li Forward/Backward filling for time-series data
-            li Using advanced imputation techniques like KNN imputation or MICE
-          p.
-            Missing values can lead to biased results and should be handled appropriately. Common methods include removing rows with missing values, imputing missing values with mean/median, or using advanced techniques like KNN imputation.
-          p.
-            Missing data can significantly impact the quality of our analysis.  It's essential to identify and handle missing values before proceeding with any analysis.
-            The isnull() method in Pandas helps us identify missing values in the dataset.
-          pre.language-python
-            code.language-python.
-              # Check for missing values in the dataset
-              missing_values = df.isnull().sum()
-              print("Missing values in each column:\n", missing_values)
-
-              # Optionally, visualize missing values using a heatmap
-              import seaborn as sns
-              import matplotlib.pyplot as plt
-
-              plt.figure(figsize=(10, 6))
-              sns.heatmap(df.isnull(), cbar=False, cmap='viridis')
-              plt.title('Heatmap of Missing Values')
-              plt.show()
-          p.
-            Visualize missing data patterns with missingno library (e.g., missingno.matrix(df) or missingno.heatmap(df)).
-          pre.language-python
-            code.language-python.
-              import missingno as msno
-              msno.matrix(df)
-        dt 2.2 Duplicate Data Detection
-        dd
-          p.
-            Duplicates can skew our analysis and lead to incorrect conclusions.  It's crucial to identify and remove duplicate rows from the dataset.
-            The duplicated() method in Pandas helps us identify duplicate rows.  If they do exist, we can count them and decide how to handle them.
-          pre.language-python
-            code.language-python.
-              # Check for duplicate rows in the dataset
-              duplicate_rows = df.duplicated().sum()
-              print(f"Duplicate rows in the dataset: {duplicate_rows}")
-        dt 2.3 Consistency of Data types
-        dd
-          p.
-            Data types play a crucial role in data analysis.  It's essential to ensure that the data types are consistent with the values in the dataset.
-            The dtypes attribute in Pandas helps us check the data types of each column.
-            Cross-verify if numerical data is stored as numbers, and if categorical data is appropriately formatted.
-          pre.language-python
-            code.language-python.
-              # Check the data types of each column
-              df.dtypes
-        dt 2.4 Outlier Detection
-        dd
-          p.
-            Outliers can skew our analysis, so detecting them is an important part of sanity checks.  Outliers can be identified visually using boxplots or statistically using the IQR method.
-          ul
-            li Use boxplots (seaborn.boxplot or matplotlib’s boxplot) to visually inspect outliers.
-            li Calculate the Interquartile Range (IQR) and use it to identify outliers programmatically.
-          p.
-            Outliers are data points that significantly differ from other observations.
-            They can distort statistical analyses and should be investigated.
-            Methods to handle outliers include removing them, transforming the data, or using robust statistical techniques.
-            Outliers can be indicative of data entry errors, unusual behavior, or rare events, and detecting them early allows for informed decision-making on whether to address
-            or retain them in further analyses. Key Statistics for Outlier Detection:
-          ul
-            li Mean: Average value in the dataset.
-            li Median: The middle value, helpful for skewed distributions.
-            li Mode: Most frequent value, useful in categorical data.
-            li Min/Max: Helps identify extreme values.
-            li Standard Deviation: Shows the spread of the data.
-            li IQR (Interquartile Range): Captures the range of the middle 50%, useful for detecting outliers.
-          p.
-            The IQR (Interquartile Range) method is commonly used to identify outliers.
-            It defines outliers as points outside 1.5 times the IQR from the first and third quartiles.
-            A box plot can help visualize outliers in the data.
-
-          p.
-            For numeric columns, the most straightforward and effective way to detect outliers is by using box plots.
-            Box plots are a visual tool that display the distribution of a dataset,
-            highlighting the quartiles and identifying potential outliers through the use of “whiskers,”
-            which typically extend to 1.5 times the interquartile range (IQR).
-            Any points outside this range are flagged as potential outliers.
-            This method provides a quick, visual check for outliers and gives an overall sense of data spread and variability.
-          p.
-            Pairing the box plot with a scatter plot allows us to examine how values are distributed across the dataset,
-            offering further context on potential outliers.
-            Scatter plots provide a view of individual data points, which can help determine if outliers are isolated or part of a broader pattern.
-            By using a combination of box plots and scatter plots, we can visually detect and investigate outliers in numeric data with minimal computational overhead.
-          p.
-            For non-numeric or high-dimensional data (such as categorical or text columns), visualizations like bar charts can be inefficient and slow to render,
-            especially when dealing with large datasets or columns with many unique values (high cardinality).
-            Instead of using visual methods, we recommend a summary-based approach for these types of columns.
-            This approach involves generating key statistics for each non-numeric column, such as:
-          ul
-            li Unique Values: Count of distinct values in the column, which can highlight unusually high cardinality.
-            li Most Frequent Value: The mode of the column, which provides insight into the most common category or entry.
-            li Frequency of the Most Frequent Value: Knowing how often the most frequent value occurs can help spot anomalies, such as over-represented categories.
-            li Total Non-Null Entries: The count of valid entries in the column, useful for identifying sparsity or missing data.
-          p.
-            This summary allows for a high-level overview of non-numeric columns without the delays and performance issues associated with plotting.
-            This method provides a quick sanity check for categorical or textual data by identifying potential anomalies in the distribution of values.
-          p To ensure the outlier detection process remains efficient and scalable as the size of our datasets grows, it is important to tailor the approach based on the data type. For numeric data, visual methods like box plots and scatter plots are appropriate, as they provide fast and intuitive insights. For non-numeric data, where the cardinality or the data size may be large, a summary-based approach is more efficient.
-          p By automatically detecting and summarizing the column types, we can avoid unnecessary computations and still provide a comprehensive overview of potential outliers. This hybrid approach balances thoroughness with performance, ensuring that outlier detection does not become a bottleneck in our data validation pipeline.
-
-          pre.language-python
-            code.language-python.
-              import pandas as pd
-              import matplotlib.pyplot as plt
-
-              # Example DataFrame (Replace with your own DataFrame 'df')
-              # df = pd.read_csv('your_data.csv')
-
-              # Loop through all columns in the DataFrame
-              for column in df.columns:
-                if pd.api.types.is_numeric_dtype(df[column]):  # Check if the column is numeric
-                  fig, axs = plt.subplots(1, 2, figsize=(16, 4))  # Set wider and shorter figure size
-
-                  # Boxplot (rotated horizontally)
-                  axs[0].boxplot(df[column].dropna(), vert=False)
-                  axs[0].set_title(f'Box plot of {column}')
-                  axs[0].set_xlabel(column)
-                  axs[0].grid(True)
-
-                  # Scatter plot (against index)
-                  axs[1].scatter(df.index, df[column], alpha=0.5)  # Scatter plot with index on the x-axis
-                  axs[1].set_title(f'Scatter plot of {column}')
-                  axs[1].set_xlabel('Index')
-                  axs[1].set_ylabel(column)
-                  axs[1].grid(True)
-
-                  # Adjust layout and spacing
-                  plt.subplots_adjust(wspace=0.4)  # Add space between the plots
-                  plt.tight_layout()
-                  plt.show()  # Show the combined plots
-                else:
-                  # For non-numeric columns, provide a simple summary instead of a bar chart
-                  unique_values = df[column].nunique()
-                  top_value = df[column].mode()[0]  # Most frequent value
-                  top_value_count = df[column].value_counts().iloc[0]  # Frequency of the top value
-                  total_count = len(df[column].dropna())
-
-                  # Print a summary of the non-numeric column
-                  print(f"Column '{column}':")
-                  print(f"  - Unique values: {unique_values}")
-                  print(f"  - Most frequent value: '{top_value}' (Count: {top_value_count})")
-                  print(f"  - Total non-null entries: {total_count}")
-
-                # Add a line break between each feature for better separation
-                print("\n")
-
-          p.
-            Once potential outliers are identified, it is important to have a plan for handling them.
-            Depending on the nature of the dataset and the context of the analysis, outliers can either be removed, transformed,
-            or retained for further investigation.
-            Outliers that result from data entry errors or inconsistencies should be corrected or removed.
-            However, in some cases (such as fraud detection or rare event prediction),
-            outliers may represent important signals and should be preserved.
-            Implementing a review process for outliers ensures that we maintain data integrity while addressing any anomalies.
-          p.
-            Incorporating outlier detection as part of our data sanity checks ensures that we identify and address anomalies before
-            they impact downstream analysis or model performance.
-            By using a visual approach for numeric data and a summary-based approach for non-numeric data,
-            we maintain efficiency without sacrificing accuracy or detail.
-            This method ensures that our data is clean, reliable, and ready for further analysis or modeling, ultimately improving the quality of our insights and decisions.
-
-      h3#exploratory-data-analysis-eda Section 3: Exploratory Data Analysis (EDA)
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-      p
-        strong Objective:
-        | Load the dataset into Python and perform initial inspection.
-      p.
-        Now that we've ensured the data is sane, we can begin exploring it to uncover patterns and relationships.
-        We'll start with univariate analysis before moving on to bivariate and multivariate explorations.
-
-      .card
-        .card-header
-          h3.card-title 3.1 Univariate Data Analysis
-        .card-body
-          p.
-            Univariate analysis focuses on analyzing individual variables in the dataset.  It helps us understand the distribution of each feature and identify patterns or anomalies.
-            Common univariate analysis techniques include histograms, bar plots, and frequency tables.
-          ul
-            li Use histograms (df.hist()) to visualize the distribution of numerical features.
-            li Use bar plots (df['column'].value_counts().plot(kind='bar')) to visualize categorical features.
-          p.
-            Univariate Analysis is a type of data analysis in data science that focuses on examining a single variable at a time.
-            The term "univariate" combines "uni-" meaning "one" and "variate," which refers to a variable.
-            Essentially, it’s about understanding the distribution, central tendency, and spread of one variable in isolation,
-            without considering relationships with other variables.
-          p Key Aspects of Univariate Data Analysis:
-          dl
-            dt Distribution
-            dd
-              p.
-                The distribution of a variable shows how its values are spread out. Common ways to visualize distributions include histograms, box plots, and density plots.
-            dt Central Tendency
-            dd
-              p.
-                Central tendency measures where the center of the data lies. The most common measures are the mean (average), median (middle value), and mode (most frequent value).
-            dt Spread or Variability
-            dd
-              p.
-                Exploring the variability or dispersion within the variable, commonly using measures like range, variance,
-                and standard deviation. This helps understand how spread out the data points are from the central value.
-          p Techniques for Univariate Analysis:
-          dl
-            dt Histogram
-            dd
-              p.
-                A histogram is a graphical representation of the distribution of a variable. It shows the frequency of values within different intervals or bins.
-                Here is an example of how to create histograms for all numeric columns in Python:
-              pre.language-python
-                code.language-python.
-                  import matplotlib.pyplot as plt
-                  # Create histograms for all numeric columns
-                  df.hist(figsize=(16, 12), bins=20, edgecolor='black')
-                  plt.suptitle('Histograms of All Numeric Columns', fontsize=16)
-                  plt.show()
-            dt Descriptive Statistics
-            dd
-              p.
-                The describe() method in Pandas provides a summary of the dataset, including data types and descriptive statistics.
-                Using the .T attribute transposes the summary for better readability.
-              p.
-                Descriptive statistics summarize the main characteristics of a variable,
-                including measures of central tendency and variability.  I like to add the transpose attribute '.T' to the
-                describe method to make the output more readable.
-              pre.language-python
-                code.language-python.
-                  # Display descriptive statistics for all numeric columns
-                  df.describe().T
-            dt Box Plot
-            dd
-              p.
-                A box plot displays the distribution of a variable using quartiles.
-                It shows the median, interquartile range, and potential outliers.
-              pre.language-python
-                code.language-python.
-                  import seaborn as sns
-                  import matplotlib.pyplot as plt
-                  # Create box plots for all numeric columns
-                  plt.figure(figsize=(16, 12))
-                  sns.boxplot(data=df)
-                  plt.title('Box Plots of All Numeric Columns')
-                  plt.show()
-              p Key compents of a box plot:
-              dl
-                dt Minimum (Lower Whisker)
-                dd
-                  p.
-                    The minimum is the smallest value in the dataset, excluding outliers. It represents the lower end of the data.
-                    In the boxplot, it’s typically connected to Q1 by a line called the “whisker.”
-                    The lower whisker extends to the smallest data point within 1.5 times the interquartile range (IQR) below Q1.
-                dt First Quartile (Q1)
-                dd
-                  p.
-                    The first quartile (Q1) is the value below which 25% of the data falls.
-                    It marks the lower boundary of the box in the boxplot.
-                dt Median (Second Quartile Q2)
-                dd
-                  p.
-                    The median is the middle value of the dataset when it’s sorted in ascending order.
-                    It’s represented by the line inside the box.
-                dt Third Quartile (Q3)
-                dd
-                  p.
-                    The third quartile (Q3) is the value below which 75% of the data falls.
-                    It marks the upper boundary of the box in the boxplot.
-                dt Maximum (Upper Whisker)
-                dd
-                  p.
-                    The maximum is the largest value in the dataset, excluding outliers. It represents the upper end of the data.
-                    In the boxplot, it’s typically connected to Q3 by a line called the “whisker.”
-                    The upper whisker extends to the largest data point within 1.5 times the interquartile range (IQR) above Q3.
-                dt Interquartile Range (IQR)
-                dd
-                  p.
-                    The interquartile range (IQR) is the range between the first and third quartiles (Q1 and Q3). It represents the middle 50% of the data.
-                    The box in the boxplot spans the IQR, showing the spread of the central data.
-
-            dt Skewness and Kurtosis
-            dd
-              p.
-                Skewness measures the asymmetry of the distribution, indicating whether the data is skewed to the left or right.
-                Kurtosis measures the shape of the distribution, showing how peaked or flat it is compared to a normal distribution.
-                These statistics provide insights into the shape of the data distribution.
-              pre.language-python
-                code.language-python.
-                  # Calculate skewness and kurtosis for all numeric columns
-                  skewness = df.skew()
-                  kurtosis = df.kurtosis()
-                  print("Skewness of each column:\n", skewness)
-                  print("Kurtosis of each column:\n", kurtosis)
-            dt KDE Plot
-            dd
-              p.
-                A Kernel Density Estimate (KDE) plot is a smoothed version of a histogram that shows the distribution of a variable.
-                It provides a continuous estimate of the probability density function of the data.
-                A KDE plot (Kernel Density Estimation) provides a smooth, continuous curve that estimates the probability density of the data.
-                Unlike a histogram, it doesn't rely on binning but instead smooths over the data, offering a more fluid representation of the distribution.
-              pre.language-python
-                code.language-python.
-                  import seaborn as sns
-                  import matplotlib.pyplot as plt
-
-                  # Create KDE plots for all numeric columns
-                  plt.figure(figsize=(16, 12))
-                  # Calculate the number of rows needed based on the number of columns
-                  num_rows = (len(df.select_dtypes(include='number').columns) + 2) // 3
-
-                  for i, col in enumerate(df.select_dtypes(include='number').columns):
-                  # Adjust subplot layout to accommodate more plots
-                  plt.subplot(num_rows, 3, i + 1)
-                  sns.kdeplot(df[col], shade=True)
-                  plt.title(f'KDE Plot of {col}')
-                  plt.tight_layout()
-                  plt.show()
-          p.
-            Univariate Data Analysis helps to summarize and understand the characteristics of individual variables,
-            providing a foundation for more complex analyses.
-            Univariate analysis provides a foundation for understanding data by highlighting patterns within individual variables.
-            It’s an essential first step in data exploration,
-            often setting the stage for more complex analyses like bivariate or multivariate analysis.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Univariate_analysis' target="_blank" rel="nofollow" title="Learn more about Univariate Data Analysis on Wikipedia" alt="Wikipedia on Univariate Data Analysis") Wikipedia on Univariate Data Analysis
-      br
-      br
-      .card
-        .card-header
-          h3.card-title 3.2 Bivariate Data Analysis
-        .card-body
-          p.
-            Bivariate analysis focuses on analyzing the relationship between two variables in the dataset.  It helps us understand how variables interact with each other and identify correlations.
-            Common bivariate analysis techniques include scatter plots, pair plots, and correlation matrices.
-          ul
-            li Use scatter plots (sns.scatterplot) to visualize the relationship between two numerical features.
-            li Use pair plots (sns.pairplot) to visualize relationships between multiple numerical features.
-            li Use correlation matrices (df.corr()) to quantify the relationship between numerical features.
-          p.
-            Bivariate Analysis is a statistical method in data science that examines the relationship between two variables.
-            The term "bivariate" stems from the prefix "bi-" meaning "two" and "variate," which refers to variables.
-            In essence, bivariate analysis explores how one variable interacts or correlates with another.
-            It helps to understand how one variable changes with respect to another.
-          p.
-            This analysis helps in understanding patterns, trends, or associations between the two variables.
-            For example, in a dataset containing information about people's ages and their corresponding income levels,
-            bivariate analysis could be used to investigate whether there is a relationship between age and income.
-            Techniques commonly used for bivariate analysis include scatter plots, correlation coefficients, and cross-tabulation.
-
-          dl
-            dt Pair Plot
-            dd
-              p.
-                Pair plots are a grid of scatter plots that visualize the relationships between multiple numerical features.
-                Pair plots are a powerful tool for visualizing relationships between multiple numerical features.
-                They provide a grid of scatter plots, where each plot shows the relationship between a pair of features.
-                This allows us to quickly identify patterns, correlations, and potential outliers in the data.
-              p.
-                However, there are some considerations to keep in mind when using pair plots:
-              ul
-                li Pros:
-                  ul
-                    li Comprehensive Visualization: Pair plots provide a detailed view of relationships between all pairs of numerical features.
-                    li Easy Identification of Patterns: They help in identifying patterns, correlations, and potential outliers.
-                    li Useful for Initial Exploration: Pair plots are great for initial data exploration and understanding the structure of the dataset.
-                li Cons:
-                  ul
-                    li Computationally Intensive: Pair plots can be computationally expensive, especially for large datasets with many features.
-                    li Cluttered Visuals: For datasets with many features, pair plots can become cluttered and hard to interpret.
-                    li Limited to Numerical Data: Pair plots are primarily useful for numerical data and may not be suitable for categorical features.
-                li Caution:
-                  ul
-                    li Compute Time: Generating pair plots for large datasets can be time-consuming. Consider sampling the data or using a subset of features if compute time is a concern.
-                    li Display Size: Pair plots can take up a lot of space, making them difficult to display on smaller screens. Ensure you have adequate display space or consider saving the plots to a file for later review.
-
-              pre.language-python
-                code.language-python.
-                  import seaborn as sns
-                  import matplotlib.pyplot as plt
-                  # Create a pair plot of numerical features
-                  sns.pairplot(df)
-                  plt.show()
-
-            dt Correlation Coefficient and Matrix
-            dd
-              p.
-                The correlation coefficient measures the strength and direction of the linear relationship
-                between two variables.
-                Values range from -1 to 1, where 1 indicates a perfect positive relationship,
-                -1 indicates a perfect negative relationship, and 0 indicates no relationship.
-              p.
-                A Correlation Matrix is a table that shows how different things (variables) are related to each other.
-                It helps us understand whether two things increase or decrease together, or if they don’t have much of a relationship at all.
-                A correlation matrix helps us to see connections between things in an organized way.
-                It's a great tool to figure out where you might want to focus more attention and helps to guide further analysis.
-              ul
-                li  +1 means a perfect positive relationship: if one thing goes up, the other also goes up.
-                li  0 means no relationship: the two things don’t really affect each other.
-                li -1 means a perfect negative relationship: if one thing goes up, the other goes down.
-
-              pre.language-python
-                code.language-python.
-                  # Calculate the correlation matrix
-                  correlation_matrix = df.corr()
-
-                  # Display the correlation matrix
-                  print(correlation_matrix)
-
-                  # Optionally, visualize the correlation matrix using a heatmap
-                  import seaborn as sns
-                  import matplotlib.pyplot as plt
-
-                  plt.figure(figsize=(10, 8))
-                  sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
-                  plt.title('Correlation Matrix Heatmap')
-                  plt.show()
-
-              p.
-                A correlation matrix is useful because it lets you see all the relationships in one table.
-                People often use it when they have lots of data to quickly find out which things are connected.
-                For example, a scientist studying health might use a correlation matrix to find out if eating
-                certain foods is related to having a lower risk of disease.
-                By using a correlation matrix, they can easily see which foods are most important and worth looking into further.
-
-          p.
-            Bivariate Data Analysis helps to uncover relationships between variables, providing insights that can inform decision-making and further analysis.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Bivariate_analysis' target="_blank" rel="nofollow" title="Learn more about Bivariate Data Analysis on Wikipedia" alt="Wikipedia on Bivariate Data Analysis") Wikipedia on Bivariate Data Analysis
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Correlation_matrix' target="_blank" rel="nofollow" title="Learn more about Correlation Matrices on Wikipedia" alt="Wikipedia on Correlation Matrices") Wikipedia on Correlation Matrices
-
-      br
-
-
-
-      dl
-        dt 3.3 Multivariate Analysis
-        dd
-          p.
-            Multivariate analysis focuses on analyzing the relationship between multiple variables in the dataset.  It helps us understand complex interactions between features and identify patterns or trends.
-            Common multivariate analysis techniques include heatmaps, cluster analysis, and dimensionality reduction.
-          ul
-            li Use heatmaps (sns.heatmap) to visualize the relationship between multiple numerical features.
-            li Use cluster analysis (KMeans, DBSCAN) to group similar observations based on features.
-            li Use dimensionality reduction (PCA, t-SNE) to reduce the number of features while preserving important information.
-          pre.language-python
-            code.language-python.
-              # Heatmap to visualize the relationship between multiple numerical features
-              sns.heatmap(df.corr(), annot=True)
-              plt.show()
-
-              # Cluster analysis to group similar observations based on features
-              from sklearn.cluster import KMeans
-              kmeans = KMeans(n_clusters=3)
-              df['cluster'] = kmeans.fit_predict(df)
-
-              # Dimensionality reduction to reduce the number of features
-              from sklearn.decomposition import PCA
-              pca = PCA(n_components=2)
-              df_pca = pca.fit_transform(df)
-              df_pca = pd.DataFrame(df_pca, columns=['PC1', 'PC2'])
-              df_pca.head()
-        dt 3.4 Feature Relationship and correlations
-        dd
-          p.
-            Understanding the relationship between features is crucial for building predictive models.  Correlation analysis helps us identify features that are highly correlated with the target variable.
-            This step is essential for feature selection and model building.
-          pre.language-python
-            code.language-python.
-              # Correlation matrix to quantify the relationship between features and target variable
-              df.corr()['target_variable'].sort_values(ascending=False)
-        dt 3.5 Time Series Analysis (if applicable)
-        dd
-          p.
-            If the dataset includes temporal data, it’s essential to analyze trends, seasonality, and autocorrelations.
-          pre.language-python
-            code.language-python.
-              # Plotting time series data
-              plt.plot(df['date_column'], df['value_column'])
-              plt.show()
-          p.
-            If your dataset contains time series data, time series analysis can provide valuable insights into trends and patterns over time.
-            Time series analysis techniques include time series decomposition, forecasting, and anomaly detection.
-          pre.language-python
-            code.language-python.
-              # Time series decomposition to analyze trends and seasonality
-              from statsmodels.tsa.seasonal import seasonal_decompose
-              decomposition = seasonal_decompose(df['time_series_column'], model='additive')
-              decomposition.plot()
-              plt.show()
-
-              # Time series forecasting to predict future values
-              from statsmodels.tsa.arima.model import ARIMA
-              model = ARIMA(df['time_series_column'], order=(1, 1, 1))
-              model_fit = model.fit()
-              forecast = model_fit.forecast(steps=10)
-              print(forecast)
-
-
-      h3#plan-for-data-cleaning-and-preprocessing Section 4: Plan for Data Cleaning and Preprocessing
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-      p
-        strong Objective:
-        | Create a Plan for any data cleaning or preprocessing steps.
-      ul
-        li Remove or impute missing values using appropriate strategies (mean, median, mode, or advanced imputation).
-        li Remove duplicate rows to ensure data integrity.
-        li Convert data types as needed (e.g., strings to categories, floats to integers).
-        li Normalize or standardize numerical features if required for downstream analysis.
-        li Encode categorical variables for machine learning models.
-        li Address outliers based on business context (remove, transform, or flag for review).
-        li Document all cleaning steps for reproducibility.
-      h3#conclusion Section 5: Conclusion
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
       p.
         By conducting thorough data sanity checks and EDA, we lay a strong foundation for further analysis.
         With a clear understanding of the data, the next steps could include feature engineering, advanced visualizations, or machine learning.
