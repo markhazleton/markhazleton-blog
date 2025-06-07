@@ -1,25 +1,36 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
+
+block variables
+  - var pageTitle = 'An Introduction to Neural Networks'
+  - var pageDescription = 'A beginner-friendly introduction to neural networks, explaining key concepts, structure, and their role in artificial intelligence and data science.'
+  - var pageKeywords = 'neural networks, introduction, AI, machine learning, data science, deep learning, neural network basics, neural network tutorial'
+  - var pageCanonical = 'https://markhazleton.com/articles/an-introduction-to-neural-networks.html'
 
 block pagehead
-  title An Introduction to Neural Networks | Data Science Blog
-  meta(name='description', content='A beginner-friendly introduction to neural networks, explaining key concepts, structure, and their role in artificial intelligence and data science.')
-  meta(name='keywords', content='neural networks, introduction, AI, machine learning, data science, deep learning, neural network basics, neural network tutorial')
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
   meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/an-introduction-to-neural-networks.html')
-  // Open Graph
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
   meta(property='og:type', content='article')
-  meta(property='og:title', content='An Introduction to Neural Networks')
-  meta(property='og:description', content='A beginner-friendly introduction to neural networks, explaining key concepts, structure, and their role in artificial intelligence and data science.')
-  meta(property='og:url', content='https://markhazleton.com/articles/an-introduction-to-neural-networks.html')
   meta(property='og:image', content='https://markhazleton.com/assets/img/neural-networks-intro.png')
   meta(property='og:image:alt', content='Neural network diagram and AI visual')
-  // Twitter Card
+
+block twitter_overrides
   meta(name='twitter:card', content='summary_large_image')
-  meta(name='twitter:title', content='An Introduction to Neural Networks')
-  meta(name='twitter:description', content='A beginner-friendly introduction to neural networks, explaining key concepts, structure, and their role in artificial intelligence and data science.')
+  meta(name='twitter:title', content=pageTitle)
+  meta(name='twitter:description', content=pageDescription)
   meta(name='twitter:image', content='https://markhazleton.com/assets/img/neural-networks-intro.png')
   meta(name='twitter:image:alt', content='Neural network diagram and AI visual')
-  // Schema.org Article
+
+block canonical
+  link(rel='canonical', href=pageCanonical)
+
+block additional_structured_data
   script(type='application/ld+json').
     {
       "@context": "https://schema.org",
@@ -43,425 +54,704 @@ block pagehead
     }
 
 block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 An Introduction to Neural Networks
-      h2.subheading.mb-3 Understanding the basics of neural networks and their applications.
-      // Table of Contents
-      nav#table-of-contents.mb-4(aria-label='Table of Contents')
-        h3.fw-bold Table of Contents
-        ul.list-group.list-group-flush
-          li.list-group-item: a(href='#what-are-neural-networks') What Are Neural Networks?
-          li.list-group-item: a(href='#how-neural-networks-learn') How Neural Networks Learn
-          li.list-group-item: a(href='#applications') Applications of Neural Networks
-          li.list-group-item: a(href='#importance') Why Are Neural Networks Important?
-          li.list-group-item: a(href='#example') Neural Networks Example
-          li.list-group-item: a(href='#components') Components of a Neural Network
-          li.list-group-item: a(href='#faq') FAQ
-          li.list-group-item: a(href='#summary') Summary Checklist
-          li.list-group-item: a(href='#glossary') Glossary
-      p.lead.
-        Neural networks are powerful computational models inspired by the structure and function of the human brain. They are designed to recognize patterns, solve problems, and make predictions, forming the backbone of many AI systems today.
-      p.
-        This article explores the core concepts behind neural networks and their role in transforming industries like healthcare, finance, and technology.
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
+  br
+  article#main-article.py-5
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            h1.display-4.fw-bold
+              i.bi.bi-diagram-3.me-3
+              | An Introduction to Neural Networks
+            h2.h3.text-muted.mb-4 Understanding the basics of neural networks and their applications
+            .article-meta.text-muted.mb-4
+              time(datetime='2025-05-20') May 20, 2025
+              span.mx-2 •
+              span.author by Mark Hazleton
+              span.mx-2 •
+              span.reading-time 12 min read
 
-      h2#what-are-neural-networks What Are Neural Networks?
-      dd
-        p.
-          At its core, a neural network is a system of interconnected nodes, or "neurons,"
-          that process data to recognize patterns and make decisions.
-          These nodes are organized into three main types of layers:
-        dl
-          dt Input Layer:
-          dd Takes raw data as input.
-          dt Hidden Layers:
-          dd Processes data to find patterns.
-          dt Output Layer:
-          dd Produces predictions or classifications.
-        p.
+          .article-content
+            // Table of Contents
+            nav#table-of-contents.mb-5(aria-label='Table of Contents')
+              .card.bg-light
+                .card-header
+                  h3.card-title.mb-0.fw-bold
+                    i.bi.bi-list-ul.me-2
+                    | Table of Contents
+                .card-body
+                  ul.list-group.list-group-flush
+                    li.list-group-item: a.text-decoration-none(href='#what-are-neural-networks') What Are Neural Networks?
+                    li.list-group-item: a.text-decoration-none(href='#how-neural-networks-learn') How Neural Networks Learn
+                    li.list-group-item: a.text-decoration-none(href='#applications') Applications of Neural Networks
+                    li.list-group-item: a.text-decoration-none(href='#importance') Why Are Neural Networks Important?
+                    li.list-group-item: a.text-decoration-none(href='#example') Neural Networks Example
+                    li.list-group-item: a.text-decoration-none(href='#components') Components of a Neural Network
+                    li.list-group-item: a.text-decoration-none(href='#faq') FAQ
+                    li.list-group-item: a.text-decoration-none(href='#summary') Summary Checklist
+                    li.list-group-item: a.text-decoration-none(href='#glossary') Glossary
 
-      h4 Key Insights About Neural Networks
-      dl
-        dt Inspiration from the Brain
-        dd Neural networks are inspired by the human brain's structure and function, mimicking how neurons signal each other.
-        dt Learning from Data
-        dd They learn patterns and make decisions based on data, improving over time with more information.
-        dt Versatility
-        dd Neural networks are versatile and can be used for various tasks, from image and speech recognition to playing games and medical diagnosis.
-        dt Challenges
-        dd Despite their power, neural networks have challenges, including requiring large data sets, significant computational resources, and potential biases in decision-making.
-      p.
-        Understanding these fundamentals provides a solid foundation for exploring the more complex aspects of neural networks and their applications.
+            p.lead.
+              Neural networks are powerful computational models inspired by the structure and function of the human brain.
+              They are designed to recognize patterns, solve problems, and make predictions, forming the backbone of many AI systems today.
 
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-
-      h2#how-neural-networks-learn How Neural Networks Learn
-      dd
-        p.
-          Neural networks learn through a process called training, which involves:
-        dl
-          dt Forward Propagation
-          dd
             p.
-              Forward propagation in a neural network is the process where input data moves forward through
-              the layers of the network to compute a prediction.
-              It's called "forward" because the computations proceed from the input layer to the output layer sequentially,
-              one layer at a time.
-            p.
-              Understanding forward propagation is fundamental,
-              as it builds the foundation for the training and inference processes in neural networks.
-              By grasping these calculations, you can better appreciate how networks learn and make predictions.
-          dt Loss Calculation
-          dd
-            p.
-              In neural networks, loss calculation is the process of quantifying the difference between
-              the model's predictions and the actual target values.
-              This is a critical step because the loss provides feedback to the network during training,
-              guiding how its parameters (weights and biases) should be adjusted to improve performance.
-            p.
-              Loss represents the error of the model’s predictions.
-              It is a single scalar value calculated for each training example or batch of examples.
-              The goal during training is to minimize the loss, making predictions closer to the true values.
-            p.
-              The loss calculation is the backbone of the learning process in neural networks.
-              It provides the feedback that drives parameter updates, ensuring the network improves over time.
-              Understanding different loss functions and their applications is crucial for designing effective neural networks.
+              This article explores the core concepts behind neural networks and their role in transforming industries like healthcare, finance, and technology.
 
-          dt Backpropagation
-          dd
-            p.
-              Backpropagation is a cornerstone of neural network training.
-              It's the process used to optimize a network by adjusting its weights and biases based
-              on how well (or poorly) the network is performing.
-              Backpropagation works by computing gradients (a measure of change) of the loss function
-              with respect to each parameter in the network and then updating the parameters to minimize the loss.
-            ul
-              li Backpropagation happens repeatedly for many data points (epochs) until the network performs well.
-              li Chain Rule is central to computing gradients; it's like "peeling layers of an onion."
-              li Modern neural networks use optimized libraries like TensorFlow or PyTorch, which automate backpropagation.
+            section#what-are-neural-networks.mb-5
+              h2.h3.mb-4
+                i.bi.bi-question-circle.me-2
+                | What Are Neural Networks?
 
-          dt Optimization: Minimizing loss.
-          dd
-            p.
-              In machine learning and neural networks, optimization refers to the process of finding the best set of parameters (weights and biases)
-              that minimize the loss function.
-              The loss function measures how far the model's predictions are from the actual values.
-              The goal is to tweak the model's parameters so that the predictions get closer and closer to the actual values.
-        p.
-          This iterative process refines the network's connections to improve accuracy.
+              .card.mb-4
+                .card-body
+                  p.
+                    At its core, a neural network is a system of interconnected nodes, or "neurons,"
+                    that process data to recognize patterns and make decisions.
+                    These nodes are organized into three main types of layers:
 
-        h4 Key Insights About Learning
-        dl
-          dt Iteration is Key
-          dd Neural networks don’t learn all at once. They improve step by step through feedback and gradual adjustments.
-          dt Optimization is the Engine
-          dd Algorithms like gradient descent drive learning, ensuring the network gets better at every step.
-          dt The Role of Data
-          dd High-quality, well-labeled data is essential for effective learning. The network's performance depends heavily on the examples it learns from.
+                  .row.g-3
+                    .col-md-4
+                      .card.h-100.border-primary
+                        .card-body.text-center
+                          i.bi.bi-input-cursor.display-6.text-primary.mb-3
+                          h5.card-title Input Layer
+                          p.card-text Takes raw data as input.
+                    .col-md-4
+                      .card.h-100.border-warning
+                        .card-body.text-center
+                          i.bi.bi-layers.display-6.text-warning.mb-3
+                          h5.card-title Hidden Layers
+                          p.card-text Processes data to find patterns.
+                    .col-md-4
+                      .card.h-100.border-success
+                        .card-body.text-center
+                          i.bi.bi-output.display-6.text-success.mb-3
+                          h5.card-title Output Layer
+                          p.card-text Produces predictions or classifications.
 
-        p.
-          Neural networks are powerful because they can learn complex patterns in data by adjusting simple parameters repeatedly.
-          At their core, they operate on basic principles: breaking problems into small steps, learning from mistakes, and improving iteratively.
-          As you continue your journey in data science, understanding these foundations will help you tackle
-          more complex models and applications.
+              .alert.alert-info
+                h5.alert-heading
+                  i.bi.bi-lightbulb.me-2
+                  | Key Insights About Neural Networks
+                ul.mb-0
+                  li
+                    strong Inspiration from the Brain:
+                    | Neural networks are inspired by the human brain's structure and function, mimicking how neurons signal each other.
+                  li
+                    strong Learning from Data:
+                    | They learn patterns and make decisions based on data, improving over time with more information.
+                  li
+                    strong Versatility:
+                    | Neural networks are versatile and can be used for various tasks, from image and speech recognition to playing games and medical diagnosis.
+                  li
+                    strong Challenges:
+                    | Despite their power, neural networks have challenges, including requiring large data sets, significant computational resources, and potential biases in decision-making.
 
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-
-      h2#applications Applications of Neural Networks
-      dd
-        p.
-          Neural networks are used in diverse fields to solve complex problems:
-        ul
-          li
-            | Image Recognition: Identifying objects in photos.
-          li
-            | Natural Language Processing: Understanding and generating text.
-          li
-            | Predictive Analytics: Forecasting trends like sales or stock prices.
-          li
-            | Speech Recognition: Converting spoken language into text.
-          li
-            | Game Playing: Achieving superhuman performance in games like chess and Go.
-
-      h4 Impact of Neural Networks
-      p.
-        The impact of neural networks is profound, driving advancements in various domains:
-      ul
-        li
-          | Healthcare: Improving diagnosis, treatment plans, and patient outcomes.
-        li
-          | Finance: Enhancing fraud detection, risk assessment, and algorithmic trading.
-        li
-          | Transportation: Enabling self-driving cars and optimizing logistics.
-        li
-          | Entertainment: Powering recommendation systems and creating realistic visual effects.
-        li
-          | Manufacturing: Predictive maintenance and quality control.
-
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-
-      h2#importance Why Are Neural Networks Important?
-      dd
-        p.
-          Neural networks have transformed industries by enabling:
-        ul
-          li
-            | Enhanced automation through AI.
-          li
-            | Improved decision-making with predictive insights.
-          li
-            | Breakthroughs in personalized healthcare, financial analysis, and more.
-
-      h4 The Promise and Challenges of Neural Networks
-      p.
-        Neural networks offer great promise for the future, but they also present challenges and limitations:
-      ul
-        li
-          | Require large amounts of data and computational power.
-        li
-          | Can be opaque, making it hard to understand their decision-making process.
-        li
-          | Prone to biases if trained on biased data.
-        li
-          | Need careful tuning and optimization to perform well.
-
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
-
-      h2#example Neural Networks Example
-      .card.mt-4
-        .card-header.d-flex.align-items-center.justify-content-between
-          h5.mb-0 Neural Networks Example
-        .card-body
-          p Practical Example: Identifying handwritten digits
-          p.
-            Humans effortlessly identify handwritten digits on checks, forms, or photographs,
-            but this task is challenging for computers due to variations in handwriting, lighting,
-            and noise in images. For example, the digit "7" may be slanted or written
-            with a crossbar, while "1" may resemble a lowercase "L."
-          p.
-            To process a digit, an image (e.g., 28x28 pixels) is flattened into a vector of 784 numerical values,
-            where each value represents the intensity of a pixel.
-            This vector becomes the input layer of the neural network.
-          p.
-            Hidden layers transform the input data by learning hierarchical features,
-            such as edges, shapes, and patterns.
-            These layers apply mathematical functions to combine pixel values into increasingly
-            abstract representations, making the network capable of distinguishing between digits.
-
-          dl
-            dt Input Layer
-            dd
               p.
-                Each pixel of a 28x28 image is an input, totaling 784 inputs.
-            dt Hidden Layers
-            dd
+                Understanding these fundamentals provides a solid foundation for exploring the more complex aspects of neural networks and their applications.
+
+            section#how-neural-networks-learn.mb-5
+              h2.h3.mb-4
+                i.bi.bi-gear.me-2
+                | How Neural Networks Learn
+
               p.
-                These layers perform mathematical operations to process pixel data.
-            dt Output Layer
-            dd
+                Neural networks learn through a process called training, which involves:
+
+              .accordion#learningProcessAccordion.mb-4
+                .accordion-item
+                  h3.accordion-header#headingForwardProp
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseForwardProp'
+                      aria-expanded='false'
+                      aria-controls='collapseForwardProp'
+                    )
+                      i.bi.bi-arrow-right-circle.me-2
+                      | Forward Propagation
+                  .accordion-collapse.collapse#collapseForwardProp(
+                    aria-labelledby='headingForwardProp'
+                    data-bs-parent='#learningProcessAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Forward propagation in a neural network is the process where input data moves forward through
+                        the layers of the network to compute a prediction.
+                        It's called "forward" because the computations proceed from the input layer to the output layer sequentially,
+                        one layer at a time.
+                      p.
+                        Understanding forward propagation is fundamental,
+                        as it builds the foundation for the training and inference processes in neural networks.
+                        By grasping these calculations, you can better appreciate how networks learn and make predictions.
+
+                .accordion-item
+                  h3.accordion-header#headingLossCalc
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseLossCalc'
+                      aria-expanded='false'
+                      aria-controls='collapseLossCalc'
+                    )
+                      i.bi.bi-calculator.me-2
+                      | Loss Calculation
+                  .accordion-collapse.collapse#collapseLossCalc(
+                    aria-labelledby='headingLossCalc'
+                    data-bs-parent='#learningProcessAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        In neural networks, loss calculation is the process of quantifying the difference between
+                        the model's predictions and the actual target values.
+                        This is a critical step because the loss provides feedback to the network during training,
+                        guiding how its parameters (weights and biases) should be adjusted to improve performance.
+                      p.
+                        Loss represents the error of the model's predictions.
+                        It is a single scalar value calculated for each training example or batch of examples.
+                        The goal during training is to minimize the loss, making predictions closer to the true values.
+                      p.
+                        The loss calculation is the backbone of the learning process in neural networks.
+                        It provides the feedback that drives parameter updates, ensuring the network improves over time.
+                        Understanding different loss functions and their applications is crucial for designing effective neural networks.
+
+                .accordion-item
+                  h3.accordion-header#headingBackprop
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseBackprop'
+                      aria-expanded='false'
+                      aria-controls='collapseBackprop'
+                    )
+                      i.bi.bi-arrow-left-circle.me-2
+                      | Backpropagation
+                  .accordion-collapse.collapse#collapseBackprop(
+                    aria-labelledby='headingBackprop'
+                    data-bs-parent='#learningProcessAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Backpropagation is a cornerstone of neural network training.
+                        It's the process used to optimize a network by adjusting its weights and biases based
+                        on how well (or poorly) the network is performing.
+                        Backpropagation works by computing gradients (a measure of change) of the loss function
+                        with respect to each parameter in the network and then updating the parameters to minimize the loss.
+                      ul
+                        li Backpropagation happens repeatedly for many data points (epochs) until the network performs well.
+                        li Chain Rule is central to computing gradients; it's like "peeling layers of an onion."
+                        li Modern neural networks use optimized libraries like TensorFlow or PyTorch, which automate backpropagation.
+
+                .accordion-item
+                  h3.accordion-header#headingOptimization
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseOptimization'
+                      aria-expanded='false'
+                      aria-controls='collapseOptimization'
+                    )
+                      i.bi.bi-speedometer2.me-2
+                      | Optimization: Minimizing Loss
+                  .accordion-collapse.collapse#collapseOptimization(
+                    aria-labelledby='headingOptimization'
+                    data-bs-parent='#learningProcessAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        In machine learning and neural networks, optimization refers to the process of finding the best set of parameters (weights and biases)
+                        that minimize the loss function.
+                        The loss function measures how far the model's predictions are from the actual values.
+                        The goal is to tweak the model's parameters so that the predictions get closer and closer to the actual values.
+
               p.
-                The output layer consists of 10 neurons, each corresponding to a possible digit (0–9).
-                The network assigns a probability to each neuron. The digit with the highest probability becomes the prediction.
+                This iterative process refines the network's connections to improve accuracy.
+
+              .alert.alert-success
+                h5.alert-heading
+                  i.bi.bi-check-circle.me-2
+                  | Key Insights About Learning
+                ul.mb-0
+                  li
+                    strong Iteration is Key:
+                    | Neural networks don't learn all at once. They improve step by step through feedback and gradual adjustments.
+                  li
+                    strong Optimization is the Engine:
+                    | Algorithms like gradient descent drive learning, ensuring the network gets better at every step.
+                  li
+                    strong The Role of Data:
+                    | High-quality, well-labeled data is essential for effective learning. The network's performance depends heavily on the examples it learns from.
+
               p.
-                The network produces 10 outputs, one for each digit.
-                It selects the highest score as its prediction.
-            dt Learning Process
-            dd
-              p.
-                During training, the network compares its predictions to the correct labels.
-                For instance, if it predicts "5" for an image of "7," it calculates the error
-                and adjusts the network's weights using a process called backpropagation
-                and an optimization algorithm like gradient descent.
-                Over many iterations, this feedback loop minimizes errors.
-              p.
-                If the prediction is incorrect, such as predicting "5" instead of "7,"
-                the network adjusts its connections to improve accuracy.
-              p.
-                Once trained, the network generalizes its learning to new, unseen images.
-                This ability to recognize patterns it hasn’t explicitly encountered demonstrates
-                the strength of neural networks in solving complex recognition tasks.
+                Neural networks are powerful because they can learn complex patterns in data by adjusting simple parameters repeatedly.
+                At their core, they operate on basic principles: breaking problems into small steps, learning from mistakes, and improving iteratively.
+                As you continue your journey in data science, understanding these foundations will help you tackle
+                more complex models and applications.
 
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
+            section#applications.mb-5
+              h2.h3.mb-4
+                i.bi.bi-grid.me-2
+                | Applications of Neural Networks
 
-      h2#components Components of a Neural Network
-      p.mb-3.
-        Neural networks consist of interconnected nodes, often referred to as neurons or units,
-        arranged in layers. Each neuron mimics the behavior of a biological neuron by taking inputs,
-        applying weights and biases, processing the result through an activation function,
-        and passing the output to subsequent neurons.
-        Each connection has a weight, signifying its importance, and biases to adjust the input. These parameters are fine-tuned during training to optimize the network's performance.
-        The primary components include:
-      p.mb-3.
-        Here’s a breakdown of their structure and function:
-      dl
-        dt Input Layer
-        dd
-          p.
-            This is the first layer of the network where raw data is input.
-          p.
-            Each neuron in the input layer corresponds to a single feature of the input data.
-            For example, in an image recognition task, each pixel value of the image might be an input neuron.
-          p.
-            The input layer does not perform any computations; it simply passes the data to the next layer.
+              .row.g-4
+                .col-md-6
+                  .card.h-100.border-primary
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-image.me-2
+                        | Core Applications
+                      ul.list-unstyled
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Image Recognition: Identifying objects in photos
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Natural Language Processing: Understanding and generating text
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Predictive Analytics: Forecasting trends like sales or stock prices
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Speech Recognition: Converting spoken language into text
+                        li.mb-2
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Game Playing: Achieving superhuman performance in games like chess and Go
 
-        dt Hidden Layers
-        dd
-          p.
-            Hidden layers are where the magic happens. These layers process
-            and transform data by identifying patterns and relationships.
-            They consist of multiple neurons connected to adjacent layers,
-            enabling the network to learn complex, non-linear representations.
-          p.
-            These layers are called "hidden" because their computations are not directly visible
-            but are crucial for learning.
+                .col-md-6
+                  .card.h-100.border-success
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-graph-up.me-2
+                        | Industry Impact
+                      ul.list-unstyled
+                        li.mb-2
+                          i.bi.bi-heart-pulse.text-danger.me-2
+                          | Healthcare: Improving diagnosis, treatment plans, and patient outcomes
+                        li.mb-2
+                          i.bi.bi-bank.text-primary.me-2
+                          | Finance: Enhancing fraud detection, risk assessment, and algorithmic trading
+                        li.mb-2
+                          i.bi.bi-truck.text-warning.me-2
+                          | Transportation: Enabling self-driving cars and optimizing logistics
+                        li.mb-2
+                          i.bi.bi-film.text-info.me-2
+                          | Entertainment: Powering recommendation systems and creating realistic visual effects
+                        li.mb-2
+                          i.bi.bi-gear.text-secondary.me-2
+                          | Manufacturing: Predictive maintenance and quality control
 
-        dt Output Layer
-        dd
-          p.
-            The output layer produces the final result of the neural network.
-            This could be a classification, numerical prediction, or another output type, depending on the task.
-          p.
-            The number of neurons in this layer depends on the task
-            (e.g., one neuron for binary classification, multiple neurons with softmax activation for multi-class tasks).
+            section#importance.mb-5
+              h2.h3.mb-4
+                i.bi.bi-star.me-2
+                | Why Are Neural Networks Important?
 
-        dt Connections Between Neurons
-        dd
-          p.
-            Neurons in a network are connected by edges,
-            each assigned a weight to determine the influence of one neuron on another.
-            Connections also include biases, which shift activation thresholds for greater flexibility.
-          p.
-            Adjusting weights and biases during training allows the network to learn and improve performance.
+              .card.mb-4
+                .card-body
+                  p.
+                    Neural networks have transformed industries by enabling:
+                  ul
+                    li Enhanced automation through AI
+                    li Improved decision-making with predictive insights
+                    li Breakthroughs in personalized healthcare, financial analysis, and more
 
-      h4 Visualizing a Neural Network
-      p.
-        ![Neural Network Diagram](https://markhazleton.com/assets/img/neural-network-diagram.png)
-        This diagram illustrates the basic structure of a neural network, including the input, hidden, and output layers, as well as the connections between neurons.
+              .alert.alert-warning
+                h5.alert-heading
+                  i.bi.bi-exclamation-triangle.me-2
+                  | The Promise and Challenges of Neural Networks
+                p.
+                  Neural networks offer great promise for the future, but they also present challenges and limitations:
+                ul.mb-0
+                  li Require large amounts of data and computational power
+                  li Can be opaque, making it hard to understand their decision-making process
+                  li Prone to biases if trained on biased data
+                  li Need careful tuning and optimization to perform well
 
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
+            section#example.mb-5
+              h2.h3.mb-4
+                i.bi.bi-code-square.me-2
+                | Neural Networks Example
 
-      h2#faq Frequently Asked Questions (FAQ)
-      .accordion#faq-accordion.mb-4
-        .accordion-item
-          span.accordion-header
-            button.accordion-button(type='button', data-bs-toggle='collapse', data-bs-target='#faq1')
-              | What is a neural network in simple terms?
-          .accordion-collapse.collapse#faq1
-            .accordion-body
-              p A neural network is a system of interconnected nodes (neurons) that process data to recognize patterns and make decisions, inspired by the human brain.
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#faq2')
-              | How do neural networks learn?
-          .accordion-collapse.collapse#faq2
-            .accordion-body
-              p They learn by adjusting their internal parameters (weights and biases) through training, using algorithms like backpropagation and optimization to minimize errors.
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#faq3')
-              | What are common applications of neural networks?
-          .accordion-collapse.collapse#faq3
-            .accordion-body
-              ul
-                li Image recognition
-                li Natural language processing
-                li Predictive analytics
-                li Speech recognition
-                li Game playing
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#faq4')
-              | What is the difference between deep learning and neural networks?
-          .accordion-collapse.collapse#faq4
-            .accordion-body
-              p Deep learning is a subset of machine learning that uses neural networks with many layers (deep neural networks) to model complex patterns in data.
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
+              .card.shadow-sm
+                .card-header.bg-primary.text-white
+                  h5.card-title.mb-0
+                    i.bi.bi-lightbulb.me-2
+                    | Practical Example: Identifying Handwritten Digits
+                .card-body
+                  p.
+                    Humans effortlessly identify handwritten digits on checks, forms, or photographs,
+                    but this task is challenging for computers due to variations in handwriting, lighting,
+                    and noise in images. For example, the digit "7" may be slanted or written
+                    with a crossbar, while "1" may resemble a lowercase "L."
 
-      h2#summary Summary Checklist
-      ul.list-group.mb-4
-        li.list-group-item Neural networks explained in simple terms
-        li.list-group-item Key learning mechanisms and components described
-        li.list-group-item Practical example provided
-        li.list-group-item SEO and accessibility best practices followed
-        li.list-group-item Table of Contents, FAQ, and Glossary included
-        li.list-group-item Bootstrap 5 and icons used for layout and navigation
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
+                  p.
+                    To process a digit, an image (e.g., 28x28 pixels) is flattened into a vector of 784 numerical values,
+                    where each value represents the intensity of a pixel.
+                    This vector becomes the input layer of the neural network.
 
-      h2#glossary Glossary of Terms
-      .accordion#glossary-accordion.mb-4
-        .accordion-item
-          span.accordion-header
-            button.accordion-button(type='button', data-bs-toggle='collapse', data-bs-target='#glossary1')
-              | Neural Network
-          .accordion-collapse.collapse#glossary1
-            .accordion-body
-              p A neural network is a computational model inspired by the human brain, consisting of interconnected nodes (neurons) that process information and learn patterns from data.
-              p For more, see the <a href='https://en.wikipedia.org/wiki/Artificial_neural_network' target='_blank' rel='noopener'>Wikipedia article on Artificial Neural Networks</a>.
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary2')
-              | Backpropagation
-          .accordion-collapse.collapse#glossary2
-            .accordion-body
-              p Backpropagation is an algorithm used to train neural networks by adjusting weights and biases to minimize prediction errors.
-              p Learn more at <a href='https://en.wikipedia.org/wiki/Backpropagation' target='_blank' rel='noopener'>Wikipedia: Backpropagation</a>.
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary3')
-              | Activation Function
-          .accordion-collapse.collapse#glossary3
-            .accordion-body
-              p An activation function determines the output of a neuron in a neural network, introducing non-linearity to help the network learn complex patterns.
-              p See <a href='https://en.wikipedia.org/wiki/Activation_function' target='_blank' rel='noopener'>Wikipedia: Activation function</a> for details.
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary4')
-              | Deep Learning
-          .accordion-collapse.collapse#glossary4
-            .accordion-body
-              p Deep learning is a subset of machine learning that uses neural networks with many layers to model complex data representations.
-              p More info: <a href='https://en.wikipedia.org/wiki/Deep_learning' target='_blank' rel='noopener'>Wikipedia: Deep learning</a>.
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#glossary5')
-              | Gradient Descent
-          .accordion-collapse.collapse#glossary5
-            .accordion-body
-              p Gradient descent is an optimization algorithm used to minimize the loss function in neural networks by iteratively adjusting parameters.
-              p See <a href='https://en.wikipedia.org/wiki/Gradient_descent' target='_blank' rel='noopener'>Wikipedia: Gradient descent</a>.
-      a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
-        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-        | Back to Top
+                  p.
+                    Hidden layers transform the input data by learning hierarchical features,
+                    such as edges, shapes, and patterns.
+                    These layers apply mathematical functions to combine pixel values into increasingly
+                    abstract representations, making the network capable of distinguishing between digits.
 
-      // Call to Action
-      .card.bg-light.p-4.mt-4.mb-4
-        .card-body.text-center
-          h3 Explore More Data Science Articles
-          p.fw-bold Dive deeper into data science topics:
-          a.btn.btn-primary.btn-lg.mb-2(href='/articles/exploratory-data-analysis-eda-using-python.html')
-            i.bi.bi-graph-up.me-1(aria-hidden)
-            | Exploratory Data Analysis Using Python
-          br
-          a.btn.btn-success.btn-lg.mb-2(href='/articles/python-the-language-of-data-science.html')
-            i.bi.bi-code-slash.me-1(aria-hidden)
-            | Python: The Language of Data Science
+                  .row.g-3.mt-3
+                    .col-md-3
+                      .card.border-primary
+                        .card-body.text-center
+                          i.bi.bi-input-cursor.display-6.text-primary.mb-2
+                          h6 Input Layer
+                          small.text-muted Each pixel of a 28x28 image is an input, totaling 784 inputs.
+                    .col-md-3
+                      .card.border-warning
+                        .card-body.text-center
+                          i.bi.bi-layers.display-6.text-warning.mb-2
+                          h6 Hidden Layers
+                          small.text-muted These layers perform mathematical operations to process pixel data.
+                    .col-md-3
+                      .card.border-success
+                        .card-body.text-center
+                          i.bi.bi-output.display-6.text-success.mb-2
+                          h6 Output Layer
+                          small.text-muted 10 neurons, each corresponding to a possible digit (0–9).
+                    .col-md-3
+                      .card.border-info
+                        .card-body.text-center
+                          i.bi.bi-arrow-repeat.display-6.text-info.mb-2
+                          h6 Learning Process
+                          small.text-muted Compares predictions to correct labels and adjusts weights.
 
+                  .mt-4
+                    p.
+                      During training, the network compares its predictions to the correct labels.
+                      For instance, if it predicts "5" for an image of "7," it calculates the error
+                      and adjusts the network's weights using a process called backpropagation
+                      and an optimization algorithm like gradient descent.
+                      Over many iterations, this feedback loop minimizes errors.
+
+                    p.mb-0.
+                      Once trained, the network generalizes its learning to new, unseen images.
+                      This ability to recognize patterns it hasn't explicitly encountered demonstrates
+                      the strength of neural networks in solving complex recognition tasks.
+
+            section#components.mb-5
+              h2.h3.mb-4
+                i.bi.bi-puzzle.me-2
+                | Components of a Neural Network
+
+              p.mb-4.
+                Neural networks consist of interconnected nodes, often referred to as neurons or units,
+                arranged in layers. Each neuron mimics the behavior of a biological neuron by taking inputs,
+                applying weights and biases, processing the result through an activation function,
+                and passing the output to subsequent neurons.
+
+              .row.g-4
+                .col-md-6
+                  .card.h-100.border-primary
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-input-cursor.me-2
+                        | Input Layer
+                      p.card-text.
+                        This is the first layer of the network where raw data is input.
+                        Each neuron in the input layer corresponds to a single feature of the input data.
+                        For example, in an image recognition task, each pixel value of the image might be an input neuron.
+                      p.card-text.mb-0.
+                        The input layer does not perform any computations; it simply passes the data to the next layer.
+
+                .col-md-6
+                  .card.h-100.border-warning
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-layers.me-2
+                        | Hidden Layers
+                      p.card-text.
+                        Hidden layers are where the magic happens. These layers process
+                        and transform data by identifying patterns and relationships.
+                        They consist of multiple neurons connected to adjacent layers,
+                        enabling the network to learn complex, non-linear representations.
+                      p.card-text.mb-0.
+                        These layers are called "hidden" because their computations are not directly visible
+                        but are crucial for learning.
+
+                .col-md-6
+                  .card.h-100.border-success
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-output.me-2
+                        | Output Layer
+                      p.card-text.
+                        The output layer produces the final result of the neural network.
+                        This could be a classification, numerical prediction, or another output type, depending on the task.
+                      p.card-text.mb-0.
+                        The number of neurons in this layer depends on the task
+                        (e.g., one neuron for binary classification, multiple neurons with softmax activation for multi-class tasks).
+
+                .col-md-6
+                  .card.h-100.border-info
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-diagram-2.me-2
+                        | Connections Between Neurons
+                      p.card-text.
+                        Neurons in a network are connected by edges,
+                        each assigned a weight to determine the influence of one neuron on another.
+                        Connections also include biases, which shift activation thresholds for greater flexibility.
+                      p.card-text.mb-0.
+                        Adjusting weights and biases during training allows the network to learn and improve performance.
+
+              .alert.alert-info.mt-4
+                h6.text-info.mb-2
+                  i.bi.bi-image.me-2
+                  | Visualizing a Neural Network
+                p.mb-0.
+                  A neural network diagram illustrates the basic structure, including the input, hidden, and output layers,
+                  as well as the connections between neurons. Each connection represents a weighted path that data follows
+                  as it moves through the network.
+
+            section#faq.mb-5
+              h2.h3.mb-4
+                i.bi.bi-question-circle.me-2
+                | Frequently Asked Questions (FAQ)
+
+              .accordion#faq-accordion.mb-4
+                .accordion-item
+                  h3.accordion-header#faqHeading1
+                    button.accordion-button(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#faq1'
+                      aria-expanded='true'
+                      aria-controls='faq1'
+                    )
+                      | What is a neural network in simple terms?
+                  .accordion-collapse.collapse.show#faq1(
+                    aria-labelledby='faqHeading1'
+                    data-bs-parent='#faq-accordion'
+                  )
+                    .accordion-body
+                      p.mb-0.
+                        A neural network is a system of interconnected nodes (neurons) that process data to recognize patterns and make decisions,
+                        inspired by the human brain.
+
+                .accordion-item
+                  h3.accordion-header#faqHeading2
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#faq2'
+                      aria-expanded='false'
+                      aria-controls='faq2'
+                    )
+                      | How do neural networks learn?
+                  .accordion-collapse.collapse#faq2(
+                    aria-labelledby='faqHeading2'
+                    data-bs-parent='#faq-accordion'
+                  )
+                    .accordion-body
+                      p.mb-0.
+                        They learn by adjusting their internal parameters (weights and biases) through training,
+                        using algorithms like backpropagation and optimization to minimize errors.
+
+                .accordion-item
+                  h3.accordion-header#faqHeading3
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#faq3'
+                      aria-expanded='false'
+                      aria-controls='faq3'
+                    )
+                      | What are common applications of neural networks?
+                  .accordion-collapse.collapse#faq3(
+                    aria-labelledby='faqHeading3'
+                    data-bs-parent='#faq-accordion'
+                  )
+                    .accordion-body
+                      ul.mb-0
+                        li Image recognition
+                        li Natural language processing
+                        li Predictive analytics
+                        li Speech recognition
+                        li Game playing
+
+                .accordion-item
+                  h3.accordion-header#faqHeading4
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#faq4'
+                      aria-expanded='false'
+                      aria-controls='faq4'
+                    )
+                      | What is the difference between deep learning and neural networks?
+                  .accordion-collapse.collapse#faq4(
+                    aria-labelledby='faqHeading4'
+                    data-bs-parent='#faq-accordion'
+                  )
+                    .accordion-body
+                      p.mb-0.
+                        Deep learning is a subset of machine learning that uses neural networks with many layers (deep neural networks)
+                        to model complex patterns in data.
+
+            section#summary.mb-5
+              h2.h3.mb-4
+                i.bi.bi-check2-square.me-2
+                | Summary Checklist
+
+              .card.bg-light
+                .card-body
+                  ul.list-group.list-group-flush
+                    li.list-group-item.bg-transparent
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Neural networks explained in simple terms
+                    li.list-group-item.bg-transparent
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Key learning mechanisms and components described
+                    li.list-group-item.bg-transparent
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Practical example provided
+                    li.list-group-item.bg-transparent
+                      i.bi.bi-check-circle.text-success.me-2
+                      | SEO and accessibility best practices followed
+                    li.list-group-item.bg-transparent
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Table of Contents, FAQ, and Glossary included
+                    li.list-group-item.bg-transparent
+                      i.bi.bi-check-circle.text-success.me-2
+                      | Bootstrap 5 and icons used for layout and navigation
+
+            section#glossary.mb-5
+              h2.h3.mb-4
+                i.bi.bi-book.me-2
+                | Glossary of Terms
+
+              .accordion#glossary-accordion.mb-4
+                .accordion-item
+                  h3.accordion-header#glossaryHeading1
+                    button.accordion-button(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#glossary1'
+                      aria-expanded='true'
+                      aria-controls='glossary1'
+                    )
+                      | Neural Network
+                  .accordion-collapse.collapse.show#glossary1(
+                    aria-labelledby='glossaryHeading1'
+                    data-bs-parent='#glossary-accordion'
+                  )
+                    .accordion-body
+                      p.
+                        A neural network is a computational model inspired by the human brain, consisting of interconnected nodes (neurons)
+                        that process information and learn patterns from data.
+                      p.mb-0.
+                        For more, see the
+                        a(href='https://en.wikipedia.org/wiki/Artificial_neural_network' target='_blank' rel='noopener') Wikipedia article on Artificial Neural Networks
+                        | .
+
+                .accordion-item
+                  h3.accordion-header#glossaryHeading2
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#glossary2'
+                      aria-expanded='false'
+                      aria-controls='glossary2'
+                    )
+                      | Backpropagation
+                  .accordion-collapse.collapse#glossary2(
+                    aria-labelledby='glossaryHeading2'
+                    data-bs-parent='#glossary-accordion'
+                  )
+                    .accordion-body
+                      p.
+                        Backpropagation is an algorithm used to train neural networks by adjusting weights and biases to minimize prediction errors.
+                      p.mb-0.
+                        Learn more at
+                        a(href='https://en.wikipedia.org/wiki/Backpropagation' target='_blank' rel='noopener') Wikipedia: Backpropagation
+                        | .
+
+                .accordion-item
+                  h3.accordion-header#glossaryHeading3
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#glossary3'
+                      aria-expanded='false'
+                      aria-controls='glossary3'
+                    )
+                      | Activation Function
+                  .accordion-collapse.collapse#glossary3(
+                    aria-labelledby='glossaryHeading3'
+                    data-bs-parent='#glossary-accordion'
+                  )
+                    .accordion-body
+                      p.
+                        An activation function determines the output of a neuron in a neural network, introducing non-linearity to help the network learn complex patterns.
+                      p.mb-0.
+                        See
+                        a(href='https://en.wikipedia.org/wiki/Activation_function' target='_blank' rel='noopener') Wikipedia: Activation function
+                        |  for details.
+
+                .accordion-item
+                  h3.accordion-header#glossaryHeading4
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#glossary4'
+                      aria-expanded='false'
+                      aria-controls='glossary4'
+                    )
+                      | Deep Learning
+                  .accordion-collapse.collapse#glossary4(
+                    aria-labelledby='glossaryHeading4'
+                    data-bs-parent='#glossary-accordion'
+                  )
+                    .accordion-body
+                      p.
+                        Deep learning is a subset of machine learning that uses neural networks with many layers to model complex data representations.
+                      p.mb-0.
+                        More info:
+                        a(href='https://en.wikipedia.org/wiki/Deep_learning' target='_blank' rel='noopener') Wikipedia: Deep learning
+                        | .
+
+                .accordion-item
+                  h3.accordion-header#glossaryHeading5
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#glossary5'
+                      aria-expanded='false'
+                      aria-controls='glossary5'
+                    )
+                      | Gradient Descent
+                  .accordion-collapse.collapse#glossary5(
+                    aria-labelledby='glossaryHeading5'
+                    data-bs-parent='#glossary-accordion'
+                  )
+                    .accordion-body
+                      p.
+                        Gradient descent is an optimization algorithm used to minimize the loss function in neural networks by iteratively adjusting parameters.
+                      p.mb-0.
+                        See
+                        a(href='https://en.wikipedia.org/wiki/Gradient_descent' target='_blank' rel='noopener') Wikipedia: Gradient descent
+                        | .
+
+            // Call to Action
+            .card.bg-gradient.border-0.shadow.mt-5
+              .card-body.text-center.py-5
+                h3.card-title.text-primary
+                  i.bi.bi-rocket.me-2
+                  | Explore More Data Science Articles
+                p.card-text.lead.text-muted.mb-4 Dive deeper into data science topics and expand your knowledge:
+
+                .row.g-3.justify-content-center
+                  .col-md-6
+                    a.btn.btn-primary.btn-lg.w-100(href='/articles/exploratory-data-analysis-eda-using-python.html')
+                      i.bi.bi-graph-up.me-2
+                      | Exploratory Data Analysis Using Python
+                  .col-md-6
+                    a.btn.btn-success.btn-lg.w-100(href='/articles/python-the-language-of-data-science.html')
+                      i.bi.bi-code-slash.me-2
+                      | Python: The Language of Data Science

@@ -1,184 +1,355 @@
-# Mark Hazleton Resume
+# Mark Hazleton Blog
 
-[Mark Hazleton Resume](https://markhazleton.com/) is the Mark Hazleton online resume/CV based on the theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/) with the following template [Start Bootstrap - Source Template](https://startbootstrap.com/theme/resume/)
+[Mark Hazleton Blog](https://markhazleton.com/) is Mark Hazleton's professional blog and portfolio site featuring articles on project management, web development, and technology solutions. Built with a modern static site generation system using PUG templates, Bootstrap 5, and custom build tools.
 
 [![Azure Static Web Apps CI/CD](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml/badge.svg)](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml)
 
-## Site Build Process
+## Technology Stack
 
-This website is built using a customized static site generation system that transforms source files (Pug, SCSS, JavaScript) into a complete static website. Here's a detailed explanation of how the build process works:
+- **Template Engine**: PUG (formerly Jade) for semantic HTML generation
+- **CSS Framework**: Bootstrap 5 with custom SCSS
+- **Build System**: Custom Node.js scripts with file watching
+- **Development Server**: BrowserSync with SSL support
+- **Content Management**: JSON-based article system with RSS/Sitemap generation
+- **Deployment**: Azure Static Web Apps with GitHub Actions
 
-### Project Structure
+## Project Structure
 
-- **src/**: Contains all source files
-  - **pug/**: Pug templates that compile to HTML
-  - **scss/**: SCSS files that compile to CSS
-  - **js/**: JavaScript source files
-  - **assets/**: Static assets (images, fonts, etc.)
-- **scripts/**: Node.js scripts that handle the build process
-- **docs/**: Output directory containing the generated static site
+```
+markhazleton-blog/
+├── src/                          # Source files
+│   ├── pug/                      # PUG templates
+│   │   ├── layouts/              # Base layouts
+│   │   ├── includes/             # Reusable components
+│   │   ├── mixins/               # PUG mixins
+│   │   └── pages/                # Page templates
+│   ├── scss/                     # SCSS stylesheets
+│   │   ├── styles.scss           # Main stylesheet
+│   │   └── modern-styles.scss    # Modern CSS features
+│   ├── js/                       # JavaScript source files
+│   ├── assets/                   # Static assets (images, fonts)
+│   ├── articles.json             # Article metadata
+│   ├── projects.json             # Project data
+│   ├── rss.xml                   # Generated RSS feed
+│   └── sitemap.xml               # Generated XML sitemap
+├── scripts/                      # Build system scripts
+│   ├── build-*.js                # Core build scripts
+│   ├── render-*.js               # Processing renderers
+│   ├── sb-watch.js               # File watcher
+│   ├── start.js                  # Development server
+│   ├── update-rss.js             # RSS feed generator
+│   ├── update-sitemap.js         # Sitemap generator
+│   └── generate-article-json.js  # Article processing
+├── docs/                         # Generated static site
+└── .github/workflows/            # CI/CD configuration
+```
 
-### Build System Components
+## Build System Architecture
 
-The build system consists of several specialized scripts that handle different aspects of the build process:
+The build system is a sophisticated static site generator with the following components:
 
-#### Core Build Scripts
+### Core Build Scripts
 
-1. **build-assets.js**: Copies static files from `src/assets/` to `docs/assets/`
-   - Handles images, fonts, and other static resources
-   - Preserves directory structure
+1. **build-assets.js**: Asset pipeline for static files
+   - Copies images, fonts, and other resources from `src/assets/` to `docs/assets/`
+   - Preserves directory structure and file permissions
+   - Handles favicons, manifests, and configuration files
 
-2. **build-pug.js**: Compiles Pug templates to HTML
-   - Processes templates in `src/pug/`
-   - Supports layouts, includes, and mixins
-   - Outputs HTML files to the `docs/` directory
+2. **build-pug.js**: PUG template compilation
+   - Processes all PUG files in `src/pug/` (excluding includes, mixins, and layouts)
+   - Supports template inheritance with `extends` and `block` patterns
+   - Generates semantic HTML5 output in `docs/`
 
-3. **build-scss.js**: Compiles SCSS to CSS
-   - Processes SCSS files in `src/scss/`
-   - Includes Bootstrap components
-   - Handles variables, mixins, and functions
-   - Outputs compiled CSS to `docs/css/`
+3. **build-scss.js**: Primary SCSS compilation
+   - Compiles `src/scss/styles.scss` to `docs/css/styles.css`
+   - Integrates Bootstrap 5 and custom styles
+   - Uses Dart Sass with deprecation warning suppression
 
-4. **build-scripts.js**: Processes JavaScript files
-   - Handles `src/js/scripts.js` and other JS files
-   - Outputs processed JS to `docs/js/`
+4. **build-modern-scss.js**: Modern CSS features
+   - Compiles `src/scss/modern-styles.scss` to `docs/css/modern-styles.css`
+   - Handles advanced CSS features and browser compatibility
 
-#### Renderer Scripts
+5. **build-scripts.js**: JavaScript processing
+   - Processes JavaScript files from `src/js/`
+   - Outputs optimized JS to `docs/js/`
 
-Each build script has a corresponding renderer script that handles the actual transformation:
+### Renderer Scripts
 
-- **render-assets.js**: File copying logic for static assets
-- **render-pug.js**: Template compilation logic
-- **render-scss.js**: SCSS compilation with source maps
-- **render-scripts.js**: JavaScript processing
+Each build script uses a corresponding renderer for actual file processing:
 
-#### Utility Scripts
+- **render-assets.js**: File system operations for static asset copying
+- **render-pug.js**: PUG template compilation with layout inheritance
+- **render-scss.js**: SCSS compilation with PostCSS processing (autoprefixer, cssnano)
+- **render-modern-scss.js**: Modern SCSS compilation with advanced features
+- **render-scripts.js**: JavaScript bundling and optimization
 
-- **clean.js**: Removes the `docs/` directory for clean builds
-- **sb-watch.js**: Watches for file changes and triggers appropriate renderers
-  - Uses chokidar for file watching
-  - Detects file types and routes to appropriate renderer
-  - Handles partial rebuilds for efficiency
-- **start.js**: Main development script
-  - Runs the watcher and browser-sync concurrently
-  - Configures SSL for local development
-  - Auto-refreshes the browser when files change
+### Development Tools
 
-### Development Workflow
+- **sb-watch.js**: Intelligent file watcher using Chokidar
+  - Monitors `src/` directory for changes
+  - Routes file changes to appropriate renderers
+  - Handles partial rebuilds for includes/mixins (rebuilds dependent files)
+  - Supports hot reloading during development
 
-1. Source files are edited in the `src/` directory
-2. The file watcher (`sb-watch.js`) detects changes
-3. Appropriate renderer scripts process the changed files
-4. Output is generated in the `docs/` directory
-5. Browser-sync refreshes the browser to show changes
+- **start.js**: Development server orchestration
+  - Runs file watcher and BrowserSync concurrently using `concurrently`
+  - Configures SSL certificates for local HTTPS development
+  - Cross-platform support (Windows/macOS/Linux)
+  - Auto-refreshes browser on file changes with debouncing (2000ms)
+
+- **start-debug.js**: Enhanced development mode with additional logging
+
+### Content Generation Scripts
+
+- **generate-article-json.js**: Article metadata processor
+  - Extracts metadata from PUG templates
+  - Generates individual JSON files for articles
+  - Creates combined article collections
+  - Supports command-line options for flexible processing
+
+- **update-rss.js**: RSS 2.0 feed generator
+  - Reads from `articles.json` for article data
+  - Generates standards-compliant RSS feed with up to 500 items
+  - Includes proper XML escaping and RSS date formatting
+  - Updates `src/rss.xml` automatically
+
+- **update-sitemap.js**: XML sitemap generator
+  - Creates search engine optimized sitemaps
+  - Dynamic priority assignment based on content age
+  - Proper ISO 8601 date formatting
+  - Follows sitemap.org protocol specifications
+  - Updates `src/sitemap.xml` automatically
+
+### Utility Scripts
+
+- **clean.js**: Build directory cleanup utility
+  - Removes `docs/` directory for fresh builds
+  - Prevents build artifacts from accumulating
+
+## SCSS Compilation System
+
+The project uses a dual SCSS compilation approach to handle both legacy and modern CSS features:
+
+### Primary Stylesheet (`styles.scss`)
+
+- Integrates Bootstrap 5 components and utilities
+- Custom variables and theme customizations
+- Compiled with Dart Sass using `@import` syntax (legacy)
+- PostCSS processing with autoprefixer and cssnano minification
+
+### Modern Stylesheet (`modern-styles.scss`)
+
+- Advanced CSS features and experimental properties
+- Future-compatible CSS syntax
+- Separate compilation pipeline for progressive enhancement
+
+### Sass Deprecation Handling
+
+Both compilation processes include sophisticated deprecation warning management:
+
+- `quietDeps: true` suppresses dependency warnings
+- Custom logger filters out deprecation messages
+- Maintains compatibility with Bootstrap 5 while preparing for Sass 3.0
+
+## Development Workflow
+
+### Initial Setup
+
+```bash
+npm install
+npm run build
+```
+
+### Development Server
+
+```bash
+npm start
+```
+
+This command:
+
+1. Builds all source files
+2. Starts the file watcher (`sb-watch.js`)
+3. Launches BrowserSync with SSL support
+4. Opens the site in your default browser
+5. Watches for changes and auto-refreshes
+
+### File Change Detection
+
+The watcher intelligently handles different file types:
+
+- **PUG files**: Compiles changed files, or all files if includes/layouts change
+- **SCSS files**: Recompiles all stylesheets
+- **JS files**: Processes JavaScript files
+- **Assets**: Copies changed static files
 
 ### Build Process Flow
 
-When running a full build:
+#### Full Build (`npm run build`)
 
-1. `clean.js` removes existing output files
-2. `build-assets.js` copies static assets
-3. `build-pug.js` compiles Pug templates to HTML
-4. `build-scss.js` compiles SCSS to CSS
-5. `build-scripts.js` processes JavaScript files
+1. `clean` - Removes existing `docs/` directory
+2. `build:pug` - Compiles all PUG templates to HTML
+3. `build:scss` - Compiles primary SCSS to CSS
+4. `build:modern-scss` - Compiles modern SCSS features
+5. `build:scripts` - Processes JavaScript files
+6. `build:assets` - Copies static assets
+7. `update-rss` - Generates RSS feed
+8. `update-sitemap` - Creates XML sitemap
 
-For incremental builds during development:
+#### Incremental Development Builds
 
-1. File watcher detects changes to specific files
-2. Only affected files are reprocessed
-3. For template includes or layouts, all dependent files are rebuilt
+- File watcher detects specific changes
+- Only affected files are reprocessed
+- Dependent files are rebuilt when includes/layouts change
+- Browser refreshes automatically after processing
 
-### RSS and Sitemap Generation
+## Content Management
 
-The build process automatically generates RSS feed and XML sitemap files to improve site visibility and syndication capabilities:
+### Article System
 
-#### RSS Feed Generation
+Articles are managed through a JSON-based system:
 
-The `update-rss.js` script generates a standards-compliant RSS 2.0 feed:
+- **articles.json**: Central article metadata registry
+- Individual article PUG templates in `src/pug/articles/`
+- Automatic RSS and sitemap generation from article data
+- Support for categories, tags, publication dates, and descriptions
 
-- Reads article data from `articles.json`
-- Sorts articles by publication date (newest first)
-- Generates an RSS feed with the 20 most recent articles
-- Includes essential RSS elements like title, link, description, and publication date
-- Supports optional elements like category and content:encoded
-- Follows RSS 2.0 specifications with proper XML namespaces
-- Updates `rss.xml` in the source directory
+### Project Portfolio
 
-The RSS feed helps readers subscribe to site updates and stay informed about new content through RSS readers.
+Projects are managed through:
 
-#### XML Sitemap Generation
+- **projects.json**: Project metadata and descriptions
+- Integration with portfolio display templates
+- Support for technology tags and project links
 
-The `update-sitemap.js` script creates a comprehensive XML sitemap for search engines:
+## NPM Scripts Reference
 
-- Automatically includes all articles from `articles.json`
-- Adds the homepage with highest priority (1.0)
-- Dynamically assigns priority values based on content age:
-  - Recent articles (< 30 days): 0.8
-  - Moderately recent articles (30-90 days): 0.6
-  - Older articles: 0.5
-- Sets change frequency based on content age (daily, weekly, monthly)
-- Formats dates according to the ISO 8601 standard required by sitemap protocol
-- Follows the sitemap.org protocol with proper schema references
-- Updates `sitemap.xml` in the source directory
+### Production Build
 
-The sitemap helps search engines discover and index all pages on the site, potentially improving SEO performance.
+- `npm run build` - Complete production build sequence
+  - Runs all build steps in order: clean → pug → scss → modern-scss → scripts → assets → rss → sitemap
 
-Both RSS and sitemap files are automatically updated as part of the regular build process, ensuring they always contain the latest content information.
+### Individual Build Steps
 
-## Usage
+- `npm run build:assets` - Copies static files from `src/assets/` to `docs/assets/`
+- `npm run build:pug` - Compiles PUG templates to HTML files
+- `npm run build:scss` - Compiles primary SCSS stylesheet (`styles.scss`)
+- `npm run build:modern-scss` - Compiles modern CSS features (`modern-styles.scss`)
+- `npm run build:scripts` - Processes JavaScript files from `src/js/`
 
-### npm Scripts
+### Development Scripts
 
-- `npm run build` builds the project - this builds assets, HTML, JS, and CSS into `docs`
-- `npm run build:assets` copies the files in the `src/assets/` directory into `docs`
-- `npm run build:pug` compiles the Pug located in the `src/pug/` directory into `docs`
-- `npm run build:scripts` brings the `src/js/scripts.js` file into `docs`
-- `npm run build:scss` compiles the SCSS files located in the `src/scss/` directory into `docs`
-- `npm run clean` deletes the `docs` directory to prepare for rebuilding the project
-- `npm run start:debug` runs the project in debug mode
-- `npm start` or `npm run start` runs the project, launches a live preview in your default browser, and watches for changes made to files in `src`
+- `npm start` or `npm run start` - Runs full development environment
+  - Builds the project
+  - Starts file watcher
+  - Launches BrowserSync with SSL
+  - Opens browser and watches for changes
+- `npm run start:debug` - Development mode with enhanced logging
 
-### Simplified Development Scripts
+### Content Management
 
-Two simplified scripts are available for local development if you encounter issues with the standard npm scripts:
+- `npm run update-rss` - Generates RSS 2.0 feed from articles.json
+- `npm run update-sitemap` - Creates XML sitemap for SEO
 
-- `node simple-serve.js` - Uses browser-sync to serve the site with automatic reloading
-- `node http-server.js` - Uses http-server for a lightweight development server
+### Utility Scripts
 
-These scripts provide a simpler alternative to the standard build process and can be helpful for troubleshooting.
+- `npm run clean` - Removes `docs/` directory for clean builds
+- `npm run update-deps` - Updates all dependencies using npm-check-updates
 
-### SCSS Modernization
+### Alternative Development Servers
 
-This project currently uses Sass `@import` syntax which is being deprecated in Dart Sass 3.0.0. A future update will need to migrate to the new `@use` and `@forward` module system. Current workarounds include:
+If you encounter issues with the main development setup, these simplified scripts are available:
 
-1. Using the quietDeps option in `render-scss.js` to suppress deprecation warnings
-2. Hardcoding some color values and variables in SCSS files to avoid module system issues
-3. Keeping the existing `@import` syntax for Bootstrap compatibility
+- `node simple-serve.js` - Basic BrowserSync server with auto-reload
+- `node http-server.js` - Lightweight HTTP server for testing
 
-#### Migration Plan
-
-1. Update custom functions to use modern Sass modules
-2. Gradually migrate component files to use namespaced variables
-3. Reorganize variable dependencies for proper module compatibility
-4. Fully migrate when Bootstrap updates for Sass 3.0 compatibility
-
-You must have npm installed in order to use this build environment.
+These provide simpler alternatives to the full development environment and can help with troubleshooting.
 
 ## Deployment
 
-The site is automatically deployed to Azure Static Web Apps using GitHub Actions. The workflow is configured in `.github/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml`.
+The site uses automated deployment to Azure Static Web Apps through GitHub Actions.
 
-The deployment process:
+### Deployment Configuration
 
-1. Triggers on push to the main branch
-2. Uses the pre-built static files in the `docs/` directory
-3. Deploys them to Azure Static Web Apps
-4. No additional build steps are required during deployment since the site is pre-built
+- **Workflow**: `.github/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml`
+- **Trigger**: Push to `main` branch or pull requests
+- **Build Environment**: Ubuntu latest with Node.js 20
+- **Dependencies**: Full development dependencies installed via `npm ci`
 
-## About
+### Deployment Process
 
-Start Bootstrap is based on the [Bootstrap](https://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
+1. GitHub Actions triggers on push to main branch
+2. Sets up Node.js 20 environment with npm caching
+3. Installs all dependencies including development tools
+4. Runs `npm run build` to generate production files
+5. Deploys `docs/` directory to Azure Static Web Apps
+6. No additional build steps required during deployment (pre-built approach)
 
-## Copyright and License
+### Static Web App Configuration
+
+- **Source Directory**: `docs/` (pre-built static files)
+- **Configuration**: `staticwebapp.config.json` for routing and headers
+- **Custom Domain**: Configured through Azure Static Web Apps
+- **SSL**: Automatically provided by Azure
+
+## Dependencies
+
+### Core Dependencies
+
+- **cheerio**: HTML/XML parsing and manipulation
+- **fs-extra**: Enhanced file system operations
+- **glob**: File pattern matching
+- **prismjs**: Syntax highlighting for code blocks
+- **terser**: JavaScript minification
+
+### Development Dependencies
+
+- **Bootstrap 5.3.6**: CSS framework and components
+- **Bootstrap Icons 1.13.1**: Icon library
+- **Pug 3.0.3**: Template engine
+- **Sass 1.89.1**: SCSS compilation
+- **BrowserSync 3.0.4**: Development server with live reload
+- **Chokidar 4.0.3**: Cross-platform file watching
+- **PostCSS/Autoprefixer/CSSnano**: CSS processing pipeline
+- **Concurrently**: Multi-process task runner
+
+## SCSS Modernization Status
+
+### Current State
+
+The project currently uses legacy Sass `@import` syntax, which is being deprecated in Dart Sass 3.0.0.
+
+### Deprecation Handling
+
+- `quietDeps: true` option suppresses dependency warnings
+- Custom logger filters deprecation messages
+- Hardcoded Bootstrap variables in some files to avoid module system issues
+
+### Future Migration Plan
+
+1. Update custom functions to use modern Sass modules (`@use`/`@forward`)
+2. Migrate component files to namespaced variables
+3. Reorganize variable dependencies for module compatibility
+4. Complete migration when Bootstrap updates for Sass 3.0 compatibility
+
+## Browser Support
+
+- **Modern Browsers**: Chrome, Firefox, Safari, Edge (latest versions)
+- **Mobile**: iOS Safari, Chrome Mobile, Samsung Internet
+- **Progressive Enhancement**: Modern CSS features in separate stylesheet
+- **SSL**: Local development and production both use HTTPS
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes in the `src/` directory
+4. Test locally with `npm start`
+5. Run `npm run build` to ensure clean production build
+6. Submit a pull request
+
+## License and Copyright
 
 Copyright 2013-2025 Mark Hazleton. Code released under the [MIT](https://github.com/markhazleton/markhazleton-blog/blob/main/LICENSE) license.
+
+Original Bootstrap theme by [Start Bootstrap](https://startbootstrap.com/), based on the [Bootstrap](https://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
