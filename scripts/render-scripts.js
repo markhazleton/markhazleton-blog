@@ -29,13 +29,15 @@ module.exports = async function renderScripts() {
 
     // Paths for scripts.js and its destination
     const sourcePathScriptsJS = upath.resolve(upath.dirname(__filename), '../src/js/scripts.js');
+    const sourcePathSearchEngineJS = upath.resolve(upath.dirname(__filename), '../src/js/search-engine.js');
     const destPathScriptsJS = upath.resolve(upath.dirname(__filename), '../docs/js/scripts.js');
+    const destPathSearchEngineJS = upath.resolve(upath.dirname(__filename), '../docs/js/search-engine.js');
 
     // Read all JS files, including the new SCSS and JSON components
     const [
         bootstrapJS, prismJS, prismYAML, prismXML, prismPUG, prismCSHARP,
         prismPython, prismBash, prismTypeScript, prismSCSS, prismJSON,
-        scriptsJS
+        scriptsJS, searchEngineJS
     ] = await Promise.all([
         fs.readFile(bootstrapJSPath, 'utf8'),
         fs.readFile(prismJSPath, 'utf8'),
@@ -48,14 +50,9 @@ module.exports = async function renderScripts() {
         fs.readFile(prismTypeScriptPath, 'utf8'),
         fs.readFile(prismSCSSPath, 'utf8'), // SCSS
         fs.readFile(prismJSONPath, 'utf8'), // JSON
-        fs.readFile(sourcePathScriptsJS, 'utf8')
+        fs.readFile(sourcePathScriptsJS, 'utf8'),
+        fs.readFile(sourcePathSearchEngineJS, 'utf8')
     ]);
-
-    // Combine all scripts
-    const combinedScripts = [
-        bootstrapJS, prismJS, prismYAML, prismXML, prismPUG, prismCSHARP,
-        prismPython, prismBash, prismTypeScript, prismSCSS, prismJSON, scriptsJS
-    ].join('\n');
 
     // Include copyright notice
     const copyrightNotice = `/*!
@@ -65,6 +62,12 @@ module.exports = async function renderScripts() {
 */
 `;
 
+    // Combine all scripts
+    const combinedScripts = [
+        bootstrapJS, prismJS, prismYAML, prismXML, prismPUG, prismCSHARP,
+        prismPython, prismBash, prismTypeScript, prismSCSS, prismJSON, scriptsJS
+    ].join('\n');
+
     // Minify combined scripts and handle errors
     const minified = await Terser.minify(combinedScripts);
     if (minified.error) {
@@ -73,4 +76,13 @@ module.exports = async function renderScripts() {
     }
 
     await fs.writeFile(destPathScriptsJS, copyrightNotice + minified.code);
+
+    // Handle search-engine.js separately (it's only needed on the search page)
+    const searchEngineMinified = await Terser.minify(searchEngineJS);
+    if (searchEngineMinified.error) {
+        console.error("Terser Error for search-engine.js: ", searchEngineMinified.error);
+        return;
+    }
+
+    await fs.writeFile(destPathSearchEngineJS, copyrightNotice + searchEngineMinified.code);
 };

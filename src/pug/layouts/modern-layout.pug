@@ -122,10 +122,9 @@ html(lang='en')
       gtag('js', new Date());
       gtag('config', 'G-L8GVZNDH0B');
 
-  body
-    // Navigation
+  body    // Navigation
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top(role='navigation', aria-label='Main navigation')
-      .container
+      .container-fluid
         a.navbar-brand(href='/#', aria-label='Mark Hazleton homepage') Mark Hazleton
 
         button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav',
@@ -145,7 +144,20 @@ html(lang='en')
             li.nav-item
               a.nav-link(href='/#contact') Contact
 
-          .social-icons
+          // Search Box - Inside collapsible navbar
+          form.d-flex.me-3.my-2.my-lg-0(onsubmit='return searchArticles(event)')
+            .input-group.search-box
+              input#headerSearchInput.form-control(
+                type='search'
+                placeholder='Search articles...'
+                aria-label='Search articles'
+                autocomplete='off'
+              )
+              button.btn.btn-outline-light(type='submit', aria-label='Search')
+                i.fas.fa-search
+
+          // Social Icons - Inside collapsible navbar
+          .d-flex.social-icons
             a(href='https://www.linkedin.com/in/markhazleton/', target='_blank', rel='noopener noreferrer', title='LinkedIn')
               i.fab.fa-linkedin-in
             a(href='https://github.com/markhazleton/', target='_blank', rel='noopener noreferrer', title='GitHub')

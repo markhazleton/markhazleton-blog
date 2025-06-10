@@ -1,0 +1,166 @@
+extends layouts/modern-layout
+
+block variables
+  - var pageTitle = 'Search Articles | Mark Hazleton'
+  - var pageDescription = 'Search through Mark Hazleton\'s collection of technical articles on software development, Azure, project management, and technology leadership.'
+  - var pageKeywords = 'search articles, Mark Hazleton, software development, Azure, project management, technology search'
+  - var pageCanonical = 'https://markhazleton.com/search.html'
+
+block pagehead
+  title= pageTitle
+  meta(name='description', content=pageDescription)
+  meta(name='keywords', content=pageKeywords)
+
+block og_overrides
+  meta(property='og:title', content=pageTitle)
+  meta(property='og:description', content=pageDescription)
+  meta(property='og:url', content=pageCanonical)
+  meta(property='og:image', content='https://markhazleton.com/assets/img/MarkHazletonLinkedInProfile.jpg')
+
+block additional_structured_data
+  script(type='application/ld+json').
+    {
+      "@context": "https://schema.org",
+      "@type": "SearchResultsPage",
+      "name": "Article Search Results",
+      "description": "Search results for technical articles by Mark Hazleton",
+      "url": "https://markhazleton.com/search.html",
+      "author": {
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "url": "https://markhazleton.com",
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton",
+          "https://www.youtube.com/@markhazleton"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mark Hazleton"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://markhazleton.com/search.html?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+
+block layout-content
+  // Search Results Page
+  section.py-5.mt-5
+    .container
+      .row.justify-content-center
+        .col-lg-10
+
+          // Search Header
+          .text-center.mb-5
+            h1.display-4.fw-bold.mb-3
+              i.fas.fa-search.me-3
+              | Article Search
+            p.lead#searchDescription Enter keywords to search through 90+ technical articles
+
+          // Enhanced Search Box
+          .card.shadow-sm.mb-5
+            .card-body.p-4
+              form#searchForm.row.g-3(onsubmit='return performSearch(event)')
+                .col-md-8
+                  .input-group.input-group-lg
+                    span.input-group-text
+                      i.fas.fa-search
+                    input#searchInput.form-control(
+                      type='search'
+                      placeholder='Search articles by title, keywords, or content...'
+                      aria-label='Search articles'
+                      autocomplete='off'
+                      required
+                    )
+                .col-md-4
+                  select#categoryFilter.form-select.form-select-lg
+                    option(value='') All Categories
+                    option(value='Project Mechanics') Project Mechanics
+                    option(value='Development') Development
+                    option(value='Case Studies') Case Studies
+                    option(value='ChatGPT') ChatGPT
+                    option(value='PromptSpark') PromptSpark
+                    option(value='Data Science') Data Science
+                    option(value='Blog Management') Blog Management
+                    option(value='ReactSpark') ReactSpark
+                    option(value='Open Source') Open Source
+                .col-12.text-center
+                  button.btn.btn-primary.btn-lg.px-4(type='submit')
+                    i.fas.fa-search.me-2
+                    | Search Articles
+
+          // Search Statistics
+          #searchStats.alert.alert-info.d-none
+            .d-flex.justify-content-between.align-items-center
+              span#statsText
+              small#searchTime          // Search Results
+          #searchResults
+            // Results will be populated by JavaScript
+
+          // Loading state
+          #loadingResults.text-center.py-5.d-none
+            .spinner-border.text-primary.mb-3(role='status')
+              span.visually-hidden Loading...
+            p.text-muted Searching articles...
+
+          // No results state
+          #noResults.text-center.py-5.d-none
+            i.fas.fa-search-minus.display-1.text-muted.mb-3
+            h3.text-muted No articles found
+            p.text-muted.mb-4 Try different keywords or browse all articles
+            a.btn.btn-primary(href='/articles.html') Browse All Articles
+
+          // Pagination
+          #searchPagination.mt-4.d-none
+
+  // Quick Search Tips
+  section.bg-light.py-4
+    .container
+      .row
+        .col-lg-8.mx-auto.text-center
+          h4.mb-3 Search Tips
+          .row.g-3
+            .col-md-4
+              .d-flex.align-items-center.justify-content-center
+                i.fas.fa-lightbulb.text-warning.me-2
+                small Use specific keywords like "Azure", "React", or "Project Management"
+            .col-md-4
+              .d-flex.align-items-center.justify-content-center
+                i.fas.fa-filter.text-info.me-2
+                small Filter by category to narrow your search
+            .col-md-4
+              .d-flex.align-items-center.justify-content-center
+                i.fas.fa-tags.text-success.me-2
+                small Search covers titles, descriptions, and keywords
+
+block additional_js
+  script(src='/js/search-engine.js')
+
+  style.
+    .search-highlight {
+      background-color: #fff3cd;
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+    .search-result-card {
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .search-result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .suggestion-item {
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .suggestion-item:hover {
+      background-color: #f8f9fa;
+    }
+    @media (max-width: 768px) {
+      .input-group-lg .form-control {
+        font-size: 1rem;
+      }
+    }
