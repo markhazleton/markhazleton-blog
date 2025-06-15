@@ -108,15 +108,22 @@ namespace mwhWebAdmin.Article
                 string templateFilePath = Path.Combine(_articlesDirectory, "article-stub.pug");
                 string templateContent = File.ReadAllText(templateFilePath);
 
-                // Perform string replacements for template fields
+                // Perform string replacements for all template fields
                 string pugContent = templateContent
-                    .Replace("{{name}}", article.Name)
-                    .Replace("{{section}}", article.Section)
-                    .Replace("{{slug}}", article.Slug)
-                    .Replace("{{lastModified}}", article.LastModified)
-                    .Replace("{{changeFrequency}}", article.ChangeFrequency)
-                    .Replace("{{description}}", article.Description)
-                    .Replace("{{content}}", article.ArticleContent);
+                    .Replace("{{title}}", article.Name ?? string.Empty)
+                    .Replace("{{subtitle}}", article.Subtitle ?? string.Empty)
+                    .Replace("{{description}}", article.Description ?? string.Empty)
+                    .Replace("{{keywords}}", article.Keywords ?? string.Empty)
+                    .Replace("{{author}}", article.Author ?? "Mark Hazleton")
+                    .Replace("{{slug}}", article.Slug ?? string.Empty)
+                    .Replace("{{sectionTitle}}", article.Section ?? string.Empty)
+                    .Replace("{{summary}}", article.Summary ?? string.Empty)
+                    .Replace("{{content}}", article.ArticleContent ?? string.Empty)
+                    .Replace("{{conclusionTitle}}", article.ConclusionTitle ?? string.Empty)
+                    .Replace("{{conclusionSummary}}", article.ConclusionSummary ?? string.Empty)
+                    .Replace("{{conclusionKeyHeading}}", article.ConclusionKeyHeading ?? string.Empty)
+                    .Replace("{{conclusionKeyText}}", article.ConclusionKeyText ?? string.Empty)
+                    .Replace("{{conclusionText}}", article.ConclusionText ?? string.Empty);
                 return pugContent;
             }
             catch (Exception ex)

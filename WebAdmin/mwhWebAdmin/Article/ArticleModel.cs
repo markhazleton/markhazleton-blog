@@ -122,5 +122,53 @@ public class ArticleModel
 
         return Path.Combine(workspaceRoot, relativePath);
     }
+
+    /// <summary>
+    /// Gets or sets the subtitle of the article.
+    /// </summary>
+    [JsonPropertyName("subtitle")]
+    public string Subtitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the author of the article.
+    /// </summary>
+    [JsonPropertyName("author")]
+    public string Author { get; set; } = "Mark Hazleton";
+
+    /// <summary>
+    /// Gets or sets the summary of the article.
+    /// </summary>
+    [JsonPropertyName("summary")]
+    public string Summary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the conclusion title of the article.
+    /// </summary>
+    [JsonPropertyName("conclusionTitle")]
+    public string ConclusionTitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the conclusion summary of the article.
+    /// </summary>
+    [JsonPropertyName("conclusionSummary")]
+    public string ConclusionSummary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the conclusion key heading of the article.
+    /// </summary>
+    [JsonPropertyName("conclusionKeyHeading")]
+    public string ConclusionKeyHeading { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the conclusion key text of the article.
+    /// </summary>
+    [JsonPropertyName("conclusionKeyText")]
+    public string ConclusionKeyText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the conclusion text of the article.
+    /// </summary>
+    [JsonPropertyName("conclusionText")]
+    public string ConclusionText { get; set; } = string.Empty;
 }
 
