@@ -1,17 +1,81 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
 
 block pagehead
-  title {{section}} - {{name}}
-  meta(name='description', content='{{section}} - {{name}}')
-  meta(name='author', content='Mark Hazleton')
+  title {{title}}
+  meta(name='description', content='{{description}}')
+  meta(name='keywords', content='{{keywords}}')
+  meta(name='author', content='{{author}}')
+
+block canonical
   link(rel='canonical', href='https://markhazleton.com/{{slug}}')
 
-block layout-content
+block og_overrides
+  meta(property='og:title', content='{{title}}')
+  meta(property='og:description', content='{{description}}')
+  meta(property='og:url', content='https://markhazleton.com/{{slug}}')
+  meta(property='og:type', content='article')
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 {{name}}
-      h2.subheading.mb-3 {{description}}
-      p.
-        {{content}}
+block twitter_overrides
+  meta(name='twitter:title', content='{{title}}')
+  meta(name='twitter:description', content='{{description}}')
+
+block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-lightbulb.me-3
+            | {{title}}
+          h2.h3.mb-4 {{subtitle}}
+          p.lead.mb-5
+            | {{summary}}
+
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Article Content Section
+          section#article-content.mb-5
+            .card.shadow-sm.border-0
+              .card-header.bg-success.text-white
+                h2.h3.mb-0
+                  i.bi.bi-graph-up-arrow.me-2
+                  | {{sectionTitle}}
+              .card-body
+                p.mb-4
+                  | {{content}}
+
+          // Additional Sections (add as needed)
+          // section#additional-section.mb-5
+          //   h2.h3.text-primary.mb-4
+          //     i.bi.bi-diagram-3.me-2
+          //     | {{additionalSectionTitle}}
+          //   p.lead.mb-4
+          //     | {{additionalSectionSummary}}
+
+        // Sidebar or extra content can be added here if needed
+
+  // Conclusion Section
+  section#conclusion.mb-5
+    .card.border-primary.shadow-sm
+      .card-header.bg-primary.text-white
+        h2.h3.mb-0
+          i.bi.bi-trophy.me-2
+          | {{conclusionTitle}}
+      .card-body
+        p.lead.mb-4
+          | {{conclusionSummary}}
+        .alert.alert-success.border-0.shadow-sm.mb-4
+          .d-flex.align-items-start
+            i.bi.bi-star-fill.text-success.me-3.fs-4
+            div
+              h4.alert-heading.h6.mb-2 {{conclusionKeyHeading}}
+              p.mb-0
+                | {{conclusionKeyText}}
+        p.mb-0
+          | {{conclusionText}}
 
