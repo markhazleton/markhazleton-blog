@@ -91,18 +91,14 @@ block layout-content
               This is when I realized that while I had written the code, I had no idea of how it worked.
               Everything looks fine from the outside, but I had no clue as to what was happening under the hood.
             p.mb-3.
-              Trying to answer the question of what was going on, I decided to dig deeper.
-              I started looking at my logs,
-              my network traffic, my agent's behavior patterns. And what I found was...
-              well, not much. My fancy AI agent was essentially a black box wrapped in promises.
-            p.mb-3.
               The agent could claim it called the API.
               It could even format its response to look like it came from an external source.
               But proving it actually made that HTTP request? That was surprisingly difficult.
             p.mb-3.
-              It's like asking someone if they actually went to the store
-              or just grabbed leftover groceries from the fridge. Both could produce milk,
-              but the source matters if you're trying to track your spending (or in my case, API costs).
+              Trying to answer the question of what was going on, I decided to dig deeper.
+              I started looking at my logs,
+              my network traffic, my agent's behavior patterns. And what I found was...
+              well, not much. My fancy AI agent was essentially a black box wrapped in promises.
 
             h2.h4.mb-3.text-info.d-flex.align-items-center
               i.bi.bi-eye.me-2
@@ -111,14 +107,37 @@ block layout-content
               This seemingly simple joke request opened my eyes to a massive problem in AI agent development:
               observability. Not the most exciting word, I'll admit, but stick with me here.
             p.mb-3.
-              Think about it this way - when you're driving, you have a dashboard.
-              You can see your speed, fuel level, engine temperature.
-              You know what's happening under the hood (mostly). But with AI agents?
-              We're essentially driving blindfolded,
-              hoping the agent is actually doing what it claims to be doing.
+              Here's the thing about black boxes - they're designed to hide their internal workings.
+              You feed something in, you get something out, but what happens in between?
+              That's the mystery. My AI agent had become this opaque system where I could see the inputs
+              and outputs, but the actual processing, the decision-making, the tool usage?
+              All hidden from view.
             p.mb-3.
-              The more I thought about this, the funnier (and scarier) it became.
-              I started imagining all the different ways my agent could be "fetching" that joke without actually calling the API.
+              If you've ever worked in Quality Assurance,
+              you'll recognize this dilemma immediately.
+              In traditional software testing, we have two fundamental approaches:
+            dl
+              dt Black Box Testing
+              dd.
+                Black box testing focuses solely on inputs and outputs - you don't care how the code works internally,
+                you just verify that when you put X in, you get Y out.
+                It's perfect for testing user experiences and catching obvious bugs.
+
+              dt White Box Testing
+              dd.
+                Where you examine the internal structure, the code paths, the decision logic.
+                You can see exactly which functions are called, which branches are taken,
+                which variables are modified.
+                This visibility is crucial for catching edge cases, verifying security measures,
+                and understanding performance bottlenecks.
+
+            p.mb-3.
+              The problem with AI agents? We're stuck in permanent black box mode. Even when we write the orchestration code ourselves, the AI's decision-making process remains opaque. We can't step through its reasoning, can't see which tools it actually invokes versus which ones it pretends to use, can't verify its internal logic.
+            p.mb-3.
+              The agent could claim it called the API. It could even format its response to look like it came from an external source. But proving it actually made that HTTP request? That was surprisingly difficult. I was staring at a black box that could be doing anything inside - fetching fresh jokes, recycling old ones, or making up entirely new material - and I had no way to peek inside and verify.
+            p.mb-3.
+              The more I thought about this, the funnier (and scarier) it became. This black box could be operating in countless ways I couldn't see, and I started imagining all the different internal processes that might be happening without my knowledge...
+            p.mb-3.
               Imagine these scenarios:
             ul.list-group.mb-4
               li.list-group-item.d-flex.align-items-center
@@ -392,7 +411,104 @@ block layout-content
                       Servers can emit detailed logs about tool calls, resource access, and performance metrics. The standardized
                       message format makes it easier to implement monitoring dashboards, audit trails, and debugging tools.
                       This is exactly why MCP is so valuable for solving the observability challenges discussed in this article—it
-                      provides a structured way to track what AI agents are actually doing when they interact with external systems.
+                      provides a structured way to track what AI agents are actually doing when they interact with external systems.            // Header with icon
+            .text-center.mb-5
+              i.bi.bi-eye.display-4.text-primary.mb-3
+              h2.fw-bold.mb-3 How MCP Addresses the Black Box Problem
+              p.lead.text-muted.
+                While my joke-fetching agent was essentially flying blind, the Model Context Protocol offers a promising solution to AI observability challenges.
+
+            // Key Benefits Cards
+            .row.g-4.mb-5
+              .col-md-6.col-lg-4
+                .card.h-100.border-0.shadow-sm
+                  .card-body.text-center.p-4
+                    i.bi.bi-journal-text.display-5.text-primary.mb-3
+                    h5.card-title Structured Logging
+                    p.card-text.text-muted.
+                      MCP provides standardized logging with eight severity levels, making it easy to track what your AI agent is actually doing.
+
+              .col-md-6.col-lg-4
+                .card.h-100.border-0.shadow-sm
+                  .card-body.text-center.p-4
+                    i.bi.bi-diagram-3.display-5.text-success.mb-3
+                    h5.card-title Request Tracing
+                    p.card-text.text-muted.
+                      Every tool call is captured as JSON-RPC messages, providing complete audit trails of agent interactions.
+
+              .col-md-6.col-lg-4
+                .card.h-100.border-0.shadow-sm
+                  .card-body.text-center.p-4
+                    i.bi.bi-search.display-5.text-warning.mb-3
+                    h5.card-title Debug Tools
+                    p.card-text.text-muted.
+                      Built-in MCP Inspector and real-time monitoring help developers see exactly what's happening under the hood.
+
+            // From Black Box to Gray Box
+            .row.align-items-center.mb-5
+              .col-lg-6
+                h3.fw-bold.mb-4
+                  i.bi.bi-box.text-dark.me-2
+                  | From Black Box to Gray Box
+                p.mb-3.
+                  In my joke scenario, I had no way to verify whether my agent actually called the API or just pulled from training data. With MCP, this changes dramatically:
+
+                ul.list-unstyled
+                  li.mb-2
+                    i.bi.bi-check-circle-fill.text-success.me-2
+                    strong Explicit Tool Calls:
+                    span.text-muted.ms-1 See exactly when external APIs are invoked
+                  li.mb-2
+                    i.bi.bi-check-circle-fill.text-success.me-2
+                    strong Complete Audit Trail:
+                    span.text-muted.ms-1 Track HTTP requests, responses, and timing
+                  li.mb-2
+                    i.bi.bi-check-circle-fill.text-success.me-2
+                    strong Real-time Visibility:
+                    span.text-muted.ms-1 Monitor agent behavior as it happens
+
+              .col-lg-6
+                .bg-white.rounded.shadow-sm.p-4
+                  h6.text-muted.small.mb-3
+                    i.bi.bi-code-square.me-1
+                    | Example MCP Log Output
+                  pre.bg-dark.text-light.p-3.rounded.small.language-json
+                    code.language-json.
+                      {
+                        "jsonrpc": "2.0",
+                        "method": "tools/call",
+                        "params": {
+                          "name": "fetch_joke",
+                          "arguments": {
+                            "source": "jokeapi.com"
+                          }
+                        },
+                        "id": 1
+                      }
+
+            // Enterprise Solutions
+            .alert.alert-info.border-0.rounded-3.mb-5
+              .row.align-items-center
+                .col-auto
+                  i.bi.bi-building.display-6.text-info
+                .col
+                  h5.alert-heading.mb-2
+                    | Enterprise Observability Solutions
+                  p.mb-2.
+                    Major platforms like New Relic, Dynatrace, and Moesif now offer specialized MCP monitoring, providing waterfall diagrams, performance metrics, and usage analytics for production AI systems.
+                  small.text-muted
+                    i.bi.bi-info-circle.me-1
+                    | The ecosystem is rapidly evolving with OpenTelemetry integration and advanced tracing capabilities in development.
+
+            // Bottom Note
+            .text-center.mt-5.mb-5
+              .bg-primary.bg-opacity-10.rounded-3.p-4
+                h5.text-primary.mb-3
+                  i.bi.bi-lightbulb.me-2
+                  | The Takeaway
+                p.mb-0.text-dark.
+                  While MCP doesn't solve AI decision-making transparency completely, it transforms AI systems from completely opaque black boxes into "gray boxes" – giving developers the visibility they need to debug, monitor, and trust their AI agents.
+
             h2.h4.mb-3.text-dark.d-flex.align-items-center
               i.bi.bi-lightning-charge.me-2
               | Code Samples
