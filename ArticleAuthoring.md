@@ -1,6 +1,6 @@
 # Article Authoring Guide
 
-This guide provides step-by-step instructions and best practices for adding new articles to the site. It covers updating the `articles.json` file, creating a new `.pug` article file, and ensuring your article is search engine optimized (SEO) and visually appealing using Bootstrap 5, Bootstrap Icons, and PrismJS for code samples.
+This guide provides step-by-step instructions and best practices for adding new articles to the site using the modern-layout. It covers updating the `articles.json` file, creating a new `.pug` article file, and ensuring your article is search engine optimized (SEO) and visually appealing using Bootstrap 5, Bootstrap Icons, and PrismJS for code samples.
 
 ---
 
@@ -42,26 +42,67 @@ This guide provides step-by-step instructions and best practices for adding new 
 
 1. **Navigate to** `src/pug/articles/`.
 2. **Create a new file** named after your article (e.g., `my-new-article.pug`).
-3. **Use the following template as a starting point:**
+3. **Use the modern-layout template:**
 
 ```pug
-extends ../layouts/articles
+extends ../layouts/modern-layout
 
 block pagehead
   title My New Article Title
   meta(name='description', content='A concise, keyword-rich description for SEO.')
   meta(name='keywords', content='keyword1, keyword2, keyword3')
-  meta(name='author', content='Your Name')
+  meta(name='author', content='Mark Hazleton')
+
+block canonical
   link(rel='canonical', href='https://markhazleton.com/articles/my-new-article.html')
 
+block og_overrides
+  meta(property='og:title', content='My New Article Title')
+  meta(property='og:description', content='A concise, keyword-rich description for SEO.')
+  meta(property='og:url', content='https://markhazleton.com/articles/my-new-article.html')
+  meta(property='og:type', content='article')
+
+block twitter_overrides
+  meta(name='twitter:title', content='My New Article Title')
+  meta(name='twitter:description', content='A concise, keyword-rich description for SEO.')
+
 block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 My New Article Title
-      h2.subheading.mb-3 A compelling subheading
-      p.lead. 
-        Write a strong introduction that summarizes the article and includes primary keywords.
-      //- Article content goes here
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-lightbulb.me-3
+            | My New Article Title
+          h2.h3.mb-4 A compelling subheading
+          p.lead.mb-5
+            | Write a strong introduction that summarizes the article and includes primary keywords.
+
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Table of Contents (for long articles)
+          nav#table-of-contents.mb-5(aria-label='Table of Contents')
+            .card.bg-light
+              .card-header
+                h3.card-title.mb-0.fw-bold
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                ul.list-group.list-group-flush
+                  li.list-group-item: a.text-decoration-none(href='#section1') Section 1
+                  li.list-group-item: a.text-decoration-none(href='#section2') Section 2
+
+          // Article sections go here
+          section#section1.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-gear.me-2
+              | Section Title
+            p.lead Content goes here...
 ```
 
 ---
