@@ -1,163 +1,293 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
 
 block pagehead
-  title Mark Hazleton - Tools to Manage My Blog
-  meta(name='description', content='Mark Hazleton - Tools to Manage My Blog')
+  title Building a Web Application to Manage Your Blog Articles - Mark Hazleton
+  meta(name='description', content='Learn how to build a custom web application to manage blog articles using ASP.NET Core, Razor Pages, and ChatGPT assistance. Explore the journey from vision to reality in creating a bespoke CMS.')
+  meta(name='keywords', content='blog management, CMS development, ASP.NET Core, Razor Pages, web application, article management, JSON data, ChatGPT coding, web development')
   meta(name='author', content='Mark Hazleton')
+
+block canonical
   link(rel='canonical', href='https://markhazleton.com/articles/building-a-web-application-to-manage-your-blog-articles.html')
 
+block og_overrides
+  meta(property='og:title', content='Building a Web Application to Manage Your Blog Articles')
+  meta(property='og:description', content='Learn how to build a custom web application to manage blog articles using ASP.NET Core, Razor Pages, and ChatGPT assistance.')
+  meta(property='og:url', content='https://markhazleton.com/articles/building-a-web-application-to-manage-your-blog-articles.html')
+  meta(property='og:type', content='article')
+
+block twitter_overrides
+  meta(name='twitter:title', content='Building a Web Application to Manage Your Blog Articles')
+  meta(name='twitter:description', content='Learn how to build a custom web application to manage blog articles using ASP.NET Core, Razor Pages, and ChatGPT assistance.')
+
 block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-gear-fill.me-3
+            | Building a Web Application to Manage Your Blog Articles
+          h2.h3.mb-4 A Journey into Web Content Management Systems
+          p.lead.mb-5
+            | Discover how to create a custom web application to efficiently manage blog articles using modern development tools and AI assistance. From concept to implementation, explore the complete development journey.
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1.mb-0 Tools to Manage My Blog
-      h2.subheading.mb-3 A Journey into Web Content Management Systems
-      p.lead.
-        Creating and managing a blog has become an essential part of sharing insights, experiences,
-        and expertise with the world.
-        For those who want to make it easier to write posts, having a Web Content Management System (CMS)
-        to maintain their blog articles just makes sense.
-      p.
-        This article explores my journey of developing a web application to manage the blog articles on this website.
-        The article delves into the process and the parallels with the creation of the Web Project Mechanics (WPM) framework.
-      h3 The Quest for Better Web Content Management
-      p.
-        As I add more articles, I increasingly have a desire to manage the articles in a more efficient and customized manner.
-        Trying to keep the navigation, sitemap, and article constancy in sync is a tedious task.
-        In the past, this has usually led to a journey of building their own CMS.
-        So, I embarked on creating a quick application using the tools that I was familiar with.  In this case a Web Application with
-        razor pages. I created a bespoke CMS to suit my unique needs on this blog.  The CMS is a web application that allows me to
-        manage the articles on this website and keep the sitemap, navigation, and footer links in sync with my new articles.
-      p.
-        My goal is to create a user-friendly solution to simplify my article management.
-      h3 From Vision to Reality
-      p.
-        Building the Blog Management Web Application The journey begins by architecting the web application.
-        Drawing from previous experiences in web development, I choose to create a web application that employs
-        the Model-View-Controller (MVC) pattern for a structured and organized codebase. With the vision set,
-        the next step is to define the internal data structure,
-        I wanted to keep the JSON file as my persistence layer for storing article information.
-      p.
-        The heart of the application lies in the ArticleService, responsible for reading, updating, and adding articles.
-        Leveraging the power of C# and ASP.NET Core, the service interacts with JSON files, handling article data with ease.
-      p.
-        The service is more than just a simple data handler; it becomes the orchestrator of article-related actions,
-        from CRUD operations to generating sitemap XML and even dynamically creating article templates.
-      h3 The Parallels
-      p.
-        Web Project Mechanics Revisited For those familiar with the
-        <a href='/web-project-mechanics.html' target='_blank'>Web Project Mechanics</a>
-        (WPM) framework,
-        The journey to build a blog management application may seem reminiscent of previous endeavors.
-        Just as the WPM framework emerged from the need to streamline project management,
-        this CMS venture arose from a passion for efficient content management.
-      p.
-        Just as WPM offers tools to simplify complex web development tasks,
-        the CMS provides tools to streamline article creation, organization, and publication.
-        The similarities between these projects highlight the author's affinity for crafting solutions
-        that improve workflows and provide tailored experiences.
-        Just as the WPM framework brought order to the chaos of web project management,
-        this CMS tackles the challenges of blog management, empowering the author to create and share content effortlessly.
-        Embracing the Journey As the journey unfolds, the parallels between creating a web application for
-        blog management and crafting frameworks like WPM become apparent.
-        The allure of transforming ideas into functional tools, refining workflows, and delivering value through technology
-        is a driving force that propels developers forward. Just as master craftsman refines their skills over time,
-        each project contributes to the developer's repertoire of expertise.
-      p.
-        The adventure of building a CMS to manage blog articles is not merely a technical feat; it's a
-        testament to the fusion of passion for writing and the art of coding.
-        With every line of code, the author is not just creating software but crafting a tool that mirrors
-        their values and enhance their capabilities.
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // Table of Contents
+          nav#table-of-contents.mb-5(aria-label='Table of Contents')
+            .card.bg-light
+              .card-header
+                h3.card-title.mb-0.fw-bold
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                ul.list-group.list-group-flush
+                  li.list-group-item: a.text-decoration-none(href='#overview') Overview & Vision
+                  li.list-group-item: a.text-decoration-none(href='#quest') The Quest for Better Content Management
+                  li.list-group-item: a.text-decoration-none(href='#vision-to-reality') From Vision to Reality
+                  li.list-group-item: a.text-decoration-none(href='#parallels') The Parallels with WPM
+                  li.list-group-item: a.text-decoration-none(href='#chatgpt-kickstart') ChatGPT Kickstarts the Project
+                  li.list-group-item: a.text-decoration-none(href='#article-interface') Creating Article Management Interface
+                  li.list-group-item: a.text-decoration-none(href='#project-interface') Creating Project Management Interface          // Overview Section
+          section#overview.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-lightbulb.me-2
+              | Overview & Vision
+            p.lead
+              | Creating and managing a blog has become an essential part of sharing insights, experiences, and expertise with the world. For those who want to make it easier to write posts, having a Web Content Management System (CMS) to maintain their blog articles just makes sense.
 
-      h2 Chat GPT Kickstarts the Project
-      h3.subheading Creating an Interface to Manage Articles
-      p.
-        I have a JSON file that lists all the articles that I have written for this site.   The article JSON file
-        is used to create navigation and a sitemap for the site.
-        Let's walk through the steps to create an interface that allows me to manage article data stored in a `articles.json` file.
-        To get going quickly, I will utilize the power of ChatGPT prompts to generate code snippets along the way.
+            p
+              | This article explores my journey of developing a web application to manage the blog articles on this website. The article delves into the process and the parallels with the creation of the Web Project Mechanics (WPM) framework.          // The Quest Section
+          section#quest.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-search.me-2
+              | The Quest for Better Web Content Management
 
-      dl
-        dt Step 1: Create the Article Model and Service
-        dd
-          p.
-            The first step is to create a C# model that represents a project.
-            We'll create an `ArticleModel` class to hold article metadata.
-          p.
-            We can use the ChatGPT prompt to help generate the code for this.
+            p
+              | As I add more articles, I increasingly have a desire to manage the articles in a more efficient and customized manner. Trying to keep the navigation, sitemap, and article consistency in sync is a tedious task.
 
-          blockquote.pre.
-            Create a model class called ArticleModel in C# for the following JSON file.
-            Create a Service to maintain the JSON file which consists of a list of the Article Model class. Here is the JSON for the articles.
-            [
-              {
-                "id": 0,
-                "Section": "Personal Philosophy",
-                "slug": "sidetrackedbysizzle.html",
-                "name": "Sidetracked by Sizzle",
-                "content": null,
-                "description": "Description for Sidetracked by Sizzle",
-                "img_src": "assets/img/ArgostoliGreeceBeach.jpg",
-                "lastmod": "2023-09-05",
-                "changefreq": "daily"
-              },
-            }
-          p.
-            This returns the code for the Article Model.
-          p.
-            And the code for the Article Service.
-          pre.language-csharp
-            code.language-csharp.
-              // ArticleModel.cs
-              public class ArticleModel
-              {
-                [JsonPropertyName("id")]
-                public int Id { get; set; }
+            p
+              | In the past, this has usually led to a journey of building their own CMS. So, I embarked on creating a quick application using the tools that I was familiar with. In this case a Web Application with razor pages. I created a bespoke CMS to suit my unique needs on this blog. The CMS is a web application that allows me to manage the articles on this website and keep the sitemap, navigation, and footer links in sync with my new articles.
 
-                [JsonPropertyName("Section")]
-                public string Section { get; set; }
+            .card.mb-4.border-primary
+              .card-body
+                h5.card-title
+                  i.bi.bi-target.me-2
+                  | Project Goal
+                p.card-text.mb-0 My goal is to create a user-friendly solution to simplify my article management.
 
-                [JsonPropertyName("slug")]
-                public string Slug { get; set; }
+          // Vision to Reality Section
+          section#vision-to-reality.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-rocket.me-2
+              | From Vision to Reality
 
-                [JsonPropertyName("name")]
-                public string Name { get; set; }
+            p
+              | Building the Blog Management Web Application: The journey begins by architecting the web application. Drawing from previous experiences in web development, I choose to create a web application that employs the Model-View-Controller (MVC) pattern for a structured and organized codebase.
 
-                [JsonPropertyName("content")]
-                public string ArticleContent { get; set; }
+            p
+              | With the vision set, the next step is to define the internal data structure. I wanted to keep the JSON file as my persistence layer for storing article information.
 
-                [JsonPropertyName("description")]
-                public string Description { get; set; }
+            .card.mb-4.bg-light
+              .card-header.bg-primary.text-white
+                h5.card-title.mb-0
+                  i.bi.bi-code-square.me-2
+                  | Core Components
+              .card-body
+                p
+                  | The heart of the application lies in the ArticleService, responsible for reading, updating, and adding articles. Leveraging the power of C# and ASP.NET Core, the service interacts with JSON files, handling article data with ease.
+                p.mb-0
+                  | The service is more than just a simple data handler; it becomes the orchestrator of article-related actions, from CRUD operations to generating sitemap XML and even dynamically creating article templates.
 
-                [JsonPropertyName("img_src")]
-                public string ImgSrc { get; set; }
+          // Parallels Section
+          section#parallels.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-diagram-3.me-2
+              | The Parallels with Web Project Mechanics
 
-                [JsonPropertyName("lastmod")]
-                public string LastModified { get; set; }
-                  = DateTime.Now.ToString("yyyy-MM-dd");
+            p
+              | For those familiar with the
+              a.text-decoration-none(href='/web-project-mechanics.html' target='_blank') Web Project Mechanics
+              |  (WPM) framework, the journey to build a blog management application may seem reminiscent of previous endeavors.
 
-                [JsonPropertyName("changefreq")]
-                public string ChangeFrequency { get; set; }
-                  = "monthly";
-              }
+            p
+              | Just as the WPM framework emerged from the need to streamline project management, this CMS venture arose from a passion for efficient content management.
 
-        dt Step 2: Create a Razor Page for Managing Articles
-        dd
-          p.
-            Now let's create a Razor Page to manage the Articles.
-            We'll use dependency injection to get the `ArticleService` instance.
-            By continuing our session in ChatGPT, I don't have to re-enter the previous code or prompts.
+            .row.g-3.mb-4
+              .col-md-6
+                .card.border-secondary.h-100
+                  .card-body
+                    h6.card-title
+                      i.bi.bi-tools.me-2
+                      | WPM Framework
+                    p.card-text.small Offers tools to simplify complex web development tasks
+              .col-md-6
+                .card.border-secondary.h-100
+                  .card-body
+                    h6.card-title
+                      i.bi.bi-pencil-square.me-2
+                      | CMS Application
+                    p.card-text.small Provides tools to streamline article creation, organization, and publication
 
-          blockquote.pre.
-            Create a Razor Page (Articles.cshtml and Articles.cshtml.cs) that gets the service through DI and displays all Articles.
+            p
+              | The similarities between these projects highlight the author's affinity for crafting solutions that improve workflows and provide tailored experiences. Just as the WPM framework brought order to the chaos of web project management, this CMS tackles the challenges of blog management, empowering the author to create and share content effortlessly.
 
-          p.
-            This returns the code for the Razor page.
+          a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top          // ChatGPT Section
+          section#chatgpt-kickstart.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-robot.me-2
+              | ChatGPT Kickstarts the Project
 
-        dt Step 3: Configure Article Service for Dependency Injection
-        dd
-          p.
-            Now that we have the service and Razor page, we can register the service and point to the Articles.JSON file.
+            p.lead
+              | Leveraging AI assistance to accelerate development and generate boilerplate code for rapid prototyping.
+
+          // Article Interface Section
+          section#article-interface.mb-5
+            h2.h4.text-secondary.mb-4
+              i.bi.bi-file-text.me-2
+              | Creating an Interface to Manage Articles
+
+            p
+              | I have a JSON file that lists all the articles that I have written for this site. The article JSON file is used to create navigation and a sitemap for the site. Let's walk through the steps to create an interface that allows me to manage article data stored in an
+              code articles.json
+              |  file.
+
+            p
+              | To get going quickly, I will utilize the power of ChatGPT prompts to generate code snippets along the way.
+
+            // Steps Accordion
+            .accordion#articleStepsAccordion.mb-4
+              .accordion-item
+                h3.accordion-header#headingOne
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseOne'
+                    aria-expanded='true'
+                    aria-controls='collapseOne'
+                  )
+                    i.bi.bi-1-circle.me-2
+                    | Step 1: Create the Article Model and Service
+                .accordion-collapse.collapse.show#collapseOne(
+                  aria-labelledby='headingOne'
+                  data-bs-parent='#articleStepsAccordion'
+                )
+                  .accordion-body
+                    p
+                      | The first step is to create a C# model that represents an article. We'll create an
+                      code ArticleModel
+                      |  class to hold article metadata.
+
+                    p
+                      | We can use the ChatGPT prompt to help generate the code for this.
+
+                    .card.bg-light.mb-3
+                      .card-header
+                        h6.card-title.mb-0
+                          i.bi.bi-chat-dots.me-2
+                          | ChatGPT Prompt
+                      .card-body
+                        blockquote.mb-0
+                          | Create a model class called ArticleModel in C# for the following JSON file. Create a Service to maintain the JSON file which consists of a list of the Article Model class. Here is the JSON for the articles...
+
+                    p This returns the code for the Article Model and the Article Service.
+
+                    pre.language-csharp
+                      code.language-csharp.
+                        // ArticleModel.cs
+                        public class ArticleModel
+                        {
+                          [JsonPropertyName("id")]
+                          public int Id { get; set; }
+
+                          [JsonPropertyName("Section")]
+                          public string Section { get; set; }
+
+                          [JsonPropertyName("slug")]
+                          public string Slug { get; set; }
+
+                          [JsonPropertyName("name")]
+                          public string Name { get; set; }
+
+                          [JsonPropertyName("content")]
+                          public string ArticleContent { get; set; }
+
+                          [JsonPropertyName("description")]
+                          public string Description { get; set; }
+
+                          [JsonPropertyName("img_src")]
+                          public string ImgSrc { get; set; }
+
+                          [JsonPropertyName("lastmod")]
+                          public string LastModified { get; set; }
+                            = DateTime.Now.ToString("yyyy-MM-dd");
+
+                          [JsonPropertyName("changefreq")]
+                          public string ChangeFrequency { get; set; }
+                            = "monthly";
+                        }
+
+              .accordion-item
+                h3.accordion-header#headingTwo
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseTwo'
+                    aria-expanded='false'
+                    aria-controls='collapseTwo'
+                  )
+                    i.bi.bi-2-circle.me-2
+                    | Step 2: Create a Razor Page for Managing Articles
+                .accordion-collapse.collapse#collapseTwo(
+                  aria-labelledby='headingTwo'
+                  data-bs-parent='#articleStepsAccordion'
+                )
+                  .accordion-body
+                    p
+                      | Now let's create a Razor Page to manage the Articles. We'll use dependency injection to get the
+                      code ArticleService
+                      |  instance. By continuing our session in ChatGPT, I don't have to re-enter the previous code or prompts.
+
+                    .card.bg-light.mb-3
+                      .card-header
+                        h6.card-title.mb-0
+                          i.bi.bi-chat-dots.me-2
+                          | ChatGPT Prompt
+                      .card-body
+                        blockquote.mb-0
+                          | Create a Razor Page (Articles.cshtml and Articles.cshtml.cs) that gets the service through DI and displays all Articles.
+
+                    p This returns the code for the Razor page.
+
+              .accordion-item
+                h3.accordion-header#headingThree
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseThree'
+                    aria-expanded='false'
+                    aria-controls='collapseThree'
+                  )
+                    i.bi.bi-3-circle.me-2
+                    | Step 3: Configure Article Service for Dependency Injection
+                .accordion-collapse.collapse#collapseThree(
+                  aria-labelledby='headingThree'
+                  data-bs-parent='#articleStepsAccordion'
+                )
+                  .accordion-body
+                    p
+                      | Now that we have the service and Razor page, we can register the service and point to the Articles.JSON file.
+
+          a(href='#table-of-contents' class='d-block mb-4 text-decoration-none')
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
 
       h3 Creating an Interface to Manage Projects
       p.
