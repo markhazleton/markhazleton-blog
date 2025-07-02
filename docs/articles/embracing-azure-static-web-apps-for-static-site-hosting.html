@@ -1,56 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Essential Meta Tags-->
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mark Hazleton" />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <!-- Page-specific metadata block-->
         <title>Embracing Azure Static Web Apps for Static Site Hosting</title>
         <meta name="description" content="Exploring the use of Azure Static Web Apps for hosting static websites, including features, deployment workflow, security, and real-world use cases." />
         <meta name="keywords" content="Azure, Static Web Apps, hosting, deployment, serverless functions, security, GitHub Actions, CI/CD, cloud services, web development, static websites, Azure ecosystem, global distribution, performance, scalability, cost management, billing, GitHub Pages, Netlify, Vercel, Azure Functions, authentication, authorization, custom domains, SSL certificates, staging environments, Azure Blob Storage, Azure Cosmos DB, community, support, future developments, conclusion" />
         <meta name="author" content="Mark Hazleton" />
+        <!-- Default canonical (can be overridden)-->
+        <link rel="canonical" href="https://markhazleton.com/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" />
+        <!-- Open Graph Meta Tags (defaults)-->
+        <meta property="og:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta property="og:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://markhazleton.com/" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <meta property="og:site_name" content="Mark Hazleton" />
+        <meta property="og:locale" content="en_US" />
+        <!-- Additional Open Graph overrides-->
         <meta property="og:title" content="Embracing Azure Static Web Apps for Static Site Hosting" />
         <meta property="og:description" content="Exploring the use of Azure Static Web Apps for hosting static websites, including features, deployment workflow, security, and real-world use cases." />
-        <meta property="og:image" content="/assets/img/ChatGPT-key-press-counter.png" />
         <meta property="og:url" content="https://markhazleton.com/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" />
         <meta property="og:type" content="article" />
+        <!-- Twitter Card Meta Tags (defaults)-->
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@markhazleton" />
+        <meta name="twitter:creator" content="@markhazleton" />
+        <meta name="twitter:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta name="twitter:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta name="twitter:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <!-- Additional Twitter Card overrides-->
         <meta name="twitter:title" content="Embracing Azure Static Web Apps for Static Site Hosting" />
         <meta name="twitter:description" content="Exploring the use of Azure Static Web Apps for hosting static websites, including features, deployment workflow, security, and real-world use cases." />
-        <meta name="twitter:image" content="/assets/img/ChatGPT-key-press-counter.png" />
-        <meta name="twitter:creator" content="@markhazleton" />
-        <link rel="canonical" href="https://markhazleton.com/articles/embracing-azure-static-web-apps-for-static-site-hosting.html" />
+        <!-- Performance optimization - No external CDN dependencies-->
+        <!-- Favicon and app icons-->
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "Person",
-                "name": "Mark Hazleton",
-                "familyName": "Hazleton",
-                "givenName": "Mark",
-                "jobTitle": "Solutions Architect",
-                "alumniOf": "University of North Texas",
-                "affiliation": {
-                    "@type": "Organization",
-                    "name": "Control Origins"
-                },
-                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
-                "url": "https://markhazleton.com"
-            }
-        </script>
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
+        <link href="/css/modern-styles.css" rel="stylesheet" />
+        <!-- Enhanced JSON-LD Structured Data for SEO-->
         <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
-                "@type": "Organization",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "givenName": "Mark",
+                "familyName": "Hazleton",
+                "jobTitle": "Solutions Architect",
+                "description": "Solutions Architect passionate for solutions which make technology work for business",
                 "url": "https://markhazleton.com",
-                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/@MarkHazleton"],
+                "knowsAbout": [".NET Framework", "ASP.NET Core", "Microsoft Azure", "Project Management", "Web Development", "Solution Architecture", "Software Engineering", "Cloud Computing", "Artificial Intelligence", "Machine Learning"],
+                "alumniOf": {
+                    "@type": "Organization",
+                    "name": "University of North Texas"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Wichita",
+                    "addressRegion": "KS",
+                    "addressCountry": "US"
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/"
+                }
             }
         </script>
-        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- No external font dependencies - using system fonts-->
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=20250624" />
+        <!-- Additional structured data for specific pages-->
+        <!-- Additional page-specific CSS-->
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -61,242 +97,822 @@
             gtag('js', new Date());
             gtag('config', 'G-L8GVZNDH0B');
         </script>
-        <script>
-            (function (c, l, a, r, i, t, y) {
-                c[a] =
-                    c[a] ||
-                    function () {
-                        (c[a].q = c[a].q || []).push(arguments);
-                    };
-                t = l.createElement(r);
-                t.async = 1;
-                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
-                y = l.getElementsByTagName(r)[0];
-                y.parentNode.insertBefore(t, y);
-            })(window, document, 'clarity', 'script', 'd628hovv63');
-        </script>
     </head>
-    <body class="sidetracked-body" id="page-top">
-        <nav class="navbar navbar-dark bg-primary p-1">
-            <div class="container-fluid justify-content-end">
-                <div class="social-icons d-flex">
-                    <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram text-light" style="font-size: 2rem"></i></a>
-                </div>
-            </div>
-        </nav>
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
-                <span class="d-block d-lg-none">Mark Hazleton</span>
-                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon">#navbarResponsive.collapse.navbar-collapse</span>
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/articles.html">Articles</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
-                </ul>
-                <!-- Search Box (for larger screens)-->
-                <div class="d-none d-lg-flex ms-auto">
-                    <form class="d-flex" onsubmit="return searchArticles(event)">
+    <body>
+        // Navigation
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Main navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/#" aria-label="Mark Hazleton homepage">Mark Hazleton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/#about" aria-current="page">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#experience">Experience</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
+                    </ul>
+                    <!-- Search Box - Inside collapsible navbar-->
+                    <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event)">
                         <div class="input-group search-box">
                             <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
                             <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
+                    <!-- Social Icons - Inside collapsible navbar-->
+                    <div class="d-flex social-icons">
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
-            </button>
+            </div>
         </nav>
-        <!-- Page Content-->
-        <div class="container-fluid p-0 painteddesert-background">
-            <article class="painteddesert-section painteddesert-section-background" id="post">
-                <div class="painteddesert-section-content">
-                    <h1>Azure Static Web Apps</h1>
-                    <strong>In the ever-evolving landscape of web development, the surge in popularity of static websites has been nothing short of remarkable. These sites, known for their speed, security, and simplicity, are increasingly becoming the go-to for developers and businesses alike. My journey with static websites has been transformative, leading me to embrace cloud-based solutions for hosting. Among these, Azure Static Web Apps stands out as a beacon of efficiency and innovation.</strong>
-                    <h2>Why Azure Static Web Apps?</h2>
-                    <p>Azure Static Web Apps emerged as my default static website tool, offering a plethora of advantages over traditional hosting methods. The integration of global distribution ensures that my sites are accessible at blazing speeds worldwide, a critical factor for user satisfaction. But perhaps the most significant boon has been the integrated CI/CD from source code to global high availability, streamlining the deployment process and making updates a breeze.</p>
-                    <h2>Getting Started with Azure Static Web Apps</h2>
-                    <p>Creating an instances of the Azure Static Web Apps begins with creating a new app within the Azure portal. This process is remarkably intuitive, guiding you through selecting a subscription, resource group, and name for your app.</p>
-                    <p>The pivotal step is linking your GitHub repository, which Azure uses to automate deployments through GitHub Actions. Every push to your repository triggers a deployment, ensuring your site is always up-to-date with the latest changes from your development team.</p>
-                    <h2>Integrating Serverless Functions</h2>
-                    <p>One of the standout features of Azure Static Web Apps is the ability to integrate serverless functions, which allows static sites to perform dynamic operations. Using Azure Functions, I was able to extend the functionality of my static sites beyond static content delivery. For example, I implemented a simple API that retrieves real-time data from a database without managing a server. This integration is straightforward, enhancing the site's capabilities while maintaining the simplicity and security of a static site.</p>
-                    <h2>Customizing the Deployment Workflow</h2>
-                    <p>The deployment process of Azure Static Web Apps is highly customizable, thanks to the integration with GitHub Actions. I found that tweaking the GitHub Actions workflow allowed me to tailor the build and deployment process to fit the specific needs of each project. Whether it's defining custom build commands, setting environment variables, or managing deployment stages, the flexibility is immense. This level of control ensures that the deployment process aligns perfectly with my project requirements.</p>
-                    <h2>Securing Your Static Web App</h2>
-                    <p>Security is paramount in today's digital landscape, and Azure Static Web Apps provides robust security features out-of-the-box. I took advantage of the built-in authentication and authorization capabilities to secure my applications, integrating seamlessly with providers like GitHub, Twitter, and Microsoft Accounts. This security layer adds peace of mind, knowing that my static sites are not only fast and reliable but also secure from unauthorized access.</p>
-                    <h2>Real-world Use Cases</h2>
-                    <p>Some real-world projects that I've deployed using Azure Static Web Apps.</p>
-                    <dl>
-                        <dt><a href="https://markhazleton.com">markhazleton.com</a></dt>
-                        <dd>My personal portfolio site, markhazleton.com, showcases my journey and projects. Azure Static Web Apps made it simple to deploy and manage, providing a global presence with minimal effort. The integrated CI/CD ensured that my portfolio is always current, reflecting my latest work and achievements.</dd>
-                        <dt><a href="https://controlorigins.com" target="_blank">Controlorigins.com</a></dt>
-                        <dd>ControlOrigins.com, a platform for sharing knowledge and resources in the tech community, benefited immensely from Azure Static Web Apps' scalability and performance. The serverless functions feature allowed me to add dynamic content like user submissions and real-time notifications, enriching the community experience.</dd>
-                        <dt><a href="https://wichitasewer.com" target="_blank">WichitaSewer.com</a></dt>
-                        <dd>Wichita Sewer and Drain Services, a private company dedicated to providing top-tier sewer and drain services, stands as a testament to the versatility and power of Azure Static Web Apps. Utilizing this platform, WichitaSewer.com serves as the digital front for the company, offering a comprehensive overview of their services, including emergency repairs, routine cleanings, and expert solutions for sewer and drain issues. Azure Static Web Apps' security and scalability were key.</dd>
-                    </dl>
-                    <h2>Cost Management and Billing</h2>
-                    <p>Navigating the cost landscape of cloud services can often be daunting. However, Azure Static Web Apps presents a transparent and flexible pricing model that aligns with the needs of projects of all sizes. From personal projects to large-scale enterprise applications, the service offers a range of plans, including a generous free tier suitable for hobby projects and small-scale applications. As projects grow, scaling up is straightforward, with costs that are predictable and aligned with usage. This approach ensures that you only pay for what you need, making it easier to manage budgets without compromising on performance and availability.</p>
-                    <h2>Comparing Azure Static Web Apps with Alternatives</h2>
-                    <p>In the realm of static site hosting, Azure Static Web Apps is not without competition. Services like Netlify and Vercel have long been favorites in the developer community, offering similar features such as continuous deployment, serverless functions, and edge networking. However, Azure Static Web Apps distinguishes itself with deep integration into the Azure ecosystem, providing seamless access to a wide array of additional Azure services. This integration is particularly beneficial for projects already utilizing Azure resources, ensuring a cohesive and streamlined development experience.</p>
-                    <h3>Comparing Azure Static Web Apps to GitHub Pages</h3>
-                    <p>When considering platforms for hosting static websites, GitHub Pages emerges as a popular and straightforward option, especially for projects already housed on GitHub. It's an excellent service for hosting simple, static content directly from a GitHub repository, making it particularly appealing for personal projects, documentation sites, and small-scale web applications. However, when comparing it to Azure Static Web Apps, several distinctions become apparent, each serving different needs and use cases.</p>
-                    <dl>
-                        <dt>Customization and Control</dt>
-                        <dd>Azure Static Web Apps provides a more comprehensive set of customization options and control over the hosting environment compared to GitHub Pages. From custom routing rules to authentication and authorization features, Azure Static Web Apps offers a level of flexibility that caters to more complex application requirements.</dd>
-                        <dt>Serverless Functions</dt>
-                        <dd>A significant advantage of Azure Static Web Apps is the integrated support for Azure Functions, enabling the addition of serverless APIs to static sites. This feature allows developers to build dynamic functionalities without the need for a backend server, a capability that GitHub Pages does not natively offer.</dd>
-                        <dt>CI/CD and Deployment</dt>
-                        <dd>Both platforms offer continuous integration and deployment features, leveraging GitHub Actions to automate the deployment process. However, Azure Static Web Apps extends these capabilities with custom build and deployment configurations, environment variables, and staging environments, providing a more robust and versatile CI/CD pipeline.</dd>
-                        <dt>Global Distribution and Performance</dt>
-                        <dd>Azure Static Web Apps benefits from the Azure global network, ensuring faster content delivery and better performance across the globe. While GitHub Pages is also reliable and performs well, Azure's extensive infrastructure and content delivery network (CDN) can offer improved scalability and performance for more demanding applications.</dd>
-                        <dt>Security and Authentication</dt>
-                        <dd>Azure Static Web Apps comes with built-in security features, including the ability to easily set up authentication and authorization with various providers. This integrated security model is more advanced than what GitHub Pages offers, making Azure Static Web Apps a better fit for applications requiring user authentication and secure access.</dd>
-                        <dt>Integration with Azure Ecosystem</dt>
-                        <dd>For projects already leveraging other Azure services or those planning to do so, Azure Static Web Apps provides seamless integration with the Azure ecosystem. This cohesive experience can simplify the development workflow and enhance application capabilities, a benefit that GitHub Pages, as a standalone service, cannot match.</dd>
-                        <dt>Use Case Suitability</dt>
-                        <dd>GitHub Pages is ideal for simpler projects where the primary need is to quickly deploy static content without the requirements for dynamic functionalities or advanced customization. In contrast, Azure Static Web Apps is suited for more complex applications that demand scalability, dynamic content through serverless functions, and integration with other cloud services.</dd>
-                        <dt>Summary</dt>
-                        <dd>While GitHub Pages offers an excellent solution for straightforward static site hosting, Azure Static Web Apps provides a more feature-rich platform suitable for a wider range of applications, from simple static sites to complex web applications requiring dynamic content, authentication, and global scalability.</dd>
-                    </dl>
-                    <h2>Advanced Features and Extensions</h2>
-                    <p>Azure Static Web Apps goes beyond basic hosting, offering advanced features that cater to more complex needs. Custom domains, SSL certificates, and staging environments are just the tip of the iceberg. The service also allows for easy integration with Azure Blob Storage for large-scale content storage and Azure Cosmos DB for NoSQL database services, among others. These extensions enable developers to build feature-rich applications that are scalable, secure, and highly available.</p>
-                    <h2>Community and Support</h2>
-                    <p>The Azure Static Web Apps community is a vibrant ecosystem of developers, contributors, and enthusiasts. Microsoft's commitment to supporting developers is evident through extensive documentation, tutorials, and forums where users can share knowledge, ask questions, and collaborate on projects. For those needing more direct support, Azure offers professional support plans, ensuring that help is readily available when needed.</p>
-                    <h2>Future Developments</h2>
-                    <p>The future of Azure Static Web Apps looks promising, with ongoing updates and new features regularly announced. Microsoft's roadmap includes enhancements in areas such as increased geographic availability, advanced routing capabilities, and deeper integration with other Azure services. As the platform evolves, it continues to address the growing needs of the modern web, ensuring that developers have the tools they need to build the next generation of web applications.</p>
-                    <h2>Conclusion</h2>
-                    <p>Using Azure Static Web Apps for static site hosting has been a journey of discovery, efficiency, and innovation. The platform's robust features, coupled with the flexibility and security it offers, make it an excellent choice for hosting static websites. Whether you're a solo developer working on a personal project or a team building enterprise-level applications, Azure Static Web Apps provides the tools you need to deploy and manage your sites with ease.</p>
+        <br />
+        <!-- Hero Section-->
+        <section class="bg-gradient-primary py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-10 mx-auto text-center">
+                        <h1 class="display-4 fw-bold mb-3">
+                            <i class="bi bi-cloud me-3"></i>
+                            Azure Static Web Apps
+                        </h1>
+                        <h2 class="h3 mb-4">Embracing Modern Static Site Hosting</h2>
+                        <p class="lead mb-5">Static sites are fast, secure, and surprisingly capable—but choosing where to host them has become unnecessarily complicated. The sheer number of hosting options can be overwhelming: traditional web hosts, CDN providers, serverless platforms, and countless specialized static site hosts, each with their own quirks and limitations. Then there's the juggling act of connecting multiple services—one for hosting, another for CI/CD, and yet another for global distribution. Azure Static Web Apps cuts through this complexity by consolidating everything into a single platform that automates deployments directly from your GitHub repository while providing built-in global CDN and serverless function capabilities. After using it for several projects, it's become my go-to choice for static site hosting, letting me focus on building rather than managing infrastructure.</p>
+                    </div>
                 </div>
-            </article>
-        </div>
-        <footer class="navbar-dark bg-primary">
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 text-left">
-                    <br />
-                    <!-- Ensure current article exists-->
-                    <!-- Extract and clean currentKeywords-->
-                    <!-- Only check for related articles if there are valid keywords-->
-                    <!-- Shuffle related articles and limit to 3-->
-                    <!-- Render current article's keywords as badges-->
-                    <div class="keywords mt-3">
-                        <p class="text-white">Hashtags:</p>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-primary text-uppercase">azure static web apps</span>
-                            <span class="badge bg-primary text-uppercase">static websites</span>
-                            <span class="badge bg-primary text-uppercase">web development</span>
-                            <span class="badge bg-primary text-uppercase">cloud-based solutions</span>
-                            <span class="badge bg-primary text-uppercase">hosting</span>
-                            <span class="badge bg-primary text-uppercase">global distribution</span>
-                            <span class="badge bg-primary text-uppercase">ci/cd</span>
-                            <span class="badge bg-primary text-uppercase">github repository</span>
-                            <span class="badge bg-primary text-uppercase">github actions</span>
-                            <span class="badge bg-primary text-uppercase">serverless functions</span>
-                            <span class="badge bg-primary text-uppercase">azure functions</span>
-                            <span class="badge bg-primary text-uppercase">dynamic operations</span>
-                            <span class="badge bg-primary text-uppercase">deployment workflow</span>
-                            <span class="badge bg-primary text-uppercase">security features</span>
-                            <span class="badge bg-primary text-uppercase">authentication</span>
-                            <span class="badge bg-primary text-uppercase">authorization</span>
-                            <span class="badge bg-primary text-uppercase">real-time data</span>
-                            <span class="badge bg-primary text-uppercase">customization</span>
-                            <span class="badge bg-primary text-uppercase">cost management</span>
-                            <span class="badge bg-primary text-uppercase">billing</span>
-                            <span class="badge bg-primary text-uppercase">pricing model</span>
-                            <span class="badge bg-primary text-uppercase">scalability</span>
-                            <span class="badge bg-primary text-uppercase">performance</span>
-                            <span class="badge bg-primary text-uppercase">netlify</span>
-                            <span class="badge bg-primary text-uppercase">vercel</span>
-                            <span class="badge bg-primary text-uppercase">azure ecosystem</span>
-                            <span class="badge bg-primary text-uppercase">github pages</span>
-                            <span class="badge bg-primary text-uppercase">customization options</span>
-                            <span class="badge bg-primary text-uppercase">serverless apis</span>
-                            <span class="badge bg-primary text-uppercase">global network</span>
-                            <span class="badge bg-primary text-uppercase">content delivery network</span>
-                            <span class="badge bg-primary text-uppercase">cdn</span>
-                            <span class="badge bg-primary text-uppercase">integration</span>
-                            <span class="badge bg-primary text-uppercase">azure blob storage</span>
-                            <span class="badge bg-primary text-uppercase">azure cosmos db</span>
-                            <span class="badge bg-primary text-uppercase">community support</span>
-                            <span class="badge bg-primary text-uppercase">future developments</span>
-                            <span class="badge bg-primary text-uppercase">microsoft</span>
-                            <span class="badge bg-primary text-uppercase">web applications.</span>
+            </div>
+        </section>
+        <!-- Main Article Content-->
+        <article id="main-article">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- Table of Contents-->
+                        <nav class="mb-5" id="table-of-contents" aria-label="Table of Contents">
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0 fw-bold">
+                                        <i class="bi bi-list-ul me-2"></i>
+                                        Table of Contents
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#why-azure-static-web-apps">Why Azure Static Web Apps?</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#getting-started">Getting Started</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#serverless-functions">Integrating Serverless Functions</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#deployment-workflow">Customizing Deployment Workflow</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#security">Securing Your Static Web App</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#use-cases">Real-world Use Cases</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#cost-management">Cost Management and Billing</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#comparisons">Comparing Alternatives</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#advanced-features">Advanced Features and Extensions</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#community">Community and Support</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#future">Future Developments</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#step-by-step-guide">Step-by-Step Guide for New Developers</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                        <!-- Why Azure Static Web Apps Section-->
+                        <section class="mb-5" id="why-azure-static-web-apps">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-question-circle me-2"></i>
+                                Why Azure Static Web Apps?
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <p class="lead">Azure Static Web Apps emerged as my default static website tool, offering a plethora of advantages over traditional hosting methods.</p>
+                                    <p class="mb-4">The integration of global distribution ensures that my sites are accessible at blazing speeds worldwide, a critical factor for user satisfaction. But perhaps the most significant boon has been the integrated CI/CD from source code to global high availability, streamlining the deployment process and making updates a breeze.</p>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Getting Started Section-->
+                        <section class="mb-5" id="getting-started">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-play-circle me-2"></i>
+                                Getting Started with Azure Static Web Apps
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <p class="mb-3">Creating an instance of the Azure Static Web Apps begins with creating a new app within the Azure portal. This process is remarkably intuitive, guiding you through selecting a subscription, resource group, and name for your app.</p>
+                                    <p class="mb-0">The pivotal step is linking your GitHub repository, which Azure uses to automate deployments through GitHub Actions. Every push to your repository triggers a deployment, ensuring your site is always up-to-date with the latest changes from your development team.</p>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Serverless Functions Section-->
+                        <section class="mb-5" id="serverless-functions">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-lightning me-2"></i>
+                                Integrating Serverless Functions
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-success text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-gear me-2"></i>
+                                        Dynamic Capabilities for Static Sites
+                                    </h3>
+                                </div>
+                                <div class="card-body"><p class="mb-0">One of the standout features of Azure Static Web Apps is the ability to integrate serverless functions, which allows static sites to perform dynamic operations. Using Azure Functions, I was able to extend the functionality of my static sites beyond static content delivery. For example, I implemented a simple API that retrieves real-time data from a database without managing a server. This integration is straightforward, enhancing the site's capabilities while maintaining the simplicity and security of a static site.</p></div>
+                            </div>
+                        </section>
+                        <!-- Deployment Workflow Section-->
+                        <section class="mb-5" id="deployment-workflow">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-arrow-repeat me-2"></i>
+                                Customizing the Deployment Workflow
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body"><p class="mb-0">The deployment process of Azure Static Web Apps is highly customizable, thanks to the integration with GitHub Actions. I found that tweaking the GitHub Actions workflow allowed me to tailor the build and deployment process to fit the specific needs of each project. Whether it's defining custom build commands, setting environment variables, or managing deployment stages, the flexibility is immense. This level of control ensures that the deployment process aligns perfectly with my project requirements.</p></div>
+                            </div>
+                        </section>
+                        <!-- Security Section-->
+                        <section class="mb-5" id="security">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-shield-check me-2"></i>
+                                Securing Your Static Web App
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-warning text-dark">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-lock me-2"></i>
+                                        Built-in Security Features
+                                    </h3>
+                                </div>
+                                <div class="card-body"><p class="mb-0">Security is paramount in today's digital landscape, and Azure Static Web Apps provides robust security features out-of-the-box. I took advantage of the built-in authentication and authorization capabilities to secure my applications, integrating seamlessly with providers like GitHub, Twitter, and Microsoft Accounts. This security layer adds peace of mind, knowing that my static sites are not only fast and reliable but also secure from unauthorized access.</p></div>
+                            </div>
+                        </section>
+                        <!-- Real-world Use Cases Section-->
+                        <section class="mb-5" id="use-cases">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-globe me-2"></i>
+                                Real-world Use Cases
+                            </h2>
+                            <p class="lead mb-4">Some real-world projects that I've deployed using Azure Static Web Apps.</p>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-header bg-primary text-white">
+                                            <h4 class="card-title mb-0">
+                                                <i class="bi bi-person me-2"></i>
+                                                markhazleton.com
+                                            </h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">My personal portfolio site, markhazleton.com, showcases my journey and projects. Azure Static Web Apps made it simple to deploy and manage, providing a global presence with minimal effort. The integrated CI/CD ensured that my portfolio is always current, reflecting my latest work and achievements.</p>
+                                            <a class="btn btn-outline-primary" href="https://markhazleton.com" target="_blank">Visit Site</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-header bg-info text-white">
+                                            <h4 class="card-title mb-0">
+                                                <i class="bi bi-people me-2"></i>
+                                                Controlorigins.com
+                                            </h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">ControlOrigins.com, a platform for sharing knowledge and resources in the tech community, benefited immensely from Azure Static Web Apps' scalability and performance. The serverless functions feature allowed me to add dynamic content like user submissions and real-time notifications, enriching the community experience.</p>
+                                            <a class="btn btn-outline-info" href="https://controlorigins.com" target="_blank">Visit Site</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="card shadow-sm">
+                                        <div class="card-header bg-success text-white">
+                                            <h4 class="card-title mb-0">
+                                                <i class="bi bi-tools me-2"></i>
+                                                WichitaSewer.com
+                                            </h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text mb-0">Wichita Sewer and Drain Services, a private company dedicated to providing top-tier sewer and drain services, stands as a testament to the versatility and power of Azure Static Web Apps. Utilizing this platform, WichitaSewer.com serves as the digital front for the company, offering a comprehensive overview of their services, including emergency repairs, routine cleanings, and expert solutions for sewer and drain issues. Azure Static Web Apps' security and scalability were key.</p>
+                                            <a class="btn btn-outline-success mt-3" href="https://wichitasewer.com" target="_blank">Visit Site</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Cost Management Section-->
+                        <section class="mb-5" id="cost-management">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-currency-dollar me-2"></i>
+                                Cost Management and Billing
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-secondary text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-graph-up me-2"></i>
+                                        Transparent and Flexible Pricing
+                                    </h3>
+                                </div>
+                                <div class="card-body"><p class="mb-0">Navigating the cost landscape of cloud services can often be daunting. However, Azure Static Web Apps presents a transparent and flexible pricing model that aligns with the needs of projects of all sizes. From personal projects to large-scale enterprise applications, the service offers a range of plans, including a generous free tier suitable for hobby projects and small-scale applications. As projects grow, scaling up is straightforward, with costs that are predictable and aligned with usage. This approach ensures that you only pay for what you need, making it easier to manage budgets without compromising on performance and availability.</p></div>
+                            </div>
+                        </section>
+                        <!-- Comparisons Section-->
+                        <section class="mb-5" id="comparisons">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-bar-chart me-2"></i>
+                                Comparing Azure Static Web Apps with Alternatives
+                            </h2>
+                            <p class="lead mb-4">In the realm of static site hosting, Azure Static Web Apps is not without competition. Services like Netlify and Vercel have long been favorites in the developer community, offering similar features such as continuous deployment, serverless functions, and edge networking. However, Azure Static Web Apps distinguishes itself with deep integration into the Azure ecosystem, providing seamless access to a wide array of additional Azure services.</p>
+                            <h3 class="h4 text-secondary mb-3">
+                                <i class="bi bi-github me-2"></i>
+                                Comparing Azure Static Web Apps to GitHub Pages
+                            </h3>
+                            <p class="mb-4">When considering platforms for hosting static websites, GitHub Pages emerges as a popular and straightforward option, especially for projects already housed on GitHub. It's an excellent service for hosting simple, static content directly from a GitHub repository, making it particularly appealing for personal projects, documentation sites, and small-scale web applications.</p>
+                            <div class="accordion mb-4" id="comparison-accordion">
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingCustomization">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCustomization" aria-expanded="false" aria-controls="collapseCustomization">
+                                            <i class="bi bi-sliders me-2"></i>
+                                            Customization and Control
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseCustomization" aria-labelledby="headingCustomization" data-bs-parent="#comparison-accordion">
+                                        <div class="accordion-body"><p class="mb-0">Azure Static Web Apps provides a more comprehensive set of customization options and control over the hosting environment compared to GitHub Pages. From custom routing rules to authentication and authorization features, Azure Static Web Apps offers a level of flexibility that caters to more complex application requirements.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingServerless">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseServerless" aria-expanded="false" aria-controls="collapseServerless">
+                                            <i class="bi bi-lightning me-2"></i>
+                                            Serverless Functions
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseServerless" aria-labelledby="headingServerless" data-bs-parent="#comparison-accordion">
+                                        <div class="accordion-body"><p class="mb-0">A significant advantage of Azure Static Web Apps is the integrated support for Azure Functions, enabling the addition of serverless APIs to static sites. This feature allows developers to build dynamic functionalities without the need for a backend server, a capability that GitHub Pages does not natively offer.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingDeployment">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeployment" aria-expanded="false" aria-controls="collapseDeployment">
+                                            <i class="bi bi-arrow-repeat me-2"></i>
+                                            CI/CD and Deployment
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseDeployment" aria-labelledby="headingDeployment" data-bs-parent="#comparison-accordion">
+                                        <div class="accordion-body"><p class="mb-0">Both platforms offer continuous integration and deployment features, leveraging GitHub Actions to automate the deployment process. However, Azure Static Web Apps extends these capabilities with custom build and deployment configurations, environment variables, and staging environments, providing a more robust and versatile CI/CD pipeline.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingPerformance">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePerformance" aria-expanded="false" aria-controls="collapsePerformance">
+                                            <i class="bi bi-speedometer2 me-2"></i>
+                                            Global Distribution and Performance
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapsePerformance" aria-labelledby="headingPerformance" data-bs-parent="#comparison-accordion">
+                                        <div class="accordion-body"><p class="mb-0">Azure Static Web Apps benefits from the Azure global network, ensuring faster content delivery and better performance across the globe. While GitHub Pages is also reliable and performs well, Azure's extensive infrastructure and content delivery network (CDN) can offer improved scalability and performance for more demanding applications.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingSecurity">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSecurity" aria-expanded="false" aria-controls="collapseSecurity">
+                                            <i class="bi bi-shield-check me-2"></i>
+                                            Security and Authentication
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseSecurity" aria-labelledby="headingSecurity" data-bs-parent="#comparison-accordion">
+                                        <div class="accordion-body"><p class="mb-0">Azure Static Web Apps comes with built-in security features, including the ability to easily set up authentication and authorization with various providers. This integrated security model is more advanced than what GitHub Pages offers, making Azure Static Web Apps a better fit for applications requiring user authentication and secure access.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingIntegration">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIntegration" aria-expanded="false" aria-controls="collapseIntegration">
+                                            <i class="bi bi-puzzle me-2"></i>
+                                            Integration with Azure Ecosystem
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseIntegration" aria-labelledby="headingIntegration" data-bs-parent="#comparison-accordion">
+                                        <div class="accordion-body"><p class="mb-0">For projects already leveraging other Azure services or those planning to do so, Azure Static Web Apps provides seamless integration with the Azure ecosystem. This cohesive experience can simplify the development workflow and enhance application capabilities, a benefit that GitHub Pages, as a standalone service, cannot match.</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-info border-0 shadow-sm">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-info-circle-fill text-info me-3 fs-4"></i>
+                                    <div>
+                                        <h4 class="alert-heading h6 mb-2">Summary</h4>
+                                        <p class="mb-0">While GitHub Pages offers an excellent solution for straightforward static site hosting, Azure Static Web Apps provides a more feature-rich platform suitable for a wider range of applications, from simple static sites to complex web applications requiring dynamic content, authentication, and global scalability.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Advanced Features Section-->
+                        <section class="mb-5" id="advanced-features">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-cpu me-2"></i>
+                                Advanced Features and Extensions
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body"><p class="mb-0">Azure Static Web Apps goes beyond basic hosting, offering advanced features that cater to more complex needs. Custom domains, SSL certificates, and staging environments are just the tip of the iceberg. The service also allows for easy integration with Azure Blob Storage for large-scale content storage and Azure Cosmos DB for NoSQL database services, among others. These extensions enable developers to build feature-rich applications that are scalable, secure, and highly available.</p></div>
+                            </div>
+                        </section>
+                        <!-- Community Section-->
+                        <section class="mb-5" id="community">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-people me-2"></i>
+                                Community and Support
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body"><p class="mb-0">The Azure Static Web Apps community is a vibrant ecosystem of developers, contributors, and enthusiasts. Microsoft's commitment to supporting developers is evident through extensive documentation, tutorials, and forums where users can share knowledge, ask questions, and collaborate on projects. For those needing more direct support, Azure offers professional support plans, ensuring that help is readily available when needed.</p></div>
+                            </div>
+                        </section>
+                        <!-- Future Developments Section-->
+                        <section class="mb-5" id="future">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-rocket me-2"></i>
+                                Future Developments
+                            </h2>
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body"><p class="mb-0">The future of Azure Static Web Apps looks promising, with ongoing updates and new features regularly announced. Microsoft's roadmap includes enhancements in areas such as increased geographic availability, advanced routing capabilities, and deeper integration with other Azure services. As the platform evolves, it continues to address the growing needs of the modern web, ensuring that developers have the tools they need to build the next generation of web applications.</p></div>
+                            </div>
+                        </section>
+                        <!-- Step-by-Step Guide Section-->
+                        <section class="mb-5" id="step-by-step-guide">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-list-check me-2"></i>
+                                Step-by-Step Guide: Creating Your First Azure Static Web App
+                            </h2>
+                            <p class="lead mb-4">This guide will walk you through creating your first Azure Static Web App from start to finish. We'll use a simple HTML site as an example, but the process works for any static site framework.</p>
+                            <!-- Prerequisites-->
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-check-circle me-2"></i>
+                                        Prerequisites
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-3">Before we begin, make sure you have:</p>
+                                    <ul class="mb-0">
+                                        <li>
+                                            An Azure account (create a free one at
+                                            <a href="https://azure.microsoft.com" target="_blank" rel="noopener">azure.microsoft.com</a>
+                                            )
+                                        </li>
+                                        <li>A GitHub account</li>
+                                        <li>Basic knowledge of Git</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Step 1: Create Repository-->
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-1-circle me-2"></i>
+                                        Step 1: Create Your Static Site Repository
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="accordion" id="step1-accordion">
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingRepo">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRepo" aria-expanded="true" aria-controls="collapseRepo">
+                                                    <i class="bi bi-github me-2"></i>
+                                                    Create a new GitHub repository
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse show" id="collapseRepo" aria-labelledby="headingRepo" data-bs-parent="#step1-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-3">
+                                                        <li>Go to GitHub and click "New repository"</li>
+                                                        <li>Name it something like `my-first-static-app`</li>
+                                                        <li>Make it public (required for free Azure Static Web Apps)</li>
+                                                        <li>Initialize with a README</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingClone">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClone" aria-expanded="false" aria-controls="collapseClone">
+                                                    <i class="bi bi-download me-2"></i>
+                                                    Clone the repository locally
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseClone" aria-labelledby="headingClone" data-bs-parent="#step1-accordion">
+                                                <div class="accordion-body">
+                                                    <pre class="language-bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/yourusername/my-first-static-app.git
+<span class="token builtin class-name">cd</span> my-first-static-app
+</code></pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingHTML">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHTML" aria-expanded="false" aria-controls="collapseHTML">
+                                                    <i class="bi bi-file-earmark-code me-2"></i>
+                                                    Create a simple HTML site
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseHTML" aria-labelledby="headingHTML" data-bs-parent="#step1-accordion">
+                                                <div class="accordion-body">
+                                                    <p class="mb-3">Create an `index.html` file with this basic content:</p>
+                                                    <pre class="language-html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>viewport<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width=device-width, initial-scale=1.0<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>My First Azure Static Web App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">></span></span><span class="token style"><span class="token language-css">
+        <span class="token selector">body</span> <span class="token punctuation">{</span> <span class="token property">font-family</span><span class="token punctuation">:</span> Arial<span class="token punctuation">,</span> sans-serif<span class="token punctuation">;</span> <span class="token property">margin</span><span class="token punctuation">:</span> <span class="token number">40</span><span class="token unit">px</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        <span class="token selector">h1</span> <span class="token punctuation">{</span> <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode color">#0078d4</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Hello from Azure Static Web Apps!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>This is my first static web app deployed on Azure.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
+</code></pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingPush">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePush" aria-expanded="false" aria-controls="collapsePush">
+                                                    <i class="bi bi-cloud-upload me-2"></i>
+                                                    Push your code to GitHub
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapsePush" aria-labelledby="headingPush" data-bs-parent="#step1-accordion">
+                                                <div class="accordion-body">
+                                                    <pre class="language-bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Initial commit with basic HTML site"</span>
+<span class="token function">git</span> push origin main
+</code></pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Step 2: Create Azure Static Web App-->
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-header bg-success text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-2-circle me-2"></i>
+                                        Step 2: Create the Azure Static Web App
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="accordion" id="step2-accordion">
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingSignIn">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSignIn" aria-expanded="true" aria-controls="collapseSignIn">
+                                                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                                                    Sign in to Azure Portal
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse show" id="collapseSignIn" aria-labelledby="headingSignIn" data-bs-parent="#step2-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>
+                                                            Go to
+                                                            <a href="https://portal.azure.com" target="_blank" rel="noopener">portal.azure.com</a>
+                                                        </li>
+                                                        <li>Sign in with your Azure account</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingCreate">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCreate" aria-expanded="false" aria-controls="collapseCreate">
+                                                    <i class="bi bi-plus-circle me-2"></i>
+                                                    Create a new Static Web App
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseCreate" aria-labelledby="headingCreate" data-bs-parent="#step2-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>Click "Create a resource" (+ icon)</li>
+                                                        <li>Search for "Static Web Apps"</li>
+                                                        <li>Click "Static Web Apps" and then "Create"</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingConfigure">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseConfigure" aria-expanded="false" aria-controls="collapseConfigure">
+                                                    <i class="bi bi-gear me-2"></i>
+                                                    Configure basic settings
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseConfigure" aria-labelledby="headingConfigure" data-bs-parent="#step2-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>
+                                                            <strong>Subscription:</strong>
+                                                            Select your subscription
+                                                        </li>
+                                                        <li>
+                                                            <strong>Resource Group:</strong>
+                                                            Create new or select existing
+                                                        </li>
+                                                        <li>
+                                                            <strong>Name:</strong>
+                                                            Choose a unique name (e.g., `my-first-static-app-123`)
+                                                        </li>
+                                                        <li>
+                                                            <strong>Plan type:</strong>
+                                                            Select "Free" for learning
+                                                        </li>
+                                                        <li>
+                                                            <strong>Region:</strong>
+                                                            Choose the closest region to you
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingGitHub">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGitHub" aria-expanded="false" aria-controls="collapseGitHub">
+                                                    <i class="bi bi-github me-2"></i>
+                                                    Connect to GitHub
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseGitHub" aria-labelledby="headingGitHub" data-bs-parent="#step2-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>
+                                                            <strong>Source:</strong>
+                                                            Select "GitHub"
+                                                        </li>
+                                                        <li>Click "Sign in with GitHub" and authorize Azure</li>
+                                                        <li>
+                                                            <strong>Organization:</strong>
+                                                            Select your GitHub username
+                                                        </li>
+                                                        <li>
+                                                            <strong>Repository:</strong>
+                                                            Select `my-first-static-app`
+                                                        </li>
+                                                        <li>
+                                                            <strong>Branch:</strong>
+                                                            Select `main`
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingBuild">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBuild" aria-expanded="false" aria-controls="collapseBuild">
+                                                    <i class="bi bi-hammer me-2"></i>
+                                                    Configure build details
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseBuild" aria-labelledby="headingBuild" data-bs-parent="#step2-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>
+                                                            <strong>Build Presets:</strong>
+                                                            Select "Custom"
+                                                        </li>
+                                                        <li>
+                                                            <strong>App location:</strong>
+                                                            Leave empty (root folder)
+                                                        </li>
+                                                        <li>
+                                                            <strong>Api location:</strong>
+                                                            Leave empty (no API for now)
+                                                        </li>
+                                                        <li>
+                                                            <strong>Output location:</strong>
+                                                            Leave empty (for plain HTML)
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingReview">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReview" aria-expanded="false" aria-controls="collapseReview">
+                                                    <i class="bi bi-check2-square me-2"></i>
+                                                    Review and create
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseReview" aria-labelledby="headingReview" data-bs-parent="#step2-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>Click "Review + create"</li>
+                                                        <li>Review your settings</li>
+                                                        <li>Click "Create"</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Step 3: Monitor Deployment-->
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-header bg-warning text-dark">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-3-circle me-2"></i>
+                                        Step 3: Monitor the Deployment
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="mb-0">
+                                        <li>
+                                            <strong>Wait for deployment:</strong>
+                                            Azure will take 2-3 minutes to set up your resources
+                                        </li>
+                                        <li>Once complete, click "Go to resource"</li>
+                                        <li>
+                                            <strong>Check the GitHub Action:</strong>
+                                            Go back to your GitHub repository, click "Actions" tab
+                                        </li>
+                                        <li>You'll see a workflow running (Azure automatically created this)</li>
+                                        <li>Wait for it to complete (green checkmark)</li>
+                                        <li>
+                                            <strong>Get your site URL:</strong>
+                                            Back in Azure Portal, copy the URL and open it in a new tab
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- What Happened-->
+                            <div class="alert alert-success border-0 shadow-sm mb-4">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-lightbulb-fill text-success me-3 fs-4"></i>
+                                    <div>
+                                        <h4 class="alert-heading h6 mb-2">What Just Happened?</h4>
+                                        <p class="mb-2">Congratulations! You've successfully:</p>
+                                        <ul class="mb-0">
+                                            <li>Created your first Azure Static Web App</li>
+                                            <li>Set up automatic CI/CD from GitHub</li>
+                                            <li>Deployed your site globally with a CDN</li>
+                                            <li>Made your first update using the automated pipeline</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Next Steps-->
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-header bg-secondary text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-arrow-right-circle me-2"></i>
+                                        Next Steps
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-3">Now that you have the basics working, you can:</p>
+                                    <ul class="mb-0">
+                                        <li>Add a custom domain</li>
+                                        <li>Integrate Azure Functions for serverless APIs</li>
+                                        <li>Add authentication</li>
+                                        <li>Deploy a more complex framework like React, Vue, or Angular</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Troubleshooting-->
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-header bg-danger text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        Troubleshooting
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="accordion" id="troubleshooting-accordion">
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingNotLoading"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotLoading" aria-expanded="false" aria-controls="collapseNotLoading">Site not loading?</button></h4>
+                                            <div class="accordion-collapse collapse" id="collapseNotLoading" aria-labelledby="headingNotLoading" data-bs-parent="#troubleshooting-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>Check that the GitHub Action completed successfully</li>
+                                                        <li>Verify your `index.html` is in the root of your repository</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingActionFailing"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseActionFailing" aria-expanded="false" aria-controls="collapseActionFailing">GitHub Action failing?</button></h4>
+                                            <div class="accordion-collapse collapse" id="collapseActionFailing" aria-labelledby="headingActionFailing" data-bs-parent="#troubleshooting-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>Check the build logs in the Actions tab</li>
+                                                        <li>Ensure your HTML files are valid</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingChangeBuild"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChangeBuild" aria-expanded="false" aria-controls="collapseChangeBuild">Need to change build settings?</button></h4>
+                                            <div class="accordion-collapse collapse" id="collapseChangeBuild" aria-labelledby="headingChangeBuild" data-bs-parent="#troubleshooting-accordion">
+                                                <div class="accordion-body">
+                                                    <ul class="mb-0">
+                                                        <li>Go to your Static Web App in Azure Portal</li>
+                                                        <li>Click "Configuration" to modify build settings</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Cost Information-->
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-info text-white">
+                                    <h3 class="h5 mb-0">
+                                        <i class="bi bi-currency-dollar me-2"></i>
+                                        Cost - Free Tier Includes
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="mb-0">
+                                        <li>100 GB bandwidth per month</li>
+                                        <li>0.5 GB storage</li>
+                                        <li>Custom domains and SSL certificates</li>
+                                        <li>Authentication integration</li>
+                                    </ul>
+                                    <p class="mt-3 mb-0 small text-muted">Perfect for learning and small projects!</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!-- Conclusion Section-->
+        <section class="mb-5" id="conclusion">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card border-primary shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h2 class="h3 mb-0">
+                                    <i class="bi bi-trophy me-2"></i>
+                                    Conclusion
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <p class="lead mb-4">Using Azure Static Web Apps for static site hosting has been a journey of discovery, efficiency, and innovation.</p>
+                                <div class="alert alert-success border-0 shadow-sm mb-4">
+                                    <div class="d-flex align-items-start">
+                                        <i class="bi bi-star-fill text-success me-3 fs-4"></i>
+                                        <div>
+                                            <h4 class="alert-heading h6 mb-2">Key Takeaway</h4>
+                                            <p class="mb-0">The platform's robust features, coupled with the flexibility and security it offers, make it an excellent choice for hosting static websites.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="mb-0">Whether you're a solo developer working on a personal project or a team building enterprise-level applications, Azure Static Web Apps provides the tools you need to deploy and manage your sites with ease.</p>
+                            </div>
                         </div>
                     </div>
-                    <!-- Render related articles in a card layout-->
-                    <div class="related-articles mt-4">
-                        <h3 class="text-white">Related Articles</h3>
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/web-project-mechanics.html" title="Description for Web Project Mechanics">Web Project Mechanics</a>
-                                        </h5>
-                                        <p class="card-text text-white">Description for Web Project Mechanics</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/transforming-samplemvccrud-with-net-aspire-a-cloud-native-evolution.html" title="Discover how integrating .NET Aspire into the SampleMvcCRUD project revolutionizes it with cloud-native capabilities, enhanced observability, and seamless service orchestration. Dive into the journey of adopting microservices architecture and leveraging advanced telemetry for insightful application monitoring.">Transforming SampleMvcCRUD with .NET Aspire: A Cloud-Native Evolution</a>
-                                        </h5>
-                                        <p class="card-text text-white">Discover how integrating .NET Aspire into the SampleMvcCRUD project revolutionizes it with cloud-native capabilities, enhanced observability, and seamless service orchestration. Dive into the journey of adopting microservices architecture and leveraging advanced telemetry for insightful application monitoring.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/projectmechanics/leadership/accountability-and-authority.html" title="Finding Balance Between Accountability and Authority">Accountability and Authority</a>
-                                        </h5>
-                                        <p class="card-text text-white">Finding Balance Between Accountability and Authority</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="mb-3">Mark Hazleton</h5>
+                        <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
-                    <div class="mt-4"><p class="text-white"></p></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 justify-content-end">
-                    <br />
-                    <div class="social-icons d-flex">
-                        <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
-                        <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
-                        <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
-                        <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
-                        <br />
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Quick Links</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#about">About</a></li>
+                            <li><a href="/#experience">Experience</a></li>
+                            <li><a href="/#projects">Projects</a></li>
+                            <li><a href="/articles.html">Articles</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/projectmechanics/">Project Mechanics</a></li>
+                            <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
+                            <li><a href="/rss.xml">RSS Feed</a></li>
+                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12"><br /></div>
+                <hr class="my-4" />
+                <div class="row">
+                    <div class="col-12 text-center"><p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p></div>
+                </div>
             </div>
         </footer>
-        <!-- Core theme JS-->
         <script src="/js/scripts.js"></script>
     </body>
 </html>

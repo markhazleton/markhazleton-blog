@@ -4,6 +4,66 @@ This guide provides step-by-step instructions and best practices for adding new 
 
 ---
 
+## 0. Converting Legacy Articles to Modern Layout
+
+If you're updating an existing article from the legacy `articles` layout to the `modern-layout`, follow these conversion steps:
+
+### Layout Extension Update
+
+- Change `extends ../layouts/articles` to `extends ../layouts/modern-layout`
+
+### Meta Tag Restructuring
+
+Organize meta tags into proper blocks:
+
+- Move canonical link to its own `block canonical`
+- Separate Open Graph tags into `block og_overrides`
+- Separate Twitter Card tags into `block twitter_overrides`
+
+### Content Structure Conversion
+
+Replace the legacy painteddesert section structure:
+
+**From:**
+
+```pug
+block layout-content
+  article#post.painteddesert-section.painteddesert-section-background
+    .painteddesert-section-content
+```
+
+**To:**
+
+```pug
+block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-[icon].me-3
+            | [Article Title]
+          h2.h3.mb-4 [Subtitle]
+          p.lead.mb-5
+            | [Introduction]
+
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+```
+
+### Section Modernization
+
+Convert simple headers to Bootstrap card-based sections with icons and proper spacing.
+
+**Reference:** See `MODERN-LAYOUT-CONVERSION-STEPS.md` for detailed conversion guidelines.
+
+---
+
 ## 1. Update `articles.json`
 
 1. **Open** `src/articles.json`.
