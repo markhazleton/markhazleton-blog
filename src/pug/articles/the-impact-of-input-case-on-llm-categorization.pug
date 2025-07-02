@@ -1,22 +1,21 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
 
 block pagehead
   title The Impact of Input Case on LLM Categorization
   meta(name='description', content='Discover how input case affects tokenization and categorization in Large Language Models (LLMs). Understand case sensitivity in NLP tasks and model robustness.')
   meta(name="keywords", content="LLM, input case, tokenization, NLP, categorization agents, BERT cased uncased, GPT case sensitivity, sentiment analysis, topic classification")
   meta(name='author', content='Mark Hazleton')
+
+block canonical
   link(rel='canonical', href='https://markhazleton.com/articles/the-impact-of-input-case-on-llm-categorization.html')
+
+block og_overrides
   meta(property='og:title', content='The Impact of Input Case on LLM Categorization')
-  meta(property='og:description', content='Discover how input case affects tokenization and categorization in Large Language Models (LLMs). Understand case sensitivity in NLP tasks and model robustness..')
-  meta(property='og:type', content='article')
+  meta(property='og:description', content='Discover how input case affects tokenization and categorization in Large Language Models (LLMs). Understand case sensitivity in NLP tasks and model robustness.')
   meta(property='og:url', content='https://markhazleton.com/articles/the-impact-of-input-case-on-llm-categorization.html')
+  meta(property='og:type', content='article')
   meta(property='og:image', content='https://img.youtube.com/vi/2hI79aKyaK0/maxresdefault.jpg')
   meta(property='og:image:alt', content='Deep Dive: LLM Prompt Case Sensitivity video preview')
-  meta(name='twitter:card', content='summary_large_image')
-  meta(name='twitter:title', content='The Impact of Input Case on LLM Categorization')
-  meta(name='twitter:description', content='Discover how input case affects tokenization and categorization in Large Language Models (LLMs). Understand case sensitivity in NLP tasks and model robustness.')
-  meta(name='twitter:image', content='https://img.youtube.com/vi/2hI79aKyaK0/maxresdefault.jpg')
-  meta(name='twitter:image:alt', content='Deep Dive: LLM Prompt Case Sensitivity video preview')
   meta(property='og:video', content='https://www.youtube.com/embed/2hI79aKyaK0')
   meta(property='og:video:type', content='text/html')
   meta(property='og:video:width', content='560')
@@ -26,192 +25,399 @@ block pagehead
   meta(property='og:locale', content='en_US')
   meta(property='article:published_time', content='2025-02-04')
 
-block layout-content
+block twitter_overrides
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:title', content='The Impact of Input Case on LLM Categorization')
+  meta(name='twitter:description', content='Discover how input case affects tokenization and categorization in Large Language Models (LLMs). Understand case sensitivity in NLP tasks and model robustness.')
+  meta(name='twitter:image', content='https://img.youtube.com/vi/2hI79aKyaK0/maxresdefault.jpg')
+  meta(name='twitter:image:alt', content='Deep Dive: LLM Prompt Case Sensitivity video preview')
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 The Impact of Input Case on LLM Categorization Agents
-      h2.subheading.mb-3 How Case Sensitivity Affects Tokenization and Categorization in NLP
-      p.
-        Large Language Models (LLMs) have demonstrated remarkable capabilities in various Natural Language Processing (NLP) tasks,
-        including text categorization. However, the seemingly minor detail of input case can significantly influence how these models process information,
-        leading to variations in tokenization and, consequently, the categories they return.
-        Understanding this sensitivity is crucial for developing robust and reliable categorization agents.
-      .card.mb-4
-        .card-title.bg-primary.text-white.p-2
-          p.lead Deep Dive: LLM Prompt Case Sensitivity
+block layout-content
+  //- Hero Section
+  section#hero.bg-light.py-5
+    .container
+      .row.align-items-center
+        .col-lg-8
+          header
+            h1.display-4.fw-bold.text-primary The Impact of Input Case on LLM Categorization
+            h2.h4.text-muted.mb-4 How Case Sensitivity Affects Tokenization and Categorization in NLP
+
+          .lead.mb-4
+            | Large Language Models (LLMs) have demonstrated remarkable capabilities in various Natural Language Processing (NLP) tasks,
+            | including text categorization. However, the seemingly minor detail of input case can significantly influence how these models process information,
+            | leading to variations in tokenization and, consequently, the categories they return.
+            | Understanding this sensitivity is crucial for developing robust and reliable categorization agents.
+
+          .d-flex.flex-wrap.gap-2.mb-4
+            .badge.bg-primary.text-white LLM
+            .badge.bg-secondary.text-white Tokenization
+            .badge.bg-success.text-white NLP
+            .badge.bg-info.text-white Case Sensitivity
+            .badge.bg-warning.text-dark Categorization
+
+        .col-lg-4.text-center
+          .card.border-0.shadow-sm
+            .card-body
+              i.bi.bi-cpu.display-1.text-primary.mb-3
+              h5.card-title Machine Learning
+              p.card-text.text-muted Deep dive into LLM tokenization and case sensitivity
+
+  //- Table of Contents
+  nav#table-of-contents.mb-5(aria-label='Table of Contents')
+    .container
+      .card.bg-light
+        .card-header
+          h3.card-title.mb-0.fw-bold
+            i.bi.bi-list-ul.me-2
+            | Table of Contents
         .card-body
-          p.card-text.
-            Unlock the secrets of LLM prompt case sensitivity!
-            This deep dive explores how the seemingly simple act of capitalization in your AI prompts can drastically impact the responses you receive
-            from Large Language Models (LLMs).
-            Discover why case sensitivity matters in prompt engineering,
-            affecting tasks like sentiment analysis where emphasis can be key,
-            and topic classification where proper nouns and acronyms are crucial.
-            Learn best practices for case-specific prompt engineering to enhance the accuracy and clarity of your AI interactions
-            and avoid unexpected results. Whether you're a beginner or an experienced prompt engineer,
-            understanding LLM response variations based on prompt case is essential for maximizing AI utility.
+          ul.list-group.list-group-flush
+            li.list-group-item: a.text-decoration-none(href='#video-section') Video: Deep Dive on Case Sensitivity
+            li.list-group-item: a.text-decoration-none(href='#tokenization') Tokenization: The First Hurdle
+            li.list-group-item: a.text-decoration-none(href='#impact') How Tokenization Changes Impact Categorization
+            li.list-group-item: a.text-decoration-none(href='#architectures') Case Sensitivity Across LLM Architectures
+            li.list-group-item: a.text-decoration-none(href='#tasks') Impact on Specific Categorization Tasks
+            li.list-group-item: a.text-decoration-none(href='#robustness') Ensuring Robustness to Varying Input Case
+            li.list-group-item: a.text-decoration-none(href='#conclusion') Conclusion
+            li.list-group-item: a.text-decoration-none(href='#glossary') Glossary of Key Terms
+
+  //- Main Content Container
+  .container.my-5
+
+    //- Video Section
+    section#video-section.mb-5
+      .card.shadow-sm
+        .card-header.bg-primary.text-white
+          h4.card-title.mb-0
+            i.bi.bi-play-circle.me-2
+            | Deep Dive: LLM Prompt Case Sensitivity
+        .card-body
+          p.card-text.mb-3
+            | Unlock the secrets of LLM prompt case sensitivity!
+            | This deep dive explores how the seemingly simple act of capitalization in your AI prompts can drastically impact the responses you receive
+            | from Large Language Models (LLMs).
+            | Discover why case sensitivity matters in prompt engineering,
+            | affecting tasks like sentiment analysis where emphasis can be key,
+            | and topic classification where proper nouns and acronyms are crucial.
+            | Learn best practices for case-specific prompt engineering to enhance the accuracy and clarity of your AI interactions
+            | and avoid unexpected results. Whether you're a beginner or an experienced prompt engineer,
+            | understanding LLM response variations based on prompt case is essential for maximizing AI utility.
+
           .ratio.ratio-16x9
             iframe(src="https://www.youtube.com/embed/2hI79aKyaK0?si=-ip3OjC9MjTSsDYA"
               title="Deep Dive: LLM Prompt Case Sensitivity"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen)
-        .card-footer
-          p.card-text
+        .card-footer.text-muted
+          small
+            i.bi.bi-info-circle.me-2
             | Video: Deep Dive on LLM Prompt Case Sensitivity – Learn how input case impacts tokenization, categorization, and prompt engineering for NLP and LLMs.
 
-      h2.mb-3 Tokenization: The First Hurdle Influenced by Case
-      p.
-        At the core of how LLMs understand text lies tokenization,
-        the process of breaking down raw text into smaller units called tokens.
-        Tokenization, the process of breaking text into tokens, is profoundly impacted by input case.
-        Case-sensitive tokenizers treat "Apple" and "apple" as distinct,
-        while case-insensitive tokenizers merge them, affecting downstream tasks.
-        The way an LLM's tokenizer handles case sensitivity plays a pivotal role in shaping the input it ultimately processes.
+    //- Tokenization Section
+    section#tokenization.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-layers.me-2
+          | Tokenization: The First Hurdle Influenced by Case
 
-      .row.mb-4
-        .col-md-6
-          .card
-            .card-header
-              h3.card-title Case-Sensitive Tokenization
+      .lead.mb-4
+        | At the core of how LLMs understand text lies tokenization,
+        | the process of breaking down raw text into smaller units called tokens.
+        | Tokenization, the process of breaking text into tokens, is profoundly impacted by input case.
+        | Case-sensitive tokenizers treat "Apple" and "apple" as distinct,
+        | while case-insensitive tokenizers merge them, affecting downstream tasks.
+        | The way an LLM's tokenizer handles case sensitivity plays a pivotal role in shaping the input it ultimately processes.
+
+      .row.g-4.mb-4
+        .col-lg-6
+          .card.h-100.border-primary
+            .card-header.bg-primary.text-white
+              h4.card-title.mb-0
+                i.bi.bi-toggle-on.me-2
+                | Case-Sensitive Tokenization
             .card-body
-              p.card-text.
-                Many LLMs utilize case-sensitive tokenizers,
-                where uppercase and lowercase forms of a word are treated as distinct tokens.
-                For instance, in a case-sensitive model, “Apple” and “apple” would be assigned different token IDs and embedding vectors.
-                This distinction allows the model to potentially capture nuances associated with capitalization, such as proper nouns or emphasis
-        .col-md-6
-          .card
-            .card-header
-              h3.card-title Case-Insensitive Tokenization
+              p.card-text
+                | Many LLMs utilize case-sensitive tokenizers,
+                | where uppercase and lowercase forms of a word are treated as distinct tokens.
+                | For instance, in a case-sensitive model, "Apple" and "apple" would be assigned different token IDs and embedding vectors.
+                | This distinction allows the model to potentially capture nuances associated with capitalization, such as proper nouns or emphasis.
+
+        .col-lg-6
+          .card.h-100.border-success
+            .card-header.bg-success.text-white
+              h4.card-title.mb-0
+                i.bi.bi-toggle-off.me-2
+                | Case-Insensitive Tokenization
             .card-body
-              p.card-text.
-                Some approaches employ case-insensitive tokenization,
-                typically by converting all input text to lowercase before tokenization.
-                In such systems, "Apple" and "apple" would be treated as identical tokens.
-                While this simplifies the vocabulary and can aid generalization in some tasks,
-                it also means the loss of any information conveyed through capitalization
+              p.card-text
+                | Some approaches employ case-insensitive tokenization,
+                | typically by converting all input text to lowercase before tokenization.
+                | In such systems, "Apple" and "apple" would be treated as identical tokens.
+                | While this simplifies the vocabulary and can aid generalization in some tasks,
+                | it also means the loss of any information conveyed through capitalization.
+
+      .alert.alert-info.border-0.shadow-sm
+        .d-flex
+          i.bi.bi-lightbulb.fs-4.text-info.me-3.flex-shrink-0
+          div
+            h5.alert-heading.mb-2 Subword Tokenization Complexity
+            p.mb-0
+              | Subword tokenizers like BERT's WordPiece can split "AIRPORT" into fragments (e.g., "AI", "##R"),
+              | complicating categorization compared to "airport" as a single token.
+              | The choice of tokenization directly dictates the sequence of tokens the LLM receives as input.
+              | Therefore, altering the case in the input can fundamentally change the representation the model uses for categorization.
 
       p.
-        Subword tokenizers like BERT's WordPiece can split "AIRPORT" into fragments (e.g., "AI", "##R"),
-        complicating categorization compared to "airport" as a single token.
-        The choice of tokenization directly dictates the sequence of tokens the LLM receives as input.
-        Therefore, altering the case in the input can fundamentally change the representation the model uses for categorization.
         Furthermore, case changes can affect how subword tokenizers split words.
-        For example, a word like “airport” might be a single token for BERT’s WordPiece tokenizer.
-        However, if the input is “AIRPORT” (all caps), it could be broken down into multiple subword fragments
+        For example, a word like "airport" might be a single token for BERT's WordPiece tokenizer.
+        However, if the input is "AIRPORT" (all caps), it could be broken down into multiple subword fragments
         like "AI", "##R", "##PO", "##RT". This fragmentation of all-caps words into "nonsense" subword pieces can
         complicate the model's understanding and potentially lead to different categorization outcomes
 
-      h2.mb-3 How Tokenization Changes Impact Categorization
-      p.
-        Tokenization changes ripple through LLM layers, altering internal representations and leading to different classification outputs.
-        Models may activate different learned patterns based on input case.
-        Since tokenization is the initial step in processing text for an LLM,
-        any changes at this stage propagate through the model's layers,
-        ultimately influencing the categorization output.
-        If the input case alters the tokens, the model's internal representation of the text will be different.
-        This means the model might activate different patterns and associations learned during its training,
-        potentially leading to different classification decisions
+    //- Impact Section
+    section#impact.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-arrow-repeat.me-2
+          | How Tokenization Changes Impact Categorization
 
-      h2.mb-3 Case Sensitivity Across Different LLM Architectures
-      p.
-        Case sensitivity varies across models like BERT, GPT, and others:
-      .accordion#caseSensitivityAccordion
+      .lead.mb-4
+        | Tokenization changes ripple through LLM layers, altering internal representations and leading to different classification outputs.
+        | Models may activate different learned patterns based on input case.
+        | Since tokenization is the initial step in processing text for an LLM,
+        | any changes at this stage propagate through the model's layers,
+        | ultimately influencing the categorization output.
+
+      .card.border-warning.mb-4
+        .card-header.bg-warning.text-dark
+          h4.card-title.mb-0
+            i.bi.bi-exclamation-triangle.me-2
+            | Impact on Model Representation
+        .card-body
+          p.card-text
+            | If the input case alters the tokens, the model's internal representation of the text will be different.
+            | This means the model might activate different patterns and associations learned during its training,
+            | potentially leading to different classification decisions.
+
+    //- Architectures Section
+    section#architectures.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-cpu.me-2
+          | Case Sensitivity Across Different LLM Architectures
+
+      .lead.mb-4
+        | Case sensitivity varies across models like BERT, GPT, and others:
+
+      .accordion#caseSensitivityAccordion.shadow-sm
         .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseOne') BERT Cased vs. Uncased
-          .accordion-collapse.collapse#collapseOne
+          h3.accordion-header#headingOne
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseOne'
+              aria-expanded='false'
+              aria-controls='collapseOne'
+            )
+              i.bi.bi-layers.me-2
+              | BERT Cased vs. Uncased
+          .accordion-collapse.collapse#collapseOne(
+            aria-labelledby='headingOne'
+            data-bs-parent='#caseSensitivityAccordion'
+          )
             .accordion-body
-              p.
-                <strong>BERT-base-cased</strong> preserves capitalization, aiding tasks like NER, while <strong>BERT-base-uncased</strong>
-                generalizes better by ignoring case.
-                The uncased version was trained on lowercased text, making it inherently case-insensitive.
-                In contrast, the cased version preserves the original casing and can leverage capitalization cues.
-                This design choice leads to performance differences on various tasks.
-                For instance, <strong>BERT-base-cased</strong> might perform better on Named Entity Recognition where capitalization is crucial,
-                while <strong>BERT-base-uncased</strong> might generalize better for topic classification where the underlying meaning is less dependent on case.
+              p
+                strong BERT-base-cased
+                |  preserves capitalization, aiding tasks like NER, while
+                strong BERT-base-uncased
+                |  generalizes better by ignoring case.
+                | The uncased version was trained on lowercased text, making it inherently case-insensitive.
+                | In contrast, the cased version preserves the original casing and can leverage capitalization cues.
+                | This design choice leads to performance differences on various tasks.
+                | For instance,
+                strong BERT-base-cased
+                |  might perform better on Named Entity Recognition where capitalization is crucial,
+                | while
+                strong BERT-base-uncased
+                |  might generalize better for topic classification where the underlying meaning is less dependent on case.
 
         .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTwo') GPT and Decoder Models
-          .accordion-collapse.collapse#collapseTwo
+          h3.accordion-header#headingTwo
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseTwo'
+              aria-expanded='false'
+              aria-controls='collapseTwo'
+            )
+              i.bi.bi-arrow-clockwise.me-2
+              | GPT and Decoder Models
+          .accordion-collapse.collapse#collapseTwo(
+            aria-labelledby='headingTwo'
+            data-bs-parent='#caseSensitivityAccordion'
+          )
             .accordion-body
-              p.
-                GPT models (e.g., GPT-2, GPT-3) use case-sensitive BPE tokenization, yet show robustness to noisy input due to their training data scale.
-                Models in the GPT family utilize byte-pair encoding (BPE) tokenization without lowercasing,
-                making them inherently case-sensitive. They assign different token IDs even for the same word with different
-                casing (e.g., "Hello" vs. "hello").
-                Despite this sensitivity, research suggests that decoder-only LLMs like GPT-2 can be relatively robust to noisy case changes,
-                potentially due to their extensive training data and byte-level BPE handling variations smoothly
-        .accordion-item
-          span.accordion-header
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseThree') Other Transformers
-          .accordion-collapse.collapse#collapseThree
-            .accordion-body
-              p.
-                Many modern Transformers (RoBERTa, XLNet, T5) retain case information by default, impacting their categorization behaviors depending on the task.
-                They typically retain case by default through subword tokenization or byte encodings.
-                However, older models or those explicitly trained with case normalization (like some LSTM-based classifiers) will be case-insensitive.
+              p
+                | GPT models (e.g., GPT-2, GPT-3) use case-sensitive BPE tokenization, yet show robustness to noisy input due to their training data scale.
+                | Models in the GPT family utilize byte-pair encoding (BPE) tokenization without lowercasing,
+                | making them inherently case-sensitive. They assign different token IDs even for the same word with different
+                | casing (e.g., "Hello" vs. "hello").
+                | Despite this sensitivity, research suggests that decoder-only LLMs like GPT-2 can be relatively robust to noisy case changes,
+                | potentially due to their extensive training data and byte-level BPE handling variations smoothly.
 
-      h2.mb-3 Impact on Specific Categorization Tasks
-      .row
-        .col-md-6
-          .card
+        .accordion-item
+          h3.accordion-header#headingThree
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseThree'
+              aria-expanded='false'
+              aria-controls='collapseThree'
+            )
+              i.bi.bi-diagram-3.me-2
+              | Other Transformers
+          .accordion-collapse.collapse#collapseThree(
+            aria-labelledby='headingThree'
+            data-bs-parent='#caseSensitivityAccordion'
+          )
+            .accordion-body
+              p
+                | Many modern Transformers (RoBERTa, XLNet, T5) retain case information by default, impacting their categorization behaviors depending on the task.
+                | They typically retain case by default through subword tokenization or byte encodings.
+                | However, older models or those explicitly trained with case normalization (like some LSTM-based classifiers) will be case-insensitive.
+
+    //- Tasks Section
+    section#tasks.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-list-task.me-2
+          | Impact on Specific Categorization Tasks
+
+      .row.g-4
+        .col-lg-6
+          .card.h-100.border-info
+            .card-header.bg-info.text-white
+              h4.card-title.mb-0
+                i.bi.bi-emoji-smile.me-2
+                | Sentiment Analysis
             .card-body
-              h3.card-title Sentiment Analysis
-              p.card-text.
-                Casing enhances sentiment detection by preserving cues like all-caps emphasis (e.g., "AMAZING!").
-                While the core sentiment often resides in the words themselves,
-                casing can carry subtle sentiment cues. For example, all-caps words like "AMAZING!" can indicate intensified emotion.
-                Lowercasing everything would lose this emphasis.
-                Some sentiment analysis systems even explicitly boost sentiment intensity for all-caps words.
-                Therefore, preserving case might be beneficial for sentiment classifiers to capture these nuances.
-                However, one must also be aware that uncommon all-caps words might be split into subwords, which the model then needs to interpret.
+              p.card-text
+                | Casing enhances sentiment detection by preserving cues like all-caps emphasis (e.g., "AMAZING!").
+                | While the core sentiment often resides in the words themselves,
+                | casing can carry subtle sentiment cues. For example, all-caps words like "AMAZING!" can indicate intensified emotion.
+                | Lowercasing everything would lose this emphasis.
+              p.card-text
+                | Some sentiment analysis systems even explicitly boost sentiment intensity for all-caps words.
+                | Therefore, preserving case might be beneficial for sentiment classifiers to capture these nuances.
+                | However, one must also be aware that uncommon all-caps words might be split into subwords, which the model then needs to interpret.
 
-        .col-md-6
-          .card
+        .col-lg-6
+          .card.h-100.border-warning
+            .card-header.bg-warning.text-dark
+              h4.card-title.mb-0
+                i.bi.bi-tags.me-2
+                | Topic Classification
             .card-body
-              h3.card-title Topic Classification
-              p.card-text.
-                Case sensitivity helps identify acronyms and proper nouns ("WHO" vs. "who"), critical in topic categorization.
-                Historically, making models case-insensitive was often considered acceptable, or even helpful, for topic classification,
-                as the difference between "inflation" and "Inflation" is usually insignificant for determining the topic.
-                Lowercasing can reduce data sparsity (treating "NASA" and "nasa" as the same).
-                However, case can be crucial for identifying domain-specific terms, acronyms,
-                and proper nouns that are strong indicators of a topic (e.g., "COVID-19", "UNICEF", "Python" vs. "python").
-                A case-sensitive model can differentiate between "who" (a pronoun) and "WHO" (World Health Organization).
-                Modern transformer models used for topic classification generally retain case and perform well
+              p.card-text
+                | Case sensitivity helps identify acronyms and proper nouns ("WHO" vs. "who"), critical in topic categorization.
+                | Historically, making models case-insensitive was often considered acceptable, or even helpful, for topic classification,
+                | as the difference between "inflation" and "Inflation" is usually insignificant for determining the topic.
+              p.card-text
+                | However, case can be crucial for identifying domain-specific terms, acronyms,
+                | and proper nouns that are strong indicators of a topic (e.g., "COVID-19", "UNICEF", "Python" vs. "python").
+                | A case-sensitive model can differentiate between "who" (a pronoun) and "WHO" (World Health Organization).
+                | Modern transformer models used for topic classification generally retain case and perform well.
 
-      h2.mb-3 Ensuring Robustness to Varying Input Case
+    //- Robustness Section
+    section#robustness.mb-5
+
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-shield-check.me-2
+          | Ensuring Robustness to Varying Input Case
+
+      .card.border-success.mb-4
+        .card-header.bg-success.text-white
+          h4.card-title.mb-0
+            i.bi.bi-gear.me-2
+            | Best Practices for Robust Models
+        .card-body
+          ul.list-unstyled.mb-0
+            li.mb-2
+              i.bi.bi-check-circle.text-success.me-2
+              | For robust agents, employ data augmentation with mixed-case samples
+            li.mb-2
+              i.bi.bi-check-circle.text-success.me-2
+              | Experiment with both cased and uncased preprocessing depending on task needs
+            li.mb-2
+              i.bi.bi-check-circle.text-success.me-2
+              | Use data augmentation with mixed-case examples during training
+            li
+              i.bi.bi-check-circle.text-success.me-2
+              | Evaluate model performance with both original-cased and lowercased input
+
       p.
-        For robust agents, employ data augmentation with mixed-case samples.
-        Experiment with both cased and uncased preprocessing depending on task needs.
         Ideally, a categorization agent should be robust to variations in user input case,
         including titles in all caps or random capitalization.
         If a model was primarily trained on well-cased text, it might misinterpret oddly cased input.
         Strategies to address this include data augmentation with mixed-case examples during training.
         For critical applications, it might be necessary to experiment with both case-sensitive and case-insensitive preprocessing
         or even use additional features to explicitly capture information lost through normalization.
-      h2.mb-3 Conclusion
-      p.
-        Input case significantly impacts LLM categorization agents by influencing the tokenization process.
-        Case-sensitive tokenization preserves potential nuances but can lead to different tokens for the same word with different casing,
-        potentially altering the model's internal representation and categorization output.
-        Different LLM architectures exhibit varying degrees of case sensitivity based on their tokenizers and training.
-        The importance of preserving case depends on the specific categorization task;
-        it can be beneficial for capturing sentiment intensity and distinguishing topic-defining acronyms and proper nouns,
-        but might be less critical for general topic identification.
-      p.
-        Ultimately, understanding your model's tokenizer, the role of case in your specific categorization task,
-        and experimenting with different preprocessing approaches are key to building reliable
-        and robust LLM-based categorization agents. Evaluating your model's performance with both original-cased
-        and lowercased input can reveal its sensitivity to case changes and guide you in making informed decisions about text preprocessing
 
-      //- Glossary Section
-      h2.mt-5.mb-3 Glossary of Key Terms
-      .accordion#glossaryAccordion
+    //- Conclusion Section
+    section#conclusion.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-check-circle.me-2
+          | Conclusion
+
+      .row.g-4.mb-4
+        .col-lg-6
+          .card.border-primary.h-100
+            .card-header.bg-primary.text-white
+              h4.card-title.mb-0
+                i.bi.bi-key.me-2
+                | Key Findings
+            .card-body
+              p.card-text
+                | Input case significantly impacts LLM categorization agents by influencing the tokenization process.
+                | Case-sensitive tokenization preserves potential nuances but can lead to different tokens for the same word with different casing,
+                | potentially altering the model's internal representation and categorization output.
+              p.card-text.mb-0
+                | Different LLM architectures exhibit varying degrees of case sensitivity based on their tokenizers and training.
+
+        .col-lg-6
+          .card.border-success.h-100
+            .card-header.bg-success.text-white
+              h4.card-title.mb-0
+                i.bi.bi-lightbulb.me-2
+                | Practical Implications
+            .card-body
+              p.card-text
+                | The importance of preserving case depends on the specific categorization task;
+                | it can be beneficial for capturing sentiment intensity and distinguishing topic-defining acronyms and proper nouns,
+                | but might be less critical for general topic identification.
+
+      .alert.alert-info.border-0.shadow-sm
+        .d-flex
+          i.bi.bi-info-circle.fs-4.text-info.me-3.flex-shrink-0
+          div
+            h5.alert-heading.mb-2 Final Recommendations
+            p.mb-0
+              | Ultimately, understanding your model's tokenizer, the role of case in your specific categorization task,
+              | and experimenting with different preprocessing approaches are key to building reliable
+              | and robust LLM-based categorization agents. Evaluating your model's performance with both original-cased
+              | and lowercased input can reveal its sensitivity to case changes and guide you in making informed decisions about text preprocessing.
+
+    //- Glossary Section
+    section#glossary.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-book.me-2
+          | Glossary of Key Terms
+
+      .accordion#glossaryAccordion.shadow-sm
         .accordion-item
           h2.accordion-header#glossaryLLM
             button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseLLM') Large Language Model (LLM)
