@@ -346,3 +346,70 @@ mark {
     margin-left: 1rem;
   }
 }
+
+// Modern Forced Colors Mode Support (replaces deprecated -ms-high-contrast)
+// This ensures compatibility with Windows High Contrast mode and other forced color modes
+@media (forced-colors: active) {
+  .card {
+    border: 1px solid !important;
+  }
+
+  .btn {
+    border: 1px solid !important;
+  }
+
+  .alert {
+    border: 1px solid !important;
+  }
+
+  .navbar {
+    border-bottom: 1px solid !important;
+  }
+
+  // Ensure sufficient contrast for interactive elements
+  .btn-outline-primary,
+  .btn-outline-secondary,
+  .btn-outline-success,
+  .btn-outline-info,
+  .btn-outline-warning,
+  .btn-outline-danger {
+    border: 2px solid !important;
+  }
+
+  // Make sure focus indicators are visible
+  .btn:focus,
+  .form-control:focus,
+  .form-select:focus {
+    outline: 2px solid !important;
+    outline-offset: 2px;
+  }
+
+  // Ensure accordion and dropdown indicators are visible
+  .accordion-button::after,
+  .dropdown-toggle::after {
+    border-color: transparent !important;
+    border-top-color: CanvasText !important;
+  }
+
+  // Override any background gradients that might not work in forced colors
+  .bg-gradient-primary,
+  .bg-gradient-secondary,
+  .bg-gradient-success,
+  .bg-gradient-info,
+  .bg-gradient-warning,
+  .bg-gradient-danger {
+    background: Canvas !important;
+    color: CanvasText !important;
+    border: 1px solid !important;
+  }
+}
+
+// Suppress -ms-high-contrast deprecation warnings by providing modern equivalents
+// This helps future-proof the site as browsers transition to forced-colors
+@supports (forced-colors: active) {
+  // Ensure any legacy high contrast styles are properly overridden
+  * {
+    // Reset any potential -ms-high-contrast inherited styles
+    -ms-high-contrast-adjust: auto;
+  }
+}

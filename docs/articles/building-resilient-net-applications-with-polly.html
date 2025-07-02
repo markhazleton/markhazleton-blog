@@ -1,46 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Essential Meta Tags-->
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mark Hazleton" />
-        <meta name="robots" content="index, follow" />
-        <title>Building Resilient Applications with Polly</title>
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" content="#2c3e50" />
+        <!-- Page-specific metadata block-->
+        <title>Building Resilient .NET Applications with Polly</title>
         <meta name="description" content="Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively." />
         <meta name="keywords" content="Polly, .NET, HttpClient, resilience, retries, timeouts, transient faults, robust applications, C#, ASP.NET, error handling, .NET programming" />
         <meta name="author" content="Mark Hazleton" />
+        <!-- Default canonical (can be overridden)-->
         <link rel="canonical" href="https://markhazleton.com/articles/building-resilient-net-applications-with-polly.html" />
+        <!-- Open Graph Meta Tags (defaults)-->
+        <meta property="og:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta property="og:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://markhazleton.com/" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <meta property="og:site_name" content="Mark Hazleton" />
+        <meta property="og:locale" content="en_US" />
+        <!-- Additional Open Graph overrides-->
+        <meta property="og:title" content="Building Resilient .NET Applications with Polly" />
+        <meta property="og:description" content="Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively." />
+        <meta property="og:url" content="https://markhazleton.com/articles/building-resilient-net-applications-with-polly.html" />
+        <meta property="og:type" content="article" />
+        <!-- Twitter Card Meta Tags (defaults)-->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@markhazleton" />
+        <meta name="twitter:creator" content="@markhazleton" />
+        <meta name="twitter:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta name="twitter:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta name="twitter:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <!-- Additional Twitter Card overrides-->
+        <meta name="twitter:title" content="Building Resilient .NET Applications with Polly" />
+        <meta name="twitter:description" content="Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively." />
+        <!-- Performance optimization - No external CDN dependencies-->
+        <!-- Favicon and app icons-->
         <link rel="shortcut icon" href="/assets/img/favicon.ico" />
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "Person",
-                "name": "Mark Hazleton",
-                "familyName": "Hazleton",
-                "givenName": "Mark",
-                "jobTitle": "Solutions Architect",
-                "alumniOf": "University of North Texas",
-                "affiliation": {
-                    "@type": "Organization",
-                    "name": "Control Origins"
-                },
-                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
-                "url": "https://markhazleton.com"
-            }
-        </script>
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
+        <link href="/css/modern-styles.css" rel="stylesheet" />
+        <!-- Enhanced JSON-LD Structured Data for SEO-->
         <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
-                "@type": "Organization",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "givenName": "Mark",
+                "familyName": "Hazleton",
+                "jobTitle": "Solutions Architect",
+                "description": "Solutions Architect passionate for solutions which make technology work for business",
                 "url": "https://markhazleton.com",
-                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/@MarkHazleton"],
+                "knowsAbout": [".NET Framework", "ASP.NET Core", "Microsoft Azure", "Project Management", "Web Development", "Solution Architecture", "Software Engineering", "Cloud Computing", "Artificial Intelligence", "Machine Learning"],
+                "alumniOf": {
+                    "@type": "Organization",
+                    "name": "University of North Texas"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Wichita",
+                    "addressRegion": "KS",
+                    "addressCountry": "US"
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/"
+                }
             }
         </script>
-        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- No external font dependencies - using system fonts-->
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=20250702" />
+        <!-- Additional structured data for specific pages-->
+        <!-- Additional page-specific CSS-->
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -51,249 +99,430 @@
             gtag('js', new Date());
             gtag('config', 'G-L8GVZNDH0B');
         </script>
-        <script>
-            (function (c, l, a, r, i, t, y) {
-                c[a] =
-                    c[a] ||
-                    function () {
-                        (c[a].q = c[a].q || []).push(arguments);
-                    };
-                t = l.createElement(r);
-                t.async = 1;
-                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
-                y = l.getElementsByTagName(r)[0];
-                y.parentNode.insertBefore(t, y);
-            })(window, document, 'clarity', 'script', 'd628hovv63');
-        </script>
     </head>
-    <body class="sidetracked-body" id="page-top">
-        <nav class="navbar navbar-dark bg-primary p-1">
-            <div class="container-fluid justify-content-end">
-                <div class="social-icons d-flex">
-                    <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram text-light" style="font-size: 2rem"></i></a>
-                </div>
-            </div>
-        </nav>
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
-                <span class="d-block d-lg-none">Mark Hazleton</span>
-                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon">#navbarResponsive.collapse.navbar-collapse</span>
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/articles.html">Articles</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
-                </ul>
-                <!-- Search Box (for larger screens)-->
-                <div class="d-none d-lg-flex ms-auto">
-                    <form class="d-flex" onsubmit="return searchArticles(event)">
+    <body>
+        // Navigation
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Main navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/#" aria-label="Mark Hazleton homepage">Mark Hazleton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/#about" aria-current="page">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#experience">Experience</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
+                    </ul>
+                    <!-- Search Box - Inside collapsible navbar-->
+                    <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event)">
                         <div class="input-group search-box">
                             <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
                             <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
+                    <!-- Social Icons - Inside collapsible navbar-->
+                    <div class="d-flex social-icons">
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
-            </button>
+            </div>
         </nav>
-        <!-- Page Content-->
-        <div class="container-fluid p-0 painteddesert-background">
-            <article class="painteddesert-section painteddesert-section-background" id="post">
-                <div class="painteddesert-section-content">
-                    <h1>Building Resilient Applications</h1>
-                    <p class="subheading mb-3">Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.</p>
-                    <p class="fw-bold text-primary text-center bg-primary text-white"><a class="fw-bold text-primary text-center bg-primary text-white" href="https://github.com/markhazleton/webspark" target="_blank" title="The full source code for the Async Demo Application is available on GitHub">The full source code for the Async Demo Application is available on GitHub</a></p>
-                    <dl>
-                        <dt class="fs-4">Introduction</dt>
-                        <dd class="mt-2">
-                            <p>In modern .NET applications, making HTTP calls to remote services is a common task. However, network instability, transient errors, and service timeouts are challenges that developers must handle effectively.</p>
-                            <p>This article provides a comprehensive guide on how to use Polly, a .NET resilience and transient-fault-handling library, in combination with `CancellationToken` to enhance the robustness of your HTTP calls with `HttpClient`. We'll walk through practical examples and explain the concepts in detail.</p>
-                        </dd>
-                        <dt class="fs-4">What Does Resilient Mean in a Web Application?</dt>
-                        <dd class="mt-2">
-                            <p>Resilience in the context of a web application refers to the ability of the application to maintain acceptable service levels despite facing various challenges, such as faults, failures, or unexpected loads. A resilient web application is designed to handle disruptions gracefully, recover quickly, and continue providing reliable service to users.</p>
-                            <p>In modern web development, resilience is crucial because web applications often rely on multiple external services, APIs, and infrastructure components. These dependencies can introduce potential points of failure that, if not handled properly, can degrade the user experience or even cause the application to become unavailable.</p>
-                            <h3 class="mt-4">Examples of Resilience in Web Applications</h3>
-                            <p>Here are some key aspects of resilience in web applications, along with examples of how they can be implemented:</p>
-                            <div class="accordion" id="resilienceExamples">
-                                <div class="accordion-item">
-                                    <span class="accordion-header" id="headingOne"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Handling Transient Faults</button></span>
-                                    <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#resilienceExamples">
-                                        <div class="accordion-body">
-                                            <p>Transient faults are temporary issues, such as network timeouts, that can resolve themselves if the operation is retried. A resilient application detects these faults and automatically retries the failed operation instead of immediately returning an error to the user.</p>
-                                            <p>For example, suppose your web application relies on an external API to fetch data. If the API request fails due to a network glitch, a resilient application would use a retry policy (such as one provided by Polly) to retry the request after a brief delay, improving the chances of success without requiring user intervention.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <span class="accordion-header" id="headingTwo"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Implementing Circuit Breakers</button></span>
-                                    <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#resilienceExamples">
-                                        <div class="accordion-body">
-                                            <p>A circuit breaker pattern is another important concept in building resilient applications. It prevents an application from repeatedly trying to perform an operation that is likely to fail, thereby protecting the application from overloading itself or the external service.</p>
-                                            <p>For instance, if a third-party service your application depends on becomes unresponsive, the circuit breaker can detect the repeated failures and temporarily stop sending requests to the service. During this "open" state, the application can return a fallback response to users, or it can serve cached data until the service becomes responsive again.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <span class="accordion-header" id="headingThree"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Graceful Degradation</button></span>
-                                    <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#resilienceExamples">
-                                        <div class="accordion-body">
-                                            <p>Graceful degradation is the practice of designing an application to continue functioning in a reduced capacity if a part of it fails. This ensures that users can still perform essential tasks, even if some features are temporarily unavailable.</p>
-                                            <p>Consider an e-commerce website that relies on multiple microservices: one for user authentication, another for payment processing, and yet another for product recommendations. If the product recommendation service becomes unavailable, a resilient application would still allow users to browse products and complete purchases, but without personalized recommendations.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <span class="accordion-header" id="headingFour"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Rate Limiting and Throttling</button></span>
-                                    <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#resilienceExamples">
-                                        <div class="accordion-body">
-                                            <p>Resilience also involves protecting your application from being overwhelmed by excessive requests, whether intentional (such as a DDoS attack) or unintentional (such as a sudden surge in traffic). Rate limiting and throttling are techniques used to control the number of requests your application processes over a specific period.</p>
-                                            <p>For example, if your web application provides an API for public use, you can implement rate limiting to ensure that no single client can overwhelm your servers with too many requests in a short time. This helps maintain service availability for all users, even during traffic spikes.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <span class="accordion-header" id="headingFive"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Timeout Management</button></span>
-                                    <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#resilienceExamples">
-                                        <div class="accordion-body">
-                                            <p>In a distributed system, it's common to interact with external services that may be slow to respond or may not respond at all. To prevent your application from hanging indefinitely, it's important to implement timeouts that define how long your application should wait for a response before considering the operation a failure.</p>
-                                            <p>For instance, when making an HTTP request to an external API, setting a timeout ensures that your application can fail fast and handle the situation appropriately, such as by retrying the request, returning a cached response, or notifying the user of the delay.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <span class="accordion-header" id="headingSix"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Health Monitoring and Self-Healing</button></span>
-                                    <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#resilienceExamples">
-                                        <div class="accordion-body">
-                                            <p>Resilient applications continuously monitor their own health and the health of their dependencies. When an issue is detected, the application can take corrective actions, such as restarting a failed service or rerouting traffic to a healthy instance.</p>
-                                            <p>An example of this is a cloud-based web application that uses auto-scaling to maintain performance during traffic spikes. If one server instance becomes unresponsive, the application can automatically spin up a new instance and redirect traffic, ensuring that users experience minimal disruption.</p>
-                                        </div>
-                                    </div>
+        <section class="bg-light py-5" id="hero">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <header>
+                            <h1 class="display-4 fw-bold text-primary">
+                                <i class="bi bi-shield-check me-3"></i>
+                                Building Resilient .NET Applications with Polly
+                            </h1>
+                            <h2 class="h4 text-muted mb-4">Master fault tolerance and resilience patterns in .NET development</h2>
+                        </header>
+                        <div class="lead mb-4">Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively with practical examples and comprehensive explanations.</div>
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            <div class="badge bg-primary text-white">Polly</div>
+                            <div class="badge bg-secondary text-white">.NET</div>
+                            <div class="badge bg-success text-white">HttpClient</div>
+                            <div class="badge bg-info text-white">Resilience</div>
+                            <div class="badge bg-warning text-dark">Fault Tolerance</div>
+                        </div>
+                        <div class="alert alert-primary border-0 shadow-sm">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-github fs-4 text-primary me-3 flex-shrink-0"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-2">Source Code Repository</h5>
+                                    <p class="mb-0">
+                                        The full source code for the Async Demo Application is available on
+                                        <a class="fw-bold" href="https://github.com/markhazleton/webspark" target="_blank" title="The full source code for the Async Demo Application is available on GitHub">GitHub</a>
+                                        . This repository contains comprehensive examples demonstrating resilience patterns with Polly.
+                                    </p>
                                 </div>
                             </div>
-                            <p>Resilience in the context of a web application refers to the ability of the application to maintain acceptable service levels in the face of faults, failures, and other challenges. A resilient web application can recover from unexpected issues, such as network outages or server downtime, without significant impact on user experience.</p>
-                            <p>In practical terms, a resilient application gracefully handles transient errors, retries failed operations intelligently, and ensures that services continue to function as expected, even under adverse conditions. Implementing resilience involves using techniques like retry policies, circuit breakers, and timeouts to prevent small failures from escalating into larger issues.</p>
-                            <p>By incorporating resilience strategies, web applications can better withstand the challenges of real-world operation, such as network failures, service outages, and unexpected traffic surges. A resilient web application not only improves user satisfaction by minimizing downtime and disruptions but also enhances the overall reliability and robustness of the system.</p>
-                        </dd>
-                        <dt class="fs-4">What is HttpClient?</dt>
-                        <dd class="mt-2">
-                            <p>The `HttpClient` class in .NET is a powerful tool for sending HTTP requests and receiving HTTP responses from a resource identified by a URI. It is often used for accessing RESTful services.</p>
-                            <p>`HttpClient` is designed to be reusable and thread-safe. To avoid socket exhaustion, it's recommended to instantiate `HttpClient` once and reuse it throughout the application lifecycle.</p>
-                            <ul>
-                                <li><a href="https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient" target="_blank">Microsoft Documentation</a></li>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="bi bi-arrow-repeat display-1 text-success mb-3"></i>
+                                <h5 class="card-title">Polly + .NET</h5>
+                                <p class="card-text text-muted">Building fault-tolerant applications</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container my-5">
+            <section class="mb-5" id="introduction">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Introduction
+                    </h2>
+                </header>
+                <div class="card border-primary shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-cloud-arrow-up me-2"></i>
+                            Modern .NET HTTP Challenges
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">In modern .NET applications, making HTTP calls to remote services is a common task. However, network instability, transient errors, and service timeouts are challenges that developers must handle effectively.</p>
+                        <p class="card-text">This article provides a comprehensive guide on how to use Polly, a .NET resilience and transient-fault-handling library, in combination with `CancellationToken` to enhance the robustness of your HTTP calls with `HttpClient`. We'll walk through practical examples and explain the concepts in detail.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="resilience-concepts">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-shield-check me-2"></i>
+                        What Does Resilient Mean in a Web Application?
+                    </h2>
+                </header>
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-gear-wide-connected me-2"></i>
+                            Resilience Definition
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Resilience in the context of a web application refers to the ability of the application to maintain acceptable service levels despite facing various challenges, such as faults, failures, or unexpected loads. A resilient web application is designed to handle disruptions gracefully, recover quickly, and continue providing reliable service to users.</p>
+                        <p class="card-text">In modern web development, resilience is crucial because web applications often rely on multiple external services, APIs, and infrastructure components. These dependencies can introduce potential points of failure that, if not handled properly, can degrade the user experience or even cause the application to become unavailable.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="resilience-examples">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-diagram-3 me-2"></i>
+                        Examples of Resilience in Web Applications
+                    </h2>
+                </header>
+                <p class="lead mb-4">Here are some key aspects of resilience in web applications, along with examples of how they can be implemented:</p>
+                <div class="accordion mb-4" id="resilienceExamples">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <i class="bi bi-arrow-repeat me-2"></i>
+                                Handling Transient Faults
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#resilienceExamples">
+                            <div class="accordion-body">
+                                <p>Transient faults are temporary issues, such as network timeouts, that can resolve themselves if the operation is retried. A resilient application detects these faults and automatically retries the failed operation instead of immediately returning an error to the user.</p>
+                                <p>For example, suppose your web application relies on an external API to fetch data. If the API request fails due to a network glitch, a resilient application would use a retry policy (such as one provided by Polly) to retry the request after a brief delay, improving the chances of success without requiring user intervention.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="bi bi-lightning-charge me-2"></i>
+                                Implementing Circuit Breakers
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#resilienceExamples">
+                            <div class="accordion-body">
+                                <p>A circuit breaker pattern is another important concept in building resilient applications. It prevents an application from repeatedly trying to perform an operation that is likely to fail, thereby protecting the application from overloading itself or the external service.</p>
+                                <p>For instance, if a third-party service your application depends on becomes unresponsive, the circuit breaker can detect the repeated failures and temporarily stop sending requests to the service. During this "open" state, the application can return a fallback response to users, or it can serve cached data until the service becomes responsive again.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <i class="bi bi-layers me-2"></i>
+                                Graceful Degradation
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#resilienceExamples">
+                            <div class="accordion-body">
+                                <p>Graceful degradation is the practice of designing an application to continue functioning in a reduced capacity if a part of it fails. This ensures that users can still perform essential tasks, even if some features are temporarily unavailable.</p>
+                                <p>Consider an e-commerce website that relies on multiple microservices: one for user authentication, another for payment processing, and yet another for product recommendations. If the product recommendation service becomes unavailable, a resilient application would still allow users to browse products and complete purchases, but without personalized recommendations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <i class="bi bi-speedometer me-2"></i>
+                                Rate Limiting and Throttling
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#resilienceExamples">
+                            <div class="accordion-body">
+                                <p>Resilience also involves protecting your application from being overwhelmed by excessive requests, whether intentional (such as a DDoS attack) or unintentional (such as a sudden surge in traffic). Rate limiting and throttling are techniques used to control the number of requests your application processes over a specific period.</p>
+                                <p>For example, if your web application provides an API for public use, you can implement rate limiting to ensure that no single client can overwhelm your servers with too many requests in a short time. This helps maintain service availability for all users, even during traffic spikes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                <i class="bi bi-clock me-2"></i>
+                                Timeout Management
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#resilienceExamples">
+                            <div class="accordion-body">
+                                <p>In a distributed system, it's common to interact with external services that may be slow to respond or may not respond at all. To prevent your application from hanging indefinitely, it's important to implement timeouts that define how long your application should wait for a response before considering the operation a failure.</p>
+                                <p>For instance, when making an HTTP request to an external API, setting a timeout ensures that your application can fail fast and handle the situation appropriately, such as by retrying the request, returning a cached response, or notifying the user of the delay.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingSix">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                <i class="bi bi-heart-pulse me-2"></i>
+                                Health Monitoring and Self-Healing
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#resilienceExamples">
+                            <div class="accordion-body">
+                                <p>Resilient applications continuously monitor their own health and the health of their dependencies. When an issue is detected, the application can take corrective actions, such as restarting a failed service or rerouting traffic to a healthy instance.</p>
+                                <p>An example of this is a cloud-based web application that uses auto-scaling to maintain performance during traffic spikes. If one server instance becomes unresponsive, the application can automatically spin up a new instance and redirect traffic, ensuring that users experience minimal disruption.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info border-0 shadow-sm mb-4">
+                    <div class="d-flex">
+                        <i class="bi bi-info-circle fs-4 text-info me-3 flex-shrink-0"></i>
+                        <div>
+                            <h5 class="alert-heading mb-2">Key Resilience Principles</h5>
+                            <p class="mb-0">By incorporating resilience strategies, web applications can better withstand the challenges of real-world operation, such as network failures, service outages, and unexpected traffic surges. A resilient web application not only improves user satisfaction by minimizing downtime and disruptions but also enhances the overall reliability and robustness of the system.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="httpclient">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-globe me-2"></i>
+                        Understanding HttpClient
+                    </h2>
+                </header>
+                <div class="card border-info shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-arrow-left-right me-2"></i>
+                            .NET HttpClient Overview
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">The `HttpClient` class in .NET is a powerful tool for sending HTTP requests and receiving HTTP responses from a resource identified by a URI. It is often used for accessing RESTful services.</p>
+                        <p class="card-text">`HttpClient` is designed to be reusable and thread-safe. To avoid socket exhaustion, it's recommended to instantiate `HttpClient` once and reuse it throughout the application lifecycle.</p>
+                        <div class="mt-3">
+                            <h6 class="fw-bold">Resources:</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <i class="bi bi-link-45deg me-2"></i>
+                                    <a class="text-decoration-none" href="https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient" target="_blank">Microsoft Documentation</a>
+                                </li>
                             </ul>
-                        </dd>
-                        <dt class="fs-4">Understanding Polly</dt>
-                        <dd class="mt-2">
-                            <p>Polly is a .NET library that provides resilience and transient-fault-handling capabilities. It allows you to define policies such as retries, circuit breakers, and timeouts for your operations, making your application more resilient to transient errors.</p>
-                            <p>In this guide, we will focus on the Retry policy, which allows you to retry an operation in case of failure, with customizable retry logic including exponential backoff and jitter (random delay).</p>
-                            <ul>
-                                <li><a href="https://github.com/App-vNext/Polly" target="_blank">Polly GitHub Repository</a></li>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="polly">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-arrow-repeat me-2"></i>
+                        Understanding Polly
+                    </h2>
+                </header>
+                <div class="card border-warning shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-shield-fill-check me-2"></i>
+                            Polly Resilience Library
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Polly is a .NET library that provides resilience and transient-fault-handling capabilities. It allows you to define policies such as retries, circuit breakers, and timeouts for your operations, making your application more resilient to transient errors.</p>
+                        <p class="card-text">In this guide, we will focus on the Retry policy, which allows you to retry an operation in case of failure, with customizable retry logic including exponential backoff and jitter (random delay).</p>
+                        <div class="mt-3">
+                            <h6 class="fw-bold">Resources:</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <i class="bi bi-github me-2"></i>
+                                    <a class="text-decoration-none" href="https://github.com/App-vNext/Polly" target="_blank">Polly GitHub Repository</a>
+                                </li>
                             </ul>
-                        </dd>
-                        <dt class="fs-4">Using CancellationToken</dt>
-                        <dd class="mt-2">
-                            <p>A `CancellationToken` is a struct in .NET that propagates notifications that operations should be canceled. It's used to gracefully stop operations that are taking too long or when a user or system requests a cancellation.</p>
-                            <p>`CancellationTokenSource` is used to create a `CancellationToken` and can signal the token to cancel the associated operation.</p>
-                            <ul>
-                                <li><a href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken" target="_blank">Microsoft Documentation</a></li>
-                                <li><a href="/cancellation-token.html" target="_self">Understanding CancellationToken in .NET</a></li>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="cancellation-token">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-stop-circle me-2"></i>
+                        Using CancellationToken
+                    </h2>
+                </header>
+                <div class="card border-danger shadow-sm mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-x-octagon me-2"></i>
+                            Graceful Operation Cancellation
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">A `CancellationToken` is a struct in .NET that propagates notifications that operations should be canceled. It's used to gracefully stop operations that are taking too long or when a user or system requests a cancellation.</p>
+                        <p class="card-text">`CancellationTokenSource` is used to create a `CancellationToken` and can signal the token to cancel the associated operation.</p>
+                        <div class="mt-3">
+                            <h6 class="fw-bold">Resources:</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <i class="bi bi-link-45deg me-2"></i>
+                                    <a class="text-decoration-none" href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken" target="_blank">Microsoft Documentation</a>
+                                </li>
+                                <li>
+                                    <i class="bi bi-file-earmark-text me-2"></i>
+                                    <a class="text-decoration-none" href="/cancellation-token.html" target="_self">Understanding CancellationToken in .NET</a>
+                                </li>
                             </ul>
-                        </dd>
-                        <dt class="fs-4">Example: Implementing MockResults Class</dt>
-                        <dd class="mt-2">
-                            <p>The `MockResults` class represents the outcome of a mock operation, including the loop count, maximum time allowed, actual runtime, and any return messages or values. It is used to encapsulate the input parameters and results of a mock operation, demonstrating long-running tasks with timeout handling.</p>
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MockResults</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="implementation">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-code-slash me-2"></i>
+                        Implementation Examples
+                    </h2>
+                </header>
+                <div class="card border-secondary shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-file-earmark-code me-2"></i>
+                            MockResults Class Implementation
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">The `MockResults` class represents the outcome of a mock operation, including the loop count, maximum time allowed, actual runtime, and any return messages or values. It is used to encapsulate the input parameters and results of a mock operation, demonstrating long-running tasks with timeout handling.</p>
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MockResults</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> LoopCount <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> MaxTimeMS <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">long</span><span class="token punctuation">?</span></span> RunTimeMS <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> Message <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token string">"init"</span><span class="token punctuation">;</span>
   <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> ResultValue <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token string">"empty"</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-                        </dd>
-                        <dt class="fs-4">Example: Creating the RemoteController Class</dt>
-                        <dd class="mt-2">
-                            <p>The `RemoteController` class simulates a remote API service that performs a long-running task. This controller demonstrates how to integrate `CancellationToken` into your operations to handle cancellations gracefully.</p>
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RemoteController</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BaseApiController</span></span>
+                    </div>
+                </div>
+                <div class="card border-info shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-server me-2"></i>
+                            RemoteController Class Implementation
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">The `RemoteController` class simulates a remote API service that performs a long-running task. This controller demonstrates how to integrate `CancellationToken` into your operations to handle cancellations gracefully.</p>
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RemoteController</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BaseApiController</span></span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>MockResults<span class="token punctuation">></span></span> <span class="token function">MockResultsAsync</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> loopCount<span class="token punctuation">,</span> <span class="token class-name">CancellationToken</span> cancellationToken<span class="token punctuation">)</span>
   <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>MockResults<span class="token punctuation">></span></span> <span class="token function">MockResultsAsync</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> loopCount<span class="token punctuation">,</span> <span class="token class-name">CancellationToken</span> cancellationToken<span class="token punctuation">)</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> returnMock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MockResults</span><span class="token punctuation">(</span>loopCount<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span>
     <span class="token punctuation">{</span>
-      <span class="token class-name"><span class="token keyword">var</span></span> returnMock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MockResults</span><span class="token punctuation">(</span>loopCount<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">try</span>
-      <span class="token punctuation">{</span>
-        <span class="token class-name"><span class="token keyword">var</span></span> result <span class="token operator">=</span> <span class="token keyword">await</span> _asyncMock<span class="token punctuation">.</span><span class="token function">LongRunningOperationWithCancellationTokenAsync</span><span class="token punctuation">(</span>loopCount<span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        returnMock<span class="token punctuation">.</span>Message <span class="token operator">=</span> <span class="token string">"Task Complete"</span><span class="token punctuation">;</span>
-        returnMock<span class="token punctuation">.</span>ResultValue <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-      <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">TaskCanceledException</span><span class="token punctuation">)</span>
-      <span class="token punctuation">{</span>
-        <span class="token keyword">throw</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-      <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
-      <span class="token punctuation">{</span>
-        returnMock<span class="token punctuation">.</span>Message <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Error: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">ex<span class="token punctuation">.</span>Message</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">;</span>
-        returnMock<span class="token punctuation">.</span>ResultValue <span class="token operator">=</span> <span class="token string">"-1"</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-      <span class="token keyword">return</span> returnMock<span class="token punctuation">;</span>
+      <span class="token class-name"><span class="token keyword">var</span></span> result <span class="token operator">=</span> <span class="token keyword">await</span> _asyncMock<span class="token punctuation">.</span><span class="token function">LongRunningOperationWithCancellationTokenAsync</span><span class="token punctuation">(</span>loopCount<span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      returnMock<span class="token punctuation">.</span>Message <span class="token operator">=</span> <span class="token string">"Task Complete"</span><span class="token punctuation">;</span>
+      returnMock<span class="token punctuation">.</span>ResultValue <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">TaskCanceledException</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      returnMock<span class="token punctuation">.</span>Message <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Error: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">ex<span class="token punctuation">.</span>Message</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">;</span>
+      returnMock<span class="token punctuation">.</span>ResultValue <span class="token operator">=</span> <span class="token string">"-1"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> returnMock<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
 
-    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">HttpPost</span></span><span class="token punctuation">]</span>
-    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Route</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"Results"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
-    <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>IActionResult<span class="token punctuation">></span></span> <span class="token function">GetResults</span><span class="token punctuation">(</span><span class="token class-name">MockResults</span> model<span class="token punctuation">)</span>
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">HttpPost</span></span><span class="token punctuation">]</span>
+  <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Route</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"Results"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>IActionResult<span class="token punctuation">></span></span> <span class="token function">GetResults</span><span class="token punctuation">(</span><span class="token class-name">MockResults</span> model<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> cts <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CancellationTokenSource</span><span class="token punctuation">(</span>TimeSpan<span class="token punctuation">.</span><span class="token function">FromMilliseconds</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> watch <span class="token operator">=</span> Stopwatch<span class="token punctuation">.</span><span class="token function">StartNew</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">MockResults<span class="token punctuation">?</span></span> result<span class="token punctuation">;</span>
+    <span class="token keyword">try</span>
     <span class="token punctuation">{</span>
-      <span class="token class-name"><span class="token keyword">var</span></span> cts <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CancellationTokenSource</span><span class="token punctuation">(</span>TimeSpan<span class="token punctuation">.</span><span class="token function">FromMilliseconds</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token class-name"><span class="token keyword">var</span></span> watch <span class="token operator">=</span> Stopwatch<span class="token punctuation">.</span><span class="token function">StartNew</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token class-name">MockResults<span class="token punctuation">?</span></span> result<span class="token punctuation">;</span>
-      <span class="token keyword">try</span>
-      <span class="token punctuation">{</span>
-        result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">MockResultsAsync</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>LoopCount<span class="token punctuation">,</span> cts<span class="token punctuation">.</span>Token<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        result<span class="token punctuation">.</span>MaxTimeMS <span class="token operator">=</span> model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-      <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">OperationCanceledException</span><span class="token punctuation">)</span>
-      <span class="token punctuation">{</span>
-        watch<span class="token punctuation">.</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MockResults</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>LoopCount<span class="token punctuation">,</span> model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">)</span>
-        <span class="token punctuation">{</span>
-          RunTimeMS <span class="token operator">=</span> watch<span class="token punctuation">.</span>ElapsedMilliseconds<span class="token punctuation">,</span>
-          Message <span class="token operator">=</span> <span class="token string">"Time Out Occurred"</span><span class="token punctuation">,</span>
-          ResultValue <span class="token operator">=</span> <span class="token string">"-1"</span>
-        <span class="token punctuation">}</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token function">StatusCode</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span>HttpStatusCode<span class="token punctuation">.</span>RequestTimeout<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-      <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
-      <span class="token punctuation">{</span>
-        watch<span class="token punctuation">.</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MockResults</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>LoopCount<span class="token punctuation">,</span> model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">)</span>
-        <span class="token punctuation">{</span>
-          RunTimeMS <span class="token operator">=</span> watch<span class="token punctuation">.</span>ElapsedMilliseconds<span class="token punctuation">,</span>
-          Message <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Error: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">ex<span class="token punctuation">.</span>Message</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">,</span>
-          ResultValue <span class="token operator">=</span> <span class="token string">"-1"</span>
-        <span class="token punctuation">}</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token function">StatusCode</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span>HttpStatusCode<span class="token punctuation">.</span>InternalServerError<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-      watch<span class="token punctuation">.</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      result<span class="token punctuation">.</span>RunTimeMS <span class="token operator">=</span> watch<span class="token punctuation">.</span>ElapsedMilliseconds<span class="token punctuation">;</span>
-      <span class="token keyword">return</span> <span class="token function">Ok</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">MockResultsAsync</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>LoopCount<span class="token punctuation">,</span> cts<span class="token punctuation">.</span>Token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      result<span class="token punctuation">.</span>MaxTimeMS <span class="token operator">=</span> model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-                        </dd>
-                        <dt class="fs-4">Example: Using Polly in the PollyController Class</dt>
-                        <dd class="mt-2">
-                            <p>The `PollyController` class demonstrates how to use Polly to implement retry logic with exponential backoff when making HTTP requests using `HttpClient`. Polly's retry policy is configured to handle transient errors, making the operation more resilient.</p>
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PollyController</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Controller</span></span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">OperationCanceledException</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      watch<span class="token punctuation">.</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MockResults</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>LoopCount<span class="token punctuation">,</span> model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        RunTimeMS <span class="token operator">=</span> watch<span class="token punctuation">.</span>ElapsedMilliseconds<span class="token punctuation">,</span>
+        Message <span class="token operator">=</span> <span class="token string">"Time Out Occurred"</span><span class="token punctuation">,</span>
+        ResultValue <span class="token operator">=</span> <span class="token string">"-1"</span>
+      <span class="token punctuation">}</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> <span class="token function">StatusCode</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span>HttpStatusCode<span class="token punctuation">.</span>RequestTimeout<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      watch<span class="token punctuation">.</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MockResults</span><span class="token punctuation">(</span>model<span class="token punctuation">.</span>LoopCount<span class="token punctuation">,</span> model<span class="token punctuation">.</span>MaxTimeMS<span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        RunTimeMS <span class="token operator">=</span> watch<span class="token punctuation">.</span>ElapsedMilliseconds<span class="token punctuation">,</span>
+        Message <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Error: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">ex<span class="token punctuation">.</span>Message</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">,</span>
+        ResultValue <span class="token operator">=</span> <span class="token string">"-1"</span>
+      <span class="token punctuation">}</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> <span class="token function">StatusCode</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span>HttpStatusCode<span class="token punctuation">.</span>InternalServerError<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    watch<span class="token punctuation">.</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>RunTimeMS <span class="token operator">=</span> watch<span class="token punctuation">.</span>ElapsedMilliseconds<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">Ok</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                    </div>
+                </div>
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-arrow-repeat me-2"></i>
+                            PollyController with Retry Logic
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">The `PollyController` class demonstrates how to use Polly to implement retry logic with exponential backoff when making HTTP requests using `HttpClient`. Polly's retry policy is configured to handle transient errors, making the operation more resilient.</p>
+                        <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PollyController</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Controller</span></span>
 <span class="token punctuation">{</span>
   <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">AsyncRetryPolicy<span class="token punctuation">&lt;</span>HttpResponseMessage<span class="token punctuation">></span></span> _httpIndexPolicy<span class="token punctuation">;</span>
   <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">HttpClient</span> _httpClient<span class="token punctuation">;</span>
+
   <span class="token keyword">public</span> <span class="token function">PollyController</span><span class="token punctuation">(</span><span class="token class-name">ILogger<span class="token punctuation">&lt;</span>PollyController<span class="token punctuation">></span></span> logger<span class="token punctuation">,</span> <span class="token class-name">IHttpClientFactory</span> clientFactory<span class="token punctuation">)</span>
   <span class="token punctuation">{</span>
     _httpClient <span class="token operator">=</span> clientFactory<span class="token punctuation">.</span><span class="token function">CreateClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -319,134 +548,74 @@
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-                        </dd>
-                        <dt class="fs-4">Conclusion</dt>
-                        <dd class="mt-2"><p>This guide has demonstrated how to build resilient HTTP clients in .NET using Polly and `CancellationToken`. By implementing these patterns, you can ensure that your applications handle transient errors gracefully, respond to timeouts, and maintain robust communication with remote services, even under adverse conditions.</p></dd>
-                    </dl>
+                    </div>
                 </div>
-            </article>
+            </section>
         </div>
-        <footer class="navbar-dark bg-primary">
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 text-left">
-                    <br />
-                    <!-- Ensure current article exists-->
-                    <!-- Extract and clean currentKeywords-->
-                    <!-- Only check for related articles if there are valid keywords-->
-                    <!-- Shuffle related articles and limit to 3-->
-                    <!-- Render current article's keywords as badges-->
-                    <div class="keywords mt-3">
-                        <p class="text-white">Hashtags:</p>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-primary text-uppercase">resilient applications</span>
-                            <span class="badge bg-primary text-uppercase">polly</span>
-                            <span class="badge bg-primary text-uppercase">httpclient</span>
-                            <span class="badge bg-primary text-uppercase">.net</span>
-                            <span class="badge bg-primary text-uppercase">retries</span>
-                            <span class="badge bg-primary text-uppercase">timeouts</span>
-                            <span class="badge bg-primary text-uppercase">transient faults</span>
-                            <span class="badge bg-primary text-uppercase">network instability</span>
-                            <span class="badge bg-primary text-uppercase">transient errors</span>
-                            <span class="badge bg-primary text-uppercase">service timeouts</span>
-                            <span class="badge bg-primary text-uppercase">resilience</span>
-                            <span class="badge bg-primary text-uppercase">transient-fault-handling</span>
-                            <span class="badge bg-primary text-uppercase">cancellationtoken</span>
-                            <span class="badge bg-primary text-uppercase">retry policy</span>
-                            <span class="badge bg-primary text-uppercase">circuit breaker pattern</span>
-                            <span class="badge bg-primary text-uppercase">graceful degradation</span>
-                            <span class="badge bg-primary text-uppercase">rate limiting</span>
-                            <span class="badge bg-primary text-uppercase">throttling</span>
-                            <span class="badge bg-primary text-uppercase">timeout management</span>
-                            <span class="badge bg-primary text-uppercase">health monitoring</span>
-                            <span class="badge bg-primary text-uppercase">self-healing</span>
-                            <span class="badge bg-primary text-uppercase">httpclient class</span>
-                            <span class="badge bg-primary text-uppercase">restful services</span>
-                            <span class="badge bg-primary text-uppercase">socket exhaustion</span>
-                            <span class="badge bg-primary text-uppercase">polly library</span>
-                            <span class="badge bg-primary text-uppercase">exponential backoff</span>
-                            <span class="badge bg-primary text-uppercase">jitter</span>
-                            <span class="badge bg-primary text-uppercase">cancellationtokensource</span>
-                            <span class="badge bg-primary text-uppercase">mockresults class</span>
-                            <span class="badge bg-primary text-uppercase">remotecontroller class</span>
-                            <span class="badge bg-primary text-uppercase">long-running task</span>
-                            <span class="badge bg-primary text-uppercase">pollycontroller class</span>
-                            <span class="badge bg-primary text-uppercase">retry logic</span>
-                            <span class="badge bg-primary text-uppercase">exponential backoff</span>
-                            <span class="badge bg-primary text-uppercase">httpresponsemessage</span>
-                            <span class="badge bg-primary text-uppercase">ihttpclientfactory</span>
-                            <span class="badge bg-primary text-uppercase">retry policy</span>
-                            <span class="badge bg-primary text-uppercase">transient errors</span>
-                            <span class="badge bg-primary text-uppercase">robust communication</span>
-                        </div>
+        <section class="mb-5" id="conclusion">
+            <div class="container">
+                <div class="card border-primary shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h3 mb-0">
+                            <i class="bi bi-check-circle me-2"></i>
+                            Conclusion
+                        </h2>
                     </div>
-                    <!-- Render related articles in a card layout-->
-                    <div class="related-articles mt-4">
-                        <h3 class="text-white">Related Articles</h3>
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/generate-wiki-documentation-from-your-code-repository.html" title="Learn how to create a tool to generate detailed wiki documentation from your code repository. This is a step-by-step guide with best practices for developers.">Generate Wiki Documentation from Your Code Repository</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learn how to create a tool to generate detailed wiki documentation from your code repository. This is a step-by-step guide with best practices for developers.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html" title="In the dynamic world of ASP.NET development, optimizing performance is a cornerstone for building successful applications. Caching is one of the most effective strategies for this, and the MemoryCacheManager class is a vital tool in this endeavor. This article dives into its functionalities and benefits, complemented by demonstration code available on GitHub https://github.com/markhazleton/webspark">Harnessing the Power of Caching in ASP.NET with MemoryCacheManager</a>
-                                        </h5>
-                                        <p class="card-text text-white">In the dynamic world of ASP.NET development, optimizing performance is a cornerstone for building successful applications. Caching is one of the most effective strategies for this, and the MemoryCacheManager class is a vital tool in this endeavor. This article dives into its functionalities and benefits, complemented by demonstration code available on GitHub https://github.com/markhazleton/webspark</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/decorator-pattern-http-client.html" title="Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.">The Decorator Pattern with Http Client</a>
-                                        </h5>
-                                        <p class="card-text text-white">Explore the Decorator Design Pattern applied to an HttpClient in ASP.NET, elucidated by Microsoft ASP.NET Solutions Architect, Mark Hazleton.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
+                    <div class="card-body">
+                        <p class="lead mb-4">This guide has demonstrated how to build resilient HTTP clients in .NET using Polly and `CancellationToken`. By implementing these patterns, you can ensure that your applications handle transient errors gracefully, respond to timeouts, and maintain robust communication with remote services, even under adverse conditions.</p>
+                        <div class="alert alert-success border-0 shadow-sm mb-4">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-lightbulb text-success me-3 fs-4"></i>
+                                <div>
+                                    <h4 class="alert-heading h6 mb-2">Key Takeaways</h4>
+                                    <p class="mb-0">Combining Polly's resilience policies with proper timeout management and cancellation tokens creates robust applications that can handle the unpredictable nature of distributed systems. These patterns are essential for building production-ready .NET applications that provide reliable user experiences.</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-4"><p class="text-white"></p></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 justify-content-end">
-                    <br />
-                    <div class="social-icons d-flex">
-                        <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
-                        <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
-                        <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
-                        <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
-                        <br />
+                        <p class="mb-0">Start implementing these resilience patterns in your .NET applications today to improve their reliability and user experience. The investment in fault tolerance will pay dividends in reduced support issues and improved application stability.</p>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12"><br /></div>
+        </section>
+        <!-- Footer-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="mb-3">Mark Hazleton</h5>
+                        <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Quick Links</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#about">About</a></li>
+                            <li><a href="/#experience">Experience</a></li>
+                            <li><a href="/#projects">Projects</a></li>
+                            <li><a href="/articles.html">Articles</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/projectmechanics/">Project Mechanics</a></li>
+                            <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
+                            <li><a href="/rss.xml">RSS Feed</a></li>
+                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" />
+                <div class="row">
+                    <div class="col-12 text-center"><p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p></div>
+                </div>
             </div>
         </footer>
-        <!-- Core theme JS-->
         <script src="/js/scripts.js"></script>
     </body>
 </html>

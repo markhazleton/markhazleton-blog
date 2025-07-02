@@ -1,220 +1,500 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
 
 block pagehead
-  title Building Resilient Applications with Polly
-  meta(name="description" content="Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.")
-  meta(name="keywords" content="Polly, .NET, HttpClient, resilience, retries, timeouts, transient faults, robust applications, C#, ASP.NET, error handling, .NET programming")
+  title Building Resilient .NET Applications with Polly
+  meta(name='description', content='Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.')
+  meta(name='keywords', content='Polly, .NET, HttpClient, resilience, retries, timeouts, transient faults, robust applications, C#, ASP.NET, error handling, .NET programming')
   meta(name='author', content='Mark Hazleton')
+
+block canonical
   link(rel='canonical', href='https://markhazleton.com/articles/building-resilient-net-applications-with-polly.html')
 
+block og_overrides
+  meta(property='og:title', content='Building Resilient .NET Applications with Polly')
+  meta(property='og:description', content='Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.')
+  meta(property='og:url', content='https://markhazleton.com/articles/building-resilient-net-applications-with-polly.html')
+  meta(property='og:type', content='article')
+
+block twitter_overrides
+  meta(name='twitter:title', content='Building Resilient .NET Applications with Polly')
+  meta(name='twitter:description', content='Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.')
+
 block layout-content
+  //- Hero Section
+  section#hero.bg-light.py-5
+    .container
+      .row.align-items-center
+        .col-lg-8
+          header
+            h1.display-4.fw-bold.text-primary
+              i.bi.bi-shield-check.me-3
+              | Building Resilient .NET Applications with Polly
+            h2.h4.text-muted.mb-4 Master fault tolerance and resilience patterns in .NET development
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 Building Resilient Applications
-      p.subheading.mb-3 Explore how Polly and HttpClient in .NET can be used together to create resilient applications. Learn to handle retries, timeouts, and transient faults effectively.
-      p.fw-bold.text-primary.text-center.bg-primary.text-white
-        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/markhazleton/webspark' target="_blank" title='The full source code for the Async Demo Application is available on GitHub') The full source code for the Async Demo Application is available on GitHub
-      dl
-        dt.fs-4 Introduction
-        dd.mt-2
-          p In modern .NET applications, making HTTP calls to remote services is a common task. However, network instability, transient errors, and service timeouts are challenges that developers must handle effectively.
-          p This article provides a comprehensive guide on how to use Polly, a .NET resilience and transient-fault-handling library, in combination with `CancellationToken` to enhance the robustness of your HTTP calls with `HttpClient`. We'll walk through practical examples and explain the concepts in detail.
-        dt.fs-4 What Does Resilient Mean in a Web Application?
-        dd.mt-2
-          p Resilience in the context of a web application refers to the ability of the application to maintain acceptable service levels despite facing various challenges, such as faults, failures, or unexpected loads. A resilient web application is designed to handle disruptions gracefully, recover quickly, and continue providing reliable service to users.
-          p In modern web development, resilience is crucial because web applications often rely on multiple external services, APIs, and infrastructure components. These dependencies can introduce potential points of failure that, if not handled properly, can degrade the user experience or even cause the application to become unavailable.
+          .lead.mb-4
+            | Explore how Polly and HttpClient in .NET can be used together to create resilient applications.
+            | Learn to handle retries, timeouts, and transient faults effectively with practical examples
+            | and comprehensive explanations.
 
-          h3.mt-4 Examples of Resilience in Web Applications
-          p Here are some key aspects of resilience in web applications, along with examples of how they can be implemented:
+          .d-flex.flex-wrap.gap-2.mb-4
+            .badge.bg-primary.text-white Polly
+            .badge.bg-secondary.text-white .NET
+            .badge.bg-success.text-white HttpClient
+            .badge.bg-info.text-white Resilience
+            .badge.bg-warning.text-dark Fault Tolerance
 
-          //- Bootstrap Accordion
-          div.accordion(id="resilienceExamples")
+          .alert.alert-primary.border-0.shadow-sm
+            .d-flex.align-items-start
+              i.bi.bi-github.fs-4.text-primary.me-3.flex-shrink-0
+              div
+                h5.alert-heading.mb-2 Source Code Repository
+                p.mb-0
+                  | The full source code for the Async Demo Application is available on
+                  a.fw-bold(href='https://github.com/markhazleton/webspark' target="_blank" title='The full source code for the Async Demo Application is available on GitHub') GitHub
+                  |. This repository contains comprehensive examples demonstrating resilience patterns with Polly.
 
-            //- Handling Transient Faults
-            div.accordion-item
-              span.accordion-header(id="headingOne")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne")
-                  | Handling Transient Faults
-              div#collapseOne.accordion-collapse.collapse(aria-labelledby="headingOne", data-bs-parent="#resilienceExamples")
-                div.accordion-body
-                  p Transient faults are temporary issues, such as network timeouts, that can resolve themselves if the operation is retried. A resilient application detects these faults and automatically retries the failed operation instead of immediately returning an error to the user.
-                  p For example, suppose your web application relies on an external API to fetch data. If the API request fails due to a network glitch, a resilient application would use a retry policy (such as one provided by Polly) to retry the request after a brief delay, improving the chances of success without requiring user intervention.
+        .col-lg-4.text-center
+          .card.border-0.shadow-sm
+            .card-body
+              i.bi.bi-arrow-repeat.display-1.text-success.mb-3
+              h5.card-title Polly + .NET
+              p.card-text.text-muted Building fault-tolerant applications
+  //- Main Content Container
+  .container.my-5
 
-            //- Implementing Circuit Breakers
-            div.accordion-item
-              span.accordion-header(id="headingTwo")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
-                  | Implementing Circuit Breakers
-              div#collapseTwo.accordion-collapse.collapse(aria-labelledby="headingTwo", data-bs-parent="#resilienceExamples")
-                div.accordion-body
-                  p A circuit breaker pattern is another important concept in building resilient applications. It prevents an application from repeatedly trying to perform an operation that is likely to fail, thereby protecting the application from overloading itself or the external service.
-                  p For instance, if a third-party service your application depends on becomes unresponsive, the circuit breaker can detect the repeated failures and temporarily stop sending requests to the service. During this "open" state, the application can return a fallback response to users, or it can serve cached data until the service becomes responsive again.
+    //- Introduction Section
+    section#introduction.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-info-circle.me-2
+          | Introduction
 
-            //- Graceful Degradation
-            div.accordion-item
-              span.accordion-header(id="headingThree")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree", aria-expanded="false", aria-controls="collapseThree")
-                  | Graceful Degradation
-              div#collapseThree.accordion-collapse.collapse(aria-labelledby="headingThree", data-bs-parent="#resilienceExamples")
-                div.accordion-body
-                  p Graceful degradation is the practice of designing an application to continue functioning in a reduced capacity if a part of it fails. This ensures that users can still perform essential tasks, even if some features are temporarily unavailable.
-                  p Consider an e-commerce website that relies on multiple microservices: one for user authentication, another for payment processing, and yet another for product recommendations. If the product recommendation service becomes unavailable, a resilient application would still allow users to browse products and complete purchases, but without personalized recommendations.
+      .card.border-primary.shadow-sm.mb-4
+        .card-header.bg-primary.text-white
+          h4.card-title.mb-0
+            i.bi.bi-cloud-arrow-up.me-2
+            | Modern .NET HTTP Challenges
+        .card-body
+          p.card-text
+            | In modern .NET applications, making HTTP calls to remote services is a common task. However, network instability,
+            | transient errors, and service timeouts are challenges that developers must handle effectively.
+          p.card-text
+            | This article provides a comprehensive guide on how to use Polly, a .NET resilience and transient-fault-handling library,
+            | in combination with `CancellationToken` to enhance the robustness of your HTTP calls with `HttpClient`.
+            | We'll walk through practical examples and explain the concepts in detail.
 
-            //- Rate Limiting and Throttling
-            div.accordion-item
-              span.accordion-header(id="headingFour")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFour", aria-expanded="false", aria-controls="collapseFour")
-                  | Rate Limiting and Throttling
-              div#collapseFour.accordion-collapse.collapse(aria-labelledby="headingFour", data-bs-parent="#resilienceExamples")
-                div.accordion-body
-                  p Resilience also involves protecting your application from being overwhelmed by excessive requests, whether intentional (such as a DDoS attack) or unintentional (such as a sudden surge in traffic). Rate limiting and throttling are techniques used to control the number of requests your application processes over a specific period.
-                  p For example, if your web application provides an API for public use, you can implement rate limiting to ensure that no single client can overwhelm your servers with too many requests in a short time. This helps maintain service availability for all users, even during traffic spikes.
+    //- Resilience Concepts Section
+    section#resilience-concepts.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-shield-check.me-2
+          | What Does Resilient Mean in a Web Application?
 
-            //- Timeout Management
-            div.accordion-item
-              span.accordion-header(id="headingFive")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFive", aria-expanded="false", aria-controls="collapseFive")
-                  | Timeout Management
-              div#collapseFive.accordion-collapse.collapse(aria-labelledby="headingFive", data-bs-parent="#resilienceExamples")
-                div.accordion-body
-                  p In a distributed system, it's common to interact with external services that may be slow to respond or may not respond at all. To prevent your application from hanging indefinitely, it's important to implement timeouts that define how long your application should wait for a response before considering the operation a failure.
-                  p For instance, when making an HTTP request to an external API, setting a timeout ensures that your application can fail fast and handle the situation appropriately, such as by retrying the request, returning a cached response, or notifying the user of the delay.
+      .card.border-success.shadow-sm.mb-4
+        .card-header.bg-success.text-white
+          h4.card-title.mb-0
+            i.bi.bi-gear-wide-connected.me-2
+            | Resilience Definition
+        .card-body
+          p.card-text
+            | Resilience in the context of a web application refers to the ability of the application to maintain
+            | acceptable service levels despite facing various challenges, such as faults, failures, or unexpected loads.
+            | A resilient web application is designed to handle disruptions gracefully, recover quickly, and continue
+            | providing reliable service to users.
+          p.card-text
+            | In modern web development, resilience is crucial because web applications often rely on multiple external services,
+            | APIs, and infrastructure components. These dependencies can introduce potential points of failure that, if not
+            | handled properly, can degrade the user experience or even cause the application to become unavailable.
 
-            //- Health Monitoring and Self-Healing
-            div.accordion-item
-              span.accordion-header(id="headingSix")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSix", aria-expanded="false", aria-controls="collapseSix")
-                  | Health Monitoring and Self-Healing
-              div#collapseSix.accordion-collapse.collapse(aria-labelledby="headingSix", data-bs-parent="#resilienceExamples")
-                div.accordion-body
-                  p Resilient applications continuously monitor their own health and the health of their dependencies. When an issue is detected, the application can take corrective actions, such as restarting a failed service or rerouting traffic to a healthy instance.
-                  p An example of this is a cloud-based web application that uses auto-scaling to maintain performance during traffic spikes. If one server instance becomes unresponsive, the application can automatically spin up a new instance and redirect traffic, ensuring that users experience minimal disruption.
+    //- Resilience Examples Section
+    section#resilience-examples.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-diagram-3.me-2
+          | Examples of Resilience in Web Applications
 
-          p Resilience in the context of a web application refers to the ability of the application to maintain acceptable service levels in the face of faults, failures, and other challenges. A resilient web application can recover from unexpected issues, such as network outages or server downtime, without significant impact on user experience.
-          p In practical terms, a resilient application gracefully handles transient errors, retries failed operations intelligently, and ensures that services continue to function as expected, even under adverse conditions. Implementing resilience involves using techniques like retry policies, circuit breakers, and timeouts to prevent small failures from escalating into larger issues.
-          p.
-            By incorporating resilience strategies, web applications can better withstand the challenges of real-world operation,
-            such as network failures, service outages, and unexpected traffic surges.
-            A resilient web application not only improves user satisfaction by minimizing downtime
-            and disruptions but also enhances the overall reliability and robustness of the system.
-        dt.fs-4 What is HttpClient?
-        dd.mt-2
-          p The `HttpClient` class in .NET is a powerful tool for sending HTTP requests and receiving HTTP responses from a resource identified by a URI. It is often used for accessing RESTful services.
-          p `HttpClient` is designed to be reusable and thread-safe. To avoid socket exhaustion, it's recommended to instantiate `HttpClient` once and reuse it throughout the application lifecycle.
-          ul
-            li
-              a(href='https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient', target='_blank') Microsoft Documentation
+      p.lead.mb-4
+        | Here are some key aspects of resilience in web applications, along with examples of how they can be implemented:
 
-        dt.fs-4 Understanding Polly
-        dd.mt-2
-          p Polly is a .NET library that provides resilience and transient-fault-handling capabilities. It allows you to define policies such as retries, circuit breakers, and timeouts for your operations, making your application more resilient to transient errors.
-          p In this guide, we will focus on the Retry policy, which allows you to retry an operation in case of failure, with customizable retry logic including exponential backoff and jitter (random delay).
-          ul
-            li
-              a(href='https://github.com/App-vNext/Polly', target='_blank') Polly GitHub Repository
+      //- Bootstrap Accordion
+      .accordion#resilienceExamples.mb-4
 
-        dt.fs-4 Using CancellationToken
-        dd.mt-2
-          p A `CancellationToken` is a struct in .NET that propagates notifications that operations should be canceled. It's used to gracefully stop operations that are taking too long or when a user or system requests a cancellation.
-          p `CancellationTokenSource` is used to create a `CancellationToken` and can signal the token to cancel the associated operation.
-          ul
-            li
-              a(href='https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken', target='_blank') Microsoft Documentation
-            li
-              a(href='/cancellation-token.html', target='_self') Understanding CancellationToken in .NET
+        //- Handling Transient Faults
+        .accordion-item
+          h3.accordion-header#headingOne
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseOne'
+              aria-expanded='false'
+              aria-controls='collapseOne'
+            )
+              i.bi.bi-arrow-repeat.me-2
+              | Handling Transient Faults
+          .accordion-collapse.collapse#collapseOne(
+            aria-labelledby='headingOne'
+            data-bs-parent='#resilienceExamples'
+          )
+            .accordion-body
+              p
+                | Transient faults are temporary issues, such as network timeouts, that can resolve themselves
+                | if the operation is retried. A resilient application detects these faults and automatically
+                | retries the failed operation instead of immediately returning an error to the user.
+              p
+                | For example, suppose your web application relies on an external API to fetch data. If the API
+                | request fails due to a network glitch, a resilient application would use a retry policy
+                | (such as one provided by Polly) to retry the request after a brief delay, improving the
+                | chances of success without requiring user intervention.
 
-        dt.fs-4 Example: Implementing MockResults Class
-        dd.mt-2
-          p The `MockResults` class represents the outcome of a mock operation, including the loop count, maximum time allowed, actual runtime, and any return messages or values. It is used to encapsulate the input parameters and results of a mock operation, demonstrating long-running tasks with timeout handling.
+        //- Implementing Circuit Breakers
+        .accordion-item
+          h3.accordion-header#headingTwo
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseTwo'
+              aria-expanded='false'
+              aria-controls='collapseTwo'
+            )
+              i.bi.bi-lightning-charge.me-2
+              | Implementing Circuit Breakers
+          .accordion-collapse.collapse#collapseTwo(
+            aria-labelledby='headingTwo'
+            data-bs-parent='#resilienceExamples'
+          )
+            .accordion-body
+              p
+                | A circuit breaker pattern is another important concept in building resilient applications.
+                | It prevents an application from repeatedly trying to perform an operation that is likely to fail,
+                | thereby protecting the application from overloading itself or the external service.
+              p
+                | For instance, if a third-party service your application depends on becomes unresponsive,
+                | the circuit breaker can detect the repeated failures and temporarily stop sending requests
+                | to the service. During this "open" state, the application can return a fallback response
+                | to users, or it can serve cached data until the service becomes responsive again.
+
+        //- Graceful Degradation
+        .accordion-item
+          h3.accordion-header#headingThree
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseThree'
+              aria-expanded='false'
+              aria-controls='collapseThree'
+            )
+              i.bi.bi-layers.me-2
+              | Graceful Degradation
+          .accordion-collapse.collapse#collapseThree(
+            aria-labelledby='headingThree'
+            data-bs-parent='#resilienceExamples'
+          )
+            .accordion-body
+              p
+                | Graceful degradation is the practice of designing an application to continue functioning
+                | in a reduced capacity if a part of it fails. This ensures that users can still perform
+                | essential tasks, even if some features are temporarily unavailable.
+              p
+                | Consider an e-commerce website that relies on multiple microservices: one for user authentication,
+                | another for payment processing, and yet another for product recommendations. If the product
+                | recommendation service becomes unavailable, a resilient application would still allow users
+                | to browse products and complete purchases, but without personalized recommendations.
+
+        //- Rate Limiting and Throttling
+        .accordion-item
+          h3.accordion-header#headingFour
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseFour'
+              aria-expanded='false'
+              aria-controls='collapseFour'
+            )
+              i.bi.bi-speedometer.me-2
+              | Rate Limiting and Throttling
+          .accordion-collapse.collapse#collapseFour(
+            aria-labelledby='headingFour'
+            data-bs-parent='#resilienceExamples'
+          )
+            .accordion-body
+              p
+                | Resilience also involves protecting your application from being overwhelmed by excessive requests,
+                | whether intentional (such as a DDoS attack) or unintentional (such as a sudden surge in traffic).
+                | Rate limiting and throttling are techniques used to control the number of requests your application
+                | processes over a specific period.
+              p
+                | For example, if your web application provides an API for public use, you can implement rate limiting
+                | to ensure that no single client can overwhelm your servers with too many requests in a short time.
+                | This helps maintain service availability for all users, even during traffic spikes.
+
+        //- Timeout Management
+        .accordion-item
+          h3.accordion-header#headingFive
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseFive'
+              aria-expanded='false'
+              aria-controls='collapseFive'
+            )
+              i.bi.bi-clock.me-2
+              | Timeout Management
+          .accordion-collapse.collapse#collapseFive(
+            aria-labelledby='headingFive'
+            data-bs-parent='#resilienceExamples'
+          )
+            .accordion-body
+              p
+                | In a distributed system, it's common to interact with external services that may be slow to respond
+                | or may not respond at all. To prevent your application from hanging indefinitely, it's important
+                | to implement timeouts that define how long your application should wait for a response before
+                | considering the operation a failure.
+              p
+                | For instance, when making an HTTP request to an external API, setting a timeout ensures that your
+                | application can fail fast and handle the situation appropriately, such as by retrying the request,
+                | returning a cached response, or notifying the user of the delay.
+
+        //- Health Monitoring and Self-Healing
+        .accordion-item
+          h3.accordion-header#headingSix
+            button.accordion-button.collapsed(
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#collapseSix'
+              aria-expanded='false'
+              aria-controls='collapseSix'
+            )
+              i.bi.bi-heart-pulse.me-2
+              | Health Monitoring and Self-Healing
+          .accordion-collapse.collapse#collapseSix(
+            aria-labelledby='headingSix'
+            data-bs-parent='#resilienceExamples'
+          )
+            .accordion-body
+              p
+                | Resilient applications continuously monitor their own health and the health of their dependencies.
+                | When an issue is detected, the application can take corrective actions, such as restarting a failed
+                | service or rerouting traffic to a healthy instance.
+              p
+                | An example of this is a cloud-based web application that uses auto-scaling to maintain performance
+                | during traffic spikes. If one server instance becomes unresponsive, the application can automatically
+                | spin up a new instance and redirect traffic, ensuring that users experience minimal disruption.
+
+      .alert.alert-info.border-0.shadow-sm.mb-4
+        .d-flex
+          i.bi.bi-info-circle.fs-4.text-info.me-3.flex-shrink-0
+          div
+            h5.alert-heading.mb-2 Key Resilience Principles
+            p.mb-0
+              | By incorporating resilience strategies, web applications can better withstand the challenges of real-world operation,
+              | such as network failures, service outages, and unexpected traffic surges. A resilient web application not only
+              | improves user satisfaction by minimizing downtime and disruptions but also enhances the overall reliability
+              | and robustness of the system.
+    //- HttpClient Section
+    section#httpclient.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-globe.me-2
+          | Understanding HttpClient
+
+      .card.border-info.shadow-sm.mb-4
+        .card-header.bg-info.text-white
+          h4.card-title.mb-0
+            i.bi.bi-arrow-left-right.me-2
+            | .NET HttpClient Overview
+        .card-body
+          p.card-text
+            | The `HttpClient` class in .NET is a powerful tool for sending HTTP requests and receiving
+            | HTTP responses from a resource identified by a URI. It is often used for accessing RESTful services.
+          p.card-text
+            | `HttpClient` is designed to be reusable and thread-safe. To avoid socket exhaustion,
+            | it's recommended to instantiate `HttpClient` once and reuse it throughout the application lifecycle.
+          .mt-3
+            h6.fw-bold Resources:
+            ul.list-unstyled
+              li
+                i.bi.bi-link-45deg.me-2
+                a.text-decoration-none(href='https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient' target='_blank') Microsoft Documentation
+
+    //- Polly Section
+    section#polly.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-arrow-repeat.me-2
+          | Understanding Polly
+
+      .card.border-warning.shadow-sm.mb-4
+        .card-header.bg-warning.text-dark
+          h4.card-title.mb-0
+            i.bi.bi-shield-fill-check.me-2
+            | Polly Resilience Library
+        .card-body
+          p.card-text
+            | Polly is a .NET library that provides resilience and transient-fault-handling capabilities.
+            | It allows you to define policies such as retries, circuit breakers, and timeouts for your operations,
+            | making your application more resilient to transient errors.
+          p.card-text
+            | In this guide, we will focus on the Retry policy, which allows you to retry an operation in case of failure,
+            | with customizable retry logic including exponential backoff and jitter (random delay).
+          .mt-3
+            h6.fw-bold Resources:
+            ul.list-unstyled
+              li
+                i.bi.bi-github.me-2
+                a.text-decoration-none(href='https://github.com/App-vNext/Polly' target='_blank') Polly GitHub Repository
+
+    //- CancellationToken Section
+    section#cancellation-token.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-stop-circle.me-2
+          | Using CancellationToken
+
+      .card.border-danger.shadow-sm.mb-4
+        .card-header.bg-danger.text-white
+          h4.card-title.mb-0
+            i.bi.bi-x-octagon.me-2
+            | Graceful Operation Cancellation
+        .card-body
+          p.card-text
+            | A `CancellationToken` is a struct in .NET that propagates notifications that operations should be canceled.
+            | It's used to gracefully stop operations that are taking too long or when a user or system requests a cancellation.
+          p.card-text
+            | `CancellationTokenSource` is used to create a `CancellationToken` and can signal the token to cancel
+            | the associated operation.
+          .mt-3
+            h6.fw-bold Resources:
+            ul.list-unstyled
+              li
+                i.bi.bi-link-45deg.me-2
+                a.text-decoration-none(href='https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken' target='_blank') Microsoft Documentation
+              li
+                i.bi.bi-file-earmark-text.me-2
+                a.text-decoration-none(href='/cancellation-token.html' target='_self') Understanding CancellationToken in .NET
+
+    //- Implementation Examples Section
+    section#implementation.mb-5
+      header.mb-4
+        h2.h3.fw-bold.text-primary
+          i.bi.bi-code-slash.me-2
+          | Implementation Examples
+
+      //- MockResults Class Example
+      .card.border-secondary.shadow-sm.mb-4
+        .card-header.bg-secondary.text-white
+          h4.card-title.mb-0
+            i.bi.bi-file-earmark-code.me-2
+            | MockResults Class Implementation
+        .card-body
+          p.card-text
+            | The `MockResults` class represents the outcome of a mock operation, including the loop count,
+            | maximum time allowed, actual runtime, and any return messages or values. It is used to encapsulate
+            | the input parameters and results of a mock operation, demonstrating long-running tasks with timeout handling.
 
           pre.language-csharp
             code.language-csharp.
               public class MockResults
               {
                 public int LoopCount { get; set; }
-                public int MaxTimeMS { get; set; }
-                public long? RunTimeMS { get; set; } = 0;
-                public string? Message { get; set; } = "init";
                 public string? ResultValue { get; set; } = "empty";
               }
 
-        dt.fs-4 Example: Creating the RemoteController Class
-        dd.mt-2
-          p The `RemoteController` class simulates a remote API service that performs a long-running task. This controller demonstrates how to integrate `CancellationToken` into your operations to handle cancellations gracefully.
+      //- RemoteController Example
+      .card.border-info.shadow-sm.mb-4
+        .card-header.bg-info.text-white
+          h4.card-title.mb-0
+            i.bi.bi-server.me-2
+            | RemoteController Class Implementation
+        .card-body
+          p.card-text
+            | The `RemoteController` class simulates a remote API service that performs a long-running task.
+            | This controller demonstrates how to integrate `CancellationToken` into your operations to handle
+            | cancellations gracefully.
+
           pre.language-csharp
             code.language-csharp.
               public class RemoteController : BaseApiController
+              {
+                private async Task<MockResults> MockResultsAsync(int loopCount, CancellationToken cancellationToken)
                 {
-                  private async Task<MockResults> MockResultsAsync(int loopCount, CancellationToken cancellationToken)
+                  var returnMock = new MockResults(loopCount, 0);
+                  try
                   {
-                    var returnMock = new MockResults(loopCount, 0);
-                    try
-                    {
-                      var result = await _asyncMock.LongRunningOperationWithCancellationTokenAsync(loopCount, cancellationToken);
-                      returnMock.Message = "Task Complete";
-                      returnMock.ResultValue = result.ToString();
-                    }
-                    catch (TaskCanceledException)
-                    {
-                      throw;
-                    }
-                    catch (Exception ex)
-                    {
-                      returnMock.Message = $"Error: {ex.Message}";
-                      returnMock.ResultValue = "-1";
-                    }
-                    return returnMock;
+                    var result = await _asyncMock.LongRunningOperationWithCancellationTokenAsync(loopCount, cancellationToken);
+                    returnMock.Message = "Task Complete";
+                    returnMock.ResultValue = result.ToString();
                   }
+                  catch (TaskCanceledException)
+                  {
+                    throw;
+                  }
+                  catch (Exception ex)
+                  {
+                    returnMock.Message = $"Error: {ex.Message}";
+                    returnMock.ResultValue = "-1";
+                  }
+                  return returnMock;
+                }
 
-                  [HttpPost]
-                  [Route("Results")]
-                  public async Task<IActionResult> GetResults(MockResults model)
+                [HttpPost]
+                [Route("Results")]
+                public async Task<IActionResult> GetResults(MockResults model)
+                {
+                  var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(model.MaxTimeMS));
+                  var watch = Stopwatch.StartNew();
+                  MockResults? result;
+                  try
                   {
-                    var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(model.MaxTimeMS));
-                    var watch = Stopwatch.StartNew();
-                    MockResults? result;
-                    try
-                    {
-                      result = await MockResultsAsync(model.LoopCount, cts.Token);
-                      result.MaxTimeMS = model.MaxTimeMS;
-                    }
-                    catch (OperationCanceledException)
-                    {
-                      watch.Stop();
-                      result = new MockResults(model.LoopCount, model.MaxTimeMS)
-                      {
-                        RunTimeMS = watch.ElapsedMilliseconds,
-                        Message = "Time Out Occurred",
-                        ResultValue = "-1"
-                      };
-                      return StatusCode((int)HttpStatusCode.RequestTimeout, result);
-                    }
-                    catch (Exception ex)
-                    {
-                      watch.Stop();
-                      result = new MockResults(model.LoopCount, model.MaxTimeMS)
-                      {
-                        RunTimeMS = watch.ElapsedMilliseconds,
-                        Message = $"Error: {ex.Message}",
-                        ResultValue = "-1"
-                      };
-                      return StatusCode((int)HttpStatusCode.InternalServerError, result);
-                    }
-                    watch.Stop();
-                    result.RunTimeMS = watch.ElapsedMilliseconds;
-                    return Ok(result);
+                    result = await MockResultsAsync(model.LoopCount, cts.Token);
+                    result.MaxTimeMS = model.MaxTimeMS;
                   }
+                  catch (OperationCanceledException)
+                  {
+                    watch.Stop();
+                    result = new MockResults(model.LoopCount, model.MaxTimeMS)
+                    {
+                      RunTimeMS = watch.ElapsedMilliseconds,
+                      Message = "Time Out Occurred",
+                      ResultValue = "-1"
+                    };
+                    return StatusCode((int)HttpStatusCode.RequestTimeout, result);
+                  }
+                  catch (Exception ex)
+                  {
+                    watch.Stop();
+                    result = new MockResults(model.LoopCount, model.MaxTimeMS)
+                    {
+                      RunTimeMS = watch.ElapsedMilliseconds,
+                      Message = $"Error: {ex.Message}",
+                      ResultValue = "-1"
+                    };
+                    return StatusCode((int)HttpStatusCode.InternalServerError, result);
+                  }
+                  watch.Stop();
+                  result.RunTimeMS = watch.ElapsedMilliseconds;
+                  return Ok(result);
+                }
               }
-        dt.fs-4 Example: Using Polly in the PollyController Class
-        dd.mt-2
-          p The `PollyController` class demonstrates how to use Polly to implement retry logic with exponential backoff when making HTTP requests using `HttpClient`. Polly's retry policy is configured to handle transient errors, making the operation more resilient.
+
+      //- PollyController Example
+      .card.border-success.shadow-sm.mb-4
+        .card-header.bg-success.text-white
+          h4.card-title.mb-0
+            i.bi.bi-arrow-repeat.me-2
+            | PollyController with Retry Logic
+        .card-body
+          p.card-text
+            | The `PollyController` class demonstrates how to use Polly to implement retry logic with exponential backoff
+            | when making HTTP requests using `HttpClient`. Polly's retry policy is configured to handle transient errors,
+            | making the operation more resilient.
+
           pre.language-csharp
             code.language-csharp.
               public class PollyController : Controller
               {
                 private readonly AsyncRetryPolicy<HttpResponseMessage> _httpIndexPolicy;
                 private readonly HttpClient _httpClient;
+
                 public PollyController(ILogger<PollyController> logger, IHttpClientFactory clientFactory)
                 {
                   _httpClient = clientFactory.CreateClient();
@@ -240,6 +520,31 @@ block layout-content
                 }
               }
 
-        dt.fs-4 Conclusion
-        dd.mt-2
-          p This guide has demonstrated how to build resilient HTTP clients in .NET using Polly and `CancellationToken`. By implementing these patterns, you can ensure that your applications handle transient errors gracefully, respond to timeouts, and maintain robust communication with remote services, even under adverse conditions.
+  //- Conclusion Section
+  section#conclusion.mb-5
+    .container
+      .card.border-primary.shadow-sm
+        .card-header.bg-primary.text-white
+          h2.h3.mb-0
+            i.bi.bi-check-circle.me-2
+            | Conclusion
+        .card-body
+          p.lead.mb-4
+            | This guide has demonstrated how to build resilient HTTP clients in .NET using Polly and `CancellationToken`.
+            | By implementing these patterns, you can ensure that your applications handle transient errors gracefully,
+            | respond to timeouts, and maintain robust communication with remote services, even under adverse conditions.
+
+          .alert.alert-success.border-0.shadow-sm.mb-4
+            .d-flex.align-items-start
+              i.bi.bi-lightbulb.text-success.me-3.fs-4
+              div
+                h4.alert-heading.h6.mb-2 Key Takeaways
+                p.mb-0
+                  | Combining Polly's resilience policies with proper timeout management and cancellation tokens creates
+                  | robust applications that can handle the unpredictable nature of distributed systems. These patterns
+                  | are essential for building production-ready .NET applications that provide reliable user experiences.
+
+          p.mb-0
+            | Start implementing these resilience patterns in your .NET applications today to improve their reliability
+            | and user experience. The investment in fault tolerance will pay dividends in reduced support issues and
+            | improved application stability.
