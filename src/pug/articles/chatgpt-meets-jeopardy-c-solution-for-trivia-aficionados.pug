@@ -1,20 +1,53 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
 
 block pagehead
   title ChatGPT Meets Jeopardy: Solutions for Trivia Aficionados
   meta(name='description', content='Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET')
   meta(name="keywords", content="ChatGPT, Jeopardy, C#, .NET, data analysis, trivia, CSV files, programming, software development, TriviaSpark, Data Analysis Demo")
   meta(name='author', content='Mark Hazleton')
+
+block canonical
   link(rel='canonical', href='https://markhazleton.com/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html')
 
+block og_overrides
+  meta(property='og:title', content='ChatGPT Meets Jeopardy: Solutions for Trivia Aficionados')
+  meta(property='og:description', content='Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET')
+  meta(property='og:url', content='https://markhazleton.com/articles/chatgpt-meets-jeopardy-c-solution-for-trivia-aficionados.html')
+  meta(property='og:type', content='article')
+
+block twitter_overrides
+  meta(name='twitter:title', content='ChatGPT Meets Jeopardy: Solutions for Trivia Aficionados')
+  meta(name='twitter:description', content='Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET')
+
 block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      p.fw-bold.text-primary.text-center.bg-primary.text-white
-        a.fw-bold.text-primary.text-center.bg-primary.text-white(href='https://github.com/controlorigins/TriviaSpark/tree/main/JeopardyData.Console' target="_blank" title='The full source code for the Jeopardy Console Application is available on GitHub') The full source code for the Jeopardy Console Application is available on GitHub
-      h1 ChatGPT Meets Jeopardy
-      h2.subheading.mb-3: A Solution for Trivia Aficionados
-      p.lead Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.
+  br
+  //- Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-puzzle.me-3
+            | ChatGPT Meets Jeopardy
+          h2.h3.mb-4 A Solution for Trivia Aficionados
+          p.lead.mb-5
+            | Discover how ChatGPT integrates Jeopardy questions into a C# application, combining trivia enthusiasm with advanced data analysis in .NET.
+
+          .d-flex.flex-wrap.gap-2.justify-content-center.mb-4
+            .badge.bg-primary.text-white ChatGPT
+            .badge.bg-secondary.text-white Jeopardy
+            .badge.bg-success.text-white C#
+            .badge.bg-info.text-white .NET
+            .badge.bg-warning.text-dark Data Analysis
+
+          .alert.alert-info.border-0.shadow-sm
+            .d-flex.align-items-start
+              i.bi.bi-github.fs-4.text-info.me-3.flex-shrink-0
+              div
+                h4.alert-heading.mb-2 Open Source Project
+                p.mb-0
+                  | The full source code for the Jeopardy Console Application is available on
+                  a(href='https://github.com/controlorigins/TriviaSpark/tree/main/JeopardyData.Console' target="_blank" title='The full source code for the Jeopardy Console Application is available on GitHub') GitHub
       p.
         As a developer passionate about trivia and data analysis, I've been exploring ways to blend my interests in a single, engaging project. My journey led me to a unique intersection: incorporating a vast dataset of Jeopardy questions into my existing applications, TriviaSpark and the Data Analysis Demo, using C# and .NET.
 
@@ -66,126 +99,354 @@ block layout-content
         This endeavor was not just about importing data; it was about breathing life into the numbers and texts,
         turning them into an interactive trivia experience enriched with the analytical prowess of C# and .NET.
 
-      dl
-        dt Step 1: Define Data Model
-        dd
-          p Define a class to match the JSON structure.
-          pre.language-csharp
-            code.language-csharp.
-              public class JeopardyQuestion
-              {
-                public required string Category { get; set; }
-                [JsonPropertyName("air_date")]
-                public required string AirDate { get; set; }
-                public required string Question { get; set; }
-                public required string Value { get; set; }
-                public required string Answer { get; set; }
-                public required string Round { get; set; }
-                [JsonPropertyName("show_number")] // Maps "show_number" in JSON to this property
-                public required string ShowNumber { get; set; }
-              }
+      //- Main Article Content
+      article#main-article
+        .container
+          .row
+            .col-lg-8.mx-auto
 
-              public class JeopardyQuestions : List&#60;JeopardyQuestion&#62;
-              {
+              //- Table of Contents
+              nav#table-of-contents.mb-5(aria-label='Table of Contents')
+                .card.bg-light
+                  .card-header
+                    h3.card-title.mb-0.fw-bold
+                      i.bi.bi-list-ul.me-2
+                      | Table of Contents
+                  .card-body
+                    .row
+                      .col-md-6
+                        ul.list-group.list-group-flush
+                          li.list-group-item: a.text-decoration-none(href='#introduction') Introduction
+                          li.list-group-item: a.text-decoration-none(href='#trivia-spark') TriviaSpark: Engaging the Mind
+                          li.list-group-item: a.text-decoration-none(href='#data-analysis') Data Analysis Unleashed
+                      .col-md-6
+                        ul.list-group.list-group-flush
+                          li.list-group-item: a.text-decoration-none(href='#discovery') A Serendipitous Discovery
+                          li.list-group-item: a.text-decoration-none(href='#solution') Crafting the Solution
+                          li.list-group-item: a.text-decoration-none(href='#conclusion') Conclusion
 
-              }
+              //- Introduction Section
+              section#introduction.mb-5
+                .card.border-0.shadow-sm
+                  .card-header.bg-primary.text-white
+                    h2.h3.mb-0
+                      i.bi.bi-play-circle.me-2
+                      | Introduction
+                  .card-body
+                    p.lead
+                      | As a developer passionate about trivia and data analysis, I've been exploring ways to blend my interests in a single, engaging project. My journey led me to a unique intersection: incorporating a vast dataset of Jeopardy questions into my existing applications, TriviaSpark and the Data Analysis Demo, using C# and .NET.
 
-        dt Step 2: Deserialize JSON
-        dd
-          p Use `System.Text.Json` to convert the JSON file into a list of objects.
-          pre.language-csharp
-            code.language-csharp.
-              string jsonFilePath = "JEOPARDY_QUESTIONS.json";
-              string json = File.ReadAllText(jsonFilePath);
-              var options = new JsonSerializerOptions
-              {
-                PropertyNameCaseInsensitive = true
-              };
-              var questions = JsonSerializer.Deserialize&#60;JeopardyQuestions&#62;(json, options);
+              //- TriviaSpark Section
+              section#trivia-spark.mb-5
+                .card.border-0.shadow-sm
+                  .card-header.bg-success.text-white
+                    h2.h3.mb-0
+                      i.bi.bi-controller.me-2
+                      | TriviaSpark: Engaging the Mind
+                  .card-body
+                    p
+                      | TriviaSpark, my trivia application, has been a playground for trivia enthusiasts,
+                      | offering a wide range of quizzes across various domains. Designed with C#,
+                      | it's been a testament to the versatility and power of .NET in creating interactive, user-friendly applications.
 
-        dt Step 3: Select Random Category
-        dd
-          p Use LINQ to query for a random category from the list.
-          pre.language-csharp
-            code.language-csharp.
-              // Group questions by category, air date, and round, then select a random group
-              var random = new Random();
-              var groupedQuestions = this
-                .GroupBy(q => new { q.Category, q.AirDate, q.Round })
-                .ToList();
-              if (groupedQuestions.Count == 0)
-              {
-                Console.WriteLine("No groups of questions available.");
-                return;
-              }
+                    p
+                      | The TriviaSpark application represents the entertainment side of C#,
+                      | offering a web-based trivia platform that's both engaging and informative.
+                      | Through the integration of Jeopardy questions, TriviaSpark becomes more than just a game;
+                      | it's a journey through a myriad of topics,
+                      | challenging the intellect of trivia aficionados and casual players alike.
 
-              var randomGroup = groupedQuestions[random.Next(groupedQuestions.Count)];
+                    .alert.alert-success.border-0.mt-3
+                      .d-flex.align-items-start
+                        i.bi.bi-robot.fs-4.text-success.me-3.flex-shrink-0
+                        div
+                          h5.alert-heading.mb-2 AI-Enhanced Trivia
+                          p.mb-0
+                            | Leveraging the capabilities of ChatGPT, TriviaSpark provides dynamic content that keeps the game fresh and exciting.
+                            | The application demonstrates how AI can enhance user interaction,
+                            | making each trivia session unique and tailored to the player's preferences.
 
+              //- Data Analysis Section
+              section#data-analysis.mb-5
+                .card.border-0.shadow-sm
+                  .card-header.bg-info.text-white
+                    h2.h3.mb-0
+                      i.bi.bi-graph-up.me-2
+                      | Data Analysis Unleashed
+                  .card-body
+                    p
+                      | In my Data Analysis Demo, I delve into CSV files to unearth patterns, insights,
+                      | and stories hidden within the data.
+                      | This C#-powered project showcases the potential of .NET in processing and visualizing complex datasets,
+                      | making data analysis accessible and insightful.
 
+                    p
+                      | On the flip side, the Data Analysis Demo showcases the analytical prowess of C# and .NET,
+                      | focusing on the dissection and visualization of CSV file data.
+                      | This demo illuminates the process of turning raw data into meaningful insights,
+                      | exemplifying how complex datasets can be made accessible and interpretable.
 
-        dt Step 4: Retrieve Questions
-        dd
-          p Select 5 questions from the chosen category.
-          pre.language-csharp
-            code.language-csharp.
-              var randomGroup = groupedQuestions[random.Next(groupedQuestions.Count)];
-              var selectedQuestions = randomGroup.Take(5).ToList(); // Take up to 5 questions from the selected group
+                    .row.g-3.mt-3
+                      .col-md-6
+                        .card.border-info.h-100
+                          .card-body
+                            h5.card-title
+                              i.bi.bi-bar-chart.me-2
+                              | Data Visualization
+                            p.card-text
+                              | The demo transforms raw CSV data into meaningful visualizations,
+                              | making complex information easier to understand and analyze.
 
-              // Displaying the details of the questions from the selected group
-              if (selectedQuestions.Any())
-              {
-                Console.WriteLine($"Selected Category: {selectedQuestions.First().Category}");
-                Console.WriteLine($"Air Date: {selectedQuestions.First().AirDate}");
-                Console.WriteLine($"Round: {selectedQuestions.First().Round}");
+                      .col-md-6
+                        .card.border-success.h-100
+                          .card-body
+                            h5.card-title
+                              i.bi.bi-lightbulb.me-2
+                              | Insights Discovery
+                            p.card-text
+                              | Through innovative use of data analysis libraries,
+                              | the demo bridges the gap between data and decision-making.
 
-                foreach (var question in selectedQuestions)
-                {
-                  Console.WriteLine($"----------");
-                  Console.WriteLine($"Question: {question.Question}");
-                  Console.WriteLine($"Value: {question.Value}");
-                  Console.WriteLine($"Answer: {question.Answer}");
-                }
-              }
-              else
-              {
-                Console.WriteLine("No questions found in the selected group.");
-              }
+              //- Discovery Section
+              section#discovery.mb-5
+                .card.border-0.shadow-sm
+                  .card-header.bg-warning.text-dark
+                    h2.h3.mb-0
+                      i.bi.bi-search.me-2
+                      | A Serendipitous Discovery
+                  .card-body
+                    p
+                      | On a quest for intriguing CSV datasets,
+                      | I stumbled upon a goldmine: a comprehensive CSV file of Jeopardy questions.
+                      | This serendipitous find seemed like the perfect bridge between TriviaSpark
+                      | and the analytical depth of the Data Analysis Demo, promising a fusion of trivia and data analytics.
 
-        dt Step 5: Display in Console
-        dd
-          p Output the show number, air date, category, and answers, asking for the questions.
-          pre.language-json
-           code.language-json.
-            Selected Category: ALL A DREAM
-            Air Date: 2011-04-19
-            Round: Double Jeopardy!
-            ----------
-            Question: 'Add 3 letters to reve, French for "dream", & you'll have this word for a daydream'
-            Value: $400
-            Answer: reverie
-            ----------
-            Question: 'Eat that 11 p.m. quesadilla & you might have a pesadilla, Spanish for this'
-            Value: $800
-            Answer: a nightmare
-            ----------
-            Question: 'In 1899 he wrote of hypermnesic dreams, in which memories, inaccessible by day, turn up in the dream'
-            Value: $1200
-            Answer: Freud
-            ----------
-            Question: 'Misty thoughts while smoking opium are the origin of the expression this type of dream'
-            Value: $7,000
-            Answer: pipe dreams
-            ----------
-            Question: 'You might have surreal dreams when you try to sleep when your temperature is 102, defined as this 5-letter condition'
-            Value: $2000
-            Answer: fever
+                    p
+                      | This find represented the perfect fusion of TriviaSpark's engaging gameplay and the Data Analysis Demo's
+                      | insightful exploration, bringing together the best of both worlds in a C# application that entertains as much as it informs.
 
-      h2 Conclusion
-      p.
-        This integration marks a milestone in my journey as a developer.
-        It symbolizes the confluence of trivia, data analysis, and software development,
-        illustrating how diverse interests can converge into a single, cohesive project.
-        With ChatGPT's insights and C#'s flexibility, the Jeopardy project stands as a
-        testament to the endless possibilities in the realm of software development.
+              //- Solution Section
+              section#solution.mb-5
+                .card.border-0.shadow-sm
+                  .card-header.bg-secondary.text-white
+                    h2.h3.mb-0
+                      i.bi.bi-code-slash.me-2
+                      | Crafting the Solution
+                  .card-body
+                    p
+                      | With the Jeopardy dataset in hand, I embarked on integrating it into a C# application.
+                      | This endeavor was not just about importing data; it was about breathing life into the numbers and texts,
+                      | turning them into an interactive trivia experience enriched with the analytical prowess of C# and .NET.
+
+                    //- Implementation Steps Accordion
+                    .accordion#implementationAccordion.mt-4
+                      //- Step 1: Define Data Model
+                      .accordion-item
+                        h3.accordion-header#headingStep1
+                          button.accordion-button(
+                            type='button'
+                            data-bs-toggle='collapse'
+                            data-bs-target='#collapseStep1'
+                            aria-expanded='true'
+                            aria-controls='collapseStep1'
+                          )
+                            i.bi.bi-1-circle.me-2
+                            | Step 1: Define Data Model
+                        .accordion-collapse.collapse.show#collapseStep1(
+                          aria-labelledby='headingStep1'
+                          data-bs-parent='#implementationAccordion'
+                        )
+                          .accordion-body
+                            p Define a class to match the JSON structure.
+                            pre.language-csharp
+                              code.language-csharp.
+                                public class JeopardyQuestion
+                                {
+                                  public required string Category { get; set; }
+                                  [JsonPropertyName("air_date")]
+                                  public required string AirDate { get; set; }
+                                  public required string Question { get; set; }
+                                  public required string Value { get; set; }
+                                  public required string Answer { get; set; }
+                                  public required string Round { get; set; }
+                                  [JsonPropertyName("show_number")] // Maps "show_number" in JSON to this property
+                                  public required string ShowNumber { get; set; }
+                                }
+
+                                public class JeopardyQuestions : List&#60;JeopardyQuestion&#62;
+                                {
+
+                                }
+
+                      //- Step 2: Deserialize JSON
+                      .accordion-item
+                        h3.accordion-header#headingStep2
+                          button.accordion-button.collapsed(
+                            type='button'
+                            data-bs-toggle='collapse'
+                            data-bs-target='#collapseStep2'
+                            aria-expanded='false'
+                            aria-controls='collapseStep2'
+                          )
+                            i.bi.bi-2-circle.me-2
+                            | Step 2: Deserialize JSON
+                        .accordion-collapse.collapse#collapseStep2(
+                          aria-labelledby='headingStep2'
+                          data-bs-parent='#implementationAccordion'
+                        )
+                          .accordion-body
+                            p Use `System.Text.Json` to convert the JSON file into a list of objects.
+                            pre.language-csharp
+                              code.language-csharp.
+                                string jsonFilePath = "JEOPARDY_QUESTIONS.json";
+                                string json = File.ReadAllText(jsonFilePath);
+                                var options = new JsonSerializerOptions
+                                {
+                                  PropertyNameCaseInsensitive = true
+                                };
+                                var questions = JsonSerializer.Deserialize&#60;JeopardyQuestions&#62;(json, options);
+
+                      //- Step 3: Select Random Category
+                      .accordion-item
+                        h3.accordion-header#headingStep3
+                          button.accordion-button.collapsed(
+                            type='button'
+                            data-bs-toggle='collapse'
+                            data-bs-target='#collapseStep3'
+                            aria-expanded='false'
+                            aria-controls='collapseStep3'
+                          )
+                            i.bi.bi-3-circle.me-2
+                            | Step 3: Select Random Category
+                        .accordion-collapse.collapse#collapseStep3(
+                          aria-labelledby='headingStep3'
+                          data-bs-parent='#implementationAccordion'
+                        )
+                          .accordion-body
+                            p Use LINQ to query for a random category from the list.
+                            pre.language-csharp
+                              code.language-csharp.
+                                // Group questions by category, air date, and round, then select a random group
+                                var random = new Random();
+                                var groupedQuestions = this
+                                  .GroupBy(q => new { q.Category, q.AirDate, q.Round })
+                                  .ToList();
+                                if (groupedQuestions.Count == 0)
+                                {
+                                  Console.WriteLine("No groups of questions available.");
+                                  return;
+                                }
+
+                                var randomGroup = groupedQuestions[random.Next(groupedQuestions.Count)];
+
+                      //- Step 4: Retrieve Questions
+                      .accordion-item
+                        h3.accordion-header#headingStep4
+                          button.accordion-button.collapsed(
+                            type='button'
+                            data-bs-toggle='collapse'
+                            data-bs-target='#collapseStep4'
+                            aria-expanded='false'
+                            aria-controls='collapseStep4'
+                          )
+                            i.bi.bi-4-circle.me-2
+                            | Step 4: Retrieve Questions
+                        .accordion-collapse.collapse#collapseStep4(
+                          aria-labelledby='headingStep4'
+                          data-bs-parent='#implementationAccordion'
+                        )
+                          .accordion-body
+                            p Select 5 questions from the chosen category.
+                            pre.language-csharp
+                              code.language-csharp.
+                                var randomGroup = groupedQuestions[random.Next(groupedQuestions.Count)];
+                                var selectedQuestions = randomGroup.Take(5).ToList(); // Take up to 5 questions from the selected group
+
+                                // Displaying the details of the questions from the selected group
+                                if (selectedQuestions.Any())
+                                {
+                                  Console.WriteLine($"Selected Category: {selectedQuestions.First().Category}");
+                                  Console.WriteLine($"Air Date: {selectedQuestions.First().AirDate}");
+                                  Console.WriteLine($"Round: {selectedQuestions.First().Round}");
+
+                                  foreach (var question in selectedQuestions)
+                                  {
+                                    Console.WriteLine($"----------");
+                                    Console.WriteLine($"Question: {question.Question}");
+                                    Console.WriteLine($"Answer: {question.Answer}");
+                                  }
+                                }
+                                else
+                                {
+                                  Console.WriteLine("No questions found in the selected group.");
+                                }
+
+                      //- Step 5: Display in Console
+                      .accordion-item
+                        h3.accordion-header#headingStep5
+                          button.accordion-button.collapsed(
+                            type='button'
+                            data-bs-toggle='collapse'
+                            data-bs-target='#collapseStep5'
+                            aria-expanded='false'
+                            aria-controls='collapseStep5'
+                          )
+                            i.bi.bi-5-circle.me-2
+                            | Step 5: Display in Console
+                        .accordion-collapse.collapse#collapseStep5(
+                          aria-labelledby='headingStep5'
+                          data-bs-parent='#implementationAccordion'
+                        )
+                          .accordion-body
+                            p Output the show number, air date, category, and answers, asking for the questions.
+                            pre.language-json
+                              code.language-json.
+                                Selected Category: ALL A DREAM
+                                Air Date: 2011-04-19
+                                Round: Double Jeopardy!
+                                Answer: fever
+
+              //- Conclusion Section
+              section#conclusion.mb-5
+                .card.border-primary.shadow
+                  .card-header.bg-primary.text-white
+                    h2.h3.mb-0
+                      i.bi.bi-trophy.me-2
+                      | Conclusion
+                  .card-body
+                    p.lead.mb-4
+                      | This integration marks a milestone in my journey as a developer.
+                      | testament to the endless possibilities in the realm of software development.
+
+                    .row.g-4
+                      .col-md-6
+                        .alert.alert-success.border-0
+                          .d-flex.align-items-start
+                            i.bi.bi-check-circle.fs-4.text-success.me-3.flex-shrink-0
+                            div
+                              h5.alert-heading.mb-2 Key Achievements
+                              ul.list-unstyled.mb-0
+                                li
+                                  i.bi.bi-check-lg.text-success.me-2
+                                  | Integrated Jeopardy dataset with C# application
+                                li
+                                  i.bi.bi-check-lg.text-success.me-2
+                                  | Created interactive trivia experience
+                                li
+                                  i.bi.bi-check-lg.text-success.me-2
+                                  | Combined entertainment with data analysis
+                                li
+                                  i.bi.bi-check-lg.text-success.me-2
+                                  | Demonstrated .NET capabilities for data processing
+
+                      .col-md-6
+                        .alert.alert-info.border-0
+                          .d-flex.align-items-start
+                            i.bi.bi-lightbulb.fs-4.text-info.me-3.flex-shrink-0
+                            div
+                              h5.alert-heading.mb-2 Future Possibilities
+                              p.mb-0
+                                | The foundation laid by this project opens doors to further innovations,
+                                | including AI-driven question generation, advanced analytics, and multi-platform extensions.
 
 
