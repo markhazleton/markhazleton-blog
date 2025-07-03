@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Essential Meta Tags-->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Mark Hazleton" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" content="#2c3e50" />
+        <!-- Page-specific metadata block-->
+        <title>Building TeachSpark: AI-Powered Educational Technology for Teachers</title>
+        <meta name="description" content="How a conversation with my daughter led to creating TeachSpark - a sophisticated .NET 9 platform that uses OpenAI to generate Common Core-aligned worksheets for teachers. Includes code examples and technical architecture insights." />
+        <meta name="keywords" content="AI education, .NET 9, OpenAI, Common Core, worksheet generation, educational technology, Bloom taxonomy, teacher tools, software architecture" />
+        <meta name="author" content="Mark Hazleton" />
+        <!-- Default canonical (can be overridden)-->
+        <link rel="canonical" href="https://markhazleton.com/articles/building-teachspark-ai-powered-educational-technology-for-teachers.html" />
+        <!-- Open Graph Meta Tags (defaults)-->
+        <meta property="og:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta property="og:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://markhazleton.com/" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <meta property="og:site_name" content="Mark Hazleton" />
+        <meta property="og:locale" content="en_US" />
+        <!-- Additional Open Graph overrides-->
+        <meta property="og:title" content="Building TeachSpark: AI-Powered Educational Technology for Teachers" />
+        <meta property="og:description" content="How a conversation with my daughter led to creating TeachSpark - a sophisticated .NET 9 platform that uses OpenAI to generate Common Core-aligned worksheets for teachers. Includes code examples and technical architecture insights." />
+        <meta property="og:url" content="https://markhazleton.com/articles/building-teachspark-ai-powered-educational-technology-for-teachers.html" />
+        <meta property="og:type" content="article" />
+        <!-- Twitter Card Meta Tags (defaults)-->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@markhazleton" />
+        <meta name="twitter:creator" content="@markhazleton" />
+        <meta name="twitter:title" content="Mark Hazleton - Solutions Architect &amp; Technology Leader" />
+        <meta name="twitter:description" content="Solutions Architect passionate for solutions which make technology work for business. Not sidetracked by sizzle." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/MarkHazleton.jpg" />
+        <meta name="twitter:image:alt" content="Mark Hazleton - Solutions Architect" />
+        <!-- Additional Twitter Card overrides-->
+        <meta name="twitter:title" content="Building TeachSpark: AI-Powered Educational Technology for Teachers" />
+        <meta name="twitter:description" content="How a conversation with my daughter led to creating TeachSpark - a sophisticated .NET 9 platform that uses OpenAI to generate Common Core-aligned worksheets for teachers. Includes code examples and technical architecture insights." />
+        <!-- Performance optimization - No external CDN dependencies-->
+        <!-- Favicon and app icons-->
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
+        <link href="/css/modern-styles.css" rel="stylesheet" />
+        <!-- Enhanced JSON-LD Structured Data for SEO-->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "givenName": "Mark",
+                "familyName": "Hazleton",
+                "jobTitle": "Solutions Architect",
+                "description": "Solutions Architect passionate for solutions which make technology work for business",
+                "url": "https://markhazleton.com",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/@MarkHazleton"],
+                "knowsAbout": [".NET Framework", "ASP.NET Core", "Microsoft Azure", "Project Management", "Web Development", "Solution Architecture", "Software Engineering", "Cloud Computing", "Artificial Intelligence", "Machine Learning"],
+                "alumniOf": {
+                    "@type": "Organization",
+                    "name": "University of North Texas"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Wichita",
+                    "addressRegion": "KS",
+                    "addressCountry": "US"
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/"
+                }
+            }
+        </script>
+        <!-- Additional structured data for specific pages-->
+        <!-- Additional page-specific CSS-->
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+    </head>
+    <body>
+        // Navigation
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Main navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/#" aria-label="Mark Hazleton homepage">Mark Hazleton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/#about" aria-current="page">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#experience">Experience</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
+                    </ul>
+                    <!-- Search Box - Inside collapsible navbar-->
+                    <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event)">
+                        <div class="input-group search-box">
+                            <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
+                            <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                    <!-- Social Icons - Inside collapsible navbar-->
+                    <div class="d-flex social-icons">
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <br />
+        <!-- Hero Section-->
+        <section class="bg-gradient-primary py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-10 mx-auto text-center">
+                        <h1 class="display-4 fw-bold mb-3">
+                            <i class="bi bi-lightbulb me-3"></i>
+                            Building TeachSpark: AI-Powered Educational Technology for Teachers
+                        </h1>
+                        <h2 class="h3 mb-4">A Father's Journey to Revolutionize Educational Technology</h2>
+                        <p class="lead mb-5">How a conversation with my eighth-grade English teacher daughter led to creating a sophisticated AI-powered worksheet generation platform</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Call to Action Section-->
+        <section class="bg-light py-5 border-top border-bottom">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="card border-primary shadow-lg">
+                            <div class="card-header bg-primary text-white text-center">
+                                <h3 class="card-title mb-0 fw-bold">
+                                    <i class="bi bi-rocket-takeoff me-2"></i>
+                                    🚀 Try TeachSpark Beta - Your Feedback Wanted!
+                                </h3>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-8">
+                                        <h4 class="h5 mb-3 text-primary">Ready to revolutionize your worksheet creation?</h4>
+                                        <p class="mb-3">TeachSpark is currently in beta and available for educators to explore. Experience firsthand how AI can transform your lesson planning workflow while maintaining educational rigor and standards alignment.</p>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-sm-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                    <small>Free during beta testing</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                    <small>Common Core aligned</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                    <small>Bloom's taxonomy integration</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                    <small>Multiple AI models supported</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 text-center">
+                                        <div class="mb-3">
+                                            <a class="btn btn-primary btn-lg mb-2 d-block" href="https://teachspark.markhazleton.com/" target="_blank" rel="noopener">
+                                                <i class="bi bi-play-circle me-2"></i>
+                                                Try Beta Site
+                                            </a>
+                                            <a class="btn btn-outline-secondary d-block" href="https://github.com/markhazleton/TeachSpark/issues" target="_blank" rel="noopener">
+                                                <i class="bi bi-github me-2"></i>
+                                                Share Feedback
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4" />
+                                <div class="alert alert-info border-0 mb-0">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-1 text-center"><i class="bi bi-people-fill text-info fs-3"></i></div>
+                                        <div class="col-md-11">
+                                            <h6 class="alert-heading mb-2">
+                                                <i class="bi bi-handshake me-2"></i>
+                                                Looking for Collaborators
+                                            </h6>
+                                            <p class="mb-0">
+                                                <strong>Educators, developers, and education technology enthusiasts:</strong>
+                                                I'm seeking partners who share the vision of empowering teachers through intelligent technology. Whether you're interested in testing, contributing code, suggesting features, or helping scale this platform, your involvement can help shape the future of AI-powered education tools.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Main Article Content-->
+        <article id="main-article">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- Table of Contents-->
+                        <nav class="mb-5" id="table-of-contents" aria-label="Table of Contents">
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0 fw-bold">
+                                        <i class="bi bi-list-ul me-2"></i>
+                                        Table of Contents
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#genesis">The Genesis: A Teacher's Challenge</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#technical-vision">The Technical Vision</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#architecture">Architecture: Building for Scale and Maintainability</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#model-selection">Innovation #1: Intelligent Model Selection</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#standards-integration">Innovation #2: Educational Standards Integration</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#logging-analytics">Innovation #3: Comprehensive Logging and Analytics</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#technical-excellence">Technical Excellence: Modern Development Practices</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#admin-experience">The Admin Experience: Professional-Grade Management</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#deployment">Deployment and Production Readiness</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#impact">The Impact: Solving Real Educational Challenges</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#lessons-learned">Lessons Learned: Building for Users, Not Developers</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#future-directions">Future Directions: Beyond Worksheets</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#conclusion">Conclusion: Technology in Service of Education</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                        <!-- Genesis Section-->
+                        <section class="mb-5" id="genesis">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-chat-dots me-2"></i>
+                                The Genesis: A Teacher's Challenge
+                            </h2>
+                            <p>As a father and software architect, some of my most rewarding projects have come from solving real problems for the people I care about most. When my daughter, an eighth-grade English teacher, mentioned her struggles with creating engaging, standards-aligned worksheets for her diverse student population, I saw an opportunity to blend my technical expertise with her educational insights.</p>
+                            <p>She had been experimenting with ChatGPT and Claude, copying and pasting prompts to generate worksheet content. While the AI tools were helpful, she found herself repeatedly explaining the same context: grade level requirements, Common Core standards, Bloom's taxonomy levels, and the need to differentiate content for various student cohorts. Each worksheet required starting from scratch, and there was no way to save, organize, or build upon previous work.</p>
+                            <div class="alert alert-info border-0 shadow-sm mb-4">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-quote text-info me-3 fs-4"></i>
+                                    <div><p class="mb-0 fst-italic">"I wish I could integrate Bloom's criteria with Common Core guidelines and target specific groups of students. The AI is powerful, but I spend too much time explaining what I need instead of focusing on my students."</p></div>
+                                </div>
+                            </div>
+                            <p>That conversation sparked the creation of TeachSpark—a comprehensive platform designed specifically for educators who want to harness AI's power while maintaining pedagogical rigor and organizational efficiency.</p>
+                        </section>
+                        <!-- Technical Vision Section-->
+                        <section class="mb-5" id="technical-vision">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-diagram-3 me-2"></i>
+                                The Technical Vision
+                            </h2>
+                            <p>As I analyzed her requirements, several key technical challenges emerged:</p>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card border-secondary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-cpu me-2"></i>
+                                                Intelligent Prompt Engineering
+                                            </h6>
+                                            <p class="card-text">How to automatically generate contextually rich prompts that incorporate educational standards without requiring teachers to remember complex formatting</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-secondary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-gear me-2"></i>
+                                                Dynamic Model Selection
+                                            </h6>
+                                            <p class="card-text">How to choose the most appropriate AI model based on worksheet type, complexity, and budget constraints</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-secondary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-book me-2"></i>
+                                                Educational Standards Integration
+                                            </h6>
+                                            <p class="card-text">How to seamlessly weave Common Core standards and Bloom's taxonomy into the content generation process</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-secondary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-folder me-2"></i>
+                                                Content Management
+                                            </h6>
+                                            <p class="card-text">How to save, organize, and iterate on generated worksheets</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-secondary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-person-check me-2"></i>
+                                                User Experience
+                                            </h6>
+                                            <p class="card-text">How to create an interface that feels natural to educators, not software developers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Architecture Section-->
+                        <section class="mb-5" id="architecture">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-building me-2"></i>
+                                Architecture: Building for Scale and Maintainability
+                            </h2>
+                            <p>TeachSpark is built on .NET 9 MVC with a clean architecture that separates concerns while maintaining flexibility for future enhancements.</p>
+                            <h4 class="h5 mb-3">The Foundation: Service Layer Architecture</h4>
+                            <p>The heart of the application lies in its service layer, which abstracts complex operations behind clean interfaces:</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ILlmService</span>
+<span class="token punctuation">{</span>
+  <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>ServiceResult<span class="token punctuation">&lt;</span>WorksheetContentResult<span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">GenerateWorksheetContentAsync</span><span class="token punctuation">(</span>
+    <span class="token class-name">WorksheetGenerationRequest</span> request<span class="token punctuation">,</span>
+    <span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> userId <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> userEmail <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token class-name">CancellationToken</span> cancellationToken <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span><span class="token punctuation">&lt;</span>ServiceResult<span class="token punctuation">></span>List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">GetAvailableModelsAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> cancellationToken <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span><span class="token punctuation">&lt;</span>ServiceResult<span class="token punctuation">></span><span class="token keyword">bool</span><span class="token punctuation">></span></span> <span class="token function">ValidateConfigurationAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> cancellationToken <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            <p>This interface hides the complexity of AI integration while providing educators with a simple, reliable way to generate content. Behind the scenes, the implementation handles model selection, cost optimization, error recovery, and quality validation.</p>
+                            <h4 class="h5 mb-3">Database Design: Educational Domain Modeling</h4>
+                            <p>The database schema reflects deep understanding of the educational domain:</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Worksheet</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Title <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> UserId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+
+  <span class="token comment">// Educational alignment</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> CommonCoreStandardId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name">CommonCoreStandard<span class="token punctuation">?</span></span> CommonCoreStandard <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> BloomLevelId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name">BloomLevel<span class="token punctuation">?</span></span> BloomLevel <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// Content storage</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> ContentMarkdown <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> RenderedHtml <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// Generation metadata</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> LlmModel <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">decimal</span><span class="token punctuation">?</span></span> GenerationCost <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">TimeSpan<span class="token punctuation">?</span></span> GenerationTime <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> TokensUsed <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// Educational metadata</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> WorksheetType <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> DifficultyLevel <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token string">"standard"</span><span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> QuestionCount <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> HasAnswerKey <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            <p>This design captures not just the content, but the educational context and generation metadata that help teachers understand and improve their worksheet creation process.</p>
+                        </section>
+                        <!-- Model Selection Section-->
+                        <section class="mb-5" id="model-selection">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                Innovation #1: Intelligent Model Selection
+                            </h2>
+                            <p>One of TeachSpark's most sophisticated features is its dynamic model selection system. Rather than forcing teachers to understand the technical differences between GPT-4o, GPT-4o-mini, and other models, the system automatically recommends the best option based on educational criteria:</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ModelSelectionCriteria</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> WorksheetType <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> DifficultyLevel <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> EstimatedTokens <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">decimal</span></span> MaxCostPerRequest <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> RequireStructuredOutput <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> PrioritizeSpeed <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> PrioritizeQuality <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>ServiceResult<span class="token punctuation">&lt;</span>ModelRecommendation<span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">RecommendModelAsync</span><span class="token punctuation">(</span>
+  <span class="token class-name">ModelSelectionCriteria</span> criteria<span class="token punctuation">,</span> <span class="token class-name">CancellationToken</span> cancellationToken <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> availableModels <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">GetAvailableModelsAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Filter models by technical requirements</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> suitableModels <span class="token operator">=</span> availableModels<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>m <span class="token operator">=></span>
+    criteria<span class="token punctuation">.</span>EstimatedTokens <span class="token operator">&lt;=</span> m<span class="token punctuation">.</span>MaxTokens <span class="token operator">&amp;&amp;</span>
+    <span class="token punctuation">(</span><span class="token operator">!</span>criteria<span class="token punctuation">.</span>RequireStructuredOutput <span class="token operator">||</span> m<span class="token punctuation">.</span>SupportsStructuredOutput<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+    <span class="token function">EstimateCost</span><span class="token punctuation">(</span>m<span class="token punctuation">,</span> criteria<span class="token punctuation">.</span>EstimatedTokens<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> criteria<span class="token punctuation">.</span>MaxCostPerRequest
+  <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Score models based on educational criteria</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> scoredModels <span class="token operator">=</span> suitableModels<span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>model <span class="token operator">=></span> <span class="token keyword">new</span>
+  <span class="token punctuation">{</span>
+    Model <span class="token operator">=</span> model<span class="token punctuation">,</span>
+    Score <span class="token operator">=</span> <span class="token function">CalculateEducationalScore</span><span class="token punctuation">(</span>model<span class="token punctuation">,</span> criteria<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">OrderByDescending</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>Score<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ModelRecommendation</span>
+  <span class="token punctuation">{</span>
+    RecommendedModel <span class="token operator">=</span> scoredModels<span class="token punctuation">.</span><span class="token function">First</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Model<span class="token punctuation">,</span>
+    Reason <span class="token operator">=</span> <span class="token function">GetEducationalReason</span><span class="token punctuation">(</span>scoredModels<span class="token punctuation">.</span><span class="token function">First</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Model<span class="token punctuation">,</span> criteria<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    EstimatedCost <span class="token operator">=</span> <span class="token function">EstimateCost</span><span class="token punctuation">(</span>scoredModels<span class="token punctuation">.</span><span class="token function">First</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Model<span class="token punctuation">,</span> criteria<span class="token punctuation">.</span>EstimatedTokens<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            <p>The system considers factors like worksheet complexity (creative writing needs more sophisticated models than vocabulary drills), budget constraints (schools have limited resources), and quality requirements (high-stakes assessments deserve premium models).</p>
+                        </section>
+                        <!-- Standards Integration Section-->
+                        <section class="mb-5" id="standards-integration">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-award me-2"></i>
+                                Innovation #2: Educational Standards Integration
+                            </h2>
+                            <p>Teachers shouldn't need to memorize Common Core standard codes or Bloom's taxonomy descriptions. TeachSpark automatically integrates this information into AI prompts:</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">private</span> <span class="token keyword">async</span> Task<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span><span class="token keyword">string</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">GeneratePromptAsync</span><span class="token punctuation">(</span><span class="token class-name">WorksheetGenerationRequest</span> request<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> promptBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>Template<span class="token punctuation">.</span>UserPromptTemplate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Automatically include Common Core standard context</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>CommonCoreStandardId<span class="token punctuation">.</span>HasValue<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> standard <span class="token operator">=</span> <span class="token keyword">await</span> dbContext<span class="token punctuation">.</span>CommonCoreStandards
+      <span class="token punctuation">.</span><span class="token function">FirstOrDefaultAsync</span><span class="token punctuation">(</span>s <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> s<span class="token punctuation">.</span>Id <span class="token operator">==</span> request<span class="token punctuation">.</span>CommonCoreStandardId<span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>standard <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"\n**Common Core Standard Alignment:**"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"- Code: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">standard<span class="token punctuation">.</span>Code</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"- Grade: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">standard<span class="token punctuation">.</span>Grade</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"- Domain: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">standard<span class="token punctuation">.</span>Domain</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"- Description: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">standard<span class="token punctuation">.</span>Description</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token string">"Ensure all questions align with this standard's requirements."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// Include Bloom's taxonomy guidance</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>BloomLevelId<span class="token punctuation">.</span>HasValue<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bloomLevel <span class="token operator">=</span> <span class="token keyword">await</span> dbContext<span class="token punctuation">.</span>BloomLevels
+      <span class="token punctuation">.</span><span class="token function">FirstOrDefaultAsync</span><span class="token punctuation">(</span>b <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> b<span class="token punctuation">.</span>Id <span class="token operator">==</span> request<span class="token punctuation">.</span>BloomLevelId<span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>bloomLevel <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"\n**Bloom's Taxonomy Level:**"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"- Level: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">bloomLevel<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string"> (Level </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">bloomLevel<span class="token punctuation">.</span>Order</span><span class="token punctuation">}</span></span><span class="token string">/6)"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"- Description: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">bloomLevel<span class="token punctuation">.</span>Description</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"- Action Verbs: </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">bloomLevel<span class="token punctuation">.</span>ActionVerbs</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      promptBuilder<span class="token punctuation">.</span><span class="token function">AppendLine</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"Focus questions on '</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">bloomLevel<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string">' cognitive level."</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> promptBuilder<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            <p>This automatic context injection means teachers can focus on their pedagogical goals rather than prompt engineering.</p>
+                        </section>
+                        <!-- Logging Analytics Section-->
+                        <section class="mb-5" id="logging-analytics">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-graph-up me-2"></i>
+                                Innovation #3: Comprehensive Logging and Analytics
+                            </h2>
+                            <p>Understanding how AI models perform in educational contexts requires detailed tracking. TeachSpark implements sophisticated logging that captures every aspect of the generation process:</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LlmLogEntry</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Status <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span> <span class="token comment">// SUCCESS or ERROR</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">DateTime</span> Timestamp <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> RequestId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">LlmCallMetadata</span> Metadata <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">WorksheetGenerationRequest</span> Request <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> SystemPrompt <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> UserPrompt <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">string</span><span class="token punctuation">.</span>Empty<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> Response <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">ErrorDetails<span class="token punctuation">?</span></span> ErrorDetails <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">LogLlmInteractionAsync</span><span class="token punctuation">(</span>
+  <span class="token class-name">WorksheetGenerationRequest</span> request<span class="token punctuation">,</span>
+  <span class="token class-name"><span class="token keyword">string</span></span> response<span class="token punctuation">,</span>
+  <span class="token class-name">LlmCallMetadata</span> metadata<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> timestamp <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>UtcNow<span class="token punctuation">;</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> fileName <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"LLM_</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">timestamp</span><span class="token format-string"><span class="token punctuation">:</span>yyyyMMdd</span><span class="token punctuation">}</span></span><span class="token string">_</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">timestamp</span><span class="token format-string"><span class="token punctuation">:</span>HHmmss</span><span class="token punctuation">}</span></span><span class="token string">_</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">Guid<span class="token punctuation">.</span><span class="token function">NewGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token format-string"><span class="token punctuation">:</span>N</span><span class="token punctuation">}</span></span><span class="token string">_success.json"</span></span><span class="token punctuation">;</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> filePath <span class="token operator">=</span> Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span>_logDirectory<span class="token punctuation">,</span> fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token class-name"><span class="token keyword">var</span></span> logEntry <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">LlmLogEntry</span>
+  <span class="token punctuation">{</span>
+    Status <span class="token operator">=</span> <span class="token string">"SUCCESS"</span><span class="token punctuation">,</span>
+    Timestamp <span class="token operator">=</span> timestamp<span class="token punctuation">,</span>
+    RequestId <span class="token operator">=</span> metadata<span class="token punctuation">.</span>RequestId<span class="token punctuation">,</span>
+    Metadata <span class="token operator">=</span> metadata<span class="token punctuation">,</span>
+    Request <span class="token operator">=</span> request<span class="token punctuation">,</span>
+    SystemPrompt <span class="token operator">=</span> request<span class="token punctuation">.</span>Template<span class="token punctuation">.</span>SystemPromptTemplate<span class="token punctuation">,</span>
+    UserPrompt <span class="token operator">=</span> request<span class="token punctuation">.</span>Template<span class="token punctuation">.</span>UserPromptTemplate<span class="token punctuation">,</span>
+    Response <span class="token operator">=</span> response
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> <span class="token function">WriteLogEntryAsync</span><span class="token punctuation">(</span>filePath<span class="token punctuation">,</span> logEntry<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            <p>This detailed logging enables continuous improvement of prompts and helps identify patterns in successful worksheet generation.</p>
+                        </section>
+                        <!-- Technical Excellence Section-->
+                        <section class="mb-5" id="technical-excellence">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-tools me-2"></i>
+                                Technical Excellence: Modern Development Practices
+                            </h2>
+                            <h4 class="h5 mb-3">Frontend Build System</h4>
+                            <p>TeachSpark uses a sophisticated webpack-based build system that rivals modern SPA applications:</p>
+                            <pre class="language-javascript"><code class="language-javascript"><span class="token comment">// webpack.config.prod.js</span>
+module<span class="token punctuation">.</span><span class="token property-access">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">mode</span><span class="token operator">:</span> <span class="token string">'production'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">optimization</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">splitChunks</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">chunks</span><span class="token operator">:</span> <span class="token string">'all'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">cacheGroups</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token literal-property property">jquery</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'jquery'</span><span class="token punctuation">,</span>
+          <span class="token literal-property property">test</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex"><span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span>node_modules<span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span>jquery<span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span></span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
+          <span class="token literal-property property">chunks</span><span class="token operator">:</span> <span class="token string">'all'</span><span class="token punctuation">,</span>
+          <span class="token literal-property property">priority</span><span class="token operator">:</span> <span class="token number">20</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">bootstrap</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'bootstrap'</span><span class="token punctuation">,</span>
+          <span class="token literal-property property">test</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex"><span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span>node_modules<span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span>bootstrap<span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span></span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
+          <span class="token literal-property property">chunks</span><span class="token operator">:</span> <span class="token string">'all'</span><span class="token punctuation">,</span>
+          <span class="token literal-property property">priority</span><span class="token operator">:</span> <span class="token number">20</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">vendor</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'vendors'</span><span class="token punctuation">,</span>
+          <span class="token literal-property property">test</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex"><span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span>node_modules<span class="token char-class"><span class="token char-class-punctuation punctuation">[</span><span class="token special-escape escape">\\</span>/<span class="token char-class-punctuation punctuation">]</span></span></span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
+          <span class="token literal-property property">chunks</span><span class="token operator">:</span> <span class="token string">'all'</span><span class="token punctuation">,</span>
+          <span class="token literal-property property">priority</span><span class="token operator">:</span> <span class="token number">10</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token keyword">new</span> <span class="token class-name">MiniCssExtractPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      <span class="token literal-property property">filename</span><span class="token operator">:</span> <span class="token string">'css/[name].[contenthash].css'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">new</span> <span class="token class-name">WebpackManifestPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      <span class="token literal-property property">fileName</span><span class="token operator">:</span> <span class="token string">'assets-manifest.json'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">publicPath</span><span class="token operator">:</span> <span class="token string">'/'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">generate</span><span class="token operator">:</span> <span class="token punctuation">(</span>seed<span class="token punctuation">,</span> files<span class="token punctuation">,</span> entrypoints<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> manifestFiles <span class="token operator">=</span> files<span class="token punctuation">.</span><span class="token method function property-access">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span>manifest<span class="token punctuation">,</span> file<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token punctuation">{</span>
+          <span class="token comment">// Generate multiple lookup keys for maximum compatibility</span>
+          <span class="token keyword">const</span> logicalName <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token property-access">name</span><span class="token punctuation">;</span>
+          <span class="token keyword">const</span> withSlash <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>logicalName<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+          <span class="token keyword">const</span> withoutSlash <span class="token operator">=</span> logicalName<span class="token punctuation">.</span><span class="token method function property-access">replace</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex"><span class="token anchor function">^</span><span class="token escape">\/</span></span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">const</span> filename <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token method function property-access">basename</span><span class="token punctuation">(</span>logicalName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+          manifest<span class="token punctuation">[</span>withSlash<span class="token punctuation">]</span> <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token property-access">path</span><span class="token punctuation">;</span>
+          manifest<span class="token punctuation">[</span>withoutSlash<span class="token punctuation">]</span> <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token property-access">path</span><span class="token punctuation">;</span>
+          manifest<span class="token punctuation">[</span>filename<span class="token punctuation">]</span> <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token property-access">path</span><span class="token punctuation">;</span>
+
+          <span class="token keyword control-flow">return</span> manifest<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span> seed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword control-flow">return</span> manifestFiles<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-puzzle me-2"></i>
+                                                Code Splitting
+                                            </h6>
+                                            <p class="card-text small">For optimal loading performance</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-hash me-2"></i>
+                                                Content Hashing
+                                            </h6>
+                                            <p class="card-text small">For cache invalidation</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-speedometer2 me-2"></i>
+                                                Asset Optimization
+                                            </h6>
+                                            <p class="card-text small">With minification and compression</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-arrow-clockwise me-2"></i>
+                                                Development Hot Reloading
+                                            </h6>
+                                            <p class="card-text small">For rapid iteration</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="h5 mb-3">Code Quality Enforcement</h4>
+                            <p>The project includes comprehensive code quality tools:</p>
+                            <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"quality"</span><span class="token operator">:</span> <span class="token string">"npm run lint &amp;&amp; npm run lint:css &amp;&amp; npm run format:check"</span><span class="token punctuation">,</span>
+    <span class="token property">"quality:fix"</span><span class="token operator">:</span> <span class="token string">"npm run lint:fix &amp;&amp; npm run lint:css:fix &amp;&amp; npm run format"</span><span class="token punctuation">,</span>
+    <span class="token property">"prebuild"</span><span class="token operator">:</span> <span class="token string">"npm run quality"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"husky"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"hooks"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"pre-commit"</span><span class="token operator">:</span> <span class="token string">"lint-staged"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"lint-staged"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"*.{js,jsx}"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"eslint --fix"</span><span class="token punctuation">,</span> <span class="token string">"prettier --write"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"*.{css,scss}"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"stylelint --fix"</span><span class="token punctuation">,</span> <span class="token string">"prettier --write"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            <p>This ensures consistent code quality and prevents issues from reaching production.</p>
+                        </section>
+                        <!-- Admin Experience Section-->
+                        <section class="mb-5" id="admin-experience">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-shield-check me-2"></i>
+                                The Admin Experience: Professional-Grade Management
+                            </h2>
+                            <p>Understanding that educational technology needs robust administration, TeachSpark includes a comprehensive admin panel with DataTables integration:</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">HttpPost</span></span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">ValidateAntiForgeryToken</span></span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">async</span> Task<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>IActionResult<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token function">GetWorksheetsData</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">try</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> worksheets <span class="token operator">=</span> <span class="token keyword">await</span> _context<span class="token punctuation">.</span>Worksheets
+      <span class="token punctuation">.</span><span class="token function">Include</span><span class="token punctuation">(</span>w <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> w<span class="token punctuation">.</span>User<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">Include</span><span class="token punctuation">(</span>w <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> w<span class="token punctuation">.</span>CommonCoreStandard<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">Include</span><span class="token punctuation">(</span>w <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> w<span class="token punctuation">.</span>BloomLevel<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">Include</span><span class="token punctuation">(</span>w <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> w<span class="token punctuation">.</span>Template<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">AsNoTracking</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">ToListAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> data <span class="token operator">=</span> worksheets<span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>w <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> <span class="token keyword">new</span>
+    <span class="token punctuation">{</span>
+      id <span class="token operator">=</span> w<span class="token punctuation">.</span>Id<span class="token punctuation">,</span>
+      title <span class="token operator">=</span> w<span class="token punctuation">.</span>Title <span class="token operator">??</span> <span class="token string">"Untitled"</span><span class="token punctuation">,</span>
+      worksheetType <span class="token operator">=</span> w<span class="token punctuation">.</span>WorksheetType <span class="token operator">??</span> <span class="token string">"Unknown"</span><span class="token punctuation">,</span>
+      difficultyLevel <span class="token operator">=</span> w<span class="token punctuation">.</span>DifficultyLevel <span class="token operator">??</span> <span class="token string">"Standard"</span><span class="token punctuation">,</span>
+      userName <span class="token operator">=</span> w<span class="token punctuation">.</span>User <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token punctuation">?</span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">w<span class="token punctuation">.</span>User<span class="token punctuation">.</span>FirstName</span><span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">w<span class="token punctuation">.</span>User<span class="token punctuation">.</span>LastName</span><span class="token punctuation">}</span></span><span class="token string">"</span></span> <span class="token punctuation">:</span> <span class="token string">"Unknown User"</span><span class="token punctuation">,</span>
+      commonCoreStandard <span class="token operator">=</span> w<span class="token punctuation">.</span>CommonCoreStandard<span class="token punctuation">?.</span>Code <span class="token operator">??</span> <span class="token string">"None"</span><span class="token punctuation">,</span>
+      bloomLevel <span class="token operator">=</span> w<span class="token punctuation">.</span>BloomLevel<span class="token punctuation">?.</span>Name <span class="token operator">??</span> <span class="token string">"None"</span><span class="token punctuation">,</span>
+      template <span class="token operator">=</span> w<span class="token punctuation">.</span>Template<span class="token punctuation">?.</span>Name <span class="token operator">??</span> <span class="token string">"None"</span><span class="token punctuation">,</span>
+      isPublic <span class="token operator">=</span> w<span class="token punctuation">.</span>IsPublic<span class="token punctuation">,</span>
+      isFavorite <span class="token operator">=</span> w<span class="token punctuation">.</span>IsFavorite<span class="token punctuation">,</span>
+      questionCount <span class="token operator">=</span> w<span class="token punctuation">.</span>QuestionCount <span class="token operator">??</span> <span class="token number">0</span><span class="token punctuation">,</span>
+      hasAnswerKey <span class="token operator">=</span> w<span class="token punctuation">.</span>HasAnswerKey<span class="token punctuation">,</span>
+      viewCount <span class="token operator">=</span> w<span class="token punctuation">.</span>ViewCount<span class="token punctuation">,</span>
+      downloadCount <span class="token operator">=</span> w<span class="token punctuation">.</span>DownloadCount<span class="token punctuation">,</span>
+      createdAt <span class="token operator">=</span> w<span class="token punctuation">.</span>CreatedAt<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token string">"yyyy-MM-dd HH:mm"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      updatedAt <span class="token operator">=</span> w<span class="token punctuation">.</span>UpdatedAt<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token string">"yyyy-MM-dd HH:mm"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token function">Json</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token punctuation">{</span> data <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    _logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"Error retrieving worksheets data for DataTables"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">Json</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token punctuation">{</span> error <span class="token operator">=</span> <span class="token string">"Failed to load worksheets data"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card border-info h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-funnel me-2"></i>
+                                                Advanced Filtering
+                                            </h6>
+                                            <p class="card-text small">Search across all worksheet metadata</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-info h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-check2-square me-2"></i>
+                                                Bulk Operations
+                                            </h6>
+                                            <p class="card-text small">Managing large datasets efficiently</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-info h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-download me-2"></i>
+                                                Export Capabilities
+                                            </h6>
+                                            <p class="card-text small">For reporting and analysis</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-info h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-graph-up-arrow me-2"></i>
+                                                Real-time Analytics
+                                            </h6>
+                                            <p class="card-text small">System usage and performance</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Deployment Section-->
+                        <section class="mb-5" id="deployment">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-cloud-upload me-2"></i>
+                                Deployment and Production Readiness
+                            </h2>
+                            <p>TeachSpark is designed for real-world deployment with comprehensive configuration management:</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token comment">// Program.cs - Production-ready startup</span>
+<span class="token class-name"><span class="token keyword">var</span></span> builder <span class="token operator">=</span> WebApplication<span class="token punctuation">.</span><span class="token function">CreateBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Configure Serilog for production logging</span>
+LoggingUtility<span class="token punctuation">.</span><span class="token function">ConfigureSerilogLogging</span><span class="token punctuation">(</span>builder<span class="token punctuation">,</span> <span class="token string">"TeachSpark.Web"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Database with proper connection management</span>
+<span class="token class-name"><span class="token keyword">var</span></span> connectionString <span class="token operator">=</span> builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">.</span><span class="token function">GetConnectionString</span><span class="token punctuation">(</span><span class="token string">"DefaultConnection"</span><span class="token punctuation">)</span>
+  <span class="token operator">??</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">InvalidOperationException</span><span class="token punctuation">(</span><span class="token string">"Connection string 'DefaultConnection' not found."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span>AddDbContext<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ApplicationDbContext<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token punctuation">(</span>options <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span><span class="token function">UseSqlite</span><span class="token punctuation">(</span>connectionString<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Identity with production-ready security settings</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span>AddDefaultIdentity<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ApplicationUser<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token punctuation">(</span>options <span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>
+<span class="token punctuation">{</span>
+  options<span class="token punctuation">.</span>Password<span class="token punctuation">.</span>RequireDigit <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>Password<span class="token punctuation">.</span>RequiredLength <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>Password<span class="token punctuation">.</span>RequireNonAlphanumeric <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>Password<span class="token punctuation">.</span>RequireUppercase <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>Password<span class="token punctuation">.</span>RequireLowercase <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>Lockout<span class="token punctuation">.</span>DefaultLockoutTimeSpan <span class="token operator">=</span> TimeSpan<span class="token punctuation">.</span><span class="token function">FromMinutes</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>Lockout<span class="token punctuation">.</span>MaxFailedAccessAttempts <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>User<span class="token punctuation">.</span>RequireUniqueEmail <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  options<span class="token punctuation">.</span>SignIn<span class="token punctuation">.</span>RequireConfirmedEmail <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span> <span class="token comment">// Configurable for production</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span>AddEntityFrameworkStores<span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>ApplicationDbContext<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Register all services through extension methods</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddCrudServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddWorksheetGenerationServices</span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card border-warning h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                                Error Handling
+                                            </h6>
+                                            <p class="card-text small">Comprehensive with proper logging</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-warning h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-shield-lock me-2"></i>
+                                                Security Configurations
+                                            </h6>
+                                            <p class="card-text small">Appropriate for educational environments</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-warning h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-speedometer me-2"></i>
+                                                Asset Optimization
+                                            </h6>
+                                            <p class="card-text small">For fast loading times</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-warning h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-database me-2"></i>
+                                                Database Migrations
+                                            </h6>
+                                            <p class="card-text small">For reliable deployments</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Impact Section-->
+                        <section class="mb-5" id="impact">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-bullseye me-2"></i>
+                                The Impact: Solving Real Educational Challenges
+                            </h2>
+                            <p>The technical sophistication of TeachSpark serves a greater purpose: empowering educators to focus on teaching rather than technology. By automating the complex aspects of AI interaction while preserving pedagogical control, the platform addresses several key pain points:</p>
+                            <div class="row g-3 mb-4">
+                                <div class="col-lg-4">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-clock text-success fs-1 mb-3"></i>
+                                            <h6 class="card-title">Time Efficiency</h6>
+                                            <p class="card-text small">Teachers spend minutes, not hours, creating customized worksheets</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-check-circle text-success fs-1 mb-3"></i>
+                                            <h6 class="card-title">Consistency</h6>
+                                            <p class="card-text small">All generated content automatically aligns with chosen educational standards</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-people text-success fs-1 mb-3"></i>
+                                            <h6 class="card-title">Differentiation</h6>
+                                            <p class="card-text small">Easy creation of multiple difficulty levels for diverse learners</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-folder-check text-success fs-1 mb-3"></i>
+                                            <h6 class="card-title">Organization</h6>
+                                            <p class="card-text small">All worksheets are saved, searchable, and reusable</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-piggy-bank text-success fs-1 mb-3"></i>
+                                            <h6 class="card-title">Cost Management</h6>
+                                            <p class="card-text small">Intelligent model selection optimizes AI usage costs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-award text-success fs-1 mb-3"></i>
+                                            <h6 class="card-title">Quality Assurance</h6>
+                                            <p class="card-text small">Built-in validation ensures educational appropriateness</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Lessons Learned Section-->
+                        <section class="mb-5" id="lessons-learned">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                Lessons Learned: Building for Users, Not Developers
+                            </h2>
+                            <p>This project reinforced several important principles for educational technology:</p>
+                            <div class="accordion mb-4" id="lessonsAccordion">
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingDomain">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDomain" aria-expanded="true" aria-controls="collapseDomain">
+                                            <i class="bi bi-mortarboard me-2"></i>
+                                            Domain Expertise Matters
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse show" id="collapseDomain" aria-labelledby="headingDomain" data-bs-parent="#lessonsAccordion">
+                                        <div class="accordion-body"><p>Understanding the educational domain—Common Core standards, Bloom's taxonomy, differentiated instruction—was crucial for creating truly useful features. Technical excellence without pedagogical understanding would have produced a sophisticated tool that teachers wouldn't use.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingAbstraction">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAbstraction" aria-expanded="false" aria-controls="collapseAbstraction">
+                                            <i class="bi bi-layers me-2"></i>
+                                            Abstraction Enables Adoption
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseAbstraction" aria-labelledby="headingAbstraction" data-bs-parent="#lessonsAccordion">
+                                        <div class="accordion-body"><p>The most successful educational technology hides complexity behind intuitive interfaces. Teachers shouldn't need to understand token limits or model capabilities; they should be able to focus on their educational goals.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingObservability">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseObservability" aria-expanded="false" aria-controls="collapseObservability">
+                                            <i class="bi bi-graph-up me-2"></i>
+                                            Observability Drives Improvement
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseObservability" aria-labelledby="headingObservability" data-bs-parent="#lessonsAccordion">
+                                        <div class="accordion-body"><p>Comprehensive logging and analytics aren't just for debugging—they're essential for understanding how AI performs in educational contexts and continuously improving the system.</p></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header" id="headingProduction">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProduction" aria-expanded="false" aria-controls="collapseProduction">
+                                            <i class="bi bi-gear me-2"></i>
+                                            Production-Ready from Day One
+                                        </button>
+                                    </h4>
+                                    <div class="accordion-collapse collapse" id="collapseProduction" aria-labelledby="headingProduction" data-bs-parent="#lessonsAccordion">
+                                        <div class="accordion-body"><p>Educational technology needs to be reliable. Proper error handling, security measures, and performance optimization aren't optional features—they're requirements for any system teachers will trust with their students' learning.</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Future Directions Section-->
+                        <section class="mb-5" id="future-directions">
+                            <h2 class="h3 text-primary mb-4">
+                                <i class="bi bi-rocket me-2"></i>
+                                Future Directions: Beyond Worksheets
+                            </h2>
+                            <p>While TeachSpark successfully addresses worksheet generation, the platform's architecture enables broader educational applications:</p>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card border-primary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-collection-play me-2"></i>
+                                                Multi-modal Content
+                                            </h6>
+                                            <p class="card-text">Incorporating images, videos, and interactive elements</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-primary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-people-fill me-2"></i>
+                                                Collaborative Features
+                                            </h6>
+                                            <p class="card-text">For teacher teams and professional learning communities</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-primary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-bar-chart me-2"></i>
+                                                Assessment Analytics
+                                            </h6>
+                                            <p class="card-text">Insights into student performance patterns</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-primary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-link-45deg me-2"></i>
+                                                LMS Integration
+                                            </h6>
+                                            <p class="card-text">Seamless workflow with learning management systems</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-primary h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-phone me-2"></i>
+                                                Mobile Applications
+                                            </h6>
+                                            <p class="card-text">On-the-go worksheet creation and review</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="h5 mb-3">Open Source and Community</h4>
+                            <p>The complete TeachSpark codebase represents thousands of hours of development focused on solving real educational challenges. While built specifically for my daughter's needs, the patterns and approaches demonstrated here can benefit the broader educational technology community.</p>
+                            <p>The project showcases how modern software development practices—clean architecture, comprehensive testing strategies, sophisticated build systems, and production-ready deployment—can be applied to create tools that genuinely improve educational outcomes.</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!-- Conclusion Section-->
+        <section class="mb-5" id="conclusion">
+            <div class="card border-primary shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h3 mb-0">
+                        <i class="bi bi-trophy me-2"></i>
+                        Conclusion: Technology in Service of Education
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead mb-4">TeachSpark began as a father's response to his daughter's professional challenges and evolved into a comprehensive platform that demonstrates the potential of AI-powered educational technology. By focusing on real user needs, maintaining high technical standards, and respecting the complexity of educational practice, we can create tools that amplify human capability rather than replace human judgment.</p>
+                    <p class="mb-4">The journey from that weekend conversation to a production-ready application reinforced my belief that the best technology solutions come from deep understanding of user needs combined with technical excellence in execution. TeachSpark doesn't just generate worksheets—it empowers educators to focus on what they do best: inspiring and guiding student learning.</p>
+                    <div class="alert alert-success border-0 shadow-sm mb-4">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-star-fill text-success me-3 fs-4"></i>
+                            <div>
+                                <h4 class="alert-heading h6 mb-2">For Educators and Developers</h4>
+                                <p class="mb-0">For educators interested in exploring how AI can enhance their practice, and for developers looking to understand how sophisticated applications can be built with modern .NET technologies, TeachSpark provides a comprehensive example of what's possible when technology serves a clear educational purpose.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4" />
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="mb-2">About the Author</h5>
+                            <p class="mb-0 small">Mark Hazleton is a software architect and educational technology enthusiast with over two decades of experience building scalable applications. He specializes in creating practical solutions that bridge the gap between complex technology and real-world user needs. When not coding, he enjoys collaborating with educators to understand how technology can genuinely improve learning outcomes.</p>
+                        </div>
+                        <div class="col-md-4 text-center"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="mb-3">Mark Hazleton</h5>
+                        <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Quick Links</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#about">About</a></li>
+                            <li><a href="/#experience">Experience</a></li>
+                            <li><a href="/#projects">Projects</a></li>
+                            <li><a href="/articles.html">Articles</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/projectmechanics/">Project Mechanics</a></li>
+                            <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
+                            <li><a href="/rss.xml">RSS Feed</a></li>
+                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" />
+                <div class="row">
+                    <div class="col-12 text-center"><p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p></div>
+                </div>
+            </div>
+        </footer>
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
