@@ -1,247 +1,911 @@
-extends ../layouts/articles
+extends ../layouts/modern-layout
 
 block pagehead
   title Developing MarkHazleton.com: Tools and Approach
   meta(name='description', content='An in-depth look into the technologies and development process behind MarkHazleton.com. Discover the tools and frameworks used to create this site.')
   meta(name="keywords" content="Mark Hazleton, website development, Node.js, Pug, VS Code, SB UI Kit Pro, GitHub, Azure, Cloudflare, Screaming Frog SEO Spider")
   meta(name='author', content='Mark Hazleton')
+
+block canonical
   link(rel='canonical', href='https://markhazleton.com/articles/developing-markhazletoncom-tools-and-approach.html')
 
+block og_overrides
+  meta(property='og:title', content='Developing MarkHazleton.com: Tools and Approach')
+  meta(property='og:description', content='An in-depth look into the technologies and development process behind MarkHazleton.com. Discover the tools and frameworks used to create this site.')
+  meta(property='og:url', content='https://markhazleton.com/articles/developing-markhazletoncom-tools-and-approach.html')
+  meta(property='og:type', content='article')
+
+block twitter_overrides
+  meta(name='twitter:title', content='Developing MarkHazleton.com: Tools and Approach')
+  meta(name='twitter:description', content='An in-depth look into the technologies and development process behind MarkHazleton.com. Discover the tools and frameworks used to create this site.')
+
 block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 Developing MarkHazleton.com
-      h2.subheading.mb-3 The Tools, Technologies, and Thought Process Behind the Site
-      p.
-        Building MarkHazleton.com was a journey defined by choosing the right tools for rapid development and efficient management. Every tool was carefully selected to ensure that the website was reliable, easy to maintain, and able to grow with the needs of the business. This article highlights the key technologies that made the site what it is today.
+  br
+  //- Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-code-slash.me-3
+            | Developing MarkHazleton.com
+          h2.h3.mb-4 The Tools, Technologies, and Thought Process Behind the Site
+          p.lead.mb-5
+            | Building MarkHazleton.com was a journey defined by choosing the right tools for rapid development and efficient management.
+            | Every tool was carefully selected to ensure that the website was reliable, easy to maintain, and able to grow with the needs of the business.
 
-      h2.subheading.mb-3 Leveraging a Well-Thought-Out Template
-      p
-        | When I began working on MarkHazleton.com, I started by forking the
-        a(href='https://github.com/StartBootstrap/startbootstrap-resume' title='Start Bootstrap Resume GitHub Repository' alt='Start Bootstrap Resume GitHub Repository' rel='nofollow' target='_blank') Start Bootstrap Resume GitHub Repository
-        | which provided a well-planned, thoughtfully designed foundation.
-        | Its structure allowed me to quickly come up to speed with static site development.
-        | I was able to focus on customizing content while gradually exploring more advanced features and adapting the template to my growing needs.
+          .d-flex.flex-wrap.gap-2.justify-content-center.mb-4
+            .badge.bg-primary.text-white Node.js
+            .badge.bg-secondary.text-white Pug
+            .badge.bg-success.text-white Azure
+            .badge.bg-info.text-white Bootstrap
+            .badge.bg-warning.text-dark GitHub Actions
 
-      dl
-        dt Easy Adaptability
-        dd
-          p.
-            The design of the Start Bootstrap Resume template made it easy to add new sections,
-            adjust layouts, and integrate dynamic elements with Node.js and npm.
-            As I became more familiar with the technology, I added features like Pug for templating and SCSS for styling.
+          .alert.alert-info.border-0.shadow-sm
+            .d-flex.align-items-start
+              i.bi.bi-github.fs-4.text-info.me-3.flex-shrink-0
+              div
+                h4.alert-heading.mb-2 Open Source Foundation
+                p.mb-0 Built on the Start Bootstrap Resume template, showcasing the power of open source in rapid development
 
-        dt Quick Learning and Customization
-        dd
-          p.
-            Thanks to the well-thought-out structure, I quickly learned how to manage static site builds,
-            minify assets, and automate tasks using Node.js.
-            The template's simplicity helped me focus on growth as I built a more robust website over time.
+  //- Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
 
-      h2.subheading.mb-3 A Flexible and Efficient Starting Point
-      p.
-        The Start Bootstrap Resume template not only provided a solid foundation but also offered the flexibility I needed as my project evolved. It allowed me to create MarkHazleton.com efficiently, giving me the tools to scale and refine the site as needed.
+          //- Table of Contents
+          nav#table-of-contents.mb-5(aria-label='Table of Contents')
+            .card.bg-light
+              .card-header
+                h3.card-title.mb-0.fw-bold
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                .row
+                  .col-md-6
+                    ul.list-group.list-group-flush
+                      li.list-group-item: a.text-decoration-none(href='#introduction') Introduction
+                      li.list-group-item: a.text-decoration-none(href='#template-foundation') Template Foundation
+                      li.list-group-item: a.text-decoration-none(href='#development-workflow') Development Workflow
+                      li.list-group-item: a.text-decoration-none(href='#technology-stack') Technology Stack
+                  .col-md-6
+                    ul.list-group.list-group-flush
+                      li.list-group-item: a.text-decoration-none(href='#scss-practices') SCSS Best Practices
+                      li.list-group-item: a.text-decoration-none(href='#recent-updates') Recent Updates (2024)
+                      li.list-group-item: a.text-decoration-none(href='#conclusion') Conclusion
 
-      h2.subheading.mb-3 Local Development and Deployment Automation
-      p.
-        Node.js plays a crucial role in the development and deployment workflow of MarkHazleton.com. It powers both the local development environment and the automated build and deployment pipeline, ensuring efficient site management. Through a set of custom npm scripts, I am able to handle everything from building static assets to deploying the site on Azure Static Web Apps via GitHub Actions.
-      dl
-        dt Package.json: Custom Scripts
-        dd
-          p The project’s `package.json` includes multiple npm scripts that automate key tasks like cleaning, building SCSS, generating Pug templates, and copying assets. This ensures a streamlined workflow, allowing me to edit, build, and deploy from a single command.
-          pre.language-javascript
-            code.language-javascript.
-              "scripts": {
-                "build": "npm run clean && npm run build:pug && npm run build:scss && npm run build:scripts && npm run build:assets",
-                "build:assets": "node scripts/build-assets.js",
-                "build:pug": "node scripts/build-pug.js",
-                "build:scripts": "node scripts/build-scripts.js",
-                "build:scss": "node scripts/build-scss.js",
-                "clean": "node scripts/clean.js",
-                "start": "npm run build && node scripts/start.js",
-                "start:debug": "npm run build && node scripts/start-debug.js"
-              }
+          //- Introduction Section
+          section#introduction.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-primary.text-white
+                h2.h3.mb-0
+                  i.bi.bi-play-circle.me-2
+                  | Introduction
+              .card-body
+                p.lead
+                  | This article highlights the key technologies that made MarkHazleton.com what it is today,
+                  | demonstrating how careful tool selection can lead to rapid development and efficient site management.
 
-        dt Local Development Setup
-        dd
-          p This is how to set up live reloading for your static website in Visual Studio Code using a custom start.js script and BrowserSync.
-          p.
-            During development, I rely on these scripts to copy static assets, compile SCSS,
-            and transform Pug templates into static HTML.
-            By using a single `npm start` command, I can run and debug the site, allowing for fast iterations.
-          h3 Setting Up start.js
-          p The start.js script runs two tasks concurrently:
-          ul
-            li A Scipt (sp-watch.js) to monitor your source files for changes and trigger a rebuild.
-            li Serves the site from the docs folder and automatically reloads the browser when changes are detected.
-            li BrowserSync, which automatically refreshes your browser when files are updated.
-          h3 Running the Site
-          p To start live reloading:
+                .alert.alert-success.border-0.mt-3
+                  .d-flex.align-items-start
+                    i.bi.bi-lightbulb.fs-4.text-success.me-3.flex-shrink-0
+                    div
+                      h5.alert-heading.mb-2 Key Focus Areas
+                      ul.list-unstyled.mb-0
+                        li
+                          i.bi.bi-check-lg.text-success.me-2
+                          | Rapid development with modern tools
+                        li
+                          i.bi.bi-check-lg.text-success.me-2
+                          | Efficient deployment automation
+                        li
+                          i.bi.bi-check-lg.text-success.me-2
+                          | Scalable architecture design
+                        li
+                          i.bi.bi-check-lg.text-success.me-2
+                          | Performance optimization
 
-          ol
-            li Open your project in VS Code.
-            li Run the start.js script in the terminal.
-            li As you update your source files, BrowserSync will automatically refresh your browser.
+          //- Template Foundation Section
+          section#template-foundation.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-success.text-white
+                h2.h3.mb-0
+                  i.bi.bi-bootstrap.me-2
+                  | Leveraging a Well-Thought-Out Template
+              .card-body
+                p.
+                  When I began working on MarkHazleton.com, I started by forking the
+                  <a href="https://github.com/StartBootstrap/startbootstrap-resume" title="Start Bootstrap Resume GitHub Repository" target="_blank" rel="nofollow">Start Bootstrap Resume GitHub Repository</a>
+                  which provided a well-planned, thoughtfully designed foundation. Its structure allowed me to quickly come up to speed with static site development.
 
-          p With the start.js script and BrowserSync, you can easily build and run your static site with live reloading, streamlining the development process.
-          pre.language-javascript
-            code.language-javascript.
-              const concurrently = require("concurrently");
-              const upath = require("upath");
-              const browserSyncPath = upath.resolve(
-                upath.dirname(__filename),
-                "../node_modules/.bin/browser-sync.cmd"
-              );
-              // Using PowerShell command in the correct format
-              const browserSyncCommand = `powershell -Command "& '${browserSyncPath}' --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --https --key 'C:\\Program Files\\OpenSSL-Win64\\bin\\localhost.key' --cert 'C:\\Program Files\\OpenSSL-Win64\\bin\\localhost.crt'"`;
-              concurrently(
-                [
-                  {
-                    command: "node scripts/sb-watch.js",
-                    name: "SB_WATCH",
-                    prefixColor: "bgBlue.bold",
-                  },
-                  {
-                    command: browserSyncCommand,
-                    name: "SB_BROWSER_SYNC",
-                    prefixColor: "bgGreen.bold",
-                  },
-                ],
-                {
-                  prefix: "name",
-                  killOthers: ["failure", "success"],
-                  restartTries: 3, // Optional: Set restart attempts if failure occurs
-                }
-              );
-              function success() {
-                console.log("Success");
-              }
-              function failure() {
-                console.log("Failure");
-              }
+                .row.g-3.mt-3
+                  .col-md-6
+                    .card.border-primary.h-100
+                      .card-body
+                        h5.card-title
+                          i.bi.bi-puzzle.me-2
+                          | Easy Adaptability
+                        p.card-text
+                          | The design of the Start Bootstrap Resume template made it easy to add new sections,
+                          | adjust layouts, and integrate dynamic elements with Node.js and npm.
 
-        dt GitHub Actions and Azure Static Web Apps
-        dd
-          p.
-            I use GitHub Actions to automate the deployment process. Once changes are pushed to the repository, GitHub Actions triggers a build process, running the same npm scripts that handle asset copying, SCSS compilation, and template generation. The final static files are then deployed to Azure Static Web Apps, ensuring the latest version of the site is live.
+                  .col-md-6
+                    .card.border-success.h-100
+                      .card-body
+                        h5.card-title
+                          i.bi.bi-lightning.me-2
+                          | Quick Learning
+                        p.card-text
+                          | Thanks to the well-thought-out structure, I quickly learned how to manage static site builds,
+                          | minify assets, and automate tasks using Node.js.
 
-        dt Best Practices for Node.js Static Site Builds
-        dd
-          dl
-            dt Modular npm scripts
-            dd Break tasks into smaller scripts for better control and flexibility.
-            dt Minification and Optimization
-            dd Use tools like Terser and CSSnano to minimize file sizes for faster load times.
-            dt CI/CD Automation
-            dd Use GitHub Actions to automate the build and deployment pipeline, ensuring every change is automatically deployed to Azure.
-      p.
-        Node.js provides a robust environment for managing both development and deployment workflows. By leveraging custom scripts, continuous integration, and Azure Static Web Apps, the process of building and maintaining a static website becomes highly efficient and scalable.
-      dl
-        dt Node.js and npm
-        dd
-          p Node.js was chosen for its robust server-side JavaScript environment, which allowed seamless integration between development and production. npm’s extensive package management helped to quickly incorporate libraries and tools necessary for site features and automation.
-          pre.language-javascript
-            code.language-javascript.
-              // Example Node.js setup for MarkHazleton.com
-              const express = require('express');
-              const app = express();
-              app.set('view engine', 'pug');
-              app.set('views', './views');
+                .alert.alert-success.border-0.mt-3
+                  .d-flex.align-items-start
+                    i.bi.bi-rocket.fs-4.text-success.me-3.flex-shrink-0
+                    div
+                      h5.alert-heading.mb-2 Flexible Foundation
+                      p.mb-0 The Start Bootstrap Resume template provided both a solid foundation and the flexibility needed for evolution, allowing efficient creation and scaling.
 
-              app.get('/', function (req, res) {
-                res.render('index', { title: 'MarkHazleton.com' });
-              });
+          //- Development Workflow Section
+          section#development-workflow.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-info.text-white
+                h2.h3.mb-0
+                  i.bi.bi-gear.me-2
+                  | Development Workflow
+              .card-body
+                p.
+                  Node.js plays a crucial role in the development and deployment workflow of MarkHazleton.com. It powers both the local development environment and the automated build and deployment pipeline, ensuring efficient site management.
 
-              app.listen(3000, () => console.log('Server running on port 3000'));
+                //- Accordion
+                .accordion#workflowAccordion
+                  //- Package.json Scripts
+                  .accordion-item
+                    h3.accordion-header#headingScripts
+                      button.accordion-button(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseScripts'
+                        aria-expanded='true'
+                        aria-controls='collapseScripts'
+                      )
+                        i.bi.bi-file-code.me-2
+                        | Package.json: Custom Scripts
+                    .accordion-collapse.collapse.show#collapseScripts(
+                      aria-labelledby='headingScripts'
+                      data-bs-parent='#workflowAccordion'
+                    )
+                      .accordion-body
+                        p The project's `package.json` includes multiple npm scripts that automate key tasks like cleaning, building SCSS, generating Pug templates, and copying assets.
 
-        dt Pug Template Engine
-        dd
-          p The Pug template engine streamlined the creation of dynamic HTML pages, enhancing development speed with its concise and readable syntax. It was also the best choice for maintaining a clean, maintainable codebase.
-          pre.language-pug
-            code.language-pug.
-              // Pug template example for MarkHazleton.com
-              doctype html
-              html
-                head
-                  title= title
-                body
-                  h1 Welcome to #{title}
-                  p This is a sample page created with Pug.
+                        .card.bg-light
+                          .card-header
+                            h5.mb-0
+                              i.bi.bi-code.me-2
+                              | Build Scripts Configuration
+                          .card-body
+                            pre.language-javascript
+                              code.language-javascript.
+                                "scripts": {
+                                  "build": "npm run clean && npm run build:pug && npm run build:scss && npm run build:scripts && npm run build:assets",
+                                  "build:assets": "node scripts/build-assets.js",
+                                  "build:pug": "node scripts/build-pug.js",
+                                  "build:scripts": "node scripts/build-scripts.js",
+                                  "build:scss": "node scripts/build-scss.js",
+                                  "clean": "node scripts/clean.js",
+                                  "start": "npm run build && node scripts/start.js",
+                                  "start:debug": "npm run build && node scripts/start-debug.js"
+                                }
 
-        dt Visual Studio Code
-        dd
-          p Visual Studio Code was my editor of choice for this project, thanks to its support for multiple programming languages, its rich extension ecosystem, and features like Git integration and IntelliSense, which significantly sped up development.
+                  //- Local Development Setup
+                  .accordion-item
+                    h3.accordion-header#headingLocalDev
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseLocalDev'
+                        aria-expanded='false'
+                        aria-controls='collapseLocalDev'
+                      )
+                        i.bi.bi-laptop.me-2
+                        | Local Development Setup
+                    .accordion-collapse.collapse#collapseLocalDev(
+                      aria-labelledby='headingLocalDev'
+                      data-bs-parent='#workflowAccordion'
+                    )
+                      .accordion-body
+                        p.
+                          This is how to set up live reloading for your static website in Visual Studio Code using a custom start.js script and BrowserSync.
 
-        dt SB UI Kit Pro (Start Bootstrap)
-        dd
-          p Using the SB UI Kit Pro template ensured that the design was modern and responsive, leveraging Bootstrap 5. The template provided pre-designed elements that accelerated both the design and development processes.
+                        h5
+                          i.bi.bi-play-circle.me-2
+                          | Setting Up start.js
 
-        dt GitHub
-        dd
-          p A private GitHub repository was essential for managing source control, offering secure collaboration and easy integration with other tools like CI/CD pipelines.
+                        p The start.js script runs two tasks concurrently:
+                        ul.list-group.list-group-flush.mb-3
+                          li.list-group-item A Script (sb-watch.js) to monitor your source files for changes and trigger a rebuild
+                          li.list-group-item Serves the site from the docs folder and automatically reloads the browser when changes are detected
+                          li.list-group-item BrowserSync, which automatically refreshes your browser when files are updated
 
-        dt Azure Static Web Apps
-        dd
-          p Azure Static Web Apps provided a seamless platform for hosting the site, automating deployment directly from the GitHub repository. It supported global distribution and security, ensuring the site was fast and secure.
+                        h5
+                          i.bi.bi-terminal.me-2
+                          | Running the Site
 
-        dt Cloudflare
-        dd
-          p Cloudflare’s services, including its free SSL and DNS, improved both the security and performance of the website. Its DDoS protection and HTTP/2 support ensured that the site could handle high traffic loads efficiently.
+                        ol.list-group.list-group-numbered.mb-3
+                          li.list-group-item Open your project in VS Code
+                          li.list-group-item Run the start.js script in the terminal
+                          li.list-group-item As you update your source files, BrowserSync will automatically refresh your browser
 
-        dt Screaming Frog SEO Spider
-        dd
-          p Screaming Frog was used to audit the site’s SEO, ensuring that meta tags, headers, and internal linking were optimized for search engines. This tool was critical in identifying and fixing issues that could impact visibility and rankings.
+                        .card.bg-light
+                          .card-header
+                            h5.mb-0
+                              i.bi.bi-code.me-2
+                              | BrowserSync Configuration
+                          .card-body
+                            pre.language-javascript
+                              code.language-javascript.
+                                const concurrently = require("concurrently");
+                                const upath = require("upath");
+                                const browserSyncPath = upath.resolve(
+                                  upath.dirname(__filename),
+                                  "../node_modules/.bin/browser-sync.cmd"
+                                );
 
-      h2.subheading.mb-3 Best Practices for SCSS with Node.js
-      p.
-        Using Node.js and SCSS together is a powerful approach to generating and minifying CSS. This method leverages tools such as Sass for compiling SCSS into CSS, Autoprefixer for browser compatibility, and CSSnano for minification. Combining all CSS into a single file optimizes site performance by reducing HTTP requests and file sizes.
+                                const browserSyncCommand = `powershell -Command "& '${browserSyncPath}' --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --https"`;
 
-      dl
-        dt SCSS Structure
-        dd
-          p The SCSS setup used in this project is modular, with imports for variables, global styles, and component-specific styles. The inclusion of Bootstrap and third-party libraries like FontAwesome and PrismJS enhances functionality and design flexibility.
-          pre.language-javascript
-            code.language-javascript.
-              // Import variables and libraries
-              @import "./variables.scss";
-              @import "bootstrap/scss/bootstrap.scss";
-              @import "fontawesome-free/css/all";
+                                concurrently([
+                                  {
+                                    command: "node scripts/sb-watch.js",
+                                    name: "SB_WATCH",
+                                    prefixColor: "bgBlue.bold",
+                                  },
+                                  {
+                                    command: browserSyncCommand,
+                                    name: "SB_BROWSER_SYNC",
+                                    prefixColor: "bgGreen.bold",
+                                  }
+                                ]);
 
-              // Component-specific styles
-              @import "./components/sidenav.scss";
-              @import "./sections/painteddesert-section.scss";
+                  //- GitHub Actions and Azure
+                  .accordion-item
+                    h3.accordion-header#headingDeployment
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseDeployment'
+                        aria-expanded='false'
+                        aria-controls='collapseDeployment'
+                      )
+                        i.bi.bi-cloud-upload.me-2
+                        | GitHub Actions and Azure Static Web Apps
+                    .accordion-collapse.collapse#collapseDeployment(
+                      aria-labelledby='headingDeployment'
+                      data-bs-parent='#workflowAccordion'
+                    )
+                      .accordion-body
+                        p.
+                          I use GitHub Actions to automate the deployment process. Once changes are pushed to the repository,
+                          GitHub Actions triggers a build process, running the same npm scripts that handle asset copying,
+                          SCSS compilation, and template generation.
 
-        dt Node.js Script for SCSS Processing
-        dd
-          p The Node.js script automates the process of compiling SCSS into a minified CSS file. It utilizes Sass for SCSS compilation and PostCSS for processing the CSS. Autoprefixer ensures browser compatibility, while CSSnano minifies the file for production.
-          pre.language-javascript
-            code.language-javascript.
-              const autoprefixer = require('autoprefixer');
-              const cssnano = require('cssnano');
-              const sass = require('sass');
-              const postcss = require('postcss');
-              const fs = require('fs');
+                        .row.g-3
+                          .col-md-4
+                            .card.border-primary
+                              .card-body.text-center
+                                i.bi.bi-github.display-4.text-primary.mb-3
+                                h6.card-title GitHub Actions
+                                p.card-text.small Automated CI/CD pipeline
 
-              const renderSCSS = () => {
-                const result = sass.renderSync({ file: 'styles.scss' });
-                postcss([autoprefixer, cssnano({ preset: 'default' })])
-                  .process(result.css, { from: undefined })
-                  .then(output => fs.writeFileSync('styles.min.css', output.css));
-              };
+                          .col-md-4
+                            .card.border-success
+                              .card-body.text-center
+                                i.bi.bi-microsoft.display-4.text-success.mb-3
+                                h6.card-title Azure Static Web Apps
+                                p.card-text.small Global hosting platform
 
-        dt Best Practices
-        dd
-          p.
-            1. **Modular SCSS**: Organize styles into reusable components and sections for easier management and updates.
-          p.
-            2. **Autoprefixer**: Ensure cross-browser compatibility by automatically adding vendor prefixes.
-          p.
-            3. **CSSnano**: Minify CSS for production to reduce file sizes and improve load times.
-          p.
-            4. **Continuous Integration**: Automate the SCSS build process with a Node.js script and integrate it into your CI/CD pipeline for seamless deployments.
+                          .col-md-4
+                            .card.border-info
+                              .card-body.text-center
+                                i.bi.bi-lightning.display-4.text-info.mb-3
+                                h6.card-title Automatic Deployment
+                                p.card-text.small Seamless updates
 
-      h2.subheading.mb-3 Conclusion
-      p.
-        By combining SCSS and Node.js, you can efficiently manage and optimize CSS files for production, ensuring faster load times and a smoother development process. This method emphasizes maintainability, performance, and scalability.
-      p.
-        The development of MarkHazleton.com relied on carefully selected technologies that aligned with the goals of the business: speed, efficiency, and maintainability. Each tool and technology was chosen to optimize the process, ensuring a solid foundation for future growth and updates.
+                  //- Best Practices
+                  .accordion-item
+                    h3.accordion-header#headingBestPractices
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseBestPractices'
+                        aria-expanded='false'
+                        aria-controls='collapseBestPractices'
+                      )
+                        i.bi.bi-star.me-2
+                        | Best Practices for Node.js Static Site Builds
+                    .accordion-collapse.collapse#collapseBestPractices(
+                      aria-labelledby='headingBestPractices'
+                      data-bs-parent='#workflowAccordion'
+                    )
+                      .accordion-body
+                        .row.g-3
+                          .col-md-4
+                            .card.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-puzzle.me-2
+                                  | Modular Scripts
+                                p.card-text Break tasks into smaller scripts for better control and flexibility.
+
+                          .col-md-4
+                            .card.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-speedometer2.me-2
+                                  | Optimization
+                                p.card-text Use tools like Terser and CSSnano to minimize file sizes for faster load times.
+
+                          .col-md-4
+                            .card.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-arrow-repeat.me-2
+                                  | CI/CD Automation
+                                p.card-text Use GitHub Actions to automate the build and deployment pipeline.
+
+                .alert.alert-primary.border-0.shadow-sm.mt-4
+                  .d-flex.align-items-start
+                    i.bi.bi-info-circle.fs-4.text-primary.me-3.flex-shrink-0
+                    div
+                      h5.alert-heading.mb-2 Efficient Workflow
+                      p.mb-0 Node.js provides a robust environment for managing both development and deployment workflows, making the process of building and maintaining a static website highly efficient and scalable.
+
+          //- Technology Stack Section
+          section#technology-stack.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-warning.text-dark
+                h2.h3.mb-0
+                  i.bi.bi-stack.me-2
+                  | Technology Stack
+              .card-body
+                p.lead
+                  | Each technology was chosen to optimize the development process, ensuring a solid foundation for future growth and updates.
+
+                .row.g-4
+                  .col-lg-6
+                    .card.h-100
+                      .card-header.bg-primary.text-white
+                        h5.card-title.mb-0
+                          i.bi.bi-laptop.me-2
+                          | Development Tools
+                      .card-body
+                        .accordion#devToolsAccordion
+                          .accordion-item
+                            h6.accordion-header#headingNodejs
+                              button.accordion-button(
+                                type='button'
+                                data-bs-toggle='collapse'
+                                data-bs-target='#collapseNodejs'
+                                aria-expanded='true'
+                                aria-controls='collapseNodejs'
+                              )
+                                i.bi.bi-nodejs.me-2
+                                | Node.js and npm
+                            .accordion-collapse.collapse.show#collapseNodejs(
+                              aria-labelledby='headingNodejs'
+                              data-bs-parent='#devToolsAccordion'
+                            )
+                              .accordion-body
+                                p Node.js was chosen for its robust server-side JavaScript environment, enabling seamless integration between development and production.
+
+                                .card.bg-light
+                                  .card-header
+                                    h6.mb-0
+                                      i.bi.bi-code.me-2
+                                      | Example Setup
+                                  .card-body
+                                    pre.language-javascript
+                                      code.language-javascript.
+                                        // Example Node.js setup for MarkHazleton.com
+                                        const express = require('express');
+                                        const app = express();
+                                        app.set('view engine', 'pug');
+                                        app.set('views', './views');
+
+                                        app.get('/', function (req, res) {
+                                          res.render('index', { title: 'MarkHazleton.com' });
+                                        });
+
+                                        app.listen(3000, () => console.log('Server running on port 3000'));
+
+                          .accordion-item
+                            h6.accordion-header#headingPug
+                              button.accordion-button.collapsed(
+                                type='button'
+                                data-bs-toggle='collapse'
+                                data-bs-target='#collapsePug'
+                                aria-expanded='false'
+                                aria-controls='collapsePug'
+                              )
+                                i.bi.bi-file-code.me-2
+                                | Pug Template Engine
+                            .accordion-collapse.collapse#collapsePug(
+                              aria-labelledby='headingPug'
+                              data-bs-parent='#devToolsAccordion'
+                            )
+                              .accordion-body
+                                p The Pug template engine streamlined the creation of dynamic HTML pages with its concise and readable syntax.
+
+                                .card.bg-light
+                                  .card-header
+                                    h6.mb-0
+                                      i.bi.bi-code.me-2
+                                      | Pug Example
+                                  .card-body
+                                    pre.language-pug
+                                      code.language-pug.
+                                        // Pug template example for MarkHazleton.com
+                                        doctype html
+                                        html
+                                          head
+                                            title= title
+                                          body
+                                            h1 Welcome to #{title}
+                                            p This is a sample page created with Pug.
+
+                          .accordion-item
+                            h6.accordion-header#headingVSCode
+                              button.accordion-button.collapsed(
+                                type='button'
+                                data-bs-toggle='collapse'
+                                data-bs-target='#collapseVSCode'
+                                aria-expanded='false'
+                                aria-controls='collapseVSCode'
+                              )
+                                i.bi.bi-code-square.me-2
+                                | Visual Studio Code
+                            .accordion-collapse.collapse#collapseVSCode(
+                              aria-labelledby='headingVSCode'
+                              data-bs-parent='#devToolsAccordion'
+                            )
+                              .accordion-body
+                                p Visual Studio Code was the editor of choice, offering excellent support for multiple programming languages and rich extension ecosystem.
+
+                  .col-lg-6
+                    .card.h-100
+                      .card-header.bg-success.text-white
+                        h5.card-title.mb-0
+                          i.bi.bi-cloud.me-2
+                          | Hosting & Services
+                      .card-body
+                        .row.g-3
+                          .col-12
+                            .card.border-secondary
+                              .card-body.text-center
+                                i.bi.bi-bootstrap.display-4.text-primary.mb-2
+                                h6.card-title SB UI Kit Pro
+                                p.card-text.small Modern, responsive design with Bootstrap 5
+
+                          .col-12
+                            .card.border-secondary
+                              .card-body.text-center
+                                i.bi.bi-github.display-4.text-dark.mb-2
+                                h6.card-title GitHub
+                                p.card-text.small Version control and collaboration platform
+
+                          .col-12
+                            .card.border-secondary
+                              .card-body.text-center
+                                i.bi.bi-microsoft.display-4.text-info.mb-2
+                                h6.card-title Azure Static Web Apps
+                                p.card-text.small Seamless hosting with global distribution
+
+                          .col-12
+                            .card.border-secondary
+                              .card-body.text-center
+                                i.bi.bi-shield-check.display-4.text-warning.mb-2
+                                h6.card-title Cloudflare
+                                p.card-text.small Security, performance, and DNS services
+
+                          .col-12
+                            .card.border-secondary
+                              .card-body.text-center
+                                i.bi.bi-search.display-4.text-success.mb-2
+                                h6.card-title Screaming Frog SEO
+                                p.card-text.small SEO auditing and optimization tool
+
+          //- SCSS Best Practices Section
+          section#scss-practices.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-secondary.text-white
+                h2.h3.mb-0
+                  i.bi.bi-palette.me-2
+                  | Best Practices for SCSS with Node.js
+              .card-body
+                p.lead
+                  | Using Node.js and SCSS together is a powerful approach to generating and minifying CSS. This method leverages tools such as Sass for compiling SCSS into CSS, Autoprefixer for browser compatibility, and CSSnano for minification.
+
+                .row.g-4
+                  .col-md-6
+                    .card.h-100
+                      .card-header.bg-primary.text-white
+                        h5.card-title.mb-0
+                          i.bi.bi-file-code.me-2
+                          | SCSS Structure
+                      .card-body
+                        p The SCSS setup used in this project is modular, with imports for variables, global styles, and component-specific styles.
+
+                        .card.bg-light
+                          .card-header
+                            h6.mb-0
+                              i.bi.bi-code.me-2
+                              | SCSS Configuration
+                          .card-body
+                            pre.language-scss
+                              code.language-scss.
+                                // Import variables and libraries
+                                @import "./variables.scss";
+                                @import "bootstrap/scss/bootstrap.scss";
+                                @import "fontawesome-free/css/all";
+
+                                // Component-specific styles
+                                @import "./components/sidenav.scss";
+                                @import "./sections/painteddesert-section.scss";
+
+                  .col-md-6
+                    .card.h-100
+                      .card-header.bg-success.text-white
+                        h5.card-title.mb-0
+                          i.bi.bi-gear.me-2
+                          | Node.js Processing Script
+                      .card-body
+                        p The Node.js script automates the process of compiling SCSS into a minified CSS file using Sass, PostCSS, Autoprefixer, and CSSnano.
+
+                        .card.bg-light
+                          .card-header
+                            h6.mb-0
+                              i.bi.bi-code.me-2
+                              | Build Script
+                          .card-body
+                            pre.language-javascript
+                              code.language-javascript.
+                                const autoprefixer = require('autoprefixer');
+                                const cssnano = require('cssnano');
+                                const sass = require('sass');
+                                const postcss = require('postcss');
+                                const fs = require('fs');
+
+                                const renderSCSS = () => {
+                                  const result = sass.renderSync({ file: 'styles.scss' });
+                                  postcss([autoprefixer, cssnano({ preset: 'default' })])
+                                    .process(result.css, { from: undefined })
+                                    .then(output => fs.writeFileSync('styles.min.css', output.css));
+                                };
+
+                .row.g-3.mt-3
+                  .col-md-3
+                    .card.text-center.h-100
+                      .card-body
+                        i.bi.bi-puzzle.display-4.text-primary.mb-2
+                        h6.card-title Modular SCSS
+                        p.card-text.small Organize styles into reusable components
+
+                  .col-md-3
+                    .card.text-center.h-100
+                      .card-body
+                        i.bi.bi-shield-check.display-4.text-success.mb-2
+                        h6.card-title Autoprefixer
+                        p.card-text.small Ensure cross-browser compatibility
+
+                  .col-md-3
+                    .card.text-center.h-100
+                      .card-body
+                        i.bi.bi-speedometer2.display-4.text-warning.mb-2
+                        h6.card-title CSSnano
+                        p.card-text.small Minify CSS for production
+
+                  .col-md-3
+                    .card.text-center.h-100
+                      .card-body
+                        i.bi.bi-arrow-repeat.display-4.text-info.mb-2
+                        h6.card-title CI/CD
+                        p.card-text.small Automated build process
+
+          //- Recent Updates Section
+          section#recent-updates.mb-5
+            .card.border-0.shadow-sm
+              .card-header.bg-warning.text-dark
+                h2.h3.mb-0
+                  i.bi.bi-clock-history.me-2
+                  | Recent Updates (2024)
+              .card-body
+                p.lead
+                  | Since this article was first written, there have been several significant improvements to the build process and toolchain.
+                  | The following updates reflect the continuous evolution of MarkHazleton.com's development approach.
+
+                .alert.alert-warning.border-0.mt-3
+                  .d-flex.align-items-start
+                    i.bi.bi-info-circle.fs-4.text-warning.me-3.flex-shrink-0
+                    div
+                      h5.alert-heading.mb-2 Build Process Enhancements
+                      p
+                        | The original build process has been expanded with additional steps to improve performance, SEO, and maintenance:
+
+                //- Accordion for updates
+                .accordion#updatesAccordion.mt-4
+                  //- Modern SCSS Build Process
+                  .accordion-item
+                    h3.accordion-header#headingModernSCSS
+                      button.accordion-button(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseModernSCSS'
+                        aria-expanded='true'
+                        aria-controls='collapseModernSCSS'
+                      )
+                        i.bi.bi-braces.me-2
+                        | Dart Sass Implementation with Modern SCSS
+                    .accordion-collapse.collapse.show#collapseModernSCSS(
+                      aria-labelledby='headingModernSCSS'
+                      data-bs-parent='#updatesAccordion'
+                    )
+                      .accordion-body
+                        p
+                          | A new dedicated build step for modern SCSS has been added using Dart Sass. This implementation
+                          | provides better performance and more features compared to the legacy Node-Sass approach.
+
+                        .card.bg-light.mb-3
+                          .card-header
+                            h5.mb-0
+                              i.bi.bi-code.me-2
+                              | Modern SCSS Build Script
+                          .card-body
+                            pre.language-javascript
+                              code.language-javascript.
+                                // Modern SCSS with Dart Sass and PostCSS
+                                const result = sass.compile(modernStylesPath, {
+                                  loadPaths: [
+                                    upath.resolve(upath.dirname(__filename), '../node_modules')
+                                  ],
+                                  quietDeps: true,      // Suppress deprecation warnings from dependencies
+                                  logger: {
+                                    warn: function(message, options) {
+                                      // Only show warnings that don't contain specific deprecation messages
+                                      if (!message.includes('deprecated') && !message.includes('Deprecation')) {
+                                        console.warn(message);
+                                      }
+                                    }
+                                  }
+                                });
+
+                        .alert.alert-info.border-0
+                          .d-flex.align-items-start
+                            i.bi.bi-info-circle.fs-4.text-info.me-3.flex-shrink-0
+                            div
+                              h5.alert-heading.mb-2 Benefits of Dart Sass
+                              ul.list-unstyled.mb-0
+                                li
+                                  i.bi.bi-check-lg.text-info.me-2
+                                  | Faster compilation times
+                                li
+                                  i.bi.bi-check-lg.text-info.me-2
+                                  | Better support for modern CSS features
+                                li
+                                  i.bi.bi-check-lg.text-info.me-2
+                                  | Active maintenance (Node-Sass is deprecated)
+                                li
+                                  i.bi.bi-check-lg.text-info.me-2
+                                  | More reliable across environments
+
+                  //- Automated SEO Updates
+                  .accordion-item
+                    h3.accordion-header#headingSEOUpdates
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseSEOUpdates'
+                        aria-expanded='false'
+                        aria-controls='collapseSEOUpdates'
+                      )
+                        i.bi.bi-search.me-2
+                        | Automated SEO Content Updates
+                    .accordion-collapse.collapse#collapseSEOUpdates(
+                      aria-labelledby='headingSEOUpdates'
+                      data-bs-parent='#updatesAccordion'
+                    )
+                      .accordion-body
+                        p
+                          | The build process now includes automatic generation of RSS feeds and sitemaps,
+                          | which significantly improves SEO and content discoverability.
+
+                        .row.g-3.mt-3
+                          .col-md-6
+                            .card.border-primary.h-100
+                              .card-body
+                                h5.card-title
+                                  i.bi.bi-rss.me-2
+                                  | RSS Feed Generation
+                                p.card-text
+                                  | Automatically creates an RSS feed from the articles.json data,
+                                  | formatting dates properly in RFC822 format and escaping XML entities.
+
+                          .col-md-6
+                            .card.border-success.h-100
+                              .card-body
+                                h5.card-title
+                                  i.bi.bi-diagram-3.me-2
+                                  | Sitemap Generation
+                                p.card-text
+                                  | Dynamically builds a sitemap.xml file that follows the sitemap protocol standards,
+                                  | with proper ISO 8601 date formatting and intelligent change frequency determination.
+
+                        .alert.alert-success.border-0.mt-3
+                          .d-flex.align-items-start
+                            i.bi.bi-robot.fs-4.text-success.me-3.flex-shrink-0
+                            div
+                              h5.alert-heading.mb-2 SEO Impact
+                              p.mb-0
+                                | These automated SEO tools improve search engine indexing, content discovery, and syndication capabilities.
+                                | The result is better visibility in search results and improved user experience for followers.
+
+                  //- Enhanced Serving Options
+                  .accordion-item
+                    h3.accordion-header#headingServing
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseServing'
+                        aria-expanded='false'
+                        aria-controls='collapseServing'
+                      )
+                        i.bi.bi-hdd-network.me-2
+                        | Enhanced Serving Options
+                    .accordion-collapse.collapse#collapseServing(
+                      aria-labelledby='headingServing'
+                      data-bs-parent='#updatesAccordion'
+                    )
+                      .accordion-body
+                        p
+                          | The project now offers multiple options for serving content locally during development,
+                          | providing flexibility for different development scenarios.
+
+                        .card.bg-light.mb-3
+                          .card-header
+                            h5.mb-0
+                              i.bi.bi-code.me-2
+                              | New Serving Scripts
+                          .card-body
+                            pre.language-javascript
+                              code.language-javascript.
+                                "scripts": {
+                                  "start": "npm run build && node scripts/start.js",
+                                  "start:debug": "npm run build && node scripts/start-debug.js",
+                                  "start:http": "npm run build && node http-server.js",
+                                  "serve": "npm run build && node simple-serve.js",
+                                  "serve:quick": "node simple-serve.js"
+                                }
+
+                        .alert.alert-info.border-0.mt-3
+                          .d-flex.align-items-start
+                            i.bi.bi-lightning.fs-4.text-info.me-3.flex-shrink-0
+                            div
+                              h5.alert-heading.mb-2 Development Workflow Improvements
+                              ul.list-unstyled.mb-0
+                                li
+                                  i.bi.bi-check-lg.text-info.me-2
+                                  | <code>start:http</code>: Simple HTTP server for testing production builds
+                                li
+                                  i.bi.bi-check-lg.text-info.me-2
+                                  | <code>serve</code>: Clean simple server after full build
+                                li
+                                  i.bi.bi-check-lg.text-info.me-2
+                                  | <code>serve:quick</code>: Fast serving without rebuilding (for minor content edits)
+
+                  //- Updated Dependencies
+                  .accordion-item
+                    h3.accordion-header#headingDeps
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#collapseDeps'
+                        aria-expanded='false'
+                        aria-controls='collapseDeps'
+                      )
+                        i.bi.bi-boxes.me-2
+                        | Modernized Dependencies
+                    .accordion-collapse.collapse#collapseDeps(
+                      aria-labelledby='headingDeps'
+                      data-bs-parent='#updatesAccordion'
+                    )
+                      .accordion-body
+                        p
+                          | The project dependencies have been regularly updated to leverage the latest features and security improvements.
+                          | Key updates include Bootstrap 5.3, Dart Sass, and modern PostCSS tools.
+
+                        .row.g-3.mt-3
+                          .col-md-6
+                            .card.border-primary.h-100
+                              .card-body
+                                h5.card-title
+                                  i.bi.bi-bootstrap.me-2
+                                  | Frontend Framework
+                                ul.list-unstyled.mb-0
+                                  li
+                                    i.bi.bi-check-lg.text-primary.me-2
+                                    | Bootstrap 5.3.7
+                                  li
+                                    i.bi.bi-check-lg.text-primary.me-2
+                                    | Bootstrap Icons 1.13.1
+                                  li
+                                    i.bi.bi-check-lg.text-primary.me-2
+                                    | Bootswatch 5.3.7
+
+                          .col-md-6
+                            .card.border-success.h-100
+                              .card-body
+                                h5.card-title
+                                  i.bi.bi-tools.me-2
+                                  | Build Tools
+                                ul.list-unstyled.mb-0
+                                  li
+                                    i.bi.bi-check-lg.text-success.me-2
+                                    | Sass 1.89.2
+                                  li
+                                    i.bi.bi-check-lg.text-success.me-2
+                                    | PostCSS 8.5.6
+                                  li
+                                    i.bi.bi-check-lg.text-success.me-2
+                                    | Autoprefixer 10.4.21
+
+                        .alert.alert-success.border-0.mt-3
+                          .d-flex.align-items-start
+                            i.bi.bi-arrow-repeat.fs-4.text-success.me-3.flex-shrink-0
+                            div
+                              h5.alert-heading.mb-2 Automated Updates
+                              p.mb-0
+                                | Using <code>npm-check-updates</code> helps maintain the project with the latest dependencies through
+                                | the <code>update-deps</code> script, ensuring the site benefits from the latest features and security patches.
+
+  //- Conclusion Section
+  section#conclusion.bg-light.py-5
+    .container
+      .card.border-primary.shadow
+        .card-header.bg-primary.text-white
+          h2.h3.mb-0
+            i.bi.bi-trophy.me-2
+            | Conclusion
+        .card-body
+          p.lead.mb-4
+            | The development of MarkHazleton.com relied on carefully selected technologies that aligned with the goals of the business: speed, efficiency, and maintainability.
+
+          .row.g-4
+            .col-md-6
+              .alert.alert-success.border-0
+                .d-flex.align-items-start
+                  i.bi.bi-check-circle.fs-4.text-success.me-3.flex-shrink-0
+                  div
+                    h5.alert-heading.mb-2 Key Success Factors
+                    ul.list-unstyled.mb-0
+                      li
+                        i.bi.bi-check-lg.text-success.me-2
+                        | Modern toolchain with Node.js and Pug
+                      li
+                        i.bi.bi-check-lg.text-success.me-2
+                        | Automated deployment with GitHub Actions
+                      li
+                        i.bi.bi-check-lg.text-success.me-2
+                        | Robust foundation from Start Bootstrap
+                      li
+                        i.bi.bi-check-lg.text-success.me-2
+                        | Scalable SCSS architecture
+
+            .col-md-6
+              .alert.alert-info.border-0
+                .d-flex.align-items-start
+                  i.bi.bi-lightbulb.fs-4.text-info.me-3.flex-shrink-0
+                  div
+                    h5.alert-heading.mb-2 Looking Forward
+                    p.mb-0 This technology stack provides a solid foundation for future growth and updates, ensuring the site remains maintainable and performant as it evolves.
+
+          .text-center.mt-4
+            p.mb-0.fw-bold By combining modern development tools with proven deployment practices, MarkHazleton.com achieves the perfect balance of development efficiency and production reliability.
