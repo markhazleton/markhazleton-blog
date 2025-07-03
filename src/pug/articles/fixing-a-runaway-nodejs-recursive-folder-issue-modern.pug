@@ -86,13 +86,13 @@ block layout-content
                   | manipulate paths longer than this would fail. However, starting with Windows 10 (Anniversary
                   | Update), it became possible to enable long file path support by modifying the Group Policy or
                   | Windows Registry.
-                
+
                 .card.mb-4.border-0.bg-light
                   .card-header.bg-secondary.text-white
                     h3.h5.mb-0 Enabling Long File Path Support
                   .card-body
                     p.mb-4 To enable support for longer paths, I did the following:
-                    
+
                     .row.mb-3
                       .col-md-6
                         .card.mb-3.h-100.border-0.bg-white
@@ -104,7 +104,7 @@ block layout-content
                             p.mb-0
                               | Navigated to "Computer Configuration > Administrative Templates > System > Filesystem"
                               | and enabled the "Enable Win32 long paths" policy.
-                      
+
                       .col-md-6
                         .card.mb-3.h-100.border-0.bg-white
                           .card-header.bg-info.text-white
@@ -114,12 +114,12 @@ block layout-content
                           .card-body
                             p.mb-0
                               | As an alternative, I edited the Registry directly by setting the value of
-                              | "LongPathsEnabled" in 
+                              | "LongPathsEnabled" in
                               code HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem
-                              |  to 
+                              |  to
                               code 1
                               | . This allowed support for file paths longer than 260 characters.
-                
+
                 .alert.alert-warning
                   h4.alert-heading.h5
                     i.bi.bi-info-circle.me-2
@@ -143,7 +143,7 @@ block layout-content
                   | Initially, I tried using built-in tools like Windows Command Prompt and PowerShell, thinking
                   | I could delete the directories with a simple recursive command. Below are the tools I tried
                   | to use before concluding that I needed a custom solution:
-                
+
                 // Command Prompt Method
                 .card.mb-4.border-0.bg-light
                   .card-header.bg-secondary.text-white
@@ -155,17 +155,17 @@ block layout-content
                       | The Windows Command Prompt is a simpler tool that lacks robust recursion and error-handling
                       | mechanisms. Commands like "rmdir" are not built to handle such complex directory structures
                       | and will often terminate with errors related to file path length or file locks.
-                    
+
                     pre.language-bash.bg-dark.text-light.p-3.rounded
                       code.language-bash rmdir /s "C:\Your\Directory\Path"
-                    
+
                     p.mb-0
                       | Using the "rmdir /s" command, I attempted to remove the entire folder structure recursively.
                       | While this works well with normal directories, it failed in this case due to the extreme depth
                       | and length of the directory paths. Windows has limitations on path lengths, and this caused
                       | the command to fail with errors like "The file name is too long." or "The system cannot find
                       | the path specified." or just having the command shell close abruptly.
-                
+
                 // PowerShell Method
                 .card.mb-4.border-0.bg-light
                   .card-header.bg-secondary.text-white
@@ -177,28 +177,28 @@ block layout-content
                       | PowerShell is usually a robust tool for file management, but when dealing with an extremely
                       | large number of nested directories, it often fails due to the path length limitation and
                       | the recursion depth.
-                    
+
                     p.mb-3
                       | I then tried using PowerShell with the "Remove-Item -Recurse -Force" command. PowerShell
                       | is a more powerful tool for managing files and directories, but it, too, failed due to the long
                       | file paths and the number of folders. PowerShell inherits the same file path limitations as the
                       | Command Prompt unless configured differently, so this option was insufficient.
-                    
+
                     pre.language-bash.bg-dark.text-light.p-3.rounded
                       code.language-bash rm -r -force "C:\Your\Directory\Path"
-                    
+
                     p.mb-3
                       | Though PowerShell had limitations in my case, a potential workaround could involve using the
                       | following script, which attempts to bypass the long path limitation by enabling long paths and
                       | splitting the process into smaller recursive chunks:
-                    
+
                     pre.language-bash.bg-dark.text-light.p-3.rounded
                       code.language-bash Remove-Item -LiteralPath "C:\Your\Directory\Path" -Recurse -Force
-                    
+
                     p.mb-0
                       | This script could work for some, but in extreme cases like mine, where paths were excessively long
                       | and directories numbered in the thousands, it still fell short.
-                
+
                 // Additional Methods
                 .row
                   .col-md-6
@@ -212,13 +212,13 @@ block layout-content
                           | While Linux systems generally handle file systems more gracefully, using Bash on WSL
                           | still relies on Windows' underlying file system. This means that although the Linux
                           | environment is more forgiving with paths, it inherits the limitations from Windows.
-                        
+
                         p.mb-0
                           | Linux systems handle long paths and recursive operations much more gracefully than Windows.
                           | I attempted to use Bash through VS Code to navigate and delete
                           | the directories. However, even though Linux could theoretically handle this depth of recursion,
                           | Bash failed due to Windows' underlying file system still imposing limits on path lengths.
-                  
+
                   .col-md-6
                     .card.mb-3.h-100.border-0.bg-light
                       .card-header.bg-secondary.text-white
@@ -233,10 +233,10 @@ block layout-content
                           | path length limitations, as it couldn't traverse the deep directory structure to delete the
                           | folders. I also tried to purge the directory using Robocopy, but it was unable to handle the
                           | excessive depth of the folder structure.
-                
+
                 .alert.alert-primary.mt-3
                   p.mb-0
-                    strong Conclusion: 
+                    strong Conclusion:
                     | Ultimately, after trying all the built-in tools and existing solutions, I decided to write a C++ program
                     | that used the WIN32 API to delete directories recursively.
 
@@ -254,18 +254,18 @@ block layout-content
                   | effectively, provided the paths are prefixed with "\\\\?\\". This special prefix enables the API to
                   | handle file paths beyond the normal MAX_PATH limitation. By using the WIN32 API, I was able to
                   | traverse and delete directories without running into the typical errors caused by long paths.
-                
+
                 p.mb-4
                   | This program first collected all directories and files and then removed them
                   | from the deepest level up to the root, ensuring safe cleanup without getting errors for trying to
                   | delete a folder that has sub-folders.
-                
+
                 // Code with collapse button
                 .mb-4
                   button.btn.btn-primary.mb-2(type='button', data-bs-toggle='collapse', data-bs-target='#cppCode')
                     i.bi.bi-code-slash.me-2
                     | Show/Hide C++ Code
-                  
+
                   .collapse#cppCode
                     pre.language-csharp.bg-dark.text-light.p-3.rounded
                       code.language-csharp.
@@ -343,34 +343,34 @@ block layout-content
                   | This C++ code starts by scanning the directory provided (in this case, "C:\\AzureDevOps\\runaway-node")
                   | and collecting a list of all subdirectories. It does this recursively, storing all directories for later deletion.
                   | After collecting all the directories, it deletes them from the deepest folder up to the root directory.
-                
+
                 .card.border-0.bg-light.mb-4
                   .card-body
                     h3.h5
                       i.bi.bi-list-check.me-2
                       | Key Components of the Solution:
-                    
+
                     ol.mb-0
                       li.mb-3
-                        strong Special Path Prefix: 
+                        strong Special Path Prefix:
                         | The code uses "\\\\?\\" prefix before the path, which tells Windows to disable path parsing and bypass the 260-character limit.
-                      
+
                       li.mb-3
-                        strong Breadth-First Directory Collection: 
+                        strong Breadth-First Directory Collection:
                         | The program uses a breadth-first approach to collect all directories that need to be deleted.
-                      
+
                       li.mb-3
-                        strong Reverse Deletion Order: 
+                        strong Reverse Deletion Order:
                         | After collecting all directories, it reverses the order so that it deletes from the deepest nested folder first.
-                      
+
                       li.mb-3
-                        strong File Attribute Handling: 
+                        strong File Attribute Handling:
                         | The code sets file attributes to normal before deletion, which helps overcome issues with read-only or hidden files.
-                      
+
                       li
-                        strong Logging: 
+                        strong Logging:
                         | The program includes a logging function to track the progress and any potential issues during the deletion process.
-                
+
                 .alert.alert-success
                   h4.alert-heading.h5
                     i.bi.bi-check-circle.me-2
@@ -388,7 +388,7 @@ block layout-content
               .card-body
                 p.lead.mb-4
                   | When dealing with extremely deep directory structures in Windows, standard tools often fail due to path length limitations, even with modern settings enabled.
-                
+
                 .alert.alert-success.border-0.shadow-sm.mb-4
                   .d-flex.align-items-start
                     i.bi.bi-star-fill.text-success.me-3.fs-4
@@ -396,7 +396,7 @@ block layout-content
                       h4.alert-heading.h6.mb-2 Prevention is Better Than Cure
                       p.mb-0
                         | Always test file system operations in your Node.js scripts, especially when they involve recursive directory creation or manipulation. Add appropriate validation and safeguards to prevent runaway processes.
-                
+
                 p.mb-0
                   | For extreme cases where standard utilities fail, writing a custom solution using the WIN32 API with the "\\\\?\\" path prefix is the most reliable approach to handle long paths and deep directory structures in Windows.
 
