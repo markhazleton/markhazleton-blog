@@ -330,9 +330,22 @@
                 </div>
             </section>
             <section class="mb-5" id="configuration">
-                <dd>
-                    <p>Vite builds the production files into a "dist" folder by default. For GitHub Pages, I modified Vite’s configuration to output into the "docs" folder. This makes setting up the GitHub Pages deployment easier as it serves the site from the "docs" folder by default.</p>
-                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> defineConfig <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"vite"</span><span class="token punctuation">;</span>
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-gear-fill me-2"></i>
+                        Configure Vite for GitHub Pages
+                    </h2>
+                </header>
+                <div class="card border-warning shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-file-earmark-code me-2"></i>
+                            Vite Configuration
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-3">Vite builds the production files into a "dist" folder by default. For GitHub Pages, I modified Vite's configuration to output into the "docs" folder. This makes setting up the GitHub Pages deployment easier as it serves the site from the "docs" folder by default.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> defineConfig <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"vite"</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> react <span class="token keyword">from</span> <span class="token string">"@vitejs/plugin-react"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
@@ -343,16 +356,28 @@
   plugins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token function">react</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                </dd>
-                <dt>Adding the Articles Component</dt>
-                <dd>
-                    <p>To display content from an RSS feed, create an "Articles" component that fetches and parses the RSS XML file, rendering article titles and links.</p>
-                    <p>This TypeScript code defines a React functional component that dynamically fetches and displays a list of articles from an RSS feed. The component uses React’s useState hook to create a state variable that holds the articles, which is initialized as an empty array. The state is updated once the RSS feed is fetched and parsed.</p>
-                    <p>Additionally, useEffect is used to ensure that the fetch operation happens when the component first renders. Since useEffect is invoked with an empty dependency array, it acts like a componentDidMount lifecycle event, executing the fetch operation only once when the component is mounted.</p>
-                    <p>The RSS feed is fetched asynchronously using the native fetch API, targeting the /rss.xml endpoint on the server. After retrieving the raw XML data as plain text, the code uses DOMParser to parse this text into an XML structure.</p>
-                    <p>Once parsed, the &lt;item> elements, which represent individual articles, are extracted. For each &lt;item>, the component pulls relevant data such as the title, link, and publication date by accessing the corresponding child elements. This extracted information is stored in a structured array, which is then used to update the component’s state.</p>
-                    <p>Once the state is updated with the parsed articles, the component renders a list of articles in the browser. Each article is displayed as a clickable link along with its publication date. The component efficiently maps through the state array of articles to dynamically generate the list items, ensuring that the data is presented as soon as it is fetched and parsed. By combining useEffect for side effects and useState for managing data, the component handles asynchronous data fetching and re-renders itself when new data becomes available, creating a simple and effective way to display RSS feed content in a React application.</p>
-                    <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useEffect<span class="token punctuation">,</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="articles">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-newspaper me-2"></i>
+                        Adding the Articles Component
+                    </h2>
+                </header>
+                <div class="card border-info shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-rss me-2"></i>
+                            RSS Feed Integration
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-3">To display content from an RSS feed, create an "Articles" component that fetches and parses the RSS XML file, rendering article titles and links.</p>
+                        <p class="card-text mb-3">This TypeScript code defines a React functional component that dynamically fetches and displays a list of articles from an RSS feed. The component uses React's useState hook to create a state variable that holds the articles, which is initialized as an empty array. The state is updated once the RSS feed is fetched and parsed.</p>
+                        <p class="card-text mb-3">Additionally, useEffect is used to ensure that the fetch operation happens when the component first renders. Since useEffect is invoked with an empty dependency array, it acts like a componentDidMount lifecycle event, executing the fetch operation only once when the component is mounted.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useEffect<span class="token punctuation">,</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> Articles<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token keyword">const</span> <span class="token punctuation">[</span>articles<span class="token punctuation">,</span> setArticles<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -393,51 +418,80 @@
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> Articles<span class="token punctuation">;</span>
 </code></pre>
-                </dd>
-                <dt>Deploying the Site on GitHub Pages</dt>
-                <dd>
-                    <p>Deploying a Vite site to GitHub Pages involves configuring a GitHub Actions workflow. This automates the process and pushes the build output to the "docs" folder on every push.</p>
-                    <pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy React App to GitHub Pages
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="deployment">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-cloud-upload me-2"></i>
+                        Deploying to GitHub Pages
+                    </h2>
+                </header>
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-github me-2"></i>
+                            GitHub Actions Workflow
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-3">Deploying a Vite site to GitHub Pages involves configuring a GitHub Actions workflow. This automates the process and pushes the build output to the "docs" folder on every push.</p>
+                        <pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy React App to GitHub Pages
 
 <span class="token key atrule">on</span><span class="token punctuation">:</span>
-<span class="token key atrule">push</span><span class="token punctuation">:</span>
-  <span class="token key atrule">branches</span><span class="token punctuation">:</span>
-  <span class="token punctuation">-</span> main
+  <span class="token key atrule">push</span><span class="token punctuation">:</span>
+    <span class="token key atrule">branches</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> main
 
 <span class="token key atrule">jobs</span><span class="token punctuation">:</span>
-<span class="token key atrule">build</span><span class="token punctuation">:</span>
-  <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
-  <span class="token key atrule">steps</span><span class="token punctuation">:</span>
-  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Checkout code
-    <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v2
+  <span class="token key atrule">build</span><span class="token punctuation">:</span>
+    <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
+    <span class="token key atrule">steps</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Checkout code
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v2
 
-  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Set up Node.js
-    <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/setup<span class="token punctuation">-</span>node@v2
-    <span class="token key atrule">with</span><span class="token punctuation">:</span>
-    <span class="token key atrule">node-version</span><span class="token punctuation">:</span> <span class="token string">'16'</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Set up Node.js
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/setup<span class="token punctuation">-</span>node@v2
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">node-version</span><span class="token punctuation">:</span> <span class="token string">'16'</span>
 
-  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install dependencies
-    <span class="token key atrule">run</span><span class="token punctuation">:</span> npm install
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install dependencies
+        <span class="token key atrule">run</span><span class="token punctuation">:</span> npm install
 
-  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build the project
-    <span class="token key atrule">run</span><span class="token punctuation">:</span> npm run build  <span class="token comment"># No need to move the folder since it's already output to docs</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build the project
+        <span class="token key atrule">run</span><span class="token punctuation">:</span> npm run build
 
-  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to GitHub Pages
-    <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v3
-    <span class="token key atrule">with</span><span class="token punctuation">:</span>
-    <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
-    <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./docs
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to GitHub Pages
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v3
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
+          <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./docs
 
 <span class="token key atrule">permissions</span><span class="token punctuation">:</span>
-<span class="token key atrule">contents</span><span class="token punctuation">:</span> write
+  <span class="token key atrule">contents</span><span class="token punctuation">:</span> write
 </code></pre>
-                </dd>
-                <dt>Final Thoughts</dt>
-                <dd><p>Vite simplified React development with features like instant hot module replacement and minimal configuration. With just a few steps, I was able to deploy a project using GitHub Pages. Vite offers flexible solutions that help you get your project online quickly. Now that I got the initial project completed and deployed, I can focus on adding more features and content to the project as I learn more about React Native with TypeScript.</p></dd>
-                <h2 class="subheading mb-3">Explore TypeScript concepts through examples and interactive code</h2>
-                <!-- Bootstrap Accordion for TypeScript Concepts-->
+                    </div>
+                </div>
+                <div class="alert alert-info border-0 shadow-sm">
+                    <div class="d-flex">
+                        <i class="bi bi-info-circle fs-4 text-info me-3 flex-shrink-0"></i>
+                        <div>
+                            <h5 class="alert-heading mb-2">Final Thoughts</h5>
+                            <p class="mb-0">Vite simplified React development with features like instant hot module replacement and minimal configuration. With just a few steps, I was able to deploy a project using GitHub Pages. Vite offers flexible solutions that help you get your project online quickly. Now that I got the initial project completed and deployed, I can focus on adding more features and content to the project as I learn more about React Native with TypeScript.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="typescript">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-code-square me-2"></i>
+                        TypeScript Concepts
+                    </h2>
+                </header>
+                <p class="lead mb-4">Explore TypeScript concepts through examples and interactive code</p>
                 <div class="accordion" id="typescriptConceptsAccordion">
-                    <!-- Concept 1: Basic Type Annotations-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -445,18 +499,16 @@
                                 Basic Type Annotations
                             </button>
                         </h3>
-                    </div>
-                    <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#typescriptConceptsAccordion">
-                        <div class="accordion-body">
-                            <p>Type annotations in TypeScript allow developers to explicitly define the data types for variables, function arguments, and return values. This proactive approach helps catch potential errors early in the development process, promoting the use of correct data types and improving overall code stability. Unlike JavaScript, which is more flexible with data types, TypeScript enforces stricter rules, bringing more predictability and helping to prevent unexpected bugs.</p>
-                            <p>In the context of React Native, type annotations play a critical role in managing components and their props. By ensuring props are correctly typed, they help reduce runtime errors. Type annotations also simplify state management and API interactions by enforcing data structures and identifying mismatches early on. Overall, they contribute to a smoother development experience, especially with TypeScript’s helpful autocompletion and type inference features.</p>
-                            <p>Type annotations in my App.tsx file enhance code quality and developer experience by ensuring type safety and improving readability. Integrating these annotations fosters a more reliable and maintainable codebase. Here are three key points:</p>
-                            <ul>
-                                <li>Component Definition: The React.FC annotation in const App: React.FC identifies App as a React functional component, ensuring type safety for any props it might receive.</li>
-                                <li>State Management: Using &lt;string&gt; in useState&lt;string&gt;('home') ensures that activeSection is always treated as a string, catching type errors early and improving code robustness.</li>
-                                <li>Function Parameters: Annotating parameters like (section: string) in handleSectionChange ensures that only strings are passed to this function, preventing potential bugs from incorrect argument types.</li>
-                            </ul>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+                        <div class="accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>Type annotations in TypeScript allow developers to explicitly define the data types for variables, function arguments, and return values. This proactive approach helps catch potential errors early in the development process, promoting the use of correct data types and improving overall code stability. Unlike JavaScript, which is more flexible with data types, TypeScript enforces stricter rules, bringing more predictability and helping to prevent unexpected bugs.</p>
+                                <p>In the context of React Native, type annotations play a critical role in managing components and their props. By ensuring props are correctly typed, they help reduce runtime errors. Type annotations also simplify state management and API interactions by enforcing data structures and identifying mismatches early on. Overall, they contribute to a smoother development experience, especially with TypeScript's helpful autocompletion and type inference features.</p>
+                                <ul>
+                                    <li>Component Definition: The React.FC annotation in const App: React.FC identifies App as a React functional component, ensuring type safety for any props it might receive.</li>
+                                    <li>State Management: Using &lt;string&gt; in useState&lt;string&gt;('home') ensures that activeSection is always treated as a string, catching type errors early and improving code robustness.</li>
+                                    <li>Function Parameters: Annotating parameters like (section: string) in handleSectionChange ensures that only strings are passed to this function, preventing potential bugs from incorrect argument types.</li>
+                                </ul>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token comment">// State to keep track of which section is active</span>
   <span class="token keyword">const</span> <span class="token punctuation">[</span>activeSection<span class="token punctuation">,</span> setActiveSection<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token string">'home'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token comment">// Handler to update the active section based on navigation clicks</span>
@@ -481,9 +533,9 @@
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 2: Functions with Typed Parameters and Return Types-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -491,16 +543,16 @@
                                 Functions with Typed Parameters and Return Types
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>Functions with typed parameters and return types are essential in TypeScript for making sure that your code is robust and less prone to errors. This is particularly useful in a React Native app, where type safety can help you avoid many common bugs.</p>
-                            <dl>
-                                <dt>Typed Parameters</dt>
-                                <dd>This allows you to specify what type of arguments a function expects. If a function receives an argument of a different type, TypeScript will throw an error.</dd>
-                                <dt>Return Types</dt>
-                                <dd>This enables you to define what type of value a function will return. This ensures that your function always returns the expected type of value.</dd>
-                            </dl>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+                        <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>Functions with typed parameters and return types are essential in TypeScript for making sure that your code is robust and less prone to errors. This is particularly useful in a React Native app, where type safety can help you avoid many common bugs.</p>
+                                <dl>
+                                    <dt>Typed Parameters</dt>
+                                    <dd>This allows you to specify what type of arguments a function expects. If a function receives an argument of a different type, TypeScript will throw an error.</dd>
+                                    <dt>Return Types</dt>
+                                    <dd>This enables you to define what type of value a function will return. This ensures that your function always returns the expected type of value.</dd>
+                                </dl>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span> View<span class="token punctuation">,</span> Text <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-native'</span><span class="token punctuation">;</span>
 
 <span class="token comment">// Define a type for the function parameters</span>
@@ -515,7 +567,7 @@
     <span class="token operator">&lt;</span>View<span class="token operator">></span>
       <span class="token operator">&lt;</span>Text<span class="token operator">></span>Hello<span class="token punctuation">,</span> my name <span class="token keyword">is</span> <span class="token punctuation">{</span>name<span class="token punctuation">}</span> and <span class="token constant">I</span> am <span class="token punctuation">{</span>age<span class="token punctuation">}</span> years old<span class="token punctuation">.</span><span class="token operator">&lt;</span><span class="token operator">/</span>Text<span class="token operator">></span>
     <span class="token operator">&lt;</span><span class="token operator">/</span>View<span class="token operator">></span>
-    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token comment">// Usage of the function in a React component</span>
@@ -523,22 +575,16 @@
   <span class="token keyword">return</span> <span class="token punctuation">(</span>
     <span class="token operator">&lt;</span>View<span class="token operator">></span>
       <span class="token operator">&lt;</span>Greet name<span class="token operator">=</span><span class="token string">"Alice"</span> age<span class="token operator">=</span><span class="token punctuation">{</span><span class="token number">30</span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>View<span class="token operator">></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>View<span class="token operator">></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span></code></pre>
-                            <dl>
-                                <dt>GreetingProps</dt>
-                                <dd>We define a type for the function parameters. It expects two properties: name (a string) and age (a number).</dd>
-                                <dt>Greet</dt>
-                                <dd>This is a React functional component that uses the GreetingProps type for its parameters. The function returns a JSX element (the type is JSX.Element).</dd>
-                                <dt>App</dt>
-                                <dd>This is the main component that uses the Greet component, passing the required props (name and age).</dd>
-                            </dl>
-                            <p>By using typed parameters and return types, you ensure that your components receive the expected types, reducing the chance of bugs and making your code easier to maintain. Plus, TypeScript provides auto-completion and type-checking features, which makes development more efficient.</p>
+<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
+</code></pre>
+                                <p>By using typed parameters and return types, you ensure that your components receive the expected types, reducing the chance of bugs and making your code easier to maintain. Plus, TypeScript provides auto-completion and type-checking features, which makes development more efficient.</p>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 3: Optional and Default Parameters-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -546,75 +592,72 @@
                                 Optional and Default Parameters
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>In TypeScript, function parameters can be optional or have default values. Optional and default parameters in TypeScript provide a way to make functions and components more flexible and robust:</p>
-                            <dl>
-                                <dt>Optional Parameters</dt>
-                                <dd>These allow you to call functions without providing all arguments, ensuring smoother function execution even with missing inputs.</dd>
-                                <dt>Default Parameters</dt>
-                                <dd>They provide a fallback value if no argument is supplied, preventing undefined values and potential errors.</dd>
-                                <dt>Type Safety</dt>
-                                <dd>Both optional and default parameters enhance code readability and reliability by explicitly defining the expected types and values, reducing bugs and improving maintainability.</dd>
-                                <p>In Hero.tsx, the concept of optional and default parameters is applied to enhance flexibility and robustness. The component accepts an optional profileData parameter, allowing it to function seamlessly even when this data isn't provided. If profileData is not available, the function defaults to a predefined defaultProfile, ensuring the component always has data to render. This approach reduces the risk of errors due to missing information and maintains the smooth operation of the component under various circumstances. Ultimately, it exemplifies how TypeScript's optional and default parameters can create more adaptable and resilient code.</p>
-                            </dl>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> defaultProfile <span class="token keyword">from</span> <span class="token string">'../data/profile.json'</span><span class="token punctuation">;</span> <span class="token comment">// Adjust the path according to where you place profile.json</span>
+                        <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>In TypeScript, function parameters can be optional or have default values. Optional and default parameters in TypeScript provide a way to make functions and components more flexible and robust:</p>
+                                <dl>
+                                    <dt>Optional Parameters</dt>
+                                    <dd>These allow you to call functions without providing all arguments, ensuring smoother function execution even with missing inputs.</dd>
+                                    <dt>Default Parameters</dt>
+                                    <dd>They provide a fallback value if no argument is supplied, preventing undefined values and potential errors.</dd>
+                                    <dt>Type Safety</dt>
+                                    <dd>Both optional and default parameters enhance code readability and reliability by explicitly defining the expected types and values, reducing bugs and improving maintainability.</dd>
+                                </dl>
+                                <p>In Hero.tsx, the concept of optional and default parameters is applied to enhance flexibility and robustness. The component accepts an optional profileData parameter, allowing it to function seamlessly even when this data isn't provided.</p>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> defaultProfile <span class="token keyword">from</span> <span class="token string">'../data/profile.json'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">interface</span> <span class="token class-name">Profile</span> <span class="token punctuation">{</span>
-name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-introduction<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-ctaLink<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-ctaText<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  introduction<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  ctaLink<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  ctaText<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token keyword">const</span> <span class="token function-variable function">renderHero</span> <span class="token operator">=</span> <span class="token punctuation">(</span>profileData<span class="token operator">?</span><span class="token operator">:</span> Profile<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
-<span class="token keyword">const</span> profile <span class="token operator">=</span> profileData <span class="token operator">||</span> defaultProfile<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> profile <span class="token operator">=</span> profileData <span class="token operator">||</span> defaultProfile<span class="token punctuation">;</span>
 
-<span class="token comment">// Check if profile is null or empty</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>profile <span class="token operator">||</span> Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>profile<span class="token punctuation">)</span><span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>profile <span class="token operator">||</span> Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>profile<span class="token punctuation">)</span><span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>section id<span class="token operator">=</span><span class="token string">"hero"</span> className<span class="token operator">=</span><span class="token string">"bg-secondary text-white text-center py-5"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container"</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
+            <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-8"</span><span class="token operator">></span>
+              <span class="token operator">&lt;</span>h1 className<span class="token operator">=</span><span class="token string">"display-4"</span><span class="token operator">></span>Error<span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">></span>
+              <span class="token operator">&lt;</span>p className<span class="token operator">=</span><span class="token string">"lead"</span><span class="token operator">></span>Profile data <span class="token keyword">is</span> missing or unavailable<span class="token punctuation">.</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
+            <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+          <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>section<span class="token operator">></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
   <span class="token keyword">return</span> <span class="token punctuation">(</span>
-  <span class="token operator">&lt;</span>section id<span class="token operator">=</span><span class="token string">"hero"</span> className<span class="token operator">=</span><span class="token string">"bg-secondary text-white text-center py-5"</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container"</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-8"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>h1 className<span class="token operator">=</span><span class="token string">"display-4"</span><span class="token operator">></span>Error<span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">></span>
-      <span class="token operator">&lt;</span>p className<span class="token operator">=</span><span class="token string">"lead"</span><span class="token operator">></span>Profile data <span class="token keyword">is</span> missing or unavailable<span class="token punctuation">.</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
+    <span class="token operator">&lt;</span>section id<span class="token operator">=</span><span class="token string">"hero"</span> className<span class="token operator">=</span><span class="token string">"bg-secondary text-white text-center py-5"</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-8"</span><span class="token operator">></span>
+            <span class="token operator">&lt;</span>h1 className<span class="token operator">=</span><span class="token string">"display-4"</span><span class="token operator">></span><span class="token punctuation">{</span>profile<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">></span>
+            <span class="token operator">&lt;</span>p className<span class="token operator">=</span><span class="token string">"lead"</span><span class="token operator">></span><span class="token punctuation">{</span>profile<span class="token punctuation">.</span>introduction<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
+            <span class="token operator">&lt;</span>a href<span class="token operator">=</span><span class="token punctuation">{</span>profile<span class="token punctuation">.</span>ctaLink<span class="token punctuation">}</span> className<span class="token operator">=</span><span class="token string">"btn btn-primary btn-lg mt-4"</span><span class="token operator">></span>
+              <span class="token punctuation">{</span>profile<span class="token punctuation">.</span>ctaText<span class="token punctuation">}</span>
+            <span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">></span>
+          <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
       <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>section<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>section<span class="token operator">></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">return</span> <span class="token punctuation">(</span>
-  <span class="token operator">&lt;</span>section id<span class="token operator">=</span><span class="token string">"hero"</span> className<span class="token operator">=</span><span class="token string">"bg-secondary text-white text-center py-5"</span><span class="token operator">></span>
-  <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container"</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-8"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>h1 className<span class="token operator">=</span><span class="token string">"display-4"</span><span class="token operator">></span><span class="token punctuation">{</span>profile<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">></span>
-      <span class="token operator">&lt;</span>p className<span class="token operator">=</span><span class="token string">"lead"</span><span class="token operator">></span><span class="token punctuation">{</span>profile<span class="token punctuation">.</span>introduction<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
-      <span class="token operator">&lt;</span>a href<span class="token operator">=</span><span class="token punctuation">{</span>profile<span class="token punctuation">.</span>ctaLink<span class="token punctuation">}</span> className<span class="token operator">=</span><span class="token string">"btn btn-primary btn-lg mt-4"</span><span class="token operator">></span>
-      <span class="token punctuation">{</span>profile<span class="token punctuation">.</span>ctaText<span class="token punctuation">}</span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>section<span class="token operator">></span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> Hero<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token constant">FC</span><span class="token operator">&lt;</span><span class="token punctuation">{</span> profileData<span class="token operator">?</span><span class="token operator">:</span> Profile <span class="token punctuation">}</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">{</span> profileData <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
-<span class="token keyword">return</span> <span class="token function">renderHero</span><span class="token punctuation">(</span>profileData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">renderHero</span><span class="token punctuation">(</span>profileData<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> Hero<span class="token punctuation">;</span>
-
-
-
 </code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 4: Interfaces-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingFour">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
@@ -622,18 +665,19 @@ ctaText<span class="token operator">:</span> <span class="token builtin">string<
                                 Interfaces
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>TypeScript interfaces are powerful tools that define the structure of an object, detailing the expected properties and their types. They enforce type-checking, ensuring that any object adhering to the interface meets these criteria, thus reducing runtime errors. In the Articles.tsx file, the Article interface outlines the structure for an article object, specifying that each article should have a title, link, and pubDate, all of which are strings.</p>
-                            <p>This interface is then used in the state management, ensuring that the articles state array contains objects that conform to this structure. By defining the shape of the article data upfront, the code becomes more predictable and easier to maintain, providing clear expectations for the data being handled.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">Article</span> <span class="token punctuation">{</span>
-title<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-link<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-pubDate<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
+                        <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>TypeScript interfaces are powerful tools that define the structure of an object, detailing the expected properties and their types. They enforce type-checking, ensuring that any object adhering to the interface meets these criteria, thus reducing runtime errors. In the Articles.tsx file, the Article interface outlines the structure for an article object, specifying that each article should have a title, link, and pubDate, all of which are strings.</p>
+                                <p>This interface is then used in the state management, ensuring that the articles state array contains objects that conform to this structure. By defining the shape of the article data upfront, the code becomes more predictable and easier to maintain, providing clear expectations for the data being handled.</p>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">Article</span> <span class="token punctuation">{</span>
+  title<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  link<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  pubDate<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 5: Type Aliases-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingFive">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
@@ -641,19 +685,19 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 Type Aliases
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>Type aliases allow you to define custom types, which can make your code more readable and reusable. A Type Alias in TypeScript provides a new name for any type, like a shorthand or simplification. This could be a primitive type, a union of types, an object type, or any other structure. It's a way to make complex types more readable and easier to manage.</p>
-                            <p>The keyword type is used to create these aliases, essentially giving a new name to an existing type or a complex structure. This is especially useful for making your code cleaner and more understandable, particularly when dealing with intricate type definitions. They don't add any new functionality or behavior to the type itself—they just give it a more convenient or meaningful name.</p>
-                            <p>On the other hand, the type keyword in TypeScript is also used to define these Type Aliases. So when we talk about 'type' in TypeScript, it often refers to the process of creating these aliases, encapsulating the concept of type definitions that enhance code clarity and maintenance. Here is a type alias example in TypeScript that defines an article.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">type</span> <span class="token class-name">Article</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+                        <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>Type aliases allow you to define custom types, which can make your code more readable and reusable. A Type Alias in TypeScript provides a new name for any type, like a shorthand or simplification. This could be a primitive type, a union of types, an object type, or any other structure.</p>
+                                <p>The keyword type is used to create these aliases, essentially giving a new name to an existing type or a complex structure. This is especially useful for making your code cleaner and more understandable, particularly when dealing with intricate type definitions.</p>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">type</span> <span class="token class-name">Article</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
   title<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
   link<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
   pubDate<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 6: Union and Intersection Types-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingSix">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
@@ -661,23 +705,16 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 Union and Intersection Types
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>TypeScript's Union and Intersection types add flexibility and power to type definitions, particularly useful in complex React applications.</p>
-                            <dl>
-                                <dt>Union Types</dt>
-                                <dd>They allow a variable to be one of several types. For example, if you have a component that can accept a string or number as a prop, you’d use a union type. This is handy for functions and components that can handle multiple types of inputs.</dd>
-                                <dt>Intersection Types</dt>
-                                <dd>They combine multiple types into one. This means an object of this type must satisfy all the combined types. Useful when you need an object to have multiple sets of properties.</dd>
-                                <p>Example in a Web Application: Imagine you have a UserProfile component that displays different user information based on user roles.</p>
+                        <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>TypeScript's Union and Intersection types add flexibility and power to type definitions, particularly useful in complex React applications.</p>
                                 <dl>
-                                    <dt>Union Type:</dt>
-                                    <dd>The user prop can be either User or SuperUser. This allows the UserProfile component to accept different user types, providing flexibility.</dd>
-                                    <dt>Intersection Type:</dt>
-                                    <dd>SuperUser combines the properties of both Admin and User, meaning a SuperUser must have all properties of both types. This is useful for users who have combined roles.</dd>
+                                    <dt>Union Types</dt>
+                                    <dd>They allow a variable to be one of several types. For example, if you have a component that can accept a string or number as a prop, you'd use a union type.</dd>
+                                    <dt>Intersection Types</dt>
+                                    <dd>They combine multiple types into one. This means an object of this type must satisfy all the combined types.</dd>
                                 </dl>
-                            </dl>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">type</span> <span class="token class-name">Admin</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
   adminRights<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -698,18 +735,19 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
       <span class="token punctuation">{</span><span class="token string">'adminRights'</span> <span class="token keyword">in</span> user <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>
         <span class="token operator">&lt;</span>ul<span class="token operator">></span>
           <span class="token punctuation">{</span>user<span class="token punctuation">.</span>adminRights<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>right<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
-            <span class="token operator">&lt;</span>li key<span class="token operator">=</span><span class="token punctuation">{</span>right<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span>right<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+            <span class="token operator">&lt;</span>li key<span class="token operator">=</span><span class="token punctuation">{</span>right<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span>right<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+          <span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
         <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
       <span class="token punctuation">)</span><span class="token punctuation">}</span>
     <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> UserProfile<span class="token punctuation">;</span>
 </code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 7: Generics-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingSeven">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
@@ -717,17 +755,16 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 Generics
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseSeven" aria-labelledby="headingSeven" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>Generics in TypeScript provide a way to create reusable components that work with a variety of types instead of a single one. They allow you to write flexible and type-safe code by enabling you to define components, functions, or hooks that can operate with different data types while preserving type information. In the context of React, generics are often used in components and hooks to ensure they can handle a wide range of data types without losing the benefits of TypeScript's type-checking.</p>
-                            <p>Example in a Web Application: Let's say you have a list component that can render lists of different types, such as users, products, or orders. By using generics, you can create a single List component that works for any type of data.</p>
-                            <ul>
-                                <li>The List component is a generic component that takes a type parameter T.</li>
-                                <li>The ListProps interface uses this type parameter to define the shape of the props.</li>
-                                <li>The items prop is an array of T, and the renderItem prop is a function that takes an item of type T and returns a React node.</li>
-                            </ul>
-                            <p>Using generics this way ensures that the List component can handle any type of data, making it highly reusable and type-safe. This flexibility is a powerful feature of TypeScript, allowing you to write more generic and adaptable components while retaining strong type-checking benefits.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+                        <div class="accordion-collapse collapse" id="collapseSeven" aria-labelledby="headingSeven" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>Generics in TypeScript provide a way to create reusable components that work with a variety of types instead of a single one. They allow you to write flexible and type-safe code by enabling you to define components, functions, or hooks that can operate with different data types while preserving type information.</p>
+                                <p>Example in a Web Application: Let's say you have a list component that can render lists of different types, such as users, products, or orders. By using generics, you can create a single List component that works for any type of data.</p>
+                                <ul>
+                                    <li>The List component is a generic component that takes a type parameter T.</li>
+                                    <li>The ListProps interface uses this type parameter to define the shape of the props.</li>
+                                    <li>The items prop is an array of T, and the renderItem prop is a function that takes an item of type T and returns a React node.</li>
+                                </ul>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">interface</span> <span class="token class-name">ListProps<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span> <span class="token punctuation">{</span>
   items<span class="token operator">:</span> <span class="token constant">T</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -737,12 +774,13 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
 <span class="token keyword">function</span> <span class="token generic-function"><span class="token function">List</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">{</span> items<span class="token punctuation">,</span> renderItem <span class="token punctuation">}</span><span class="token operator">:</span> ListProps<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token keyword">return</span> <span class="token punctuation">(</span>
     <span class="token operator">&lt;</span>ul<span class="token operator">></span>
-    <span class="token punctuation">{</span>items<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
-      <span class="token operator">&lt;</span>li key<span class="token operator">=</span><span class="token punctuation">{</span>index<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token function">renderItem</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span><span class="token punctuation">)</span>
-    <span class="token punctuation">)</span><span class="token punctuation">}</span>
+      <span class="token punctuation">{</span>items<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
+        <span class="token operator">&lt;</span>li key<span class="token operator">=</span><span class="token punctuation">{</span>index<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token function">renderItem</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+      <span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
     <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
+
 <span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Alice'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Bob'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> products <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Laptop'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">'Phone'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
@@ -754,14 +792,14 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
       <span class="token operator">&lt;</span>h2<span class="token operator">></span>Products<span class="token operator">:</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">></span>
       <span class="token operator">&lt;</span>List items<span class="token operator">=</span><span class="token punctuation">{</span>products<span class="token punctuation">}</span> renderItem<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span>product<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token operator">&lt;</span>span<span class="token operator">></span><span class="token punctuation">{</span>product<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
     <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
 
+<span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
 </code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 8: Type Assertions-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingEight">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
@@ -769,11 +807,12 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 Type Assertions
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseEight" aria-labelledby="headingEight" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>TypeScript type assertions are a way to tell the compiler that you know more about the type of a value than it does. It's essentially a way to override the compiler's inferred type and specify a more specific type, which can be useful in certain scenarios. For instance, let's say you retrieve a value from an API response that is of type unknown or any, and you know it’s actually a string. You can use type assertions to inform TypeScript of this fact and proceed with string-specific operations. There are two syntaxes for type assertions: the as syntax and the angle-bracket &lt;Type&gt; syntax.</p>
-                            <p>Imagine you have an input field where users can enter their age, and you want to ensure that the value is treated as a number. Since the input value is always a string by default, you can use a type assertion to convert it to a number.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+                        <div class="accordion-collapse collapse" id="collapseEight" aria-labelledby="headingEight" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>TypeScript type assertions are a way to tell the compiler that you know more about the type of a value than it does. It's essentially a way to override the compiler's inferred type and specify a more specific type, which can be useful in certain scenarios.</p>
+                                <p>Imagine you have an input field where users can enter their age, and you want to ensure that the value is treated as a number. Since the input value is always a string by default, you can use a type assertion to convert it to a number.</p>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+
 <span class="token keyword">const</span> AgeInput<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token keyword">const</span> <span class="token punctuation">[</span>age<span class="token punctuation">,</span> setAge<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">number</span> <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -786,16 +825,16 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
     <span class="token operator">&lt;</span>div<span class="token operator">></span>
       <span class="token operator">&lt;</span>label htmlFor<span class="token operator">=</span><span class="token string">"age"</span><span class="token operator">></span>Enter your age<span class="token operator">:</span><span class="token operator">&lt;</span><span class="token operator">/</span>label<span class="token operator">></span>
       <span class="token operator">&lt;</span>input type<span class="token operator">=</span><span class="token string">"text"</span> id<span class="token operator">=</span><span class="token string">"age"</span> onChange<span class="token operator">=</span><span class="token punctuation">{</span>handleAgeChange<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
-        <span class="token punctuation">{</span>age <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>p<span class="token operator">></span>Your age <span class="token keyword">is</span><span class="token operator">:</span> <span class="token punctuation">{</span>age<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span><span class="token punctuation">}</span>
+      <span class="token punctuation">{</span>age <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>p<span class="token operator">></span>Your age <span class="token keyword">is</span><span class="token operator">:</span> <span class="token punctuation">{</span>age<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span><span class="token punctuation">}</span>
     <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token keyword">export</span> <span class="token keyword">default</span> AgeInput<span class="token punctuation">;</span>
 
+<span class="token keyword">export</span> <span class="token keyword">default</span> AgeInput<span class="token punctuation">;</span>
 </code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 9: Enums-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingNine">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
@@ -803,16 +842,16 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 Enums
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseNine" aria-labelledby="headingNine" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>Enums, or enumerations, in TypeScript are a way to define a set of named constants. They can be a great tool to make your code more readable and expressive, especially when dealing with sets of related values. Enums help avoid magic strings or numbers in your code, making it easier to manage and understand. In the context of a React application, enums are often used to represent a fixed set of possible values for a prop, state, or parameter. This ensures that only valid values are used, reducing the risk of bugs.</p>
-                            <p>Example in a Web Application: Suppose you are building a task management app where each task can have a specific status.</p>
-                            <ul>
-                                <li>An enum TaskStatus is created to define the possible statuses a task can have: ToDo, InProgress, and Done.</li>
-                                <li>The Task interface includes a status property that uses the TaskStatus enum, ensuring that only valid statuses can be assigned.</li>
-                                <li>The TaskComponent uses the enum to manage and display the task's status, providing buttons to change the status, each using values from the TaskStatus enum.</li>
-                            </ul>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+                        <div class="accordion-collapse collapse" id="collapseNine" aria-labelledby="headingNine" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>Enums, or enumerations, in TypeScript are a way to define a set of named constants. They can be a great tool to make your code more readable and expressive, especially when dealing with sets of related values.</p>
+                                <p>Example in a Web Application: Suppose you are building a task management app where each task can have a specific status.</p>
+                                <ul>
+                                    <li>An enum TaskStatus is created to define the possible statuses a task can have: ToDo, InProgress, and Done.</li>
+                                    <li>The Task interface includes a status property that uses the TaskStatus enum, ensuring that only valid statuses can be assigned.</li>
+                                    <li>The TaskComponent uses the enum to manage and display the task's status, providing buttons to change the status.</li>
+                                </ul>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">enum</span> TaskStatus <span class="token punctuation">{</span>
   ToDo <span class="token operator">=</span> <span class="token string">'ToDo'</span><span class="token punctuation">,</span>
@@ -841,7 +880,7 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
       <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">handleStatusChange</span><span class="token punctuation">(</span>TaskStatus<span class="token punctuation">.</span>InProgress<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">></span>In Progress<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
       <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">handleStatusChange</span><span class="token punctuation">(</span>TaskStatus<span class="token punctuation">.</span>Done<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">></span>Done<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
     <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
@@ -849,16 +888,16 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
     id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
     title<span class="token operator">:</span> <span class="token string">'Learn TypeScript enums'</span><span class="token punctuation">,</span>
     status<span class="token operator">:</span> TaskStatus<span class="token punctuation">.</span>ToDo
-    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
   <span class="token keyword">return</span> <span class="token operator">&lt;</span>TaskComponent task<span class="token operator">=</span><span class="token punctuation">{</span>task<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
 </code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 10: React Native Props with TypeScript-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingTen">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
@@ -866,23 +905,16 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 React Native Props with TypeScript
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseTen" aria-labelledby="headingTen" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>React Native, like React, allows components to receive data and event handlers through props. Using TypeScript with React Native adds the benefit of strong typing to these props, enhancing code quality and reducing bugs. Props in React Native: Props are used to pass data from one component to another, creating dynamic and reusable components. They ensure that components can be customized and controlled by their parent components.</p>
-                            <dl>
-                                <dt>GreetingProps Interface:</dt>
-                                <dd><p>This defines the structure of the props expected by the Greeting component. It specifies that the component expects a name (mandatory string) and an optional age (number). The age property has a question mark (?), indicating it is optional.</p></dd>
-                                <dt>Greeting Component:</dt>
-                                <dd>
-                                    <p>This functional component takes GreetingProps as its props type. It destructures name and age from the props. Within the component:</p>
-                                    <ul>
-                                        <li>It renders a View containing a Text element that always displays the name.</li>
-                                        <li>It conditionally renders another Text element showing the age if the age prop is provided.</li>
-                                        <li>This setup ensures that the Greeting component is type-safe and can flexibly handle the presence or absence of the age prop while always displaying the name.</li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">GreetingProps</span> <span class="token punctuation">{</span>
+                        <div class="accordion-collapse collapse" id="collapseTen" aria-labelledby="headingTen" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>React Native, like React, allows components to receive data and event handlers through props. Using TypeScript with React Native adds the benefit of strong typing to these props, enhancing code quality and reducing bugs.</p>
+                                <dl>
+                                    <dt>GreetingProps Interface</dt>
+                                    <dd>This defines the structure of the props expected by the Greeting component. It specifies that the component expects a name (mandatory string) and an optional age (number).</dd>
+                                    <dt>Greeting Component</dt>
+                                    <dd>This functional component takes GreetingProps as its props type. It destructures name and age from the props and conditionally renders content based on whether the age prop is provided.</dd>
+                                </dl>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">GreetingProps</span> <span class="token punctuation">{</span>
   name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
   age<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -894,11 +926,11 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
       <span class="token punctuation">{</span>age <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>Text<span class="token operator">></span>You are <span class="token punctuation">{</span>age<span class="token punctuation">}</span> years old<span class="token punctuation">.</span><span class="token operator">&lt;</span><span class="token operator">/</span>Text<span class="token operator">></span><span class="token punctuation">}</span>
     <span class="token operator">&lt;</span><span class="token operator">/</span>View<span class="token operator">></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
-                            <p>In this example, name is a required prop, and age is optional. TypeScript will enforce the correct usage of these props when using the Greeting component.</p>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+                            </div>
                         </div>
                     </div>
-                    <!-- Concept 11: TypeScript Classes-->
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingEleven">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
@@ -906,14 +938,11 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
                                 TypeScript Classes
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="collapseEleven" aria-labelledby="headingEleven" data-bs-parent="#typescriptConceptsAccordion"></div>
-                        <div class="accordion-body">
-                            <p>TypeScript classes are a way to create reusable blueprints for objects, encapsulating both data and behavior. They bring an object-oriented approach to TypeScript, much like classes in C#. In the context the Article class, TypeScript classes allow you to define the structure and functionality of an Article. The class encapsulates properties like title, link, and pubDate, which are all essential attributes of an article. By defining these properties in the class, you ensure that every instance of Article has a consistent structure.</p>
-                            <p>Classes also allow you to define a constructor, a special method used for creating and initializing objects of the class. In the Article class, the constructor takes parameters that correspond to the article's properties and assigns them to the class's properties. This ensures that whenever you create a new Article, you provide the necessary data for title, link, and pubDate.</p>
-                            <p>TypeScript classes can include methods that define behaviors related to the class's data. In the Article class, for example, you might have a method called getSummary that returns a formatted string summarizing the article's information. This method encapsulates the behavior related to presenting an article's summary, keeping the logic within the class where it belongs.</p>
-                            <p>The use of TypeScript classes also supports inheritance, where a new class can inherit properties and methods from an existing class. This promotes code reuse and allows for the creation of more specialized classes that build on the functionality of base classes.</p>
-                            <p>Overall, TypeScript classes like Article provide a powerful way to define and work with structured data, offering clear, maintainable, and scalable code. They combine data and behavior in a way that aligns with object-oriented principles, making your TypeScript code more robust and easier to understand.</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">class</span> <span class="token class-name">Article</span> <span class="token punctuation">{</span>
+                        <div class="accordion-collapse collapse" id="collapseEleven" aria-labelledby="headingEleven" data-bs-parent="#typescriptConceptsAccordion">
+                            <div class="accordion-body">
+                                <p>TypeScript classes are a way to create reusable blueprints for objects, encapsulating both data and behavior. They bring an object-oriented approach to TypeScript, much like classes in C#.</p>
+                                <p>Classes also allow you to define a constructor, a special method used for creating and initializing objects of the class. TypeScript classes can include methods that define behaviors related to the class's data and support inheritance for code reuse and creating specialized classes.</p>
+                                <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">class</span> <span class="token class-name">Article</span> <span class="token punctuation">{</span>
   title<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
   link<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
   pubDate<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
@@ -934,31 +963,50 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
 <span class="token keyword">const</span> article <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Article</span><span class="token punctuation">(</span><span class="token string">'New TypeScript Release'</span><span class="token punctuation">,</span> <span class="token string">'https://typescriptlang.org'</span><span class="token punctuation">,</span> <span class="token string">'2024-10-12'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>article<span class="token punctuation">.</span><span class="token function">getSummary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <p>These TypeScript code samples cover core features that will improve the development experience for new developers. They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.</p>
-                <br />
-                <hr />
-                <br />
-                <div class="card">
-                    <div class="card-header"><h2 class="card-title">Adding React Router</h2></div>
+                <div class="alert alert-info border-0 shadow-sm mt-4">
+                    <div class="d-flex">
+                        <i class="bi bi-lightbulb fs-4 text-info me-3 flex-shrink-0"></i>
+                        <div>
+                            <h5 class="alert-heading mb-2">TypeScript Summary</h5>
+                            <p class="mb-0">These TypeScript code samples cover core features that will improve the development experience for new developers. They ensure safer, more predictable code, especially in React Native projects where maintaining clarity in component structures is essential.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-5" id="router">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-signpost-2 me-2"></i>
+                        Adding React Router
+                    </h2>
+                </header>
+                <div class="card border-primary shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-map me-2"></i>
+                            Navigation Implementation
+                        </h4>
+                    </div>
                     <div class="card-body">
                         <p class="lead">I decided to implement React Router for navigation between sections using URLs like /#about and /#projects.</p>
-                        <p>Here are the steps I took to integrate React Router into my portfolio project.</p>
-                        <This>enabled me to navigate to different sections using URLs like /#about and /#projects.</This>
+                        <p class="card-text">Here are the steps I took to integrate React Router into my portfolio project. This enabled me to navigate to different sections using URLs like /#about and /#projects.</p>
                     </div>
-                    <dl>
-                        <dt>Step 1: Install react-router-dom</dt>
-                        <dd>
-                            <p>The first step is to install the React Router library by running the following command:</p>
-                            <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> react-router-dom
+                </div>
+                <dl class="row">
+                    <dt class="col-sm-3">Step 1: Install react-router-dom</dt>
+                    <dd class="col-sm-9">
+                        <p>The first step is to install the React Router library by running the following command:</p>
+                        <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> react-router-dom
 </code></pre>
-                        </dd>
-                        <dt>Step 2: Update App.tsx to Use HashRouter</dt>
-                        <dd>
-                            <p>Next, update the `App.tsx` file to use `HashRouter` for URL navigation. The following code sets up routes for different sections of your portfolio:</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> HashRouter<span class="token punctuation">,</span> Routes<span class="token punctuation">,</span> Route <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-router-dom'</span><span class="token punctuation">;</span>
+                    </dd>
+                    <dt class="col-sm-3">Step 2: Update App.tsx to Use HashRouter</dt>
+                    <dd class="col-sm-9">
+                        <p>Next, update the `App.tsx` file to use `HashRouter` for URL navigation. The following code sets up routes for different sections of your portfolio:</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> HashRouter<span class="token punctuation">,</span> Routes<span class="token punctuation">,</span> Route <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-router-dom'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> Header <span class="token keyword">from</span> <span class="token string">'./components/Header'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> Footer <span class="token keyword">from</span> <span class="token string">'./components/Footer'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span> lazy<span class="token punctuation">,</span> Suspense <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
@@ -971,116 +1019,128 @@ pubDate<span class="token operator">:</span> <span class="token builtin">string<
 
 <span class="token keyword">const</span> App<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token keyword">return</span> <span class="token punctuation">(</span>
-  <span class="token operator">&lt;</span>HashRouter<span class="token operator">></span>
-    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"d-flex flex-column min-vh-100"</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span>Header <span class="token operator">/</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span>main className<span class="token operator">=</span><span class="token string">"flex-grow-1 pt-5 mt-5 container"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-10"</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>Suspense fallback<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>div<span class="token operator">></span>Loading<span class="token operator">...</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><span class="token punctuation">}</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>Routes<span class="token operator">></span>
-          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Hero <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
-          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/about"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>About <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
-          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/projects"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Projects <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
-          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/joke"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Joke <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
-          <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/articles"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Articles <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>Routes<span class="token operator">></span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>Suspense<span class="token operator">></span>
+    <span class="token operator">&lt;</span>HashRouter<span class="token operator">></span>
+      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"d-flex flex-column min-vh-100"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>Header <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>main className<span class="token operator">=</span><span class="token string">"flex-grow-1 pt-5 mt-5 container"</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"row justify-content-center"</span><span class="token operator">></span>
+            <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"col-md-10"</span><span class="token operator">></span>
+              <span class="token operator">&lt;</span>Suspense fallback<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>div<span class="token operator">></span>Loading<span class="token operator">...</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><span class="token punctuation">}</span><span class="token operator">></span>
+                <span class="token operator">&lt;</span>Routes<span class="token operator">></span>
+                  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Hero <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+                  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/about"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>About <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+                  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/projects"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Projects <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+                  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/joke"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Joke <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+                  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/articles"</span> element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span>Articles <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>
+                <span class="token operator">&lt;</span><span class="token operator">/</span>Routes<span class="token operator">></span>
+              <span class="token operator">&lt;</span><span class="token operator">/</span>Suspense<span class="token operator">></span>
+            <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+          <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>main<span class="token operator">></span>
+        <span class="token operator">&lt;</span>Footer <span class="token operator">/</span><span class="token operator">></span>
       <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>main<span class="token operator">></span>
-    <span class="token operator">&lt;</span>Footer <span class="token operator">/</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>HashRouter<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>HashRouter<span class="token operator">></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> App<span class="token punctuation">;</span>
 </code></pre>
-                        </dd>
-                        <dt>Step 3: Modify Header.tsx to Use Links</dt>
-                        <dd>
-                            <p>Modify the `Header.tsx` file to replace traditional anchor `&lt;a&gt` tags with React Router's `Link` component for route-based navigation:</p>
-                            <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Link <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-router-dom'</span><span class="token punctuation">;</span>
+                    </dd>
+                    <dt class="col-sm-3">Step 3: Modify Header.tsx to Use Links</dt>
+                    <dd class="col-sm-9">
+                        <p>Modify the `Header.tsx` file to replace traditional anchor `&lt;a&gt` tags with React Router's `Link` component for route-based navigation:</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Link <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react-router-dom'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> Header<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token keyword">return</span> <span class="token punctuation">(</span>
-  <span class="token operator">&lt;</span>header<span class="token operator">></span>
-    <span class="token operator">&lt;</span>nav className<span class="token operator">=</span><span class="token string">"navbar navbar-expand-lg navbar-light bg-light fixed-top"</span><span class="token operator">></span>
-    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container-fluid"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"navbar-brand"</span> to<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">></span>Mark Hazleton<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
-      <span class="token operator">&lt;</span>button className<span class="token operator">=</span><span class="token string">"navbar-toggler"</span> type<span class="token operator">=</span><span class="token string">"button"</span> data<span class="token operator">-</span>bs<span class="token operator">-</span>toggle<span class="token operator">=</span><span class="token string">"collapse"</span> data<span class="token operator">-</span>bs<span class="token operator">-</span>target<span class="token operator">=</span><span class="token string">"#navbarNav"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>span className<span class="token operator">=</span><span class="token string">"navbar-toggler-icon"</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">></span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
-      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"collapse navbar-collapse"</span> id<span class="token operator">=</span><span class="token string">"navbarNav"</span><span class="token operator">></span>
-      <span class="token operator">&lt;</span>ul className<span class="token operator">=</span><span class="token string">"navbar-nav"</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">></span>Home<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
-        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/about"</span><span class="token operator">></span>About<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
-        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/projects"</span><span class="token operator">></span>Projects<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
-        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/articles"</span><span class="token operator">></span>Articles<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
-        <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
-        <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/joke"</span><span class="token operator">></span>Joke<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>nav<span class="token operator">></span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>header<span class="token operator">></span>
+    <span class="token operator">&lt;</span>header<span class="token operator">></span>
+      <span class="token operator">&lt;</span>nav className<span class="token operator">=</span><span class="token string">"navbar navbar-expand-lg navbar-light bg-light fixed-top"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container-fluid"</span><span class="token operator">></span>
+          <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"navbar-brand"</span> to<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">></span>Mark Hazleton<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+          <span class="token operator">&lt;</span>button className<span class="token operator">=</span><span class="token string">"navbar-toggler"</span> type<span class="token operator">=</span><span class="token string">"button"</span> data<span class="token operator">-</span>bs<span class="token operator">-</span>toggle<span class="token operator">=</span><span class="token string">"collapse"</span> data<span class="token operator">-</span>bs<span class="token operator">-</span>target<span class="token operator">=</span><span class="token string">"#navbarNav"</span><span class="token operator">></span>
+            <span class="token operator">&lt;</span>span className<span class="token operator">=</span><span class="token string">"navbar-toggler-icon"</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">></span>
+          <span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
+          <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"collapse navbar-collapse"</span> id<span class="token operator">=</span><span class="token string">"navbarNav"</span><span class="token operator">></span>
+            <span class="token operator">&lt;</span>ul className<span class="token operator">=</span><span class="token string">"navbar-nav"</span><span class="token operator">></span>
+              <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+                <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">></span>Home<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+              <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+              <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+                <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/about"</span><span class="token operator">></span>About<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+              <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+              <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+                <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/projects"</span><span class="token operator">></span>Projects<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+              <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+              <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+                <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/articles"</span><span class="token operator">></span>Articles<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+              <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+              <span class="token operator">&lt;</span>li className<span class="token operator">=</span><span class="token string">"nav-item"</span><span class="token operator">></span>
+                <span class="token operator">&lt;</span>Link className<span class="token operator">=</span><span class="token string">"nav-link"</span> to<span class="token operator">=</span><span class="token string">"/joke"</span><span class="token operator">></span>Joke<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">></span>
+              <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+            <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
+          <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>nav<span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>header<span class="token operator">></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> Header<span class="token punctuation">;</span>
 </code></pre>
-                        </dd>
-                        <dt>Step 4: Build the Project</dt>
-                        <dd>
-                            <p>Finally, build the project with the following command:</p>
-                            <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> run clean
+                    </dd>
+                    <dt class="col-sm-3">Step 4: Build the Project</dt>
+                    <dd class="col-sm-9">
+                        <p>Finally, build the project with the following command:</p>
+                        <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> run clean
 <span class="token function">npm</span> run build
 <span class="token function">npm</span> run dev
 </code></pre>
-                        </dd>
-                        <dt>Conclusion</dt>
-                        <dd><p>Now I have added React Router to the portfolio project. With this setup, users can navigate different sections using hash-based URLs without reloading the page.</p></dd>
-                    </dl>
+                    </dd>
+                    <dt class="col-sm-3">Conclusion</dt>
+                    <dd class="col-sm-9"><p>Now I have added React Router to the portfolio project. With this setup, users can navigate different sections using hash-based URLs without reloading the page.</p></dd>
+                </dl>
+            </section>
+            <section class="mb-5" id="deploy-guide">
+                <header class="mb-4">
+                    <h2 class="h3 fw-bold text-primary">
+                        <i class="bi bi-rocket-takeoff me-2"></i>
+                        Deploy Guide: Vite App to GitHub Pages
+                    </h2>
+                </header>
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="bi bi-cloud-upload me-2"></i>
+                            Complete Deployment Process
+                        </h4>
+                    </div>
+                    <div class="card-body"><p class="lead">Deploying a Vite project to GitHub Pages can be straightforward, but requires attention to configuration, especially around base paths and environment variables. This guide provides clear steps to successfully deploy your Vite app.</p></div>
                 </div>
-                <br />
-                <hr />
-                <br />
-                <div class="card">
-                    <div class="card-header"><h2 class="card-title">Deploy a Vite app to GitHub Pages</h2></div>
-                    <div class="card-body">
-                        <p class="lead">Deploying a Vite project to GitHub Pages can be straightforward, but requires attention to configuration, especially around base paths and environment variables. This guide provides clear steps to successfully deploy your Vite app.</p>
-                        <dl><dt>Step 1: Setting the Base Path in Vite Configuration</dt></dl>
-                        <dd>
-                            <p>In Vite, the base path must be set to match the subdirectory where GitHub Pages serves the site. This ensures correct paths to assets like JavaScript and CSS. In the `vite.config.ts`, configure the base property:</p>
-                            <pre class="language-ts"><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+                <dl class="row">
+                    <dt class="col-sm-3">Step 1: Setting the Base Path in Vite Configuration</dt>
+                    <dd class="col-sm-9">
+                        <p>In Vite, the base path must be set to match the subdirectory where GitHub Pages serves the site. This ensures correct paths to assets like JavaScript and CSS. In the `vite.config.ts`, configure the base property:</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   base<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">VITE_BASE_URL</span> <span class="token operator">||</span> <span class="token string">"/"</span><span class="token punctuation">,</span>
   build<span class="token operator">:</span> <span class="token punctuation">{</span>
-  outDir<span class="token operator">:</span> <span class="token string">"docs"</span><span class="token punctuation">,</span>
+    outDir<span class="token operator">:</span> <span class="token string">"docs"</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                        </dd>
-                        <dt>Step 2: Using Environment Variables with dotenv</dt>
-                        <dd>
-                            <p>Use environment variables for path configuration. Create `.env` and `.env.production` files to manage paths in development and production environments. The production file should reflect your repository name.</p>
-                            <pre class="language-bash"><code class="language-bash"><span class="token assign-left variable">VITE_BASE_URL</span><span class="token operator">=</span>/</code></pre>
-                            <pre class="language-bash"><code class="language-bash"><span class="token assign-left variable">VITE_BASE_URL</span><span class="token operator">=</span>/repository-name/
+                    </dd>
+                    <dt class="col-sm-3">Step 2: Using Environment Variables with dotenv</dt>
+                    <dd class="col-sm-9">
+                        <p>Use environment variables for path configuration. Create `.env` and `.env.production` files to manage paths in development and production environments. The production file should reflect your repository name.</p>
+                        <p class="fw-bold">.env file:</p>
+                        <pre class="language-bash"><code class="language-bash"><span class="token assign-left variable">VITE_BASE_URL</span><span class="token operator">=</span>/</code></pre>
+                        <p class="fw-bold">.env.production file:</p>
+                        <pre class="language-bash"><code class="language-bash"><span class="token assign-left variable">VITE_BASE_URL</span><span class="token operator">=</span>/repository-name/
 </code></pre>
-                        </dd>
-                        <dt>Step 3: Loading Environment Variables in Vite Config</dt>
-                        <dd>
-                            <p>Vite automatically loads environment variables with the `VITE_` prefix. For custom environment handling, import the `dotenv` package and manually load environment files based on the environment mode.</p>
-                            <pre class="language-ts"><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> defineConfig <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"vite"</span><span class="token punctuation">;</span>
+                    </dd>
+                    <dt class="col-sm-3">Step 3: Loading Environment Variables in Vite Config</dt>
+                    <dd class="col-sm-9">
+                        <p>Vite automatically loads environment variables with the `VITE_` prefix. For custom environment handling, import the `dotenv` package and manually load environment files based on the environment mode.</p>
+                        <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> defineConfig <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"vite"</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> react <span class="token keyword">from</span> <span class="token string">"@vitejs/plugin-react"</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> dotenv <span class="token keyword">from</span> <span class="token string">"dotenv"</span><span class="token punctuation">;</span>
 
@@ -1090,27 +1150,34 @@ dotenv<span class="token punctuation">.</span><span class="token function">confi
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   base<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">VITE_BASE_URL</span> <span class="token operator">||</span> <span class="token string">"/"</span><span class="token punctuation">,</span>
   build<span class="token operator">:</span> <span class="token punctuation">{</span>
-  outDir<span class="token operator">:</span> <span class="token string">"docs"</span><span class="token punctuation">,</span>
+    outDir<span class="token operator">:</span> <span class="token string">"docs"</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
   plugins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token function">react</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                        </dd>
-                        <dt>Step 4: Building the Project for GitHub Pages</dt>
-                        <dd>
-                            <p>After configuring the project, run the build command to generate the production-ready files in the `docs/` folder, which is used by GitHub Pages.</p>
-                            <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> run build
+                    </dd>
+                    <dt class="col-sm-3">Step 4: Building the Project for GitHub Pages</dt>
+                    <dd class="col-sm-9">
+                        <p>After configuring the project, run the build command to generate the production-ready files in the `docs/` folder, which is used by GitHub Pages.</p>
+                        <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> run build
 </code></pre>
-                        </dd>
-                        <dt>Step 5: Deploying to GitHub Pages</dt>
-                        <dd>
-                            <p>Once the build is complete, commit and push the `docs/` folder to your repository. In the GitHub Pages settings, set the source to the `docs/` folder to make your site live.</p>
-                            <pre class="language-bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+                    </dd>
+                    <dt class="col-sm-3">Step 5: Deploying to GitHub Pages</dt>
+                    <dd class="col-sm-9">
+                        <p>Once the build is complete, commit and push the `docs/` folder to your repository. In the GitHub Pages settings, set the source to the `docs/` folder to make your site live.</p>
+                        <pre class="language-bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
 <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Deploy Vite project to GitHub Pages"</span>
 <span class="token function">git</span> push origin main
 </code></pre>
-                        </dd>
-                        <p>By following these steps, you can deploy a Vite project to GitHub Pages with proper handling of environment variables and paths. The critical step is setting the correct base path and using dotenv to manage environment settings across development and production environments.</p>
+                    </dd>
+                </dl>
+                <div class="alert alert-success border-0 shadow-sm mt-4">
+                    <div class="d-flex">
+                        <i class="bi bi-check-circle fs-4 text-success me-3 flex-shrink-0"></i>
+                        <div>
+                            <h5 class="alert-heading mb-2">Deployment Success</h5>
+                            <p class="mb-0">By following these steps, you can deploy a Vite project to GitHub Pages with proper handling of environment variables and paths. The critical step is setting the correct base path and using dotenv to manage environment settings across development and production environments.</p>
+                        </div>
                     </div>
                 </div>
             </section>
