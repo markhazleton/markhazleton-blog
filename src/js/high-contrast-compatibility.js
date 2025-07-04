@@ -7,14 +7,18 @@
 
   // Check if we're in a high contrast mode
   function isHighContrastMode() {
-    // Modern approach using forced-colors
+    // Modern approach using forced-colors (preferred)
     if (window.matchMedia && window.matchMedia('(forced-colors: active)').matches) {
       return true;
     }
 
-    // Legacy fallback (still functional but deprecated)
-    if (window.matchMedia && window.matchMedia('(-ms-high-contrast: active)').matches) {
-      return true;
+    // Minimal legacy fallback - only check once to avoid repeated deprecation warnings
+    try {
+      if (window.matchMedia && window.matchMedia('(-ms-high-contrast: active)').matches) {
+        return true;
+      }
+    } catch (e) {
+      // Silently handle any future removal of the deprecated API
     }
 
     return false;

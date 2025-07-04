@@ -55,28 +55,284 @@
 
                         <div class="mb-3">
                             <label for="Name" class="form-label fw-bold">Article Title:</label>
-                            <input type="text" class="form-control" asp-for="NewArticle.Name" placeholder="Enter article title..." />
+                            <input type="text" class="form-control" asp-for="NewArticle.Name"
+                                placeholder="Enter article title..." />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Subtitle" class="form-label fw-bold">Subtitle:</label>
+                            <input type="text" class="form-control" asp-for="NewArticle.Subtitle"
+                                placeholder="Enter article subtitle (optional)..." />
+                            <small class="form-text text-muted">A complementary subtitle that provides additional
+                                context</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Author" class="form-label fw-bold">Author:</label>
+                            <input type="text" class="form-control" asp-for="NewArticle.Author" />
                         </div>
 
                         <div class="mb-3">
                             <label for="Slug" class="form-label fw-bold">URL Slug:</label>
                             <div class="input-group">
                                 <span class="input-group-text">markhazleton.com/</span>
-                                <input type="text" class="form-control" asp-for="NewArticle.Slug" placeholder="article-url-slug" />
+                                <input type="text" class="form-control" asp-for="NewArticle.Slug"
+                                    placeholder="article-url-slug" />
                             </div>
-                            <small class="form-text text-muted">This will be the URL for your article. Use lowercase letters and hyphens.</small>
+                            <small class="form-text text-muted">This will be the URL for your article. Use lowercase
+                                letters and hyphens.</small>
                         </div>
 
                         <div class="mb-3">
                             <label for="Description" class="form-label fw-bold">Description:</label>
-                            <textarea class="form-control" asp-for="NewArticle.Description" rows="3" placeholder="Brief description of the article for SEO..."></textarea>
-                            <small class="form-text text-muted">This description will be used for search engines and social media previews.</small>
+                            <textarea class="form-control" asp-for="NewArticle.Description" rows="3"
+                                placeholder="Brief description of the article for SEO..."></textarea>
+                            <small class="form-text text-muted">This description will be used for search engines and
+                                social media previews.</small>
                         </div>
 
                         <div class="mb-3">
-                            <label for="ImgSrc" class="form-label fw-bold">Featured Image URL:</label>
-                            <input type="url" class="form-control" asp-for="NewArticle.ImgSrc" placeholder="https://example.com/image.jpg" />
-                            <small class="form-text text-muted">Optional: URL to the main image for this article.</small>
+                            <label for="Summary" class="form-label fw-bold">Summary/Introduction:</label>
+                            <textarea class="form-control" asp-for="NewArticle.Summary" rows="3"
+                                placeholder="2-3 sentence introduction that hooks the reader..."></textarea>
+                            <small class="form-text text-muted">This will be used as the article introduction or
+                                summary</small>
+                        </div>
+
+                        <!-- Image Selection Section -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Featured Image:</label>
+
+                            <!-- Current/Selected Image Preview -->
+                            <div class="mb-3">
+                                <div class="image-preview-container text-center">
+                                    @{
+                                        string imageUrl = !string.IsNullOrEmpty(Model.NewArticle.ImgSrc) ? "/" +
+                                        Model.NewArticle.ImgSrc : "/assets/img/placeholder.svg";
+                                        string imageName = !string.IsNullOrEmpty(Model.NewArticle.ImgSrc) ?
+                                        Model.NewArticle.ImgSrc : "No image selected";
+                                    }
+                                    <img id="selectedImagePreview" src="@imageUrl" alt="@imageName"
+                                        class="img-fluid rounded border"
+                                        style="max-height: 200px; object-fit: cover; width: 100%;"
+                                        onerror="this.src='/assets/img/placeholder.svg'; this.alt='No image selected';" />
+                                    <div class="mt-2">
+                                        <small id="selectedImageName" class="text-muted">@imageName</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hidden input for form submission -->
+                            <input asp-for="NewArticle.ImgSrc" type="hidden" id="selectedImageInput" />
+                            <span asp-validation-for="NewArticle.ImgSrc" class="text-danger"></span>
+                        </div>
+
+                        <!-- Image Selection Grid -->
+                        <div class="mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="fas fa-images me-2"></i>Choose an Image</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="image-grid">
+                                        <!-- No Image Option -->
+                                        <div class="image-option @(string.IsNullOrEmpty(Model.NewArticle.ImgSrc) ? "border-primary selected" : "")"
+                                            data-image-path="">
+                                            <div class="image-option-content">
+                                                <div class="image-placeholder">
+                                                    <i class="fas fa-ban text-muted"></i>
+                                                </div>
+                                                <small class="image-name">No Image</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Available Images -->
+                                        @foreach (var imagePath in Model.AvailableImages)
+                                        {
+                                            <div class="image-option @(imagePath == Model.NewArticle.ImgSrc ? "border-primary selected" : "")"
+                                                data-image-path="@imagePath">
+                                                <div class="image-option-content">
+                                                    <img src="/@imagePath" alt="@System.IO.Path.GetFileName(imagePath)"
+                                                        class="image-thumbnail"
+                                                        onerror="this.parentElement.innerHTML='<div class=\'image-error\'><i class=\'fas fa-exclamation-triangle\'></i></div>';" />
+                                                    <small class="image-name" title="@imagePath">
+                                                        @System.IO.Path.GetFileName(imagePath)
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YouTube Video Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fab fa-youtube me-2"></i>YouTube Video</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle me-2"></i>YouTube Integration</h6>
+                            <p class="mb-0 small">If this article has an associated YouTube video, provide the URL and
+                                title. This will be used for enhanced SEO and social media integration.</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="YouTubeUrl" class="form-label fw-bold">YouTube Video URL:</label>
+                            <input type="url" class="form-control" asp-for="NewArticle.YouTubeUrl"
+                                placeholder="https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID" />
+                            <small class="form-text text-muted">Full YouTube URL for the video associated with this
+                                article (optional)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="YouTubeTitle" class="form-label fw-bold">YouTube Video Title:</label>
+                            <input type="text" class="form-control" asp-for="NewArticle.YouTubeTitle"
+                                placeholder="Enter the YouTube video title..." />
+                            <small class="form-text text-muted">The title of the YouTube video (optional, used for
+                                enhanced metadata)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced SEO Section -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-search me-2"></i>SEO Optimization</h5>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="generateSeoFields()">
+                            <i class="fas fa-magic me-2"></i>Auto-Generate with AI
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-lightbulb me-2"></i>SEO Tips</h6>
+                            <ul class="mb-0 small">
+                                <li><strong>Title:</strong> 30-60 characters for optimal search results</li>
+                                <li><strong>Description:</strong> 120-160 characters to encourage clicks</li>
+                                <li><strong>Keywords:</strong> 3-8 relevant terms, comma-separated</li>
+                            </ul>
+                        </div>
+
+                        <!-- SEO Title -->
+                        <div class="mb-3">
+                            <label for="SeoTitle" class="form-label fw-bold">SEO Title:</label>
+                            <input type="text" class="form-control" asp-for="NewArticle.Seo.Title"
+                                placeholder="SEO-optimized title (leave blank to use article title)" />
+                            <small class="form-text text-muted">If provided, this will be used instead of the article
+                                title for search engines.</small>
+                        </div>
+
+                        <!-- SEO Description -->
+                        <div class="mb-3">
+                            <label for="SeoDescription" class="form-label fw-bold">SEO Description:</label>
+                            <textarea class="form-control" asp-for="NewArticle.Seo.Description" rows="2"
+                                placeholder="SEO-optimized description (120-160 characters)"></textarea>
+                            <small class="form-text text-muted">If provided, this will be used instead of the basic
+                                description for search engines.</small>
+                        </div>
+
+                        <!-- SEO Keywords -->
+                        <div class="mb-3">
+                            <label for="SeoKeywords" class="form-label fw-bold">SEO Keywords:</label>
+                            <input type="text" class="form-control" asp-for="NewArticle.Seo.Keywords"
+                                placeholder="keyword1, keyword2, keyword3" />
+                            <small class="form-text text-muted">Targeted keywords for search engine
+                                optimization.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-share-alt me-2"></i>Social Media Preview</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Open Graph (Facebook/LinkedIn)</h6>
+                                <div class="mb-3">
+                                    <label for="OgTitle" class="form-label">Title:</label>
+                                    <input type="text" class="form-control" asp-for="NewArticle.OpenGraph.Title"
+                                        placeholder="Social media title" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="OgDescription" class="form-label">Description:</label>
+                                    <textarea class="form-control" asp-for="NewArticle.OpenGraph.Description" rows="2"
+                                        placeholder="Social media description"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="OgImageAlt" class="form-label">Image Alt Text:</label>
+                                    <input type="text" class="form-control" asp-for="NewArticle.OpenGraph.ImageAlt"
+                                        placeholder="Description of the image" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Twitter Card</h6>
+                                <div class="mb-3">
+                                    <label for="TwitterTitle" class="form-label">Title:</label>
+                                    <input type="text" class="form-control" asp-for="NewArticle.TwitterCard.Title"
+                                        placeholder="Twitter title (shorter)" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="TwitterDescription" class="form-label">Description:</label>
+                                    <textarea class="form-control" asp-for="NewArticle.TwitterCard.Description" rows="2"
+                                        placeholder="Twitter description"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="TwitterImageAlt" class="form-label">Image Alt Text:</label>
+                                    <input type="text" class="form-control" asp-for="NewArticle.TwitterCard.ImageAlt"
+                                        placeholder="Twitter image description" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conclusion Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-flag-checkered me-2"></i>Conclusion Section</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="ConclusionTitle" class="form-label fw-bold">Conclusion Title:</label>
+                            <input type="text" class="form-control" asp-for="NewArticle.ConclusionTitle"
+                                placeholder="e.g., Key Takeaways, Final Thoughts, What's Next..." />
+                            <small class="form-text text-muted">Compelling heading for the conclusion section</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ConclusionSummary" class="form-label fw-bold">Conclusion Summary:</label>
+                            <textarea class="form-control" asp-for="NewArticle.ConclusionSummary" rows="3"
+                                placeholder="Brief summary of the key points covered in the article..."></textarea>
+                            <small class="form-text text-muted">2-3 sentences summarizing the main points</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="ConclusionKeyHeading" class="form-label fw-bold">Key Takeaway
+                                    Heading:</label>
+                                <input type="text" class="form-control" asp-for="NewArticle.ConclusionKeyHeading"
+                                    placeholder="e.g., Bottom Line, Key Insight, Action Item..." />
+                                <small class="form-text text-muted">Short, impactful heading</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="ConclusionKeyText" class="form-label fw-bold">Key Takeaway Text:</label>
+                                <textarea class="form-control" asp-for="NewArticle.ConclusionKeyText" rows="2"
+                                    placeholder="Main insight or actionable takeaway..."></textarea>
+                                <small class="form-text text-muted">1-2 sentences with the key insight</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ConclusionText" class="form-label fw-bold">Final Thoughts:</label>
+                            <textarea class="form-control" asp-for="NewArticle.ConclusionText" rows="3"
+                                placeholder="Final thoughts, call to action, or next steps..."></textarea>
+                            <small class="form-text text-muted">Closing thoughts and call to action for readers</small>
                         </div>
                     </div>
                 </div>
@@ -88,8 +344,10 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="ArticleContent" class="form-label fw-bold">Content:</label>
-                            <textarea class="form-control" asp-for="NewArticle.ArticleContent" rows="15" placeholder="Write your article content here using HTML or Markdown..."></textarea>
-                            <small class="form-text text-muted">You can use HTML tags and Markdown formatting in your content.</small>
+                            <textarea class="form-control" asp-for="NewArticle.ArticleContent" rows="15"
+                                placeholder="Write your article content here using HTML or Markdown..."></textarea>
+                            <small class="form-text text-muted">You can use HTML tags and Markdown formatting in your
+                                content.</small>
                         </div>
                     </div>
                 </div>
@@ -141,3 +399,175 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function ()
+    {
+        const imageOptions = document.querySelectorAll('.image-option');
+        const selectedImageInput = document.getElementById('selectedImageInput');
+        const selectedImagePreview = document.getElementById('selectedImagePreview');
+        const selectedImageName = document.getElementById('selectedImageName');
+
+        imageOptions.forEach(function (option)
+        {
+            option.addEventListener('click', function ()
+            {
+                // Remove selected class from all options
+                imageOptions.forEach(opt => opt.classList.remove('selected'));
+
+                // Add selected class to clicked option
+                this.classList.add('selected');
+
+                // Get the image path
+                const imagePath = this.getAttribute('data-image-path');
+
+                // Update hidden input
+                selectedImageInput.value = imagePath;
+
+                // Update preview
+                if (imagePath)
+                {
+                    selectedImagePreview.src = '/' + imagePath;
+                    selectedImagePreview.alt = 'Selected Image: ' + imagePath;
+                    selectedImageName.textContent = imagePath;
+                } else
+                {
+                    selectedImagePreview.src = '/assets/img/placeholder.svg';
+                    selectedImagePreview.alt = 'No image selected';
+                    selectedImageName.textContent = 'No image selected';
+                }
+
+                // Handle image load errors
+                selectedImagePreview.onerror = function ()
+                {
+                    this.src = '/assets/img/placeholder.svg';
+                    this.alt = 'Image not found';
+                    selectedImageName.textContent = imagePath ? imagePath + ' (not found)' : 'No image selected';
+                };
+            });
+        });
+    });
+
+    async function generateSeoFields()
+    {
+        const title = document.querySelector('input[name="NewArticle.Name"]').value;
+        const content = document.querySelector('textarea[name="NewArticle.ArticleContent"]').value;
+
+        if (!title || !content)
+        {
+            alert('Please enter both article title and content before generating SEO fields.');
+            return;
+        }
+
+        const button = document.querySelector('button[onclick="generateSeoFields()"]');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating...';
+        button.disabled = true;
+
+        try
+        {
+            const response = await fetch('/api/test/test-seo-generation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: title,
+                    content: content
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success)
+            {
+                // Populate SEO fields
+                if (data.generatedSeo.seoTitle)
+                {
+                    document.querySelector('input[name="NewArticle.Seo.Title"]').value = data.generatedSeo.seoTitle;
+                }
+                if (data.generatedSeo.seoDescription)
+                {
+                    document.querySelector('textarea[name="NewArticle.Seo.Description"]').value = data.generatedSeo.seoDescription;
+                }
+                if (data.generatedSeo.keywords)
+                {
+                    document.querySelector('input[name="NewArticle.Seo.Keywords"]').value = data.generatedSeo.keywords;
+                    // Also populate the main Keywords field
+                    document.querySelector('input[name="NewArticle.Keywords"]').value = data.generatedSeo.keywords;
+                }
+
+                // Populate Social Media fields
+                if (data.generatedSeo.openGraphTitle)
+                {
+                    document.querySelector('input[name="NewArticle.OpenGraph.Title"]').value = data.generatedSeo.openGraphTitle;
+                }
+                if (data.generatedSeo.openGraphDescription)
+                {
+                    document.querySelector('textarea[name="NewArticle.OpenGraph.Description"]').value = data.generatedSeo.openGraphDescription;
+                }
+                if (data.generatedSeo.twitterDescription)
+                {
+                    document.querySelector('textarea[name="NewArticle.TwitterCard.Description"]').value = data.generatedSeo.twitterDescription;
+                }
+
+                // Populate Article content fields
+                if (data.generatedSeo.subtitle)
+                {
+                    document.querySelector('input[name="NewArticle.Subtitle"]').value = data.generatedSeo.subtitle;
+                }
+                if (data.generatedSeo.summary)
+                {
+                    document.querySelector('textarea[name="NewArticle.Summary"]').value = data.generatedSeo.summary;
+                }
+
+                // Populate Conclusion section fields
+                if (data.generatedSeo.conclusionTitle)
+                {
+                    document.querySelector('input[name="NewArticle.ConclusionTitle"]').value = data.generatedSeo.conclusionTitle;
+                }
+                if (data.generatedSeo.conclusionSummary)
+                {
+                    document.querySelector('textarea[name="NewArticle.ConclusionSummary"]').value = data.generatedSeo.conclusionSummary;
+                }
+                if (data.generatedSeo.conclusionKeyHeading)
+                {
+                    document.querySelector('input[name="NewArticle.ConclusionKeyHeading"]').value = data.generatedSeo.conclusionKeyHeading;
+                }
+                if (data.generatedSeo.conclusionKeyText)
+                {
+                    document.querySelector('textarea[name="NewArticle.ConclusionKeyText"]').value = data.generatedSeo.conclusionKeyText;
+                }
+                if (data.generatedSeo.conclusionText)
+                {
+                    document.querySelector('textarea[name="NewArticle.ConclusionText"]').value = data.generatedSeo.conclusionText;
+                }
+
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                alertDiv.innerHTML = `
+                <strong>Success!</strong> SEO fields have been generated using AI.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+                document.querySelector('.card-body').prepend(alertDiv);
+
+                // Auto-dismiss after 5 seconds
+                setTimeout(() =>
+                {
+                    alertDiv.remove();
+                }, 5000);
+            } else
+            {
+                alert('Error generating SEO fields: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error)
+        {
+            alert('Request failed: ' + error.message);
+        } finally
+        {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
+    }
+</script>

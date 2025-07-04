@@ -170,5 +170,53 @@ public class ArticleModel
     /// </summary>
     [JsonPropertyName("conclusionText")]
     public string ConclusionText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the enhanced SEO metadata for the article.
+    /// </summary>
+    [JsonPropertyName("seo")]
+    public SeoModel? Seo { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Open Graph metadata for the article.
+    /// </summary>
+    [JsonPropertyName("og")]
+    public OpenGraphModel? OpenGraph { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Twitter Card metadata for the article.
+    /// </summary>
+    [JsonPropertyName("twitter")]
+    public TwitterCardModel? TwitterCard { get; set; }
+
+    /// <summary>
+    /// Gets or sets the YouTube video URL associated with the article.
+    /// </summary>
+    [JsonPropertyName("youtubeUrl")]
+    public string? YouTubeUrl { get; set; }
+
+    /// <summary>
+    /// Gets or sets the YouTube video title associated with the article.
+    /// </summary>
+    [JsonPropertyName("youtubeTitle")]
+    public string? YouTubeTitle { get; set; }
+
+    /// <summary>
+    /// Gets the effective title for SEO purposes
+    /// </summary>
+    [JsonIgnore]
+    public string EffectiveTitle => Seo?.Title ?? Name;
+
+    /// <summary>
+    /// Gets the effective description for SEO purposes
+    /// </summary>
+    [JsonIgnore]
+    public string EffectiveDescription => Seo?.Description ?? Description;
+
+    /// <summary>
+    /// Gets the effective keywords for SEO purposes
+    /// </summary>
+    [JsonIgnore]
+    public string EffectiveKeywords => Seo?.Keywords ?? Keywords;
 }
 

@@ -1,26 +1,21 @@
-extends layouts/modern-layout
+extends layouts/modern-layout.pug
 
-block pagehead
-  // Homepage-specific metadata overrides
-  title Mark Hazleton - Solutions Architect & Technology Leader
-  meta(name='description', content='Mark Hazleton - Solutions Architect specializing in .NET, Azure, and project management. 25+ years experience bridging technology with business goals. Discover the latest insights from 80+ technical articles.')
-  meta(name='keywords', content='Mark Hazleton, Solutions Architect, .NET Developer, Azure Cloud, Project Management, ASP.NET Core, Software Engineering, Technology Consultant, Web Development, Dallas Texas')
+block variables
+  // Homepage-specific SEO overrides using variables that the dynamic layout will pick up
+  - var pageTitle = 'Mark Hazleton - Solutions Architect & Technology Leader'
+  - var pageDescription = 'Solutions Architect with 25+ years experience. Discover insights from 80+ technical articles covering .NET, Azure, project management, and software engineering.'
+  - var pageKeywords = 'Mark Hazleton, Solutions Architect, .NET Developer, Azure Cloud, Project Management, ASP.NET Core, Software Engineering, Technology Consultant, Web Development, Dallas Texas'
+  - var pageCanonical = 'https://markhazleton.com/'
 
-  // Additional SEO enhancements for homepage
-  meta(name='theme-color', content='#2c3e50')
-  meta(name='msapplication-TileColor', content='#2c3e50')
-  meta(name='application-name', content='Mark Hazleton')
-
-block og_overrides
   // Enhanced Open Graph for homepage
-  meta(property='og:description', content='Solutions Architect with 25+ years experience. Discover the latest insights from 80+ technical articles covering .NET, Azure, project management, and software engineering best practices.')
-  meta(property='og:image:alt', content='Mark Hazleton - Solutions Architect and Technology Leader')
+  - var pageOgDescription = 'Solutions Architect with 25+ years experience. Discover the latest insights from 80+ technical articles covering .NET, Azure, project management, and software engineering best practices.'
+  - var pageOgImageAlt = 'Mark Hazleton - Solutions Architect and Technology Leader'
 
-block twitter_overrides
   // Enhanced Twitter Cards for homepage
-  meta(name='twitter:description', content='Solutions Architect with 25+ years experience. Discover the latest insights from 80+ technical articles covering .NET, Azure, project management, and software engineering.')
-  meta(name='twitter:image:alt', content='Mark Hazleton - Solutions Architect and Technology Leader')
-  block additional_structured_data
+  - var pageTwitterDescription = 'Solutions Architect with 25+ years experience. Discover the latest insights from 80+ technical articles covering .NET, Azure, project management, and software engineering.'
+  - var pageTwitterImageAlt = 'Mark Hazleton - Solutions Architect and Technology Leader'
+
+block additional_structured_data
   // Homepage-specific structured data
   script(type="application/ld+json").
     {
@@ -42,7 +37,8 @@ block twitter_overrides
         "@type": "ItemList",
         "name": "Technical Articles",
         "description": "Collection of 80+ technical articles covering .NET, Azure, project management, and software engineering",
-        "numberOfItems": "80+"        }
+        "numberOfItems": "80+"
+      }
     }
 
 block layout-content

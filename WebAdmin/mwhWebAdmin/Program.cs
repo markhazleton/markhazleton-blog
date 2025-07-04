@@ -5,6 +5,7 @@ global using System.Xml;
 using Microsoft.Extensions.FileProviders;
 using mwhWebAdmin.Article;
 using mwhWebAdmin.Project;
+using mwhWebAdmin.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,8 @@ builder.Services.AddHttpClient();
 // Logging setup
 builder.Services.AddLogging(configure => configure.AddConsole());
 
-// Razor Pages
+// API Controllers and Razor Pages
+builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 
 // Article and Project Services with configuration
@@ -47,6 +49,9 @@ builder.Services.AddSingleton<ProjectService>(provider =>
 {
     return new ProjectService(projectsPath);
 });
+
+// SEO Validation Service
+builder.Services.AddScoped<SeoValidationService>();
 
 var app = builder.Build();
 
@@ -84,6 +89,9 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseRouting();
 app.UseAuthorization();
+
+// Map both API controllers and Razor Pages
+app.MapControllers();
 app.MapRazorPages();
 
 app.Run();

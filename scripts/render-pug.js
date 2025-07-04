@@ -10,9 +10,13 @@ const Prism = require('prismjs');
 require('prismjs/components/')(); // Load all languages
 const { execSync } = require('child_process');
 
-// Get List of Articles
+// Get List of Articles and Projects
 const articles = require('./../src/articles.json');
 const projects = require('./../src/projects.json');
+
+// Import SEO Helper
+const SEOHelper = require('./seo-helper');
+const seoHelper = new SEOHelper(articles);
 
 module.exports = async function renderPug(filePath) {
     const destPath = filePath.replace(/src\/pug\//, 'docs/').replace(/\.pug$/, '.html');
@@ -41,6 +45,9 @@ module.exports = async function renderPug(filePath) {
 //    console.log(`Current Slug: ${currentSlug}`);
 //    console.log(`Last Modified: ${formattedLastModified}`);
 
+    // Get SEO data for this article/page
+    const seoData = article ? seoHelper.getArticleSEO(currentSlug) : seoHelper.getDefaultSEO();
+
     const html = pug.renderFile(filePath, {
         doctype: 'html',
         filename: filePath,
@@ -49,7 +56,9 @@ module.exports = async function renderPug(filePath) {
         projects: projects,
         currentSlug: currentSlug,
         lastModified: formattedLastModified,
-        article: article
+        article: article,
+        seoData: seoData,
+        seoHelper: seoHelper
     });
 
 

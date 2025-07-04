@@ -1,0 +1,265 @@
+extends layouts/dynamic-seo-layout
+
+block layout-content
+  // Breadcrumb Navigation
+  .container.mt-4
+    nav.breadcrumb-modern(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles.html') Articles
+        li.breadcrumb-item.active(aria-current='page') CancellationToken
+
+  // Article Content
+  article#main-article.py-5
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            h1.display-4.fw-bold CancellationToken for Efficient Asynchronous Programming
+            .article-meta.text-muted.mb-4
+              time(datetime=publishedDate) #{new Date(publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              span.mx-2 •
+              span by Mark Hazleton
+              span.mx-2 •
+              span #{estimatedReadTime} min read
+
+          .article-content            p.lead
+            | Asynchronous programming can be challenging, especially when it comes to managing long-running operations or dealing with unpredictable user interactions. It is crucial to handle cancellations gracefully to ensure that the application remains responsive and doesn't waste resources on abandoned work. One of the techniques for efficiently and safely managing these scenarios is the use of the
+            strong CancellationToken
+            |  class. By accepting a CancellationToken as a parameter, a method can be notified when the caller is no longer interested in the result and can gracefully cancel its work.
+
+            section.mb-5
+              h2.h3.mb-4 What is a CancellationToken?
+              p.mb-4
+                | A
+                strong CancellationToken
+                |  is an object that allows you to communicate the cancellation status to an asynchronous operation. It's a way of telling an operation to stop executing if it's no longer needed. For example, if a user cancels a search operation in a web application, you can use a
+                strong CancellationToken
+                |  instance to signal to the server to stop processing the request.
+
+              p.mb-4
+                | One way to use a
+                strong CancellationToken
+                |  is with the Task class in C#. The Task class represents an asynchronous operation that can be canceled using a
+                strong CancellationToken
+                | . To use it, you simply pass a
+                strong CancellationToken
+                |  to the Task.Run method, which runs the operation asynchronously.
+
+              p.mb-4 The following code snippet shows how to use a
+                strong CancellationToken
+                |  with the Task class:
+
+              .card.shadow-sm.mb-4
+                .card-body
+                  pre.language-csharp.mb-0
+                    code.language-csharp.
+                      public async Task DownloadFileAsync(string url,
+                        string filename,
+                        HttpClient client,
+                        CancellationToken cancellationToken)
+                      {
+                        await client.DownloadFileTaskAsync(url, filename, cancellationToken);
+                      }
+
+              p.mb-4
+                | In this example, the DownloadFileAsync method takes a URL and a filename as input, along with a
+                strong CancellationToken
+                | . It accepts an instance of the HttpClient class, which is used to download the file. The DownloadFileTaskAsync method is called on the client object, passing in the URL, filename, and cancellationToken. If the
+                strong CancellationToken
+                |  is canceled before the download is complete, the Task will be canceled.
+
+              p.mb-4
+                | By using a
+                strong CancellationToken
+                | , you can make your code more responsive to the requestor. Most asynchronous libraries allow for the passing of the
+                strong CancellationToken
+                |  in their methods.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-check-circle.me-2.text-success
+                | Checking For Cancellation
+
+              p.mb-4
+                | When you're writing asynchronous code, it's important to handle cancellation gracefully. This is especially true when you're dealing with long-running operations or unpredictable user interactions. One way to handle cancellation is by using a CancellationToken. A CancellationToken is an object that allows the requesting code to signal a cancellation of an asynchronous operation.
+
+              .alert.alert-info.mb-4
+                h5.alert-heading
+                  i.bi.bi-info-circle.me-2
+                  | Key Considerations
+                ul.mb-0
+                  li Identify the points in your code where cancellation is allowed
+                  li Determine how you want to handle cancellation at each point
+                  li Consider the granularity of cancellation
+                  li Place cancellation checks close to critical points
+
+              p.mb-4
+                | You can call the
+                strong ThrowIfCancellationRequested()
+                |  method to check if the CancellationToken has been canceled and throw an exception if it has. Determining where in your business logic to place the call to
+                strong ThrowIfCancellationRequested()
+                |  can be a crucial decision to ensure efficient and safe asynchronous programming.
+
+              .card.shadow-sm.mb-4
+                .card-header.bg-primary.text-white
+                  h5.mb-0
+                    i.bi.bi-code-slash.me-2
+                    | Cancellation Example
+                .card-body
+                  pre.language-csharp.mb-0
+                    code.language-csharp.
+                      public async Task DownloadFileAsync(List<string> urls,
+                        string filename,
+                        HttpClient client,
+                        CancellationToken cancellationToken)
+                        {
+                          try {
+                            foreach (var url in urls)
+                            {
+                              // Check for cancellation before each download
+                              cancellationToken.ThrowIfCancellationRequested();
+                              await client.DownloadFileTaskAsync(url, filename, cancellationToken);
+                            }
+                          }
+                          catch (TaskCanceledException ex)
+                          {
+                            // Handle cancellation thrown by client.DownloadFileTaskAsync() here
+                          }
+                          catch (OperationCanceledException ex)
+                          {
+                            // Handle cancellation thrown by ThrowIfCancellationRequested() here
+                          }
+                        }
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-gear.me-2.text-primary
+                | Best Practices
+
+              .row.g-4.mb-4
+                .col-md-6
+                  .card.h-100.border-start.border-4.border-success
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-check2.me-2.text-success
+                        | Do This
+                      ul.list-unstyled
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Propagate CancellationToken to all methods
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Check cancellation at appropriate intervals
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Handle cancellation exceptions properly
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Use IsCancellationRequested for non-throwing checks
+
+                .col-md-6
+                  .card.h-100.border-start.border-4.border-warning
+                    .card-body
+                      h5.card-title
+                        i.bi.bi-exclamation-triangle.me-2.text-warning
+                        | Consider This
+                      ul.list-unstyled
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Don't cancel after point of no return
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Balance granularity vs performance
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Ensure proper resource cleanup
+                        li.mb-2
+                          i.bi.bi-arrow-right.me-2
+                          | Leave objects in valid state
+
+              p.mb-4
+                | Overall, careful consideration of where to place the call to
+                strong ThrowIfCancellationRequested()
+                |  in your business logic is critical to ensure efficient and safe asynchronous programming. Keep in mind that calling the
+                strong ThrowIfCancellationRequested()
+                |  method only checks if the cancellation has been requested and throws an exception of type OperationCanceledException if necessary.
+
+              .alert.alert-warning.mb-4
+                h5.alert-heading
+                  i.bi.bi-lightbulb.me-2
+                  | Important Notes
+                p.mb-2
+                  | If you need to check the state of the cancellation token without throwing an exception, you can use the
+                  strong IsCancellationRequested
+                  |  property. This property returns a boolean value indicating whether cancellation has been requested for the token.
+                p.mb-0
+                  | It is important to consider the consequences of cancellation, especially in long-running or expensive operations. You should ensure that any resources acquired during the operation are properly released and any partial results are correctly handled in the event of a cancellation.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-github.me-2.text-dark
+                | Sample Code
+              p.mb-4
+                | For more complete coding examples of asynchronous techniques in .NET, check out the
+                a.text-decoration-none(href='https://github.com/markhazleton/WebSpark', target='_blank', rel='noopener')
+                  i.bi.bi-box-arrow-up-ne.me-1
+                  | WebSpark repository on GitHub
+                | . This repository, developed by Mark Hazleton, provides a wide range of examples of how to use CancellationToken and other asynchronous programming techniques in a safe and efficient manner.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-check-circle.me-2.text-success
+                | Conclusion
+              .card.bg-light.border-0
+                .card-body
+                  p.mb-3
+                    | By following best practices for handling cancellations in asynchronous programming, you can ensure that your application remains responsive, efficient, and free from errors caused by abandoned work.
+                  ul.mb-3
+                    li Use CancellationToken to gracefully handle cancellations
+                    li Pass it to all methods involved in the operation
+                    li Handle exceptions thrown when an operation or task is canceled
+                  p.mb-0
+                    | With these practices in place, you can write reliable and efficient asynchronous code.
+
+            section.mb-5
+              h2.h3.mb-4
+                i.bi.bi-link-45deg.me-2.text-primary
+                | Related Articles
+              .row.g-3
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h6.card-title
+                        a.text-decoration-none(href='https://markhazleton.com/decorator-pattern-http-client.html')
+                          | Decorator Pattern with HttpClient
+                      p.card-text.small.text-muted Brief description of how CancellationToken is used with HttpClient and the Decorator Design Pattern.
+
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h6.card-title
+                        a.text-decoration-none(href='https://knowyourtoolset.com/2023/05/cancellation-tokens/', target='_blank', rel='noopener')
+                          | Cancellation Tokens in ASP.NET APIs
+                          i.bi.bi-box-arrow-up-ne.ms-1.small
+                      p.card-text.small.text-muted Overview of implementing CancellationToken in ASP.NET APIs by Erik Dahl.
+
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h6.card-title
+                        a.text-decoration-none(href='https://andrewlock.net/cancellation-tokens-in-mvc-core-controllers/', target='_blank', rel='noopener')
+                          | Cancellation Tokens in MVC Core Controllers
+                          i.bi.bi-box-arrow-up-ne.ms-1.small
+                      p.card-text.small.text-muted Insights into the use of CancellationToken in MVC Core Controllers.
+
+                .col-md-6
+                  .card.h-100.shadow-sm
+                    .card-body
+                      h6.card-title
+                        a.text-decoration-none(href='https://docs.microsoft.com/en-us/dotnet/standard/threading/cancellation-in-managed-threads', target='_blank', rel='noopener')
+                          | Cancellation in Managed Threads
+                          i.bi.bi-box-arrow-up-ne.ms-1.small
+                      p.card-text.small.text-muted Microsoft's official documentation on cancellation patterns.
