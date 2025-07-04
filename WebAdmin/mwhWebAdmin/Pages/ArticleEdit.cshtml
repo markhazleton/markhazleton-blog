@@ -359,8 +359,8 @@
             const title = document.querySelector('input[name="Article.Name"]').value;
             const content = document.querySelector('textarea[name="Article.ArticleContent"]').value;
 
-            if (!title || !content) {
-                alert('Please enter both article title and content before generating SEO fields.');
+            if (!title) {
+                alert('Please enter article title before generating SEO fields.');
                 return;
             }
 
@@ -403,6 +403,9 @@
                     }
                     if (data.generatedSeo.openGraphDescription) {
                         document.querySelector('textarea[name="Article.OpenGraph.Description"]').value = data.generatedSeo.openGraphDescription;
+                    }
+                    if (data.generatedSeo.twitterTitle) {
+                        document.querySelector('input[name="Article.TwitterCard.Title"]').value = data.generatedSeo.twitterTitle;
                     }
                     if (data.generatedSeo.twitterDescription) {
                         document.querySelector('textarea[name="Article.TwitterCard.Description"]').value = data.generatedSeo.twitterDescription;
