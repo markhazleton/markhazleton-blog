@@ -57,37 +57,80 @@ Analyze the provided content which may include:
 - Raw article content
 - Current descriptions
 
-Generate comprehensive SEO metadata based on this analysis.
-Focus on the main article content and structural elements to understand the topic and create:
+Generate comprehensive SEO metadata, social media previews, and conclusion content based on this analysis.
+Focus on the main article content and structural elements to understand the topic.
 
-1. SEO-optimized keywords (comma-separated, 5-10 keywords relevant to the content)
-2. SEO title (50-60 characters, compelling and keyword-rich)
-3. Meta description (120-160 characters, engaging summary with primary keywords)
-4. Open Graph title (can be slightly different from SEO title, 30-65 characters)
-5. Open Graph description (can be more engaging, up to 200 characters)
-6. Twitter description (concise version, up to 120 characters)
+For SEO Optimization:
+- Keywords: 5-10 relevant keywords (comma-separated)
+- SEO Title: 50-60 characters, compelling and keyword-rich
+- Meta Description: 120-160 characters, engaging summary with primary keywords
+
+For Social Media Preview:
+- Open Graph Title: 30-65 characters, can be slightly different from SEO title
+- Open Graph Description: Up to 200 characters, more engaging for social media
+- Twitter Title: Shorter than SEO title, up to 50 characters
+- Twitter Description: Concise version, up to 120 characters
+
+For Article Content:
+- Subtitle: Complementary subtitle that provides additional context
+- Summary: 2-3 sentence introduction that hooks the reader
+
+For Conclusion Section:
+- Conclusion Title: Compelling heading (e.g., Key Takeaways, Final Thoughts)
+- Conclusion Summary: 2-3 sentences summarizing main points
+- Conclusion Key Heading: Short, impactful heading (e.g., Bottom Line, Key Insight)
+- Conclusion Key Text: 1-2 sentences with the key insight
+- Conclusion Text: Final thoughts, call to action, or next steps
 
 Consider the article structure from PUG templates to understand content organization.
-Ignore navigation elements, headers, footers, and technical markup.
-
-Return ONLY a valid JSON object in this exact format:
-{
-  ""keywords"": ""keyword1, keyword2, keyword3"",
-  ""seoTitle"": ""Compelling SEO Title Here"",
-  ""metaDescription"": ""Engaging meta description that summarizes the content and includes primary keywords."",
-  ""ogTitle"": ""Open Graph Title"",
-  ""ogDescription"": ""Open Graph description that can be more engaging and social-media friendly."",
-  ""twitterDescription"": ""Concise Twitter description.""
-}";
+Ignore navigation elements, headers, footers, and technical markup.";
 
                 var userContent = string.IsNullOrEmpty(currentTitle)
                     ? content
                     : $"Current Title: {currentTitle}\n\nContent: {content}";
 
-                // Prepare the request payload
+                // Define the JSON schema for structured outputs
+                var responseFormat = new
+                {
+                    type = "json_schema",
+                    json_schema = new
+                    {
+                        name = "seo_generation_result",
+                        strict = true,
+                        schema = new
+                        {
+                            type = "object",
+                            properties = new
+                            {
+                                keywords = new { type = "string", description = "Comma-separated list of 5-10 SEO keywords" },
+                                seoTitle = new { type = "string", description = "SEO-optimized title (50-60 characters)" },
+                                metaDescription = new { type = "string", description = "Meta description (120-160 characters)" },
+                                ogTitle = new { type = "string", description = "Open Graph title (30-65 characters)" },
+                                ogDescription = new { type = "string", description = "Open Graph description (up to 200 characters)" },
+                                twitterTitle = new { type = "string", description = "Twitter title (shorter than SEO title, up to 50 characters)" },
+                                twitterDescription = new { type = "string", description = "Twitter description (up to 120 characters)" },
+                                subtitle = new { type = "string", description = "Article subtitle providing additional context" },
+                                summary = new { type = "string", description = "2-3 sentence article introduction" },
+                                conclusionTitle = new { type = "string", description = "Conclusion section heading" },
+                                conclusionSummary = new { type = "string", description = "2-3 sentences summarizing main points" },
+                                conclusionKeyHeading = new { type = "string", description = "Short, impactful key takeaway heading" },
+                                conclusionKeyText = new { type = "string", description = "1-2 sentences with key insight" },
+                                conclusionText = new { type = "string", description = "Final thoughts and call to action" }
+                            },
+                            required = new[] {
+                                "keywords", "seoTitle", "metaDescription", "ogTitle", "ogDescription",
+                                "twitterTitle", "twitterDescription", "subtitle", "summary", "conclusionTitle",
+                                "conclusionSummary", "conclusionKeyHeading", "conclusionKeyText", "conclusionText"
+                            },
+                            additionalProperties = false
+                        }
+                    }
+                };
+
+                // Prepare the request payload with structured outputs
                 var requestBody = new
                 {
-                    model = "gpt-4o",
+                    model = "gpt-4o-2024-08-06", // Use the model that supports structured outputs
                     messages = new[]
                     {
                         new
@@ -101,8 +144,9 @@ Return ONLY a valid JSON object in this exact format:
                             content = userContent
                         }
                     },
-                    max_tokens = 2000,
-                    temperature = 0.3
+                    max_tokens = 3000,
+                    temperature = 0.3,
+                    response_format = responseFormat
                 };
 
                 var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
@@ -126,7 +170,7 @@ Return ONLY a valid JSON object in this exact format:
                     return new SeoGenerationResult();
                 }
 
-                // Parse the JSON response from AI
+                // With structured outputs, the response should be valid JSON without markdown formatting
                 try
                 {
                     var seoData = JsonSerializer.Deserialize<SeoGenerationResult>(aiResponse);
@@ -134,7 +178,7 @@ Return ONLY a valid JSON object in this exact format:
                 }
                 catch (JsonException ex)
                 {
-                    _logger.LogWarning(ex, "Failed to parse AI SEO response as JSON. Raw response: {Response}", aiResponse);
+                    _logger.LogWarning(ex, "Failed to parse structured AI SEO response as JSON. Raw response: {Response}", aiResponse);
 
                     // Fallback: try to extract keywords from the response
                     return new SeoGenerationResult
@@ -145,7 +189,7 @@ Return ONLY a valid JSON object in this exact format:
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to generate SEO data using OpenAI API.");
+                _logger.LogError(ex, "Failed to generate SEO data using OpenAI API with structured outputs.");
                 return new SeoGenerationResult();
             }
         }
@@ -1048,6 +1092,49 @@ Return ONLY a valid JSON object in this exact format:
                 if (string.IsNullOrEmpty(article.TwitterCard!.Description) && !string.IsNullOrEmpty(seoData.TwitterDescription))
                 {
                     article.TwitterCard.Description = seoData.TwitterDescription;
+                }
+
+                // Update Twitter title if not already set
+                if (string.IsNullOrEmpty(article.TwitterCard.Title) && !string.IsNullOrEmpty(seoData.TwitterTitle))
+                {
+                    article.TwitterCard.Title = seoData.TwitterTitle;
+                }
+
+                // Update article content fields
+                if (string.IsNullOrEmpty(article.Subtitle) && !string.IsNullOrEmpty(seoData.Subtitle))
+                {
+                    article.Subtitle = seoData.Subtitle;
+                }
+
+                if (string.IsNullOrEmpty(article.Summary) && !string.IsNullOrEmpty(seoData.Summary))
+                {
+                    article.Summary = seoData.Summary;
+                }
+
+                // Update conclusion section fields
+                if (string.IsNullOrEmpty(article.ConclusionTitle) && !string.IsNullOrEmpty(seoData.ConclusionTitle))
+                {
+                    article.ConclusionTitle = seoData.ConclusionTitle;
+                }
+
+                if (string.IsNullOrEmpty(article.ConclusionSummary) && !string.IsNullOrEmpty(seoData.ConclusionSummary))
+                {
+                    article.ConclusionSummary = seoData.ConclusionSummary;
+                }
+
+                if (string.IsNullOrEmpty(article.ConclusionKeyHeading) && !string.IsNullOrEmpty(seoData.ConclusionKeyHeading))
+                {
+                    article.ConclusionKeyHeading = seoData.ConclusionKeyHeading;
+                }
+
+                if (string.IsNullOrEmpty(article.ConclusionKeyText) && !string.IsNullOrEmpty(seoData.ConclusionKeyText))
+                {
+                    article.ConclusionKeyText = seoData.ConclusionKeyText;
+                }
+
+                if (string.IsNullOrEmpty(article.ConclusionText) && !string.IsNullOrEmpty(seoData.ConclusionText))
+                {
+                    article.ConclusionText = seoData.ConclusionText;
                 }
             }
 

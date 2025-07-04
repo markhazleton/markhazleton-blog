@@ -40,6 +40,7 @@ namespace mwhWebAdmin.Controllers
                         SeoDescription = testArticle.Seo?.Description,
                         OpenGraphTitle = testArticle.OpenGraph?.Title,
                         OpenGraphDescription = testArticle.OpenGraph?.Description,
+                        TwitterTitle = testArticle.TwitterCard?.Title,
                         TwitterDescription = testArticle.TwitterCard?.Description,
                         CanonicalUrl = testArticle.Seo?.Canonical,
                         // Article content fields

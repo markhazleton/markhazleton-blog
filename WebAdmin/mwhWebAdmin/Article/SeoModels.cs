@@ -165,6 +165,9 @@ public class SeoGenerationResult
     [JsonPropertyName("twitterDescription")]
     public string? TwitterDescription { get; set; }
 
+    [JsonPropertyName("twitterTitle")]
+    public string? TwitterTitle { get; set; }
+
     [JsonPropertyName("subtitle")]
     public string? Subtitle { get; set; }
 

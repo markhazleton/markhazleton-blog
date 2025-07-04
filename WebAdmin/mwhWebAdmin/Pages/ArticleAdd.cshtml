@@ -453,9 +453,9 @@
         const title = document.querySelector('input[name="NewArticle.Name"]').value;
         const content = document.querySelector('textarea[name="NewArticle.ArticleContent"]').value;
 
-        if (!title || !content)
+        if (!title)
         {
-            alert('Please enter both article title and content before generating SEO fields.');
+            alert('Please enter article title before generating SEO fields.');
             return;
         }
 
@@ -505,6 +505,10 @@
                 if (data.generatedSeo.openGraphDescription)
                 {
                     document.querySelector('textarea[name="NewArticle.OpenGraph.Description"]').value = data.generatedSeo.openGraphDescription;
+                }
+                if (data.generatedSeo.twitterTitle)
+                {
+                    document.querySelector('input[name="NewArticle.TwitterCard.Title"]').value = data.generatedSeo.twitterTitle;
                 }
                 if (data.generatedSeo.twitterDescription)
                 {
