@@ -39,7 +39,12 @@
 
         <div class="mb-3">
             <label for="Description" class="form-label">Description:</label>
-            <input type="text" class="form-control" asp-for="Article.Description" />
+            <input type="text" class="form-control" asp-for="Article.Description"
+                   oninput="updateCharacterCount('articleDescriptionCount', this.value, 50, 200)" />
+            <div class="d-flex justify-content-between">
+                <small class="form-text text-muted">Brief description of the article for SEO.</small>
+                <small id="articleDescriptionCount" class="form-text">0 characters (50-200 recommended)</small>
+            </div>
         </div>
 
         <div class="mb-3">
@@ -54,7 +59,8 @@
 
         <div class="mb-3">
             <label for="ArticleContent" class="form-label">Content:</label>
-            <textarea class="form-control" asp-for="Article.ArticleContent" rows="8" placeholder="Enter article content..."></textarea>
+            <textarea class="form-control" asp-for="Article.ArticleContent" rows="8" placeholder="Enter article content in markdown format..."></textarea>
+            <small class="form-text text-muted">Use markdown syntax for formatting (# headers, **bold**, *italic*, [links](url), ```code blocks```, etc.). The AI will generate content in markdown format.</small>
         </div>
 
         <!-- YouTube Video Section -->
@@ -96,22 +102,34 @@
                 <!-- SEO Title -->
                 <div class="mb-3">
                     <label for="SeoTitle" class="form-label fw-bold">SEO Title:</label>
-                    <input type="text" class="form-control" asp-for="Article.Seo.Title" placeholder="SEO-optimized title (leave blank to use article title)" />
-                    <small class="form-text text-muted">If provided, this will be used instead of the article title for search engines.</small>
+                    <input type="text" class="form-control" asp-for="Article.Seo.Title" placeholder="SEO-optimized title (leave blank to use article title)"
+                           oninput="updateCharacterCount('seoTitleCount', this.value, 30, 60)" />
+                    <div class="d-flex justify-content-between">
+                        <small class="form-text text-muted">If provided, this will be used instead of the article title for search engines.</small>
+                        <small id="seoTitleCount" class="form-text">0 characters (30-60 recommended)</small>
+                    </div>
                 </div>
 
                 <!-- SEO Description -->
                 <div class="mb-3">
                     <label for="SeoDescription" class="form-label fw-bold">SEO Description:</label>
-                    <textarea class="form-control" asp-for="Article.Seo.Description" rows="2" placeholder="SEO-optimized description (120-160 characters)"></textarea>
-                    <small class="form-text text-muted">If provided, this will be used instead of the basic description for search engines.</small>
+                    <textarea class="form-control" asp-for="Article.Seo.Description" rows="2" placeholder="SEO-optimized description (120-160 characters)"
+                              oninput="updateCharacterCount('seoDescriptionCount', this.value, 120, 160)"></textarea>
+                    <div class="d-flex justify-content-between">
+                        <small class="form-text text-muted">If provided, this will be used instead of the basic description for search engines.</small>
+                        <small id="seoDescriptionCount" class="form-text">0 characters (120-160 required)</small>
+                    </div>
                 </div>
 
                 <!-- SEO Keywords -->
                 <div class="mb-3">
                     <label for="SeoKeywords" class="form-label fw-bold">SEO Keywords:</label>
-                    <input type="text" class="form-control" asp-for="Article.Seo.Keywords" placeholder="keyword1, keyword2, keyword3" />
-                    <small class="form-text text-muted">Targeted keywords for search engine optimization.</small>
+                    <input type="text" class="form-control" asp-for="Article.Seo.Keywords" placeholder="keyword1, keyword2, keyword3"
+                           oninput="updateKeywordCount('seoKeywordsCount', this.value)" />
+                    <div class="d-flex justify-content-between">
+                        <small class="form-text text-muted">Targeted keywords for search engine optimization.</small>
+                        <small id="seoKeywordsCount" class="form-text">0 keywords (3-8 recommended)</small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,11 +145,15 @@
                         <h6>Open Graph (Facebook/LinkedIn)</h6>
                         <div class="mb-3">
                             <label for="OgTitle" class="form-label">Title:</label>
-                            <input type="text" class="form-control" asp-for="Article.OpenGraph.Title" placeholder="Social media title" />
+                            <input type="text" class="form-control" asp-for="Article.OpenGraph.Title" placeholder="Social media title"
+                                   oninput="updateCharacterCount('ogTitleCount', this.value, 30, 65)" />
+                            <small id="ogTitleCount" class="form-text">0 characters (30-65 recommended)</small>
                         </div>
                         <div class="mb-3">
                             <label for="OgDescription" class="form-label">Description:</label>
-                            <textarea class="form-control" asp-for="Article.OpenGraph.Description" rows="2" placeholder="Social media description"></textarea>
+                            <textarea class="form-control" asp-for="Article.OpenGraph.Description" rows="2" placeholder="Social media description"
+                                      oninput="updateCharacterCount('ogDescriptionCount', this.value, 0, 200)"></textarea>
+                            <small id="ogDescriptionCount" class="form-text">0 characters (max 200)</small>
                         </div>
                         <div class="mb-3">
                             <label for="OgImageAlt" class="form-label">Image Alt Text:</label>
@@ -142,11 +164,15 @@
                         <h6>Twitter Card</h6>
                         <div class="mb-3">
                             <label for="TwitterTitle" class="form-label">Title:</label>
-                            <input type="text" class="form-control" asp-for="Article.TwitterCard.Title" placeholder="Twitter title (shorter)" />
+                            <input type="text" class="form-control" asp-for="Article.TwitterCard.Title" placeholder="Twitter title (shorter)"
+                                   oninput="updateCharacterCount('twitterTitleCount', this.value, 0, 50)" />
+                            <small id="twitterTitleCount" class="form-text">0 characters (max 50)</small>
                         </div>
                         <div class="mb-3">
                             <label for="TwitterDescription" class="form-label">Description:</label>
-                            <textarea class="form-control" asp-for="Article.TwitterCard.Description" rows="2" placeholder="Twitter description"></textarea>
+                            <textarea class="form-control" asp-for="Article.TwitterCard.Description" rows="2" placeholder="Twitter description"
+                                      oninput="updateCharacterCount('twitterDescriptionCount', this.value, 0, 120)"></textarea>
+                            <small id="twitterDescriptionCount" class="form-text">0 characters (max 120)</small>
                         </div>
                         <div class="mb-3">
                             <label for="TwitterImageAlt" class="form-label">Image Alt Text:</label>
@@ -355,6 +381,98 @@
             });
         });
 
+        // Character counting functions
+        function updateCharacterCount(counterId, value, minChars = 0, maxChars = 0) {
+            const counter = document.getElementById(counterId);
+            const length = value.length;
+
+            let text = `${length} characters`;
+            let className = 'form-text';
+
+            if (minChars > 0 && maxChars > 0) {
+                text += ` (${minChars}-${maxChars} recommended)`;
+                if (length < minChars) {
+                    className += ' text-warning';
+                } else if (length > maxChars) {
+                    className += ' text-danger';
+                } else {
+                    className += ' text-success';
+                }
+            } else if (maxChars > 0) {
+                text += ` (max ${maxChars})`;
+                if (length > maxChars) {
+                    className += ' text-danger';
+                } else if (length > maxChars * 0.9) {
+                    className += ' text-warning';
+                } else {
+                    className += ' text-muted';
+                }
+            } else {
+                className += ' text-muted';
+            }
+
+            counter.textContent = text;
+            counter.className = className;
+        }
+
+        function updateKeywordCount(counterId, value) {
+            const counter = document.getElementById(counterId);
+            const keywords = value.split(',').map(k => k.trim()).filter(k => k.length > 0);
+            const count = keywords.length;
+
+            let text = `${count} keywords`;
+            let className = 'form-text';
+
+            if (count === 0) {
+                text += ' (3-8 recommended)';
+                className += ' text-muted';
+            } else if (count < 3) {
+                text += ' (3-8 recommended)';
+                className += ' text-warning';
+            } else if (count > 8) {
+                text += ' (3-8 recommended)';
+                className += ' text-danger';
+            } else {
+                text += ' (3-8 recommended)';
+                className += ' text-success';
+            }
+
+            counter.textContent = text;
+            counter.className = className;
+        }
+
+        // Initialize character counts on page load
+        function initializeCharacterCounts() {
+            // Article fields
+            const articleDescription = document.querySelector('input[name="Article.Description"]');
+
+            // SEO fields
+            const seoTitle = document.querySelector('input[name="Article.Seo.Title"]');
+            const seoDescription = document.querySelector('textarea[name="Article.Seo.Description"]');
+            const seoKeywords = document.querySelector('input[name="Article.Seo.Keywords"]');
+
+            // Social media fields
+            const ogTitle = document.querySelector('input[name="Article.OpenGraph.Title"]');
+            const ogDescription = document.querySelector('textarea[name="Article.OpenGraph.Description"]');
+            const twitterTitle = document.querySelector('input[name="Article.TwitterCard.Title"]');
+            const twitterDescription = document.querySelector('textarea[name="Article.TwitterCard.Description"]');
+
+            // Initialize counters
+            if (articleDescription) updateCharacterCount('articleDescriptionCount', articleDescription.value, 50, 200);
+            if (seoTitle) updateCharacterCount('seoTitleCount', seoTitle.value, 30, 60);
+            if (seoDescription) updateCharacterCount('seoDescriptionCount', seoDescription.value, 120, 160);
+            if (seoKeywords) updateKeywordCount('seoKeywordsCount', seoKeywords.value);
+            if (ogTitle) updateCharacterCount('ogTitleCount', ogTitle.value, 30, 65);
+            if (ogDescription) updateCharacterCount('ogDescriptionCount', ogDescription.value, 0, 200);
+            if (twitterTitle) updateCharacterCount('twitterTitleCount', twitterTitle.value, 0, 50);
+            if (twitterDescription) updateCharacterCount('twitterDescriptionCount', twitterDescription.value, 0, 120);
+        }
+
+        // Call initialize function after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharacterCounts();
+        });
+
         async function generateSeoFields() {
             const title = document.querySelector('input[name="Article.Name"]').value;
             const content = document.querySelector('textarea[name="Article.ArticleContent"]').value;
@@ -384,6 +502,17 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    // Populate main article fields
+                    if (data.generatedSeo.articleTitle) {
+                        document.querySelector('input[name="Article.Name"]').value = data.generatedSeo.articleTitle;
+                    }
+                    if (data.generatedSeo.articleDescription) {
+                        document.querySelector('input[name="Article.Description"]').value = data.generatedSeo.articleDescription;
+                    }
+                    if (data.generatedSeo.articleContent) {
+                        document.querySelector('textarea[name="Article.ArticleContent"]').value = data.generatedSeo.articleContent;
+                    }
+
                     // Populate SEO fields
                     if (data.generatedSeo.seoTitle) {
                         document.querySelector('input[name="Article.Seo.Title"]').value = data.generatedSeo.seoTitle;
@@ -435,6 +564,9 @@
                     if (data.generatedSeo.conclusionText) {
                         document.querySelector('textarea[name="Article.ConclusionText"]').value = data.generatedSeo.conclusionText;
                     }
+
+                    // Update character counters after populating fields
+                    initializeCharacterCounts();
 
                     // Show success message
                     const alertDiv = document.createElement('div');
