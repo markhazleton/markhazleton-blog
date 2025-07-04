@@ -188,4 +188,14 @@ public class SeoGenerationResult
 
     [JsonPropertyName("conclusionText")]
     public string? ConclusionText { get; set; }
+
+    // New properties for article content generation
+    [JsonPropertyName("articleTitle")]
+    public string? ArticleTitle { get; set; }
+
+    [JsonPropertyName("articleDescription")]
+    public string? ArticleDescription { get; set; }
+
+    [JsonPropertyName("articleContent")]
+    public string? ArticleContent { get; set; }
 }
