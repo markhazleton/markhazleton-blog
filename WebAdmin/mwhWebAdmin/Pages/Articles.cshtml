@@ -32,6 +32,9 @@
                     <i class="fas fa-folder me-2"></i>Test Directory Slugs
                 </button>
             </form>
+            <a asp-page="./SeoDashboard" class="btn btn-outline-success me-2">
+                <i class="fas fa-chart-line me-2"></i>SEO Dashboard
+            </a>
             <a asp-page="./ArticleAdd" class="btn btn-admin-primary">
                 <i class="fas fa-plus-circle me-2"></i>Add New Article
             </a>
@@ -155,7 +158,23 @@ else
                                                     <h6 class="article-title">
                                                         @article.Name
                                                     </h6>
+                                                    @if (!string.IsNullOrEmpty(article.Subtitle))
+                                                    {
+                                                        <p class="article-subtitle text-muted mb-2 small">@article.Subtitle</p>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(article.Description))
+                                                    {
+                                                        <p class="article-description small text-muted mb-2">
+                                                            @(article.Description.Length > 100 ? article.Description.Substring(0, 100) + "..." : article.Description)
+                                                        </p>
+                                                    }
                                                     <div class="article-meta">
+                                                        @if (!string.IsNullOrEmpty(article.Author) && article.Author != "Mark Hazleton")
+                                                        {
+                                                            <span class="badge bg-secondary me-1">
+                                                                <i class="fas fa-user me-1"></i>@article.Author
+                                                            </span>
+                                                        }
                                                         @if (!string.IsNullOrEmpty(article.LastModified) && article.LastModified !=
                                                                                                     "1/1/1900" && article.LastModified != "1900-01-01")
                                                         {

@@ -41,24 +41,46 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="Name" class="form-label fw-bold">Article Name:</label>
+                    <label for="Name" class="form-label fw-bold">Article Title:</label>
                     <input type="text" class="form-control" asp-for="Name" placeholder="Enter article title..." />
                 </div>
 
                 <div class="mb-3">
+                    <label for="Subtitle" class="form-label fw-bold">Subtitle:</label>
+                    <input type="text" class="form-control" asp-for="Subtitle"
+                        placeholder="Enter article subtitle (optional)..." />
+                    <div class="form-text">A complementary subtitle that provides additional context</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Author" class="form-label fw-bold">Author:</label>
+                    <input type="text" class="form-control" asp-for="Author" placeholder="Author name..." />
+                </div>
+
+                <div class="mb-3">
                     <label for="Description" class="form-label fw-bold">Description:</label>
-                    <textarea class="form-control" asp-for="Description" rows="3" placeholder="Brief description of the article..."></textarea>
+                    <textarea class="form-control" asp-for="Description" rows="3"
+                        placeholder="Brief description of the article..."></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Summary" class="form-label fw-bold">Summary/Introduction:</label>
+                    <textarea class="form-control" asp-for="Summary" rows="3"
+                        placeholder="2-3 sentence introduction that hooks the reader..."></textarea>
+                    <div class="form-text">This will be used as the article introduction or summary</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="Keywords" class="form-label fw-bold">Keywords:</label>
-                    <input type="text" class="form-control" asp-for="Keywords" placeholder="Comma-separated keywords..." />
+                    <input type="text" class="form-control" asp-for="Keywords"
+                        placeholder="Comma-separated keywords..." />
                     <div class="form-text">Separate multiple keywords with commas</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="ArticleContent" class="form-label fw-bold">Content:</label>
-                    <textarea class="form-control" asp-for="ArticleContent" rows="6" placeholder="Article content..."></textarea>
+                    <textarea class="form-control" asp-for="ArticleContent" rows="6"
+                        placeholder="Article content..."></textarea>
                 </div>
 
                 @if (isEdit)
@@ -69,6 +91,50 @@
                         <div class="form-text">URL-friendly version of the article name</div>
                     </div>
                 }
+            </div>
+        </div>
+
+        <!-- Conclusion Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-flag-checkered me-2"></i>Conclusion Section</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="ConclusionTitle" class="form-label fw-bold">Conclusion Title:</label>
+                    <input type="text" class="form-control" asp-for="ConclusionTitle"
+                        placeholder="e.g., Key Takeaways, Final Thoughts, What's Next..." />
+                    <div class="form-text">Compelling heading for the conclusion section</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ConclusionSummary" class="form-label fw-bold">Conclusion Summary:</label>
+                    <textarea class="form-control" asp-for="ConclusionSummary" rows="3"
+                        placeholder="Brief summary of the key points covered in the article..."></textarea>
+                    <div class="form-text">2-3 sentences summarizing the main points</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="ConclusionKeyHeading" class="form-label fw-bold">Key Takeaway Heading:</label>
+                        <input type="text" class="form-control" asp-for="ConclusionKeyHeading"
+                            placeholder="e.g., Bottom Line, Key Insight, Action Item..." />
+                        <div class="form-text">Short, impactful heading</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="ConclusionKeyText" class="form-label fw-bold">Key Takeaway Text:</label>
+                        <textarea class="form-control" asp-for="ConclusionKeyText" rows="2"
+                            placeholder="Main insight or actionable takeaway..."></textarea>
+                        <div class="form-text">1-2 sentences with the key insight</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ConclusionText" class="form-label fw-bold">Final Thoughts:</label>
+                    <textarea class="form-control" asp-for="ConclusionText" rows="3"
+                        placeholder="Final thoughts, call to action, or next steps..."></textarea>
+                    <div class="form-text">Closing thoughts and call to action for readers</div>
+                </div>
             </div>
         </div>
     </div>
@@ -82,7 +148,7 @@
                 <div class="mb-3">
                     <label for="ImgSrc" class="form-label fw-bold">Image Path:</label>
                     <select class="form-select" asp-for="ImgSrc">
-                        <option value="">Select an image...</option>                        @foreach (var image in availableImages)
+                        <option value="">Select an image...</option> @foreach (var image in availableImages)
                         {
                             <option value="@image">@System.IO.Path.GetFileName(image)</option>
                         }
@@ -92,13 +158,15 @@
 
                 <div class="mb-3">
                     <small class="text-muted">Custom path:</small>
-                    <input type="text" class="form-control form-control-sm" asp-for="ImgSrc" placeholder="assets/img/custom-image.jpg" />
+                    <input type="text" class="form-control form-control-sm" asp-for="ImgSrc"
+                        placeholder="assets/img/custom-image.jpg" />
                 </div>
 
                 @if (!string.IsNullOrEmpty(Model.ImgSrc))
                 {
                     <div class="text-center">
-                        <img src="/@Model.ImgSrc" alt="Article Image" class="img-fluid rounded" style="max-height: 200px;" />
+                        <img src="/@Model.ImgSrc" alt="Article Image" class="img-fluid rounded"
+                            style="max-height: 200px;" />
                     </div>
                 }
             </div>
@@ -125,7 +193,9 @@
                             <i class="fas fa-exclamation-triangle me-2"></i>Source file not found
                             @if (!string.IsNullOrEmpty(Model.Source))
                             {
-                                <br><small class="text-muted">Expected: @Model.Source</small>
+                                <br>
+                    
+                                <small class="text-muted">Expected: @Model.Source</small>
                             }
                         </div>
                     }
@@ -134,3 +204,9 @@
         }
     </div>
 </div>
+
+   
+       
+                                      {
+     <br>  
+          

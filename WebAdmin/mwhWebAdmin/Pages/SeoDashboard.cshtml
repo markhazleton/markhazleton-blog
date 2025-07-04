@@ -1,0 +1,236 @@
+@page
+@model mwhWebAdmin.Pages.SeoDashboardModel
+@{
+    ViewData["Title"] = "SEO Dashboard";
+}
+
+<!-- Page Header -->
+<div class="page-header fade-in-up">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="fas fa-chart-line me-3"></i>@ViewData["Title"]</h1>
+            <p class="lead mb-0">Monitor and optimize SEO performance across all articles</p>
+        </div>
+        <div>
+            <a href="/test-seo.html" class="btn btn-info me-2" target="_blank">
+                <i class="fas fa-flask me-2"></i>Test AI SEO Generation
+            </a>
+            <a asp-page="./Articles" class="btn btn-outline-secondary">
+                <i class="fas fa-newspaper me-2"></i>Back to Articles
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- SEO Statistics -->
+<div class="row mb-4 fade-in-up">
+    <div class="col-md-3">
+        <div class="admin-card bg-primary">
+            <div class="admin-card-body">
+                <div class="admin-card-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div class="admin-card-content">
+                    <h3>@Model.SeoStats["TotalArticles"]</h3>
+                    <p>Total Articles</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-card bg-success">
+            <div class="admin-card-body">
+                <div class="admin-card-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="admin-card-content">
+                    <h3>@Model.SeoStats["CompleteSeoArticles"]</h3>
+                    <p>Complete SEO</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-card bg-warning">
+            <div class="admin-card-body">
+                <div class="admin-card-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="admin-card-content">
+                    <h3>@Model.SeoStats["TitleIssues"]</h3>
+                    <p>Title Issues</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-card bg-danger">
+            <div class="admin-card-body">
+                <div class="admin-card-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="admin-card-content">
+                    <h3>@Model.SeoStats["DescriptionIssues"]</h3>
+                    <p>Description Issues</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SEO Score Distribution -->
+<div class="admin-form fade-in-up">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>SEO Score Distribution</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @{
+                    var gradeA = Model.ArticleScores.Count(s => s.Value.Grade == "A");
+                    var gradeB = Model.ArticleScores.Count(s => s.Value.Grade == "B");
+                    var gradeC = Model.ArticleScores.Count(s => s.Value.Grade == "C");
+                    var gradeD = Model.ArticleScores.Count(s => s.Value.Grade == "D");
+                    var gradeF = Model.ArticleScores.Count(s => s.Value.Grade == "F");
+                    var total = Model.ArticleScores.Count;
+                }
+                <div class="col-md-2">
+                    <div class="text-center">
+                        <div class="badge bg-success fs-1">A</div>
+                        <div class="mt-2">@gradeA articles</div>
+                        <small class="text-muted">@((total > 0 ? (gradeA * 100 / total) : 0))%</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-center">
+                        <div class="badge bg-info fs-1">B</div>
+                        <div class="mt-2">@gradeB articles</div>
+                        <small class="text-muted">@((total > 0 ? (gradeB * 100 / total) : 0))%</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-center">
+                        <div class="badge bg-warning fs-1">C</div>
+                        <div class="mt-2">@gradeC articles</div>
+                        <small class="text-muted">@((total > 0 ? (gradeC * 100 / total) : 0))%</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-center">
+                        <div class="badge bg-secondary fs-1">D</div>
+                        <div class="mt-2">@gradeD articles</div>
+                        <small class="text-muted">@((total > 0 ? (gradeD * 100 / total) : 0))%</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-center">
+                        <div class="badge bg-danger fs-1">F</div>
+                        <div class="mt-2">@gradeF articles</div>
+                        <small class="text-muted">@((total > 0 ? (gradeF * 100 / total) : 0))%</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Articles Needing Attention -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Articles Needing SEO Attention</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.ArticlesNeedingAttention.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Article</th>
+                                <th>SEO Score</th>
+                                <th>Grade</th>
+                                <th>Main Issues</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var article in Model.ArticlesNeedingAttention)
+                            {
+                                var validation = Model.ArticleValidations[article.Id];
+                                <tr>
+                                    <td>
+                                        <strong>@article.Name</strong><br>
+                                        <small class="text-muted">@article.Section</small>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="width: 100px;">
+                                            <div class="progress-bar @GetProgressBarClass(validation.Score.OverallScore)"
+                                                 role="progressbar"
+                                                 style="width: @validation.Score.OverallScore%"
+                                                 aria-valuenow="@validation.Score.OverallScore"
+                                                 aria-valuemin="0"
+                                                 aria-valuemax="100">
+                                                @validation.Score.OverallScore
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge @GetGradeBadgeClass(validation.Score.Grade)">@validation.Score.Grade</span>
+                                    </td>
+                                    <td>
+                                        @foreach (var warning in validation.Warnings.Take(2))
+                                        {
+                                            <small class="d-block text-warning">⚠️ @warning</small>
+                                        }
+                                        @foreach (var error in validation.Errors.Take(1))
+                                        {
+                                            <small class="d-block text-danger">❌ @error</small>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-page="./ArticleEdit" asp-route-id="@article.Id" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit me-1"></i>Edit
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <i class="fas fa-trophy text-success mb-3" style="font-size: 3rem;"></i>
+                    <h4>Great job! 🎉</h4>
+                    <p class="text-muted">All your articles have good SEO scores.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetProgressBarClass(int score)
+    {
+        return score switch
+        {
+            >= 90 => "bg-success",
+            >= 80 => "bg-info",
+            >= 70 => "bg-warning",
+            >= 60 => "bg-secondary",
+            _ => "bg-danger"
+        };
+    }
+
+    string GetGradeBadgeClass(string grade)
+    {
+        return grade switch
+        {
+            "A" => "bg-success",
+            "B" => "bg-info",
+            "C" => "bg-warning",
+            "D" => "bg-secondary",
+            _ => "bg-danger"
+        };
+    }
+}

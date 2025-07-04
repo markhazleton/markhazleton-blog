@@ -35,11 +35,12 @@ namespace mwhWebAdmin.Article
         }
 
         /// <summary>
-        /// Generates SEO-optimized keywords for the given content using OpenAI's Chat Completions API.
+        /// Generates comprehensive SEO data for the given content using OpenAI's Chat Completions API.
         /// </summary>
         /// <param name="content">The body content of the article.</param>
-        /// <returns>A comma-separated string of SEO-optimized keywords.</returns>
-        private async Task<string> GenerateKeywordsFromContentAsync(string content)
+        /// <param name="currentTitle">The current article title for context.</param>
+        /// <returns>A structured SEO data object with keywords, title, description, etc.</returns>
+        private async Task<SeoGenerationResult> GenerateSeoDataFromContentAsync(string content, string? currentTitle = null)
         {
             try
             {
@@ -48,6 +49,40 @@ namespace mwhWebAdmin.Article
 
                 using var httpClient = _httpClientFactory.CreateClient();
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", openAiApiKey);
+
+                var systemPrompt = @"You are an SEO expert specializing in technical and business content optimization.
+Analyze the provided content which may include:
+- Article title and metadata
+- PUG template structure indicators (marked with [Structure: ...])
+- Raw article content
+- Current descriptions
+
+Generate comprehensive SEO metadata based on this analysis.
+Focus on the main article content and structural elements to understand the topic and create:
+
+1. SEO-optimized keywords (comma-separated, 5-10 keywords relevant to the content)
+2. SEO title (50-60 characters, compelling and keyword-rich)
+3. Meta description (120-160 characters, engaging summary with primary keywords)
+4. Open Graph title (can be slightly different from SEO title, 30-65 characters)
+5. Open Graph description (can be more engaging, up to 200 characters)
+6. Twitter description (concise version, up to 120 characters)
+
+Consider the article structure from PUG templates to understand content organization.
+Ignore navigation elements, headers, footers, and technical markup.
+
+Return ONLY a valid JSON object in this exact format:
+{
+  ""keywords"": ""keyword1, keyword2, keyword3"",
+  ""seoTitle"": ""Compelling SEO Title Here"",
+  ""metaDescription"": ""Engaging meta description that summarizes the content and includes primary keywords."",
+  ""ogTitle"": ""Open Graph Title"",
+  ""ogDescription"": ""Open Graph description that can be more engaging and social-media friendly."",
+  ""twitterDescription"": ""Concise Twitter description.""
+}";
+
+                var userContent = string.IsNullOrEmpty(currentTitle)
+                    ? content
+                    : $"Current Title: {currentTitle}\n\nContent: {content}";
 
                 // Prepare the request payload
                 var requestBody = new
@@ -58,16 +93,16 @@ namespace mwhWebAdmin.Article
                         new
                         {
                             role = "system",
-                            content = "You are an SEO expert. Calculate SEO-optimized keywords from the provided content. Ignore the header, footer, and any links off the page. Return a comma separated string of keywords."
+                            content = systemPrompt
                         },
                         new
                         {
                             role = "user",
-                            content = content
+                            content = userContent
                         }
                     },
-                    max_tokens = 1000,
-                    temperature = 0.5
+                    max_tokens = 2000,
+                    temperature = 0.3
                 };
 
                 var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
@@ -80,19 +115,51 @@ namespace mwhWebAdmin.Article
                 var responseData = JsonDocument.Parse(responseContent);
 
                 // Extract the response text
-                var keywords = responseData.RootElement
+                var aiResponse = responseData.RootElement
                     .GetProperty("choices")[0]
                     .GetProperty("message")
                     .GetProperty("content")
                     .GetString();
 
-                return keywords?.Trim() ?? string.Empty;
+                if (string.IsNullOrEmpty(aiResponse))
+                {
+                    return new SeoGenerationResult();
+                }
+
+                // Parse the JSON response from AI
+                try
+                {
+                    var seoData = JsonSerializer.Deserialize<SeoGenerationResult>(aiResponse);
+                    return seoData ?? new SeoGenerationResult();
+                }
+                catch (JsonException ex)
+                {
+                    _logger.LogWarning(ex, "Failed to parse AI SEO response as JSON. Raw response: {Response}", aiResponse);
+
+                    // Fallback: try to extract keywords from the response
+                    return new SeoGenerationResult
+                    {
+                        Keywords = aiResponse.Trim()
+                    };
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to generate keywords using OpenAI API.");
-                return string.Empty;
+                _logger.LogError(ex, "Failed to generate SEO data using OpenAI API.");
+                return new SeoGenerationResult();
             }
+        }
+
+        /// <summary>
+        /// Generates SEO-optimized keywords for the given content using OpenAI's Chat Completions API.
+        /// This method is maintained for backward compatibility.
+        /// </summary>
+        /// <param name="content">The body content of the article.</param>
+        /// <returns>A comma-separated string of SEO-optimized keywords.</returns>
+        private async Task<string> GenerateKeywordsFromContentAsync(string content)
+        {
+            var seoData = await GenerateSeoDataFromContentAsync(content);
+            return seoData.Keywords ?? string.Empty;
         }
 
         /// <summary>
@@ -108,22 +175,55 @@ namespace mwhWebAdmin.Article
                 string templateFilePath = Path.Combine(_articlesDirectory, "article-stub.pug");
                 string templateContent = File.ReadAllText(templateFilePath);
 
-                // Perform string replacements for all template fields
+                // Replace placeholder content with actual article data
                 string pugContent = templateContent
-                    .Replace("{{title}}", article.Name ?? string.Empty)
-                    .Replace("{{subtitle}}", article.Subtitle ?? string.Empty)
-                    .Replace("{{description}}", article.Description ?? string.Empty)
-                    .Replace("{{keywords}}", article.Keywords ?? string.Empty)
-                    .Replace("{{author}}", article.Author ?? "Mark Hazleton")
-                    .Replace("{{slug}}", article.Slug ?? string.Empty)
-                    .Replace("{{sectionTitle}}", article.Section ?? string.Empty)
-                    .Replace("{{summary}}", article.Summary ?? string.Empty)
-                    .Replace("{{content}}", article.ArticleContent ?? string.Empty)
-                    .Replace("{{conclusionTitle}}", article.ConclusionTitle ?? string.Empty)
-                    .Replace("{{conclusionSummary}}", article.ConclusionSummary ?? string.Empty)
-                    .Replace("{{conclusionKeyHeading}}", article.ConclusionKeyHeading ?? string.Empty)
-                    .Replace("{{conclusionKeyText}}", article.ConclusionKeyText ?? string.Empty)
-                    .Replace("{{conclusionText}}", article.ConclusionText ?? string.Empty);
+                    .Replace("Article Title Here", article.Name ?? "New Article Title")
+                    .Replace("Article Subtitle Here", article.Subtitle ?? "Article Subtitle")
+                    .Replace("Brief article summary or introduction paragraph goes here.",
+                            article.Summary ?? article.Description ?? "Brief article summary or introduction paragraph.")
+                    .Replace("Main Section Title", article.Section ?? "Main Content")
+                    .Replace("Main article content goes here. This is where you'll write your detailed content.",
+                            article.ArticleContent ?? "Main article content goes here. This is where you'll write your detailed content.")
+                    .Replace("Summary of key points from the article.",
+                            article.ConclusionSummary ?? "Summary of key points from the article.")
+                    .Replace("Main insight or actionable takeaway from the article.",
+                            article.ConclusionKeyText ?? "Main insight or actionable takeaway from the article.")
+                    .Replace("Final thoughts and call to action or next steps.",
+                            article.ConclusionText ?? "Final thoughts and call to action or next steps.");
+
+                // Add YouTube video section if URL is provided
+                if (!string.IsNullOrEmpty(article.YouTubeUrl))
+                {
+                    string videoId = ExtractYouTubeVideoId(article.YouTubeUrl);
+                    if (!string.IsNullOrEmpty(videoId))
+                    {
+                        string videoTitle = article.YouTubeTitle ?? "Featured Video";
+                        string videoSection = $@"
+          // Featured Video
+          .card.mb-4.shadow-sm
+            .card-header.bg-dark.text-white
+              h5.card-title.mb-0
+                i.bi.bi-play-circle.me-2
+                | Watch: {videoTitle}
+            .card-body.p-0
+              .ratio.ratio-16x9
+                iframe(
+                  src=""https://www.youtube.com/embed/{videoId}""
+                  title=""{videoTitle}""
+                  allow=""accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share""
+                  referrerpolicy=""strict-origin-when-cross-origin""
+                  allowfullscreen
+                )
+            .card-footer.text-muted
+              small
+                i.bi.bi-info-circle.me-1
+                | {videoTitle}
+";
+                        // Insert the video section after the article introduction
+                        pugContent = pugContent.Replace("p.lead.mb-5", $"p.lead.mb-5{videoSection}");
+                    }
+                }
+
                 return pugContent;
             }
             catch (Exception ex)
@@ -836,6 +936,364 @@ namespace mwhWebAdmin.Article
             var result = CalculateSourceFilePath(testSlug);
             _logger.LogInformation("Result for slug '{Slug}': {SourcePath}", testSlug, result);
             return result;
+        }
+
+        /// <summary>
+        /// Initializes empty SEO objects for an article if they don't exist
+        /// </summary>
+        /// <param name="article">The article to initialize SEO for</param>
+        public void InitializeSeoFields(ArticleModel article)
+        {
+            article.Seo ??= new SeoModel
+            {
+                Title = article.Name,
+                Description = article.Description,
+                Keywords = article.Keywords,
+                Canonical = $"https://markhazleton.com/{article.Slug}"
+            };
+
+            article.OpenGraph ??= new OpenGraphModel
+            {
+                Title = article.Seo.Title,
+                Description = article.Seo.Description,
+                Image = !string.IsNullOrEmpty(article.ImgSrc) ? $"https://markhazleton.com/{article.ImgSrc}" : null,
+                ImageAlt = $"{article.Name} - Mark Hazleton"
+            };
+
+            article.TwitterCard ??= new TwitterCardModel
+            {
+                Title = article.Seo.Title?.Length > 50 ? article.Seo.Title[..47] + "..." : article.Seo.Title,
+                Description = article.Seo.Description?.Length > 120 ? article.Seo.Description[..117] + "..." : article.Seo.Description,
+                Image = article.OpenGraph.Image,
+                ImageAlt = article.OpenGraph.ImageAlt
+            };
+        }
+
+        /// <summary>
+        /// Auto-generates SEO fields based on article content
+        /// </summary>
+        /// <param name="article">The article to enhance</param>
+        public void AutoGenerateSeoFields(ArticleModel article)
+        {
+            // Initialize if needed
+            InitializeSeoFields(article);
+
+            // Auto-generate canonical URL
+            if (string.IsNullOrEmpty(article.Seo!.Canonical))
+            {
+                article.Seo.Canonical = $"https://markhazleton.com/{article.Slug}";
+            }
+
+            // Auto-generate Open Graph image alt text
+            if (string.IsNullOrEmpty(article.OpenGraph!.ImageAlt))
+            {
+                article.OpenGraph.ImageAlt = $"{article.Name} - Mark Hazleton";
+            }
+
+            // Auto-generate Twitter image alt text
+            if (string.IsNullOrEmpty(article.TwitterCard!.ImageAlt))
+            {
+                article.TwitterCard.ImageAlt = article.OpenGraph.ImageAlt;
+            }
+        }
+
+        /// <summary>
+        /// Auto-generates SEO fields based on article content using AI
+        /// </summary>
+        /// <param name="article">The article to enhance</param>
+        public async Task AutoGenerateSeoFieldsAsync(ArticleModel article)
+        {
+            // Initialize if needed
+            InitializeSeoFields(article);
+
+            // Prepare content for AI analysis
+            string contentForAnalysis = await PrepareContentForSeoAnalysis(article);
+
+            // Generate AI-powered SEO data if content is available
+            if (!string.IsNullOrEmpty(contentForAnalysis))
+            {
+                var seoData = await GenerateSeoDataFromContentAsync(contentForAnalysis, article.Name);
+
+                // Update keywords if not already set
+                if (string.IsNullOrEmpty(article.Keywords) && !string.IsNullOrEmpty(seoData.Keywords))
+                {
+                    article.Keywords = seoData.Keywords;
+                }
+
+                // Update SEO title if not already set
+                if (string.IsNullOrEmpty(article.Seo!.Title) && !string.IsNullOrEmpty(seoData.SeoTitle))
+                {
+                    article.Seo.Title = seoData.SeoTitle;
+                }
+
+                // Update meta description if not already set
+                if (string.IsNullOrEmpty(article.Seo.Description) && !string.IsNullOrEmpty(seoData.MetaDescription))
+                {
+                    article.Seo.Description = seoData.MetaDescription;
+                }
+
+                // Update Open Graph title if not already set
+                if (string.IsNullOrEmpty(article.OpenGraph!.Title) && !string.IsNullOrEmpty(seoData.OgTitle))
+                {
+                    article.OpenGraph.Title = seoData.OgTitle;
+                }
+
+                // Update Open Graph description if not already set
+                if (string.IsNullOrEmpty(article.OpenGraph.Description) && !string.IsNullOrEmpty(seoData.OgDescription))
+                {
+                    article.OpenGraph.Description = seoData.OgDescription;
+                }
+
+                // Update Twitter description if not already set
+                if (string.IsNullOrEmpty(article.TwitterCard!.Description) && !string.IsNullOrEmpty(seoData.TwitterDescription))
+                {
+                    article.TwitterCard.Description = seoData.TwitterDescription;
+                }
+            }
+
+            // Auto-generate canonical URL
+            if (string.IsNullOrEmpty(article.Seo!.Canonical))
+            {
+                article.Seo.Canonical = $"https://markhazleton.com/{article.Slug}";
+            }
+
+            // Auto-generate Open Graph image alt text
+            if (string.IsNullOrEmpty(article.OpenGraph!.ImageAlt))
+            {
+                article.OpenGraph.ImageAlt = $"{article.Name} - Mark Hazleton";
+            }
+
+            // Auto-generate Twitter image alt text
+            if (string.IsNullOrEmpty(article.TwitterCard!.ImageAlt))
+            {
+                article.TwitterCard.ImageAlt = article.OpenGraph.ImageAlt;
+            }
+        }
+
+        /// <summary>
+        /// Gets SEO statistics for all articles
+        /// </summary>
+        /// <returns>Dictionary with SEO statistics</returns>
+        public Dictionary<string, object> GetSeoStatistics()
+        {
+            var articles = GetArticles();
+            var stats = new Dictionary<string, object>
+            {
+                ["TotalArticles"] = articles.Count,
+                ["ArticlesWithSeo"] = articles.Count(a => a.Seo != null),
+                ["ArticlesWithOpenGraph"] = articles.Count(a => a.OpenGraph != null),
+                ["ArticlesWithTwitterCard"] = articles.Count(a => a.TwitterCard != null),
+                ["TitleIssues"] = articles.Count(a => string.IsNullOrEmpty(a.EffectiveTitle) ||
+                                                     a.EffectiveTitle.Length < 30 ||
+                                                     a.EffectiveTitle.Length > 60),
+                ["DescriptionIssues"] = articles.Count(a => string.IsNullOrEmpty(a.EffectiveDescription) ||
+                                                            a.EffectiveDescription.Length < 120 ||
+                                                            a.EffectiveDescription.Length > 160),
+                ["MissingImages"] = articles.Count(a => string.IsNullOrEmpty(a.ImgSrc)),
+                ["CompleteSeoArticles"] = articles.Count(a => a.Seo != null && a.OpenGraph != null && a.TwitterCard != null)
+            };
+
+            return stats;
+        }
+
+        /// <summary>
+        /// Prepares content for SEO analysis by combining article metadata with PUG file content
+        /// </summary>
+        /// <param name="article">The article to prepare content for</param>
+        /// <returns>Combined content including PUG file structure and article metadata</returns>
+        private async Task<string> PrepareContentForSeoAnalysis(ArticleModel article)
+        {
+            var contentParts = new List<string>();
+
+            // Add basic article metadata
+            if (!string.IsNullOrEmpty(article.Name))
+            {
+                contentParts.Add($"Article Title: {article.Name}");
+            }
+
+            if (!string.IsNullOrEmpty(article.Description))
+            {
+                contentParts.Add($"Current Description: {article.Description}");
+            }
+
+            if (!string.IsNullOrEmpty(article.Section))
+            {
+                contentParts.Add($"Category/Section: {article.Section}");
+            }
+
+            // Try to read PUG file content for additional context
+            try
+            {
+                string pugContent = await ReadPugFileContent(article);
+                if (!string.IsNullOrEmpty(pugContent))
+                {
+                    contentParts.Add("PUG File Content Structure:");
+                    contentParts.Add(pugContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Could not read PUG file for article: {ArticleName}", article.Name);
+            }
+
+            // Add existing article content if available
+            if (!string.IsNullOrEmpty(article.ArticleContent))
+            {
+                contentParts.Add("Article Content:");
+                contentParts.Add(article.ArticleContent);
+            }
+
+            return string.Join("\n\n", contentParts);
+        }
+
+        /// <summary>
+        /// Reads and extracts meaningful content from a PUG file for SEO analysis
+        /// </summary>
+        /// <param name="article">The article whose PUG file to read</param>
+        /// <returns>Extracted and cleaned content from the PUG file</returns>
+        private async Task<string> ReadPugFileContent(ArticleModel article)
+        {
+            try
+            {
+                // Calculate the PUG file path
+                string pugFilePath = string.Empty;
+
+                if (!string.IsNullOrEmpty(article.Source))
+                {
+                    // Use the source path if available (remove /src/pug/ prefix and convert to actual file path)
+                    string relativePath = article.Source.Replace("/src/pug/", "").Replace("/", "\\");
+                    pugFilePath = Path.Combine(_filePath.Replace("articles.json", ""), "pug", relativePath);
+                }
+                else if (!string.IsNullOrEmpty(article.Slug))
+                {
+                    // Fallback: derive from slug
+                    string fileName = article.Slug.Replace(".html", ".pug").Replace("articles/", "");
+                    pugFilePath = Path.Combine(_articlesDirectory, fileName);
+                }
+
+                if (string.IsNullOrEmpty(pugFilePath) || !File.Exists(pugFilePath))
+                {
+                    _logger.LogDebug("PUG file not found for article: {ArticleName} at path: {PugFilePath}", article.Name, pugFilePath);
+                    return string.Empty;
+                }
+
+                // Read the PUG file
+                string pugContent = await File.ReadAllTextAsync(pugFilePath);
+
+                // Extract meaningful content from PUG file
+                return ExtractContentFromPug(pugContent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error reading PUG file for article: {ArticleName}", article.Name);
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Extracts meaningful text content from PUG markup for SEO analysis
+        /// </summary>
+        /// <param name="pugContent">Raw PUG file content</param>
+        /// <returns>Cleaned text content suitable for AI analysis</returns>
+        private static string ExtractContentFromPug(string pugContent)
+        {
+            if (string.IsNullOrEmpty(pugContent))
+                return string.Empty;
+
+            var lines = pugContent.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var contentLines = new List<string>();
+
+            foreach (var line in lines)
+            {
+                var trimmedLine = line.Trim();
+
+                // Skip comments, extends, block declarations, and other PUG syntax
+                if (trimmedLine.StartsWith("//") ||
+                    trimmedLine.StartsWith("extends ") ||
+                    trimmedLine.StartsWith("block ") ||
+                    trimmedLine.StartsWith("include ") ||
+                    trimmedLine.StartsWith("mixin ") ||
+                    trimmedLine.StartsWith("if ") ||
+                    trimmedLine.StartsWith("each ") ||
+                    trimmedLine.StartsWith("case ") ||
+                    trimmedLine.StartsWith("when ") ||
+                    trimmedLine.StartsWith("unless ") ||
+                    string.IsNullOrWhiteSpace(trimmedLine))
+                {
+                    continue;
+                }
+
+                // Extract text content (lines starting with | or plain text)
+                if (trimmedLine.StartsWith("| "))
+                {
+                    contentLines.Add(trimmedLine.Substring(2).Trim());
+                }
+                // Extract text that might be after HTML elements (simple heuristic)
+                else if (trimmedLine.Contains(" ") && !trimmedLine.StartsWith(".") && !trimmedLine.StartsWith("#"))
+                {
+                    // Look for text after the last space that might be content
+                    var lastSpaceIndex = trimmedLine.LastIndexOf(' ');
+                    if (lastSpaceIndex > 0 && lastSpaceIndex < trimmedLine.Length - 1)
+                    {
+                        var potentialContent = trimmedLine.Substring(lastSpaceIndex + 1).Trim();
+                        if (potentialContent.Length > 3 && !potentialContent.StartsWith(".") && !potentialContent.StartsWith("#"))
+                        {
+                            contentLines.Add(potentialContent);
+                        }
+                    }
+                }
+                // Extract headings and other meaningful structure indicators
+                else if (trimmedLine.Contains("h1.") || trimmedLine.Contains("h2.") || trimmedLine.Contains("h3.") ||
+                         trimmedLine.Contains("p.") || trimmedLine.Contains("article") || trimmedLine.Contains("section"))
+                {
+                    contentLines.Add($"[Structure: {trimmedLine}]");
+                }
+            }
+
+            return string.Join("\n", contentLines);
+        }
+
+        /// <summary>
+        /// Extracts the YouTube video ID from various YouTube URL formats.
+        /// </summary>
+        /// <param name="url">The YouTube URL.</param>
+        /// <returns>The video ID if found, otherwise empty string.</returns>
+        private string ExtractYouTubeVideoId(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+                return string.Empty;
+
+            try
+            {
+                // Handle different YouTube URL formats
+                var uri = new Uri(url);
+
+                // Standard YouTube URL: https://www.youtube.com/watch?v=VIDEO_ID
+                if (uri.Host.Contains("youtube.com"))
+                {
+                    var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+                    return query["v"] ?? string.Empty;
+                }
+
+                // Short YouTube URL: https://youtu.be/VIDEO_ID
+                if (uri.Host.Contains("youtu.be"))
+                {
+                    return uri.Segments.LastOrDefault()?.TrimStart('/') ?? string.Empty;
+                }
+
+                // Embed URL: https://www.youtube.com/embed/VIDEO_ID
+                if (uri.AbsolutePath.StartsWith("/embed/"))
+                {
+                    return uri.Segments.LastOrDefault()?.TrimStart('/') ?? string.Empty;
+                }
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to extract YouTube video ID from URL: {Url}", url);
+                return string.Empty;
+            }
         }
     }
 }
