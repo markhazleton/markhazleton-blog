@@ -62,8 +62,8 @@ Focus on the main article content and structural elements to understand the topi
 
 TITLE CONSISTENCY STRATEGY:
 - Generate ONE primary optimized title and use variations for different platforms
-- SEO Title: Full optimized title with '| Mark Hazleton' suffix
-- Article Title: Clean version without the suffix (will be the same as SEO title minus '| Mark Hazleton')
+- SEO Title: Full optimized title 
+- Article Title: Clean version (same as SEO title)
 - Open Graph Title: Same as Article Title or slight variation for social media
 - Twitter Title: Shortened version of Article Title (max 50 characters)
 
@@ -84,8 +84,8 @@ MARKDOWN FORMATTING REQUIREMENTS:
 - Structure content with clear sections, proper spacing, and logical flow
 
 For SEO Optimization:
-- Keywords: 3-8 relevant keywords (comma-separated), MUST include 'Mark Hazleton' for brand visibility
-- SEO Title: ABSOLUTE REQUIREMENT - MINIMUM 30 characters, MAXIMUM 60 characters, compelling and keyword-rich, MUST include '| Mark Hazleton' suffix for brand consistency. NEVER submit a title shorter than 30 characters total.
+- Keywords: 3-8 relevant keywords (comma-separated)
+- SEO Title: ABSOLUTE REQUIREMENT - MINIMUM 30 characters, MAXIMUM 60 characters, compelling and keyword-rich. NEVER submit a title shorter than 30 characters total.
 - Meta Description: ABSOLUTE REQUIREMENT - MINIMUM 120 characters, MAXIMUM 160 characters, engaging summary with primary keywords, MUST include action words like 'discover', 'learn', 'explore', 'understand', 'master', or 'guide'. NEVER submit a description shorter than 120 characters.
 
 For Social Media Preview (USE CONSISTENT TITLES):
@@ -106,24 +106,24 @@ For Conclusion Section:
 - Conclusion Text: Final thoughts, call to action, or next steps
 
 VALIDATION REQUIREMENTS:
-- SEO Title: Must be 30-60 characters INCLUDING the '| Mark Hazleton' suffix. Count characters carefully.
-- Article Title: Should be the SEO title WITHOUT the '| Mark Hazleton' suffix
+- SEO Title: Must be 30-60 characters. Count characters carefully.
+- Article Title: Should be the SEO title
 - Meta Description: Must be 120-160 characters. Count characters carefully.
-- Keywords: Must include 'Mark Hazleton' and be 3-8 total keywords.
+- Keywords: Must be 3-8 total keywords.
 - Article Content: Should be comprehensive and well-structured
 - Title Consistency: Open Graph and Twitter titles should be based on the Article Title
 
 EXAMPLE TITLE CONSTRUCTION:
 - Article Title: 'Complete Guide to SampleMvcCRUD Project' (41 chars)
-- SEO Title: 'Complete Guide to SampleMvcCRUD Project | Mark Hazleton' (55 chars)
+- SEO Title: 'Complete Guide to SampleMvcCRUD Project' (41 chars)
 - Open Graph Title: 'Complete Guide to SampleMvcCRUD Project' (same as Article Title)
 - Twitter Title: 'SampleMvcCRUD Guide' (19 chars, shortened version)
 
 IMPORTANT: The SEO title and meta description will be validated for exact character count requirements.
 Any response that does not meet these requirements will be rejected.
-The SEO title MUST be at least 30 characters and include '| Mark Hazleton'.
+The SEO title MUST be at least 30 characters.
 The meta description MUST be between 120-160 characters and include action words.
-Keywords MUST include 'Mark Hazleton' and be between 3-8 total keywords.
+Keywords MUST be between 3-8 total keywords.
 Article content should be comprehensive and informative.
 
 Consider the article structure from PUG templates to understand content organization.
@@ -149,8 +149,8 @@ Ignore navigation elements, headers, footers, and technical markup.";
                                 articleTitle = new { type = "string", description = "Clean article title without brand suffix (will be used as main article title)" },
                                 articleDescription = new { type = "string", description = "Single paragraph summary (1-2 sentences) of what the article covers" },
                                 articleContent = new { type = "string", description = "Full article content in MARKDOWN format - create comprehensive, well-structured content using proper markdown syntax (# headers, - lists, ```code blocks```, [links](url), **bold**, *italic*, etc.)" },
-                                keywords = new { type = "string", description = "Comma-separated list of 3-8 SEO keywords, MUST include 'Mark Hazleton'" },
-                                seoTitle = new { type = "string", description = "SEO-optimized title (ABSOLUTE MINIMUM 30 characters, MAXIMUM 60 characters), MUST include '| Mark Hazleton' suffix. Should be articleTitle + '| Mark Hazleton'" },
+                                keywords = new { type = "string", description = "Comma-separated list of 3-8 SEO keywords" },
+                                seoTitle = new { type = "string", description = "SEO-optimized title (ABSOLUTE MINIMUM 30 characters, MAXIMUM 60 characters)" },
                                 metaDescription = new { type = "string", description = "Meta description (ABSOLUTE MINIMUM 120 characters, MAXIMUM 160 characters), MUST include action words like 'discover', 'learn', 'explore'. Count characters carefully before submitting." },
                                 ogTitle = new { type = "string", description = "Open Graph title - use articleTitle or slight variation (30-65 characters)" },
                                 ogDescription = new { type = "string", description = "Open Graph description (up to 200 characters)" },
@@ -307,20 +307,20 @@ Ignore navigation elements, headers, footers, and technical markup.";
         /// <returns>A corrected title that meets all requirements.</returns>
         private string EnsureSeoTitleMeetsRequirements(string title, string? fallbackTitle = null)
         {
-            const string brandSuffix = " | Mark Hazleton";
+            const string brandSuffix = "";
             const int minLength = 30;
             const int maxLength = 60;
 
-            // Remove existing brand suffix if present to avoid duplication
-            var cleanTitle = title.Replace(" | Mark Hazleton", "").Replace("|Mark Hazleton", "").Trim();
+            // Use the title as-is since we're not adding any suffix
+            var cleanTitle = title.Trim();
 
-            // If the clean title is too short, try to use fallback or expand it
-            if (cleanTitle.Length < (minLength - brandSuffix.Length))
+            // If the title is too short, try to use fallback or expand it
+            if (cleanTitle.Length < minLength)
             {
                 if (!string.IsNullOrEmpty(fallbackTitle))
                 {
-                    var cleanFallback = fallbackTitle.Replace(" | Mark Hazleton", "").Replace("|Mark Hazleton", "").Trim();
-                    if (cleanFallback.Length >= (minLength - brandSuffix.Length))
+                    var cleanFallback = fallbackTitle.Trim();
+                    if (cleanFallback.Length >= minLength)
                     {
                         cleanTitle = cleanFallback;
                     }
@@ -382,7 +382,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
             foreach (var expansion in expansions)
             {
                 var expandedTitle = $"{expansion}: {title}";
-                if (expandedTitle.Length >= minLength && expandedTitle.Length <= 60 - " | Mark Hazleton".Length)
+                if (expandedTitle.Length >= minLength && expandedTitle.Length <= 60)
                 {
                     return expandedTitle;
                 }
@@ -454,22 +454,16 @@ Ignore navigation elements, headers, footers, and technical markup.";
         }
 
         /// <summary>
-        /// Ensures keywords meet the requirement of including "Mark Hazleton" and being 3-8 keywords.
+        /// Ensures keywords meet the requirement of being 3-8 keywords.
         /// </summary>
         /// <param name="keywords">The original keywords.</param>
         /// <returns>Corrected keywords that meet all requirements.</returns>
         private string EnsureKeywordsMeetRequirements(string keywords)
         {
             if (string.IsNullOrEmpty(keywords))
-                return "Mark Hazleton";
+                return "solutions architect, project management, web development";
 
             var keywordList = keywords.Split(',').Select(k => k.Trim()).Where(k => !string.IsNullOrEmpty(k)).ToList();
-
-            // Ensure "Mark Hazleton" is included
-            if (!keywordList.Any(k => k.Equals("Mark Hazleton", StringComparison.OrdinalIgnoreCase)))
-            {
-                keywordList.Add("Mark Hazleton");
-            }
 
             // Ensure we have at least 3 keywords
             if (keywordList.Count < 3)
@@ -488,16 +482,8 @@ Ignore navigation elements, headers, footers, and technical markup.";
             // Ensure we don't exceed 8 keywords
             if (keywordList.Count > 8)
             {
-                // Keep "Mark Hazleton" and the first 7 other keywords
-                var markHazeltonKeyword = keywordList.FirstOrDefault(k => k.Equals("Mark Hazleton", StringComparison.OrdinalIgnoreCase));
-                var otherKeywords = keywordList.Where(k => !k.Equals("Mark Hazleton", StringComparison.OrdinalIgnoreCase)).Take(7).ToList();
-
-                keywordList = new List<string>();
-                if (markHazeltonKeyword != null)
-                {
-                    keywordList.Add(markHazeltonKeyword);
-                }
-                keywordList.AddRange(otherKeywords);
+                // Keep the first 8 keywords
+                keywordList = keywordList.Take(8).ToList();
             }
 
             return string.Join(", ", keywordList);
@@ -749,7 +735,8 @@ Ignore navigation elements, headers, footers, and technical markup.";
         }
 
         /// <summary>
-        /// Generates the Keywords property for an article by fetching the content from the <section> node with id="post"
+        /// Generates the Keywords property for an article by fetching the content from the <article> element
+        /// (supports both id="post" for legacy layout and id="main-article" for modern layout)
         /// and calculating keywords using the GenerateKeywordsFromContentAsync function.
         /// </summary>
         /// <param name="targetSlug">Optional slug to target a specific article.</param>
@@ -769,11 +756,13 @@ Ignore navigation elements, headers, footers, and technical markup.";
                     response.EnsureSuccessStatusCode();
                     string htmlContent = await response.Content.ReadAsStringAsync();
 
-                    // Parse the HTML to extract the content from <article id='post'>
+                    // Parse the HTML to extract the content from <article> element (supports both id='post' and id='main-article')
                     var htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(htmlContent);
 
-                    var sectionNode = htmlDoc.DocumentNode.SelectSingleNode("//article[@id='post']");
+                    // Try to find article with id='post' first (legacy layout), then id='main-article' (modern layout)
+                    var sectionNode = htmlDoc.DocumentNode.SelectSingleNode("//article[@id='post']")
+                                   ?? htmlDoc.DocumentNode.SelectSingleNode("//article[@id='main-article']");
 
                     var content = sectionNode?.InnerText;
 
@@ -786,7 +775,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
                     }
                     else
                     {
-                        _logger.LogWarning("No content found in <article id='post'> for article: {ArticleName}", article.Name);
+                        _logger.LogWarning("No content found in <article> element (tried both id='post' and id='main-article') for article: {ArticleName}", article.Name);
                     }
                 }
                 catch (Exception ex)
@@ -896,9 +885,9 @@ Ignore navigation elements, headers, footers, and technical markup.";
                     writer.WriteAttributeString("xmlns", "atom", null, "http://www.w3.org/2005/Atom");
 
                     writer.WriteStartElement("channel");
-                    writer.WriteElementString("title", "Mark Hazleton Articles");
+                    writer.WriteElementString("title", "Solutions Architect Articles");
                     writer.WriteElementString("link", "https://markhazleton.com/");
-                    writer.WriteElementString("description", "Latest articles from Mark Hazleton.");
+                    writer.WriteElementString("description", "Latest articles from Solutions Architect blog.");
                     writer.WriteElementString("lastBuildDate", DateTime.Now.ToString("r"));
 
                     // Add the atom:link element with rel="self"
@@ -1310,7 +1299,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
                 Title = article.Seo.Title,
                 Description = article.Seo.Description,
                 Image = !string.IsNullOrEmpty(article.ImgSrc) ? $"https://markhazleton.com/{article.ImgSrc}" : null,
-                ImageAlt = $"{article.Name} - Mark Hazleton"
+                ImageAlt = $"{article.Name} - Solutions Architect"
             };
 
             article.TwitterCard ??= new TwitterCardModel
@@ -1340,7 +1329,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
             // Auto-generate Open Graph image alt text
             if (string.IsNullOrEmpty(article.OpenGraph!.ImageAlt))
             {
-                article.OpenGraph.ImageAlt = $"{article.Name} - Mark Hazleton";
+                article.OpenGraph.ImageAlt = $"{article.Name} - Solutions Architect";
             }
 
             // Auto-generate Twitter image alt text
@@ -1480,7 +1469,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
             // Auto-generate Open Graph image alt text
             if (string.IsNullOrEmpty(article.OpenGraph!.ImageAlt))
             {
-                article.OpenGraph.ImageAlt = $"{article.Name} - Mark Hazleton";
+                article.OpenGraph.ImageAlt = $"{article.Name} - Solutions Architect";
             }
 
             // Auto-generate Twitter image alt text

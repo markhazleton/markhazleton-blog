@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using mwhWebAdmin.Article;
 using mwhWebAdmin.Project;
@@ -22,6 +23,12 @@ public class SeoDashboardModel : BasePageModel
     public Dictionary<int, SeoValidationResult> ArticleValidations { get; private set; } = new();
     public List<ArticleModel> ArticlesNeedingAttention { get; private set; } = new();
 
+    [BindProperty(SupportsGet = true)]
+    public string? FilterGrade { get; set; }
+
+    public List<ArticleModel> FilteredArticles { get; private set; } = new();
+    public bool IsFiltered => !string.IsNullOrEmpty(FilterGrade);
+
     public void OnGet()
     {
         // Get SEO statistics
@@ -42,5 +49,14 @@ public class SeoDashboardModel : BasePageModel
             .Where(a => ArticleScores[a.Id].OverallScore < 80 || ArticleValidations[a.Id].Errors.Any())
             .OrderBy(a => ArticleScores[a.Id].OverallScore)
             .ToList();
+
+        // Filter articles by grade if specified
+        if (!string.IsNullOrEmpty(FilterGrade))
+        {
+            FilteredArticles = articles
+                .Where(a => ArticleScores[a.Id].Grade == FilterGrade)
+                .OrderByDescending(a => ArticleScores[a.Id].OverallScore)
+                .ToList();
+        }
     }
 }

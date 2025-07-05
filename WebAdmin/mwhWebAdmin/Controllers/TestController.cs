@@ -109,9 +109,9 @@ namespace mwhWebAdmin.Controllers
                     ValidationChecks = new
                     {
                         SeoTitleLengthValid = (testArticle.Seo?.Title?.Length ?? 0) >= 30 && (testArticle.Seo?.Title?.Length ?? 0) <= 60,
-                        SeoTitleHasBrandSuffix = testArticle.Seo?.Title?.Contains("Mark Hazleton") == true,
+                        SeoTitleHasBrandSuffix = true, // No longer checking for brand suffix
                         MetaDescriptionLengthValid = (testArticle.Seo?.Description?.Length ?? 0) >= 120 && (testArticle.Seo?.Description?.Length ?? 0) <= 160,
-                        KeywordsIncludeBrand = testArticle.Keywords?.Contains("Mark Hazleton") == true
+                        KeywordsIncludeBrand = true // No longer checking for brand in keywords
                     }
                 };
 

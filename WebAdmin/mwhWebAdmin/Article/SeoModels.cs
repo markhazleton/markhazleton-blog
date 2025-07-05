@@ -15,10 +15,10 @@ public class SeoModel
     public string? Title { get; set; }
 
     /// <summary>
-    /// Gets or sets the title suffix (e.g., " | Mark Hazleton")
+    /// Gets or sets the title suffix (e.g., " | Blog")
     /// </summary>
     [JsonPropertyName("titleSuffix")]
-    public string? TitleSuffix { get; set; } = " | Mark Hazleton";
+    public string? TitleSuffix { get; set; } = "";
 
     /// <summary>
     /// Gets or sets the SEO-optimized description (120-160 characters recommended)

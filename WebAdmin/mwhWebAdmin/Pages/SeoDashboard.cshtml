@@ -8,8 +8,23 @@
 <div class="page-header fade-in-up">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1><i class="fas fa-chart-line me-3"></i>@ViewData["Title"]</h1>
-            <p class="lead mb-0">Monitor and optimize SEO performance across all articles</p>
+            <h1>
+                <i class="fas fa-chart-line me-3"></i>@ViewData["Title"]
+                @if (Model.IsFiltered)
+                {
+                    <span class="badge @GetGradeBadgeClass(Model.FilterGrade ?? "F") ms-2">Grade @Model.FilterGrade</span>
+                }
+            </h1>
+            <p class="lead mb-0">
+                @if (Model.IsFiltered)
+                {
+                    <text>Showing @Model.FilteredArticles.Count articles with SEO grade @Model.FilterGrade</text>
+                }
+                else
+                {
+                    <text>Monitor and optimize SEO performance across all articles</text>
+                }
+            </p>
         </div>
         <div>
             <a href="/test-seo.html" class="btn btn-info me-2" target="_blank">
@@ -83,6 +98,7 @@
     <div class="card mb-4">
         <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>SEO Score Distribution</h5>
+            <small class="text-muted">Click on any grade to filter articles by that score range</small>
         </div>
         <div class="card-body">
             <div class="row">
@@ -96,42 +112,167 @@
                 }
                 <div class="col-md-2">
                     <div class="text-center">
-                        <div class="badge bg-success fs-1">A</div>
-                        <div class="mt-2">@gradeA articles</div>
-                        <small class="text-muted">@((total > 0 ? (gradeA * 100 / total) : 0))%</small>
+                        <a asp-page="./SeoDashboard" asp-route-filterGrade="A"
+                            class="text-decoration-none grade-filter @(Model.FilterGrade == "A" ? "active" : "")"
+                            title="Grade A: 90-100% SEO Score">
+                            <div class="badge bg-success fs-1 grade-badge">A</div>
+                            <div class="mt-2">@gradeA articles</div>
+                            <small class="text-muted">@((total > 0 ? (gradeA * 100 / total) : 0))%</small>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="text-center">
-                        <div class="badge bg-info fs-1">B</div>
-                        <div class="mt-2">@gradeB articles</div>
-                        <small class="text-muted">@((total > 0 ? (gradeB * 100 / total) : 0))%</small>
+                        <a asp-page="./SeoDashboard" asp-route-filterGrade="B"
+                            class="text-decoration-none grade-filter @(Model.FilterGrade == "B" ? "active" : "")"
+                            title="Grade B: 80-89% SEO Score">
+                            <div class="badge bg-info fs-1 grade-badge">B</div>
+                            <div class="mt-2">@gradeB articles</div>
+                            <small class="text-muted">@((total > 0 ? (gradeB * 100 / total) : 0))%</small>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="text-center">
-                        <div class="badge bg-warning fs-1">C</div>
-                        <div class="mt-2">@gradeC articles</div>
-                        <small class="text-muted">@((total > 0 ? (gradeC * 100 / total) : 0))%</small>
+                        <a asp-page="./SeoDashboard" asp-route-filterGrade="C"
+                            class="text-decoration-none grade-filter @(Model.FilterGrade == "C" ? "active" : "")"
+                            title="Grade C: 70-79% SEO Score">
+                            <div class="badge bg-warning fs-1 grade-badge">C</div>
+                            <div class="mt-2">@gradeC articles</div>
+                            <small class="text-muted">@((total > 0 ? (gradeC * 100 / total) : 0))%</small>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="text-center">
-                        <div class="badge bg-secondary fs-1">D</div>
-                        <div class="mt-2">@gradeD articles</div>
-                        <small class="text-muted">@((total > 0 ? (gradeD * 100 / total) : 0))%</small>
+                        <a asp-page="./SeoDashboard" asp-route-filterGrade="D"
+                            class="text-decoration-none grade-filter @(Model.FilterGrade == "D" ? "active" : "")"
+                            title="Grade D: 60-69% SEO Score">
+                            <div class="badge bg-secondary fs-1 grade-badge">D</div>
+                            <div class="mt-2">@gradeD articles</div>
+                            <small class="text-muted">@((total > 0 ? (gradeD * 100 / total) : 0))%</small>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="text-center">
-                        <div class="badge bg-danger fs-1">F</div>
-                        <div class="mt-2">@gradeF articles</div>
-                        <small class="text-muted">@((total > 0 ? (gradeF * 100 / total) : 0))%</small>
+                        <a asp-page="./SeoDashboard" asp-route-filterGrade="F"
+                            class="text-decoration-none grade-filter @(Model.FilterGrade == "F" ? "active" : "")"
+                            title="Grade F: Below 60% SEO Score">
+                            <div class="badge bg-danger fs-1 grade-badge">F</div>
+                            <div class="mt-2">@gradeF articles</div>
+                            <small class="text-muted">@((total > 0 ? (gradeF * 100 / total) : 0))%</small>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Filtered Articles Section -->
+    @if (Model.IsFiltered)
+    {
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-filter me-2"></i>
+                    Articles with Grade @Model.FilterGrade
+                    <span
+                        class="badge @GetGradeBadgeClass(Model.FilterGrade ?? "F") ms-2">@Model.FilteredArticles.Count</span>
+                </h5>
+                <a asp-page="./SeoDashboard" class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i>Clear Filter
+                </a>
+            </div>
+            <div class="card-body">
+                @if (Model.FilteredArticles.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Article</th>
+                                    <th>SEO Score</th>
+                                    <th>Grade</th>
+                                    <th>Score Details</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var article in Model.FilteredArticles)
+                                {
+                                    var validation = Model.ArticleValidations[article.Id];
+                                    var score = Model.ArticleScores[article.Id];
+                                    <tr>
+                                        <td>
+                                            <strong>@article.Name</strong><br>
+                                            <small class="text-muted">@article.Section</small>
+                                        </td>
+                                        <td>
+                                            <div class="progress" style="width: 100px;">
+                                                <div class="progress-bar @GetProgressBarClass(score.OverallScore)"
+                                                    role="progressbar" style="width: @score.OverallScore%"
+                                                    aria-valuenow="@score.OverallScore" aria-valuemin="0" aria-valuemax="100">
+                                                    @score.OverallScore
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge @GetGradeBadgeClass(score.Grade)">@score.Grade</span>
+                                        </td>
+                                        <td>
+                                            <small class="d-block">Title: @score.TitleScore%</small>
+                                            <small class="d-block">Description: @score.DescriptionScore%</small>
+                                            <small class="d-block">Keywords: @score.KeywordsScore%</small>
+                                            <small class="d-block">Images: @score.ImageScore%</small>
+                                        </td>
+                                        <td>
+                                            @if (validation.Errors.Any())
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                                    @validation.Errors.Count Error(s)
+                                                </span>
+                                            }
+                                            else if (validation.Warnings.Any())
+                                            {
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                                    @validation.Warnings.Count Warning(s)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check me-1"></i>
+                                                    Good
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-page="./ArticleEdit" asp-route-id="@article.Id"
+                                                class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit me-1"></i>Edit
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="fas fa-search text-muted mb-3" style="font-size: 3rem;"></i>
+                        <h4>No articles found</h4>
+                        <p class="text-muted">No articles match the selected grade filter.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    }
 
     <!-- Articles Needing Attention -->
     <div class="card">
@@ -164,17 +305,16 @@
                                     <td>
                                         <div class="progress" style="width: 100px;">
                                             <div class="progress-bar @GetProgressBarClass(validation.Score.OverallScore)"
-                                                 role="progressbar"
-                                                 style="width: @validation.Score.OverallScore%"
-                                                 aria-valuenow="@validation.Score.OverallScore"
-                                                 aria-valuemin="0"
-                                                 aria-valuemax="100">
+                                                role="progressbar" style="width: @validation.Score.OverallScore%"
+                                                aria-valuenow="@validation.Score.OverallScore" aria-valuemin="0"
+                                                aria-valuemax="100">
                                                 @validation.Score.OverallScore
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge @GetGradeBadgeClass(validation.Score.Grade)">@validation.Score.Grade</span>
+                                        <span
+                                            class="badge @GetGradeBadgeClass(validation.Score.Grade)">@validation.Score.Grade</span>
                                     </td>
                                     <td>
                                         @foreach (var warning in validation.Warnings.Take(2))
@@ -187,7 +327,8 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-page="./ArticleEdit" asp-route-id="@article.Id" class="btn btn-sm btn-outline-primary">
+                                        <a asp-page="./ArticleEdit" asp-route-id="@article.Id"
+                                            class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-edit me-1"></i>Edit
                                         </a>
                                     </td>
@@ -234,3 +375,40 @@
         };
     }
 }
+
+<style>
+    .grade-filter {
+        transition: all 0.3s ease;
+        display: block;
+        padding: 15px;
+        border-radius: 8px;
+        color: inherit !important;
+    }
+
+    .grade-filter:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .grade-filter.active {
+        background-color: rgba(13, 110, 253, 0.1);
+        border: 2px solid #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .grade-badge {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .grade-filter:hover .grade-badge {
+        transform: scale(1.1);
+    }
+
+    .grade-filter.active .grade-badge {
+        transform: scale(1.05);
+    }
+</style>
+                     </td>
+       span
