@@ -77,13 +77,6 @@ public class SeoValidationService
             score = 100;
         }
 
-        // Check for brand suffix
-        if (!title.Contains("Mark Hazleton"))
-        {
-            warnings.Add("Consider adding '| Mark Hazleton' suffix for brand consistency");
-            score = Math.Max(score - 10, 0);
-        }
-
         return (score, warnings, errors);
     }
 
@@ -153,13 +146,6 @@ public class SeoValidationService
         else
         {
             score = 100;
-        }
-
-        // Check for Mark Hazleton in keywords
-        if (!keywordList.Any(k => k.ToLower().Contains("mark hazleton")))
-        {
-            warnings.Add("Consider including 'Mark Hazleton' in keywords for brand visibility");
-            score = Math.Max(score - 5, 0);
         }
 
         return (score, warnings, errors);

@@ -40,7 +40,7 @@
         <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
         <!-- No external font dependencies - using system fonts-->
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=20250704" />
+        <link rel="stylesheet" href="/css/styles.css?version=20250705" />
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -480,88 +480,118 @@ http://localhost:3000/contact
                     <div class="keywords mt-3">
                         <p class="text-white">Hashtags:</p>
                         <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-primary text-uppercase">javascript</span>
-                            <span class="badge bg-primary text-uppercase">development environment</span>
-                            <span class="badge bg-primary text-uppercase">node.js</span>
-                            <span class="badge bg-primary text-uppercase">eslint</span>
-                            <span class="badge bg-primary text-uppercase">nodemon</span>
+                            <span class="badge bg-primary text-uppercase">{&quot;articletitle&quot;:&quot;troubleshooting js-dev-env project&quot;</span>
+                            <span class="badge bg-primary text-uppercase">&quot;articledescription&quot;:&quot;explore the challenges faced while troubleshooting a javascript development environment</span>
+                            <span class="badge bg-primary text-uppercase">including breaking changes and dependency conflicts</span>
+                            <span class="badge bg-primary text-uppercase">and learn how to rebuild a stable setup.&quot;</span>
+                            <span class="badge bg-primary text-uppercase">&quot;articlecontent&quot;:&quot;# troubleshooting js-dev-env project\n\n## a story of challenges</span>
                             <span class="badge bg-primary text-uppercase">breaking changes</span>
-                            <span class="badge bg-primary text-uppercase">dependencies</span>
+                            <span class="badge bg-primary text-uppercase">and rebuilding from scratch\n\nwhen i first set out to build a development environment for my javascript project</span>
+                            <span class="badge bg-primary text-uppercase">i envisioned a smooth</span>
+                            <span class="badge bg-primary text-uppercase">streamlined setup. i wanted a workspace where i could write modern javascript</span>
+                            <span class="badge bg-primary text-uppercase">manage dependencies effortlessly</span>
+                            <span class="badge bg-primary text-uppercase">lint my code</span>
+                            <span class="badge bg-primary text-uppercase">and run a local server with instant updates.\n\nhowever</span>
+                            <span class="badge bg-primary text-uppercase">what i didn’t account for was the series of breaking changes in the core packages that made my initial environment incompatible with the newer versions of these tools.\n\n## facing the initial issues and breaking changes\n\nthe first sign of trouble was when i tried to upgrade my core packages—node.js</span>
+                            <span class="badge bg-primary text-uppercase">nodemon</span>
+                            <span class="badge bg-primary text-uppercase">and eslint. each package had introduced breaking changes that resulted in errors</span>
                             <span class="badge bg-primary text-uppercase">version conflicts</span>
-                            <span class="badge bg-primary text-uppercase">troubleshooting</span>
-                            <span class="badge bg-primary text-uppercase">upgrade</span>
-                            <span class="badge bg-primary text-uppercase">package.json</span>
-                            <span class="badge bg-primary text-uppercase">server</span>
-                            <span class="badge bg-primary text-uppercase">express</span>
+                            <span class="badge bg-primary text-uppercase">and even the inability to run the project. the breaking changes in eslint were the most frustrating. several rules were deprecated</span>
+                            <span class="badge bg-primary text-uppercase">and new rule configurations required major changes to the `.eslintrc` file. additionally</span>
+                            <span class="badge bg-primary text-uppercase">the plugin `eslint-plugin-import` began requiring newer versions of eslint that weren’t backward compatible with my original configuration.\n\n```bash\nnpm install eslint@latest eslint-plugin-import@latest\n```\n\nnodemon also underwent significant updates. the move to nodemon 3.x came with breaking changes in how the watcher worked and how it interacted with my build scripts. the config settings i was using to handle auto-reloading became obsolete</span>
+                            <span class="badge bg-primary text-uppercase">causing the server to crash when certain files changed.\n\n```json\n\&quot;dev\&quot;: \&quot;nodemon --watch src --exec node server.js\&quot;\n```\n\nthese breaking changes led to a cascade of dependency issues</span>
+                            <span class="badge bg-primary text-uppercase">where some packages required older versions of node.js</span>
+                            <span class="badge bg-primary text-uppercase">while others demanded the latest version. this mismatch made it nearly impossible to have a stable</span>
+                            <span class="badge bg-primary text-uppercase">functioning environment without sacrificing modern features.\n\n## code changes to support new versions\n\nto resolve these issues</span>
+                            <span class="badge bg-primary text-uppercase">i had to update several parts of my codebase. first</span>
+                            <span class="badge bg-primary text-uppercase">i upgraded the project dependencies to the latest versions and updated the eslint rules and configuration accordingly. for example</span>
+                            <span class="badge bg-primary text-uppercase">eslint’s newer rules required specific configuration changes. the deprecation of `no-use-before-define` for functions required me to manually rewrite functions or disable the rule in the config file.\n\n```json\n\&quot;rules\&quot;: {\n \&quot;no-use-before-define\&quot;: [\&quot;error\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">{ \&quot;functions\&quot;: false }]\n}\n```\n\ni also had to refactor my scripts to ensure compatibility with nodemon’s changes. the way the file watcher worked had changed</span>
+                            <span class="badge bg-primary text-uppercase">so i modified my script in `package.json` to explicitly specify which directories to watch.\n\n```json\n\&quot;scripts\&quot;: {\n \&quot;start\&quot;: \&quot;node server.js\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;dev\&quot;: \&quot;nodemon --watch 'src/**/*.js' --exec 'node server.js'\&quot;\n}\n```\n\n## troubleshooting dependency conflicts\n\nthe dependency conflicts were another major issue. older versions of some libraries</span>
+                            <span class="badge bg-primary text-uppercase">such as babel or typescript</span>
+                            <span class="badge bg-primary text-uppercase">wouldn’t work properly with the newer versions of node.js or eslint. i had to experiment with different version combinations to find a setup that worked without too many compatibility issues. the conflicts between node.js versions and specific package versions required that i settle on using node.js 16.x</span>
+                            <span class="badge bg-primary text-uppercase">which was a stable release compatible with both eslint and nodemon. however</span>
+                            <span class="badge bg-primary text-uppercase">this still meant that i couldn’t use certain cutting-edge features of node.js 18.x without risking breaking the entire setup.\n\n```json\n\&quot;engines\&quot;: {\n \&quot;node\&quot;: \&quot;&gt;=16.0.0\&quot;\n}\n```\n\nto handle these issues</span>
+                            <span class="badge bg-primary text-uppercase">i relied on tools like `nvm` (node version manager) to switch between node.js versions easily</span>
+                            <span class="badge bg-primary text-uppercase">allowing me to maintain different projects with different node.js versions without causing issues in my overall environment.\n\n```bash\nnvm use 16\n```\n\n## the decision to start over\n\nafter countless hours spent troubleshooting</span>
+                            <span class="badge bg-primary text-uppercase">upgrading dependencies</span>
+                            <span class="badge bg-primary text-uppercase">and trying different combinations</span>
+                            <span class="badge bg-primary text-uppercase">i realized that my dev environment was a patchwork of fixes that lacked stability. i made the tough decision to scrap the original environment and start fresh with a minimalist setup that only included the essentials. this decision was key in reducing complexity and avoiding further dependency conflicts. i chose to start with the basics: a simple server</span>
+                            <span class="badge bg-primary text-uppercase">a linter</span>
+                            <span class="badge bg-primary text-uppercase">and a few essential packages. once that was stable</span>
+                            <span class="badge bg-primary text-uppercase">i could expand incrementally.\n\n## lessons learned from breaking changes\n\nthe experience of troubleshooting breaking changes taught me valuable lessons about maintaining a development environment:\n\n1. **stick to lts versions**: always aim for long-term support (lts) versions of node.js and other core packages to avoid running into cutting-edge changes that could break backward compatibility.\n2. **understand your dependencies**: before upgrading any package</span>
+                            <span class="badge bg-primary text-uppercase">especially major versions</span>
+                            <span class="badge bg-primary text-uppercase">review the changelogs and release notes to understand what breaking changes have been introduced.\n3. **use version locking**: using `package-lock.json` or `yarn.lock` files can save a lot of trouble by ensuring consistent dependency versions across different environments.\n4. **refactor incrementally**: when upgrading or fixing breaking changes</span>
+                            <span class="badge bg-primary text-uppercase">it’s better to refactor your codebase step-by-step</span>
+                            <span class="badge bg-primary text-uppercase">rather than trying to overhaul everything at once.\n\n## conclusion: starting fresh after breaking changes\n\nthe breaking changes to node.js</span>
+                            <span class="badge bg-primary text-uppercase">eslint</span>
+                            <span class="badge bg-primary text-uppercase">and nodemon forced me to re-evaluate my initial approach. by starting fresh and focusing on core functionality</span>
+                            <span class="badge bg-primary text-uppercase">i was able to create a more stable and maintainable development environment. this experience reinforced the importance of simplicity and version management in modern development workflows.\n\n## rebuilding my js-dev-env project\n\nwhen i first set out to build a development environment for my javascript project</span>
+                            <span class="badge bg-primary text-uppercase">i envisioned a smooth</span>
+                            <span class="badge bg-primary text-uppercase">streamlined setup that would support all my needs. i wanted a workspace where i could write modern javascript</span>
+                            <span class="badge bg-primary text-uppercase">manage dependencies effortlessly</span>
+                            <span class="badge bg-primary text-uppercase">lint my code</span>
+                            <span class="badge bg-primary text-uppercase">and run a local server with instant updates.\n\nbut things didn't go as planned. here is how i built a functional dev environment from scratch.\n\n### building a basic development environment\n\ni started fresh</span>
+                            <span class="badge bg-primary text-uppercase">deleting everything in my folder except for `.git` and starting over. at least i would have a history of before and after.\n\n```bash\ncd js-dev-env\nnpm init -y\n```\n\ni installed core packages like express</span>
+                            <span class="badge bg-primary text-uppercase">nodemon</span>
                             <span class="badge bg-primary text-uppercase">ejs</span>
-                            <span class="badge bg-primary text-uppercase">bootstrap</span>
-                            <span class="badge bg-primary text-uppercase">dynamic content</span>
-                            <span class="badge bg-primary text-uppercase">navigation</span>
-                            <span class="badge bg-primary text-uppercase">json</span>
-                            <span class="badge bg-primary text-uppercase">scss</span>
-                            <span class="badge bg-primary text-uppercase">bootstrap icons</span>
-                            <span class="badge bg-primary text-uppercase">sass</span>
-                            <span class="badge bg-primary text-uppercase">npm</span>
-                            <span class="badge bg-primary text-uppercase">development process</span>
-                            <span class="badge bg-primary text-uppercase">codebase</span>
-                            <span class="badge bg-primary text-uppercase">refactor</span>
-                            <span class="badge bg-primary text-uppercase">compatibility</span>
-                            <span class="badge bg-primary text-uppercase">dependency conflicts</span>
-                            <span class="badge bg-primary text-uppercase">node version manager</span>
-                            <span class="badge bg-primary text-uppercase">nvm</span>
-                            <span class="badge bg-primary text-uppercase">minimalist setup</span>
-                            <span class="badge bg-primary text-uppercase">core functionality</span>
-                            <span class="badge bg-primary text-uppercase">content management</span>
-                            <span class="badge bg-primary text-uppercase">routing</span>
-                            <span class="badge bg-primary text-uppercase">templates</span>
-                            <span class="badge bg-primary text-uppercase">static content</span>
-                            <span class="badge bg-primary text-uppercase">styling</span>
-                            <span class="badge bg-primary text-uppercase">modular</span>
-                            <span class="badge bg-primary text-uppercase">maintainable.</span>
+                            <span class="badge bg-primary text-uppercase">and bootstrap.\n\n```bash\nnpm install express nodemon ejs bootstrap\nnpm install --save-dev nodemon\n```\n\ni then added basic scripts to `package.json`.\n\n```json\n\&quot;scripts\&quot;: {\n \&quot;start\&quot;: \&quot;node server.js\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;dev\&quot;: \&quot;nodemon server.js\&quot;\n}\n```\n\n### building the basic site\n\ni set up a simple express server to serve content and ejs templates.\n\n```javascript\nconst express = require('express');\nconst path = require('path');\nconst app = express();\n\napp.set('view engine'</span>
+                            <span class="badge bg-primary text-uppercase">'ejs');\napp.use(express.static(path.join(__dirname</span>
+                            <span class="badge bg-primary text-uppercase">'public')));\n\napp.get('/'</span>
+                            <span class="badge bg-primary text-uppercase">(req</span>
+                            <span class="badge bg-primary text-uppercase">res) =&gt; {\n res.render('index'</span>
+                            <span class="badge bg-primary text-uppercase">{ title: 'home' });\n});\n\napp.listen(3000</span>
+                            <span class="badge bg-primary text-uppercase">() =&gt; {\n console.log('server running on http://localhost:3000');\n});\n```\n\n### running the site\n\nwith everything set up</span>
+                            <span class="badge bg-primary text-uppercase">i used nodemon to run the development server.\n\n```bash\nnpm run dev\n```\n\n## conclusion: lessons learned\n\nin the end</span>
+                            <span class="badge bg-primary text-uppercase">starting over helped me streamline my development environment. by going back to basics</span>
+                            <span class="badge bg-primary text-uppercase">i was able to:\n\n- use express to serve static content and manage routes.\n- integrate nodemon to automatically restart the server on changes during development.\n- employ ejs to easily manage templates and layouts.\n- utilize bootstrap to simplify styling without writing custom css.\n\nthis approach not only simplified my development process but taught me the value of focusing on core functionality first.\n\n## dynamic content and navigation\n\n### simplify content management and navigation using a json file\n\ni decided i wanted some dynamic content and navigation in the project. i added a `pages.json` file to dynamically control both the content and navigation of the pages in my js-dev-env project. this approach allows you to manage your site's content and navigation links without hardcoding them</span>
+                            <span class="badge bg-primary text-uppercase">making it much easier to update or add new pages later on.\n\n#### prerequisites\n\nbefore starting</span>
+                            <span class="badge bg-primary text-uppercase">ensure the following is in place:\n\n- node.js installed\n- express set up to handle routes\n- ejs templating engine\n- bootstrap for styling\n\n#### step 1: create the `pages.json` file\n\nthe `pages.json` file will hold details for all your site's pages</span>
+                            <span class="badge bg-primary text-uppercase">such as the title</span>
+                            <span class="badge bg-primary text-uppercase">url</span>
+                            <span class="badge bg-primary text-uppercase">template</span>
+                            <span class="badge bg-primary text-uppercase">and content. this will allow you to dynamically generate both pages and navigation. first</span>
+                            <span class="badge bg-primary text-uppercase">create a `data` folder in the root of your project</span>
+                            <span class="badge bg-primary text-uppercase">and inside it</span>
+                            <span class="badge bg-primary text-uppercase">create a `pages.json` file. here's an example of how to structure your json file:\n\n```json\n[\n {\n \&quot;title\&quot;: \&quot;home\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;url\&quot;: \&quot;/\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;template\&quot;: \&quot;page\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;content\&quot;: {\n \&quot;heading\&quot;: \&quot;welcome to my bootstrap 5 website\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;text\&quot;: \&quot;this is the home page.\&quot;\n }\n }</span>
+                            <span class="badge bg-primary text-uppercase">\n {\n \&quot;title\&quot;: \&quot;about\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;url\&quot;: \&quot;/about\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;template\&quot;: \&quot;page\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;content\&quot;: {\n \&quot;heading\&quot;: \&quot;about us\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;text\&quot;: \&quot;this is the about page. learn more about us here.\&quot;\n }\n }</span>
+                            <span class="badge bg-primary text-uppercase">\n {\n \&quot;title\&quot;: \&quot;contact\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;url\&quot;: \&quot;/contact\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;template\&quot;: \&quot;page\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;content\&quot;: {\n \&quot;heading\&quot;: \&quot;contact us\&quot;</span>
+                            <span class="badge bg-primary text-uppercase">\n \&quot;text\&quot;: \&quot;get in touch with us using the form below.\&quot;\n }\n }\n]\n```\n\n#### step 2: modify `index.js` to use `pages.json`\n\nnow</span>
+                            <span class="badge bg-primary text-uppercase">update your `index.js` file to read the `pages.json` data and generate routes dynamically. this step also involves extracting the top-level pages for the navigation bar and passing them to ejs templates.\n\n```javascript\nconst express = require('express');\nconst path = require('path');\nconst fs = require('fs');\nconst app = express();\n\napp.set('view engine'</span>
+                            <span class="badge bg-primary text-uppercase">'ejs');\napp.use(express.static(path.join(__dirname</span>
+                            <span class="badge bg-primary text-uppercase">'public')));\n\n// read the pages.json file\nconst pagesdata = json.parse(fs.readfilesync(path.join(__dirname</span>
+                            <span class="badge bg-primary text-uppercase">'data'</span>
+                            <span class="badge bg-primary text-uppercase">'pages.json')</span>
+                            <span class="badge bg-primary text-uppercase">'utf-8'));\n\n// filter top-level pages for navigation\nconst toplevelpages = pagesdata.filter(page =&gt; (page.url.match(/\\//g) || []).length === 1);\n\n// generate dynamic routes from pages.json\npagesdata.foreach(page =&gt; {\n app.get(page.url</span>
+                            <span class="badge bg-primary text-uppercase">(req</span>
+                            <span class="badge bg-primary text-uppercase">res) =&gt; {\n res.render(page.template</span>
+                            <span class="badge bg-primary text-uppercase">{\n title: page.title</span>
+                            <span class="badge bg-primary text-uppercase">\n heading: page.content.heading</span>
+                            <span class="badge bg-primary text-uppercase">\n text: page.content.text</span>
+                            <span class="badge bg-primary text-uppercase">\n pages: toplevelpages // pass navigation items\n });\n });\n});\n\n// start the server\nconst port = process.env.port || 3000;\napp.listen(port</span>
+                            <span class="badge bg-primary text-uppercase">() =&gt; {\n console.log(`server running at http://localhost:${port}/`);\n});\n```\n\n#### step 3: update the layout to include dynamic navigation\n\nnext</span>
+                            <span class="badge bg-primary text-uppercase">update the `layout.ejs` file to dynamically render the navigation bar based on the `pages.json` data. this avoids hardcoding navigation links in every template and makes it easier to manage as new pages are added.\n\n```html\n&lt;!doctype html&gt;\n&lt;html lang=\&quot;en\&quot;&gt;\n&lt;head&gt;\n &lt;meta charset=\&quot;utf-8\&quot;&gt;\n &lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width</span>
+                            <span class="badge bg-primary text-uppercase">
+                                initial-scale=1.0\&quot;&gt;\n &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;\n &lt;link href=\&quot;/css/modern-styles.css\&quot; rel=\&quot;stylesheet\&quot;&gt;\n&lt;/head&gt;\n&lt;body&gt;\n &lt;!-- dynamic navigation bar --&gt;\n &lt;nav class=\&quot;navbar navbar-expand-lg navbar-light bg-light\&quot;&gt;\n &lt;div class=\&quot;container-fluid\&quot;&gt;\n &lt;a class=\&quot;navbar-brand\&quot; href=\&quot;/\&quot;&gt;my site&lt;/a&gt;\n &lt;button class=\&quot;navbar-toggler\&quot; type=\&quot;button\&quot; data-bs-toggle=\&quot;collapse\&quot; data-bs-target=\&quot;#navbarnav\&quot; aria-controls=\&quot;navbarnav\&quot; aria-expanded=\&quot;false\&quot;&gt;\n &lt;span class=\&quot;navbar-toggler-icon\&quot;&gt;&lt;/span&gt;\n &lt;/button&gt;\n &lt;div class=\&quot;collapse navbar-collapse\&quot; id=\&quot;navbarnav\&quot;&gt;\n &lt;ul class=\&quot;navbar-nav ms-auto\&quot;&gt;\n &lt;% pages.foreach(function(page) { %&gt;\n &lt;li
+                                class=\&quot;nav-item\&quot;&gt;\n &lt;a class=\&quot;nav-link\&quot; href=\&quot;&lt;%= page.url %&gt;\&quot;&gt;&lt;%= page.title %&gt;&lt;/a&gt;\n &lt;/li&gt;\n &lt;% }); %&gt;\n &lt;/ul&gt;\n &lt;/div&gt;\n &lt;/div&gt;\n &lt;/nav&gt;\n &lt;!-- main content --&gt;\n &lt;main class=\&quot;container mt-5\&quot;&gt;\n &lt;h1&gt;&lt;%= heading %&gt;&lt;/h1&gt;\n &lt;p&gt;&lt;%= text %&gt;&lt;/p&gt;\n &lt;%- body %&gt; &lt;!-- view content will be injected here --&gt;\n &lt;/main&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n```\n\n#### step 4: create ejs templates for each page\n\neach page in the `pages.json` file needs a corresponding ejs template. i started out with a very basic `page
+                            </span>
                         </div>
                     </div>
                     <!-- Render related articles in a card layout-->
-                    <div class="related-articles mt-4">
-                        <h3 class="text-white">Related Articles</h3>
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/using-chatgpt-for-developers.html" title="Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.">Using ChatGPT for C# Development</a>
-                                        </h5>
-                                        <p class="card-text text-white">Unlock the potential of ChatGPT for C# development with Mark Hazleton's insightful guide. Explore real-world examples, improve code quality, and enhance developer productivity with ChatGPT. Dive into this comprehensive resource now.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/migrating-samplemvccrud-application-from-net-8-to-net-9.html" title="Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance.">Migrating SampleMvcCRUD Application from .NET 8 to .NET 9</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/building-my-first-react-site-using-vite.html" title="Learn how to quickly build and deploy a React site using Vite and GitHub Pages, including troubleshooting common issues like CORS">Building My First React Site Using Vite</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learn how to quickly build and deploy a React site using Vite and GitHub Pages, including troubleshooting common issues like CORS</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <p class="mt-4 text-muted"></p>
                     <div class="mt-4"><p class="text-white"></p></div>
                 </div>
             </div>

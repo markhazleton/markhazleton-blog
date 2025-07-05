@@ -1,5 +1,5 @@
 /**
- * SEO Data Helper for Mark Hazleton Blog
+ * SEO Data Helper for Blog
  * Centralizes SEO data management and provides consistent meta tag generation
  */
 
@@ -7,8 +7,8 @@ class SEOHelper {
     constructor(articles = [], defaultConfig = {}) {
         this.articles = articles;
         this.defaultConfig = {
-            titleSuffix: ' | Mark Hazleton',
-            defaultAuthor: 'Mark Hazleton',
+            titleSuffix: '',
+            defaultAuthor: 'Solutions Architect',
             defaultRobots: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
             baseUrl: 'https://markhazleton.com',
             defaultImage: 'https://markhazleton.com/assets/img/MarkHazleton.jpg',
@@ -51,8 +51,8 @@ class SEOHelper {
                 image: article.og?.image || article.img_src || this.defaultConfig.defaultImage,
                 imageWidth: this.defaultConfig.defaultImageWidth,
                 imageHeight: this.defaultConfig.defaultImageHeight,
-                imageAlt: article.og?.imageAlt || `${article.name} - Mark Hazleton`,
-                siteName: 'Mark Hazleton',
+                imageAlt: article.og?.imageAlt || article.name,
+                siteName: 'Solutions Architect & Technology Leader',
                 locale: 'en_US'
             },
 
@@ -64,7 +64,7 @@ class SEOHelper {
                 title: article.twitter?.title || title,
                 description: article.twitter?.description || description,
                 image: article.twitter?.image || article.img_src || this.defaultConfig.defaultImage,
-                imageAlt: article.twitter?.imageAlt || `${article.name} - Mark Hazleton`
+                imageAlt: article.twitter?.imageAlt || article.name
             },
 
             // Structured Data
@@ -77,13 +77,13 @@ class SEOHelper {
      */
     getDefaultSEO(customData = {}) {
         const title = this.buildTitle(customData.title || 'Solutions Architect & Technology Leader');
-        const description = customData.description || 'Mark Hazleton - Solutions Architect specializing in .NET, Azure, and project management. 25+ years experience bridging technology with business goals.';
+        const description = customData.description || 'Solutions Architect specializing in .NET, Azure, and project management. 25+ years experience bridging technology with business goals.';
         const canonical = customData.canonical || this.defaultConfig.baseUrl;
 
         return {
             title,
             description,
-            keywords: customData.keywords || 'Mark Hazleton, Solutions Architect, .NET Developer, Azure Cloud, Project Management',
+            keywords: customData.keywords || 'Solutions Architect, .NET Developer, Azure Cloud, Project Management',
             canonical,
             robots: this.defaultConfig.defaultRobots,
             author: this.defaultConfig.defaultAuthor,
@@ -96,8 +96,8 @@ class SEOHelper {
                 image: this.defaultConfig.defaultImage,
                 imageWidth: this.defaultConfig.defaultImageWidth,
                 imageHeight: this.defaultConfig.defaultImageHeight,
-                imageAlt: 'Mark Hazleton - Solutions Architect',
-                siteName: 'Mark Hazleton',
+                imageAlt: 'Solutions Architect',
+                siteName: 'Solutions Architect & Technology Leader',
                 locale: 'en_US'
             },
 
@@ -108,7 +108,7 @@ class SEOHelper {
                 title: customData.twitterTitle || title,
                 description: customData.twitterDescription || description,
                 image: this.defaultConfig.defaultImage,
-                imageAlt: 'Mark Hazleton - Solutions Architect'
+                imageAlt: 'Solutions Architect'
             }
         };
     }
@@ -117,8 +117,8 @@ class SEOHelper {
      * Build optimized title with suffix
      */
     buildTitle(baseTitle, customSuffix = null) {
-        const suffix = customSuffix !== undefined ? customSuffix : this.defaultConfig.titleSuffix;
-        const title = baseTitle + (suffix || '');
+        // Use just the base title, no suffix
+        const title = baseTitle;
 
         // Ensure title is within optimal length (30-60 characters)
         if (title.length > 60) {

@@ -133,7 +133,7 @@ public class ArticleModel
     /// Gets or sets the author of the article.
     /// </summary>
     [JsonPropertyName("author")]
-    public string Author { get; set; } = "Mark Hazleton";
+    public string Author { get; set; } = "Solutions Architect";
 
     /// <summary>
     /// Gets or sets the summary of the article.

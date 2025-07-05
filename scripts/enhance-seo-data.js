@@ -10,26 +10,30 @@ const path = require('path');
 const articlesPath = path.join(__dirname, '../src/articles.json');
 const articles = JSON.parse(fs.readFileSync(articlesPath, 'utf8'));
 
-function optimizeTitle(title) {
+function optimizeTitle(title, articleInfo = {}) {
   // Ensure title is between 30-60 characters for optimal SEO
+  const location = articleInfo.slug ? ` [Article: ${articleInfo.slug}${articleInfo.id ? `, ID: ${articleInfo.id}` : ''}]` : '';
+
   if (title.length < 30) {
-    console.log(`Title too short (${title.length} chars): ${title}`);
+    console.log(`[SEO WARNING]${location} Title too short (${title.length} chars, should be ≥30): ${title}`);
   }
   if (title.length > 60) {
-    console.log(`Title too long (${title.length} chars): ${title}`);
+    console.log(`[SEO WARNING]${location} Title too long (${title.length} chars, should be ≤60): ${title}`);
   }
   return title;
 }
 
-function optimizeDescription(description) {
+function optimizeDescription(description, articleInfo = {}) {
   // Ensure description is between 120-160 characters for optimal SEO
   if (!description) return description;
 
+  const location = articleInfo.slug ? ` [Article: ${articleInfo.slug}${articleInfo.id ? `, ID: ${articleInfo.id}` : ''}]` : '';
+
   if (description.length < 120) {
-    console.log(`Description too short (${description.length} chars): ${description.substring(0, 50)}...`);
+    console.log(`[SEO WARNING]${location} Description too short (${description.length} chars, should be ≥120): ${description.substring(0, 50)}...`);
   }
   if (description.length > 160) {
-    console.log(`Description too long (${description.length} chars), truncating: ${description.substring(0, 50)}...`);
+    console.log(`[SEO WARNING]${location} Description too long (${description.length} chars, should be ≤160), truncating: ${description.substring(0, 50)}...`);
     return description.substring(0, 157) + '...';
   }
   return description;
@@ -41,22 +45,23 @@ function enhanceArticleSEO(article) {
     return article;
   }
 
-  console.log(`Enhancing SEO for: ${article.name}`);
+  const articleInfo = { slug: article.slug, id: article.id, name: article.name };
+  console.log(`[SEO ENHANCEMENT] Processing article: ${article.name} [ID: ${article.id}, Slug: ${article.slug}]`);
 
   // Create enhanced SEO structure
   const enhanced = {
     ...article,
     seo: article.seo || {
-      title: optimizeTitle(article.name),
+      title: optimizeTitle(article.name, articleInfo),
       titleSuffix: ' | Mark Hazleton',
-      description: optimizeDescription(article.description),
+      description: optimizeDescription(article.description, articleInfo),
       keywords: article.keywords || '',
       canonical: `https://markhazleton.com/${article.slug}`,
       robots: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
     },
     og: article.og || {
       title: article.name,
-      description: article.description ? optimizeDescription(article.description) : '',
+      description: article.description ? optimizeDescription(article.description, articleInfo) : '',
       type: 'article',
       image: article.img_src ? `https://markhazleton.com/${article.img_src}` : 'https://markhazleton.com/assets/img/MarkHazleton.jpg',
       imageAlt: `${article.name} - Mark Hazleton`
@@ -96,10 +101,12 @@ function analyzeCurrentSEO() {
 
   let hasBasicSEO = 0;
   let hasEnhancedSEO = 0;
-  let titleIssues = 0;
-  let descriptionIssues = 0;
+  let titleIssues = [];
+  let descriptionIssues = [];
 
   articles.forEach(article => {
+    const articleInfo = `[ID: ${article.id}, Slug: ${article.slug}]`;
+
     if (article.name && article.description && article.keywords) {
       hasBasicSEO++;
     }
@@ -109,19 +116,42 @@ function analyzeCurrentSEO() {
     }
 
     if (!article.name || article.name.length < 30 || article.name.length > 60) {
-      titleIssues++;
+      const issue = !article.name ?
+        `Missing title ${articleInfo}` :
+        `Title length issue (${article.name.length} chars) ${articleInfo}: ${article.name.substring(0, 50)}...`;
+      titleIssues.push(issue);
     }
 
     if (!article.description || article.description.length < 120 || article.description.length > 160) {
-      descriptionIssues++;
+      const issue = !article.description ?
+        `Missing description ${articleInfo}` :
+        `Description length issue (${article.description.length} chars) ${articleInfo}: ${article.description.substring(0, 50)}...`;
+      descriptionIssues.push(issue);
     }
   });
 
   console.log(`Total articles: ${articles.length}`);
   console.log(`Articles with basic SEO: ${hasBasicSEO}`);
   console.log(`Articles with enhanced SEO: ${hasEnhancedSEO}`);
-  console.log(`Articles with title issues: ${titleIssues}`);
-  console.log(`Articles with description issues: ${descriptionIssues}`);
+  console.log(`Articles with title issues: ${titleIssues.length}`);
+  console.log(`Articles with description issues: ${descriptionIssues.length}`);
+
+  if (titleIssues.length > 0) {
+    console.log('\n🔍 TITLE ISSUES:');
+    titleIssues.slice(0, 10).forEach(issue => console.log(`  • ${issue}`));
+    if (titleIssues.length > 10) {
+      console.log(`  ... and ${titleIssues.length - 10} more`);
+    }
+  }
+
+  if (descriptionIssues.length > 0) {
+    console.log('\n🔍 DESCRIPTION ISSUES:');
+    descriptionIssues.slice(0, 10).forEach(issue => console.log(`  • ${issue}`));
+    if (descriptionIssues.length > 10) {
+      console.log(`  ... and ${descriptionIssues.length - 10} more`);
+    }
+  }
+
   console.log('========================\n');
 }
 

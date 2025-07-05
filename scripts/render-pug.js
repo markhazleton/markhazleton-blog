@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const fse = require('fs');
+const fse = require('fs-extra');
 const upath = require('upath');
 const pug = require('pug');
 const sh = require('shelljs');
@@ -16,7 +16,13 @@ const projects = require('./../src/projects.json');
 
 // Import SEO Helper
 const SEOHelper = require('./seo-helper');
-const seoHelper = new SEOHelper(articles);
+const seoHelper = new SEOHelper(articles, {
+    logWarnings: true,
+    logErrors: true,
+    logInfo: false,
+    logScores: false,
+    logBuild: false
+});
 
 module.exports = async function renderPug(filePath) {
     const destPath = filePath.replace(/src\/pug\//, 'docs/').replace(/\.pug$/, '.html');
@@ -41,12 +47,20 @@ module.exports = async function renderPug(filePath) {
     }
     const formattedLastModified = new Date(lastModified).toLocaleDateString(); // Short date
 
-//    console.log(`Rendering: ${filePath}`);
-//    console.log(`Current Slug: ${currentSlug}`);
-//    console.log(`Last Modified: ${formattedLastModified}`);
+    // Log build info if enabled
+    if (seoHelper.defaultConfig.logBuild) {
+        console.log(`[BUILD] Rendering: ${currentSlug} ${article ? `(Article ID: ${article.id})` : '(No article data)'}`);
+    }
+
+    // Build source context for SEO validation
+    const sourceContext = {
+        pugFile: upath.relative(process.cwd(), filePath),
+        buildStep: 'render-pug',
+        timestamp: new Date().toISOString()
+    };
 
     // Get SEO data for this article/page
-    const seoData = article ? seoHelper.getArticleSEO(currentSlug) : seoHelper.getDefaultSEO();
+    const seoData = article ? seoHelper.getArticleSEO(currentSlug, sourceContext) : seoHelper.getDefaultSEO();
 
     const html = pug.renderFile(filePath, {
         doctype: 'html',
