@@ -69,6 +69,18 @@ public class ArticleModel
     /// </summary>
     [JsonPropertyName("lastmod")]
     public string LastModified { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+
+    /// <summary>
+    /// Gets or sets the published date of the article.
+    /// </summary>
+    [JsonPropertyName("publishedDate")]
+    public string PublishedDate { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+
+    /// <summary>
+    /// Gets or sets the estimated read time of the article in minutes.
+    /// </summary>
+    [JsonPropertyName("estimatedReadTime")]
+    public int EstimatedReadTime { get; set; } = 5;
     ///
     /// <summary>
     /// Gets or sets the change frequency of the article.
