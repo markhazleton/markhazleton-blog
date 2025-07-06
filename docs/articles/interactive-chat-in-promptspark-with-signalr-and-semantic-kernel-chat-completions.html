@@ -1,177 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="author" content="Mark Hazleton" />
-        <meta name="robots" content="index, follow" />
-        <title>PromptSpark - Interactive Chat in PromptSpark With SignalR and Semantic Kernel Chat Completions</title>
-        <meta name="description" content="Guide to implementing a real-time, AI-driven chat application in PromptSpark using ASP.NET SignalR and OpenAI GPT via Semantic Kernel." />
-        <meta name="keywords" content="PromptSpark, SignalR, Semantic Kernel, real-time chat, AI-driven chat" />
-        <meta name="author" content="Mark Hazleton" />
-        <link rel="canonical" href="https://markhazleton.com/articles/interactive-chat-in-promptspark-with-signalr-and-semantic-kernel-chat-completions.html" />
-        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "Person",
-                "name": "Mark Hazleton",
-                "familyName": "Hazleton",
-                "givenName": "Mark",
-                "jobTitle": "Solutions Architect",
-                "alumniOf": "University of North Texas",
-                "affiliation": {
-                    "@type": "Organization",
-                    "name": "Control Origins"
-                },
-                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/c/MarkHazleton/", "https://markhazleton.brandyourself.com/", "https://www.postman.com/markhazleton/", "https://stackoverflow.com/users/479571/markhazleton/", "https://www.slideshare.net/markhazleton/", "https://hub.docker.com/u/markhazleton/", "https://www.polywork.com/markhazleton/", "https://www.codeproject.com/Members/MarkHazleton/", "https://markhazleton.wordpress.com/", "https://learn.microsoft.com/en-us/users/mark-hazleton/", "https://app.pluralsight.com/profile/markhazletonCEC/", "https://app.pluralsight.com/profile/markhazleton/", "https://www.instagram.com/markhazleton/", "https://storybird.ai/u/markhazleton/", "https://www.pinterest.com/markhazleton/"],
-                "url": "https://markhazleton.com"
-            }
-        </script>
-        <script type="application/ld+json">
-            {
-                "@context": "https://schema.org",
-                "@type": "Organization",
-                "url": "https://markhazleton.com",
-                "logo": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
-            }
-        </script>
-        <meta name="seobility" content="f80235aca1a812e0afde44f0142c825b" />
-        <!-- No external font dependencies - using system fonts-->
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="/css/styles.css?version=20250705" />
-        <!-- Global site tag (gtag.js) - Google Analytics-->
-        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'G-L8GVZNDH0B');
-        </script>
-        <script>
-            (function (c, l, a, r, i, t, y) {
-                c[a] =
-                    c[a] ||
-                    function () {
-                        (c[a].q = c[a].q || []).push(arguments);
-                    };
-                t = l.createElement(r);
-                t.async = 1;
-                t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
-                y = l.getElementsByTagName(r)[0];
-                y.parentNode.insertBefore(t, y);
-            })(window, document, 'clarity', 'script', 'd628hovv63');
-        </script>
-    </head>
-    <body class="sidetracked-body" id="page-top">
-        <nav class="navbar navbar-dark bg-primary p-1">
-            <div class="container-fluid justify-content-end">
-                <div class="social-icons d-flex">
-                    <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube text-light me-2" style="font-size: 2rem"></i></a>
-                    <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram text-light" style="font-size: 2rem"></i></a>
-                </div>
+<br />
+<!-- Hero Section-->
+<section class="bg-gradient-primary py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-10 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-cloud me-3"></i>
+                    Interactive Chat in PromptSpark With SignalR
+                </h1>
+                <h2 class="subheading mb-4">Transitioning to a Simplified and Agile Approach</h2>
             </div>
-        </nav>
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-            <a class="navbar-brand js-scroll-trigger" href="/#page-top" title="Mark Hazleton">
-                <span class="d-block d-lg-none">Mark Hazleton</span>
-                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/assets/img/MarkHazleton.jpg" alt="..." /></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon">#navbarResponsive.collapse.navbar-collapse</span>
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/articles.html">Articles</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://webspark.markhazleton.com">WebSpark</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/projectmechanics/">Project Mechanics</a></li>
-                </ul>
-                <!-- Search Box (for larger screens)-->
-                <div class="d-none d-lg-flex ms-auto">
-                    <form class="d-flex" onsubmit="return searchArticles(event)">
-                        <div class="input-group search-box">
-                            <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
-                            <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
-                        </div>
-                    </form>
-                </div>
-            </button>
-        </nav>
-        <!-- Page Content-->
-        <div class="container-fluid p-0 painteddesert-background">
-            <article class="painteddesert-section painteddesert-section-background" id="post">
-                <div class="painteddesert-section-content">
-                    <h1>Interactive Chat in PromptSpark With SignalR</h1>
-                    <h2 class="subheading mb-3">Transitioning to a Simplified and Agile Approach</h2>
-                    <p>
-                        This article reimagines the approach from
-                        <a href="/articles/integrating-chat-completions-into-prompt-spark.html">Integrating Chat Completions into Prompt Spark,</a>
-                        focusing on agility and adaptability to meet the needs of a React Native component. By simplifying the integration, I want to make the chat completions implementation more efficient and effective, embracing a continuous learning approach. This transition underscores the importance of staying open to better, streamlined methods as new insights emerge, allowing us to build more responsive, user-centric applications.
-                    </p>
-                    <h2 class="subheading mb-3">Building an AI-driven, real-time chat using ASP.NET SignalR and OpenAI's GPT models via Semantic Kernel</h2>
-                    <p>This guide covers the steps to create an interactive chat experience using ASP.NET SignalR for real-time functionality and OpenAI's GPT models for intelligent responses, through Semantic Kernel.</p>
-                    <p>In this new article, I am refining the approach introduced in the original "Integrating Chat Completions into Prompt Spark," focusing on a more agile and adaptable structure. As I explore this updated implementation, the goal is to simplify and enhance the process of embedding chat completions, making the design more efficient and ready for a VIT React Native environment. This transition reflects a commitment to continuous improvement, staying open to evolving insights that reveal better, streamlined methods.</p>
-                    <dl>
-                        <dt>Introduction</dt>
-                        <dd><p>In this article, developers and solution architects will learn how to integrate ASP.NET SignalR with Semantic Kernel's chat completion service to build a responsive, intelligent chat application in PromptSpark. SignalR enables real-time communication, while Semantic Kernel leverages OpenAI's GPT models for contextually relevant responses.</p></dd>
-                        <dt>What You’ll Build and Why It Matters</dt>
-                        <dd><p>You’ll create an interactive chat application where users receive immediate, AI-generated responses, closely simulating natural conversation flow. Combining SignalR's real-time messaging and Semantic Kernel's adaptive AI enhances engagement, suitable for use cases like customer support, virtual assistants, and interactive content.</p></dd>
-                        <dt>Setting Up Your Development Environment</dt>
-                        <dd>
-                            <p>This project requires ASP.NET Core, SignalR, and Semantic Kernel. Follow these steps to set up your environment and secure your OpenAI API keys with environment variables.</p>
-                            <pre class="language-bash"><code class="language-bash">dotnet <span class="token function">add</span> package Microsoft.AspNetCore.SignalR
+        </div>
+    </div>
+</section>
+<!-- Main Article Content-->
+<article id="main-article">
+    <div class="container">
+        <div class="row">
+            <p>
+                This article reimagines the approach from
+                <a href="/articles/integrating-chat-completions-into-prompt-spark.html">Integrating Chat Completions into Prompt Spark,</a>
+                focusing on agility and adaptability to meet the needs of a React Native component. By simplifying the integration, I want to make the chat completions implementation more efficient and effective, embracing a continuous learning approach. This transition underscores the importance of staying open to better, streamlined methods as new insights emerge, allowing us to build more responsive, user-centric applications.
+            </p>
+            <h2 class="subheading mb-3">Building an AI-driven, real-time chat using ASP.NET SignalR and OpenAI's GPT models via Semantic Kernel</h2>
+            <p>This guide covers the steps to create an interactive chat experience using ASP.NET SignalR for real-time functionality and OpenAI's GPT models for intelligent responses, through Semantic Kernel.</p>
+            <p>In this new article, I am refining the approach introduced in the original "Integrating Chat Completions into Prompt Spark," focusing on a more agile and adaptable structure. As I explore this updated implementation, the goal is to simplify and enhance the process of embedding chat completions, making the design more efficient and ready for a VIT React Native environment. This transition reflects a commitment to continuous improvement, staying open to evolving insights that reveal better, streamlined methods.</p>
+            <dl>
+                <dt>Introduction</dt>
+                <dd><p>In this article, developers and solution architects will learn how to integrate ASP.NET SignalR with Semantic Kernel's chat completion service to build a responsive, intelligent chat application in PromptSpark. SignalR enables real-time communication, while Semantic Kernel leverages OpenAI's GPT models for contextually relevant responses.</p></dd>
+                <dt>What You’ll Build and Why It Matters</dt>
+                <dd><p>You’ll create an interactive chat application where users receive immediate, AI-generated responses, closely simulating natural conversation flow. Combining SignalR's real-time messaging and Semantic Kernel's adaptive AI enhances engagement, suitable for use cases like customer support, virtual assistants, and interactive content.</p></dd>
+                <dt>Setting Up Your Development Environment</dt>
+                <dd>
+                    <p>This project requires ASP.NET Core, SignalR, and Semantic Kernel. Follow these steps to set up your environment and secure your OpenAI API keys with environment variables.</p>
+                    <pre class="language-bash"><code class="language-bash">dotnet <span class="token function">add</span> package Microsoft.AspNetCore.SignalR
 dotnet <span class="token function">add</span> package Microsoft.SemanticKernel
 </code></pre>
-                        </dd>
-                        <dt>Setting Up Program.cs</dt>
+                </dd>
+                <dt>Setting Up Program.cs</dt>
+                <dd>
+                    <p>In this section, we’ll set up the main program configuration in `Program.cs` for the integration of SignalR and OpenAI’s GPT models via Semantic Kernel. This configuration ensures real-time functionality and prepares the AI chat service for prompt responses.</p>
+                    <dl>
+                        <dt>Logging Configuration</dt>
                         <dd>
-                            <p>In this section, we’ll set up the main program configuration in `Program.cs` for the integration of SignalR and OpenAI’s GPT models via Semantic Kernel. This configuration ensures real-time functionality and prepares the AI chat service for prompt responses.</p>
-                            <dl>
-                                <dt>Logging Configuration</dt>
-                                <dd>
-                                    <p>Add console logging for debugging and set a debug level to capture detailed information. pre.language-csharp</p>
-                                    <pre class="language-csharp"><code class="language-csharp">builder<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span><span class="token function">AddConsole</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                            <p>Add console logging for debugging and set a debug level to capture detailed information. pre.language-csharp</p>
+                            <pre class="language-csharp"><code class="language-csharp">builder<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span><span class="token function">AddConsole</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 builder<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span><span class="token function">SetMinimumLevel</span><span class="token punctuation">(</span>LogLevel<span class="token punctuation">.</span>Debug<span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                                </dd>
-                                <dt>SignalR Setup</dt>
-                                <dd>
-                                    <p>Add SignalR to the services, enabling real-time messaging capabilities in the application.</p>
-                                    <pre class="language-csharp"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSignalR</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        </dd>
+                        <dt>SignalR Setup</dt>
+                        <dd>
+                            <p>Add SignalR to the services, enabling real-time messaging capabilities in the application.</p>
+                            <pre class="language-csharp"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSignalR</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                                </dd>
-                                <dt>OpenAI API Integration</dt>
-                                <dd>
-                                    <p>Configure Semantic Kernel’s `AddOpenAIChatCompletion` service, using API keys stored in environment variables. Ensure the environment variables `OPENAI_API_KEY` and `MODEL_ID` are correctly set to avoid errors.</p>
-                                    <pre class="language-csharp"><code class="language-csharp"><span class="token class-name"><span class="token keyword">string</span></span> apikey <span class="token operator">=</span> builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetValue</span><span class="token generic class-name"><span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token string">"OPENAI_API_KEY"</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token string">"not found"</span><span class="token punctuation">;</span>
+                        </dd>
+                        <dt>OpenAI API Integration</dt>
+                        <dd>
+                            <p>Configure Semantic Kernel’s `AddOpenAIChatCompletion` service, using API keys stored in environment variables. Ensure the environment variables `OPENAI_API_KEY` and `MODEL_ID` are correctly set to avoid errors.</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token class-name"><span class="token keyword">string</span></span> apikey <span class="token operator">=</span> builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetValue</span><span class="token generic class-name"><span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token string">"OPENAI_API_KEY"</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token string">"not found"</span><span class="token punctuation">;</span>
 <span class="token class-name"><span class="token keyword">string</span></span> modelId <span class="token operator">=</span> builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetValue</span><span class="token generic class-name"><span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token string">"MODEL_ID"</span><span class="token punctuation">)</span> <span class="token operator">??</span> <span class="token string">"gpt-4o"</span><span class="token punctuation">;</span>
 builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddOpenAIChatCompletion</span><span class="token punctuation">(</span>modelId<span class="token punctuation">,</span> apikey<span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                                </dd>
-                                <dt>Routing and Middleware</dt>
-                                <dd>
-                                    <p>Map routes for API controllers and the SignalR `ChatHub`, enabling endpoint access and serving static files like the front-end HTML.</p>
-                                    <pre class="language-csharp"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> app <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        </dd>
+                        <dt>Routing and Middleware</dt>
+                        <dd>
+                            <p>Map routes for API controllers and the SignalR `ChatHub`, enabling endpoint access and serving static files like the front-end HTML.</p>
+                            <pre class="language-csharp"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> app <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 app<span class="token punctuation">.</span><span class="token function">UseDefaultFiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Looks for index.html, index.htm by default</span>
 app<span class="token punctuation">.</span><span class="token function">UseStaticFiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 app<span class="token punctuation">.</span><span class="token function">MapControllers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 app<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">MapHub</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ChatHub<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token string">"/chatHub"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                                </dd>
-                            </dl>
                         </dd>
-                        <dt>Implementing the SignalR Chat Hub</dt>
-                        <dd>
-                            <p>The ChatHub manages messages, maintains conversation history, and processes real-time user interactions. Below is the implementation of the `ChatHub` class, which initializes with an instance of `IChatCompletionService` and manages message flow with a `ConcurrentDictionary` for chat history.</p>
-                            <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ChatHub</span><span class="token punctuation">(</span><span class="token class-name">IChatCompletionService</span> _chatCompletionService<span class="token punctuation">)</span> <span class="token punctuation">:</span> Hub
+                    </dl>
+                </dd>
+                <dt>Implementing the SignalR Chat Hub</dt>
+                <dd>
+                    <p>The ChatHub manages messages, maintains conversation history, and processes real-time user interactions. Below is the implementation of the `ChatHub` class, which initializes with an instance of `IChatCompletionService` and manages message flow with a `ConcurrentDictionary` for chat history.</p>
+                    <pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ChatHub</span><span class="token punctuation">(</span><span class="token class-name">IChatCompletionService</span> _chatCompletionService<span class="token punctuation">)</span> <span class="token punctuation">:</span> Hub
 <span class="token punctuation">{</span>
   <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ChatEntry</span>
   <span class="token punctuation">{</span>
@@ -263,13 +170,13 @@ app<span class="token punctuation">.</span><span class="token generic-method"><s
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-                        </dd>
-                        <dt>Generating AI-Powered Responses with Semantic Kernel</dt>
-                        <dd><p>The `GenerateStreamingBotResponse` method in the ChatHub class generates responses asynchronously. This method streams responses to the client in real-time, providing a continuous "typing" effect for a more dynamic chat experience.</p></dd>
-                        <dt>Building the Front-End for PromptSpark Chat</dt>
-                        <dd>
-                            <p>Set up a user-friendly interface with an input box, chat history window, and “send” button. Establish a SignalR connection for real-time messaging, and use streaming for a “typing” effect in AI responses.</p>
-                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                </dd>
+                <dt>Generating AI-Powered Responses with Semantic Kernel</dt>
+                <dd><p>The `GenerateStreamingBotResponse` method in the ChatHub class generates responses asynchronously. This method streams responses to the client in real-time, providing a continuous "typing" effect for a more dynamic chat experience.</p></dd>
+                <dt>Building the Front-End for PromptSpark Chat</dt>
+                <dd>
+                    <p>Set up a user-friendly interface with an input box, chat history window, and “send” button. Establish a SignalR connection for real-time messaging, and use streaming for a “typing” effect in AI responses.</p>
+                    <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token method function property-access">withUrl</span><span class="token punctuation">(</span><span class="token string">"/chathub"</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token method function property-access">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -278,11 +185,11 @@ connection<span class="token punctuation">.</span><span class="token method func
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre>
-                        </dd>
-                        <dt>Front-End Testing with index.html</dt>
-                        <dd>
-                            <p>Create a simple test harness 'index.html' in the wwwwroot folder for the interactive chat interface. It provides a basic layout with Bootstrap styling, enabling users to send messages and view responses in real-time.</p>
-                            <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                </dd>
+                <dt>Front-End Testing with index.html</dt>
+                <dd>
+                    <p>Create a simple test harness 'index.html' in the wwwwroot folder for the interactive chat interface. It provides a basic layout with Bootstrap styling, enabling users to send messages and view responses in real-time.</p>
+                    <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>card-header text-center<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>PromptSpark Chat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
@@ -302,8 +209,8 @@ connection<span class="token punctuation">.</span><span class="token method func
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
-                            <p>Add the following JavaScript code to the 'index.html' file to establish a SignalR connection and handle real-time messaging.</p>
-                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <p>Add the following JavaScript code to the 'index.html' file to establish a SignalR connection and handle real-time messaging.</p>
+                    <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token method function property-access">withUrl</span><span class="token punctuation">(</span><span class="token string">"/chatHub"</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token method function property-access">configureLogging</span><span class="token punctuation">(</span>signalR<span class="token punctuation">.</span><span class="token property-access"><span class="token maybe-class-name">LogLevel</span></span><span class="token punctuation">.</span><span class="token property-access"><span class="token maybe-class-name">Information</span></span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token method function property-access">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -379,11 +286,11 @@ connection<span class="token punctuation">.</span><span class="token method func
 
 <span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                            <dl>
-                                <dt>SignalR Connection</dt>
-                                <dd>
-                                    <p>Establishes a real-time connection with the SignalR hub. This is some simple javascript code that connects to the SignalR hub and logs a message to the console when the connection is successful.</p>
-                                    <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <dl>
+                        <dt>SignalR Connection</dt>
+                        <dd>
+                            <p>Establishes a real-time connection with the SignalR hub. This is some simple javascript code that connects to the SignalR hub and logs a message to the console when the connection is successful.</p>
+                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">signalR<span class="token punctuation">.</span>HubConnectionBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token method function property-access">withUrl</span><span class="token punctuation">(</span><span class="token string">"/chathub"</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token method function property-access">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -391,11 +298,11 @@ connection<span class="token punctuation">.</span><span class="token method func
   <span class="token comment">// Display received messages</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-                                </dd>
-                                <dt>User Interaction</dt>
-                                <dd>
-                                    <p>Provides a join functionality with a unique conversation ID per session.</p>
-                                    <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">joinChat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        </dd>
+                        <dt>User Interaction</dt>
+                        <dd>
+                            <p>Provides a join functionality with a unique conversation ID per session.</p>
+                            <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">joinChat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   userName <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"userInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">value</span><span class="token punctuation">.</span><span class="token method function property-access">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>userName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"userForm"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property-access">style</span><span class="token punctuation">.</span><span class="token property-access">display</span> <span class="token operator">=</span> <span class="token string">"none"</span><span class="token punctuation">;</span>
@@ -403,11 +310,11 @@ connection<span class="token punctuation">.</span><span class="token method func
     <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messageInput"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">focus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-                                </dd>
-                                <dt>Real-Time Messaging</dt>
-                                <dd>
-                                    <p>Updates the chat window in real time with both user and bot messages, including a “typing” effect for bot responses.</p>
-                                    <pre class="language-javascript"><code class="language-javascript">connection<span class="token punctuation">.</span><span class="token method function property-access">on</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> message</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
+                        </dd>
+                        <dt>Real-Time Messaging</dt>
+                        <dd>
+                            <p>Updates the chat window in real time with both user and bot messages, including a “typing” effect for bot responses.</p>
+                            <pre class="language-javascript"><code class="language-javascript">connection<span class="token punctuation">.</span><span class="token method function property-access">on</span><span class="token punctuation">(</span><span class="token string">"ReceiveMessage"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> message</span><span class="token punctuation">)</span> <span class="token arrow operator">=></span> <span class="token punctuation">{</span>
   <span class="token keyword">const</span> messagesList <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">getElementById</span><span class="token punctuation">(</span><span class="token string">"messagesList"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
   <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>user <span class="token operator">===</span> <span class="token string">"ChatBot"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -428,172 +335,20 @@ connection<span class="token punctuation">.</span><span class="token method func
   <span class="token punctuation">}</span>
   messagesList<span class="token punctuation">.</span><span class="token property-access">scrollTop</span> <span class="token operator">=</span> messagesList<span class="token punctuation">.</span><span class="token property-access">scrollHeight</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-                                </dd>
-                                <dt>Testing Tips</dt>
-                                <dd><p>Test by sending messages, observing real-time updates, and verifying that the bot's responses stream line by line for an enhanced chat experience.</p></dd>
-                            </dl>
                         </dd>
-                        <dt>Testing and Improving the Chat Experience</dt>
-                        <dd><p>Test the chat flow to ensure messages display correctly, and responses stream as expected. Refine the AI's tone through system prompts in ChatHistory, log key interactions, and optimize the user experience.</p></dd>
-                        <dt>Common Issues and Troubleshooting Tips</dt>
-                        <dd><p>Troubleshoot OpenAI API key issues, SignalR connectivity problems, and adjust prompt history for enhanced response quality. Ensure connection stability and efficient response streaming.</p></dd>
-                        <dt>Extending and Scaling the Chat Application</dt>
-                        <dd><p>Consider persisting chat history across sessions for customer support applications, and use Azure SignalR Service for scaling. Future enhancements could include multilingual support and sentiment analysis.</p></dd>
+                        <dt>Testing Tips</dt>
+                        <dd><p>Test by sending messages, observing real-time updates, and verifying that the bot's responses stream line by line for an enhanced chat experience.</p></dd>
                     </dl>
-                    <h2>Conclusion</h2>
-                    <p>This guide has shown how to create an AI-enhanced, real-time chat application in PromptSpark using SignalR and Semantic Kernel. By combining real-time messaging with intelligent responses, developers can build highly engaging, adaptive chat experiences. Explore customizations and build unique AI-driven applications in PromptSpark.</p>
-                </div>
-            </article>
+                </dd>
+                <dt>Testing and Improving the Chat Experience</dt>
+                <dd><p>Test the chat flow to ensure messages display correctly, and responses stream as expected. Refine the AI's tone through system prompts in ChatHistory, log key interactions, and optimize the user experience.</p></dd>
+                <dt>Common Issues and Troubleshooting Tips</dt>
+                <dd><p>Troubleshoot OpenAI API key issues, SignalR connectivity problems, and adjust prompt history for enhanced response quality. Ensure connection stability and efficient response streaming.</p></dd>
+                <dt>Extending and Scaling the Chat Application</dt>
+                <dd><p>Consider persisting chat history across sessions for customer support applications, and use Azure SignalR Service for scaling. Future enhancements could include multilingual support and sentiment analysis.</p></dd>
+            </dl>
+            <h2>Conclusion</h2>
+            <p>This guide has shown how to create an AI-enhanced, real-time chat application in PromptSpark using SignalR and Semantic Kernel. By combining real-time messaging with intelligent responses, developers can build highly engaging, adaptive chat experiences. Explore customizations and build unique AI-driven applications in PromptSpark.</p>
         </div>
-        <footer class="navbar-dark bg-primary">
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 text-left">
-                    <br />
-                    <!-- Ensure current article exists-->
-                    <!-- Extract and clean currentKeywords-->
-                    <!-- Only check for related articles if there are valid keywords-->
-                    <!-- Shuffle related articles and limit to 3-->
-                    <!-- Render current article's keywords as badges-->
-                    <div class="keywords mt-3">
-                        <p class="text-white">Hashtags:</p>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-primary text-uppercase">{&quot;articletitle&quot;:&quot;interactive chat in promptspark with signalr&quot;</span>
-                            <span class="badge bg-primary text-uppercase">&quot;articledescription&quot;:&quot;this article explores building a real-time chat application using asp.net signalr and openai's gpt models</span>
-                            <span class="badge bg-primary text-uppercase">focusing on agility and efficiency in integration.&quot;</span>
-                            <span class="badge bg-primary text-uppercase">&quot;articlecontent&quot;:&quot;# interactive chat in promptspark with signalr\n\n## transitioning to a simplified and agile approach\n\nthis article reimagines the approach from integrating chat completions into prompt spark</span>
-                            <span class="badge bg-primary text-uppercase">focusing on agility and adaptability to meet the needs of a react native component. by simplifying the integration</span>
-                            <span class="badge bg-primary text-uppercase">the chat completions implementation becomes more efficient and effective</span>
-                            <span class="badge bg-primary text-uppercase">embracing a continuous learning approach. this transition underscores the importance of staying open to better</span>
-                            <span class="badge bg-primary text-uppercase">streamlined methods as new insights emerge</span>
-                            <span class="badge bg-primary text-uppercase">allowing us to build more responsive</span>
-                            <span class="badge bg-primary text-uppercase">user-centric applications.\n\n## building an ai-driven</span>
-                            <span class="badge bg-primary text-uppercase">real-time chat\n\nthis guide covers the steps to create an interactive chat experience using asp.net signalr for real-time functionality and openai's gpt models for intelligent responses</span>
-                            <span class="badge bg-primary text-uppercase">through semantic kernel. the goal is to simplify and enhance the process of embedding chat completions</span>
-                            <span class="badge bg-primary text-uppercase">making the design more efficient and ready for a vit react native environment.\n\n### introduction\n\nin this article</span>
-                            <span class="badge bg-primary text-uppercase">developers and solution architects will learn how to integrate asp.net signalr with semantic kernel's chat completion service to build a responsive</span>
-                            <span class="badge bg-primary text-uppercase">intelligent chat application in promptspark. signalr enables real-time communication</span>
-                            <span class="badge bg-primary text-uppercase">while semantic kernel leverages openai's gpt models for contextually relevant responses.\n\n### what you’ll build and why it matters\n\nyou’ll create an interactive chat application where users receive immediate</span>
-                            <span class="badge bg-primary text-uppercase">ai-generated responses</span>
-                            <span class="badge bg-primary text-uppercase">closely simulating natural conversation flow. combining signalr's real-time messaging and semantic kernel's adaptive ai enhances engagement</span>
-                            <span class="badge bg-primary text-uppercase">suitable for use cases like customer support</span>
-                            <span class="badge bg-primary text-uppercase">virtual assistants</span>
-                            <span class="badge bg-primary text-uppercase">and interactive content.\n\n### setting up your development environment\n\nthis project requires asp.net core</span>
-                            <span class="badge bg-primary text-uppercase">signalr</span>
-                            <span class="badge bg-primary text-uppercase">and semantic kernel. follow these steps to set up your environment and secure your openai api keys with environment variables.\n\n```bash\ndotnet add package microsoft.aspnetcore.signalr\ndotnet add package microsoft.semantickernel\n```\n\n### setting up program.cs\n\nin this section</span>
-                            <span class="badge bg-primary text-uppercase">we’ll set up the main program configuration in `program.cs` for the integration of signalr and openai’s gpt models via semantic kernel. this configuration ensures real-time functionality and prepares the ai chat service for prompt responses.\n\n#### logging configuration\n\nadd console logging for debugging and set a debug level to capture detailed information.\n\n```csharp\nbuilder.logging.addconsole();\nbuilder.logging.setminimumlevel(loglevel.debug);\n```\n\n#### signalr setup\n\nadd signalr to the services</span>
-                            <span class="badge bg-primary text-uppercase">enabling real-time messaging capabilities in the application.\n\n```csharp\nbuilder.services.addsignalr();\n```\n\n#### openai api integration\n\nconfigure semantic kernel’s `addopenaichatcompletion` service</span>
-                            <span class="badge bg-primary text-uppercase">using api keys stored in environment variables. ensure the environment variables `openai_api_key` and `model_id` are correctly set to avoid errors.\n\n```csharp\nstring apikey = builder.configuration.getvalue&lt;string&gt;(\&quot;openai_api_key\&quot;) ?? \&quot;not found\&quot;;\nstring modelid = builder.configuration.getvalue&lt;string&gt;(\&quot;model_id\&quot;) ?? \&quot;gpt-4o\&quot;;\nbuilder.services.addopenaichatcompletion(modelid</span>
-                            <span class="badge bg-primary text-uppercase">apikey);\n```\n\n#### routing and middleware\n\nmap routes for api controllers and the signalr `chathub`</span>
-                            <span class="badge bg-primary text-uppercase">enabling endpoint access and serving static files like the front-end html.\n\n```csharp\nvar app = builder.build();\napp.usedefaultfiles(); // looks for index.html</span>
-                            <span class="badge bg-primary text-uppercase">index.htm by default\napp.usestaticfiles();\n\napp.mapcontrollers();\napp.maphub&lt;chathub&gt;(\&quot;/chathub\&quot;);\n```\n\n### implementing the signalr chat hub\n\nthe chathub manages messages</span>
-                            <span class="badge bg-primary text-uppercase">maintains conversation history</span>
-                            <span class="badge bg-primary text-uppercase">and processes real-time user interactions. below is the implementation of the `chathub` class</span>
-                            <span class="badge bg-primary text-uppercase">which initializes with an instance of `ichatcompletionservice` and manages message flow with a `concurrentdictionary` for chat history.\n\n```csharp\npublic class chathub(ichatcompletionservice _chatcompletionservice) : hub\n{\n public class chatentry\n {\n public datetime timestamp { get; set; }\n public string user { get; set; }\n public string usermessage { get; set; }\n public string botresponse { get; set; }\n }\n\n private static readonly concurrentdictionary&lt;string</span>
-                            <span class="badge bg-primary text-uppercase">list&lt;chatentry&gt;&gt; chathistorycache = new();\n\n public async task sendmessage(string user</span>
-                            <span class="badge bg-primary text-uppercase">string message</span>
-                            <span class="badge bg-primary text-uppercase">string conversationid)\n {\n if (!chathistorycache.containskey(conversationid))\n {\n chathistorycache[conversationid] = new list&lt;chatentry&gt;();\n }\n var timestamp = datetime.now;\n\n // broadcast user's message\n await clients.all.sendasync(\&quot;receivemessage\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">user</span>
-                            <span class="badge bg-primary text-uppercase">message</span>
-                            <span class="badge bg-primary text-uppercase">conversationid);\n\n var chathistory = new chathistory();\n chathistory.addsystemmessage(\&quot;you are in a conversation</span>
-                            <span class="badge bg-primary text-uppercase">keep your answers brief</span>
-                            <span class="badge bg-primary text-uppercase">always ask follow-up questions</span>
-                            <span class="badge bg-primary text-uppercase">ask if ready for full answer.\&quot;);\n\n foreach (var chatentry in chathistorycache[conversationid])\n {\n chathistory.addusermessage(chatentry.usermessage);\n chathistory.addsystemmessage(chatentry.botresponse);\n }\n chathistory.addusermessage(message);\n\n // generate bot response with streaming\n var botresponse = await generatestreamingbotresponse(chathistory</span>
-                            <span class="badge bg-primary text-uppercase">conversationid);\n\n // add the message to the in-memory cache\n chathistorycache[conversationid].add(new chatentry\n {\n timestamp = timestamp</span>
-                            <span class="badge bg-primary text-uppercase">\n user = user</span>
-                            <span class="badge bg-primary text-uppercase">\n usermessage = message</span>
-                            <span class="badge bg-primary text-uppercase">\n botresponse = botresponse\n });\n }\n\n private async task&lt;string&gt; generatestreamingbotresponse(chathistory chathistory</span>
-                            <span class="badge bg-primary text-uppercase">string conversationid)\n {\n var buffer = new stringbuilder();\n var message = new stringbuilder();\n try\n {\n await foreach (var response in _chatcompletionservice.getstreamingchatmessagecontentsasync(chathistory))\n {\n if (response?.content != null)\n {\n buffer.append(response.content);\n\n if (response.content.contains('\\n'))\n {\n var contenttosend = buffer.tostring();\n await clients.all.sendasync(\&quot;receivemessage\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">\&quot;chatbot\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">contenttosend</span>
-                            <span class="badge bg-primary text-uppercase">conversationid);\n await appendtocsvlog(conversationid</span>
-                            <span class="badge bg-primary text-uppercase">\&quot;system\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">contenttosend);\n message.append(contenttosend);\n buffer.clear();\n }\n }\n }\n\n if (buffer.length &gt; 0)\n {\n var remainingcontent = buffer.tostring();\n await clients.all.sendasync(\&quot;receivemessage\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">\&quot;chatbot\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">remainingcontent</span>
-                            <span class="badge bg-primary text-uppercase">conversationid);\n message.append(remainingcontent);\n await appendtocsvlog(conversationid</span>
-                            <span class="badge bg-primary text-uppercase">\&quot;system\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">remainingcontent);\n }\n }\n catch (exception ex)\n {\n console.writeline($\&quot;error in generating bot response: {ex.message}\&quot;);\n message.append(\&quot;an error occurred while processing your request.\&quot;);\n await clients.caller.sendasync(\&quot;receivemessage\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">\&quot;system\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">\&quot;an error occurred while processing your request.\&quot;);\n }\n return message.tostring();\n }\n\n private async task appendtocsvlog(string conversationid</span>
-                            <span class="badge bg-primary text-uppercase">string sender</span>
-                            <span class="badge bg-primary text-uppercase">string message)\n {\n console.writeline($\&quot;{datetime.now}</span>
-                            <span class="badge bg-primary text-uppercase">{conversationid}</span>
-                            <span class="badge bg-primary text-uppercase">{sender}: {message}\&quot;);\n }\n}\n```\n\n### generating ai-powered responses with semantic kernel\n\nthe `generatestreamingbotresponse` method in the chathub class generates responses asynchronously. this method streams responses to the client in real-time</span>
-                            <span class="badge bg-primary text-uppercase">providing a continuous \&quot;typing\&quot; effect for a more dynamic chat experience.\n\n### building the front-end for promptspark chat\n\nset up a user-friendly interface with an input box</span>
-                            <span class="badge bg-primary text-uppercase">chat history window</span>
-                            <span class="badge bg-primary text-uppercase">and “send” button. establish a signalr connection for real-time messaging</span>
-                            <span class="badge bg-primary text-uppercase">and use streaming for a “typing” effect in ai responses.\n\n```javascript\nconst connection = new signalr.hubconnectionbuilder()\n .withurl(\&quot;/chathub\&quot;)\n .build();\n\nconnection.on(\&quot;receivemessage\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">(user</span>
-                            <span class="badge bg-primary text-uppercase">message</span>
-                            <span class="badge bg-primary text-uppercase">conversationid) =&gt; {\n // display received messages\n});\n```\n\n### front-end testing with index.html\n\ncreate a simple test harness 'index.html' in the wwwroot folder for the interactive chat interface. it provides a basic layout with bootstrap styling</span>
-                            <span class="badge bg-primary text-uppercase">
-                                enabling users to send messages and view responses in real-time.\n\n```html\n&lt;div class=\&quot;card\&quot;&gt;\n &lt;div class=\&quot;card-header text-center\&quot;&gt;\n &lt;h2&gt;promptspark chat&lt;/h2&gt;\n &lt;/div&gt;\n &lt;div class=\&quot;card-body\&quot;&gt;\n &lt;div id=\&quot;userform\&quot; class=\&quot;mb-4\&quot;&gt;\n &lt;label for=\&quot;userinput\&quot; class=\&quot;form-label\&quot;&gt;enter your name to join the chat:&lt;/label&gt;\n &lt;input type=\&quot;text\&quot; id=\&quot;userinput\&quot; class=\&quot;form-control\&quot; placeholder=\&quot;your name\&quot; /&gt;\n &lt;button class=\&quot;btn btn-primary mt-2\&quot; onclick=\&quot;joinchat()\&quot;&gt;join chat&lt;/button&gt;\n &lt;/div&gt;\n &lt;div id=\&quot;chatwindow\&quot; style=\&quot;display: none;\&quot;&gt;\n &lt;ul id=\&quot;messageslist\&quot; class=\&quot;list-unstyled mb-3 p-3 border rounded bg-white\&quot; style=\&quot;height: 300px; overflow-y:
-                                scroll;\&quot;&gt;\n &lt;/ul&gt;\n &lt;div class=\&quot;input-group\&quot;&gt;\n &lt;input type=\&quot;text\&quot; id=\&quot;messageinput\&quot; class=\&quot;form-control\&quot; placeholder=\&quot;type your message here...\&quot; /&gt;\n &lt;button class=\&quot;btn btn-primary\&quot; onclick=\&quot;sendmessage()\&quot;&gt;send&lt;/button&gt;\n &lt;/div&gt;\n &lt;/div&gt;\n &lt;/div&gt;\n&lt;/div&gt;\n```\n\nadd the following javascript code to the 'index.html' file to establish a signalr connection and handle real-time messaging.\n\n```javascript\nconst connection = new signalr.hubconnectionbuilder()\n .withurl(\&quot;/chathub\&quot;)\n .configurelogging(signalr.loglevel.information)\n .build();\n\nlet username = \&quot;\&quot;;\nlet conversationid = localstorage.getitem(\&quot;conversationid\&quot;) || generateconversationid();\nlet botmessageelement = null;\nlocalstorage.setitem(\&quot;conversationid\&quot;
-                            </span>
-                            <span class="badge bg-primary text-uppercase">conversationid);\n\nfunction generateconversationid() {\n return math.random().tostring(36).substring(2</span>
-                            <span class="badge bg-primary text-uppercase">15);\n}\n\nasync function start() {\n try {\n await connection.start();\n console.log(\&quot;connected to signalr hub!\&quot;);\n } catch (err) {\n console.error(\&quot;connection failed: \&quot;</span>
-                            <span class="badge bg-primary text-uppercase">err);\n settimeout(start</span>
-                            <span class="badge bg-primary text-uppercase">5000);\n }\n}\n\nconnection.on(\&quot;receivemessage\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">(user</span>
-                            <span class="badge bg-primary text-uppercase">message) =&gt; {\n const messageslist = document.getelementbyid(\&quot;messageslist\&quot;);\n\n if (user === \&quot;chatbot\&quot;) {\n if (!botmessageelement) {\n botmessageelement = document.createelement(\&quot;li\&quot;);\n botmessageelement.classlist.add(\&quot;mb-2\&quot;);\n botmessageelement.setattribute(\&quot;data-user\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">
-                                \&quot;chatbot\&quot;);\n botmessageelement.innerhtml = `&lt;strong&gt;${user}:&lt;/strong&gt; &lt;span class=\&quot;bot-message-content\&quot;&gt;&lt;/span&gt;`;\n messageslist.appendchild(botmessageelement);\n }\n botmessageelement.queryselector(\&quot;.bot-message-content\&quot;).textcontent += message + \&quot; \&quot;;\n } else {\n botmessageelement = null;\n const li = document.createelement(\&quot;li\&quot;);\n li.classlist.add(\&quot;mb-2\&quot;);\n li.innerhtml = `&lt;strong&gt;${user}:&lt;/strong&gt; ${message}`;\n messageslist.appendchild(li);\n }\n messageslist.scrolltop = messageslist.scrollheight;\n});\n\nfunction joinchat() {\n username = document.getelementbyid(\&quot;userinput\&quot;).value.trim();\n if (username) {\n document.getelementbyid(\&quot;userform\&quot;).style.display = \&quot;none\&quot;;\n document.getelementbyid(\&quot;chatwindow\&quot;).style.display = \&quot;block\&quot;;\n
-                                document.getelementbyid(\&quot;messageinput\&quot;).focus();\n }\n}\n\nasync function sendmessage() {\n const message = document.getelementbyid(\&quot;messageinput\&quot;).value.trim();\n if (username &amp;&amp; message) {\n try {\n await connection.invoke(\&quot;sendmessage\&quot;
-                            </span>
-                            <span class="badge bg-primary text-uppercase">username</span>
-                            <span class="badge bg-primary text-uppercase">message</span>
-                            <span class="badge bg-primary text-uppercase">conversationid);\n document.getelementbyid(\&quot;messageinput\&quot;).value = '';\n } catch (err) {\n console.error(\&quot;sendmessage failed: \&quot;</span>
-                            <span class="badge bg-primary text-uppercase">err);\n }\n }\n}\n\ndocument.getelementbyid(\&quot;messageinput\&quot;).addeventlistener(\&quot;keypress\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">function (event) {\n if (event.key === \&quot;enter\&quot;) {\n event.preventdefault();\n sendmessage();\n }\n});\n\nstart();\n```\n\n#### signalr connection\n\nestablishes a real-time connection with the signalr hub. this is some simple javascript code that connects to the signalr hub and logs a message to the console when the connection is successful.\n\n```javascript\nconst connection = new signalr.hubconnectionbuilder()\n .withurl(\&quot;/chathub\&quot;)\n .build();\n\nconnection.on(\&quot;receivemessage\&quot;</span>
-                            <span class="badge bg-primary text-uppercase">(user</span>
-                            <span class="badge bg-primary text-uppercase">message</span>
-                            <span class="badge bg-primary text-uppercase">conversationid) =&gt; {\n // display received messages\n});\n```\n\n#### user interaction\n\nprovides a join functionality with a unique conversation</span>
-                        </div>
-                    </div>
-                    <!-- Render related articles in a card layout-->
-                    <div class="related-articles mt-4">
-                        <h3 class="text-white">Related Articles</h3>
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                            <div class="col">
-                                <div class="card h-100 bg-dark text-white">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-                                            <a class="text-white" href="/articles/building-real-time-chat-with-react-signalr-and-markdown-streaming.html" title="Learn how to create a real-time chat application using React, SignalR, and Markdown streaming for dynamic messaging and rendering.">Building Real-Time Chat with React and SignalR</a>
-                                        </h5>
-                                        <p class="card-text text-white">Learn how to create a real-time chat application using React, SignalR, and Markdown streaming for dynamic messaging and rendering.</p>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4"><p class="text-white"></p></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-            </div>
-            <div class="row">
-                <div class="col-1"><br /></div>
-                <div class="col-10 justify-content-end">
-                    <br />
-                    <div class="social-icons d-flex">
-                        <a class="social-icon" href="https://www.linkedin.com/in/markhazleton" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="social-icon" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class="fab fa-github"></i></a>
-                        <a class="social-icon" href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
-                        <a class="social-icon" href="https://www.instagram.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="Instagram Profile"><i class="fab fa-instagram"></i></a>
-                        <a class="social-icon" href="https://markhazleton.com/rss.xml" target="_blank" rel="noopener noreferrer" title="RSS Feed"><i class="fas fa-rss"></i></a>
-                        <br />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12"><br /></div>
-            </div>
-        </footer>
-        <!-- Core theme JS-->
-        <script src="/js/scripts.js"></script>
-    </body>
-</html>
+    </div>
+</article>

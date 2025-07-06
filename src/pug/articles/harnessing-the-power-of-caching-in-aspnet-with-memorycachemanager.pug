@@ -1,180 +1,169 @@
-extends ../layouts/articles
-
-block pagehead
-  title Harnessing the Power of Caching with MemoryCacheManager
-  meta(name='description' content='An in-depth look at the MemoryCacheManager class in ASP.NET and its application in web development.')
-  meta(name='author', content='Mark Hazleton')
-  meta(name='keywords' content='MemoryCacheManager, ASP.NET, Caching, Web Development, Performance Optimization')
-  link(rel='canonical', href='https://markhazleton.com/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html')
-
-  meta(property='og:title' content='Harnessing the Power of Caching in ASP.NET with MemoryCacheManager')
-  meta(property='og:description' content='An in-depth look at the MemoryCacheManager class in ASP.NET and its application in web development.')
-  meta(property='og:image' content='/assets/img/Memory-Cache-Manager-Dashboard.png')
-  meta(property='og:url' content='https://markhazleton.com/articles/harnessing-the-power-of-caching-in-aspnet-with-memorycachemanager.html')
-  meta(property='og:type' content='article')
-  meta(name='twitter:card' content='summary_large_image')
-  meta(name='twitter:title' content='Harnessing the Power of Caching in ASP.NET with MemoryCacheManager')
-  meta(name='twitter:description' content='An in-depth look at the MemoryCacheManager class in ASP.NET and its application in web development.')
-  meta(name='twitter:image' content='/assets/img/Memory-Cache-Manager-Dashboard.png')
-  meta(name='twitter:creator' content='@markhazleton')
-
-
 block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-cloud.me-3
+            | Memory Cache Manager
+          h2.subheading.mb-4  Harnessing the Power of Caching in ASP.NET with MemoryCacheManager
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 Memory Cache Manager
-      .subheading Harnessing the Power of Caching in ASP.NET with MemoryCacheManager
-      p.lead
-        | While working on the AsyncSpark demonstration in my WebSpark project,
-        | I encountered a practical challenge: managing the request limits of the OpenWeather API. As most developers know, API request limits can be a tricky aspect,
-        | especially when working with limited resources. In search of a straightforward solution that wouldn't rely heavily on third-party libraries,
-        | I developed the MemoryCacheManager class. It's a no-fuss, efficient way to cache API calls – a simple yet effective tool that aligns well with the needs of a project like WebSpark.
-        |  This article is a walk-through of how MemoryCacheManager fits into the picture, offering a modest peek into the world of caching in ASP.NET development.
-        a(href='https://github.com/markhazleton/webspark') https://github.com/markhazleton/webspark
-        | .
-      h2 WeatherServiceCachingDecorator:
-      .subheading A Real-World Use Case for MemoryCacheManager
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        p.lead
+          | While working on the AsyncSpark demonstration in my WebSpark project,
+          | I encountered a practical challenge: managing the request limits of the OpenWeather API. As most developers know, API request limits can be a tricky aspect,
+          | especially when working with limited resources. In search of a straightforward solution that wouldn't rely heavily on third-party libraries,
+          | I developed the MemoryCacheManager class. It's a no-fuss, efficient way to cache API calls – a simple yet effective tool that aligns well with the needs of a project like WebSpark.
+          |  This article is a walk-through of how MemoryCacheManager fits into the picture, offering a modest peek into the world of caching in ASP.NET development.
+          a(href='https://github.com/markhazleton/webspark') https://github.com/markhazleton/webspark
+          | .
+        h2 WeatherServiceCachingDecorator:
+        .subheading A Real-World Use Case for MemoryCacheManager
 
-      div.row
-        div.col-4
+        div.row
+          div.col-4
             img.img-fluid.d-block.w-90.rounded.wide-border(src='/assets/img/Memory-Cache-Manager-Dashboard.png' alt='Memory Cache Manager Dashboard')
-        div.col-8
-          dl
-            dt Purpose of WeatherServiceCachingDecorator
-            dd
-              | Enhances an existing weather service with caching capabilities, providing optimized performance and reduced API calls.
-            dt Caching Current Weather Data
-            dd
-              | Unique cache keys are created for each location to store and retrieve weather data distinctly. The class first checks the cache before making external service calls.
-            dt Storing and Retrieving Data
-            dd
-              | If weather data for a location isn't in the cache, it's fetched from the weather service, logged, and stored in the cache with an expiration time.
-            dt Caching Weather Forecast Data
-            dd
-              | Follows a similar caching approach for weather forecasts, reducing service calls and improving response times.
-            dt Benefits in a Web Application Context
-            dd
-              | Offers reduced latency, decreased load on external services, and improved reliability by serving cached data.
-            dt Conclusion
-            dd
-              | Demonstrates the effectiveness of MemoryCacheManager in enhancing service performance and reliability in web applications.
+          div.col-8
+            dl
+              dt Purpose of WeatherServiceCachingDecorator
+              dd
+                | Enhances an existing weather service with caching capabilities, providing optimized performance and reduced API calls.
+              dt Caching Current Weather Data
+              dd
+                | Unique cache keys are created for each location to store and retrieve weather data distinctly. The class first checks the cache before making external service calls.
+              dt Storing and Retrieving Data
+              dd
+                | If weather data for a location isn't in the cache, it's fetched from the weather service, logged, and stored in the cache with an expiration time.
+              dt Caching Weather Forecast Data
+              dd
+                | Follows a similar caching approach for weather forecasts, reducing service calls and improving response times.
+              dt Benefits in a Web Application Context
+              dd
+                | Offers reduced latency, decreased load on external services, and improved reliability by serving cached data.
+              dt Conclusion
+              dd
+                | Demonstrates the effectiveness of MemoryCacheManager in enhancing service performance and reliability in web applications.
 
-      h2 The Role of MemoryCacheManager
-      p The MemoryCacheManager class serves as a robust solution for managing memory caches in ASP.NET applications, offering an efficient approach to data storage and retrieval. It's particularly valuable for applications that demand quick data access with minimal latency.
-      dl
-        dt Concurrent Dictionary for Cache Keys
-        dd Utilizes a thread-safe ConcurrentDictionary for storing cache keys, ensuring data integrity across multiple threads.
-        dt Cancellation Token Support
-        dd Implements CancellationTokenSource for managing cache lifespan and controlled cancellation of cache operations.
-        dt Eviction Handling
-        dd Intelligent handling of cache eviction with the PostEviction method, catering to different eviction reasons.
-        dt Cache Entry Options Customization
-        dd Offers customizable cache entry options, including expiration tokens and eviction callbacks.
-        dt Clear and Dispose Functionality
-        dd Features methods for clearing the cache and proper disposal of resources, essential for maintaining application health.
-        dt Benefits
-        dd By caching frequently accessed data, MemoryCacheManager enhances application performance through reduced data retrieval operations. It aids in scalability and ensures consistent data access in multi-threaded environments, common in modern web applications.
-      h2 Code Walkthrough of MemoryCacheManager
-      p The MemoryCacheManager class is a finely-tuned component designed to enhance the performance of ASP.NET applications through efficient caching. Let's take a closer look at its core parts:
-      h3 Initialization and Setup
-      p
-        | The class initializes a static
-        code ConcurrentDictionary
-        | ,
-        code _allKeys
-        | , to keep track of cache keys. This ensures thread safety and efficient management of cache keys. Additionally, an instance of
-        code IMemoryCache
-        | , provided by ASP.NET Core, is used for actual caching operations.
-      h3 Cache Operations
-      ul
-        li
-          strong Adding to Cache:
-          | The
-          code Set
-          |  method adds items to the cache. It handles key management and sets cache options, including expiration.
-        li
-          strong Retrieving from Cache:
-          | The
-          code Get
-          |  method fetches items, leveraging the cache-first strategy. If an item is not in cache, it’s loaded and then stored in cache for subsequent requests.
-        li
-          strong Removing from Cache:
-          | The
-          code Remove
-          |  method removes items from the cache and updates the key dictionary accordingly.
-      h3 Eviction Policy
-      p
-        | The class implements an eviction policy through the
-        code PostEviction
-        |  callback. This method gets triggered when items are evicted from the cache, allowing for custom actions based on the eviction reason.
-      h3 Cache Clearing and Disposal
-      ul
-        li
-          strong Clearing the Cache:
-          | The
-          code Clear
-          |  method iterates through all keys and removes each item from the cache, ensuring a clean state.
-        li
-          strong Disposal Pattern:
-          | While the current implementation of
-          code Dispose
-          |  method is empty, it provides a structure for resource cleanup if needed in the future.
-      h3 Concurrency and Lock Management
-      p
-        | A unique feature is the
-        code PerformActionWithLock
-        |  method, which ensures that actions are performed with exclusive access, preventing race conditions in multi-threaded scenarios.
-      p
-        | This walkthrough provides a high-level understanding of the MemoryCacheManager class, emphasizing its role in efficient caching and application performance enhancement. To delve into the specifics, visit the demonstration code on GitHub.
-        a(href='https://github.com/markhazleton/webspark') https://github.com/markhazleton/webspark
+        h2 The Role of MemoryCacheManager
+        p The MemoryCacheManager class serves as a robust solution for managing memory caches in ASP.NET applications, offering an efficient approach to data storage and retrieval. It's particularly valuable for applications that demand quick data access with minimal latency.
+        dl
+          dt Concurrent Dictionary for Cache Keys
+          dd Utilizes a thread-safe ConcurrentDictionary for storing cache keys, ensuring data integrity across multiple threads.
+          dt Cancellation Token Support
+          dd Implements CancellationTokenSource for managing cache lifespan and controlled cancellation of cache operations.
+          dt Eviction Handling
+          dd Intelligent handling of cache eviction with the PostEviction method, catering to different eviction reasons.
+          dt Cache Entry Options Customization
+          dd Offers customizable cache entry options, including expiration tokens and eviction callbacks.
+          dt Clear and Dispose Functionality
+          dd Features methods for clearing the cache and proper disposal of resources, essential for maintaining application health.
+          dt Benefits
+          dd By caching frequently accessed data, MemoryCacheManager enhances application performance through reduced data retrieval operations. It aids in scalability and ensures consistent data access in multi-threaded environments, common in modern web applications.
+        h2 Code Walkthrough of MemoryCacheManager
+        p The MemoryCacheManager class is a finely-tuned component designed to enhance the performance of ASP.NET applications through efficient caching. Let's take a closer look at its core parts:
+        h3 Initialization and Setup
+        p
+          | The class initializes a static
+          code ConcurrentDictionary
+          | ,
+          code _allKeys
+          | , to keep track of cache keys. This ensures thread safety and efficient management of cache keys. Additionally, an instance of
+          code IMemoryCache
+          | , provided by ASP.NET Core, is used for actual caching operations.
+        h3 Cache Operations
+        ul
+          li
+            strong Adding to Cache:
+            | The
+            code Set
+            |  method adds items to the cache. It handles key management and sets cache options, including expiration.
+          li
+            strong Retrieving from Cache:
+            | The
+            code Get
+            |  method fetches items, leveraging the cache-first strategy. If an item is not in cache, it’s loaded and then stored in cache for subsequent requests.
+          li
+            strong Removing from Cache:
+            | The
+            code Remove
+            |  method removes items from the cache and updates the key dictionary accordingly.
+        h3 Eviction Policy
+        p
+          | The class implements an eviction policy through the
+          code PostEviction
+          |  callback. This method gets triggered when items are evicted from the cache, allowing for custom actions based on the eviction reason.
+        h3 Cache Clearing and Disposal
+        ul
+          li
+            strong Clearing the Cache:
+            | The
+            code Clear
+            |  method iterates through all keys and removes each item from the cache, ensuring a clean state.
+          li
+            strong Disposal Pattern:
+            | While the current implementation of
+            code Dispose
+            |  method is empty, it provides a structure for resource cleanup if needed in the future.
+        h3 Concurrency and Lock Management
+        p
+          | A unique feature is the
+          code PerformActionWithLock
+          |  method, which ensures that actions are performed with exclusive access, preventing race conditions in multi-threaded scenarios.
+        p
+          | This walkthrough provides a high-level understanding of the MemoryCacheManager class, emphasizing its role in efficient caching and application performance enhancement. To delve into the specifics, visit the demonstration code on GitHub.
+          a(href='https://github.com/markhazleton/webspark') https://github.com/markhazleton/webspark
 
 
-      h3 CancellationTokenSource in MemoryCacheManager
-      p
-        | There is an instance of the
-        code CancellationTokenSource
-        a(href='https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource') https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource
-        | within the MemoryCacheManager class which plays a role in managing the lifecycle of cache entries.
-        | Let's delve into its purpose and functionality:
-      dl
-        dt Purpose of CancellationTokenSource
-        dd
-          | The
+        h3 CancellationTokenSource in MemoryCacheManager
+        p
+          | There is an instance of the
           code CancellationTokenSource
-          |  is a powerful .NET construct used to signal cancellation in asynchronous and potentially long-running operations. In the context of the MemoryCacheManager, it serves to manage the expiration and clearing of cache entries.
-        dt Managing Cache Lifespan
-        dd
-          | When a cache entry is added using the
-          code Set
-          |  method, the
-          code CancellationTokenSource
-          |  is tied to the cache entry's options. This integration allows for controlled expiration of cache items based on specific conditions or time frames.
-        dt Controlled Cache Invalidation
-        dd
-          | In scenarios where there's a need to invalidate the cache prematurely, the
-          code CancellationTokenSource
-        dt Recreating the Token After Clearing
-        dd
-          | Upon invoking the
-          |  can be used to cancel all associated cache entries. This mechanism is especially useful for implementing dynamic cache clearing strategies, where cache consistency is critical.
-          code Clear
-          |  method, the
-          code CancellationTokenSource
-          |  is canceled and disposed of, effectively clearing the cache. It’s then crucial to recreate the
-          code CancellationTokenSource
-          |  to ensure that new cache entries can be added with their cancellation tokens, maintaining the integrity of cache management.
-      p
-        | Overall, the
-        |  in MemoryCacheManager adds a layer of flexibility and control over how cache entries are managed, ensuring that they can be invalidated as per application requirements, contributing to both the efficiency and reliability of caching mechanisms.
+          a(href='https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource') https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource
+          | within the MemoryCacheManager class which plays a role in managing the lifecycle of cache entries.
+          | Let's delve into its purpose and functionality:
+        dl
+          dt Purpose of CancellationTokenSource
+          dd
+            | The
+            code CancellationTokenSource
+            |  is a powerful .NET construct used to signal cancellation in asynchronous and potentially long-running operations. In the context of the MemoryCacheManager, it serves to manage the expiration and clearing of cache entries.
+          dt Managing Cache Lifespan
+          dd
+            | When a cache entry is added using the
+            code Set
+            |  method, the
+            code CancellationTokenSource
+            |  is tied to the cache entry's options. This integration allows for controlled expiration of cache items based on specific conditions or time frames.
+          dt Controlled Cache Invalidation
+          dd
+            | In scenarios where there's a need to invalidate the cache prematurely, the
+            code CancellationTokenSource
+          dt Recreating the Token After Clearing
+          dd
+            | Upon invoking the
+            |  can be used to cancel all associated cache entries. This mechanism is especially useful for implementing dynamic cache clearing strategies, where cache consistency is critical.
+            code Clear
+            |  method, the
+            code CancellationTokenSource
+            |  is canceled and disposed of, effectively clearing the cache. It’s then crucial to recreate the
+            code CancellationTokenSource
+            |  to ensure that new cache entries can be added with their cancellation tokens, maintaining the integrity of cache management.
+        p
+          | Overall, the
+          |  in MemoryCacheManager adds a layer of flexibility and control over how cache entries are managed, ensuring that they can be invalidated as per application requirements, contributing to both the efficiency and reliability of caching mechanisms.
 
-      h2 Best Practices and Considerations
-      dl
-        dt Cache Invalidation Strategy:
-        dd Implement an effective strategy for cache invalidation to maintain data consistency.
-        dt Memory Management:
-        dd Monitor memory usage to prevent potential leaks and optimize performance.
-        dt Testing and Optimization:
-        dd Regularly test and adjust the cache configuration to meet the specific needs of your application.
-      h2 Conclusion
-      p The MemoryCacheManager class is an essential tool for ASP.NET developers aiming to enhance their application's performance. It offers a balance between simplicity and functionality, making it ideal for robust memory management in web applications.
+        h2 Best Practices and Considerations
+        dl
+          dt Cache Invalidation Strategy:
+          dd Implement an effective strategy for cache invalidation to maintain data consistency.
+          dt Memory Management:
+          dd Monitor memory usage to prevent potential leaks and optimize performance.
+          dt Testing and Optimization:
+          dd Regularly test and adjust the cache configuration to meet the specific needs of your application.
+        h2 Conclusion
+        p The MemoryCacheManager class is an essential tool for ASP.NET developers aiming to enhance their application's performance. It offers a balance between simplicity and functionality, making it ideal for robust memory management in web applications.

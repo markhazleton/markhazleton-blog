@@ -1,276 +1,277 @@
-extends ../layouts/articles
-
-block pagehead
-  title Migrating SampleMvcCRUD from .NET 8 to .NET 9
-  meta(name='description', content='Learn how to migrate a .NET MVC CRUD application from .NET 8 to .NET 9 while enhancing SEO and improving performance.')
-  meta(name="keywords", content="ASP.NET, .NET 9, MVC, CRUD Application, Migration, SEO")
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/migrating-samplemvccrud-application-from-net-8-to-net-9.html')
-
 block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-cloud.me-3
+            | Migrating SampleMvcCRUD from .NET 8 to .NET 9
+          h2.subheading.mb-4  How I migrated my application and optimized its SEO.
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 Migrating SampleMvcCRUD from .NET 8 to .NET 9
-      h2.subheading.mb-3 How I migrated my application and optimized its SEO.
-      p.
-        Migrating a .NET MVC CRUD application from .NET 8 to .NET 9 involves several key steps to ensure compatibility, performance improvement, and better visibility through SEO enhancements. In this article, I'll share my personal experience with the migration process, covering the challenges faced and the steps I took to ensure a smooth transition and an optimized web presence.
-      p
-        | For more information on the Sample MVC CRUD application, you can reference the following page:
-        a(href='https://markhazleton.com/sample-mvc-crud.html', target='_blank') Sample MVC CRUD Application.
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        p.
+          Migrating a .NET MVC CRUD application from .NET 8 to .NET 9 involves several key steps to ensure compatibility, performance improvement, and better visibility through SEO enhancements. In this article, I'll share my personal experience with the migration process, covering the challenges faced and the steps I took to ensure a smooth transition and an optimized web presence.
+        p
+          | For more information on the Sample MVC CRUD application, you can reference the following page:
+          a(href='https://markhazleton.com/sample-mvc-crud.html', target='_blank') Sample MVC CRUD Application.
 
-      .card.mb-3
-        .card-header
-          h5.mb-0 NET Version Strategy
-        .card-body
-          p.
-            Microsoft adopts a structured versioning strategy for .NET with Long-Term Support (LTS) and Current (STS) releases:
-          ul
-            li
-              b LTS Releases:
-              | Supported for at least three years, these versions focus on stability and receive critical updates and security patches, making them ideal for enterprise applications.
-            li
-              b STS Releases:
-              | Supported for 18 months, they introduce new features and improvements. These are suitable for developers who want to leverage the latest capabilities.
-          p.
-            The yearly cycle was introduced to provide predictability and stability for enterprises while encouraging innovation. LTS releases offer three years of support, focusing on stability, whereas STS releases are supported for 18 months, featuring the latest innovations.
-          ul
-            li .NET Core 1.0 (2016): First cross-platform release.
-            li .NET Core 3.0 (2019): LTS release, precursor to .NET 5.
-            li .NET 5 (2020): Unified .NET platform, starting the annual cycle.
-            li .NET 6 (2021): LTS release, enhanced performance and new APIs.
-            li .NET 7 (2022): STS release, focused on cloud-native improvements.
-            li .NET 8 (2023): LTS release, major runtime and library enhancements.
-            li .NET 9 (2024): STS release, new language features and tooling updates.
-          p.mb-0.
-            Choose LTS for stability and STS for innovation based on your project's needs.
-        .card-footer
+        .card.mb-3
+          .card-header
+            h5.mb-0 NET Version Strategy
+          .card-body
+            p.
+              Microsoft adopts a structured versioning strategy for .NET with Long-Term Support (LTS) and Current (STS) releases:
+            ul
+              li
+                b LTS Releases:
+                | Supported for at least three years, these versions focus on stability and receive critical updates and security patches, making them ideal for enterprise applications.
+              li
+                b STS Releases:
+                | Supported for 18 months, they introduce new features and improvements. These are suitable for developers who want to leverage the latest capabilities.
+            p.
+              The yearly cycle was introduced to provide predictability and stability for enterprises while encouraging innovation. LTS releases offer three years of support, focusing on stability, whereas STS releases are supported for 18 months, featuring the latest innovations.
+            ul
+              li .NET Core 1.0 (2016): First cross-platform release.
+              li .NET Core 3.0 (2019): LTS release, precursor to .NET 5.
+              li .NET 5 (2020): Unified .NET platform, starting the annual cycle.
+              li .NET 6 (2021): LTS release, enhanced performance and new APIs.
+              li .NET 7 (2022): STS release, focused on cloud-native improvements.
+              li .NET 8 (2023): LTS release, major runtime and library enhancements.
+              li .NET 9 (2024): STS release, new language features and tooling updates.
+            p.mb-0.
+              Choose LTS for stability and STS for innovation based on your project's needs.
+          .card-footer
             p.mb-0
-                | For more information on the .NET versioning strategy, reference the following:
-                a(href='https://learn.microsoft.com/en-us/dotnet/core/versions/', target='_blank') .NET Versioning Strategy.
-      dl
-        dt Step 1: Run .NET Migration Assistance App
-        dd
-          | The .NET Migration Assistance App is a versatile tool designed to simplify the process of upgrading legacy .NET applications. It provides automated assistance, guiding developers through complex migration tasks such as updating project files, replacing deprecated APIs, and handling configuration changes. With support for various project types, the tool ensures that the migration is efficient and less prone to errors.
-          | The app also offers flexibility in usage, with both a graphical interface integrated into Visual Studio and a command-line tool for automation. This versatility makes it suitable for diverse team workflows, from manual migrations to automated CI/CD processes.
+              | For more information on the .NET versioning strategy, reference the following:
+              a(href='https://learn.microsoft.com/en-us/dotnet/core/versions/', target='_blank') .NET Versioning Strategy.
+        dl
+          dt Step 1: Run .NET Migration Assistance App
+          dd
+            | The .NET Migration Assistance App is a versatile tool designed to simplify the process of upgrading legacy .NET applications. It provides automated assistance, guiding developers through complex migration tasks such as updating project files, replacing deprecated APIs, and handling configuration changes. With support for various project types, the tool ensures that the migration is efficient and less prone to errors.
+            | The app also offers flexibility in usage, with both a graphical interface integrated into Visual Studio and a command-line tool for automation. This versatility makes it suitable for diverse team workflows, from manual migrations to automated CI/CD processes.
 
-          dl
-            dt Deprecated API Detection
-            dd
-              | The app identifies deprecated APIs and suggests modern alternatives, making it easier to update large codebases. This reduces the manual effort required for finding and replacing outdated code.
+            dl
+              dt Deprecated API Detection
+              dd
+                | The app identifies deprecated APIs and suggests modern alternatives, making it easier to update large codebases. This reduces the manual effort required for finding and replacing outdated code.
 
-            dt Visual Studio Integration
-            dd
-              | The tool integrates seamlessly with Visual Studio and offers both a graphical interface and a command-line option, allowing developers to use it according to their preferred workflow.
+              dt Visual Studio Integration
+              dd
+                | The tool integrates seamlessly with Visual Studio and offers both a graphical interface and a command-line option, allowing developers to use it according to their preferred workflow.
 
-            dt Comprehensive Reporting
-            dd
-              | After the migration process, the app generates detailed reports highlighting areas that need attention, helping teams prioritize tasks and resolve critical issues efficiently.
+              dt Comprehensive Reporting
+              dd
+                | After the migration process, the app generates detailed reports highlighting areas that need attention, helping teams prioritize tasks and resolve critical issues efficiently.
 
-        dt Step 2: Update the Target Framework and NuGet Packages
-        dd
-          | Once the target framework is updated, it's essential to ensure that all NuGet packages are also updated to versions compatible with .NET 9. This involves not only updating the packages but also reviewing each project for included packages that may have vulnerabilities or deprecated features.
-          | A systematic approach is necessary for this step. Each project should be evaluated individually, and a plan should be made to address any security concerns or compatibility issues that arise.
+          dt Step 2: Update the Target Framework and NuGet Packages
+          dd
+            | Once the target framework is updated, it's essential to ensure that all NuGet packages are also updated to versions compatible with .NET 9. This involves not only updating the packages but also reviewing each project for included packages that may have vulnerabilities or deprecated features.
+            | A systematic approach is necessary for this step. Each project should be evaluated individually, and a plan should be made to address any security concerns or compatibility issues that arise.
 
-          dl
-            dt Update All NuGet Packages
-            dd
-              | Use the `dotnet list package --outdated` command to identify all outdated packages and update them using `dotnet add package` to the latest compatible versions.
+            dl
+              dt Update All NuGet Packages
+              dd
+                | Use the `dotnet list package --outdated` command to identify all outdated packages and update them using `dotnet add package` to the latest compatible versions.
 
-            dt Check for Vulnerable Packages
-            dd
-              | For each project, use tools like `dotnet list package --vulnerable` to identify packages with known vulnerabilities and replace them with safer alternatives or patches.
+              dt Check for Vulnerable Packages
+              dd
+                | For each project, use tools like `dotnet list package --vulnerable` to identify packages with known vulnerabilities and replace them with safer alternatives or patches.
 
-            dt Project-by-Project Review
-            dd
-              | Review each project individually:
-              dl
-                dt Dependency Analysis
-                dd
-                  | Analyze each project's dependencies for compatibility with .NET 9.
-                dt Resolve Conflicts
-                dd
-                  | Resolve any conflicts between updated packages and existing code.
-                dt Rebuild and Test
-                dd
-                  | Rebuild and thoroughly test each project after updating to ensure stability and compatibility.
+              dt Project-by-Project Review
+              dd
+                | Review each project individually:
+                dl
+                  dt Dependency Analysis
+                  dd
+                    | Analyze each project's dependencies for compatibility with .NET 9.
+                  dt Resolve Conflicts
+                  dd
+                    | Resolve any conflicts between updated packages and existing code.
+                  dt Rebuild and Test
+                  dd
+                    | Rebuild and thoroughly test each project after updating to ensure stability and compatibility.
 
-        dt Step 3: Update Docker Configuration
-        dd
-          | Updating the Docker configuration involves changing the base images to use .NET 9 SDK and runtime images. This ensures the Docker containers are using the latest .NET 9 features and performance optimizations.
-          pre.language-csharp
-            code.language-csharp.
-              FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-              FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-          | After updating, I verified the Docker build locally:
-          pre.language-csharp
-            code.language-csharp.
-              docker build -t samplemvcapp:latest .
-              docker run -p 5000:80 samplemvcapp:latest
-          | Updating CI/CD pipelines to use .NET 9 for building and testing is another critical step.
+          dt Step 3: Update Docker Configuration
+          dd
+            | Updating the Docker configuration involves changing the base images to use .NET 9 SDK and runtime images. This ensures the Docker containers are using the latest .NET 9 features and performance optimizations.
+            pre.language-csharp
+              code.language-csharp.
+                FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+                FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+            | After updating, I verified the Docker build locally:
+            pre.language-csharp
+              code.language-csharp.
+                docker build -t samplemvcapp:latest .
+                docker run -p 5000:80 samplemvcapp:latest
+            | Updating CI/CD pipelines to use .NET 9 for building and testing is another critical step.
 
-        dt Step 4: Code Changes and Refactoring
-        dd
-          | I reviewed the release notes and breaking changes in .NET 9 to update the code accordingly. Replacing deprecated APIs and using newer counterparts was necessary to maintain compatibility.
-          | Thorough testing helped me identify and fix any runtime issues and behavioral changes in the application.
+          dt Step 4: Code Changes and Refactoring
+          dd
+            | I reviewed the release notes and breaking changes in .NET 9 to update the code accordingly. Replacing deprecated APIs and using newer counterparts was necessary to maintain compatibility.
+            | Thorough testing helped me identify and fix any runtime issues and behavioral changes in the application.
 
-        dt Step 5: Search Engine Optimization (SEO)
-        dd
-          | Enhancing the SEO of the application involved updating meta tags, improving URL structures, and implementing structured data. This step ensures better visibility and user engagement.
-          pre.language-csharp
-            code.language-csharp.
-              <meta name="description" content="Sample MVC CRUD application showcasing .NET 9 features.">
-              <meta property="og:title" content="Sample MVC App - .NET 9">
-              <meta property="og:description" content="Learn how to build and optimize a .NET 9 MVC CRUD application.">
-          | I also improved URL structures to follow a RESTful approach:
-          pre.language-csharp
-            code.language-csharp.
-              /products/edit/1
-      h2 Migration Checklist from .NET 8 to .NET 9
-      p Here's a quick checklist to ensure a smooth migration from .NET 8 to .NET 9:
-      .accordion#checklist
-        .accordion-item
-          span.accordion-header#headingOne
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseOne', aria-expanded='false', aria-controls='collapseOne')
-              | 1. Review .NET 9 Release Notes and Breaking Changes
-          #collapseOne.accordion-collapse.collapse(aria-labelledby='headingOne', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Review the official .NET 9 release notes for new features.
-                li Identify and document any breaking changes.
-                li Plan for code updates and refactoring if necessary.
-        .accordion-item
-          span.accordion-header#headingTwo
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
-              | 2. Assess Third-Party Library Compatibility
-          #collapseTwo.accordion-collapse.collapse(aria-labelledby='headingTwo', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Check compatibility of all NuGet packages with .NET 9.
-                li Update or replace incompatible packages.
-                li Test the application with updated libraries.
-        .accordion-item
-          span.accordion-header#headingThree
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseThree', aria-expanded='false', aria-controls='collapseThree')
-              | 3. Backup Current Project and Dependencies
-          #collapseThree.accordion-collapse.collapse(aria-labelledby='headingThree', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Backup the current project and source code.
-                li Export and save a copy of all dependencies.
-                li Store backups in a secure, version-controlled environment.
-        .accordion-item
-          span.accordion-header#headingFour
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseFour', aria-expanded='false', aria-controls='collapseFour')
-              | 4. Run .NET Migration Assistance App on Each Project
-          #collapseFour.accordion-collapse.collapse(aria-labelledby='headingFour', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Use the tool to analyze project compatibility.
-                li Apply suggested changes and review the report.
-                li Resolve any flagged issues or incompatibilities.
-        .accordion-item
-          span.accordion-header#headingFive
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseFive', aria-expanded='false', aria-controls='collapseFive')
-              | 5. Update the TargetFramework in .csproj Files
-          #collapseFive.accordion-collapse.collapse(aria-labelledby='headingFive', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Open each project’s .csproj file in a text editor.
-                li Change the TargetFramework element to net9.0.
-                li Save the changes and verify build success.
-        .accordion-item
-          span.accordion-header#headingSix
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSix', aria-expanded='false', aria-controls='collapseSix')
-              | 6. Upgrade NuGet Packages
-          #collapseSix.accordion-collapse.collapse(aria-labelledby='headingSix', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li List outdated packages using `dotnet list package --outdated`.
-                li Update each package to a compatible version.
-                li Run tests to ensure stability.
-        .accordion-item
-          span.accordion-header#headingSeven
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSeven', aria-expanded='false', aria-controls='collapseSeven')
-              | 7. Update Dockerfile Base Images to .NET 9
-          #collapseSeven.accordion-collapse.collapse(aria-labelledby='headingSeven', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Update the base image references in Dockerfile.
-                li Build and run Docker containers locally.
-                li Test application functionality within the container.
-        .accordion-item
-          span.accordion-header#headingEight
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseEight', aria-expanded='false', aria-controls='collapseEight')
-              | 8. Replace Deprecated APIs
-          #collapseEight.accordion-collapse.collapse(aria-labelledby='headingEight', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Identify deprecated APIs used in the project.
-                li Replace deprecated APIs with updated alternatives.
-                li Test thoroughly to ensure no breaking changes.
-        .accordion-item
-          span.accordion-header#headingNine
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseNine', aria-expanded='false', aria-controls='collapseNine')
-              | 9. Run Unit, Integration, and End-to-End Tests
-          #collapseNine.accordion-collapse.collapse(aria-labelledby='headingNine', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Run all unit tests to verify individual components.
-                li Execute integration tests for inter-component interactions.
-                li Perform end-to-end testing to validate overall functionality.
-        .accordion-item
-          span.accordion-header#headingTen
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTen', aria-expanded='false', aria-controls='collapseTen')
-              | 10. Modify CI/CD Pipelines to Use .NET 9
-          #collapseTen.accordion-collapse.collapse(aria-labelledby='headingTen', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Update build pipelines to target .NET 9.
-                li Modify Docker build steps in CI/CD scripts.
-                li Test the pipelines in a staging environment.
-        .accordion-item
-          span.accordion-header#headingEleven
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseEleven', aria-expanded='false', aria-controls='collapseEleven')
-              | 11. Deploy to a Staging Environment First
-          #collapseEleven.accordion-collapse.collapse(aria-labelledby='headingEleven', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Deploy the updated application to a staging environment.
-                li Verify functionality and performance under load.
-                li Fix any issues before deploying to production.
-        .accordion-item
-          span.accordion-header#headingTwelve
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTwelve', aria-expanded='false', aria-controls='collapseTwelve')
-              | 12. Update Meta Tags, Titles, and Descriptions
-          #collapseTwelve.accordion-collapse.collapse(aria-labelledby='headingTwelve', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Review and update meta tags for SEO optimization.
-                li Ensure each page has a unique and descriptive title.
-                li Implement Open Graph and Twitter Card metadata.
-        .accordion-item
-          span.accordion-header#headingThirteen
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseThirteen', aria-expanded='false', aria-controls='collapseThirteen')
-              | 13. Implement Structured Data and Improve URL Structure
-          #collapseThirteen.accordion-collapse.collapse(aria-labelledby='headingThirteen', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Implement structured data using Schema.org.
-                li Update URLs to be clean and descriptive.
-                li Avoid query parameters; use RESTful URLs instead.
-        .accordion-item
-          span.accordion-header#headingFourteen
-            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseFourteen', aria-expanded='false', aria-controls='collapseFourteen')
-              | 14. Optimize Performance and Ensure Responsive Design
-          #collapseFourteen.accordion-collapse.collapse(aria-labelledby='headingFourteen', data-bs-parent='#checklist')
-            .accordion-body
-              ul
-                li Improve page load times by leveraging caching.
-                li Minify JavaScript, CSS, and HTML resources.
-                li Ensure mobile-friendly design using Bootstrap.
+          dt Step 5: Search Engine Optimization (SEO)
+          dd
+            | Enhancing the SEO of the application involved updating meta tags, improving URL structures, and implementing structured data. This step ensures better visibility and user engagement.
+            pre.language-csharp
+              code.language-csharp.
+                <meta name="description" content="Sample MVC CRUD application showcasing .NET 9 features.">
+                <meta property="og:title" content="Sample MVC App - .NET 9">
+                <meta property="og:description" content="Learn how to build and optimize a .NET 9 MVC CRUD application.">
+            | I also improved URL structures to follow a RESTful approach:
+            pre.language-csharp
+              code.language-csharp.
+                /products/edit/1
+        h2 Migration Checklist from .NET 8 to .NET 9
+        p Here's a quick checklist to ensure a smooth migration from .NET 8 to .NET 9:
+        .accordion#checklist
+          .accordion-item
+            span.accordion-header#headingOne
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseOne', aria-expanded='false', aria-controls='collapseOne')
+                | 1. Review .NET 9 Release Notes and Breaking Changes
+            #collapseOne.accordion-collapse.collapse(aria-labelledby='headingOne', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Review the official .NET 9 release notes for new features.
+                  li Identify and document any breaking changes.
+                  li Plan for code updates and refactoring if necessary.
+          .accordion-item
+            span.accordion-header#headingTwo
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+                | 2. Assess Third-Party Library Compatibility
+            #collapseTwo.accordion-collapse.collapse(aria-labelledby='headingTwo', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Check compatibility of all NuGet packages with .NET 9.
+                  li Update or replace incompatible packages.
+                  li Test the application with updated libraries.
+          .accordion-item
+            span.accordion-header#headingThree
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseThree', aria-expanded='false', aria-controls='collapseThree')
+                | 3. Backup Current Project and Dependencies
+            #collapseThree.accordion-collapse.collapse(aria-labelledby='headingThree', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Backup the current project and source code.
+                  li Export and save a copy of all dependencies.
+                  li Store backups in a secure, version-controlled environment.
+          .accordion-item
+            span.accordion-header#headingFour
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseFour', aria-expanded='false', aria-controls='collapseFour')
+                | 4. Run .NET Migration Assistance App on Each Project
+            #collapseFour.accordion-collapse.collapse(aria-labelledby='headingFour', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Use the tool to analyze project compatibility.
+                  li Apply suggested changes and review the report.
+                  li Resolve any flagged issues or incompatibilities.
+          .accordion-item
+            span.accordion-header#headingFive
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseFive', aria-expanded='false', aria-controls='collapseFive')
+                | 5. Update the TargetFramework in .csproj Files
+            #collapseFive.accordion-collapse.collapse(aria-labelledby='headingFive', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Open each project’s .csproj file in a text editor.
+                  li Change the TargetFramework element to net9.0.
+                  li Save the changes and verify build success.
+          .accordion-item
+            span.accordion-header#headingSix
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSix', aria-expanded='false', aria-controls='collapseSix')
+                | 6. Upgrade NuGet Packages
+            #collapseSix.accordion-collapse.collapse(aria-labelledby='headingSix', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li List outdated packages using `dotnet list package --outdated`.
+                  li Update each package to a compatible version.
+                  li Run tests to ensure stability.
+          .accordion-item
+            span.accordion-header#headingSeven
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSeven', aria-expanded='false', aria-controls='collapseSeven')
+                | 7. Update Dockerfile Base Images to .NET 9
+            #collapseSeven.accordion-collapse.collapse(aria-labelledby='headingSeven', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Update the base image references in Dockerfile.
+                  li Build and run Docker containers locally.
+                  li Test application functionality within the container.
+          .accordion-item
+            span.accordion-header#headingEight
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseEight', aria-expanded='false', aria-controls='collapseEight')
+                | 8. Replace Deprecated APIs
+            #collapseEight.accordion-collapse.collapse(aria-labelledby='headingEight', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Identify deprecated APIs used in the project.
+                  li Replace deprecated APIs with updated alternatives.
+                  li Test thoroughly to ensure no breaking changes.
+          .accordion-item
+            span.accordion-header#headingNine
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseNine', aria-expanded='false', aria-controls='collapseNine')
+                | 9. Run Unit, Integration, and End-to-End Tests
+            #collapseNine.accordion-collapse.collapse(aria-labelledby='headingNine', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Run all unit tests to verify individual components.
+                  li Execute integration tests for inter-component interactions.
+                  li Perform end-to-end testing to validate overall functionality.
+          .accordion-item
+            span.accordion-header#headingTen
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTen', aria-expanded='false', aria-controls='collapseTen')
+                | 10. Modify CI/CD Pipelines to Use .NET 9
+            #collapseTen.accordion-collapse.collapse(aria-labelledby='headingTen', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Update build pipelines to target .NET 9.
+                  li Modify Docker build steps in CI/CD scripts.
+                  li Test the pipelines in a staging environment.
+          .accordion-item
+            span.accordion-header#headingEleven
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseEleven', aria-expanded='false', aria-controls='collapseEleven')
+                | 11. Deploy to a Staging Environment First
+            #collapseEleven.accordion-collapse.collapse(aria-labelledby='headingEleven', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Deploy the updated application to a staging environment.
+                  li Verify functionality and performance under load.
+                  li Fix any issues before deploying to production.
+          .accordion-item
+            span.accordion-header#headingTwelve
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseTwelve', aria-expanded='false', aria-controls='collapseTwelve')
+                | 12. Update Meta Tags, Titles, and Descriptions
+            #collapseTwelve.accordion-collapse.collapse(aria-labelledby='headingTwelve', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Review and update meta tags for SEO optimization.
+                  li Ensure each page has a unique and descriptive title.
+                  li Implement Open Graph and Twitter Card metadata.
+          .accordion-item
+            span.accordion-header#headingThirteen
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseThirteen', aria-expanded='false', aria-controls='collapseThirteen')
+                | 13. Implement Structured Data and Improve URL Structure
+            #collapseThirteen.accordion-collapse.collapse(aria-labelledby='headingThirteen', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Implement structured data using Schema.org.
+                  li Update URLs to be clean and descriptive.
+                  li Avoid query parameters; use RESTful URLs instead.
+          .accordion-item
+            span.accordion-header#headingFourteen
+              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseFourteen', aria-expanded='false', aria-controls='collapseFourteen')
+                | 14. Optimize Performance and Ensure Responsive Design
+            #collapseFourteen.accordion-collapse.collapse(aria-labelledby='headingFourteen', data-bs-parent='#checklist')
+              .accordion-body
+                ul
+                  li Improve page load times by leveraging caching.
+                  li Minify JavaScript, CSS, and HTML resources.
+                  li Ensure mobile-friendly design using Bootstrap.
 
-      p.
-        Migrating to .NET 9 and optimizing for SEO will not only improve the performance and security of your application
-        but also increase its visibility. Follow the steps and checklist provided to ensure a smooth migration and enhanced user experience.
-        If you have any questions or need assistance, feel free to reach out to me!
+        p.
+          Migrating to .NET 9 and optimizing for SEO will not only improve the performance and security of your application
+          but also increase its visibility. Follow the steps and checklist provided to ensure a smooth migration and enhanced user experience.
+          If you have any questions or need assistance, feel free to reach out to me!
