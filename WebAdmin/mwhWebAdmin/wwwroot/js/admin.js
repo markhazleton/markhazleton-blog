@@ -184,15 +184,45 @@ function toggleSidebar() {
     }
 }
 
-function refreshSite() {
+async function refreshSite() {
     if (confirm('This will regenerate the site files. Continue?')) {
         AdminDashboard.showLoading();
 
-        // Simulate site refresh - replace with actual API call
-        setTimeout(() => {
+        try {
+            // Call the API endpoint
+            const response = await fetch('/api/site/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Show success message
+                showAlert('Site refreshed successfully!', 'success');
+
+                // Optionally reload the page after a short delay to reflect changes
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                // Show error message with details
+                const errorMsg = `Build failed: ${result.message}`;
+                showAlert(errorMsg, 'danger');
+
+                // Log the detailed output to console for debugging
+                if (result.output) {
+                    console.error('Build output:', result.output);
+                }
+            }
+        } catch (error) {
+            console.error('Error refreshing site:', error);
+            showAlert('Error refreshing site. Please try again.', 'danger');
+        } finally {
             AdminDashboard.hideLoading();
-            alert('Site refreshed successfully!');
-        }, 3000);
+        }
     }
 }
 
@@ -206,6 +236,34 @@ function deleteItem(id, type) {
             form.submit();
         }
     }
+}
+
+// Helper function to show alerts
+function showAlert(message, type = 'info') {
+    // Create alert element
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    // Find a container to add the alert (preferably at the top of main content)
+    const container = document.querySelector('.container-fluid') || document.body;
+    const firstChild = container.firstChild;
+
+    if (firstChild) {
+        container.insertBefore(alertDiv, firstChild);
+    } else {
+        container.appendChild(alertDiv);
+    }
+
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
 }
 
 // Initialize on DOM ready

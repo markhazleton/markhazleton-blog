@@ -131,6 +131,9 @@ public class SeoScore
     public int DescriptionScore { get; set; }
     public int KeywordsScore { get; set; }
     public int ImageScore { get; set; }
+    public int H1Score { get; set; }
+    public int ContentImageScore { get; set; }
+    public int HtmlSeoScore { get; set; }
     public int OverallScore { get; set; }
     public string Grade => OverallScore switch
     {

@@ -1499,10 +1499,130 @@ Ignore navigation elements, headers, footers, and technical markup.";
                                                             a.EffectiveDescription.Length < 120 ||
                                                             a.EffectiveDescription.Length > 160),
                 ["MissingImages"] = articles.Count(a => string.IsNullOrEmpty(a.ImgSrc)),
-                ["CompleteSeoArticles"] = articles.Count(a => a.Seo != null && a.OpenGraph != null && a.TwitterCard != null)
+                ["CompleteSeoArticles"] = articles.Count(a => a.Seo != null && a.OpenGraph != null && a.TwitterCard != null),
+                // New file-based validation statistics
+                ["PugFilesFound"] = articles.Count(a => GetPugFilePathForStats(a) != null),
+                ["HtmlFilesFound"] = articles.Count(a => GetHtmlFilePathForStats(a) != null),
+                ["FilesWithValidation"] = articles.Count(a => GetPugFilePathForStats(a) != null || GetHtmlFilePathForStats(a) != null)
             };
 
             return stats;
+        }
+
+        /// <summary>
+        /// Gets the PUG file path for an article - helper method for statistics
+        /// </summary>
+        /// <param name="article">The article</param>
+        /// <returns>PUG file path or null if not found</returns>
+        private string? GetPugFilePathForStats(ArticleModel article)
+        {
+            try
+            {
+                var srcPath = _configuration["SrcPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "src");
+
+                if (!string.IsNullOrEmpty(article.Source))
+                {
+                    var relativePath = article.Source.Replace("/src/pug/", "").Replace("/", Path.DirectorySeparatorChar.ToString());
+                    var fullPath = Path.Combine(srcPath, "pug", relativePath);
+                    return File.Exists(fullPath) ? fullPath : null;
+                }
+                else if (!string.IsNullOrEmpty(article.Slug))
+                {
+                    var fileName = article.Slug.Replace(".html", ".pug").Replace("articles/", "");
+                    var fullPath = Path.Combine(srcPath, "pug", "articles", fileName);
+                    return File.Exists(fullPath) ? fullPath : null;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting PUG file path for article: {ArticleName}", article.Name);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the HTML file path for an article - helper method for statistics
+        /// </summary>
+        /// <param name="article">The article</param>
+        /// <returns>HTML file path or null if not found</returns>
+        private string? GetHtmlFilePathForStats(ArticleModel article)
+        {
+            try
+            {
+                var docsPath = _configuration["DocsPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "docs");
+
+                if (!string.IsNullOrEmpty(article.Slug))
+                {
+                    var htmlFileName = article.Slug;
+
+                    // If the slug ends with /, check for index.html
+                    if (htmlFileName.EndsWith("/"))
+                    {
+                        htmlFileName += "index.html";
+                    }
+                    else if (!htmlFileName.EndsWith(".html"))
+                    {
+                        htmlFileName += ".html";
+                    }
+
+                    var fullPath = Path.Combine(docsPath, htmlFileName);
+
+                    // If file doesn't exist and slug doesn't end with /, try adding /index.html
+                    if (!File.Exists(fullPath) && !article.Slug.EndsWith("/") && !article.Slug.EndsWith(".html"))
+                    {
+                        var indexPath = Path.Combine(docsPath, article.Slug, "index.html");
+                        if (File.Exists(indexPath))
+                        {
+                            return indexPath;
+                        }
+                    }
+
+                    return File.Exists(fullPath) ? fullPath : null;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting HTML file path for article: {ArticleName}", article.Name);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Extracts YouTube video ID from URL
+        /// </summary>
+        /// <param name="youtubeUrl">YouTube URL</param>
+        /// <returns>Video ID or empty string if not found</returns>
+        private string ExtractYouTubeVideoId(string youtubeUrl)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(youtubeUrl))
+                    return string.Empty;
+
+                var uri = new Uri(youtubeUrl);
+                var queryParameters = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+                // Handle different YouTube URL formats
+                if (uri.Host.Contains("youtube.com"))
+                {
+                    return queryParameters["v"] ?? string.Empty;
+                }
+                else if (uri.Host.Contains("youtu.be"))
+                {
+                    return uri.Segments.LastOrDefault()?.TrimStart('/') ?? string.Empty;
+                }
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error extracting YouTube video ID from URL: {YoutubeUrl}", youtubeUrl);
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -1548,7 +1668,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
             // Add existing article content if available
             if (!string.IsNullOrEmpty(article.ArticleContent))
             {
-                contentParts.Add("Article Content:");
+                contentParts.Add("Existing Article Content:");
                 contentParts.Add(article.ArticleContent);
             }
 
@@ -1556,151 +1676,42 @@ Ignore navigation elements, headers, footers, and technical markup.";
         }
 
         /// <summary>
-        /// Reads and extracts meaningful content from a PUG file for SEO analysis
+        /// Reads PUG file content for an article
         /// </summary>
-        /// <param name="article">The article whose PUG file to read</param>
-        /// <returns>Extracted and cleaned content from the PUG file</returns>
+        /// <param name="article">The article</param>
+        /// <returns>PUG file content or empty string if not found</returns>
         private async Task<string> ReadPugFileContent(ArticleModel article)
         {
             try
             {
-                // Calculate the PUG file path
-                string pugFilePath = string.Empty;
+                var srcPath = _configuration["SrcPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "src");
 
                 if (!string.IsNullOrEmpty(article.Source))
                 {
-                    // Use the source path if available (remove /src/pug/ prefix and convert to actual file path)
-                    string relativePath = article.Source.Replace("/src/pug/", "").Replace("/", "\\");
-                    pugFilePath = Path.Combine(_filePath.Replace("articles.json", ""), "pug", relativePath);
+                    var relativePath = article.Source.Replace("/src/pug/", "").Replace("/", Path.DirectorySeparatorChar.ToString());
+                    var fullPath = Path.Combine(srcPath, "pug", relativePath);
+
+                    if (File.Exists(fullPath))
+                    {
+                        return await File.ReadAllTextAsync(fullPath);
+                    }
                 }
                 else if (!string.IsNullOrEmpty(article.Slug))
                 {
-                    // Fallback: derive from slug
-                    string fileName = article.Slug.Replace(".html", ".pug").Replace("articles/", "");
-                    pugFilePath = Path.Combine(_articlesDirectory, fileName);
+                    var fileName = article.Slug.Replace(".html", ".pug").Replace("articles/", "");
+                    var fullPath = Path.Combine(srcPath, "pug", "articles", fileName);
+
+                    if (File.Exists(fullPath))
+                    {
+                        return await File.ReadAllTextAsync(fullPath);
+                    }
                 }
 
-                if (string.IsNullOrEmpty(pugFilePath) || !File.Exists(pugFilePath))
-                {
-                    _logger.LogDebug("PUG file not found for article: {ArticleName} at path: {PugFilePath}", article.Name, pugFilePath);
-                    return string.Empty;
-                }
-
-                // Read the PUG file
-                string pugContent = await File.ReadAllTextAsync(pugFilePath);
-
-                // Extract meaningful content from PUG file
-                return ExtractContentFromPug(pugContent);
+                return string.Empty;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error reading PUG file for article: {ArticleName}", article.Name);
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Extracts meaningful text content from PUG markup for SEO analysis
-        /// </summary>
-        /// <param name="pugContent">Raw PUG file content</param>
-        /// <returns>Cleaned text content suitable for AI analysis</returns>
-        private static string ExtractContentFromPug(string pugContent)
-        {
-            if (string.IsNullOrEmpty(pugContent))
-                return string.Empty;
-
-            var lines = pugContent.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            var contentLines = new List<string>();
-
-            foreach (var line in lines)
-            {
-                var trimmedLine = line.Trim();
-
-                // Skip comments, extends, block declarations, and other PUG syntax
-                if (trimmedLine.StartsWith("//") ||
-                    trimmedLine.StartsWith("extends ") ||
-                    trimmedLine.StartsWith("block ") ||
-                    trimmedLine.StartsWith("include ") ||
-                    trimmedLine.StartsWith("mixin ") ||
-                    trimmedLine.StartsWith("if ") ||
-                    trimmedLine.StartsWith("each ") ||
-                    trimmedLine.StartsWith("case ") ||
-                    trimmedLine.StartsWith("when ") ||
-                    trimmedLine.StartsWith("unless ") ||
-                    string.IsNullOrWhiteSpace(trimmedLine))
-                {
-                    continue;
-                }
-
-                // Extract text content (lines starting with | or plain text)
-                if (trimmedLine.StartsWith("| "))
-                {
-                    contentLines.Add(trimmedLine.Substring(2).Trim());
-                }
-                // Extract text that might be after HTML elements (simple heuristic)
-                else if (trimmedLine.Contains(" ") && !trimmedLine.StartsWith(".") && !trimmedLine.StartsWith("#"))
-                {
-                    // Look for text after the last space that might be content
-                    var lastSpaceIndex = trimmedLine.LastIndexOf(' ');
-                    if (lastSpaceIndex > 0 && lastSpaceIndex < trimmedLine.Length - 1)
-                    {
-                        var potentialContent = trimmedLine.Substring(lastSpaceIndex + 1).Trim();
-                        if (potentialContent.Length > 3 && !potentialContent.StartsWith(".") && !potentialContent.StartsWith("#"))
-                        {
-                            contentLines.Add(potentialContent);
-                        }
-                    }
-                }
-                // Extract headings and other meaningful structure indicators
-                else if (trimmedLine.Contains("h1.") || trimmedLine.Contains("h2.") || trimmedLine.Contains("h3.") ||
-                         trimmedLine.Contains("p.") || trimmedLine.Contains("article") || trimmedLine.Contains("section"))
-                {
-                    contentLines.Add($"[Structure: {trimmedLine}]");
-                }
-            }
-
-            return string.Join("\n", contentLines);
-        }
-
-        /// <summary>
-        /// Extracts the YouTube video ID from various YouTube URL formats.
-        /// </summary>
-        /// <param name="url">The YouTube URL.</param>
-        /// <returns>The video ID if found, otherwise empty string.</returns>
-        private string ExtractYouTubeVideoId(string url)
-        {
-            if (string.IsNullOrEmpty(url))
-                return string.Empty;
-
-            try
-            {
-                // Handle different YouTube URL formats
-                var uri = new Uri(url);
-
-                // Standard YouTube URL: https://www.youtube.com/watch?v=VIDEO_ID
-                if (uri.Host.Contains("youtube.com"))
-                {
-                    var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
-                    return query["v"] ?? string.Empty;
-                }
-
-                // Short YouTube URL: https://youtu.be/VIDEO_ID
-                if (uri.Host.Contains("youtu.be"))
-                {
-                    return uri.Segments.LastOrDefault()?.TrimStart('/') ?? string.Empty;
-                }
-
-                // Embed URL: https://www.youtube.com/embed/VIDEO_ID
-                if (uri.AbsolutePath.StartsWith("/embed/"))
-                {
-                    return uri.Segments.LastOrDefault()?.TrimStart('/') ?? string.Empty;
-                }
-
-                return string.Empty;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Failed to extract YouTube video ID from URL: {Url}", url);
                 return string.Empty;
             }
         }

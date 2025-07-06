@@ -41,10 +41,12 @@ else
             </div>
             <div class="d-flex align-items-center">
                 <div class="me-3">
-                    <input type="text" class="form-control table-search" placeholder="Search projects..." style="width: 250px;">
+                    <input type="text" class="form-control table-search" placeholder="Search projects..."
+                        style="width: 250px;">
                 </div>
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown">
                         <i class="fas fa-filter me-1"></i>Filter
                     </button>
                     <ul class="dropdown-menu">
@@ -74,16 +76,14 @@ else
                                 <div class="project-image-thumb">
                                     @if (!string.IsNullOrEmpty(project.Image))
                                     {
-                                        <img src="/@project.Image"
-                                             alt="@project.Title"
-                                             class="img-thumbnail"
-                                             style="width: 60px; height: 60px; object-fit: cover;"
-                                             onerror="this.src='/img/placeholder.svg';" />
+                                        <img src="/@project.Image" alt="@project.Title" class="img-thumbnail"
+                                            style="width: 60px; height: 60px; object-fit: cover;"
+                                            onerror="this.src='/img/placeholder.svg';" />
                                     }
                                     else
                                     {
                                         <div class="bg-light border rounded d-flex align-items-center justify-content-center"
-                                             style="width: 60px; height: 60px;">
+                                            style="width: 60px; height: 60px;">
                                             <i class="fas fa-image text-muted"></i>
                                         </div>
                                     }
@@ -107,7 +107,8 @@ else
                             <td>
                                 @if (!string.IsNullOrEmpty(project.Link))
                                 {
-                                    <a href="@project.Link" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <a href="@project.Link" target="_blank" rel="noopener noreferrer"
+                                        class="btn btn-outline-primary btn-sm">
                                         <i class="fas fa-external-link-alt me-1"></i>View
                                     </a>
                                 }
@@ -119,19 +120,14 @@ else
                             <td class="text-center">
                                 <div class="action-buttons">
                                     <a asp-page="./ProjectEdit" asp-route-id="@project.Id"
-                                       class="btn btn-outline-primary btn-sm"
-                                       data-bs-toggle="tooltip"
-                                       title="Edit Project">
+                                        class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" title="Edit Project">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <form method="post" asp-page-handler="Delete" asp-route-id="@project.Id"
-                                          class="d-inline" data-delete-id="@project.Id">
-                                        <button type="button"
-                                                class="btn btn-outline-danger btn-sm"
-                                                data-bs-toggle="tooltip"
-                                                title="Delete Project"
-                                                onclick="deleteItem(@project.Id, 'project')">
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@project.Id" class="d-inline"
+                                        data-delete-id="@project.Id">
+                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip"
+                                            title="Delete Project" onclick="deleteItem(@project.Id, 'project')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -160,12 +156,16 @@ else
 
 @section Scripts {
     <script>
-        function filterProjects(filter) {
+        function filterProjects(filter)
+        {
             const rows = document.querySelectorAll('tbody tr');
-            rows.forEach(row => {
-                if (filter === 'all') {
+            rows.forEach(row =>
+            {
+                if (filter === 'all')
+                {
                     row.style.display = '';
-                } else {
+                } else
+                {
                     // Add your filtering logic here
                     row.style.display = '';
                 }

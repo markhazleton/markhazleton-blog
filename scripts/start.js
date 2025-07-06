@@ -1,55 +1,31 @@
-const concurrently = require("concurrently");
-const path = require("path");
-const upath = require("upath");
+const { execSync } = require('child_process');
+const path = require('path');
+const fs = require('fs');
 
-// Detect platform
-const isWindows = process.platform === "win32";
+console.log('Starting Mark Hazleton Blog...');
+console.log('Building site and starting development server...');
 
-// Set BrowserSync executable based on platform
-const browserSyncPath = isWindows
-    ? upath.resolve(__dirname, "../node_modules/.bin/browser-sync.cmd")
-    : upath.resolve(__dirname, "../node_modules/.bin/browser-sync");
-
-// Set SSL key and cert paths
-const sslKeyPath = isWindows
-    ? "C:\\Program Files\\OpenSSL-Win64\\bin\\localhost.key"
-    : "/usr/local/etc/openssl/localhost.key";
-
-const sslCertPath = isWindows
-    ? "C:\\Program Files\\OpenSSL-Win64\\bin\\localhost.crt"
-    : "/usr/local/etc/openssl/localhost.crt";
-
-// BrowserSync command for Windows and macOS/Linux with explicit open flag
-const browserSyncCommand = isWindows
-    ? `powershell -Command "& '${browserSyncPath}' --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --open --https --key '${sslKeyPath}' --cert '${sslCertPath}'"`
-    : `${browserSyncPath} --reload-delay 2000 --reload-debounce 2000 docs -w --no-online --open --https --key ${sslKeyPath} --cert ${sslCertPath}`;
-
-// Run concurrently
-concurrently(
-    [
-        {
-            command: "node scripts/sb-watch.js",
-            name: "SB_WATCH",
-            prefixColor: "bgBlue.bold",
-        },
-        {
-            command: browserSyncCommand,
-            name: "SB_BROWSER_SYNC",
-            prefixColor: "bgGreen.bold",
-        },
-    ],
-    {
-        prefix: "name",
-        killOthers: ["failure", "success"],
-        restartTries: 3, // Optional: Set restart attempts if failure occurs
-    }
-);
-
-// Success and failure handlers (using event listeners instead of .then())
-function success() {
-    console.log("Success");
+// Check if docs directory exists
+const docsDir = path.join(__dirname, '..', 'docs');
+if (!fs.existsSync(docsDir)) {
+    console.error('docs directory not found! Please run: npm run build');
+    process.exit(1);
 }
 
-function failure() {
-    console.log("Failure");
+try {
+    // Change to the docs directory
+    process.chdir(docsDir);
+
+    // Start browser-sync server
+    const command = `npx browser-sync start --server --files "*.html, css/*.css, js/*.js" --port 3000 --open --no-notify`;
+
+    console.log('🚀 Starting development server on http://localhost:3000');
+    console.log('📁 Serving files from docs directory');
+    console.log('👀 Watching for file changes...');
+
+    execSync(command, { stdio: 'inherit' });
+} catch (error) {
+    console.error('❌ Error starting the development server:', error.message);
+    console.log('Make sure browser-sync is installed: npm install');
+    process.exit(1);
 }
