@@ -1,271 +1,259 @@
-extends ../layouts/articles
-
-block pagehead
-  title Exploring Data Using K-means Clustering
-  meta(name='description', content='A Data Scientist explores nutritional data patterns using K-means Clustering on Google Colab, segmenting foods by nutrient content.')
-  meta(name="keywords" content="PCA, K-means Clustering, Nutritional Data, Google Colab, Data Science, Jupyter Notebook")
-  meta(name='author', content='Mark Hazleton')
-  link(rel='canonical', href='https://markhazleton.com/articles/exploring-nutritional-data-using-pca-and-k-means-clustering.html')
-
 block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-cloud.me-3
+            | Exploreing Nutritional Data Using PCA and K-Means Clustering
+          h2.subheading.mb-4 Understanding K-means Clustering
 
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-      h1 Exploring Data K-means Clustering
-      h2.subheading.mb-3 Understanding K-means Clustering
-      p.
-        Clustering, from a data science perspective, refers to the process of grouping a set of objects or data points in such a way that items in the same group (called a cluster)
-        are more similar to each other than to those in other groups. It’s a key technique in unsupervised learning,
-        where the algorithm identifies patterns and relationships in data without predefined labels or categories.
-        The goal of clustering is to uncover hidden structures in data by organizing it into meaningful groups based on their similarities.
-        This approach is widely used in various fields, including customer segmentation, market analysis, image recognition, and medical diagnostics, helping data scientists make sense of complex datasets and draw valuable insights.
-      p.
-        Let's look at K-means clustering, a popular algorithm for partitioning data into clusters based on their similarities.
-      dl
-        dt K
-        dd The "K" in K-means refers to the number of clusters you want to divide your data into. For example, if you choose K = 3, the algorithm will create three groups based on the similarities in the data.
-        dt Means
-        dd The "means" part refers to the centroids or averages of the clusters. In K-means clustering, each cluster has a central point, which is the average (or mean) of all the data points in that cluster. The algorithm calculates these means and adjusts them as it organizes the data into clusters.
-        dt Clustering
-        dd Clustering is the process of grouping similar data points together. In K-means clustering, data points are grouped into K clusters based on their similarity to the centroids. The goal is to minimize the distance between data points and their assigned cluster’s centroid.
-      p.
-        By iteratively adjusting the clusters and centroids, K-means efficiently finds patterns and groups within data, making it one of the most widely used techniques for discovering hidden structures in datasets.
-      p.
-        K-means Clustering is a method used to group data points into clusters based on their similarities.
-        Each cluster has a center point called a centroid, and data points are grouped by how close they are to this centroid.
-      p.
-        K-means clustering is a popular unsupervised machine learning algorithm that partitions data into
-        𝑘 clusters, where each point belongs to the cluster with the nearest mean (centroid). The algorithm
-        iterates to minimize the variance within clusters, producing an optimal clustering result. This article
-        will walk through its key concepts, applications, and provide answers to common questions.
-
-      .card
-        .card-header
-          h5.card-title Student Grade Example
-        .card-body
-          p.card-text.
-            Let’s imagine you’re a teacher with a class of students, and you want to group them based on their grades in subjects like Math, Science, English, Drama, Band, Choir, History, and P.E.
-            You don’t know in advance which students are good at which subjects, so you use K-means clustering to let the data guide you.
-            Using K-means clustering, we can find groups of students who are similar in their performance in these subjects, but unlike other methods, this is an unsupervised approach.
-            Since K-means is an unsupervised clustering algorithm, we don't start with any assumptions about which students belong to which group.
-            Instead, we let the data, in this case the students' grades, lead us to the grouping.
-            The algorithm analyzes their performance across all subjects and forms clusters based on similarities in their grades.
-          dl
-            dt Start with a Guess
-            dd At the beginning, you randomly place three imaginary "centers" (these are like starting points) anywhere in the grade data. You don't know yet which students belong to which group, so these centers are just rough guesses.
-            dt Group By grades
-            dd Next, you look at each student’s grades and see which center they are closest to. For example, a student who has high grades in Math and Science might be grouped with the "math and science" center, while a student with high Drama and Band grades might be closer to the "arts" center.
-            dt Move the Center
-            dd After assigning students to the nearest group, you update each center by moving it to the average of the grades in its group. For example, if the "math and science" group now has several students, the center moves to the average of their Math and Science grades.
-            dt Repeat
-            dd.
-              You keep repeating this process, assigning students to the nearest center and updating the centers,
-              until the centers no longer move. At this point, the algorithm has found stable groups of students based on their grades.
-              You keep repeating this process—grouping students by the nearest center,
-              moving the centers to the average of each group—until the centers stop moving.
-              This means the groups are now stable, and you’ve found clusters of students based on their grades.
-          p.
-            In this way, K-means doesn’t start with any assumptions about which students are good in which subjects.
-            The algorithm uses the grade data to create groups naturally, allowing you to find patterns in how students perform across subjects.
-            Whether they are strong in math or enjoy the arts, the data leads to the final grouping!  This is the power of unsupervised learning.
-            Here is a simple example of how K-means clustering might group students based on their grades in different subjects:
-          ul
-            li
-              strong Group 1:
-              |  Students with high grades in Math and Science might be grouped together. This could indicate a group of students who are strong in math and science subjects.
-            li
-              strong Group 2:
-              |  Students with high grades in Drama, Band, and Choir might naturally group together. These students may enjoy the arts or theatre-related activities.
-            li
-              strong Group 3:
-              |  Students with high grades in P.E. and History could form a group, reflecting students who excel in physical activities or sports.
-          p.card-text.
-            In this way, K-means clustering allows the data itself to define the groups, helping teachers see patterns in student strengths without making any assumptions beforehand.
-            K-means Clustering helps to identify patterns and group similar data points, making it easier to analyze and understand large datasets.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/K-means_clustering' target="_blank" rel="nofollow" title="Learn more about K-means Clustering on Wikipedia" alt="Wikipedia on K-means Clustering") Wikipedia on K-means Clustering
-
-      h2.subheading.mb-3 K-Means Clustering Nutrient Data
-      p
-        | I recently analyzed a nutritional dataset from Kaggle using Google Colab,
-        | a platform that lets you write and execute Python code in a browser-based Jupyter notebook.
-        | The goal was to understand nutrient patterns across various foods and to segment these items based on their nutrient content.
-        | You can find the full code and analysis in my Google Drive folder
-        a(href='https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing' target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis" alt="Google Drive Folder") here.
-
-      p.
-        Kaggle is an excellent resource for data scientists and enthusiasts to find and share datasets.
-        It offers a vast collection of datasets across various domains, making it a great place to
-        practice data analysis and machine learning techniques.
-        You can find datasets on topics ranging from healthcare to finance, and even niche areas like nutritional data.
-        Kaggle also hosts competitions where you can test your skills against others and learn from the community.
-      p.
-        I got my hands on a dataset containing nutritional values for common foods and products, including protein, fat, vitamin C, and fiber content.
-      p.
-        I have already performed data exploration and manipulation steps, so let's dive into the key concepts of K-means clustering.
-        We have a clean dataset with the nutrient values of various foods, and we are ready to apply K-means clustering to segment these foods based on their nutrient content.
-      dl
-        dt Random Initialization
-        dd
-          | K-means starts by randomly selecting 𝑘 initial centroids. Since this process is random, different
-          | runs of K-means can yield different results. This issue can be reduced by running the algorithm multiple
-          | times and selecting the result with the lowest sum of squared errors (SSE).
-          pre.language-csharp
-            code.language-csharp.
-              // Example pseudocode for random initialization
-              Initialize k random centroids;
-              while not converged:
-                Assign points to the nearest centroid;
-                Update centroid locations;
-              End while;
-
-        dt Cluster Assignment and Centroid Update
-        dd
-          | After initialization, the algorithm assigns data points to the nearest centroid based on Euclidean distance.
-          | The centroids are then updated by calculating the mean of the points in each cluster. This process is repeated
-          | until the centroids stabilize.
-          pre.language-csharp
-            code.language-csharp.
-              // Pseudocode for cluster assignment and update
-              for each point in dataset:
-                Assign point to nearest centroid;
-              Update centroids;
-              Repeat until centroids no longer change;
-
-        dt Sum of Squared Errors (SSE)
-        dd
-          | K-means aims to minimize the sum of squared errors (SSE), which is the total squared distance between points
-          | and their centroids. The lower the SSE, the better the clustering result.
-          pre.language-csharp
-            code.language-csharp.
-              // Formula for SSE
-              SSE = sum((x - centroid)^2 for all x in cluster);
-
-        dt Choosing the Optimal Number of Clusters
-        dd
-          | Two common methods for selecting the optimal number of clusters are:
-          | - **Elbow Method:** Plot SSE for different values of 𝑘 and look for the "elbow," where adding more clusters
-          |   no longer significantly reduces SSE.
-          | - **Silhouette Score:** Measures how similar a point is to its own cluster compared to other clusters. The
-          |   higher the score, the better the clustering.
-
-        dt Scaling Data for K-Means
-        dd
-          | Scaling is critical in K-means to ensure that all features contribute equally to the distance calculations.
-          | Data should be scaled, especially when the features have different units or scales, to prevent larger-scale
-          | features from dominating the clustering.
+  // Main Article Content
+  article#main-article
+    .container
       .row
-        .col-12
-          .accordion(id="faqAccordion")
-            .accordion-item
-              span.accordion-header(id="headingOne")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne")
-                  | Q1: Why might different runs of K-means produce slightly different results?
-              #collapseOne.accordion-collapse.collapse(aria-labelledby="headingOne", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | K-means relies on random initialization of centroids, which can lead to different clustering results.
-                  | Running the algorithm multiple times and selecting the result with the lowest SSE can address this issue.
-
-            .accordion-item
-              span.accordion-header(id="headingTwo")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
-                  | Q2: Does K-means automatically scale the data during the iterations?
-              #collapseTwo.accordion-collapse.collapse(aria-labelledby="headingTwo", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | No, K-means does not scale data automatically. It is necessary to scale the data manually before applying the algorithm.
-
-            .accordion-item
-              span.accordion-header(id="headingThree")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree", aria-expanded="false", aria-controls="collapseThree")
-                  | Q3: How does K-means compute the centroids for clusters?
-              #collapseThree.accordion-collapse.collapse(aria-labelledby="headingThree", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | The centroids are calculated by taking the mean of all points assigned to each cluster after every iteration.
-
-            .accordion-item
-              span.accordion-header(id="headingFour")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFour", aria-expanded="false", aria-controls="collapseFour")
-                  | Q4: Why is it important to specify the number of clusters in K-means?
-              #collapseFour.accordion-collapse.collapse(aria-labelledby="headingFour", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | K-means requires specifying the number of clusters (𝑘) beforehand, as this determines how many centroids are initialized and how the data is partitioned.
-
-            .accordion-item
-              span.accordion-header(id="headingFive")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFive", aria-expanded="false", aria-controls="collapseFive")
-                  | Q5: What happens if the number of clusters is equal to the number of data points?
-              #collapseFive.accordion-collapse.collapse(aria-labelledby="headingFive", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | If 𝑘 equals the number of data points, each point will be its own cluster, and the SSE will be zero.
-
-            .accordion-item
-              span.accordion-header(id="headingSix")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSix", aria-expanded="false", aria-controls="collapseSix")
-                  | Q6: Is K-means sensitive to outliers?
-              #collapseSix.accordion-collapse.collapse(aria-labelledby="headingSix", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | Yes, K-means can be sensitive to outliers, as they can heavily influence the centroids. Handling outliers before applying K-means is important, or consider using other algorithms like K-medoids.
-
-            .accordion-item
-              span.accordion-header(id="headingSeven")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSeven", aria-expanded="false", aria-controls="collapseSeven")
-                  | Q7: What kind of distance metric does K-means use?
-              #collapseSeven.accordion-collapse.collapse(aria-labelledby="headingSeven", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | K-means typically uses Euclidean distance for measuring the distance between points and centroids.
-
-            .accordion-item
-              span.accordion-header(id="headingEight")
-                button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseEight", aria-expanded="false", aria-controls="collapseEight")
-                  | Q8: Can K-means be used for non-spherical clusters?
-              #collapseEight.accordion-collapse.collapse(aria-labelledby="headingEight", data-bs-parent="#faqAccordion")
-                .accordion-body
-                  | K-means works best for spherical clusters with relatively uniform variance. For non-spherical clusters, other algorithms like DBSCAN may be more appropriate.
-
-      dl
-        dt Dimensionality Reduction with PCA
-        dd
-          p.
-            I applied Principal Component Analysis (PCA) to reduce the complexity of the data.
-            PCA transforms the data into new dimensions, called principal components, which capture the most significant patterns.
-            This allowed me to visualize nutrient relationships in just two dimensions,
-            preserving about 68% of the data’s variance, or information.
-        dt Segmentation Using K-means Clustering
-        dd
-          p.
-            I applied K-means clustering, a technique that divides data into clusters based on their similarity.
-            To determine the optimal number of clusters,
-            I plotted an elbow curve using the inertia (sum of squared distances within clusters).
-            The “elbow point” at three clusters indicated a good balance.
-            I confirmed this choice with the silhouette score,
-            which measures how well-separated the clusters are;
-            a score closer to 1 suggests distinct and well-defined clusters.
-
-      h3 Key Concepts
-      p.
-        This project provided valuable experience with PCA and K-means clustering.
-        While Google Colab allowed me to work interactively,
-        PCA simplified the data by highlighting major patterns,
-        and K-means grouped the data into meaningful clusters,
-        which could be helpful for future analyses like customer segmentation or recommendation systems.
-
-      .card
-        .card-header
-          h3.card-title Principal Component Analysis (PCA)
-        .card-body
+        p.lead.
+          Clustering, from a data science perspective, refers to the process of grouping a set of objects or data points in such a way that items in the same group (called a cluster)
+          are more similar to each other than to those in other groups. It’s a key technique in unsupervised learning,
+          where the algorithm identifies patterns and relationships in data without predefined labels or categories.
+          The goal of clustering is to uncover hidden structures in data by organizing it into meaningful groups based on their similarities.
+          This approach is widely used in various fields, including customer segmentation, market analysis, image recognition, and medical diagnostics, helping data scientists make sense of complex datasets and draw valuable insights.
         p.
-          Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms data into
-          a smaller number of uncorrelated variables (principal components) that capture the main patterns in the data.
-        p.
-          Imagine you have a lot of data, like test scores in math, science, history, and art.
-          It can be hard to see the big picture when you have many different variables,
-          especially if there are a lot of patterns and connections between them.
-          PCA is a tool that helps you simplify this information.
-          It takes a big set of data with many variables and reduces it to a smaller set of "components"
-          that still capture the most important information.
+          Let's look at K-means clustering, a popular algorithm for partitioning data into clusters based on their similarities.
         dl
-          dt Principal Component Analysis (PCA)
+          dt K
+          dd The "K" in K-means refers to the number of clusters you want to divide your data into. For example, if you choose K = 3, the algorithm will create three groups based on the similarities in the data.
+          dt Means
+          dd The "means" part refers to the centroids or averages of the clusters. In K-means clustering, each cluster has a central point, which is the average (or mean) of all the data points in that cluster. The algorithm calculates these means and adjusts them as it organizes the data into clusters.
+          dt Clustering
+          dd Clustering is the process of grouping similar data points together. In K-means clustering, data points are grouped into K clusters based on their similarity to the centroids. The goal is to minimize the distance between data points and their assigned cluster’s centroid.
+        p.
+          By iteratively adjusting the clusters and centroids, K-means efficiently finds patterns and groups within data, making it one of the most widely used techniques for discovering hidden structures in datasets.
+        p.
+          K-means Clustering is a method used to group data points into clusters based on their similarities.
+          Each cluster has a center point called a centroid, and data points are grouped by how close they are to this centroid.
+        p.
+          K-means clustering is a popular unsupervised machine learning algorithm that partitions data into
+          𝑘 clusters, where each point belongs to the cluster with the nearest mean (centroid). The algorithm
+          iterates to minimize the variance within clusters, producing an optimal clustering result. This article
+          will walk through its key concepts, applications, and provide answers to common questions.
+
+        .card
+          .card-header
+            h5.card-title Student Grade Example
+          .card-body
+            p.card-text.
+              Let’s imagine you’re a teacher with a class of students, and you want to group them based on their grades in subjects like Math, Science, English, Drama, Band, Choir, History, and P.E.
+              You don’t know in advance which students are good at which subjects, so you use K-means clustering to let the data guide you.
+              Using K-means clustering, we can find groups of students who are similar in their performance in these subjects, but unlike other methods, this is an unsupervised approach.
+              Since K-means is an unsupervised clustering algorithm, we don't start with any assumptions about which students belong to which group.
+              Instead, we let the data, in this case the students' grades, lead us to the grouping.
+              The algorithm analyzes their performance across all subjects and forms clusters based on similarities in their grades.
+            dl
+              dt Start with a Guess
+              dd At the beginning, you randomly place three imaginary "centers" (these are like starting points) anywhere in the grade data. You don't know yet which students belong to which group, so these centers are just rough guesses.
+              dt Group By grades
+              dd Next, you look at each student’s grades and see which center they are closest to. For example, a student who has high grades in Math and Science might be grouped with the "math and science" center, while a student with high Drama and Band grades might be closer to the "arts" center.
+              dt Move the Center
+              dd After assigning students to the nearest group, you update each center by moving it to the average of the grades in its group. For example, if the "math and science" group now has several students, the center moves to the average of their Math and Science grades.
+              dt Repeat
+              dd.
+                You keep repeating this process, assigning students to the nearest center and updating the centers,
+                until the centers no longer move. At this point, the algorithm has found stable groups of students based on their grades.
+                You keep repeating this process—grouping students by the nearest center,
+                moving the centers to the average of each group—until the centers stop moving.
+                This means the groups are now stable, and you’ve found clusters of students based on their grades.
+            p.
+              In this way, K-means doesn’t start with any assumptions about which students are good in which subjects.
+              The algorithm uses the grade data to create groups naturally, allowing you to find patterns in how students perform across subjects.
+              Whether they are strong in math or enjoy the arts, the data leads to the final grouping!  This is the power of unsupervised learning.
+              Here is a simple example of how K-means clustering might group students based on their grades in different subjects:
+            ul
+              li
+                strong Group 1:
+                |  Students with high grades in Math and Science might be grouped together. This could indicate a group of students who are strong in math and science subjects.
+              li
+                strong Group 2:
+                |  Students with high grades in Drama, Band, and Choir might naturally group together. These students may enjoy the arts or theatre-related activities.
+              li
+                strong Group 3:
+                |  Students with high grades in P.E. and History could form a group, reflecting students who excel in physical activities or sports.
+            p.card-text.
+              In this way, K-means clustering allows the data itself to define the groups, helping teachers see patterns in student strengths without making any assumptions beforehand.
+              K-means Clustering helps to identify patterns and group similar data points, making it easier to analyze and understand large datasets.
+          .card-footer
+            a.btn.btn-primary(href='https://en.wikipedia.org/wiki/K-means_clustering' target="_blank" rel="nofollow" title="Learn more about K-means Clustering on Wikipedia" alt="Wikipedia on K-means Clustering") Wikipedia on K-means Clustering
+
+        h2.subheading.mb-3 K-Means Clustering Nutrient Data
+        p
+          | I recently analyzed a nutritional dataset from Kaggle using Google Colab,
+          | a platform that lets you write and execute Python code in a browser-based Jupyter notebook.
+          | The goal was to understand nutrient patterns across various foods and to segment these items based on their nutrient content.
+          | You can find the full code and analysis in my Google Drive folder
+          a(href='https://drive.google.com/drive/folders/1cF49bLIgTwHMNwo7TxSjMw_8m-yw2cBg?usp=sharing' target="_blank" rel="nofollow" title="Google Drive Folder with Code and Analysis" alt="Google Drive Folder") here.
+
+        p.
+          Kaggle is an excellent resource for data scientists and enthusiasts to find and share datasets.
+          It offers a vast collection of datasets across various domains, making it a great place to
+          practice data analysis and machine learning techniques.
+          You can find datasets on topics ranging from healthcare to finance, and even niche areas like nutritional data.
+          Kaggle also hosts competitions where you can test your skills against others and learn from the community.
+        p.
+          I got my hands on a dataset containing nutritional values for common foods and products, including protein, fat, vitamin C, and fiber content.
+        p.
+          I have already performed data exploration and manipulation steps, so let's dive into the key concepts of K-means clustering.
+          We have a clean dataset with the nutrient values of various foods, and we are ready to apply K-means clustering to segment these foods based on their nutrient content.
+        dl
+          dt Random Initialization
           dd
+            | K-means starts by randomly selecting 𝑘 initial centroids. Since this process is random, different
+            | runs of K-means can yield different results. This issue can be reduced by running the algorithm multiple
+            | times and selecting the result with the lowest sum of squared errors (SSE).
+            pre.language-csharp
+              code.language-csharp.
+                // Example pseudocode for random initialization
+                Initialize k random centroids;
+                while not converged:
+                  Assign points to the nearest centroid;
+                  Update centroid locations;
+                End while;
+
+          dt Cluster Assignment and Centroid Update
+          dd
+            | After initialization, the algorithm assigns data points to the nearest centroid based on Euclidean distance.
+            | The centroids are then updated by calculating the mean of the points in each cluster. This process is repeated
+            | until the centroids stabilize.
+            pre.language-csharp
+              code.language-csharp.
+                // Pseudocode for cluster assignment and update
+                for each point in dataset:
+                  Assign point to nearest centroid;
+                Update centroids;
+                Repeat until centroids no longer change;
+
+          dt Sum of Squared Errors (SSE)
+          dd
+            | K-means aims to minimize the sum of squared errors (SSE), which is the total squared distance between points
+            | and their centroids. The lower the SSE, the better the clustering result.
+            pre.language-csharp
+              code.language-csharp.
+                // Formula for SSE
+                SSE = sum((x - centroid)^2 for all x in cluster);
+
+          dt Choosing the Optimal Number of Clusters
+          dd
+            | Two common methods for selecting the optimal number of clusters are:
+            | - **Elbow Method:** Plot SSE for different values of 𝑘 and look for the "elbow," where adding more clusters
+            |   no longer significantly reduces SSE.
+            | - **Silhouette Score:** Measures how similar a point is to its own cluster compared to other clusters. The
+            |   higher the score, the better the clustering.
+
+          dt Scaling Data for K-Means
+          dd
+            | Scaling is critical in K-means to ensure that all features contribute equally to the distance calculations.
+            | Data should be scaled, especially when the features have different units or scales, to prevent larger-scale
+            | features from dominating the clustering.
+        .row
+          .col-12
+            .accordion(id="faqAccordion")
+              .accordion-item
+                span.accordion-header(id="headingOne")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseOne", aria-expanded="false", aria-controls="collapseOne")
+                    | Q1: Why might different runs of K-means produce slightly different results?
+                #collapseOne.accordion-collapse.collapse(aria-labelledby="headingOne", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | K-means relies on random initialization of centroids, which can lead to different clustering results.
+                    | Running the algorithm multiple times and selecting the result with the lowest SSE can address this issue.
+
+              .accordion-item
+                span.accordion-header(id="headingTwo")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
+                    | Q2: Does K-means automatically scale the data during the iterations?
+                #collapseTwo.accordion-collapse.collapse(aria-labelledby="headingTwo", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | No, K-means does not scale data automatically. It is necessary to scale the data manually before applying the algorithm.
+
+              .accordion-item
+                span.accordion-header(id="headingThree")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree", aria-expanded="false", aria-controls="collapseThree")
+                    | Q3: How does K-means compute the centroids for clusters?
+                #collapseThree.accordion-collapse.collapse(aria-labelledby="headingThree", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | The centroids are calculated by taking the mean of all points assigned to each cluster after every iteration.
+
+              .accordion-item
+                span.accordion-header(id="headingFour")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFour", aria-expanded="false", aria-controls="collapseFour")
+                    | Q4: Why is it important to specify the number of clusters in K-means?
+                #collapseFour.accordion-collapse.collapse(aria-labelledby="headingFour", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | K-means requires specifying the number of clusters (𝑘) beforehand, as this determines how many centroids are initialized and how the data is partitioned.
+
+              .accordion-item
+                span.accordion-header(id="headingFive")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseFive", aria-expanded="false", aria-controls="collapseFive")
+                    | Q5: What happens if the number of clusters is equal to the number of data points?
+                #collapseFive.accordion-collapse.collapse(aria-labelledby="headingFive", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | If 𝑘 equals the number of data points, each point will be its own cluster, and the SSE will be zero.
+
+              .accordion-item
+                span.accordion-header(id="headingSix")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSix", aria-expanded="false", aria-controls="collapseSix")
+                    | Q6: Is K-means sensitive to outliers?
+                #collapseSix.accordion-collapse.collapse(aria-labelledby="headingSix", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | Yes, K-means can be sensitive to outliers, as they can heavily influence the centroids. Handling outliers before applying K-means is important, or consider using other algorithms like K-medoids.
+
+              .accordion-item
+                span.accordion-header(id="headingSeven")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseSeven", aria-expanded="false", aria-controls="collapseSeven")
+                    | Q7: What kind of distance metric does K-means use?
+                #collapseSeven.accordion-collapse.collapse(aria-labelledby="headingSeven", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | K-means typically uses Euclidean distance for measuring the distance between points and centroids.
+
+              .accordion-item
+                span.accordion-header(id="headingEight")
+                  button.accordion-button.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseEight", aria-expanded="false", aria-controls="collapseEight")
+                    | Q8: Can K-means be used for non-spherical clusters?
+                #collapseEight.accordion-collapse.collapse(aria-labelledby="headingEight", data-bs-parent="#faqAccordion")
+                  .accordion-body
+                    | K-means works best for spherical clusters with relatively uniform variance. For non-spherical clusters, other algorithms like DBSCAN may be more appropriate.
+
+        dl
+          dt Dimensionality Reduction with PCA
+          dd
+            p.
+              I applied Principal Component Analysis (PCA) to reduce the complexity of the data.
+              PCA transforms the data into new dimensions, called principal components, which capture the most significant patterns.
+              This allowed me to visualize nutrient relationships in just two dimensions,
+              preserving about 68% of the data’s variance, or information.
+          dt Segmentation Using K-means Clustering
+          dd
+            p.
+              I applied K-means clustering, a technique that divides data into clusters based on their similarity.
+              To determine the optimal number of clusters,
+              I plotted an elbow curve using the inertia (sum of squared distances within clusters).
+              The “elbow point” at three clusters indicated a good balance.
+              I confirmed this choice with the silhouette score,
+              which measures how well-separated the clusters are;
+              a score closer to 1 suggests distinct and well-defined clusters.
+
+        h3 Key Concepts
+        p.
+          This project provided valuable experience with PCA and K-means clustering.
+          While Google Colab allowed me to work interactively,
+          PCA simplified the data by highlighting major patterns,
+          and K-means grouped the data into meaningful clusters,
+          which could be helpful for future analyses like customer segmentation or recommendation systems.
+
+        .card
+          .card-header
+            h3.card-title Principal Component Analysis (PCA)
+          .card-body
           p.
             Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms data into
             a smaller number of uncorrelated variables (principal components) that capture the main patterns in the data.
@@ -276,116 +264,129 @@ block layout-content
             PCA is a tool that helps you simplify this information.
             It takes a big set of data with many variables and reduces it to a smaller set of "components"
             that still capture the most important information.
-          dt How PCA Works
-          dd
-          p.
-            PCA works by looking for patterns in the data. It finds directions (or components) in which the data varies the most.
-            These components are like new axes, and they represent combinations of the original variables.
-            Here’s a step-by-step look at how PCA simplifies data:
-          ol
-            li.
-              Find the Directions of Maximum Variance: PCA looks for the direction in the data where the points are spread out the most.
-              This direction is called the first principal component. It shows the main pattern in the data.
-            li.
-              Add More Components: After finding the first principal component, PCA looks for the next direction where the data varies the most, but at a right angle to the first one.
-              This is the second principal component. These components are always at right angles (90 degrees) to each other, making them uncorrelated.
-            li.
-              Keep the Important Components: You can add as many components as there are variables, but most of the time, only the first few components capture the main patterns.
-              By keeping only the most important ones, you reduce the data’s complexity.
-          dt Example with Simple Data
-          dd
-          p.
-            Imagine a dataset with students' scores in Math and Science.
-            If there’s a strong relationship (students who do well in Math also do well in Science), PCA would combine these scores into one main component that represents both subjects.
-          ol
-            li Original Data: Math and Science Scores
-            li First Principal Component: Overall Academic Ability
-            li Second Principal Component: Difference Between Math and Science
-          p.
-            So, instead of tracking two scores separately, PCA would give you an “Overall Academic Ability” score that captures the main pattern, simplifying the data.
-          dt Why PCA is Useful
-          dd
-          p.
-            PCA has several benefits for analyzing data:
-          ol
-            li Reduces Complexity: PCA simplifies data by reducing the number of variables you need to look at. You keep the main patterns and ignore the rest, making the data easier to understand.
-            li Finds Patterns: PCA reveals hidden patterns by focusing on the directions where the data varies the most.
-            li Helps with Visualization: If you have data with many variables, PCA can reduce it to two or three components, making it possible to plot and visualize.
-        p.
-          In summary, PCA is a way to look at the big picture of your data by focusing on what’s most important. It turns a complex dataset into something simpler, allowing you to see patterns and relationships that would otherwise be hidden.
-        .card-footer
-          a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Principal_component_analysis' target="_blank" rel="nofollow" title="Learn more about Principal Component Analysis on Wikipedia" alt="Wikipedia on PCA") Wikipedia on PCA
-        br
-        hr
-        br
-        .card
-          .card-header
-            h3.card-title Principal Components
-          .card-body
-          p.
-            Principal Components are the new variables created by PCA that represent the directions of maximum variance in the data.
-            Each principal component is a linear combination of the original variables, and they are uncorrelated with each other.
-          p.
-            Here’s a more detailed look at Principal Components:
           dl
-            dt First Principal Component
+            dt Principal Component Analysis (PCA)
             dd
             p.
-              The first principal component captures the largest amount of variance in the data. It is the direction in which the data varies the most.
-              This component often represents the most significant pattern in the dataset.
-            dt Second Principal Component
+              Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms data into
+              a smaller number of uncorrelated variables (principal components) that capture the main patterns in the data.
+            p.
+              Imagine you have a lot of data, like test scores in math, science, history, and art.
+              It can be hard to see the big picture when you have many different variables,
+              especially if there are a lot of patterns and connections between them.
+              PCA is a tool that helps you simplify this information.
+              It takes a big set of data with many variables and reduces it to a smaller set of "components"
+              that still capture the most important information.
+            dt How PCA Works
             dd
             p.
-              The second principal component captures the second largest amount of variance, but it is orthogonal (at a right angle) to the first component.
-              This ensures that it represents a different pattern in the data.
-            dt Subsequent Principal Components
+              PCA works by looking for patterns in the data. It finds directions (or components) in which the data varies the most.
+              These components are like new axes, and they represent combinations of the original variables.
+              Here’s a step-by-step look at how PCA simplifies data:
+            ol
+              li.
+                Find the Directions of Maximum Variance: PCA looks for the direction in the data where the points are spread out the most.
+                This direction is called the first principal component. It shows the main pattern in the data.
+              li.
+                Add More Components: After finding the first principal component, PCA looks for the next direction where the data varies the most, but at a right angle to the first one.
+                This is the second principal component. These components are always at right angles (90 degrees) to each other, making them uncorrelated.
+              li.
+                Keep the Important Components: You can add as many components as there are variables, but most of the time, only the first few components capture the main patterns.
+                By keeping only the most important ones, you reduce the data’s complexity.
+            dt Example with Simple Data
             dd
             p.
-              Each subsequent principal component captures the next highest variance while being orthogonal to all previous components.
-              These components continue to represent new patterns in the data, but each captures less variance than the previous one.
-            dt Eigenvalues and Eigenvectors
+              Imagine a dataset with students' scores in Math and Science.
+              If there’s a strong relationship (students who do well in Math also do well in Science), PCA would combine these scores into one main component that represents both subjects.
+            ol
+              li Original Data: Math and Science Scores
+              li First Principal Component: Overall Academic Ability
+              li Second Principal Component: Difference Between Math and Science
+            p.
+              So, instead of tracking two scores separately, PCA would give you an “Overall Academic Ability” score that captures the main pattern, simplifying the data.
+            dt Why PCA is Useful
             dd
             p.
-              Principal components are derived from the eigenvectors of the covariance matrix of the data. The eigenvalues associated with these eigenvectors indicate the amount of variance captured by each principal component.
-            dt Interpretation
-            dd
-            p.
-              Interpreting principal components involves looking at the coefficients of the original variables in each component.
-              These coefficients indicate the contribution of each variable to the component, helping to understand the underlying patterns.
+              PCA has several benefits for analyzing data:
+            ol
+              li Reduces Complexity: PCA simplifies data by reducing the number of variables you need to look at. You keep the main patterns and ignore the rest, making the data easier to understand.
+              li Finds Patterns: PCA reveals hidden patterns by focusing on the directions where the data varies the most.
+              li Helps with Visualization: If you have data with many variables, PCA can reduce it to two or three components, making it possible to plot and visualize.
           p.
-            In summary, Principal Components are essential in PCA as they transform the data into a new set of variables that capture the most significant patterns, making it easier to analyze and visualize complex datasets.
+            In summary, PCA is a way to look at the big picture of your data by focusing on what’s most important. It turns a complex dataset into something simpler, allowing you to see patterns and relationships that would otherwise be hidden.
           .card-footer
-            a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Principal_component_analysis#Details' target="_blank" rel="nofollow" title="Learn more about Principal Components on Wikipedia" alt="Wikipedia on Principal Components") Wikipedia on Principal Components
-        br
-        hr
-        br
+            a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Principal_component_analysis' target="_blank" rel="nofollow" title="Learn more about Principal Component Analysis on Wikipedia" alt="Wikipedia on PCA") Wikipedia on PCA
+          br
+          hr
+          br
+          .card
+            .card-header
+              h3.card-title Principal Components
+            .card-body
+            p.
+              Principal Components are the new variables created by PCA that represent the directions of maximum variance in the data.
+              Each principal component is a linear combination of the original variables, and they are uncorrelated with each other.
+            p.
+              Here’s a more detailed look at Principal Components:
+            dl
+              dt First Principal Component
+              dd
+              p.
+                The first principal component captures the largest amount of variance in the data. It is the direction in which the data varies the most.
+                This component often represents the most significant pattern in the dataset.
+              dt Second Principal Component
+              dd
+              p.
+                The second principal component captures the second largest amount of variance, but it is orthogonal (at a right angle) to the first component.
+                This ensures that it represents a different pattern in the data.
+              dt Subsequent Principal Components
+              dd
+              p.
+                Each subsequent principal component captures the next highest variance while being orthogonal to all previous components.
+                These components continue to represent new patterns in the data, but each captures less variance than the previous one.
+              dt Eigenvalues and Eigenvectors
+              dd
+              p.
+                Principal components are derived from the eigenvectors of the covariance matrix of the data. The eigenvalues associated with these eigenvectors indicate the amount of variance captured by each principal component.
+              dt Interpretation
+              dd
+              p.
+                Interpreting principal components involves looking at the coefficients of the original variables in each component.
+                These coefficients indicate the contribution of each variable to the component, helping to understand the underlying patterns.
+            p.
+              In summary, Principal Components are essential in PCA as they transform the data into a new set of variables that capture the most significant patterns, making it easier to analyze and visualize complex datasets.
+            .card-footer
+              a.btn.btn-primary(href='https://en.wikipedia.org/wiki/Principal_component_analysis#Details' target="_blank" rel="nofollow" title="Learn more about Principal Components on Wikipedia" alt="Wikipedia on Principal Components") Wikipedia on Principal Components
+          br
+          hr
+          br
 
-        h2 Glossary of Terms
-        dl
-          dt Google Colab
-          dd
-          | A free, browser-based environment for writing and running Python code in Jupyter notebooks, particularly popular for data science projects.
+          h2 Glossary of Terms
+          dl
+            dt Google Colab
+            dd
+            | A free, browser-based environment for writing and running Python code in Jupyter notebooks, particularly popular for data science projects.
 
-          dt Jupyter Notebook
-          dd
-          | An interactive coding environment that allows you to combine code, visualizations, and text, commonly used in data science.
+            dt Jupyter Notebook
+            dd
+            | An interactive coding environment that allows you to combine code, visualizations, and text, commonly used in data science.
 
-          dt Dendrogram
-          dd
-          | A tree-like diagram used to illustrate the arrangement of clusters formed by hierarchical clustering.
+            dt Dendrogram
+            dd
+            | A tree-like diagram used to illustrate the arrangement of clusters formed by hierarchical clustering.
 
-          dt Elbow Curve
-          dd
-          | A plot used to determine the optimal number of clusters in K-means by finding a point where the decrease in variance slows, resembling an "elbow."
+            dt Elbow Curve
+            dd
+            | A plot used to determine the optimal number of clusters in K-means by finding a point where the decrease in variance slows, resembling an "elbow."
 
-          dt Inertia
-          dd
-          | The sum of squared distances between data points and their cluster centroids. Lower inertia indicates tighter clusters.
+            dt Inertia
+            dd
+            | The sum of squared distances between data points and their cluster centroids. Lower inertia indicates tighter clusters.
 
-          dt Silhouette Score
-          dd
-          | A measure of how similar each point is to its cluster compared to other clusters, with values close to 1 indicating well-separated clusters.
+            dt Silhouette Score
+            dd
+            | A measure of how similar each point is to its cluster compared to other clusters, with values close to 1 indicating well-separated clusters.
 
-          dt Dimensionality Reduction
-          dd
-          | The process of reducing the number of variables in a dataset while retaining as much information as possible.
+            dt Dimensionality Reduction
+            dd
+            | The process of reducing the number of variables in a dataset while retaining as much information as possible.

@@ -44,17 +44,7 @@ block twitter_overrides
   meta(name='twitter:description', content='[SEO Description]')
 ```
 
-### 3. Replace layout-content Block Structure
-
-**From:** Custom section classes
-
-```pug
-block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-```
-
-**To:** Modern Bootstrap 5 structure with hero section
+### 3. Validated layout-content Block Structure
 
 ```pug
 block layout-content

@@ -62,7 +62,7 @@ Focus on the main article content and structural elements to understand the topi
 
 TITLE CONSISTENCY STRATEGY:
 - Generate ONE primary optimized title and use variations for different platforms
-- SEO Title: Full optimized title 
+- SEO Title: Full optimized title
 - Article Title: Clean version (same as SEO title)
 - Open Graph Title: Same as Article Title or slight variation for social media
 - Twitter Title: Shortened version of Article Title (max 50 characters)

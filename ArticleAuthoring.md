@@ -22,18 +22,6 @@ Organize meta tags into proper blocks:
 
 ### Content Structure Conversion
 
-Replace the legacy painteddesert section structure:
-
-**From:**
-
-```pug
-block layout-content
-  article#post.painteddesert-section.painteddesert-section-background
-    .painteddesert-section-content
-```
-
-**To:**
-
 ```pug
 block layout-content
   br
