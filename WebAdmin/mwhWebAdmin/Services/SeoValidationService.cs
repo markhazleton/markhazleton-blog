@@ -693,9 +693,34 @@ public class SeoValidationService
             var ogTypeNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='og:type']");
 
             if (ogTitleNode == null) { warnings.Add("Missing Open Graph title"); score -= 2; }
-            if (ogDescNode == null) { warnings.Add("Missing Open Graph description"); score -= 2; }
             if (ogImageNode == null) { warnings.Add("Missing Open Graph image"); score -= 2; }
             if (ogTypeNode == null) { warnings.Add("Missing Open Graph type"); score -= 2; }
+
+            // Validate Open Graph description separately for length validation
+            if (ogDescNode == null)
+            {
+                warnings.Add("Missing Open Graph description");
+                score -= 2;
+            }
+            else
+            {
+                var ogDescContent = ogDescNode.GetAttributeValue("content", "").Trim();
+                if (string.IsNullOrWhiteSpace(ogDescContent))
+                {
+                    errors.Add("Empty Open Graph description");
+                    score -= 10;
+                }
+                else if (ogDescContent.Length < 120)
+                {
+                    warnings.Add($"Open Graph description too short ({ogDescContent.Length} chars). Recommended: 120-160 characters");
+                    score -= 3;
+                }
+                else if (ogDescContent.Length > 160)
+                {
+                    warnings.Add($"Open Graph description too long ({ogDescContent.Length} chars). Recommended: 120-160 characters");
+                    score -= 3;
+                }
+            }
 
             // Validate Twitter Card tags
             var twitterCardNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='twitter:card']");
@@ -705,8 +730,33 @@ public class SeoValidationService
 
             if (twitterCardNode == null) { warnings.Add("Missing Twitter Card type"); score -= 2; }
             if (twitterTitleNode == null) { warnings.Add("Missing Twitter Card title"); score -= 2; }
-            if (twitterDescNode == null) { warnings.Add("Missing Twitter Card description"); score -= 2; }
             if (twitterImageNode == null) { warnings.Add("Missing Twitter Card image"); score -= 2; }
+
+            // Validate Twitter Card description separately for length validation
+            if (twitterDescNode == null)
+            {
+                warnings.Add("Missing Twitter Card description");
+                score -= 2;
+            }
+            else
+            {
+                var twitterDescContent = twitterDescNode.GetAttributeValue("content", "").Trim();
+                if (string.IsNullOrWhiteSpace(twitterDescContent))
+                {
+                    errors.Add("Empty Twitter Card description");
+                    score -= 10;
+                }
+                else if (twitterDescContent.Length < 120)
+                {
+                    warnings.Add($"Twitter Card description too short ({twitterDescContent.Length} chars). Recommended: 120-160 characters");
+                    score -= 3;
+                }
+                else if (twitterDescContent.Length > 160)
+                {
+                    warnings.Add($"Twitter Card description too long ({twitterDescContent.Length} chars). Recommended: 120-160 characters");
+                    score -= 3;
+                }
+            }
 
             // Validate keywords
             var keywordsNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='keywords']");

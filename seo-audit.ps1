@@ -1,5 +1,6 @@
 # SEO Audit Script for Mark Hazleton Blog
 # This script checks all HTML files in the docs folder for common SEO issues
+# Validation logic is consistent with mwhWebAdmin\Services\SeoValidationService.cs
 
 param(
     [string]$DocsPath = "docs",
@@ -50,13 +51,19 @@ $summary = @{
     MissingCanonical    = 0
     TitleTooLong        = 0
     TitleTooShort       = 0
-    DescriptionTooLong  = 0
-    DescriptionTooShort = 0
+    MetaDescriptionTooLong  = 0
+    MetaDescriptionTooShort = 0
+    OgDescriptionTooLong    = 0
+    OgDescriptionTooShort   = 0
+    TwitterDescriptionTooLong = 0
+    TwitterDescriptionTooShort = 0
     MissingH1           = 0
     MultipleH1          = 0
     MissingAltText      = 0
     EmptyTitle          = 0
     EmptyDescription    = 0
+    EmptyOgDescription  = 0
+    EmptyTwitterDescription = 0
     MissingOpenGraph    = 0
     MissingTwitterCard  = 0
     TooFewKeywords      = 0
@@ -175,12 +182,12 @@ function Test-SEOCompliance {
                 $summary.EmptyDescription++
             }
             elseif ($descLength -gt 160) {
-                $issues += "Description too long ($descLength chars, should be ≤160)"
-                $summary.DescriptionTooLong++
+                $issues += "Meta description too long ($descLength chars, should be ≤160)"
+                $summary.MetaDescriptionTooLong++
             }
             elseif ($descLength -lt 120) {
-                $issues += "Description too short ($descLength chars, should be ≥120)"
-                $summary.DescriptionTooShort++
+                $issues += "Meta description too short ($descLength chars, should be ≥120)"
+                $summary.MetaDescriptionTooShort++
             }
         }
     }
@@ -242,7 +249,6 @@ function Test-SEOCompliance {
     # Check for Open Graph metadata
     $ogChecks = @(
         @{Pattern = 'property=[\"\x27]og:title[\"\x27]'; Message = "Missing Open Graph title" },
-        @{Pattern = 'property=[\"\x27]og:description[\"\x27]'; Message = "Missing Open Graph description" },
         @{Pattern = 'property=[\"\x27]og:image[\"\x27]'; Message = "Missing Open Graph image" },
         @{Pattern = 'property=[\"\x27]og:type[\"\x27]'; Message = "Missing Open Graph type" }
     )
@@ -254,11 +260,37 @@ function Test-SEOCompliance {
         }
     }
 
+    # Check Open Graph description separately for length validation
+    if ($content -notmatch 'property=[\"\x27]og:description[\"\x27]') {
+        $issues += "Missing Open Graph description"
+        $summary.MissingOpenGraph++
+    }
+    else {
+        $ogDescPattern = 'property=[\"\x27]og:description[\"\x27][^>]*content=[\"\x27]([^\"]*?)[\"\x27]'
+        $ogDescMatch = [regex]::Match($content, $ogDescPattern)
+        if ($ogDescMatch.Success) {
+            $ogDescText = $ogDescMatch.Groups[1].Value.Trim()
+            $ogDescLength = $ogDescText.Length
+
+            if ([string]::IsNullOrWhiteSpace($ogDescText)) {
+                $issues += "Empty Open Graph description"
+                $summary.EmptyOgDescription++
+            }
+            elseif ($ogDescLength -gt 160) {
+                $issues += "Open Graph description too long ($ogDescLength chars, should be ≤160)"
+                $summary.OgDescriptionTooLong++
+            }
+            elseif ($ogDescLength -lt 120) {
+                $issues += "Open Graph description too short ($ogDescLength chars, should be ≥120)"
+                $summary.OgDescriptionTooShort++
+            }
+        }
+    }
+
     # Check for Twitter Card metadata
     $twitterChecks = @(
         @{Pattern = 'name=[\"\x27]twitter:card[\"\x27]'; Message = "Missing Twitter Card type" },
         @{Pattern = 'name=[\"\x27]twitter:title[\"\x27]'; Message = "Missing Twitter Card title" },
-        @{Pattern = 'name=[\"\x27]twitter:description[\"\x27]'; Message = "Missing Twitter Card description" },
         @{Pattern = 'name=[\"\x27]twitter:image[\"\x27]'; Message = "Missing Twitter Card image" }
     )
 
@@ -266,6 +298,33 @@ function Test-SEOCompliance {
         if ($content -notmatch $check.Pattern) {
             $issues += $check.Message
             $summary.MissingTwitterCard++
+        }
+    }
+
+    # Check Twitter Card description separately for length validation
+    if ($content -notmatch 'name=[\"\x27]twitter:description[\"\x27]') {
+        $issues += "Missing Twitter Card description"
+        $summary.MissingTwitterCard++
+    }
+    else {
+        $twitterDescPattern = 'name=[\"\x27]twitter:description[\"\x27][^>]*content=[\"\x27]([^\"]*?)[\"\x27]'
+        $twitterDescMatch = [regex]::Match($content, $twitterDescPattern)
+        if ($twitterDescMatch.Success) {
+            $twitterDescText = $twitterDescMatch.Groups[1].Value.Trim()
+            $twitterDescLength = $twitterDescText.Length
+
+            if ([string]::IsNullOrWhiteSpace($twitterDescText)) {
+                $issues += "Empty Twitter Card description"
+                $summary.EmptyTwitterDescription++
+            }
+            elseif ($twitterDescLength -gt 160) {
+                $issues += "Twitter Card description too long ($twitterDescLength chars, should be ≤160)"
+                $summary.TwitterDescriptionTooLong++
+            }
+            elseif ($twitterDescLength -lt 120) {
+                $issues += "Twitter Card description too short ($twitterDescLength chars, should be ≥120)"
+                $summary.TwitterDescriptionTooShort++
+            }
         }
     }
 
@@ -365,8 +424,14 @@ else {
     if ($summary.TitleTooShort -gt 0) { Write-Host "• Titles too short: $($summary.TitleTooShort)" -ForegroundColor Yellow }
     if ($summary.MissingDescription -gt 0) { Write-Host "• Missing meta descriptions: $($summary.MissingDescription)" -ForegroundColor Red }
     if ($summary.EmptyDescription -gt 0) { Write-Host "• Empty meta descriptions: $($summary.EmptyDescription)" -ForegroundColor Red }
-    if ($summary.DescriptionTooLong -gt 0) { Write-Host "• Descriptions too long: $($summary.DescriptionTooLong)" -ForegroundColor Yellow }
-    if ($summary.DescriptionTooShort -gt 0) { Write-Host "• Descriptions too short: $($summary.DescriptionTooShort)" -ForegroundColor Yellow }
+    if ($summary.MetaDescriptionTooLong -gt 0) { Write-Host "• Meta descriptions too long: $($summary.MetaDescriptionTooLong)" -ForegroundColor Yellow }
+    if ($summary.MetaDescriptionTooShort -gt 0) { Write-Host "• Meta descriptions too short: $($summary.MetaDescriptionTooShort)" -ForegroundColor Yellow }
+    if ($summary.OgDescriptionTooLong -gt 0) { Write-Host "• Open Graph descriptions too long: $($summary.OgDescriptionTooLong)" -ForegroundColor Yellow }
+    if ($summary.OgDescriptionTooShort -gt 0) { Write-Host "• Open Graph descriptions too short: $($summary.OgDescriptionTooShort)" -ForegroundColor Yellow }
+    if ($summary.EmptyOgDescription -gt 0) { Write-Host "• Empty Open Graph descriptions: $($summary.EmptyOgDescription)" -ForegroundColor Red }
+    if ($summary.TwitterDescriptionTooLong -gt 0) { Write-Host "• Twitter Card descriptions too long: $($summary.TwitterDescriptionTooLong)" -ForegroundColor Yellow }
+    if ($summary.TwitterDescriptionTooShort -gt 0) { Write-Host "• Twitter Card descriptions too short: $($summary.TwitterDescriptionTooShort)" -ForegroundColor Yellow }
+    if ($summary.EmptyTwitterDescription -gt 0) { Write-Host "• Empty Twitter Card descriptions: $($summary.EmptyTwitterDescription)" -ForegroundColor Red }
     if ($summary.MissingKeywords -gt 0) { Write-Host "• Missing meta keywords: $($summary.MissingKeywords)" -ForegroundColor Yellow }
     if ($summary.MissingCanonical -gt 0) { Write-Host "• Missing canonical URLs: $($summary.MissingCanonical)" -ForegroundColor Yellow }
     if ($summary.MissingH1 -gt 0) { Write-Host "• Missing H1 tags: $($summary.MissingH1)" -ForegroundColor Red }
@@ -396,6 +461,8 @@ Write-Host ""
 Write-Host "💡 RECOMMENDATIONS:" -ForegroundColor Cyan
 Write-Host "• Title tags should be 30-60 characters" -ForegroundColor White
 Write-Host "• Meta descriptions should be 120-160 characters" -ForegroundColor White
+Write-Host "• Open Graph descriptions should be 120-160 characters" -ForegroundColor White
+Write-Host "• Twitter Card descriptions should be 120-160 characters" -ForegroundColor White
 Write-Host "• Keywords should be 3-8 relevant terms" -ForegroundColor White
 Write-Host "• Each page should have exactly one H1 tag" -ForegroundColor White
 Write-Host "• All images should have descriptive alt text" -ForegroundColor White
