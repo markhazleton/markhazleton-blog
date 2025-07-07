@@ -181,12 +181,12 @@ function Test-SEOCompliance {
                 $issues += "Empty meta description"
                 $summary.EmptyDescription++
             }
-            elseif ($descLength -gt 160) {
-                $issues += "Meta description too long ($descLength chars, should be ≤160)"
+            elseif ($descLength -gt 320) {
+                $issues += "Meta description too long ($descLength chars, should be ≤320)"
                 $summary.MetaDescriptionTooLong++
             }
-            elseif ($descLength -lt 120) {
-                $issues += "Meta description too short ($descLength chars, should be ≥120)"
+            elseif ($descLength -lt 150) {
+                $issues += "Meta description too short ($descLength chars, should be ≥150)"
                 $summary.MetaDescriptionTooShort++
             }
         }
@@ -276,12 +276,12 @@ function Test-SEOCompliance {
                 $issues += "Empty Open Graph description"
                 $summary.EmptyOgDescription++
             }
-            elseif ($ogDescLength -gt 160) {
-                $issues += "Open Graph description too long ($ogDescLength chars, should be ≤160)"
+            elseif ($ogDescLength -gt 300) {
+                $issues += "Open Graph description too long ($ogDescLength chars, should be ≤300)"
                 $summary.OgDescriptionTooLong++
             }
-            elseif ($ogDescLength -lt 120) {
-                $issues += "Open Graph description too short ($ogDescLength chars, should be ≥120)"
+            elseif ($ogDescLength -lt 200) {
+                $issues += "Open Graph description too short ($ogDescLength chars, should be ≥200)"
                 $summary.OgDescriptionTooShort++
             }
         }
@@ -317,12 +317,12 @@ function Test-SEOCompliance {
                 $issues += "Empty Twitter Card description"
                 $summary.EmptyTwitterDescription++
             }
-            elseif ($twitterDescLength -gt 160) {
-                $issues += "Twitter Card description too long ($twitterDescLength chars, should be ≤160)"
+            elseif ($twitterDescLength -gt 200) {
+                $issues += "Twitter Card description too long ($twitterDescLength chars, should be ≤200)"
                 $summary.TwitterDescriptionTooLong++
             }
-            elseif ($twitterDescLength -lt 120) {
-                $issues += "Twitter Card description too short ($twitterDescLength chars, should be ≥120)"
+            elseif ($twitterDescLength -lt 200) {
+                $issues += "Twitter Card description too short ($twitterDescLength chars, should be ≥200)"
                 $summary.TwitterDescriptionTooShort++
             }
         }
@@ -460,9 +460,9 @@ Write-Host "✅ SEO Audit Complete!" -ForegroundColor Green
 Write-Host ""
 Write-Host "💡 RECOMMENDATIONS:" -ForegroundColor Cyan
 Write-Host "• Title tags should be 30-60 characters" -ForegroundColor White
-Write-Host "• Meta descriptions should be 120-160 characters" -ForegroundColor White
-Write-Host "• Open Graph descriptions should be 120-160 characters" -ForegroundColor White
-Write-Host "• Twitter Card descriptions should be 120-160 characters" -ForegroundColor White
+Write-Host "• Meta descriptions should be 150-160 characters (max 320)" -ForegroundColor White
+Write-Host "• Open Graph descriptions should be 200-300 characters (max 300)" -ForegroundColor White
+Write-Host "• Twitter Card descriptions should be 200 characters (max 200)" -ForegroundColor White
 Write-Host "• Keywords should be 3-8 relevant terms" -ForegroundColor White
 Write-Host "• Each page should have exactly one H1 tag" -ForegroundColor White
 Write-Host "• All images should have descriptive alt text" -ForegroundColor White
