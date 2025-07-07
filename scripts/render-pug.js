@@ -34,7 +34,15 @@ module.exports = async function renderPug(filePath) {
 
     // Get the last modified date of the file
     const fileStats = fs.statSync(filePath);
-    const article = articles.find(article => article.slug === currentSlug);
+
+    // Find article - handle index.html mapping to folder paths
+    let article = articles.find(article => article.slug === currentSlug);
+
+    // If no article found and this is an index.html file, try mapping to folder path
+    if (!article && currentSlug.endsWith('/index.html')) {
+        const folderSlug = currentSlug.replace('/index.html', '/');
+        article = articles.find(article => article.slug === folderSlug);
+    }
 
     // Use Git to retrieve the last commit date for the file
     let lastModified;
