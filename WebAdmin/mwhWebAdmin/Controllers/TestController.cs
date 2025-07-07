@@ -110,7 +110,7 @@ namespace mwhWebAdmin.Controllers
                     {
                         SeoTitleLengthValid = (testArticle.Seo?.Title?.Length ?? 0) >= 30 && (testArticle.Seo?.Title?.Length ?? 0) <= 60,
                         SeoTitleHasBrandSuffix = true, // No longer checking for brand suffix
-                        MetaDescriptionLengthValid = (testArticle.Seo?.Description?.Length ?? 0) >= 120 && (testArticle.Seo?.Description?.Length ?? 0) <= 160,
+                        MetaDescriptionLengthValid = (testArticle.Seo?.Description?.Length ?? 0) >= 150 && (testArticle.Seo?.Description?.Length ?? 0) <= 160,
                         KeywordsIncludeBrand = true // No longer checking for brand in keywords
                     }
                 };

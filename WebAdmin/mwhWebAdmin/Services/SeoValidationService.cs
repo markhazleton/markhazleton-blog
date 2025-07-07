@@ -1,6 +1,5 @@
-using mwhWebAdmin.Article;
-using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using mwhWebAdmin.Article;
 
 namespace mwhWebAdmin.Services;
 
@@ -134,14 +133,14 @@ public class SeoValidationService
         }
 
         // Length validation
-        if (description.Length < 120)
+        if (description.Length < 150)
         {
-            warnings.Add($"Description is too short ({description.Length} chars). Recommended: 120-160 characters");
+            warnings.Add($"Description is too short ({description.Length} chars). Recommended: 150-160 characters");
             score = 60;
         }
-        else if (description.Length > 160)
+        else if (description.Length > 320)
         {
-            warnings.Add($"Description is too long ({description.Length} chars). Recommended: 120-160 characters");
+            warnings.Add($"Description is too long ({description.Length} chars). Recommended: 150-160 characters (max 320)");
             score = 70;
         }
         else
@@ -401,7 +400,7 @@ public class SeoValidationService
 
         if (string.IsNullOrEmpty(article.Seo?.Description))
         {
-            recommendations.Add("Add an SEO-optimized description (120-160 chars) for better search results.");
+            recommendations.Add("Add an SEO-optimized description (150-160 chars) for better search results.");
         }
 
         if (article.OpenGraph == null)
@@ -668,12 +667,12 @@ public class SeoValidationService
                 }
                 else if (descContent.Length < 120)
                 {
-                    warnings.Add($"HTML meta description too short ({descContent.Length} chars). Recommended: 120-160 characters");
+                    warnings.Add($"HTML meta description too short ({descContent.Length} chars). Recommended: 150-160 characters");
                     score -= 5;
                 }
                 else if (descContent.Length > 160)
                 {
-                    warnings.Add($"HTML meta description too long ({descContent.Length} chars). Recommended: 120-160 characters");
+                    warnings.Add($"HTML meta description too long ({descContent.Length} chars). Recommended: 150-160 characters");
                     score -= 5;
                 }
             }
@@ -710,14 +709,14 @@ public class SeoValidationService
                     errors.Add("Empty Open Graph description");
                     score -= 10;
                 }
-                else if (ogDescContent.Length < 120)
+                else if (ogDescContent.Length < 200)
                 {
-                    warnings.Add($"Open Graph description too short ({ogDescContent.Length} chars). Recommended: 120-160 characters");
+                    warnings.Add($"Open Graph description too short ({ogDescContent.Length} chars). Recommended: 200-300 characters");
                     score -= 3;
                 }
-                else if (ogDescContent.Length > 160)
+                else if (ogDescContent.Length > 300)
                 {
-                    warnings.Add($"Open Graph description too long ({ogDescContent.Length} chars). Recommended: 120-160 characters");
+                    warnings.Add($"Open Graph description too long ({ogDescContent.Length} chars). Recommended: 200-300 characters");
                     score -= 3;
                 }
             }
@@ -746,14 +745,14 @@ public class SeoValidationService
                     errors.Add("Empty Twitter Card description");
                     score -= 10;
                 }
-                else if (twitterDescContent.Length < 120)
+                else if (twitterDescContent.Length < 200)
                 {
-                    warnings.Add($"Twitter Card description too short ({twitterDescContent.Length} chars). Recommended: 120-160 characters");
+                    warnings.Add($"Twitter Card description too short ({twitterDescContent.Length} chars). Recommended: 200 characters");
                     score -= 3;
                 }
-                else if (twitterDescContent.Length > 160)
+                else if (twitterDescContent.Length > 200)
                 {
-                    warnings.Add($"Twitter Card description too long ({twitterDescContent.Length} chars). Recommended: 120-160 characters");
+                    warnings.Add($"Twitter Card description too long ({twitterDescContent.Length} chars). Recommended: 200 characters");
                     score -= 3;
                 }
             }

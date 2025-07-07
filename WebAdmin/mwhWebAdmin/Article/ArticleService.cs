@@ -86,13 +86,13 @@ MARKDOWN FORMATTING REQUIREMENTS:
 For SEO Optimization:
 - Keywords: 3-8 relevant keywords (comma-separated)
 - SEO Title: ABSOLUTE REQUIREMENT - MINIMUM 30 characters, MAXIMUM 60 characters, compelling and keyword-rich. NEVER submit a title shorter than 30 characters total.
-- Meta Description: ABSOLUTE REQUIREMENT - MINIMUM 120 characters, MAXIMUM 160 characters, engaging summary with primary keywords, MUST include action words like 'discover', 'learn', 'explore', 'understand', 'master', or 'guide'. NEVER submit a description shorter than 120 characters.
+- Meta Description: ABSOLUTE REQUIREMENT - MINIMUM 150 characters, MAXIMUM 160 characters, engaging summary with primary keywords, MUST include action words like 'discover', 'learn', 'explore', 'understand', 'master', or 'guide'. NEVER submit a description shorter than 150 characters.
 
 For Social Media Preview (USE CONSISTENT TITLES):
 - Open Graph Title: Use the Article Title (same as SEO title without suffix) or slight variation (30-65 characters)
-- Open Graph Description: Up to 200 characters, more engaging for social media
+- Open Graph Description: 200-300 characters, more engaging for social media
 - Twitter Title: Shortened version of Article Title (up to 50 characters)
-- Twitter Description: Concise version, up to 120 characters
+- Twitter Description: Concise version, up to 200 characters
 
 For Article Content:
 - Subtitle: Complementary subtitle that provides additional context
@@ -108,7 +108,7 @@ For Conclusion Section:
 VALIDATION REQUIREMENTS:
 - SEO Title: Must be 30-60 characters. Count characters carefully.
 - Article Title: Should be the SEO title
-- Meta Description: Must be 120-160 characters. Count characters carefully.
+- Meta Description: Must be 150-160 characters. Count characters carefully.
 - Keywords: Must be 3-8 total keywords.
 - Article Content: Should be comprehensive and well-structured
 - Title Consistency: Open Graph and Twitter titles should be based on the Article Title
@@ -122,7 +122,7 @@ EXAMPLE TITLE CONSTRUCTION:
 IMPORTANT: The SEO title and meta description will be validated for exact character count requirements.
 Any response that does not meet these requirements will be rejected.
 The SEO title MUST be at least 30 characters.
-The meta description MUST be between 120-160 characters and include action words.
+The meta description MUST be between 150-160 characters and include action words.
 Keywords MUST be between 3-8 total keywords.
 Article content should be comprehensive and informative.
 
@@ -151,11 +151,11 @@ Ignore navigation elements, headers, footers, and technical markup.";
                                 articleContent = new { type = "string", description = "Full article content in MARKDOWN format - create comprehensive, well-structured content using proper markdown syntax (# headers, - lists, ```code blocks```, [links](url), **bold**, *italic*, etc.)" },
                                 keywords = new { type = "string", description = "Comma-separated list of 3-8 SEO keywords" },
                                 seoTitle = new { type = "string", description = "SEO-optimized title (ABSOLUTE MINIMUM 30 characters, MAXIMUM 60 characters)" },
-                                metaDescription = new { type = "string", description = "Meta description (ABSOLUTE MINIMUM 120 characters, MAXIMUM 160 characters), MUST include action words like 'discover', 'learn', 'explore'. Count characters carefully before submitting." },
+                                metaDescription = new { type = "string", description = "Meta description (ABSOLUTE MINIMUM 150 characters, MAXIMUM 160 characters), MUST include action words like 'discover', 'learn', 'explore'. Count characters carefully before submitting." },
                                 ogTitle = new { type = "string", description = "Open Graph title - use articleTitle or slight variation (30-65 characters)" },
                                 ogDescription = new { type = "string", description = "Open Graph description (up to 200 characters)" },
                                 twitterTitle = new { type = "string", description = "Twitter title - shortened version of articleTitle (up to 50 characters)" },
-                                twitterDescription = new { type = "string", description = "Twitter description (up to 120 characters)" },
+                                twitterDescription = new { type = "string", description = "Twitter description (up to 200 characters)" },
                                 subtitle = new { type = "string", description = "Article subtitle providing additional context" },
                                 summary = new { type = "string", description = "2-3 sentence article introduction" },
                                 conclusionTitle = new { type = "string", description = "Conclusion section heading" },
@@ -400,7 +400,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
         }
 
         /// <summary>
-        /// Ensures the meta description meets the 120-160 character requirement.
+        /// Ensures the meta description meets the 150-160 character requirement.
         /// </summary>
         /// <param name="description">The original description.</param>
         /// <returns>A corrected description that meets length requirements.</returns>

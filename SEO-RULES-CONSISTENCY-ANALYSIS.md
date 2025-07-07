@@ -19,7 +19,7 @@ Both systems implement identical validation:
 
 Both systems implement identical validation:
 
-- **Length Requirements**: 120-160 characters  
+- **Length Requirements**: 150-160 characters (max 320)  
 - **Empty/Missing Detection**: Both check for missing or empty descriptions
 - **PowerShell**: Lines 152-174 in `seo-audit.ps1`
 - **WebAdmin**: Lines 85-109 in `SeoValidationService.cs`
@@ -162,7 +162,7 @@ if (keywordList.Count > 8) // Warning: too many keywords
 ### Meta Descriptions  
 
 - **Required**: Yes
-- **Length**: 120-160 characters
+- **Length**: 150-160 characters (max 320)
 - **Empty Check**: Yes
 - **WebAdmin Enhancement**: Call-to-action word recommendations
 
