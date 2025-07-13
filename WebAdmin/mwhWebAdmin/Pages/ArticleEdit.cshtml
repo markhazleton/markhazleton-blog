@@ -9,6 +9,32 @@
 <div class="container mt-5">
     <h1>Edit Article</h1>
 
+    @* Display TempData messages *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["WarningMessage"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            @TempData["WarningMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <form method="post">
         <input type="hidden" asp-for="Article.Id" />
 
@@ -40,7 +66,7 @@
         <div class="mb-3">
             <label for="Description" class="form-label">Description:</label>
             <input type="text" class="form-control" asp-for="Article.Description"
-                   oninput="updateCharacterCount('articleDescriptionCount', this.value, 50, 200)" />
+                   oninput="updateCharacterCount('articleDescriptionCount', this.value, 'MetaDescription')" />
             <div class="d-flex justify-content-between">
                 <small class="form-text text-muted">Brief description of the article for SEO.</small>
                 <small id="articleDescriptionCount" class="form-text">0 characters (50-200 recommended)</small>
@@ -53,8 +79,16 @@
             <small class="form-text text-muted">This will be used as the article introduction or summary</small>
         </div>
         <div class="mb-3">
-            <label for="Keywords" class="form-label">Keywords (comma-separated):</label>
+            <div class="d-flex justify-content-between align-items-center">
+                <label for="Keywords" class="form-label">Keywords (comma-separated):</label>
+                <div>
+                    <button type="submit" asp-page-handler="Validate" class="btn btn-primary btn-sm" id="aiKeywordsBtn">
+                        <i class="fas fa-magic me-2"></i>Generate AI Content
+                    </button>
+                </div>
+            </div>
             <input type="text" class="form-control" asp-for="Article.Keywords" />
+            <small class="form-text text-muted">Click "Generate AI Content" to automatically create keywords, descriptions, and all SEO fields using AI.</small>
         </div>
 
         <div class="mb-3">
@@ -103,7 +137,7 @@
                 <div class="mb-3">
                     <label for="SeoTitle" class="form-label fw-bold">SEO Title:</label>
                     <input type="text" class="form-control" asp-for="Article.Seo.Title" placeholder="SEO-optimized title (leave blank to use article title)"
-                           oninput="updateCharacterCount('seoTitleCount', this.value, 30, 60)" />
+                           oninput="updateCharacterCount('seoTitleCount', this.value, 'Title')" />
                     <div class="d-flex justify-content-between">
                         <small class="form-text text-muted">If provided, this will be used instead of the article title for search engines.</small>
                         <small id="seoTitleCount" class="form-text">0 characters (30-60 recommended)</small>
@@ -114,10 +148,10 @@
                 <div class="mb-3">
                     <label for="SeoDescription" class="form-label fw-bold">SEO Description:</label>
                     <textarea class="form-control" asp-for="Article.Seo.Description" rows="2" placeholder="SEO-optimized description (150-160 characters)"
-                              oninput="updateCharacterCount('seoDescriptionCount', this.value, 150, 320)"></textarea>
+                              oninput="updateCharacterCount('seoDescriptionCount', this.value, 'MetaDescription')"></textarea>
                     <div class="d-flex justify-content-between">
                         <small class="form-text text-muted">If provided, this will be used instead of the basic description for search engines.</small>
-                        <small id="seoDescriptionCount" class="form-text">0 characters (150-160 ideal, max 320)</small>
+                        <small id="seoDescriptionCount" class="form-text">0 characters (150-320 characters)</small>
                     </div>
                 </div>
 
@@ -146,14 +180,14 @@
                         <div class="mb-3">
                             <label for="OgTitle" class="form-label">Title:</label>
                             <input type="text" class="form-control" asp-for="Article.OpenGraph.Title" placeholder="Social media title"
-                                   oninput="updateCharacterCount('ogTitleCount', this.value, 30, 65)" />
+                                   oninput="updateCharacterCount('ogTitleCount', this.value, 'OpenGraphTitle')" />
                             <small id="ogTitleCount" class="form-text">0 characters (30-65 recommended)</small>
                         </div>
                         <div class="mb-3">
                             <label for="OgDescription" class="form-label">Description:</label>
                             <textarea class="form-control" asp-for="Article.OpenGraph.Description" rows="2" placeholder="Social media description (200-300 characters)"
-                                      oninput="updateCharacterCount('ogDescriptionCount', this.value, 200, 300)"></textarea>
-                            <small id="ogDescriptionCount" class="form-text">0 characters (200-300 recommended)</small>
+                                      oninput="updateCharacterCount('ogDescriptionCount', this.value, 'OpenGraphDescription')"></textarea>
+                            <small id="ogDescriptionCount" class="form-text">0 characters (100-300 characters)</small>
                         </div>
                         <div class="mb-3">
                             <label for="OgImageAlt" class="form-label">Image Alt Text:</label>
@@ -165,14 +199,14 @@
                         <div class="mb-3">
                             <label for="TwitterTitle" class="form-label">Title:</label>
                             <input type="text" class="form-control" asp-for="Article.TwitterCard.Title" placeholder="Twitter title (shorter)"
-                                   oninput="updateCharacterCount('twitterTitleCount', this.value, 0, 50)" />
+                                   oninput="updateCharacterCount('twitterTitleCount', this.value, 'TwitterTitle')" />
                             <small id="twitterTitleCount" class="form-text">0 characters (max 50)</small>
                         </div>
                         <div class="mb-3">
                             <label for="TwitterDescription" class="form-label">Description:</label>
-                            <textarea class="form-control" asp-for="Article.TwitterCard.Description" rows="2" placeholder="Twitter description (200 characters)"
-                                      oninput="updateCharacterCount('twitterDescriptionCount', this.value, 200, 200)"></textarea>
-                            <small id="twitterDescriptionCount" class="form-text">0 characters (200 recommended)</small>
+                            <textarea class="form-control" asp-for="Article.TwitterCard.Description" rows="2" placeholder="Twitter description (120-200 characters)"
+                                      oninput="updateCharacterCount('twitterDescriptionCount', this.value, 'TwitterDescription')"></textarea>
+                            <small id="twitterDescriptionCount" class="form-text">0 characters (120-200 characters)</small>
                         </div>
                         <div class="mb-3">
                             <label for="TwitterImageAlt" class="form-label">Image Alt Text:</label>
@@ -332,15 +366,31 @@
                     <option value="@item">@item</option>
                 }
             </select>
-        </div>        <div>
-            <button type="submit" class="btn btn-primary">Save</button>
+        </div>        <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Article
+                    </button>
+                    <a href="/Articles" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Articles
+                    </a>
+                </div>
+                <div>
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Changes are saved without automatic AI processing. Use the "Generate AI Content" button above for AI-powered content generation.
+                    </small>
+                </div>
+            </div>
         </div>
     </form>
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    <script src="~/js/seo-validation-config.js"></script>
+    <script>        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize image selection functionality
             const imageOptions = document.querySelectorAll('.image-option');
             const selectedImageInput = document.getElementById('selectedImageInput');
             const selectedImagePreview = document.getElementById('selectedImagePreview');
@@ -378,68 +428,65 @@
                         selectedImageName.textContent = imagePath ? imagePath + ' (not found)' : 'No image selected';
                     };
                 });
-            });
+            });            // Simple AI Keywords button functionality
+            const aiKeywordsBtn = document.getElementById('aiKeywordsBtn');
+            if (aiKeywordsBtn) {
+                aiKeywordsBtn.addEventListener('click', function(e) {
+                    console.log('[AI-VALIDATION-UI] Generate AI Content button clicked');
+
+                    // Validate that we have content
+                    const content = document.querySelector('textarea[name="Article.ArticleContent"]').value;
+                    console.log('[AI-VALIDATION-UI] Article content length:', content ? content.length : 0);
+
+                    if (!content || content.trim().length === 0) {
+                        console.log('[AI-VALIDATION-UI] No content found, preventing submission');
+                        e.preventDefault();
+                        alert('Please add article content before generating AI keywords and SEO data.');
+                        return false;
+                    }
+
+                    console.log('[AI-VALIDATION-UI] Content validation passed, will submit form');
+
+                    // Get the form element
+                    const form = this.closest('form');
+                    console.log('[AI-VALIDATION-UI] Form found:', form);
+                    console.log('[AI-VALIDATION-UI] Form action:', form.action);
+                    console.log('[AI-VALIDATION-UI] Form method:', form.method);
+
+                    // Add simple loading state
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating AI Content...';
+                    this.disabled = true;
+
+                    console.log('[AI-VALIDATION-UI] Button loading state activated, form will submit naturally');
+
+                    // Don't prevent default - let the form submit naturally
+                    // The asp-page-handler="Validate" attribute will handle the server-side routing
+
+                    // Add a small delay to ensure the console logs are visible
+                    setTimeout(() => {
+                        console.log('[AI-VALIDATION-UI] About to submit form...');
+                        // If the form doesn't submit naturally, we'll force it
+                        if (form) {
+                            console.log('[AI-VALIDATION-UI] Manually submitting form...');
+                            form.submit();
+                        }
+                    }, 100);
+
+                    // Reset button state if there's an error (form will handle success)
+                    setTimeout(() => {
+                        if (this.disabled) {
+                            console.log('[AI-VALIDATION-UI] Timeout reached, resetting button state');
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                        }
+                    }, 60000); // 60 second timeout for AI generation
+                });
+            }
+
+            // Initialize character counts
+            initializeCharacterCounts();
         });
-
-        // Character counting functions
-        function updateCharacterCount(counterId, value, minChars = 0, maxChars = 0) {
-            const counter = document.getElementById(counterId);
-            const length = value.length;
-
-            let text = `${length} characters`;
-            let className = 'form-text';
-
-            if (minChars > 0 && maxChars > 0) {
-                text += ` (${minChars}-${maxChars} recommended)`;
-                if (length < minChars) {
-                    className += ' text-warning';
-                } else if (length > maxChars) {
-                    className += ' text-danger';
-                } else {
-                    className += ' text-success';
-                }
-            } else if (maxChars > 0) {
-                text += ` (max ${maxChars})`;
-                if (length > maxChars) {
-                    className += ' text-danger';
-                } else if (length > maxChars * 0.9) {
-                    className += ' text-warning';
-                } else {
-                    className += ' text-muted';
-                }
-            } else {
-                className += ' text-muted';
-            }
-
-            counter.textContent = text;
-            counter.className = className;
-        }
-
-        function updateKeywordCount(counterId, value) {
-            const counter = document.getElementById(counterId);
-            const keywords = value.split(',').map(k => k.trim()).filter(k => k.length > 0);
-            const count = keywords.length;
-
-            let text = `${count} keywords`;
-            let className = 'form-text';
-
-            if (count === 0) {
-                text += ' (3-8 recommended)';
-                className += ' text-muted';
-            } else if (count < 3) {
-                text += ' (3-8 recommended)';
-                className += ' text-warning';
-            } else if (count > 8) {
-                text += ' (3-8 recommended)';
-                className += ' text-danger';
-            } else {
-                text += ' (3-8 recommended)';
-                className += ' text-success';
-            }
-
-            counter.textContent = text;
-            counter.className = className;
-        }
 
         // Initialize character counts on page load
         function initializeCharacterCounts() {
@@ -457,20 +504,64 @@
             const twitterTitle = document.querySelector('input[name="Article.TwitterCard.Title"]');
             const twitterDescription = document.querySelector('textarea[name="Article.TwitterCard.Description"]');
 
-            // Initialize counters
-            if (articleDescription) updateCharacterCount('articleDescriptionCount', articleDescription.value, 50, 200);
-            if (seoTitle) updateCharacterCount('seoTitleCount', seoTitle.value, 30, 60);
-            if (seoDescription) updateCharacterCount('seoDescriptionCount', seoDescription.value, 150, 160);
+            // Initialize counters using centralized config
+            if (articleDescription) updateCharacterCount('articleDescriptionCount', articleDescription.value, 'MetaDescription');
+            if (seoTitle) updateCharacterCount('seoTitleCount', seoTitle.value, 'Title');
+            if (seoDescription) updateCharacterCount('seoDescriptionCount', seoDescription.value, 'MetaDescription');
             if (seoKeywords) updateKeywordCount('seoKeywordsCount', seoKeywords.value);
-            if (ogTitle) updateCharacterCount('ogTitleCount', ogTitle.value, 30, 65);
-            if (ogDescription) updateCharacterCount('ogDescriptionCount', ogDescription.value, 0, 200);
-            if (twitterTitle) updateCharacterCount('twitterTitleCount', twitterTitle.value, 0, 50);
-            if (twitterDescription) updateCharacterCount('twitterDescriptionCount', twitterDescription.value, 0, 200);
+            if (ogTitle) updateCharacterCount('ogTitleCount', ogTitle.value, 'OpenGraphTitle');
+            if (ogDescription) updateCharacterCount('ogDescriptionCount', ogDescription.value, 'OpenGraphDescription');
+            if (twitterTitle) updateCharacterCount('twitterTitleCount', twitterTitle.value, 'TwitterTitle');
+            if (twitterDescription) updateCharacterCount('twitterDescriptionCount', twitterDescription.value, 'TwitterDescription');
         }
 
-        // Call initialize function after DOM is loaded
+        // Check if we have a success message from AI validation and highlight updated fields
+        function checkForAIUpdates() {
+            const successAlert = document.querySelector('.alert-success');
+            if (successAlert && successAlert.textContent.includes('AI')) {
+                highlightAIUpdatedFields();
+            }
+        }
+
+        // Highlight fields that were likely updated by AI
+        function highlightAIUpdatedFields() {
+            const fieldsToHighlight = [
+                'input[name="Article.Keywords"]',
+                'input[name="Article.Description"]',
+                'textarea[name="Article.Summary"]',
+                'input[name="Article.Seo.Title"]',
+                'textarea[name="Article.Seo.Description"]',
+                'input[name="Article.OpenGraph.Title"]',
+                'textarea[name="Article.OpenGraph.Description"]',
+                'input[name="Article.TwitterCard.Title"]',
+                'textarea[name="Article.TwitterCard.Description"]',
+                'input[name="Article.ConclusionTitle"]',
+                'textarea[name="Article.ConclusionSummary"]',
+                'input[name="Article.ConclusionKeyHeading"]',
+                'textarea[name="Article.ConclusionKeyText"]',
+                'textarea[name="Article.ConclusionText"]'
+            ];
+
+            fieldsToHighlight.forEach(selector => {
+                const field = document.querySelector(selector);
+                if (field && field.value.trim()) {
+                    field.style.backgroundColor = '#d4edda';
+                    field.style.borderColor = '#c3e6cb';
+                    field.style.transition = 'all 0.3s ease';
+
+                    // Remove highlight after 8 seconds
+                    setTimeout(() => {
+                        field.style.backgroundColor = '';
+                        field.style.borderColor = '';
+                    }, 8000);
+                }
+            });
+        }
+
+        // Initialize everything when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
-            initializeCharacterCounts();
+            // Check for AI updates and highlight fields
+            checkForAIUpdates();
         });
 
         async function generateSeoFields() {

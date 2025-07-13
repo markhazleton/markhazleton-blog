@@ -21,6 +21,32 @@
     </div>
 </div>
 
+@* Display TempData messages *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        @TempData["WarningMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <!-- Article Form -->
 <div class="admin-form fade-in-up">
     <form method="post">
@@ -87,7 +113,7 @@
                             <label for="Description" class="form-label fw-bold">Description:</label>
                             <textarea class="form-control" asp-for="NewArticle.Description" rows="3"
                                 placeholder="Brief description of the article for SEO..."
-                                oninput="updateCharacterCount('articleDescriptionCount', this.value, 50, 200)"></textarea>
+                                oninput="updateCharacterCount('articleDescriptionCount', this.value, 'MetaDescription')"></textarea>
                             <div class="d-flex justify-content-between">
                                 <small class="form-text text-muted">This description will be used for search engines and
                                     social media previews.</small>
@@ -102,6 +128,20 @@
                                 placeholder="2-3 sentence introduction that hooks the reader..."></textarea>
                             <small class="form-text text-muted">This will be used as the article introduction or
                                 summary</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label for="Keywords" class="form-label fw-bold">Keywords (comma-separated):</label>
+                                <button type="submit" asp-page-handler="ValidateKeywords" class="btn btn-primary btn-sm"
+                                    id="aiKeywordsBtn">
+                                    <i class="fas fa-lightbulb me-2"></i>Generate AI Keywords
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" asp-for="NewArticle.Keywords"
+                                placeholder="keyword1, keyword2, keyword3..." />
+                            <small class="form-text text-muted">Click "Generate AI Keywords" to automatically create
+                                keywords from your article content using AI.</small>
                         </div>
 
                         <!-- Image Selection Section -->
@@ -226,7 +266,7 @@
                             <label for="SeoTitle" class="form-label fw-bold">SEO Title:</label>
                             <input type="text" class="form-control" asp-for="NewArticle.Seo.Title"
                                 placeholder="SEO-optimized title (leave blank to use article title)"
-                                oninput="updateCharacterCount('seoTitleCount', this.value, 30, 60)" />
+                                oninput="updateCharacterCount('seoTitleCount', this.value, 'Title')" />
                             <div class="d-flex justify-content-between">
                                 <small class="form-text text-muted">If provided, this will be used instead of the
                                     article
@@ -240,7 +280,7 @@
                             <label for="SeoDescription" class="form-label fw-bold">SEO Description:</label>
                             <textarea class="form-control" asp-for="NewArticle.Seo.Description" rows="2"
                                 placeholder="SEO-optimized description (150-160 characters)"
-                                oninput="updateCharacterCount('seoDescriptionCount', this.value, 150, 160)"></textarea>
+                                oninput="updateCharacterCount('seoDescriptionCount', this.value, 'MetaDescription')"></textarea>
                             <div class="d-flex justify-content-between">
                                 <small class="form-text text-muted">If provided, this will be used instead of the basic
                                     description for search engines.</small>
@@ -277,15 +317,16 @@
                                     <label for="OgTitle" class="form-label">Title:</label>
                                     <input type="text" class="form-control" asp-for="NewArticle.OpenGraph.Title"
                                         placeholder="Social media title"
-                                        oninput="updateCharacterCount('ogTitleCount', this.value, 30, 65)" />
+                                        oninput="updateCharacterCount('ogTitleCount', this.value, 'OpenGraphTitle')" />
                                     <small id="ogTitleCount" class="form-text">0 characters (30-65 recommended)</small>
                                 </div>
                                 <div class="mb-3">
                                     <label for="OgDescription" class="form-label">Description:</label>
                                     <textarea class="form-control" asp-for="NewArticle.OpenGraph.Description" rows="2"
                                         placeholder="Social media description"
-                                        oninput="updateCharacterCount('ogDescriptionCount', this.value, 0, 200)"></textarea>
-                                    <small id="ogDescriptionCount" class="form-text">0 characters (max 200)</small>
+                                        oninput="updateCharacterCount('ogDescriptionCount', this.value, 'OpenGraphDescription')"></textarea>
+                                    <small id="ogDescriptionCount" class="form-text">0 characters (100-300
+                                        characters)</small>
                                 </div>
                                 <div class="mb-3">
                                     <label for="OgImageAlt" class="form-label">Image Alt Text:</label>
@@ -299,15 +340,16 @@
                                     <label for="TwitterTitle" class="form-label">Title:</label>
                                     <input type="text" class="form-control" asp-for="NewArticle.TwitterCard.Title"
                                         placeholder="Twitter title (shorter)"
-                                        oninput="updateCharacterCount('twitterTitleCount', this.value, 0, 50)" />
+                                        oninput="updateCharacterCount('twitterTitleCount', this.value, 'TwitterTitle')" />
                                     <small id="twitterTitleCount" class="form-text">0 characters (max 50)</small>
                                 </div>
                                 <div class="mb-3">
                                     <label for="TwitterDescription" class="form-label">Description:</label>
                                     <textarea class="form-control" asp-for="NewArticle.TwitterCard.Description" rows="2"
                                         placeholder="Twitter description"
-                                        oninput="updateCharacterCount('twitterDescriptionCount', this.value, 0, 200)"></textarea>
-                                    <small id="twitterDescriptionCount" class="form-text">0 characters (max 200)</small>
+                                        oninput="updateCharacterCount('twitterDescriptionCount', this.value, 'TwitterDescription')"></textarea>
+                                    <small id="twitterDescriptionCount" class="form-text">0 characters (120-200
+                                        characters)</small>
                                 </div>
                                 <div class="mb-3">
                                     <label for="TwitterImageAlt" class="form-label">Image Alt Text:</label>
@@ -428,6 +470,7 @@
     </form>
 </div>
 
+<script src="~/js/seo-validation-config.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function ()
     {
@@ -476,46 +519,8 @@
         });
     });
 
-    // Character counting functions
-    function updateCharacterCount(counterId, value, minChars = 0, maxChars = 0)
-    {
-        const counter = document.getElementById(counterId);
-        const length = value.length;
-
-        let text = `${length} characters`;
-        let className = 'form-text';
-
-        if (minChars > 0 && maxChars > 0)
-        {
-            text += ` (${minChars}-${maxChars} recommended)`;
-            if (length < minChars)
-            {
-                className += ' text-warning';
-            } else if (length > maxChars)
-            {
-                className += ' text-danger';
-            } else
-            {
-                className += ' text-success';
-            }
-        } else if (maxChars > 0)
-        {
-            text += ` (max ${maxChars})`;
-            if (length > maxChars)
-            {
-                className += ' text-danger';
-            } else if (length > maxChars * 0.9)
-            {
-                className += ' text-warning';
-            } else
-            {
-                className += ' text-success';
-            }
-        }
-
-        counter.textContent = text;
-        counter.className = className;
-    }
+    // Use centralized character counting functions from seo-validation-config.js
+    // Note: The global functions are available from the imported script
 
     function updateKeywordCount(counterId, value)
     {
@@ -559,14 +564,14 @@
         const twitterTitle = document.querySelector('input[name="NewArticle.TwitterCard.Title"]');
         const twitterDescription = document.querySelector('textarea[name="NewArticle.TwitterCard.Description"]');
 
-        if (articleDescription) updateCharacterCount('articleDescriptionCount', articleDescription.value, 50, 200);
-        if (seoTitle) updateCharacterCount('seoTitleCount', seoTitle.value, 30, 60);
-        if (seoDescription) updateCharacterCount('seoDescriptionCount', seoDescription.value, 150, 160);
+        if (articleDescription) updateCharacterCount('articleDescriptionCount', articleDescription.value, 'MetaDescription');
+        if (seoTitle) updateCharacterCount('seoTitleCount', seoTitle.value, 'Title');
+        if (seoDescription) updateCharacterCount('seoDescriptionCount', seoDescription.value, 'MetaDescription');
         if (seoKeywords) updateKeywordCount('seoKeywordsCount', seoKeywords.value);
-        if (ogTitle) updateCharacterCount('ogTitleCount', ogTitle.value, 30, 65);
-        if (ogDescription) updateCharacterCount('ogDescriptionCount', ogDescription.value, 0, 200);
-        if (twitterTitle) updateCharacterCount('twitterTitleCount', twitterTitle.value, 0, 50);
-        if (twitterDescription) updateCharacterCount('twitterDescriptionCount', twitterDescription.value, 0, 200);
+        if (ogTitle) updateCharacterCount('ogTitleCount', ogTitle.value, 'OpenGraphTitle');
+        if (ogDescription) updateCharacterCount('ogDescriptionCount', ogDescription.value, 'OpenGraphDescription');
+        if (twitterTitle) updateCharacterCount('twitterTitleCount', twitterTitle.value, 'TwitterTitle');
+        if (twitterDescription) updateCharacterCount('twitterDescriptionCount', twitterDescription.value, 'TwitterDescription');
     }
 
     // Call initialize function after DOM is loaded
@@ -718,4 +723,45 @@
             button.disabled = false;
         }
     }
+
+    // Handle AI keywords button
+    document.addEventListener('DOMContentLoaded', function ()
+    {
+        const aiKeywordsBtn = document.getElementById('aiKeywordsBtn');
+        if (aiKeywordsBtn)
+        {
+            aiKeywordsBtn.addEventListener('click', function (e)
+            {
+                // Get form data
+                const title = document.querySelector('input[name="NewArticle.Name"]')?.value;
+                const content = document.querySelector('textarea[name="NewArticle.ArticleContent"]')?.value;
+
+                // Basic validation
+                if (!title || !content)
+                {
+                    e.preventDefault();
+                    alert('Please enter both article title and content before generating AI keywords.');
+                    return false;
+                }
+
+                // Show loading state
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating...';
+                this.disabled = true;
+
+                // Reset button state if there's an error (form will handle success)
+                setTimeout(() =>
+                {
+                    if (this.disabled)
+                    {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                    }
+                }, 30000); // 30 second timeout
+
+                // Allow form submission to proceed
+                return true;
+            });
+        }
+    });
 </script>

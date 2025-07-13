@@ -54,7 +54,7 @@ public class SeoDashboardModel : BasePageModel
         if (!string.IsNullOrEmpty(FilterGrade))
         {
             FilteredArticles = articles
-                .Where(a => ArticleScores[a.Id].Grade == FilterGrade)
+                .Where(a => ArticleScores[a.Id].GetGrade(ArticleValidations[a.Id].Warnings) == FilterGrade)
                 .OrderByDescending(a => ArticleScores[a.Id].OverallScore)
                 .ToList();
         }
