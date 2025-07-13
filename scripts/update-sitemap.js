@@ -141,5 +141,10 @@ function updateSitemap() {
     }
 }
 
-// Execute the function
-updateSitemap();
+// Execute the function if called directly
+if (require.main === module) {
+    updateSitemap();
+}
+
+// Export for use by other scripts
+module.exports = updateSitemap;

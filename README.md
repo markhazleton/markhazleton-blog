@@ -4,6 +4,11 @@
 
 [![Azure Static Web Apps CI/CD](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml/badge.svg)](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml)
 
+## Quick Links
+
+- **[SEO Guidelines](SEO.md)** - Complete SEO validation system and optimization rules
+- **[Article Authoring Guide](Authoring.md)** - Step-by-step content creation guide
+
 ## Technology Stack
 
 - **Template Engine**: PUG (formerly Jade) for semantic HTML generation
@@ -353,3 +358,54 @@ The project currently uses legacy Sass `@import` syntax, which is being deprecat
 Copyright 2013-2025 Mark Hazleton. Code released under the [MIT](https://github.com/markhazleton/markhazleton-blog/blob/main/LICENSE) license.
 
 Original Bootstrap theme by [Start Bootstrap](https://startbootstrap.com/), based on the [Bootstrap](https://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
+
+## Web Admin Features
+
+### AI Content Generation
+
+The site includes a comprehensive Web Admin application (`WebAdmin/mwhWebAdmin/`) with advanced AI-powered content generation:
+
+- **AI Content Generation**: Single-click generation of all SEO metadata fields using OpenAI GPT-4
+- **SEO Validation Dashboard**: Real-time validation with A-F grading system
+- **Interactive Forms**: Live character counting and validation feedback
+- **Site Refresh**: Direct integration with npm build system for content updates
+
+#### AI Content Generation Features
+
+When clicking "Generate AI Content", the system automatically creates:
+
+- **Core Fields**: Keywords, description, summary
+- **SEO Metadata**: Title, meta description, canonical URLs
+- **Social Media**: Open Graph and Twitter Card metadata
+- **Conclusion Sections**: Title, summary, key takeaways, final thoughts
+
+#### Technical Implementation
+
+- **Structured Output**: Uses OpenAI's structured output for consistent field generation
+- **Real-time Validation**: Immediate feedback on character limits and SEO requirements
+- **Visual Feedback**: Field highlighting and loading states for user experience
+- **Comprehensive Logging**: Full debugging support with structured logging
+
+### Recent Improvements
+
+#### Cleanup Activities
+
+Extensive cleanup of development files to maintain a lean codebase:
+
+- **Removed 35+ obsolete files**: SSL scripts, migration utilities, documentation fragments
+- **Consolidated Documentation**: All SEO rules now in single `SEO.md` file
+- **Streamlined Scripts**: Removed redundant server files and certificate utilities
+- **Eliminated Debug Code**: Cleaned up console logging and simplified interfaces
+
+#### Console Logging Enhancement
+
+- **Structured Logging**: Migrated from `Console.WriteLine` to proper `ILogger` instances
+- **Debugging Support**: Comprehensive logging for AI content generation flow
+- **Performance Improvement**: More efficient logging with structured parameters
+
+#### UI/UX Improvements
+
+- **Simplified Interfaces**: Reduced confusing multiple buttons to single, clear actions
+- **Enhanced Visual Feedback**: 8-second field highlighting with smooth transitions
+- **Better Error Handling**: User-friendly messages with detailed server feedback
+- **Loading States**: Professional loading indicators with timeout handling
