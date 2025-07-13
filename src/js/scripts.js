@@ -47,11 +47,32 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 }
             });
         });
-    }    // Initialize header search functionality
+    }
+
+    // Initialize header search functionality with Edge-specific fixes
     initializeHeaderSearch();
 
     // Initialize search form submission
     initializeSearchForm();
+
+    // Edge-specific polyfills and fixes
+    if (navigator.userAgent.indexOf('Edge') > -1 || navigator.userAgent.indexOf('Edg') > -1) {
+        // Add specific Edge compatibility fixes
+        console.log('Microsoft Edge detected, applying compatibility fixes');
+
+        // Ensure articles cache is preloaded for Edge
+        setTimeout(function() {
+            if (!window.articlesCache) {
+                fetch('/articles.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        window.articlesCache = data;
+                        console.log('Articles cache preloaded for Edge');
+                    })
+                    .catch(error => console.error('Error preloading articles:', error));
+            }
+        }, 500);
+    }
 });
 
 // Global search function for form submission - defined outside DOMContentLoaded
@@ -82,9 +103,11 @@ function initializeHeaderSearch() {
         }
     });
 
-    // Optional: Add typeahead suggestions for header search
+    // Enhanced typeahead with better browser compatibility
     let timeoutId;
-    headerSearchInput.addEventListener('input', function() {
+
+    // Use both 'input' and 'keyup' events for better Edge compatibility
+    function handleSearchInput() {
         clearTimeout(timeoutId);
         const query = this.value.trim();
 
@@ -95,6 +118,16 @@ function initializeHeaderSearch() {
         } else {
             hideHeaderSuggestions();
         }
+    }
+
+    // Add multiple event listeners for better browser support
+    headerSearchInput.addEventListener('input', handleSearchInput);
+    headerSearchInput.addEventListener('keyup', handleSearchInput);
+    headerSearchInput.addEventListener('propertychange', handleSearchInput); // IE/Edge legacy support
+
+    // Also handle paste events
+    headerSearchInput.addEventListener('paste', function() {
+        setTimeout(handleSearchInput.bind(this), 100);
     });
 
     // Hide suggestions when clicking outside
@@ -102,6 +135,19 @@ function initializeHeaderSearch() {
         if (!e.target.closest('.header-search-container')) {
             hideHeaderSuggestions();
         }
+    });
+
+    // Focus and blur events for better UX
+    headerSearchInput.addEventListener('focus', function() {
+        const query = this.value.trim();
+        if (query.length >= 2) {
+            showHeaderSuggestions(query);
+        }
+    });
+
+    headerSearchInput.addEventListener('blur', function() {
+        // Delay hiding to allow for suggestion clicks
+        setTimeout(hideHeaderSuggestions, 150);
     });
 }
 
@@ -124,6 +170,9 @@ async function showHeaderSuggestions(query) {
         // Only load articles if not already loaded
         if (!window.articlesCache) {
             const response = await fetch('/articles.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             window.articlesCache = await response.json();
         }
 
@@ -136,12 +185,15 @@ async function showHeaderSuggestions(query) {
         searchContainer.classList.add('header-search-container');
         searchContainer.style.position = 'relative';
 
-        let suggestionsHtml = '<div class="header-search-suggestions position-absolute bg-white border rounded shadow-sm mt-1 w-100" style="z-index: 1050; top: 100%;">';
+        let suggestionsHtml = '<div class="header-search-suggestions position-absolute bg-white border rounded shadow-sm mt-1 w-100" style="z-index: 1050; top: 100%; max-height: 300px; overflow-y: auto; border: 1px solid #dee2e6; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); -moz-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);">';
         suggestions.forEach(article => {
             suggestionsHtml += `
-                <div class="suggestion-item p-2 border-bottom text-dark" onclick="selectHeaderSuggestion('${article.slug}')" style="cursor: pointer;">
-                    <div class="fw-bold small">${highlightHeaderMatch(article.name, query)}</div>
-                    <small class="text-muted">${article.Section}</small>
+                <div class="suggestion-item p-2 border-bottom text-dark"
+                     onclick="selectHeaderSuggestion('${article.slug}')"
+                     onmousedown="event.preventDefault();"
+                     style="cursor: pointer; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; transition: background-color 0.2s ease;">
+                    <div class="fw-bold small" style="font-weight: 600; font-size: 0.875rem;">${highlightHeaderMatch(article.name, query)}</div>
+                    <small class="text-muted" style="color: #6c757d; font-size: 0.8rem;">${article.Section}</small>
                 </div>
             `;
         });
@@ -152,8 +204,13 @@ async function showHeaderSuggestions(query) {
         if (existing) existing.remove();
 
         searchContainer.insertAdjacentHTML('beforeend', suggestionsHtml);
+
+        // Add keyboard navigation support
+        addKeyboardNavigation();
+
     } catch (error) {
         console.error('Error loading search suggestions:', error);
+        // Fallback: still allow search to work without suggestions
     }
 }
 
@@ -167,25 +224,97 @@ function hideHeaderSuggestions() {
 function getHeaderQuickMatches(query, limit) {
     if (!window.articlesCache) return [];
 
-    const lowercaseQuery = query.toLowerCase();
-    return window.articlesCache
-        .filter(article =>
-            article.name.toLowerCase().includes(lowercaseQuery) ||
-            article.keywords.toLowerCase().includes(lowercaseQuery) ||
-            article.Section.toLowerCase().includes(lowercaseQuery)
-        )
-        .slice(0, limit);
+    try {
+        const lowercaseQuery = query.toLowerCase();
+        return window.articlesCache
+            .filter(article => {
+                // More robust filtering with null checks
+                const name = (article.name || '').toLowerCase();
+                const keywords = (article.keywords || '').toLowerCase();
+                const section = (article.Section || '').toLowerCase();
+                const description = (article.description || '').toLowerCase();
+
+                return name.includes(lowercaseQuery) ||
+                       keywords.includes(lowercaseQuery) ||
+                       section.includes(lowercaseQuery) ||
+                       description.includes(lowercaseQuery);
+            })
+            .slice(0, limit);
+    } catch (error) {
+        console.error('Error filtering articles:', error);
+        return [];
+    }
 }
 
 // Highlight matching text for header
 function highlightHeaderMatch(text, query) {
-    const regex = new RegExp(`(${query})`, 'gi');
-    return text.replace(regex, '<mark style="background-color: #fff3cd; padding: 0 2px;">$1</mark>');
+    if (!text || !query) return text || '';
+
+    try {
+        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        return text.replace(regex, '<mark style="background-color: #fff3cd; padding: 0 2px;">$1</mark>');
+    } catch (error) {
+        console.error('Error highlighting text:', error);
+        return text;
+    }
 }
 
 // Select header suggestion
 function selectHeaderSuggestion(slug) {
     window.location.href = `/${slug}`;
+}
+
+// Add keyboard navigation support for suggestions
+function addKeyboardNavigation() {
+    const headerSearchInput = document.getElementById('headerSearchInput');
+    if (!headerSearchInput) return;
+
+    let currentSelection = -1;
+
+    // Remove existing keydown listener if any
+    headerSearchInput.removeEventListener('keydown', handleKeydownNavigation);
+    headerSearchInput.addEventListener('keydown', handleKeydownNavigation);
+
+    function handleKeydownNavigation(e) {
+        const suggestions = document.querySelectorAll('.header-search-suggestions .suggestion-item');
+        if (suggestions.length === 0) return;
+
+        switch(e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                currentSelection = Math.min(currentSelection + 1, suggestions.length - 1);
+                updateSelection(suggestions, currentSelection);
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                currentSelection = Math.max(currentSelection - 1, -1);
+                updateSelection(suggestions, currentSelection);
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (currentSelection >= 0 && suggestions[currentSelection]) {
+                    suggestions[currentSelection].click();
+                } else {
+                    performHeaderSearch();
+                }
+                break;
+            case 'Escape':
+                hideHeaderSuggestions();
+                currentSelection = -1;
+                break;
+        }
+    }
+
+    function updateSelection(suggestions, index) {
+        suggestions.forEach((item, i) => {
+            if (i === index) {
+                item.style.backgroundColor = '#e9ecef';
+                item.scrollIntoView({ block: 'nearest' });
+            } else {
+                item.style.backgroundColor = '';
+            }
+        });
+    }
 }
 
 // Initialize search form submission handler
