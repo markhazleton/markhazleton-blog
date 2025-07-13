@@ -268,6 +268,11 @@ public static class SeoValidationConfig
     public static class Scoring
     {
         /// <summary>
+        /// Weight for HTML SEO score (matches Title and MetaDescription importance)
+        /// </summary>
+        public const int HtmlSeoScoreWeight = 2;
+
+        /// <summary>
         /// Calculates weighted overall score
         /// Title, Description, and HTML SEO are most important (weighted 2x)
         /// Others are standard weight (1x)
@@ -281,13 +286,22 @@ public static class SeoValidationConfig
             int contentImageScore,
             int htmlSeoScore)
         {
+            // Calculate the actual sum of weights instead of hardcoding 9.0
+            var totalWeight = Title.ScoreWeight +
+                             MetaDescription.ScoreWeight +
+                             Keywords.ScoreWeight +
+                             Images.ScoreWeight +
+                             H1Tag.ScoreWeight +
+                             Images.ScoreWeight +
+                             HtmlSeoScoreWeight;
+
             var weightedScore = (titleScore * Title.ScoreWeight +
                                descriptionScore * MetaDescription.ScoreWeight +
                                keywordsScore * Keywords.ScoreWeight +
                                imageScore * Images.ScoreWeight +
                                h1Score * H1Tag.ScoreWeight +
                                contentImageScore * Images.ScoreWeight +
-                               htmlSeoScore * 2) / 9.0;
+                               htmlSeoScore * HtmlSeoScoreWeight) / (double)totalWeight;
 
             return Math.Min((int)Math.Round(weightedScore, MidpointRounding.AwayFromZero), 100);
         }
