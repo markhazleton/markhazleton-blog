@@ -1,5 +1,7 @@
 using HtmlAgilityPack;
 using System.Globalization;
+using mwhWebAdmin.Configuration;
+using mwhWebAdmin.Services;
 
 namespace mwhWebAdmin.Article
 {
@@ -44,94 +46,31 @@ namespace mwhWebAdmin.Article
         {
             try
             {
+                _logger.LogInformation("[ArticleService] GenerateSeoDataFromContentAsync called with content length: {ContentLength} characters", content?.Length);
+                _logger.LogInformation("[ArticleService] Current title: {CurrentTitle}", currentTitle ?? "None");
+
                 var openAiApiKey = _configuration["OPENAI_API_KEY"];
                 var openAiApiUrl = "https://api.openai.com/v1/chat/completions";
+
+                Console.WriteLine($"[ArticleService] OpenAI API Key present: {!string.IsNullOrEmpty(openAiApiKey)}");
+                Console.WriteLine($"[ArticleService] OpenAI API URL: {openAiApiUrl}");
 
                 using var httpClient = _httpClientFactory.CreateClient();
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", openAiApiKey);
 
-                var systemPrompt = @"You are an SEO expert specializing in technical and business content optimization.
-Analyze the provided content which may include:
-- Article title and metadata
-- PUG template structure indicators (marked with [Structure: ...])
-- Raw article content
-- Current descriptions
+                Console.WriteLine($"[ArticleService] HTTP client created and authorization header set");
 
-Generate comprehensive SEO metadata, social media previews, article content, and conclusion content based on this analysis.
-Focus on the main article content and structural elements to understand the topic.
+                var systemPrompt = SeoLlmPromptConfig.GetContentGenerationPrompt(
+                    currentTitle ?? "Article",
+                    content ?? "");
 
-TITLE CONSISTENCY STRATEGY:
-- Generate ONE primary optimized title and use variations for different platforms
-- SEO Title: Full optimized title
-- Article Title: Clean version (same as SEO title)
-- Open Graph Title: Same as Article Title or slight variation for social media
-- Twitter Title: Shortened version of Article Title (max 50 characters)
-
-CRITICAL SEO REQUIREMENTS (MANDATORY - THESE MUST BE FOLLOWED):
-
-For Article Content:
-- Article Title: Clean, compelling title without brand suffix (this will be used as the main article title)
-- Article Description: Single paragraph summary (1-2 sentences) of what the article covers
-- Article Content: Full article content in MARKDOWN format - create comprehensive, well-structured content using proper markdown syntax (headers, lists, code blocks, links, etc.)
-
-MARKDOWN FORMATTING REQUIREMENTS:
-- Use proper heading hierarchy: # Main Title, ## Section Headings, ### Subsections
-- Format lists with - or * for unordered, 1. 2. 3. for ordered
-- Use **bold** and *italic* for emphasis
-- Create code blocks with ```language for multi-line code, `inline` for single words
-- Format links as [text](url) and ensure they open in new tabs where appropriate
-- Use > for blockquotes when including quotes or important callouts
-- Structure content with clear sections, proper spacing, and logical flow
-
-For SEO Optimization:
-- Keywords: 3-8 relevant keywords (comma-separated)
-- SEO Title: ABSOLUTE REQUIREMENT - MINIMUM 30 characters, MAXIMUM 60 characters, compelling and keyword-rich. NEVER submit a title shorter than 30 characters total.
-- Meta Description: ABSOLUTE REQUIREMENT - MINIMUM 150 characters, MAXIMUM 160 characters, engaging summary with primary keywords, MUST include action words like 'discover', 'learn', 'explore', 'understand', 'master', or 'guide'. NEVER submit a description shorter than 150 characters.
-
-For Social Media Preview (USE CONSISTENT TITLES):
-- Open Graph Title: Use the Article Title (same as SEO title without suffix) or slight variation (30-65 characters)
-- Open Graph Description: 200-300 characters, more engaging for social media
-- Twitter Title: Shortened version of Article Title (up to 50 characters)
-- Twitter Description: Concise version, up to 200 characters
-
-For Article Content:
-- Subtitle: Complementary subtitle that provides additional context
-- Summary: 2-3 sentence introduction that hooks the reader
-
-For Conclusion Section:
-- Conclusion Title: Compelling heading (e.g., Key Takeaways, Final Thoughts)
-- Conclusion Summary: 2-3 sentences summarizing main points
-- Conclusion Key Heading: Short, impactful heading (e.g., Bottom Line, Key Insight)
-- Conclusion Key Text: 1-2 sentences with the key insight
-- Conclusion Text: Final thoughts, call to action, or next steps
-
-VALIDATION REQUIREMENTS:
-- SEO Title: Must be 30-60 characters. Count characters carefully.
-- Article Title: Should be the SEO title
-- Meta Description: Must be 150-160 characters. Count characters carefully.
-- Keywords: Must be 3-8 total keywords.
-- Article Content: Should be comprehensive and well-structured
-- Title Consistency: Open Graph and Twitter titles should be based on the Article Title
-
-EXAMPLE TITLE CONSTRUCTION:
-- Article Title: 'Complete Guide to SampleMvcCRUD Project' (41 chars)
-- SEO Title: 'Complete Guide to SampleMvcCRUD Project' (41 chars)
-- Open Graph Title: 'Complete Guide to SampleMvcCRUD Project' (same as Article Title)
-- Twitter Title: 'SampleMvcCRUD Guide' (19 chars, shortened version)
-
-IMPORTANT: The SEO title and meta description will be validated for exact character count requirements.
-Any response that does not meet these requirements will be rejected.
-The SEO title MUST be at least 30 characters.
-The meta description MUST be between 150-160 characters and include action words.
-Keywords MUST be between 3-8 total keywords.
-Article content should be comprehensive and informative.
-
-Consider the article structure from PUG templates to understand content organization.
-Ignore navigation elements, headers, footers, and technical markup.";
+                Console.WriteLine($"[ArticleService] System prompt generated, length: {systemPrompt.Length} characters");
 
                 var userContent = string.IsNullOrEmpty(currentTitle)
-                    ? content
-                    : $"Current Title: {currentTitle}\n\nContent: {content}";
+                    ? content ?? ""
+                    : $"Current Title: {currentTitle}\n\nContent: {content ?? ""}";
+
+                Console.WriteLine($"[ArticleService] User content prepared, length: {userContent.Length} characters");
 
                 // Define the JSON schema for structured outputs
                 var responseFormat = new
@@ -149,13 +88,13 @@ Ignore navigation elements, headers, footers, and technical markup.";
                                 articleTitle = new { type = "string", description = "Clean article title without brand suffix (will be used as main article title)" },
                                 articleDescription = new { type = "string", description = "Single paragraph summary (1-2 sentences) of what the article covers" },
                                 articleContent = new { type = "string", description = "Full article content in MARKDOWN format - create comprehensive, well-structured content using proper markdown syntax (# headers, - lists, ```code blocks```, [links](url), **bold**, *italic*, etc.)" },
-                                keywords = new { type = "string", description = "Comma-separated list of 3-8 SEO keywords" },
-                                seoTitle = new { type = "string", description = "SEO-optimized title (ABSOLUTE MINIMUM 30 characters, MAXIMUM 60 characters)" },
-                                metaDescription = new { type = "string", description = "Meta description (ABSOLUTE MINIMUM 150 characters, MAXIMUM 160 characters), MUST include action words like 'discover', 'learn', 'explore'. Count characters carefully before submitting." },
-                                ogTitle = new { type = "string", description = "Open Graph title - use articleTitle or slight variation (30-65 characters)" },
-                                ogDescription = new { type = "string", description = "Open Graph description (up to 200 characters)" },
-                                twitterTitle = new { type = "string", description = "Twitter title - shortened version of articleTitle (up to 50 characters)" },
-                                twitterDescription = new { type = "string", description = "Twitter description (up to 200 characters)" },
+                                keywords = new { type = "string", description = $"Comma-separated list of {SeoValidationConfig.Keywords.MinCount}-{SeoValidationConfig.Keywords.MaxCount} SEO keywords" },
+                                seoTitle = new { type = "string", description = $"SEO-optimized title (ABSOLUTE MINIMUM {SeoValidationConfig.Title.MinLength} characters, MAXIMUM {SeoValidationConfig.Title.MaxLength} characters)" },
+                                metaDescription = new { type = "string", description = $"Meta description (ABSOLUTE MINIMUM {SeoValidationConfig.MetaDescription.MinLength} characters, MAXIMUM {SeoValidationConfig.MetaDescription.MaxLength} characters), MUST include action words like 'discover', 'learn', 'explore'. Count characters carefully before submitting." },
+                                ogTitle = new { type = "string", description = $"Open Graph title - use articleTitle or slight variation ({SeoValidationConfig.OpenGraphTitle.MinLength}-{SeoValidationConfig.OpenGraphTitle.MaxLength} characters)" },
+                                ogDescription = new { type = "string", description = $"Open Graph description ({SeoValidationConfig.OpenGraphDescription.MinLength}-{SeoValidationConfig.OpenGraphDescription.MaxLength} characters)" },
+                                twitterTitle = new { type = "string", description = $"Twitter title - shortened version of articleTitle (up to {SeoValidationConfig.TwitterTitle.MaxLength} characters)" },
+                                twitterDescription = new { type = "string", description = $"Twitter description ({SeoValidationConfig.TwitterDescription.MinLength}-{SeoValidationConfig.TwitterDescription.MaxLength} characters)" },
                                 subtitle = new { type = "string", description = "Article subtitle providing additional context" },
                                 summary = new { type = "string", description = "2-3 sentence article introduction" },
                                 conclusionTitle = new { type = "string", description = "Conclusion section heading" },
@@ -198,11 +137,20 @@ Ignore navigation elements, headers, footers, and technical markup.";
 
                 var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
 
+                _logger.LogInformation("[ArticleService] Request body prepared, making API call to OpenAI...");
+                _logger.LogInformation("[ArticleService] *** STARTING LLM API CALL ***");
+
                 // Make the API call
                 var response = await httpClient.PostAsync(openAiApiUrl, jsonContent);
+
+                _logger.LogInformation("[ArticleService] *** LLM API CALL COMPLETED ***");
+                _logger.LogInformation("[ArticleService] OpenAI API response received. Status: {StatusCode}", response.StatusCode);
+
                 response.EnsureSuccessStatusCode();
 
                 var responseContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"[ArticleService] Response content received, length: {responseContent.Length} characters");
+
                 var responseData = JsonDocument.Parse(responseContent);
 
                 // Extract the response text
@@ -212,27 +160,37 @@ Ignore navigation elements, headers, footers, and technical markup.";
                     .GetProperty("content")
                     .GetString();
 
+                Console.WriteLine($"[ArticleService] AI response extracted, length: {aiResponse?.Length} characters");
+
                 if (string.IsNullOrEmpty(aiResponse))
                 {
+                    Console.WriteLine($"[ArticleService] AI response is empty, returning empty result");
                     return new SeoGenerationResult();
                 }
 
                 // With structured outputs, the response should be valid JSON without markdown formatting
                 try
                 {
+                    Console.WriteLine($"[ArticleService] Attempting to parse JSON response...");
                     var seoData = JsonSerializer.Deserialize<SeoGenerationResult>(aiResponse);
+                    Console.WriteLine($"[ArticleService] JSON parsed successfully. SeoData is null: {seoData == null}");
+
                     if (seoData != null)
                     {
+                        Console.WriteLine($"[ArticleService] Processing and validating SEO data...");
                         // Post-process and validate the SEO data to ensure it meets requirements
                         seoData = ValidateAndCorrectSeoData(seoData, currentTitle);
+                        Console.WriteLine($"[ArticleService] SEO data validated and corrected");
                     }
                     return seoData ?? new SeoGenerationResult();
                 }
                 catch (JsonException ex)
                 {
+                    Console.WriteLine($"[ArticleService] JSON parsing failed: {ex.Message}");
                     _logger.LogWarning(ex, "Failed to parse structured AI SEO response as JSON. Raw response: {Response}", aiResponse);
 
                     // Fallback: try to extract keywords from the response
+                    Console.WriteLine($"[ArticleService] Using fallback - extracting keywords from response");
                     return new SeoGenerationResult
                     {
                         Keywords = aiResponse.Trim()
@@ -241,6 +199,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[ArticleService] Exception in GenerateSeoDataFromContentAsync: {ex.Message}");
                 _logger.LogError(ex, "Failed to generate SEO data using OpenAI API with structured outputs.");
                 return new SeoGenerationResult();
             }
@@ -300,7 +259,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
         }
 
         /// <summary>
-        /// Ensures the SEO title meets the 30-60 character requirement and includes the brand suffix.
+        /// Ensures the SEO title meets the {SeoValidationConfig.Title.MinLength}-{SeoValidationConfig.Title.MaxLength} character requirement and includes the brand suffix.
         /// </summary>
         /// <param name="title">The original title.</param>
         /// <param name="fallbackTitle">Fallback title to use if original is too short.</param>
@@ -308,8 +267,8 @@ Ignore navigation elements, headers, footers, and technical markup.";
         private string EnsureSeoTitleMeetsRequirements(string title, string? fallbackTitle = null)
         {
             const string brandSuffix = "";
-            const int minLength = 30;
-            const int maxLength = 60;
+            var minLength = SeoValidationConfig.Title.MinLength;
+            var maxLength = SeoValidationConfig.Title.MaxLength;
 
             // Use the title as-is since we're not adding any suffix
             var cleanTitle = title.Trim();
@@ -400,14 +359,14 @@ Ignore navigation elements, headers, footers, and technical markup.";
         }
 
         /// <summary>
-        /// Ensures the meta description meets the 150-160 character requirement.
+        /// Ensures the meta description meets the {SeoValidationConfig.MetaDescription.MinLength}-{SeoValidationConfig.MetaDescription.MaxLength} character requirement.
         /// </summary>
         /// <param name="description">The original description.</param>
         /// <returns>A corrected description that meets length requirements.</returns>
         private string EnsureMetaDescriptionMeetsRequirements(string description)
         {
-            const int minLength = 120;
-            const int maxLength = 160;
+            var minLength = SeoValidationConfig.MetaDescription.MinLength;
+            var maxLength = SeoValidationConfig.MetaDescription.MaxLength;
 
             if (description.Length >= minLength && description.Length <= maxLength)
                 return description;
@@ -454,7 +413,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
         }
 
         /// <summary>
-        /// Ensures keywords meet the requirement of being 3-8 keywords.
+        /// Ensures keywords meet the requirement of being {SeoValidationConfig.Keywords.MinCount}-{SeoValidationConfig.Keywords.MaxCount} keywords.
         /// </summary>
         /// <param name="keywords">The original keywords.</param>
         /// <returns>Corrected keywords that meet all requirements.</returns>
@@ -465,13 +424,13 @@ Ignore navigation elements, headers, footers, and technical markup.";
 
             var keywordList = keywords.Split(',').Select(k => k.Trim()).Where(k => !string.IsNullOrEmpty(k)).ToList();
 
-            // Ensure we have at least 3 keywords
-            if (keywordList.Count < 3)
+            // Ensure we have at least minimum keywords
+            if (keywordList.Count < SeoValidationConfig.Keywords.MinCount)
             {
                 var additionalKeywords = new[] { "solutions architect", "project management", "web development", "IT consulting", "technical leadership" };
                 foreach (var keyword in additionalKeywords)
                 {
-                    if (keywordList.Count >= 3) break;
+                    if (keywordList.Count >= SeoValidationConfig.Keywords.MinCount) break;
                     if (!keywordList.Any(k => k.Equals(keyword, StringComparison.OrdinalIgnoreCase)))
                     {
                         keywordList.Add(keyword);
@@ -479,11 +438,11 @@ Ignore navigation elements, headers, footers, and technical markup.";
                 }
             }
 
-            // Ensure we don't exceed 8 keywords
-            if (keywordList.Count > 8)
+            // Ensure we don't exceed maximum keywords
+            if (keywordList.Count > SeoValidationConfig.Keywords.MaxCount)
             {
-                // Keep the first 8 keywords
-                keywordList = keywordList.Take(8).ToList();
+                // Keep the first maximum allowed keywords
+                keywordList = keywordList.Take(SeoValidationConfig.Keywords.MaxCount).ToList();
             }
 
             return string.Join(", ", keywordList);
@@ -836,31 +795,6 @@ Ignore navigation elements, headers, footers, and technical markup.";
             }
         }
 
-        /// <summary>
-        /// Updates the Keywords property for all articles by fetching meta tag keywords from their respective URLs.
-        /// </summary>
-        public async Task UpdateKeywordsForAllArticlesAsync(CancellationToken cancellationToken)
-        {
-            for (int i = 0; i < _articles.Count; i++)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    _logger.LogInformation("UpdateKeywordsForAllArticlesAsync operation was cancelled.");
-                    break;
-                }
-                if (string.IsNullOrWhiteSpace(_articles[i].Keywords))
-                {
-                    // add 1 second delay to avoid hitting the OpenAI API rate limit
-                    await Task.Delay(1000, cancellationToken).ConfigureAwait(true);
-                    Console.WriteLine($"Updating keywords for article: {_articles[i].Name}");
-                    await UpdateArticle(_articles[i]).ConfigureAwait(true);
-                    Console.WriteLine($"UPDATED keywords for article: {_articles[i].Name}");
-                    await Task.Delay(1000, cancellationToken).ConfigureAwait(true);
-
-                }
-            }
-        }
-
         public void GenerateRSSFeed()
         {
             try
@@ -1019,8 +953,6 @@ Ignore navigation elements, headers, footers, and technical markup.";
                  /// <param name="updatedArticle">The updated article model.</param>
         public async Task UpdateArticle(ArticleModel updatedArticle)
         {
-            updatedArticle.Keywords = await GenerateKeywordsAsync(updatedArticle) ?? updatedArticle.Keywords;
-
             // Calculate source file path if not already set or if slug has changed
             if (string.IsNullOrEmpty(updatedArticle.Source))
             {
@@ -1345,16 +1277,26 @@ Ignore navigation elements, headers, footers, and technical markup.";
         /// <param name="article">The article to enhance</param>
         public async Task AutoGenerateSeoFieldsAsync(ArticleModel article)
         {
+            _logger.LogInformation("[ArticleService] AutoGenerateSeoFieldsAsync called for article: {ArticleName}", article.Name);
+
             // Initialize if needed
             InitializeSeoFields(article);
+            _logger.LogInformation("[ArticleService] SEO fields initialized");
 
             // Prepare content for AI analysis
             string contentForAnalysis = await PrepareContentForSeoAnalysis(article);
+            _logger.LogInformation("[ArticleService] Content prepared for analysis, length: {ContentLength} characters", contentForAnalysis?.Length);
 
             // Generate AI-powered SEO data if content is available
             if (!string.IsNullOrEmpty(contentForAnalysis))
             {
+                _logger.LogInformation("[ArticleService] Calling GenerateSeoDataFromContentAsync...");
+                _logger.LogInformation("[ArticleService] About to make LLM API call to OpenAI...");
+
                 var seoData = await GenerateSeoDataFromContentAsync(contentForAnalysis, article.Name);
+
+                _logger.LogInformation("[ArticleService] LLM API call completed successfully!");
+                _logger.LogInformation("[ArticleService] SEO data generated successfully");
 
                 _logger.LogInformation("AI generated SEO data for article '{ArticleName}': Title='{SeoTitle}' ({TitleLength} chars), Description='{MetaDescription}' ({DescriptionLength} chars)",
                     article.Name, seoData.SeoTitle, seoData.SeoTitle?.Length ?? 0, seoData.MetaDescription, seoData.MetaDescription?.Length ?? 0);
@@ -1362,18 +1304,21 @@ Ignore navigation elements, headers, footers, and technical markup.";
                 // Always update main article fields with AI-generated data
                 if (!string.IsNullOrEmpty(seoData.ArticleTitle))
                 {
+                    _logger.LogInformation("[ArticleService] Updating article title: {ArticleTitle}", seoData.ArticleTitle);
                     article.Name = seoData.ArticleTitle;
                     _logger.LogInformation("Updated article title for article '{OriginalName}': '{NewTitle}'", article.Name, seoData.ArticleTitle);
                 }
 
                 if (!string.IsNullOrEmpty(seoData.ArticleDescription))
                 {
+                    _logger.LogInformation("[ArticleService] Updating article description");
                     article.Description = seoData.ArticleDescription;
                     _logger.LogInformation("Updated article description for article '{ArticleName}'", article.Name);
                 }
 
                 if (!string.IsNullOrEmpty(seoData.ArticleContent))
                 {
+                    Console.WriteLine($"[ArticleService] Updating article content, length: {seoData.ArticleContent.Length} characters");
                     article.ArticleContent = seoData.ArticleContent;
                     _logger.LogInformation("Updated article content for article '{ArticleName}'", article.Name);
                 }
@@ -1381,6 +1326,7 @@ Ignore navigation elements, headers, footers, and technical markup.";
                 // Always update with AI-generated SEO data
                 if (!string.IsNullOrEmpty(seoData.Keywords))
                 {
+                    Console.WriteLine($"[ArticleService] Updating keywords: {seoData.Keywords}");
                     article.Keywords = seoData.Keywords;
                     _logger.LogInformation("Updated keywords for article '{ArticleName}': {Keywords}", article.Name, seoData.Keywords);
                 }
@@ -1422,40 +1368,47 @@ Ignore navigation elements, headers, footers, and technical markup.";
                     article.TwitterCard!.Title = seoData.TwitterTitle;
                 }
 
-                // Update article content fields
-                if (string.IsNullOrEmpty(article.Subtitle) && !string.IsNullOrEmpty(seoData.Subtitle))
+                // Update article content fields (always update with AI data)
+                if (!string.IsNullOrEmpty(seoData.Subtitle))
                 {
+                    Console.WriteLine($"[ArticleService] Updating subtitle: {seoData.Subtitle}");
                     article.Subtitle = seoData.Subtitle;
                 }
 
-                if (string.IsNullOrEmpty(article.Summary) && !string.IsNullOrEmpty(seoData.Summary))
+                if (!string.IsNullOrEmpty(seoData.Summary))
                 {
+                    Console.WriteLine($"[ArticleService] Updating summary");
                     article.Summary = seoData.Summary;
                 }
 
-                // Update conclusion section fields
-                if (string.IsNullOrEmpty(article.ConclusionTitle) && !string.IsNullOrEmpty(seoData.ConclusionTitle))
+                // Update conclusion section fields (always update with AI data)
+                if (!string.IsNullOrEmpty(seoData.ConclusionTitle))
                 {
+                    Console.WriteLine($"[ArticleService] Updating conclusion title: {seoData.ConclusionTitle}");
                     article.ConclusionTitle = seoData.ConclusionTitle;
                 }
 
-                if (string.IsNullOrEmpty(article.ConclusionSummary) && !string.IsNullOrEmpty(seoData.ConclusionSummary))
+                if (!string.IsNullOrEmpty(seoData.ConclusionSummary))
                 {
+                    Console.WriteLine($"[ArticleService] Updating conclusion summary");
                     article.ConclusionSummary = seoData.ConclusionSummary;
                 }
 
-                if (string.IsNullOrEmpty(article.ConclusionKeyHeading) && !string.IsNullOrEmpty(seoData.ConclusionKeyHeading))
+                if (!string.IsNullOrEmpty(seoData.ConclusionKeyHeading))
                 {
+                    Console.WriteLine($"[ArticleService] Updating conclusion key heading: {seoData.ConclusionKeyHeading}");
                     article.ConclusionKeyHeading = seoData.ConclusionKeyHeading;
                 }
 
-                if (string.IsNullOrEmpty(article.ConclusionKeyText) && !string.IsNullOrEmpty(seoData.ConclusionKeyText))
+                if (!string.IsNullOrEmpty(seoData.ConclusionKeyText))
                 {
+                    Console.WriteLine($"[ArticleService] Updating conclusion key text");
                     article.ConclusionKeyText = seoData.ConclusionKeyText;
                 }
 
-                if (string.IsNullOrEmpty(article.ConclusionText) && !string.IsNullOrEmpty(seoData.ConclusionText))
+                if (!string.IsNullOrEmpty(seoData.ConclusionText))
                 {
+                    Console.WriteLine($"[ArticleService] Updating conclusion text");
                     article.ConclusionText = seoData.ConclusionText;
                 }
             }
@@ -1477,6 +1430,8 @@ Ignore navigation elements, headers, footers, and technical markup.";
             {
                 article.TwitterCard.ImageAlt = article.OpenGraph.ImageAlt;
             }
+
+            Console.WriteLine($"[ArticleService] AutoGenerateSeoFieldsAsync completed for article: {article.Name}");
         }
 
         /// <summary>
@@ -1493,11 +1448,11 @@ Ignore navigation elements, headers, footers, and technical markup.";
                 ["ArticlesWithOpenGraph"] = articles.Count(a => a.OpenGraph != null),
                 ["ArticlesWithTwitterCard"] = articles.Count(a => a.TwitterCard != null),
                 ["TitleIssues"] = articles.Count(a => string.IsNullOrEmpty(a.EffectiveTitle) ||
-                                                     a.EffectiveTitle.Length < 30 ||
-                                                     a.EffectiveTitle.Length > 60),
+                                                     a.EffectiveTitle.Length < SeoValidationConfig.Title.MinLength ||
+                                                     a.EffectiveTitle.Length > SeoValidationConfig.Title.MaxLength),
                 ["DescriptionIssues"] = articles.Count(a => string.IsNullOrEmpty(a.EffectiveDescription) ||
-                                                            a.EffectiveDescription.Length < 120 ||
-                                                            a.EffectiveDescription.Length > 160),
+                                                            a.EffectiveDescription.Length < SeoValidationConfig.MetaDescription.MinLength ||
+                                                            a.EffectiveDescription.Length > SeoValidationConfig.MetaDescription.MaxLength),
                 ["MissingImages"] = articles.Count(a => string.IsNullOrEmpty(a.ImgSrc)),
                 ["CompleteSeoArticles"] = articles.Count(a => a.Seo != null && a.OpenGraph != null && a.TwitterCard != null),
                 // New file-based validation statistics
@@ -1632,6 +1587,8 @@ Ignore navigation elements, headers, footers, and technical markup.";
         /// <returns>Combined content including PUG file structure and article metadata</returns>
         private async Task<string> PrepareContentForSeoAnalysis(ArticleModel article)
         {
+            Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis called for article: {article.Name}");
+
             var contentParts = new List<string>();
 
             // Add basic article metadata
@@ -1650,29 +1607,41 @@ Ignore navigation elements, headers, footers, and technical markup.";
                 contentParts.Add($"Category/Section: {article.Section}");
             }
 
+            Console.WriteLine($"[ArticleService] Added basic metadata to content parts");
+
             // Try to read PUG file content for additional context
             try
             {
+                Console.WriteLine($"[ArticleService] Attempting to read PUG file content...");
                 string pugContent = await ReadPugFileContent(article);
                 if (!string.IsNullOrEmpty(pugContent))
                 {
+                    Console.WriteLine($"[ArticleService] PUG content read successfully, length: {pugContent.Length} characters");
                     contentParts.Add("PUG File Content Structure:");
                     contentParts.Add(pugContent);
+                }
+                else
+                {
+                    Console.WriteLine($"[ArticleService] PUG content is empty");
                 }
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[ArticleService] Error reading PUG file: {ex.Message}");
                 _logger.LogWarning(ex, "Could not read PUG file for article: {ArticleName}", article.Name);
             }
 
             // Add existing article content if available
             if (!string.IsNullOrEmpty(article.ArticleContent))
             {
+                Console.WriteLine($"[ArticleService] Adding existing article content, length: {article.ArticleContent.Length} characters");
                 contentParts.Add("Existing Article Content:");
                 contentParts.Add(article.ArticleContent);
             }
 
-            return string.Join("\n\n", contentParts);
+            var result = string.Join("\n\n", contentParts);
+            Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis completed, final content length: {result.Length} characters");
+            return result;
         }
 
         /// <summary>
@@ -1684,33 +1653,52 @@ Ignore navigation elements, headers, footers, and technical markup.";
         {
             try
             {
+                Console.WriteLine($"[ArticleService] ReadPugFileContent called for article: {article.Name}");
+
                 var srcPath = _configuration["SrcPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "src");
+                Console.WriteLine($"[ArticleService] Source path: {srcPath}");
 
                 if (!string.IsNullOrEmpty(article.Source))
                 {
+                    Console.WriteLine($"[ArticleService] Using article.Source: {article.Source}");
                     var relativePath = article.Source.Replace("/src/pug/", "").Replace("/", Path.DirectorySeparatorChar.ToString());
                     var fullPath = Path.Combine(srcPath, "pug", relativePath);
+                    Console.WriteLine($"[ArticleService] Full path from Source: {fullPath}");
 
                     if (File.Exists(fullPath))
                     {
+                        Console.WriteLine($"[ArticleService] File exists, reading content...");
                         return await File.ReadAllTextAsync(fullPath);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[ArticleService] File does not exist: {fullPath}");
                     }
                 }
                 else if (!string.IsNullOrEmpty(article.Slug))
                 {
+                    Console.WriteLine($"[ArticleService] Using article.Slug: {article.Slug}");
                     var fileName = article.Slug.Replace(".html", ".pug").Replace("articles/", "");
                     var fullPath = Path.Combine(srcPath, "pug", "articles", fileName);
+                    Console.WriteLine($"[ArticleService] Full path from Slug: {fullPath}");
 
                     if (File.Exists(fullPath))
                     {
+                        Console.WriteLine($"[ArticleService] File exists, reading content...");
                         return await File.ReadAllTextAsync(fullPath);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[ArticleService] File does not exist: {fullPath}");
                     }
                 }
 
+                Console.WriteLine($"[ArticleService] No PUG file found, returning empty string");
                 return string.Empty;
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[ArticleService] Exception in ReadPugFileContent: {ex.Message}");
                 _logger.LogError(ex, "Error reading PUG file for article: {ArticleName}", article.Name);
                 return string.Empty;
             }

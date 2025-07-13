@@ -146,18 +146,18 @@
         <div class="card-body">
             <div class="row">
                 @{
-                    var gradeA = Model.ArticleScores.Count(s => s.Value.Grade == "A");
-                    var gradeB = Model.ArticleScores.Count(s => s.Value.Grade == "B");
-                    var gradeC = Model.ArticleScores.Count(s => s.Value.Grade == "C");
-                    var gradeD = Model.ArticleScores.Count(s => s.Value.Grade == "D");
-                    var gradeF = Model.ArticleScores.Count(s => s.Value.Grade == "F");
+                    var gradeA = Model.ArticleScores.Count(s => s.Value.GetGrade(Model.ArticleValidations[s.Key].Warnings) == "A");
+                    var gradeB = Model.ArticleScores.Count(s => s.Value.GetGrade(Model.ArticleValidations[s.Key].Warnings) == "B");
+                    var gradeC = Model.ArticleScores.Count(s => s.Value.GetGrade(Model.ArticleValidations[s.Key].Warnings) == "C");
+                    var gradeD = Model.ArticleScores.Count(s => s.Value.GetGrade(Model.ArticleValidations[s.Key].Warnings) == "D");
+                    var gradeF = Model.ArticleScores.Count(s => s.Value.GetGrade(Model.ArticleValidations[s.Key].Warnings) == "F");
                     var total = Model.ArticleScores.Count;
                 }
                 <div class="col-md-2">
                     <div class="text-center">
                         <a asp-page="./SeoDashboard" asp-route-filterGrade="A"
                             class="text-decoration-none grade-filter @(Model.FilterGrade == "A" ? "active" : "")"
-                            title="Grade A: 90-100% SEO Score">
+                            title="Grade A: No warnings about too long or too short attributes (90+ score)">
                             <div class="badge bg-success fs-1 grade-badge">A</div>
                             <div class="mt-2">@gradeA articles</div>
                             <small class="text-muted">@((total > 0 ? (gradeA * 100 / total) : 0))%</small>
@@ -168,7 +168,7 @@
                     <div class="text-center">
                         <a asp-page="./SeoDashboard" asp-route-filterGrade="B"
                             class="text-decoration-none grade-filter @(Model.FilterGrade == "B" ? "active" : "")"
-                            title="Grade B: 80-89% SEO Score">
+                            title="Grade B: Only warnings related to Twitter or Open Graph (80+ score)">
                             <div class="badge bg-info fs-1 grade-badge">B</div>
                             <div class="mt-2">@gradeB articles</div>
                             <small class="text-muted">@((total > 0 ? (gradeB * 100 / total) : 0))%</small>
@@ -179,7 +179,7 @@
                     <div class="text-center">
                         <a asp-page="./SeoDashboard" asp-route-filterGrade="C"
                             class="text-decoration-none grade-filter @(Model.FilterGrade == "C" ? "active" : "")"
-                            title="Grade C: 70-79% SEO Score">
+                            title="Grade C: Warnings related to title and meta descriptions (70+ score)">
                             <div class="badge bg-warning fs-1 grade-badge">C</div>
                             <div class="mt-2">@gradeC articles</div>
                             <small class="text-muted">@((total > 0 ? (gradeC * 100 / total) : 0))%</small>
@@ -190,7 +190,7 @@
                     <div class="text-center">
                         <a asp-page="./SeoDashboard" asp-route-filterGrade="D"
                             class="text-decoration-none grade-filter @(Model.FilterGrade == "D" ? "active" : "")"
-                            title="Grade D: 60-69% SEO Score">
+                            title="Grade D: Other warnings with decent overall score (60+ score)">
                             <div class="badge bg-secondary fs-1 grade-badge">D</div>
                             <div class="mt-2">@gradeD articles</div>
                             <small class="text-muted">@((total > 0 ? (gradeD * 100 / total) : 0))%</small>
@@ -201,7 +201,7 @@
                     <div class="text-center">
                         <a asp-page="./SeoDashboard" asp-route-filterGrade="F"
                             class="text-decoration-none grade-filter @(Model.FilterGrade == "F" ? "active" : "")"
-                            title="Grade F: Below 60% SEO Score">
+                            title="Grade F: Major SEO issues with low overall score (under 60 score)">
                             <div class="badge bg-danger fs-1 grade-badge">F</div>
                             <div class="mt-2">@gradeF articles</div>
                             <small class="text-muted">@((total > 0 ? (gradeF * 100 / total) : 0))%</small>
@@ -262,7 +262,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge @GetGradeBadgeClass(score.Grade)">@score.Grade</span>
+                                            <span class="badge @GetGradeBadgeClass(score.GetGrade(validation.Warnings))">@score.GetGrade(validation.Warnings)</span>
                                         </td>
                                         <td>
                                             <div class="row g-1">
@@ -432,8 +432,11 @@
                                         </div>
                                     </td>
                                     <td>
+                                        @{
+                                            var currentGrade = validation.Score.GetGrade(validation.Warnings);
+                                        }
                                         <span
-                                            class="badge @GetGradeBadgeClass(validation.Score.Grade)">@validation.Score.Grade</span>
+                                            class="badge @GetGradeBadgeClass(currentGrade)">@currentGrade</span>
                                     </td>
                                     <td>
                                         @foreach (var warning in validation.Warnings.Take(2))

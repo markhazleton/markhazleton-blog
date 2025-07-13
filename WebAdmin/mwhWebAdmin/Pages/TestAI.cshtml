@@ -1,0 +1,91 @@
+@page
+@model mwhWebAdmin.Pages.TestAIModel
+@{
+    ViewData["Title"] = "Test AI Integration";
+}
+
+<div class="container mt-5">
+    <h1>Test AI Integration</h1>
+    <p>This page helps you test if the AI integration is working properly.</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Configuration Check</h3>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    OpenAI API Key
+                    @if (Model.HasApiKey)
+                    {
+                        <span class="badge bg-success">✓ Configured</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">✗ Missing</span>
+                    }
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Article Service
+                    <span class="badge bg-success">✓ Available</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Test AI Generation</h3>
+            <form method="post">
+                <div class="mb-3">
+                    <label for="testContent" class="form-label">Test Content:</label>
+                    <textarea class="form-control" id="testContent" name="testContent" rows="5"
+                              placeholder="Enter some content to test AI SEO generation...">This is a test article about web development using ASP.NET Core. It covers various topics including Razor Pages, Entity Framework, and deployment strategies.</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-robot me-2"></i>Test AI Generation
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.TestResult != null)
+    {
+        <div class="mt-4">
+            <h3>Test Results</h3>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Generated SEO Data</h5>
+                    <dl class="row">
+                        <dt class="col-sm-3">Keywords:</dt>
+                        <dd class="col-sm-9">@Model.TestResult.Keywords</dd>
+
+                        <dt class="col-sm-3">SEO Title:</dt>
+                        <dd class="col-sm-9">@Model.TestResult.SeoTitle</dd>
+
+                        <dt class="col-sm-3">Meta Description:</dt>
+                        <dd class="col-sm-9">@Model.TestResult.MetaDescription</dd>
+
+                        <dt class="col-sm-3">Open Graph Title:</dt>
+                        <dd class="col-sm-9">@Model.TestResult.OgTitle</dd>
+
+                        <dt class="col-sm-3">Twitter Description:</dt>
+                        <dd class="col-sm-9">@Model.TestResult.TwitterDescription</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    }
+</div>

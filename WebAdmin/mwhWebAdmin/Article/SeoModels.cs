@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using mwhWebAdmin.Configuration;
 
 namespace mwhWebAdmin.Article;
 
@@ -21,7 +21,7 @@ public class SeoModel
     public string? TitleSuffix { get; set; } = "";
 
     /// <summary>
-    /// Gets or sets the SEO-optimized description (150-160 characters recommended)
+    /// Gets or sets the SEO-optimized description (150-320 characters recommended)
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; set; }
@@ -51,13 +51,13 @@ public class SeoModel
 public class OpenGraphModel
 {
     /// <summary>
-    /// Gets or sets the Open Graph title
+    /// Gets or sets the Open Graph title (30-65 characters recommended)
     /// </summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }
 
     /// <summary>
-    /// Gets or sets the Open Graph description
+    /// Gets or sets the Open Graph description (100-300 characters recommended)
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; set; }
@@ -87,13 +87,13 @@ public class OpenGraphModel
 public class TwitterCardModel
 {
     /// <summary>
-    /// Gets or sets the Twitter card title
+    /// Gets or sets the Twitter card title (max 50 characters recommended)
     /// </summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }
 
     /// <summary>
-    /// Gets or sets the Twitter card description
+    /// Gets or sets the Twitter card description (120-200 characters recommended)
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; set; }
@@ -135,12 +135,30 @@ public class SeoScore
     public int ContentImageScore { get; set; }
     public int HtmlSeoScore { get; set; }
     public int OverallScore { get; set; }
+
+    /// <summary>
+    /// Gets the grade based on warnings and overall score
+    /// A: No warnings about too long or too short attributes (90+ score)
+    /// B: Only warnings related to Twitter or Open Graph (80+ score)
+    /// C: Warnings related to title and meta descriptions (70+ score)
+    /// D: Other warnings (60+ score)
+    /// F: Major issues (under 60 score)
+    /// </summary>
+    public string GetGrade(List<string> warnings)
+    {
+        return SeoValidationConfig.Grading.GetGrade(OverallScore, warnings);
+    }
+
+    /// <summary>
+    /// Legacy grade property for backward compatibility
+    /// Uses standard grade ranges: A(90+), B(80+), C(70+), D(60+), F(<60)
+    /// </summary>
     public string Grade => OverallScore switch
     {
-        >= 90 => "A",
-        >= 80 => "B",
-        >= 70 => "C",
-        >= 60 => "D",
+        >= SeoValidationConfig.Grading.GradeAThreshold => "A",
+        >= SeoValidationConfig.Grading.GradeBThreshold => "B",
+        >= SeoValidationConfig.Grading.GradeCThreshold => "C",
+        >= SeoValidationConfig.Grading.GradeDThreshold => "D",
         _ => "F"
     };
 }

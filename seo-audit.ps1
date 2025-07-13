@@ -7,6 +7,12 @@ param(
     [switch]$Verbose = $false
 )
 
+# Import centralized SEO validation configuration
+Import-Module -Name "$PSScriptRoot\SeoValidationConfig.psm1" -Force
+
+# Get the SEO validation configuration
+$SeoConfig = Get-SeoValidationConfig
+
 Write-Host "🔍 Starting SEO Audit for Mark Hazleton Blog..." -ForegroundColor Green
 Write-Host "📁 Scanning directory: $DocsPath" -ForegroundColor Cyan
 Write-Host ""
@@ -45,29 +51,29 @@ Write-Host ""
 $totalFiles = 0
 $issuesFound = @()
 $summary = @{
-    MissingTitle        = 0
-    MissingDescription  = 0
-    MissingKeywords     = 0
-    MissingCanonical    = 0
-    TitleTooLong        = 0
-    TitleTooShort       = 0
-    MetaDescriptionTooLong  = 0
-    MetaDescriptionTooShort = 0
-    OgDescriptionTooLong    = 0
-    OgDescriptionTooShort   = 0
-    TwitterDescriptionTooLong = 0
+    MissingTitle               = 0
+    MissingDescription         = 0
+    MissingKeywords            = 0
+    MissingCanonical           = 0
+    TitleTooLong               = 0
+    TitleTooShort              = 0
+    MetaDescriptionTooLong     = 0
+    MetaDescriptionTooShort    = 0
+    OgDescriptionTooLong       = 0
+    OgDescriptionTooShort      = 0
+    TwitterDescriptionTooLong  = 0
     TwitterDescriptionTooShort = 0
-    MissingH1           = 0
-    MultipleH1          = 0
-    MissingAltText      = 0
-    EmptyTitle          = 0
-    EmptyDescription    = 0
-    EmptyOgDescription  = 0
-    EmptyTwitterDescription = 0
-    MissingOpenGraph    = 0
-    MissingTwitterCard  = 0
-    TooFewKeywords      = 0
-    TooManyKeywords     = 0
+    MissingH1                  = 0
+    MultipleH1                 = 0
+    MissingAltText             = 0
+    EmptyTitle                 = 0
+    EmptyDescription           = 0
+    EmptyOgDescription         = 0
+    EmptyTwitterDescription    = 0
+    MissingOpenGraph           = 0
+    MissingTwitterCard         = 0
+    TooFewKeywords             = 0
+    TooManyKeywords            = 0
 }
 
 # Function to check if file should be validated based on articles.json
@@ -154,12 +160,12 @@ function Test-SEOCompliance {
                 $issues += "Empty title tag"
                 $summary.EmptyTitle++
             }
-            elseif ($titleLength -gt 60) {
-                $issues += "Title too long ($titleLength chars, should be ≤60)"
+            elseif ($titleLength -gt $SeoConfig.Title.MaxLength) {
+                $issues += "Title too long ($titleLength chars, should be ≤$($SeoConfig.Title.MaxLength))"
                 $summary.TitleTooLong++
             }
-            elseif ($titleLength -lt 30) {
-                $issues += "Title too short ($titleLength chars, should be ≥30)"
+            elseif ($titleLength -lt $SeoConfig.Title.MinLength) {
+                $issues += "Title too short ($titleLength chars, should be ≥$($SeoConfig.Title.MinLength))"
                 $summary.TitleTooShort++
             }
         }
@@ -181,12 +187,12 @@ function Test-SEOCompliance {
                 $issues += "Empty meta description"
                 $summary.EmptyDescription++
             }
-            elseif ($descLength -gt 320) {
-                $issues += "Meta description too long ($descLength chars, should be ≤320)"
+            elseif ($descLength -gt $SeoConfig.MetaDescription.MaxLength) {
+                $issues += "Meta description too long ($descLength chars, should be ≤$($SeoConfig.MetaDescription.MaxLength))"
                 $summary.MetaDescriptionTooLong++
             }
-            elseif ($descLength -lt 150) {
-                $issues += "Meta description too short ($descLength chars, should be ≥150)"
+            elseif ($descLength -lt $SeoConfig.MetaDescription.MinLength) {
+                $issues += "Meta description too short ($descLength chars, should be ≥$($SeoConfig.MetaDescription.MinLength))"
                 $summary.MetaDescriptionTooShort++
             }
         }
@@ -204,12 +210,12 @@ function Test-SEOCompliance {
             $keywordText = $keywordMatch.Groups[1].Value.Trim()
             if (-not [string]::IsNullOrWhiteSpace($keywordText)) {
                 $keywordList = $keywordText.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
-                if ($keywordList.Count -lt 3) {
-                    $issues += "Too few keywords ($($keywordList.Count) found, recommended: 3-8)"
+                if ($keywordList.Count -lt $SeoConfig.Keywords.MinCount) {
+                    $issues += "Too few keywords ($($keywordList.Count) found, recommended: $($SeoConfig.Keywords.MinCount)-$($SeoConfig.Keywords.MaxCount))"
                     $summary.TooFewKeywords++
                 }
-                elseif ($keywordList.Count -gt 8) {
-                    $issues += "Too many keywords ($($keywordList.Count) found, recommended: 3-8)"
+                elseif ($keywordList.Count -gt $SeoConfig.Keywords.MaxCount) {
+                    $issues += "Too many keywords ($($keywordList.Count) found, recommended: $($SeoConfig.Keywords.MinCount)-$($SeoConfig.Keywords.MaxCount))"
                     $summary.TooManyKeywords++
                 }
             }
@@ -276,12 +282,12 @@ function Test-SEOCompliance {
                 $issues += "Empty Open Graph description"
                 $summary.EmptyOgDescription++
             }
-            elseif ($ogDescLength -gt 300) {
-                $issues += "Open Graph description too long ($ogDescLength chars, should be ≤300)"
+            elseif ($ogDescLength -gt $SeoConfig.OpenGraphDescription.MaxLength) {
+                $issues += "Open Graph description too long ($ogDescLength chars, should be ≤$($SeoConfig.OpenGraphDescription.MaxLength))"
                 $summary.OgDescriptionTooLong++
             }
-            elseif ($ogDescLength -lt 200) {
-                $issues += "Open Graph description too short ($ogDescLength chars, should be ≥200)"
+            elseif ($ogDescLength -lt $SeoConfig.OpenGraphDescription.MinLength) {
+                $issues += "Open Graph description too short ($ogDescLength chars, should be ≥$($SeoConfig.OpenGraphDescription.MinLength))"
                 $summary.OgDescriptionTooShort++
             }
         }
@@ -317,12 +323,12 @@ function Test-SEOCompliance {
                 $issues += "Empty Twitter Card description"
                 $summary.EmptyTwitterDescription++
             }
-            elseif ($twitterDescLength -gt 200) {
-                $issues += "Twitter Card description too long ($twitterDescLength chars, should be ≤200)"
+            elseif ($twitterDescLength -gt $SeoConfig.TwitterDescription.MaxLength) {
+                $issues += "Twitter Card description too long ($twitterDescLength chars, should be ≤$($SeoConfig.TwitterDescription.MaxLength))"
                 $summary.TwitterDescriptionTooLong++
             }
-            elseif ($twitterDescLength -lt 200) {
-                $issues += "Twitter Card description too short ($twitterDescLength chars, should be ≥200)"
+            elseif ($twitterDescLength -lt $SeoConfig.TwitterDescription.MinLength) {
+                $issues += "Twitter Card description too short ($twitterDescLength chars, should be ≥$($SeoConfig.TwitterDescription.MinLength))"
                 $summary.TwitterDescriptionTooShort++
             }
         }

@@ -1,6 +1,8 @@
 # Article Authoring Guide
 
-This guide provides step-by-step instructions and best practices for adding new articles to the site using the modern-layout. It covers updating the `articles.json` file, creating a new `.pug` article file, and ensuring your article is search engine optimized (SEO) and visually appealing using Bootstrap 5, Bootstrap Icons, and PrismJS for code samples.
+This guide provides step-by-step instructions and best practices for adding new articles to the site using the modern-layout. It covers updating the `articles.json` file, creating a new `.pug` article file, and creating visually appealing content using Bootstrap 5, Bootstrap Icons, and PrismJS for code samples.
+
+> **SEO Guidelines**: For comprehensive SEO validation rBy following these steps and guidelines, you'll ensure your new article is well-structured, visually appealing, and optimized for both users and search engines. For detailed SEO requirements and validation rules, refer to [SEO.md](SEO.md).les, character limits, and optimization best practices, see [SEO.md](SEO.md).
 
 ---
 
@@ -61,8 +63,8 @@ Convert simple headers to Bootstrap card-based sections with icons and proper sp
    - `slug`: The output HTML path (e.g., `my-new-article.html` or `folder/my-new-article.html`).
    - `name`: The article title.
    - `content`: (Optional) Short summary or null.
-   - `description`: A concise, keyword-rich description for SEO.
-   - `keywords`: Comma-separated keywords for SEO.
+   - `description`: A concise description for meta tags (see [SEO.md](SEO.md) for character limits).
+   - `keywords`: Comma-separated keywords for meta tags.
    - `img_src`: Path to a relevant image (e.g., `assets/img/my-image.jpg`).
    - `lastmod`: Date in `YYYY-MM-DD` format.
    - `changefreq`: Update frequency (e.g., `monthly`).
@@ -76,7 +78,7 @@ Convert simple headers to Bootstrap card-based sections with icons and proper sp
   "slug": "articles/my-new-article.html",
   "name": "My New Article Title",
   "content": "A short summary of the article.",
-  "description": "A concise, keyword-rich description for SEO.",
+  "description": "A concise description for meta tags.",
   "keywords": "keyword1, keyword2, keyword3",
   "img_src": "assets/img/my-image.jpg",
   "lastmod": "2025-05-20",
@@ -97,7 +99,7 @@ extends ../layouts/modern-layout
 
 block pagehead
   title My New Article Title
-  meta(name='description', content='A concise, keyword-rich description for SEO.')
+  meta(name='description', content='A concise description for meta tags.')
   meta(name='keywords', content='keyword1, keyword2, keyword3')
   meta(name='author', content='Mark Hazleton')
 
@@ -106,13 +108,13 @@ block canonical
 
 block og_overrides
   meta(property='og:title', content='My New Article Title')
-  meta(property='og:description', content='A concise, keyword-rich description for SEO.')
+  meta(property='og:description', content='A concise description for social sharing.')
   meta(property='og:url', content='https://markhazleton.com/articles/my-new-article.html')
   meta(property='og:type', content='article')
 
 block twitter_overrides
   meta(name='twitter:title', content='My New Article Title')
-  meta(name='twitter:description', content='A concise, keyword-rich description for SEO.')
+  meta(name='twitter:description', content='A concise description for Twitter sharing.')
 
 block layout-content
   br
@@ -197,7 +199,7 @@ block layout-content
 
 ### Meta Tags for YouTube Videos and Preview Images
 
-When embedding a YouTube video, update your meta tags for best SEO and social sharing:
+When embedding a YouTube video, update your meta tags for best social sharing:
 
 - **Open Graph (og) tags:**
 
@@ -226,7 +228,7 @@ When embedding a YouTube video, update your meta tags for best SEO and social sh
 - **Best Practices:**
 
   - Use the YouTube video’s `maxresdefault.jpg` as the preview image for best quality.
-  - Always provide descriptive `alt` text for preview images for accessibility and SEO.
+  - Always provide descriptive `alt` text for preview images for accessibility.
   - Ensure all video and image URLs are correct and use HTTPS.
   - Include both video and image meta tags for optimal display on all platforms.
 
@@ -389,7 +391,7 @@ h2.mt-5.mb-3 Glossary of Key Terms
 
 - [ ] Article entry added to `articles.json`
 - [ ] `.pug` file created and content added
-- [ ] SEO meta tags and keywords set
+- [ ] Meta tags properly set (see [SEO.md](SEO.md) for guidelines)
 - [ ] Bootstrap 5 and icons used for layout and visuals
 - [ ] Code samples use PrismJS markup
 - [ ] Images have descriptive alt text

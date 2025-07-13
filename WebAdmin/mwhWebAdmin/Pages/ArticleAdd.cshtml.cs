@@ -32,7 +32,7 @@ public class ArticleAddModel : BasePageModel
         AvailableImages = _articleService.GetAvailableImages();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public IActionResult OnPost()
     {
         if (!ModelState.IsValid)
         {
@@ -41,18 +41,49 @@ public class ArticleAddModel : BasePageModel
             return Page();
         }
 
-        // Auto-generate SEO fields using AI if content is available
-        if (!string.IsNullOrEmpty(NewArticle.ArticleContent))
-        {
-            await _articleService.AutoGenerateSeoFieldsAsync(NewArticle);
-        }
-        else
-        {
-            // Basic auto-generation without AI
-            _articleService.AutoGenerateSeoFields(NewArticle);
-        }
+        // Only perform basic auto-generation without AI calls
+        _articleService.AutoGenerateSeoFields(NewArticle);
 
         _articleService.AddArticle(NewArticle);
         return RedirectToPage("Articles");
+    }
+
+    public async Task<IActionResult> OnPostValidateKeywordsAsync()
+    {
+        _baseLogger.LogInformation("OnPostValidateKeywordsAsync called for new article");
+
+        if (!ModelState.IsValid)
+        {
+            _baseLogger.LogWarning("ModelState is invalid for new article validation");
+            AvailableImages = _articleService.GetAvailableImages();
+            return Page();
+        }
+
+        try
+        {
+            // Generate keywords using AI if content is available
+            if (!string.IsNullOrEmpty(NewArticle.ArticleContent))
+            {
+                _baseLogger.LogInformation("Starting AI SEO field generation for new article");
+                await _articleService.AutoGenerateSeoFieldsAsync(NewArticle);
+                _baseLogger.LogInformation("AI SEO field generation completed for new article");
+                TempData["SuccessMessage"] = "Keywords have been validated and updated using AI.";
+            }
+            else
+            {
+                _baseLogger.LogWarning("No content available for AI validation for new article");
+                TempData["WarningMessage"] = "No content available for AI keyword validation. Please add article content first.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _baseLogger.LogError(ex, "Error validating keywords for new article");
+            TempData["ErrorMessage"] = "Failed to validate keywords. Please try again.";
+        }
+
+        // Refresh the page data
+        AvailableImages = _articleService.GetAvailableImages();
+        _baseLogger.LogInformation("OnPostValidateKeywordsAsync completed for new article");
+        return Page();
     }
 }
