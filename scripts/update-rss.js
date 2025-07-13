@@ -126,5 +126,10 @@ function updateRssFeed() {
     }
 }
 
-// Execute the function
-updateRssFeed();
+// Execute the function if called directly
+if (require.main === module) {
+    updateRssFeed();
+}
+
+// Export for use by other scripts
+module.exports = updateRssFeed;
