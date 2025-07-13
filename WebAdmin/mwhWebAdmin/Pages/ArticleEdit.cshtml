@@ -82,7 +82,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <label for="Keywords" class="form-label">Keywords (comma-separated):</label>
                 <div>
-                    <button type="submit" asp-page-handler="Validate" class="btn btn-primary btn-sm" id="aiKeywordsBtn">
+                    <button type="submit" asp-page-handler="Validate" class="btn btn-primary btn-sm" id="aiKeywordsBtn" formnovalidate>
                         <i class="fas fa-magic me-2"></i>Generate AI Content
                     </button>
                 </div>
@@ -369,7 +369,7 @@
         </div>        <div class="mb-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" asp-page-handler="">
                         <i class="fas fa-save me-2"></i>Save Article
                     </button>
                     <a href="/Articles" class="btn btn-secondary ms-2">
@@ -428,63 +428,7 @@
                         selectedImageName.textContent = imagePath ? imagePath + ' (not found)' : 'No image selected';
                     };
                 });
-            });            // Simple AI Keywords button functionality
-            const aiKeywordsBtn = document.getElementById('aiKeywordsBtn');
-            if (aiKeywordsBtn) {
-                aiKeywordsBtn.addEventListener('click', function(e) {
-                    console.log('[AI-VALIDATION-UI] Generate AI Content button clicked');
-
-                    // Validate that we have content
-                    const content = document.querySelector('textarea[name="Article.ArticleContent"]').value;
-                    console.log('[AI-VALIDATION-UI] Article content length:', content ? content.length : 0);
-
-                    if (!content || content.trim().length === 0) {
-                        console.log('[AI-VALIDATION-UI] No content found, preventing submission');
-                        e.preventDefault();
-                        alert('Please add article content before generating AI keywords and SEO data.');
-                        return false;
-                    }
-
-                    console.log('[AI-VALIDATION-UI] Content validation passed, will submit form');
-
-                    // Get the form element
-                    const form = this.closest('form');
-                    console.log('[AI-VALIDATION-UI] Form found:', form);
-                    console.log('[AI-VALIDATION-UI] Form action:', form.action);
-                    console.log('[AI-VALIDATION-UI] Form method:', form.method);
-
-                    // Add simple loading state
-                    const originalText = this.innerHTML;
-                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating AI Content...';
-                    this.disabled = true;
-
-                    console.log('[AI-VALIDATION-UI] Button loading state activated, form will submit naturally');
-
-                    // Don't prevent default - let the form submit naturally
-                    // The asp-page-handler="Validate" attribute will handle the server-side routing
-
-                    // Add a small delay to ensure the console logs are visible
-                    setTimeout(() => {
-                        console.log('[AI-VALIDATION-UI] About to submit form...');
-                        // If the form doesn't submit naturally, we'll force it
-                        if (form) {
-                            console.log('[AI-VALIDATION-UI] Manually submitting form...');
-                            form.submit();
-                        }
-                    }, 100);
-
-                    // Reset button state if there's an error (form will handle success)
-                    setTimeout(() => {
-                        if (this.disabled) {
-                            console.log('[AI-VALIDATION-UI] Timeout reached, resetting button state');
-                            this.innerHTML = originalText;
-                            this.disabled = false;
-                        }
-                    }, 60000); // 60 second timeout for AI generation
-                });
-            }
-
-            // Initialize character counts
+            });            // Initialize character counts
             initializeCharacterCounts();
         });
 
