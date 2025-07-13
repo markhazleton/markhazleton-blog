@@ -80,7 +80,11 @@ module.exports = async function renderPug(filePath) {
         lastModified: formattedLastModified,
         article: article,
         seoData: seoData,
-        seoHelper: seoHelper
+        seoHelper: seoHelper,
+        // Article properties for template compatibility
+        publishedDate: article ? article.publishedDate : null,
+        pageAuthor: article ? article.author : 'Mark Hazleton',
+        estimatedReadTime: article ? article.estimatedReadTime : 5
     });
 
 
