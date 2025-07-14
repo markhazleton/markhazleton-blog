@@ -30,7 +30,8 @@ class SEOHelper {
         // Build SEO data with fallbacks
         const seo = article.seo || {};
         const title = this.buildTitle(seo.title || article.name, seo.titleSuffix);
-        const description = this.truncateDescription(seo.description || article.description || '');
+        const pugSource = article.source || `src/pug/articles/${article.slug.replace('.html', '.pug')}`;
+        const description = this.truncateDescription(seo.description || article.description || '', pugSource);
         const keywords = seo.keywords || article.keywords || '';
         const canonical = seo.canonical || `${this.defaultConfig.baseUrl}/${article.slug}`;
 
@@ -133,14 +134,16 @@ class SEOHelper {
     /**
      * Truncate description to optimal length (150-160 characters)
      */
-    truncateDescription(description) {
+    truncateDescription(description, pugSource = null) {
         if (!description) return '';
 
+        const sourceInfo = pugSource ? ` [PUG: ${pugSource}]` : '';
+
         if (description.length > 160) {
-            console.warn(`Description too long (${description.length} chars), truncating: ${description.substring(0, 50)}...`);
+            console.warn(`Description too long (${description.length} chars), truncating${sourceInfo}: ${description.substring(0, 50)}...`);
             return description.substring(0, 157) + '...';
         } else if (description.length < 120) {
-            console.warn(`Description too short (${description.length} chars): ${description.substring(0, 50)}...`);
+            console.warn(`Description too short (${description.length} chars)${sourceInfo}: ${description.substring(0, 50)}...`);
         }
 
         return description;
