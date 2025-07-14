@@ -3,6 +3,7 @@
 /**
  * Comprehensive SEO Validation Report
  * Provides detailed location-specific feedback for all SEO issues
+ * Maps HTML files back to their PUG source files for easier fixing
  */
 
 const fs = require('fs');
@@ -20,22 +21,47 @@ articles.forEach(article => {
 });
 
 /**
+ * Map HTML file path to corresponding PUG source file
+ */
+function mapHtmlToPugFile(htmlFilePath) {
+    const relativePath = path.relative(path.join(__dirname, '../docs'), htmlFilePath);
+    const htmlFileName = path.basename(htmlFilePath, '.html');
+
+    // Handle root level files
+    if (!relativePath.includes('/')) {
+        const pugPath = path.join(__dirname, '../src/pug', htmlFileName + '.pug');
+        if (fs.existsSync(pugPath)) {
+            return path.relative(process.cwd(), pugPath);
+        }
+    }
+
+    // Handle files in subdirectories (like articles/)
+    const pugPath = path.join(__dirname, '../src/pug', relativePath.replace('.html', '.pug'));
+    if (fs.existsSync(pugPath)) {
+        return path.relative(process.cwd(), pugPath);
+    }
+
+    // Fallback: return original HTML path if PUG not found
+    return path.relative(process.cwd(), htmlFilePath) + ' (PUG source not found)';
+}
+
+/**
  * Validate HTML file and provide detailed feedback
  */
 function validateHtmlFile(filePath) {
     const issues = [];
-    const relativePath = path.relative(process.cwd(), filePath);
-    const slug = path.basename(filePath);
-    const article = articleLookup[slug];
+    const pugFilePath = mapHtmlToPugFile(filePath);
+    const htmlFileName = path.basename(filePath, '.html');
+    const article = articleLookup[htmlFileName];
 
     try {
         const content = fs.readFileSync(filePath, 'utf8');
         const $ = cheerio.load(content);
 
-        // Article context for reporting
+        // Article context for reporting - now includes PUG source
         const context = article ?
-            `[Article: ${slug}, ID: ${article.id}, Source: ${article.slug}]` :
-            `[File: ${slug}, No article data]`;
+            `[Article: ${htmlFileName}, ID: ${article.id}, PUG Source: ${pugFilePath}]` :
+            `[File: ${htmlFileName}, PUG Source: ${pugFilePath}]`;
 
         // Validate title
         const title = $('title').text().trim();
@@ -212,20 +238,21 @@ function validateHtmlFile(filePath) {
 }
 
 /**
- * Generate comprehensive report
+ * Generate comprehensive report grouped by PUG source files
  */
 function generateReport() {
     console.log('🔍 COMPREHENSIVE SEO VALIDATION REPORT');
     console.log('=====================================\n');
 
     const docsPath = path.join(__dirname, '../docs');
-    const allIssues = [];
+    const pugFileIssues = new Map(); // Group issues by PUG file
     const summary = {
-        files: 0,
+        htmlFiles: 0,
+        pugFiles: 0,
         errors: 0,
         warnings: 0,
         info: 0,
-        filesWithIssues: 0
+        pugFilesWithIssues: 0
     };
 
     // Find all HTML files
@@ -248,20 +275,22 @@ function generateReport() {
     }
 
     const htmlFiles = findHtmlFiles(docsPath);
-    summary.files = htmlFiles.length;
+    summary.htmlFiles = htmlFiles.length;
 
-    console.log(`📊 Analyzing ${htmlFiles.length} HTML files...\n`);
+    console.log(`📊 Analyzing ${htmlFiles.length} HTML files, mapping to PUG sources...\n`);
 
-    // Process each file
+    // Process each file and group by PUG source
     for (const filePath of htmlFiles) {
         const issues = validateHtmlFile(filePath);
+        const pugFilePath = mapHtmlToPugFile(filePath);
 
         if (issues.length > 0) {
-            summary.filesWithIssues++;
-            allIssues.push({
-                file: path.relative(process.cwd(), filePath),
-                issues: issues
-            });
+            if (!pugFileIssues.has(pugFilePath)) {
+                pugFileIssues.set(pugFilePath, []);
+            }
+
+            // Add all issues for this HTML file to the PUG file's issue list
+            pugFileIssues.get(pugFilePath).push(...issues);
 
             // Count by severity
             issues.forEach(issue => {
@@ -274,52 +303,99 @@ function generateReport() {
         }
     }
 
+    summary.pugFiles = pugFileIssues.size;
+    summary.pugFilesWithIssues = pugFileIssues.size;
+
     // Display results
-    if (allIssues.length === 0) {
+    if (pugFileIssues.size === 0) {
         console.log('🎉 EXCELLENT! No SEO issues found!');
         return;
     }
 
     console.log('📋 SUMMARY:');
-    console.log(`• Total files: ${summary.files}`);
-    console.log(`• Files with issues: ${summary.filesWithIssues}`);
-    console.log(`• Files without issues: ${summary.files - summary.filesWithIssues}`);
+    console.log(`• HTML files analyzed: ${summary.htmlFiles}`);
+    console.log(`• PUG source files with issues: ${summary.pugFilesWithIssues}`);
     console.log(`• Total errors: ${summary.errors}`);
     console.log(`• Total warnings: ${summary.warnings}`);
     console.log(`• Total info items: ${summary.info}\n`);
 
-    // Display detailed issues
-    console.log('🔍 DETAILED ISSUES:\n');
+    // Display detailed issues grouped by PUG file
+    console.log('🔍 DETAILED ISSUES BY PUG SOURCE FILE:\n');
 
-    allIssues.forEach(fileResult => {
-        console.log(`📄 ${fileResult.file}:`);
+    // Sort PUG files for consistent output
+    const sortedPugFiles = Array.from(pugFileIssues.keys()).sort();
 
-        fileResult.issues.forEach(issue => {
-            const icon = issue.severity === 'ERROR' ? '❌' :
-                        issue.severity === 'WARNING' ? '⚠️' : 'ℹ️';
+    sortedPugFiles.forEach(pugFile => {
+        const issues = pugFileIssues.get(pugFile);
+        const errorCount = issues.filter(i => i.severity === 'ERROR').length;
+        const warningCount = issues.filter(i => i.severity === 'WARNING').length;
+        const infoCount = issues.filter(i => i.severity === 'INFO').length;
 
-            console.log(`  ${icon} ${issue.severity}: ${issue.issue}`);
-            console.log(`     Location: ${issue.location}`);
-            console.log(`     Context: ${issue.context}`);
-            if (issue.content) {
-                console.log(`     Content: ${issue.content}`);
-            }
-            console.log(`     Solution: ${issue.suggestion}\n`);
-        });
+        console.log(`📄 ${pugFile}:`);
+        console.log(`   Issues: ${errorCount} errors, ${warningCount} warnings, ${infoCount} info`);
+        console.log('   ═══════════════════════════════════════════════════════════════\n');
+
+        // Group issues by severity for better readability
+        const errorIssues = issues.filter(i => i.severity === 'ERROR');
+        const warningIssues = issues.filter(i => i.severity === 'WARNING');
+        const infoIssues = issues.filter(i => i.severity === 'INFO');
+
+        // Display errors first
+        if (errorIssues.length > 0) {
+            console.log('   ❌ ERRORS (fix these first):');
+            errorIssues.forEach(issue => {
+                console.log(`      • ${issue.issue}`);
+                console.log(`        Location: ${issue.location}`);
+                if (issue.content) {
+                    console.log(`        Content: ${issue.content}`);
+                }
+                console.log(`        Solution: ${issue.suggestion}\n`);
+            });
+        }
+
+        // Display warnings
+        if (warningIssues.length > 0) {
+            console.log('   ⚠️  WARNINGS (important for SEO):');
+            warningIssues.forEach(issue => {
+                console.log(`      • ${issue.issue}`);
+                console.log(`        Location: ${issue.location}`);
+                if (issue.content) {
+                    console.log(`        Content: ${issue.content}`);
+                }
+                console.log(`        Solution: ${issue.suggestion}\n`);
+            });
+        }
+
+        // Display info items
+        if (infoIssues.length > 0) {
+            console.log('   ℹ️  INFO (nice to have):');
+            infoIssues.forEach(issue => {
+                console.log(`      • ${issue.issue}`);
+                console.log(`        Location: ${issue.location}`);
+                if (issue.content) {
+                    console.log(`        Content: ${issue.content}`);
+                }
+                console.log(`        Solution: ${issue.suggestion}\n`);
+            });
+        }
+
+        console.log('   ───────────────────────────────────────────────────────────────\n');
     });
 
     // Provide actionable recommendations
     console.log('💡 NEXT STEPS:');
+    console.log('1. Open the PUG source files listed above to make fixes');
     if (summary.errors > 0) {
-        console.log('1. Fix ERROR items first - these are missing essential SEO elements');
+        console.log('2. Fix ERROR items first - these are missing essential SEO elements');
     }
     if (summary.warnings > 0) {
-        console.log('2. Address WARNING items - these affect SEO performance');
+        console.log('3. Address WARNING items - these affect SEO performance');
     }
     if (summary.info > 0) {
-        console.log('3. Consider INFO items - these improve social media sharing');
+        console.log('4. Consider INFO items - these improve social media sharing');
     }
-    console.log('4. Run this report again after fixes to verify improvements\n');
+    console.log('5. Run `npm run build:pug` to regenerate HTML after PUG changes');
+    console.log('6. Run this report again after fixes to verify improvements\n');
 }
 
 // Run the report

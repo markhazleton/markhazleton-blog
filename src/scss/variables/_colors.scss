@@ -11,3 +11,23 @@ $orange: #d9b650;
 // Override Bootstrap default state colors
 
 $primary: #83580b;
+
+// Theme colors for cross-browser compatibility
+// These provide fallbacks for browsers that don't support meta[name="theme-color"]
+$theme-color-light: #2c3e50;
+$theme-color-dark: #34495e;
+$accent-color-light: #3498db;
+$accent-color-dark: #5dade2;
+
+// CSS Custom Properties for theme colors (Firefox, Opera compatibility)
+:root {
+  --browser-theme-color: #{$theme-color-light};
+  --browser-accent-color: #{$accent-color-light};
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --browser-theme-color: #{$theme-color-dark};
+    --browser-accent-color: #{$accent-color-dark};
+  }
+}
