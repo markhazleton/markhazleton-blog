@@ -19,6 +19,7 @@ const renderAssets = require('./render-assets');
 // Import utility functions
 const updateRSS = require('./update-rss');
 const updateSitemap = require('./update-sitemap');
+const updateSectionsWithArticles = require('./update-sections');
 
 const sh = require('shelljs');
 const upath = require('upath');
@@ -27,6 +28,7 @@ class BlogBuilder {
     constructor() {
         this.srcPath = upath.resolve(upath.dirname(__filename), '../src');
         this.tasks = {
+            sections: this.buildSections.bind(this),
             pug: this.buildPug.bind(this),
             scss: this.buildSCSS.bind(this),
             scripts: this.buildScripts.bind(this),
@@ -34,6 +36,19 @@ class BlogBuilder {
             sitemap: this.buildSitemap.bind(this),
             rss: this.buildRSS.bind(this)
         };
+    }
+
+    /**
+     * Build sections with articles data
+     */
+    async buildSections() {
+        console.log('📚 Building sections with articles...');
+        const startTime = Date.now();
+
+        updateSectionsWithArticles();
+
+        const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+        console.log(`✅ Sections built (${duration}s)`);
     }
 
     /**
@@ -183,6 +198,7 @@ if (require.main === module) {
         console.log('Usage: node scripts/build.js [options]');
         console.log('');
         console.log('Options:');
+        console.log('  --sections  Build sections with articles');
         console.log('  --pug       Build PUG templates');
         console.log('  --scss      Build SCSS stylesheets');
         console.log('  --scripts   Build JavaScript files');
@@ -194,7 +210,7 @@ if (require.main === module) {
         console.log('Examples:');
         console.log('  node scripts/build.js           # Build everything');
         console.log('  node scripts/build.js --pug     # Build only PUG templates');
-        console.log('  node scripts/build.js --scss --scripts  # Build SCSS and scripts');
+        console.log('  node scripts/build.js --sections --assets  # Build sections and assets');
         console.log('');
         process.exit(0);
     }

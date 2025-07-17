@@ -65,4 +65,10 @@ module.exports = function renderAssets() {
         const destFile = upath.join(destPath, file);
         copyFile(sourceFile, destFile);
     });
+
+    // Specifically ensure JSON files are copied (for explicit logging)
+    const jsonFiles = glob.sync("*.json", { cwd: srcPath });
+    if (jsonFiles.length > 0) {
+        console.log(`📄 Copying ${jsonFiles.length} JSON files:`, jsonFiles.join(', '));
+    }
 };
