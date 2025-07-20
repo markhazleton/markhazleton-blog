@@ -466,9 +466,9 @@ Write-Host "✅ SEO Audit Complete!" -ForegroundColor Green
 Write-Host ""
 Write-Host "💡 RECOMMENDATIONS:" -ForegroundColor Cyan
 Write-Host "• Title tags should be 30-60 characters" -ForegroundColor White
-Write-Host "• Meta descriptions should be 150-160 characters (max 320)" -ForegroundColor White
+Write-Host "• Meta descriptions should be 120-160 characters" -ForegroundColor White
 Write-Host "• Open Graph descriptions should be 200-300 characters (max 300)" -ForegroundColor White
-Write-Host "• Twitter Card descriptions should be 200 characters (max 200)" -ForegroundColor White
+Write-Host "• Twitter Card descriptions should be 120-160 characters" -ForegroundColor White
 Write-Host "• Keywords should be 3-8 relevant terms" -ForegroundColor White
 Write-Host "• Each page should have exactly one H1 tag" -ForegroundColor White
 Write-Host "• All images should have descriptive alt text" -ForegroundColor White

@@ -21,7 +21,7 @@ public class SeoModel
     public string? TitleSuffix { get; set; } = "";
 
     /// <summary>
-    /// Gets or sets the SEO-optimized description (150-320 characters recommended)
+    /// Gets or sets the SEO-optimized description (120-160 characters recommended)
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; set; }
@@ -57,7 +57,7 @@ public class OpenGraphModel
     public string? Title { get; set; }
 
     /// <summary>
-    /// Gets or sets the Open Graph description (100-300 characters recommended)
+    /// Gets or sets the Open Graph description (120-160 characters recommended)
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; set; }
@@ -93,7 +93,7 @@ public class TwitterCardModel
     public string? Title { get; set; }
 
     /// <summary>
-    /// Gets or sets the Twitter card description (120-200 characters recommended)
+    /// Gets or sets the Twitter card description (120-160 characters recommended)
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; set; }

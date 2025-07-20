@@ -26,7 +26,7 @@ All systems enforce identical validation rules to maintain consistency and quali
 
 #### 2. Meta Descriptions  
 
-- **Length**: 150-320 characters
+- **Length**: 120-160 characters
 - **Requirements**: Must be present, compelling, and keyword-rich
 - **Validation**: Length validation with quality guidelines
 - **Enforcement**: PowerShell script, C# service, edit forms, LLM prompts
@@ -56,7 +56,7 @@ All systems enforce identical validation rules to maintain consistency and quali
 #### Open Graph Protocol
 
 - **og:title**: 30-65 characters
-- **og:description**: 100-300 characters (updated from 200-300 based on official OG Protocol research)
+- **og:description**: 120-160 characters (aligned with meta description standards)
 - **og:image**: Required, with recommended dimensions
 - **og:type**: Required (article, website, etc.)
 - **Research Basis**: Official Open Graph Protocol specifies "one to two sentence description" with no mandatory character limits; 100-300 range provides optimal balance
@@ -64,10 +64,10 @@ All systems enforce identical validation rules to maintain consistency and quali
 #### Twitter Cards
 
 - **twitter:title**: Maximum 50 characters  
-- **twitter:description**: 120-200 characters (updated from exactly 200 based on Twitter developer documentation)
+- **twitter:description**: 120-160 characters (aligned with meta description standards)
 - **twitter:image**: Required with proper dimensions
 - **twitter:card**: Summary or summary_large_image
-- **Research Basis**: Twitter's official maximum is 200 characters; 120-200 range accommodates both concise and detailed descriptions
+- **Research Basis**: Aligned with modern SEO best practices for consistency across all social media descriptions
 
 ### Technical SEO
 
@@ -181,10 +181,10 @@ function updateCharacterCount(elementId, text, min, max) {
 **SEO Requirements in AI Prompts**:
 
 - Title: 30-60 characters, compelling and keyword-rich
-- Meta Description: 150-320 characters, engaging summary
+- Meta Description: 120-160 characters, engaging summary
 - Keywords: 3-8 relevant keywords
 - Open Graph Description: 100-300 characters
-- Twitter Description: 120-200 characters
+- Twitter Description: 120-160 characters
 
 ## 📊 Grading System
 
