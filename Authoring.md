@@ -430,20 +430,20 @@ When using AI content generation, the following fields are automatically populat
 #### Core Article Fields
 
 - **Keywords**: SEO-optimized keyword list (3-8 keywords)
-- **Description**: Article description for SEO (150-320 characters)
+- **Description**: Article description for SEO (120-160 characters)
 - **Summary**: Article introduction/summary
 
 #### SEO Metadata
 
 - **SEO Title**: Search engine optimized title (30-60 characters)
-- **SEO Description**: Meta description for search results (150-320 characters)
+- **SEO Description**: Meta description for search results (120-160 characters)
 
 #### Social Media Optimization
 
 - **Open Graph Title**: Facebook/LinkedIn preview title (30-65 characters)
 - **Open Graph Description**: Facebook/LinkedIn preview description (100-300 characters)
 - **Twitter Title**: Twitter card title (max 50 characters)
-- **Twitter Description**: Twitter card description (120-200 characters)
+- **Twitter Description**: Twitter card description (120-160 characters)
 
 #### Conclusion Section
 

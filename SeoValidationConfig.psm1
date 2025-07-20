@@ -12,9 +12,9 @@ $SeoConfig = @{
     }
 
     MetaDescription      = @{
-        MinLength        = 150
-        MaxLength        = 320
-        OptimalMinLength = 150
+        MinLength        = 120
+        MaxLength        = 160
+        OptimalMinLength = 120
         OptimalMaxLength = 160
         ScoreWeight      = 2
     }
@@ -28,18 +28,18 @@ $SeoConfig = @{
     }
 
     OpenGraphDescription = @{
-        MinLength        = 100
-        MaxLength        = 300
-        OptimalMinLength = 100
-        OptimalMaxLength = 200
+        MinLength        = 120
+        MaxLength        = 160
+        OptimalMinLength = 120
+        OptimalMaxLength = 160
         ScoreWeight      = 1
     }
 
     TwitterDescription   = @{
         MinLength        = 120
-        MaxLength        = 200
+        MaxLength        = 160
         OptimalMinLength = 120
-        OptimalMaxLength = 180
+        OptimalMaxLength = 160
         ScoreWeight      = 1
     }
 

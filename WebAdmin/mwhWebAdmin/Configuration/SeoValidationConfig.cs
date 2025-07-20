@@ -41,9 +41,9 @@ public static class SeoValidationConfig
     /// </summary>
     public static class MetaDescription
     {
-        public const int MinLength = 150;
-        public const int MaxLength = 320;
-        public const int OptimalMinLength = 150;
+        public const int MinLength = 120;
+        public const int MaxLength = 160;
+        public const int OptimalMinLength = 120;
         public const int OptimalMaxLength = 160;
         public const int ScoreWeight = 2;
 
@@ -98,15 +98,14 @@ public static class SeoValidationConfig
 
     /// <summary>
     /// Open Graph description validation rules
-    /// Based on research: Official Open Graph Protocol specifies "one to two sentence description"
-    /// with no mandatory character limits; 100-300 range provides optimal balance
+    /// Aligned with modern SEO practices for social media sharing consistency
     /// </summary>
     public static class OpenGraphDescription
     {
-        public const int MinLength = 100;
-        public const int MaxLength = 300;
-        public const int OptimalMinLength = 100;
-        public const int OptimalMaxLength = 200;
+        public const int MinLength = 120;
+        public const int MaxLength = 160;
+        public const int OptimalMinLength = 120;
+        public const int OptimalMaxLength = 160;
         public const int ScoreWeight = 1;
 
         public static string GetValidationMessage(int length)
@@ -128,15 +127,14 @@ public static class SeoValidationConfig
 
     /// <summary>
     /// Twitter description validation rules
-    /// Based on research: Twitter's official maximum is 200 characters;
-    /// 120-200 range accommodates both concise and detailed descriptions
+    /// Aligned with modern SEO practices for social media sharing consistency
     /// </summary>
     public static class TwitterDescription
     {
         public const int MinLength = 120;
-        public const int MaxLength = 200;
+        public const int MaxLength = 160;
         public const int OptimalMinLength = 120;
-        public const int OptimalMaxLength = 180;
+        public const int OptimalMaxLength = 160;
         public const int ScoreWeight = 1;
 
         public static string GetValidationMessage(int length)

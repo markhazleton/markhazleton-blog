@@ -324,16 +324,36 @@ public class ImagesValidator : BaseSeoValidator<ArticleModel>
 
         score = 90;
 
-        if (article.OpenGraph?.Image == null)
+        // Validate OpenGraph description if provided
+        if (!string.IsNullOrWhiteSpace(article.OpenGraph?.Description))
         {
-            warnings.Add("Open Graph image not specified - will use featured image");
-            score = Math.Max(score - 5, 0);
+            var ogDescLength = article.OpenGraph.Description.Length;
+            if (ogDescLength < SeoValidationConfig.OpenGraphDescription.MinLength)
+            {
+                warnings.Add($"Open Graph description too short ({ogDescLength} chars). Recommended: {SeoValidationConfig.OpenGraphDescription.MinLength}-{SeoValidationConfig.OpenGraphDescription.MaxLength} characters");
+                score = Math.Max(score - 5, 0);
+            }
+            else if (ogDescLength > SeoValidationConfig.OpenGraphDescription.MaxLength)
+            {
+                warnings.Add($"Open Graph description too long ({ogDescLength} chars). Recommended: {SeoValidationConfig.OpenGraphDescription.MinLength}-{SeoValidationConfig.OpenGraphDescription.MaxLength} characters");
+                score = Math.Max(score - 5, 0);
+            }
         }
 
-        if (article.TwitterCard?.Image == null)
+        // Validate Twitter description if provided
+        if (!string.IsNullOrWhiteSpace(article.TwitterCard?.Description))
         {
-            warnings.Add("Twitter Card image not specified - will use featured image");
-            score = Math.Max(score - 5, 0);
+            var twitterDescLength = article.TwitterCard.Description.Length;
+            if (twitterDescLength < SeoValidationConfig.TwitterDescription.MinLength)
+            {
+                warnings.Add($"Twitter description too short ({twitterDescLength} chars). Recommended: {SeoValidationConfig.TwitterDescription.MinLength}-{SeoValidationConfig.TwitterDescription.MaxLength} characters");
+                score = Math.Max(score - 5, 0);
+            }
+            else if (twitterDescLength > SeoValidationConfig.TwitterDescription.MaxLength)
+            {
+                warnings.Add($"Twitter description too long ({twitterDescLength} chars). Recommended: {SeoValidationConfig.TwitterDescription.MinLength}-{SeoValidationConfig.TwitterDescription.MaxLength} characters");
+                score = Math.Max(score - 5, 0);
+            }
         }
 
         if (string.IsNullOrWhiteSpace(article.OpenGraph?.ImageAlt) &&
@@ -570,13 +590,13 @@ public class HtmlSeoValidator : FileBasedValidator<ArticleModel>
 
         if (descContent.Length < 120)
         {
-            warnings.Add($"HTML meta description too short ({descContent.Length} chars). Recommended: 150-160 characters");
+            warnings.Add($"HTML meta description too short ({descContent.Length} chars). Recommended: 120-160 characters");
             return (5, warnings, errors);
         }
 
         if (descContent.Length > 160)
         {
-            warnings.Add($"HTML meta description too long ({descContent.Length} chars). Recommended: 150-160 characters");
+            warnings.Add($"HTML meta description too long ({descContent.Length} chars). Recommended: 120-160 characters");
             return (5, warnings, errors);
         }
 
@@ -607,7 +627,6 @@ public class HtmlSeoValidator : FileBasedValidator<ArticleModel>
         var requiredOgTags = new[]
         {
             ("og:title", "Missing Open Graph title", 2),
-            ("og:image", "Missing Open Graph image", 2),
             ("og:type", "Missing Open Graph type", 2)
         };
 
@@ -636,14 +655,14 @@ public class HtmlSeoValidator : FileBasedValidator<ArticleModel>
                 errors.Add("Empty Open Graph description");
                 scoreDeduction += 10;
             }
-            else if (ogDescContent.Length < 100)
+            else if (ogDescContent.Length < 120)
             {
-                warnings.Add($"Open Graph description too short ({ogDescContent.Length} chars). Recommended: 100-300 characters");
+                warnings.Add($"Open Graph description too short ({ogDescContent.Length} chars). Recommended: 120-160 characters");
                 scoreDeduction += 3;
             }
-            else if (ogDescContent.Length > 300)
+            else if (ogDescContent.Length > 160)
             {
-                warnings.Add($"Open Graph description too long ({ogDescContent.Length} chars). Recommended: 100-300 characters");
+                warnings.Add($"Open Graph description too long ({ogDescContent.Length} chars). Recommended: 120-160 characters");
                 scoreDeduction += 3;
             }
         }
@@ -660,8 +679,7 @@ public class HtmlSeoValidator : FileBasedValidator<ArticleModel>
         var requiredTwitterTags = new[]
         {
             ("twitter:card", "Missing Twitter Card type", 2),
-            ("twitter:title", "Missing Twitter Card title", 2),
-            ("twitter:image", "Missing Twitter Card image", 2)
+            ("twitter:title", "Missing Twitter Card title", 2)
         };
 
         foreach (var (name, message, penalty) in requiredTwitterTags)
@@ -691,12 +709,12 @@ public class HtmlSeoValidator : FileBasedValidator<ArticleModel>
             }
             else if (twitterDescContent.Length < 120)
             {
-                warnings.Add($"Twitter Card description too short ({twitterDescContent.Length} chars). Recommended: 120-200 characters");
+                warnings.Add($"Twitter Card description too short ({twitterDescContent.Length} chars). Recommended: 120-160 characters");
                 scoreDeduction += 3;
             }
-            else if (twitterDescContent.Length > 200)
+            else if (twitterDescContent.Length > 160)
             {
-                warnings.Add($"Twitter Card description too long ({twitterDescContent.Length} chars). Recommended: 120-200 characters");
+                warnings.Add($"Twitter Card description too long ({twitterDescContent.Length} chars). Recommended: 120-160 characters");
                 scoreDeduction += 3;
             }
         }

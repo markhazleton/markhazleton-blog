@@ -132,7 +132,7 @@ class SEOHelper {
     }
 
     /**
-     * Truncate description to optimal length (150-160 characters)
+     * Truncate description to optimal length (120-160 characters)
      */
     truncateDescription(description, pugSource = null) {
         if (!description) return '';
