@@ -32,105 +32,234 @@ block layout-content
               span.mx-2 •
               span #{estimatedReadTime} min read
 
-          .article-content            p.lead
-            | As a developer, one of the most exciting aspects of programming is the opportunity to learn new concepts and techniques. Recently, I embarked on a journey to understand concurrent processing better, and I'm excited to share my experience with you.
+          .article-content
+            p.lead.
+              As a developer, one of the most exciting aspects of programming is the
+              opportunity to learn new concepts and techniques.
+              Recently, I embarked on a journey to understand concurrent processing better,
+              and I'm excited to share my experience with you.
 
-            p.mb-4
-              | The idea of managing multiple tasks simultaneously has always fascinated me. However, it can be a complex challenge, requiring synchronization and careful management to avoid issues like race conditions and deadlocks. To dive into this topic, I decided to develop a C# console application that would allow me to experiment and learn practically.
+            p.mb-4.
+              The idea of managing multiple tasks simultaneously has always fascinated me.
+              However, it can be a complex challenge, requiring synchronization
+              and careful management to avoid issues like race conditions and deadlocks.
+              To dive into this topic, I decided to develop a C# console application
+              that would allow me to experiment and learn practically.
 
             section.mb-5
               h2.h3.mb-4
                 i.bi.bi-list-check.me-2.text-primary
                 | Considerations for Concurrent Processing
 
-              .row.g-4
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-gear.me-2.text-success
-                        | Task Autonomy and Independence
-                      p.card-text For multiple tasks to effectively run concurrently, each task must encapsulate an autonomous and self-contained unit of functionality. Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources.
+              .accordion#considerationsAccordion
+                .accordion-item
+                  h3.accordion-header#headingAutonomy
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseAutonomy'
+                      aria-expanded='false'
+                      aria-controls='collapseAutonomy'
+                    )
+                      i.bi.bi-gear.me-2.text-success
+                      | Task Autonomy and Independence
+                  .accordion-collapse.collapse#collapseAutonomy(
+                    aria-labelledby='headingAutonomy'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        For multiple tasks to effectively run concurrently, each task must encapsulate an autonomous and self-contained unit of functionality. Autonomy ensures that a task operates independently, free from unnecessary dependencies on other tasks or shared resources.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-arrow-repeat.me-2.text-primary
-                        | Synchronization
-                      p.card-text Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency among multiple threads or tasks. Techniques like locks, semaphores, and monitors can be used to control access to shared resources.
+                .accordion-item
+                  h3.accordion-header#headingSynchronization
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseSynchronization'
+                      aria-expanded='false'
+                      aria-controls='collapseSynchronization'
+                    )
+                      i.bi.bi-arrow-repeat.me-2.text-primary
+                      | Synchronization
+                  .accordion-collapse.collapse#collapseSynchronization(
+                    aria-labelledby='headingSynchronization'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Ensuring proper synchronization is crucial to prevent race conditions and ensure data consistency among multiple threads or tasks. Techniques like locks, semaphores, and monitors can be used to control access to shared resources.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-bar-chart.me-2.text-info
-                        | Scalability
-                      p.card-text Consider the scalability of your concurrent processing solution. Will it perform well as the number of concurrent tasks or threads increases? Design your system to handle increased load without degrading performance.
+                .accordion-item
+                  h3.accordion-header#headingScalability
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseScalability'
+                      aria-expanded='false'
+                      aria-controls='collapseScalability'
+                    )
+                      i.bi.bi-bar-chart.me-2.text-info
+                      | Scalability
+                  .accordion-collapse.collapse#collapseScalability(
+                    aria-labelledby='headingScalability'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Consider the scalability of your concurrent processing solution. Will it perform well as the number of concurrent tasks or threads increases? Design your system to handle increased load without degrading performance.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-exclamation-triangle.me-2.text-warning
-                        | Deadlocks and Livelocks
-                      p.card-text Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release.
+                .accordion-item
+                  h3.accordion-header#headingDeadlocks
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseDeadlocks'
+                      aria-expanded='false'
+                      aria-controls='collapseDeadlocks'
+                    )
+                      i.bi.bi-exclamation-triangle.me-2.text-warning
+                      | Deadlocks and Livelocks
+                  .accordion-collapse.collapse#collapseDeadlocks(
+                    aria-labelledby='headingDeadlocks'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Be aware of potential deadlocks and livelocks that can occur when multiple threads are waiting for resources that are held by other threads. Avoid circular dependencies and ensure proper resource allocation/release.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-memory.me-2.text-secondary
-                        | Resource Management
-                      p.card-text Properly manage resources such as memory, file handles, and network connections. Failing to release resources can lead to resource exhaustion and degrade system performance.
+                .accordion-item
+                  h3.accordion-header#headingResourceManagement
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseResourceManagement'
+                      aria-expanded='false'
+                      aria-controls='collapseResourceManagement'
+                    )
+                      i.bi.bi-memory.me-2.text-secondary
+                      | Resource Management
+                  .accordion-collapse.collapse#collapseResourceManagement(
+                    aria-labelledby='headingResourceManagement'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Properly manage resources such as memory, file handles, and network connections. Failing to release resources can lead to resource exhaustion and degrade system performance.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-shield-check.me-2.text-success
-                        | Thread Safety
-                      p.card-text Ensure that your code is thread-safe. Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously. Use techniques like immutable data, synchronization, and thread-local storage.
+                .accordion-item
+                  h3.accordion-header#headingThreadSafety
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseThreadSafety'
+                      aria-expanded='false'
+                      aria-controls='collapseThreadSafety'
+                    )
+                      i.bi.bi-shield-check.me-2.text-success
+                      | Thread Safety
+                  .accordion-collapse.collapse#collapseThreadSafety(
+                    aria-labelledby='headingThreadSafety'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Ensure that your code is thread-safe. Thread safety means that the behavior of a program remains consistent when multiple threads are executing simultaneously. Use techniques like immutable data, synchronization, and thread-local storage.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-diagram-3.me-2.text-primary
-                        | Load Balancing
-                      p.card-text Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources. Load balancing helps prevent scenarios where some threads are idle while others are overloaded.
+                .accordion-item
+                  h3.accordion-header#headingLoadBalancing
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseLoadBalancing'
+                      aria-expanded='false'
+                      aria-controls='collapseLoadBalancing'
+                    )
+                      i.bi.bi-diagram-3.me-2.text-primary
+                      | Load Balancing
+                  .accordion-collapse.collapse#collapseLoadBalancing(
+                    aria-labelledby='headingLoadBalancing'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Distribute tasks evenly among threads or processing units to ensure efficient utilization of resources. Load balancing helps prevent scenarios where some threads are idle while others are overloaded.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-puzzle.me-2.text-info
-                        | Task Granularity
-                      p.card-text Determine the appropriate level of task granularity. Too fine-grained tasks can lead to overhead due to thread management, while too coarse-grained tasks might not fully utilize available resources.
+                .accordion-item
+                  h3.accordion-header#headingTaskGranularity
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseTaskGranularity'
+                      aria-expanded='false'
+                      aria-controls='collapseTaskGranularity'
+                    )
+                      i.bi.bi-puzzle.me-2.text-info
+                      | Task Granularity
+                  .accordion-collapse.collapse#collapseTaskGranularity(
+                    aria-labelledby='headingTaskGranularity'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Determine the appropriate level of task granularity. Too fine-grained tasks can lead to overhead due to thread management, while too coarse-grained tasks might not fully utilize available resources.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-bug.me-2.text-danger
-                        | Error Handling
-                      p.card-text Implement robust error-handling mechanisms for concurrent tasks. Unhandled exceptions in one task should not crash the entire application.
+                .accordion-item
+                  h3.accordion-header#headingErrorHandling
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseErrorHandling'
+                      aria-expanded='false'
+                      aria-controls='collapseErrorHandling'
+                    )
+                      i.bi.bi-bug.me-2.text-danger
+                      | Error Handling
+                  .accordion-collapse.collapse#collapseErrorHandling(
+                    aria-labelledby='headingErrorHandling'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Implement robust error-handling mechanisms for concurrent tasks. Unhandled exceptions in one task should not crash the entire application.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-search.me-2.text-secondary
-                        | Testing and Debugging
-                      p.card-text Testing concurrent code is challenging. Consider using techniques like stress testing and race condition detection tools to identify issues. Debugging concurrent issues can be complex.
+                .accordion-item
+                  h3.accordion-header#headingTesting
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseTesting'
+                      aria-expanded='false'
+                      aria-controls='collapseTesting'
+                    )
+                      i.bi.bi-search.me-2.text-secondary
+                      | Testing and Debugging
+                  .accordion-collapse.collapse#collapseTesting(
+                    aria-labelledby='headingTesting'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Testing concurrent code is challenging. Consider using techniques like stress testing and race condition detection tools to identify issues. Debugging concurrent issues can be complex.
 
-                .col-md-6
-                  .card.h-100.shadow-sm
-                    .card-body
-                      h5.card-title
-                        i.bi.bi-chat-dots.me-2.text-primary
-                        | Communication and Coordination
-                      p.card-text Threads or tasks might need to communicate and coordinate with each other. Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.
+                .accordion-item
+                  h3.accordion-header#headingCommunication
+                    button.accordion-button.collapsed(
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#collapseCommunication'
+                      aria-expanded='false'
+                      aria-controls='collapseCommunication'
+                    )
+                      i.bi.bi-chat-dots.me-2.text-primary
+                      | Communication and Coordination
+                  .accordion-collapse.collapse#collapseCommunication(
+                    aria-labelledby='headingCommunication'
+                    data-bs-parent='#considerationsAccordion'
+                  )
+                    .accordion-body
+                      p.
+                        Threads or tasks might need to communicate and coordinate with each other. Consider using mechanisms like message queues, shared memory, and events to facilitate inter-thread communication.
 
             section.mb-5
               h2.h3.mb-4
@@ -318,6 +447,25 @@ block layout-content
 
                   p.mb-0
                     strong Happy coding and exploring the world of concurrency!
+
+            section.mb-5
+              .alert.alert-info.border-0.shadow-sm
+                .row.align-items-center
+                  .col-md-2.text-center
+                    i.bi.bi-arrow-right-circle.display-4.text-primary
+                  .col-md-10
+                    h4.alert-heading.mb-3
+                      i.bi.bi-lightbulb.me-2
+                      | Ready for the Next Level?
+                    p.mb-3
+                      | Now that you've explored the fundamentals of concurrent processing with SemaphoreSlim,
+                      | you're ready to tackle more advanced scenarios. Learn how to manage concurrent lists of tasks
+                      | with different return types, robust error handling, and comprehensive telemetry.
+                    p.mb-0
+                      a.btn.btn-primary.btn-lg(href='/task-list-processor.html')
+                        i.bi.bi-list-task.me-2
+                        | Explore TaskListProcessor: Advanced Concurrent Operations
+                        i.bi.bi-arrow-right.ms-2
 
             section.mb-5#SemaphoreSlimClass
               .card.shadow-sm
