@@ -20,7 +20,7 @@
         <!-- Canonical URL-->
         <link rel="canonical" href="https://markhazleton.com/articles/troubleshooting-and-rebuilding-my-js-dev-env-project.html" />
         <!-- Default canonical override block (for backward compatibility)-->
-        <!-- Open Graph Meta Tags-->
+        <!-- Open Graph Meta Tags - Optimized for LinkedIn Sharing-->
         <meta property="og:title" content="Troubleshooting and Rebuilding My JS-Dev-Env Project" />
         <meta property="og:description" content="Discover how to troubleshoot and rebuild a JavaScript development environment using Node.js, Nodemon, ESLint, Express, and Bootstrap effectively." />
         <meta property="og:type" content="article" />
@@ -31,6 +31,117 @@
         <meta property="og:image:alt" content="Troubleshooting and Rebuilding My JS-Dev-Env Project - Mark Hazleton" />
         <meta property="og:site_name" content="Mark Hazleton" />
         <meta property="og:locale" content="en_US" />
+        <!-- LinkedIn-specific optimizations-->
+        <meta property="article:author" content="Mark Hazleton" />
+        <meta property="article:published_time" content="2024-10-02" />
+        <meta property="article:tag" content='{"articleTitle":"Troubleshooting JS-Dev-Env Project"' />
+        <meta property="article:tag" content='"articleDescription":"Explore the challenges faced while troubleshooting a JavaScript development environment' />
+        <meta property="article:tag" content="including breaking changes and dependency conflicts" />
+        <meta property="article:tag" content='and learn how to rebuild a stable setup."' />
+        <meta property="article:tag" content='"articleContent":"# Troubleshooting JS-Dev-Env Project\n\n## A Story of Challenges' />
+        <meta property="article:tag" content="Breaking Changes" />
+        <meta property="article:tag" content="and Rebuilding from Scratch\n\nWhen I first set out to build a development environment for my JavaScript project" />
+        <meta property="article:tag" content="I envisioned a smooth" />
+        <meta property="article:tag" content="streamlined setup. I wanted a workspace where I could write modern JavaScript" />
+        <meta property="article:tag" content="manage dependencies effortlessly" />
+        <meta property="article:tag" content="lint my code" />
+        <meta property="article:tag" content="and run a local server with instant updates.\n\nHowever" />
+        <meta property="article:tag" content="what I didn’t account for was the series of breaking changes in the core packages that made my initial environment incompatible with the newer versions of these tools.\n\n## Facing the Initial Issues and Breaking Changes\n\nThe first sign of trouble was when I tried to upgrade my core packages—Node.js" />
+        <meta property="article:tag" content="Nodemon" />
+        <meta property="article:tag" content="and ESLint. Each package had introduced breaking changes that resulted in errors" />
+        <meta property="article:tag" content="version conflicts" />
+        <meta property="article:tag" content="and even the inability to run the project. The breaking changes in ESLint were the most frustrating. Several rules were deprecated" />
+        <meta property="article:tag" content="and new rule configurations required major changes to the `.eslintrc` file. Additionally" />
+        <meta property="article:tag" content="the plugin `eslint-plugin-import` began requiring newer versions of ESLint that weren’t backward compatible with my original configuration.\n\n```bash\nnpm install eslint@latest eslint-plugin-import@latest\n```\n\nNodemon also underwent significant updates. The move to Nodemon 3.x came with breaking changes in how the watcher worked and how it interacted with my build scripts. The config settings I was using to handle auto-reloading became obsolete" />
+        <meta property="article:tag" content='causing the server to crash when certain files changed.\n\n```json\n\"dev\": \"nodemon --watch src --exec node server.js\"\n```\n\nThese breaking changes led to a cascade of dependency issues' />
+        <meta property="article:tag" content="where some packages required older versions of Node.js" />
+        <meta property="article:tag" content="while others demanded the latest version. This mismatch made it nearly impossible to have a stable" />
+        <meta property="article:tag" content="functioning environment without sacrificing modern features.\n\n## Code Changes to Support New Versions\n\nTo resolve these issues" />
+        <meta property="article:tag" content="I had to update several parts of my codebase. First" />
+        <meta property="article:tag" content="I upgraded the project dependencies to the latest versions and updated the ESLint rules and configuration accordingly. For example" />
+        <meta property="article:tag" content='ESLint’s newer rules required specific configuration changes. The deprecation of `no-use-before-define` for functions required me to manually rewrite functions or disable the rule in the config file.\n\n```json\n\"rules\": {\n  \"no-use-before-define\": [\"error\"' />
+        <meta property="article:tag" content='{ \"functions\": false }]\n}\n```\n\nI also had to refactor my scripts to ensure compatibility with Nodemon’s changes. The way the file watcher worked had changed' />
+        <meta property="article:tag" content='so I modified my script in `package.json` to explicitly specify which directories to watch.\n\n```json\n\"scripts\": {\n  \"start\": \"node server.js\"' />
+        <meta property="article:tag" content="\n  \&quot;dev\&quot;: \&quot;nodemon --watch 'src/**/*.js' --exec 'node server.js'\&quot;\n}\n```\n\n## Troubleshooting Dependency Conflicts\n\nThe dependency conflicts were another major issue. Older versions of some libraries" />
+        <meta property="article:tag" content="such as Babel or TypeScript" />
+        <meta property="article:tag" content="wouldn’t work properly with the newer versions of Node.js or ESLint. I had to experiment with different version combinations to find a setup that worked without too many compatibility issues. The conflicts between Node.js versions and specific package versions required that I settle on using Node.js 16.x" />
+        <meta property="article:tag" content="which was a stable release compatible with both ESLint and Nodemon. However" />
+        <meta property="article:tag" content='this still meant that I couldn’t use certain cutting-edge features of Node.js 18.x without risking breaking the entire setup.\n\n```json\n\"engines\": {\n  \"node\": \"&gt;=16.0.0\"\n}\n```\n\nTo handle these issues' />
+        <meta property="article:tag" content="I relied on tools like `nvm` (Node Version Manager) to switch between Node.js versions easily" />
+        <meta property="article:tag" content="allowing me to maintain different projects with different Node.js versions without causing issues in my overall environment.\n\n```bash\nnvm use 16\n```\n\n## The Decision to Start Over\n\nAfter countless hours spent troubleshooting" />
+        <meta property="article:tag" content="upgrading dependencies" />
+        <meta property="article:tag" content="and trying different combinations" />
+        <meta property="article:tag" content="I realized that my dev environment was a patchwork of fixes that lacked stability. I made the tough decision to scrap the original environment and start fresh with a minimalist setup that only included the essentials. This decision was key in reducing complexity and avoiding further dependency conflicts. I chose to start with the basics: a simple server" />
+        <meta property="article:tag" content="a linter" />
+        <meta property="article:tag" content="and a few essential packages. Once that was stable" />
+        <meta property="article:tag" content="I could expand incrementally.\n\n## Lessons Learned from Breaking Changes\n\nThe experience of troubleshooting breaking changes taught me valuable lessons about maintaining a development environment:\n\n1. **Stick to LTS Versions**: Always aim for Long-Term Support (LTS) versions of Node.js and other core packages to avoid running into cutting-edge changes that could break backward compatibility.\n2. **Understand Your Dependencies**: Before upgrading any package" />
+        <meta property="article:tag" content="especially major versions" />
+        <meta property="article:tag" content="review the changelogs and release notes to understand what breaking changes have been introduced.\n3. **Use Version Locking**: Using `package-lock.json` or `yarn.lock` files can save a lot of trouble by ensuring consistent dependency versions across different environments.\n4. **Refactor Incrementally**: When upgrading or fixing breaking changes" />
+        <meta property="article:tag" content="it’s better to refactor your codebase step-by-step" />
+        <meta property="article:tag" content="rather than trying to overhaul everything at once.\n\n## Conclusion: Starting Fresh After Breaking Changes\n\nThe breaking changes to Node.js" />
+        <meta property="article:tag" content="ESLint" />
+        <meta property="article:tag" content="and Nodemon forced me to re-evaluate my initial approach. By starting fresh and focusing on core functionality" />
+        <meta property="article:tag" content="I was able to create a more stable and maintainable development environment. This experience reinforced the importance of simplicity and version management in modern development workflows.\n\n## Rebuilding My JS-Dev-Env Project\n\nWhen I first set out to build a development environment for my JavaScript project" />
+        <meta property="article:tag" content="I envisioned a smooth" />
+        <meta property="article:tag" content="streamlined setup that would support all my needs. I wanted a workspace where I could write modern JavaScript" />
+        <meta property="article:tag" content="manage dependencies effortlessly" />
+        <meta property="article:tag" content="lint my code" />
+        <meta property="article:tag" content="and run a local server with instant updates.\n\nBut things didn't go as planned. Here is how I built a functional dev environment from scratch.\n\n### Building a Basic Development Environment\n\nI started fresh" />
+        <meta property="article:tag" content="deleting everything in my folder except for `.git` and starting over. At least I would have a history of before and after.\n\n```bash\ncd js-dev-env\nnpm init -y\n```\n\nI installed core packages like Express" />
+        <meta property="article:tag" content="Nodemon" />
+        <meta property="article:tag" content="EJS" />
+        <meta property="article:tag" content='and Bootstrap.\n\n```bash\nnpm install express nodemon ejs bootstrap\nnpm install --save-dev nodemon\n```\n\nI then added basic scripts to `package.json`.\n\n```json\n\"scripts\": {\n  \"start\": \"node server.js\"' />
+        <meta property="article:tag" content="\n  \&quot;dev\&quot;: \&quot;nodemon server.js\&quot;\n}\n```\n\n### Building the Basic Site\n\nI set up a simple Express server to serve content and EJS templates.\n\n```javascript\nconst express = require('express');\nconst path = require('path');\nconst app = express();\n\napp.set('view engine'" />
+        <meta property="article:tag" content="'ejs');\napp.use(express.static(path.join(__dirname" />
+        <meta property="article:tag" content="'public')));\n\napp.get('/'" />
+        <meta property="article:tag" content="(req" />
+        <meta property="article:tag" content="res) =&gt; {\n  res.render('index'" />
+        <meta property="article:tag" content="{ title: 'Home' });\n});\n\napp.listen(3000" />
+        <meta property="article:tag" content="() =&gt; {\n  console.log('Server running on http://localhost:3000');\n});\n```\n\n### Running the Site\n\nWith everything set up" />
+        <meta property="article:tag" content="I used Nodemon to run the development server.\n\n```bash\nnpm run dev\n```\n\n## Conclusion: Lessons Learned\n\nIn the end" />
+        <meta property="article:tag" content="starting over helped me streamline my development environment. By going back to basics" />
+        <meta property="article:tag" content="I was able to:\n\n- Use Express to serve static content and manage routes.\n- Integrate Nodemon to automatically restart the server on changes during development.\n- Employ EJS to easily manage templates and layouts.\n- Utilize Bootstrap to simplify styling without writing custom CSS.\n\nThis approach not only simplified my development process but taught me the value of focusing on core functionality first.\n\n## Dynamic Content and Navigation\n\n### Simplify Content Management and Navigation Using a JSON File\n\nI decided I wanted some dynamic content and navigation in the project. I added a `pages.json` file to dynamically control both the content and navigation of the pages in my JS-Dev-Env project. This approach allows you to manage your site's content and navigation links without hardcoding them" />
+        <meta property="article:tag" content="making it much easier to update or add new pages later on.\n\n#### Prerequisites\n\nBefore starting" />
+        <meta property="article:tag" content="ensure the following is in place:\n\n- Node.js installed\n- Express set up to handle routes\n- EJS templating engine\n- Bootstrap for styling\n\n#### Step 1: Create the `pages.json` File\n\nThe `pages.json` file will hold details for all your site's pages" />
+        <meta property="article:tag" content="such as the title" />
+        <meta property="article:tag" content="URL" />
+        <meta property="article:tag" content="template" />
+        <meta property="article:tag" content="and content. This will allow you to dynamically generate both pages and navigation. First" />
+        <meta property="article:tag" content="create a `data` folder in the root of your project" />
+        <meta property="article:tag" content="and inside it" />
+        <meta property="article:tag" content='create a `pages.json` file. Here&apos;s an example of how to structure your JSON file:\n\n```json\n[\n  {\n    \"title\": \"Home\"' />
+        <meta property="article:tag" content='\n    \"url\": \"/\"' />
+        <meta property="article:tag" content='\n    \"template\": \"page\"' />
+        <meta property="article:tag" content='\n    \"content\": {\n      \"heading\": \"Welcome to My Bootstrap 5 Website\"' />
+        <meta property="article:tag" content='\n      \"text\": \"This is the home page.\"\n    }\n  }' />
+        <meta property="article:tag" content='\n  {\n    \"title\": \"About\"' />
+        <meta property="article:tag" content='\n    \"url\": \"/about\"' />
+        <meta property="article:tag" content='\n    \"template\": \"page\"' />
+        <meta property="article:tag" content='\n    \"content\": {\n      \"heading\": \"About Us\"' />
+        <meta property="article:tag" content='\n      \"text\": \"This is the about page. Learn more about us here.\"\n    }\n  }' />
+        <meta property="article:tag" content='\n  {\n    \"title\": \"Contact\"' />
+        <meta property="article:tag" content='\n    \"url\": \"/contact\"' />
+        <meta property="article:tag" content='\n    \"template\": \"page\"' />
+        <meta property="article:tag" content='\n    \"content\": {\n      \"heading\": \"Contact Us\"' />
+        <meta property="article:tag" content='\n      \"text\": \"Get in touch with us using the form below.\"\n    }\n  }\n]\n```\n\n#### Step 2: Modify `index.js` to Use `pages.json`\n\nNow' />
+        <meta property="article:tag" content="update your `index.js` file to read the `pages.json` data and generate routes dynamically. This step also involves extracting the top-level pages for the navigation bar and passing them to EJS templates.\n\n```javascript\nconst express = require('express');\nconst path = require('path');\nconst fs = require('fs');\nconst app = express();\n\napp.set('view engine'" />
+        <meta property="article:tag" content="'ejs');\napp.use(express.static(path.join(__dirname" />
+        <meta property="article:tag" content="'public')));\n\n// Read the pages.json file\nconst pagesData = JSON.parse(fs.readFileSync(path.join(__dirname" />
+        <meta property="article:tag" content="'data'" />
+        <meta property="article:tag" content="'pages.json')" />
+        <meta property="article:tag" content="'utf-8'));\n\n// Filter top-level pages for navigation\nconst topLevelPages = pagesData.filter(page =&gt; (page.url.match(/\\//g) || []).length === 1);\n\n// Generate dynamic routes from pages.json\npagesData.forEach(page =&gt; {\n  app.get(page.url" />
+        <meta property="article:tag" content="(req" />
+        <meta property="article:tag" content="res) =&gt; {\n    res.render(page.template" />
+        <meta property="article:tag" content="{\n      title: page.title" />
+        <meta property="article:tag" content="\n      heading: page.content.heading" />
+        <meta property="article:tag" content="\n      text: page.content.text" />
+        <meta property="article:tag" content="\n      pages: topLevelPages  // Pass navigation items\n    });\n  });\n});\n\n// Start the server\nconst port = process.env.PORT || 3000;\napp.listen(port" />
+        <meta property="article:tag" content="() =&gt; {\n  console.log(`Server running at http://localhost:${port}/`);\n});\n```\n\n#### Step 3: Update the Layout to Include Dynamic Navigation\n\nNext" />
+        <meta property="article:tag" content='update the `layout.ejs` file to dynamically render the navigation bar based on the `pages.json` data. This avoids hardcoding navigation links in every template and makes it easier to manage as new pages are added.\n\n```html\n&lt;!DOCTYPE html&gt;\n&lt;html lang=\"en\"&gt;\n&lt;head&gt;\n  &lt;meta charset=\"UTF-8\"&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width' />
+        <meta
+            property="article:tag"
+            content='initial-scale=1.0\"&gt;\n  &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;\n  &lt;link href=\"/css/modern-styles.css\" rel=\"stylesheet\"&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;!-- Dynamic Navigation Bar --&gt;\n  &lt;nav class=\"navbar navbar-expand-lg navbar-light bg-light\"&gt;\n    &lt;div class=\"container-fluid\"&gt;\n      &lt;a class=\"navbar-brand\" href=\"/\"&gt;My Site&lt;/a&gt;\n      &lt;button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarNav\" aria-controls=\"navbarNav\" aria-expanded=\"false\"&gt;\n        &lt;span class=\"navbar-toggler-icon\"&gt;&lt;/span&gt;\n      &lt;/button&gt;\n      &lt;div class=\"collapse navbar-collapse\" id=\"navbarNav\"&gt;\n        &lt;ul class=\"navbar-nav ms-auto\"&gt;\n          &lt;% pages.forEach(function(page) { %&gt;\n            &lt;li class=\"nav-item\"&gt;\n              &lt;a class=\"nav-link\" href=\"&lt;%= page.url %&gt;\"&gt;&lt;%= page.title %&gt;&lt;/a&gt;\n            &lt;/li&gt;\n          &lt;% }); %&gt;\n        &lt;/ul&gt;\n      &lt;/div&gt;\n    &lt;/div&gt;\n  &lt;/nav&gt;\n  &lt;!-- Main Content --&gt;\n  &lt;main class=\"container mt-5\"&gt;\n    &lt;h1&gt;&lt;%= heading %&gt;&lt;/h1&gt;\n    &lt;p&gt;&lt;%= text %&gt;&lt;/p&gt;\n    &lt;%- body %&gt; &lt;!-- View content will be injected here --&gt;\n  &lt;/main&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n```\n\n#### Step 4: Create EJS Templates for Each Page\n\nEach page in the `pages.json` file needs a corresponding EJS template. I started out with a very basic `page'
+        />
         <!-- YouTube video Open Graph tags-->
         <!-- Additional Open Graph overrides (for backward compatibility)-->
         <!-- Twitter Card Meta Tags-->
@@ -90,6 +201,7 @@
         </script>
         <!-- Additional structured data for specific pages-->
         <!-- Additional page-specific CSS-->
+        <!-- Include LinkedIn sharing mixins-->
         <!-- Global site tag (gtag.js) - Google Analytics-->
         <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
         <script>
@@ -508,6 +620,11 @@ http://localhost:3000/contact
                 </div>
             </div>
         </article>
+        <!-- Auto-include floating LinkedIn share for article pages-->
+        <!-- Check if first parameter is an article object-->
+        <div class="floating-linkedin-share position-fixed" style="bottom: 20px; right: 20px; z-index: 1000">
+            <a class="btn btn-linkedin btn-lg rounded-circle shadow" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmarkhazleton.com%2Farticles%2Ftroubleshooting-and-rebuilding-my-js-dev-env-project.html&amp;title=Troubleshooting%20and%20Rebuilding%20My%20JS-Dev-Env%20Project&amp;summary=Explore%20how%20to%20troubleshoot%20and%20rebuild%20a%20JavaScript%20development%20environment%20using%20Node.js%2C%20Nodemon%2C%20ESLint%2C%20Express%2C%20and%20Bootstrap.&amp;source=Mark%20Hazleton" target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onclick="return openLinkedInShare(this.href);"><i class="fab fa-linkedin-in"></i></a>
+        </div>
         <!-- Footer-->
         <footer>
             <div class="container">

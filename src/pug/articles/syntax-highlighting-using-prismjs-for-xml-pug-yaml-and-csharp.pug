@@ -1,385 +1,398 @@
 extends ../layouts/modern-layout
 
 block layout-content
-    // Page Navigation Sub-Nav
-    nav#article-navigation.navbar.navbar-expand-lg.bg-light.border-bottom.sticky-top.mt-5.pt-4.py-4.mb-5(style='scroll-margin-top:90px' aria-label='Article Navigation')
-      .container
-        .navbar-nav.nav-pills.flex-row.flex-wrap.justify-content-center.w-100
-          .nav-item
-            a.nav-link.text-dark.fw-medium(href='#introduction')
-              i.bi.bi-play-circle.me-1
-              | Introduction
-          .nav-item
-            a.nav-link.text-dark.fw-medium(href='#adding-prismjs')
-              i.bi.bi-code-slash.me-1
-              | Adding Prism.js
-          .nav-item
-            a.nav-link.text-dark.fw-medium(href='#other-considerations')
-              i.bi.bi-gear.me-1
-              | Other Considerations
-          .nav-item
-            a.nav-link.text-dark.fw-medium(href='#glossary')
-              i.bi.bi-book.me-1
-              | Glossary
-    // Hero Section
-    section.bg-gradient-primary.py-5
-      .container
-        .row.align-items-center
-          .col-lg-10.mx-auto.text-center
-            h1.display-4.fw-bold.mb-3
-              i.bi.bi-lightning-charge.me-3
-              | Implementing Syntax Highlighting
-            h2.h3.mb-4 Using Prism.js for XML, PUG, YAML, C#, and Python
-            p.lead.mb-5.
-              When building a website or documentation portal that involves a lot of code snippets,
-              syntax highlighting becomes essential to enhance readability and user experience.
-              Prism.js is a lightweight and customizable library for syntax highlighting.
-            p.
-              In this guide, we will walk through setting up Prism.js for XML, PUG, YAML, C#, and Python and discuss automating this process using a custom build tool, <span class='fw-bold'>render-scripts.js</span>.
+  // Page Navigation Sub-Nav
+  nav#article-navigation.navbar.navbar-expand-lg.bg-light.border-bottom.sticky-top.mt-5.pt-4.py-4.mb-5(style='scroll-margin-top:90px' aria-label='Article Navigation')
+    .container
+      .navbar-nav.nav-pills.flex-row.flex-wrap.justify-content-center.w-100
+        .nav-item
+          a.nav-link.text-dark.fw-medium(href='#introduction')
+            i.bi.bi-play-circle.me-1
+            | Introduction
+        .nav-item
+          a.nav-link.text-dark.fw-medium(href='#adding-prismjs')
+            i.bi.bi-code-slash.me-1
+            | Adding Prism.js
+        .nav-item
+          a.nav-link.text-dark.fw-medium(href='#other-considerations')
+            i.bi.bi-gear.me-1
+            | Other Considerations
+        .nav-item
+          a.nav-link.text-dark.fw-medium(href='#glossary')
+            i.bi.bi-book.me-1
+            | Glossary
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-lightning-charge.me-3
+            | Implementing Syntax Highlighting
+          p.h3.mb-4 Using Prism.js for XML, PUG, YAML, C#, and Python
+          p.lead.mb-5.
+            When building a website or documentation portal that involves a lot of code snippets,
+            syntax highlighting becomes essential to enhance readability and user experience.
+            Prism.js is a lightweight and customizable library for syntax highlighting.
+          p.
+            In this guide, we will walk through setting up Prism.js for XML, PUG, YAML, C#, and Python and discuss automating this process using a custom build tool, <span class='fw-bold'>render-scripts.js</span>.
 
 
-    article#main-article.py-5
-      .container
-        // Adding Prism.js Section
-        h3#adding-prismjs.mb-3 Adding Prism.js to Your Project
-        .card.mb-4
-          .card-body
-            dl
-              dt.fw-bold Step 1: Setting Up Prism.js            dd.mb-3
-                | First, include Prism.js in your project. You can use the CDN or download it locally for better performance and offline capability. Below is the CDN setup for the Coy theme.
-                .alert.alert-info.mt-2
-                  i.bi.bi-info-circle.me-2
-                  strong Performance Tip:
-                  | For production websites, consider hosting PrismJS files locally instead of using CDNs to reduce external dependencies and improve loading performance.
-                button.btn.btn-primary.mb-2(type='button', data-bs-toggle='collapse', data-bs-target='#cdnCode') Show/Hide CDN Setup
-                .collapse#cdnCode
-                  pre.language-html.mb-0
-                    code.language-html.
-                      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-coy.min.css" rel="stylesheet" />
-                      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
+  article#main-article.py-5
+    .container
+      // Introduction Section
+      section#introduction.mb-5
+        h2.mb-3 Introduction
+        p.
+          When building a website or documentation portal that involves a lot of code snippets,
+          syntax highlighting becomes essential to enhance readability and user experience.
+          Prism.js is a lightweight and customizable library for syntax highlighting that supports
+          multiple programming languages including XML, PUG, YAML, C#, and Python.
+        p.
+          This comprehensive guide will walk you through the complete process of implementing
+          Prism.js in your project, from basic setup to advanced customizations and automation
+          using build tools.
 
-              dt.fw-bold Step 2: Adding Support for Specific Languages
-              dd.mb-3
-                | To highlight specific languages like XML, PUG, YAML, C#, and Python add their corresponding language components.
-                button.btn.btn-primary.mb-2(type='button', data-bs-toggle='collapse', data-bs-target='#langCode') Show/Hide Language Scripts
-                .collapse#langCode
-                  pre.language-html.mb-0
-                    code.language-html.
-                      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-xml.min.js"></script>
-                      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-pug.min.js"></script>
-                      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-yaml.min.js"></script>
-                      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-csharp.min.js"></script>
-                      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-python.min.js"></script>
+      // Adding Prism.js Section
+      h2#adding-prismjs.mb-3 Adding Prism.js to Your Project
+      .card.mb-4
+        .card-body
+          dl
+            dt.fw-bold Step 1: Setting Up Prism.js            dd.mb-3
+              | First, include Prism.js in your project. You can use the CDN or download it locally for better performance and offline capability. Below is the CDN setup for the Coy theme.
+              .alert.alert-info.mt-2
+                i.bi.bi-info-circle.me-2
+                strong Performance Tip:
+                | For production websites, consider hosting PrismJS files locally instead of using CDNs to reduce external dependencies and improve loading performance.
+              button.btn.btn-primary.mb-2(type='button', data-bs-toggle='collapse', data-bs-target='#cdnCode') Show/Hide CDN Setup
+              .collapse#cdnCode
+                pre.language-html.mb-0
+                  code.language-html.
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-coy.min.css" rel="stylesheet" />
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
 
-              dt.fw-bold Step 3: Creating Code Blocks for Each Language
-              dd.mb-3
-                p.mb-1 Wrap your code in <code>&lt;pre&gt;</code> and <code>&lt;code&gt;</code> tags with the appropriate language class for Prism.js to highlight them.
-                .row.g-3
-                  .col-md-6
-                    .card.h-100
-                      .card-header.bg-light.fw-bold XML Example
-                      .card-body
-                        pre.language-xml.line-numbers
-                          code.language-xml.
-                            <rss version="2.0">
-                              <channel>
-                                <title>Latest Blog Posts</title>
-                                <link>https://markhazleton.com</link>
-                                <description>Recent blog posts from Mark Hazleton</description>
-                              </channel>
-                            </rss>
-                  .col-md-6
-                    .card.h-100
-                      .card-header.bg-light.fw-bold PUG Example
-                      .card-body
-                        pre.language-pug.line-numbers
-                          code.language-pug.
-                            html
-                              head
-                                title Prism.js Highlight Example
-                              body
-                                h1 This is a PUG template
-                                p Use Prism.js for highlighting PUG syntax.
-                .row.g-3.mt-2
-                  .col-md-6
-                    .card.h-100
-                      .card-header.bg-light.fw-bold YAML Example
-                      .card-body
-                        pre.language-yaml.line-numbers
-                          code.language-yaml.
-                            name: Update README with Latest Blog Posts
-                            on:
-                              schedule:
-                                - cron: '0 0 * * *'
-                            jobs:
-                              update-readme:
-                                runs-on: ubuntu-latest
-                  .col-md-6
-                    .card.h-100
-                      .card-header.bg-light.fw-bold C# Example
-                      .card-body
-                        pre.language-csharp.line-numbers
-                          code.language-csharp.
-                            using System;
-                            public class HelloWorld {
-                              public static void Main(string[] args) {
-                                Console.WriteLine("Hello, World!");
-                              }
+            dt.fw-bold Step 2: Adding Support for Specific Languages
+            dd.mb-3
+              | To highlight specific languages like XML, PUG, YAML, C#, and Python add their corresponding language components.
+              button.btn.btn-primary.mb-2(type='button', data-bs-toggle='collapse', data-bs-target='#langCode') Show/Hide Language Scripts
+              .collapse#langCode
+                pre.language-html.mb-0
+                  code.language-html.
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-xml.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-pug.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-yaml.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-csharp.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-python.min.js"></script>
+
+            dt.fw-bold Step 3: Creating Code Blocks for Each Language
+            dd.mb-3
+              p.mb-1 Wrap your code in <code>&lt;pre&gt;</code> and <code>&lt;code&gt;</code> tags with the appropriate language class for Prism.js to highlight them.
+              .row.g-3
+                .col-md-6
+                  .card.h-100
+                    .card-header.bg-light.fw-bold XML Example
+                    .card-body
+                      pre.language-xml.line-numbers
+                        code.language-xml.
+                          <rss version="2.0">
+                            <channel>
+                              <title>Latest Blog Posts</title>
+                              <link>https://markhazleton.com</link>
+                              <description>Recent blog posts from Mark Hazleton</description>
+                            </channel>
+                          </rss>
+                .col-md-6
+                  .card.h-100
+                    .card-header.bg-light.fw-bold PUG Example
+                    .card-body
+                      pre.language-pug.line-numbers
+                        code.language-pug.
+                          html
+                            head
+                              title Prism.js Highlight Example
+                            body
+                              h1 This is a PUG template
+                              p Use Prism.js for highlighting PUG syntax.
+              .row.g-3.mt-2
+                .col-md-6
+                  .card.h-100
+                    .card-header.bg-light.fw-bold YAML Example
+                    .card-body
+                      pre.language-yaml.line-numbers
+                        code.language-yaml.
+                          name: Update README with Latest Blog Posts
+                          on:
+                            schedule:
+                              - cron: '0 0 * * *'
+                          jobs:
+                            update-readme:
+                              runs-on: ubuntu-latest
+                .col-md-6
+                  .card.h-100
+                    .card-header.bg-light.fw-bold C# Example
+                    .card-body
+                      pre.language-csharp.line-numbers
+                        code.language-csharp.
+                          using System;
+                          public class HelloWorld {
+                            public static void Main(string[] args) {
+                              Console.WriteLine("Hello, World!");
                             }
+                          }
 
-              dt.fw-bold Step 4: Automating with render-scripts.js
-              dd.mb-3
-                | In my build process, the <span class='fw-bold'>render-scripts.js</span> script bundles Prism.js, Bootstrap, and custom JavaScript files into a single, minified file for deployment. Here's the key part of the script that handles the combination of these scripts.
-                button.btn.btn-primary.mb-2(type='button', data-bs-toggle='collapse', data-bs-target='#renderScriptCode') Show/Hide render-scripts.js Example
-                .collapse#renderScriptCode
-                  pre.language-js.line-numbers
-                    code.language-js.
-                      // Path to Bootstrap JS in node_modules (adjust according to your Bootstrap version)
-                      const bootstrapJSPath = upath.resolve(upath.dirname(__filename), '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
+            dt.fw-bold Step 4: Automating with render-scripts.js
+            dd.mb-3
+              | In my build process, the <span class='fw-bold'>render-scripts.js</span> script bundles Prism.js, Bootstrap, and custom JavaScript files into a single, minified file for deployment. Here's the key part of the script that handles the combination of these scripts.
+              button.btn.btn-primary.mb-2(type='button', data-bs-toggle='collapse', data-bs-target='#renderScriptCode') Show/Hide render-scripts.js Example
+              .collapse#renderScriptCode
+                pre.language-js.line-numbers
+                  code.language-js.
+                    // Path to Bootstrap JS in node_modules (adjust according to your Bootstrap version)
+                    const bootstrapJSPath = upath.resolve(upath.dirname(__filename), '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
 
-                      // Path to PrismJS and the YAML language component in node_modules
-                      const prismJSPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/prism.js');
-                      const prismYAMLPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-yaml.min.js');
-                      const prismXMLPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-xml-doc.min.js');
-                      const prismPUGPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-pug.min.js');
-                      const prismCSHARPPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-csharp.min.js');
-                      const prismPYTHONPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-python.min.js');
+                    // Path to PrismJS and the YAML language component in node_modules
+                    const prismJSPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/prism.js');
+                    const prismYAMLPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-yaml.min.js');
+                    const prismXMLPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-xml-doc.min.js');
+                    const prismPUGPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-pug.min.js');
+                    const prismCSHARPPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-csharp.min.js');
+                    const prismPYTHONPath = upath.resolve(upath.dirname(__filename), '../node_modules/prismjs/components/prism-python.min.js');
 
-                      // Paths for scripts.js and its destination
-                      const sourcePathScriptsJS = upath.resolve(upath.dirname(__filename), '../src/js/scripts.js');
-                      const destPathScriptsJS = upath.resolve(upath.dirname(__filename), '../docs/js/scripts.js');
+                    // Paths for scripts.js and its destination
+                    const sourcePathScriptsJS = upath.resolve(upath.dirname(__filename), '../src/js/scripts.js');
+                    const destPathScriptsJS = upath.resolve(upath.dirname(__filename), '../docs/js/scripts.js');
 
-                      // Read the Bootstrap JS, PrismJS, Prism YAML, and your scripts.js content
-                      const [bootstrapJS, prismJS, prismYAML, prismXML, prismPUG, prismCSHARP,prismPYTHON, scriptsJS] = await Promise.all([
-                        fs.readFile(bootstrapJSPath, 'utf8'),
-                        fs.readFile(prismJSPath, 'utf8'),
-                        fs.readFile(prismYAMLPath, 'utf8'),
-                        fs.readFile(prismXMLPath, 'utf8'),
-                        fs.readFile(prismPUGPath, 'utf8'),
-                        fs.readFile(prismCSHARPPath, 'utf8'),
-                        fs.readFile(prismPYTHONPath, 'utf8'),
-                        fs.readFile(sourcePathScriptsJS, 'utf8')
-                      ]);
+                    // Read the Bootstrap JS, PrismJS, Prism YAML, and your scripts.js content
+                    const [bootstrapJS, prismJS, prismYAML, prismXML, prismPUG, prismCSHARP,prismPYTHON, scriptsJS] = await Promise.all([
+                      fs.readFile(bootstrapJSPath, 'utf8'),
+                      fs.readFile(prismJSPath, 'utf8'),
+                      fs.readFile(prismYAMLPath, 'utf8'),
+                      fs.readFile(prismXMLPath, 'utf8'),
+                      fs.readFile(prismPUGPath, 'utf8'),
+                      fs.readFile(prismCSHARPPath, 'utf8'),
+                      fs.readFile(prismPYTHONPath, 'utf8'),
+                      fs.readFile(sourcePathScriptsJS, 'utf8')
+                    ]);
 
-                      // Combine Bootstrap JS, PrismJS, Prism YAML, and your scripts.js
-                      const combinedScripts = bootstrapJS + '\n' + prismJS + '\n' + prismYAML + '\n' + prismXML + '\n' + prismPUG + '\n' + prismCSHARP + '\n' + prismPYTHON + '\n'+ scriptsJS;
-              dt.fw-bold Step 5: Verifying and Customizing Highlighting
-              dd.mb-3
-                | You can verify that Prism.js is working by viewing the page in your browser. Optional customizations can be applied using CSS to tweak the appearance. For example:
-                pre.language-css.line-numbers
-                  code.language-css.
-                    .token.keyword {
-                      color: #569cd6;
-                    }
+                    // Combine Bootstrap JS, PrismJS, Prism YAML, and your scripts.js
+                    const combinedScripts = bootstrapJS + '\n' + prismJS + '\n' + prismYAML + '\n' + prismXML + '\n' + prismPUG + '\n' + prismCSHARP + '\n' + prismPYTHON + '\n'+ scriptsJS;
+            dt.fw-bold Step 5: Verifying and Customizing Highlighting
+            dd.mb-3
+              | You can verify that Prism.js is working by viewing the page in your browser. Optional customizations can be applied using CSS to tweak the appearance. For example:
+              pre.language-css.line-numbers
+                code.language-css.
+                  .token.keyword {
+                    color: #569cd6;
+                  }
 
-        a(href='#article-navigation' class='d-block mb-4 text-decoration-none')
-          i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-          | Back to Top
+      a(href='#article-navigation' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
 
-        // Other Considerations Section
-        h2#other-considerations.mt-5.mb-3 Other Considerations
-        .accordion#otherConsiderationsAccordion.mb-4
-          .accordion-item
-            h2.accordion-header#performanceHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#performanceCollapse') Optimizing Performance with Prism.js
-            .accordion-collapse.collapse#performanceCollapse
-              .accordion-body
-                p To optimize performance, consider using Prism.js’s autoloader to load only the necessary languages at runtime. Add the autoloader script like this:
-                pre.language-html.line-numbers
-                  code.language-html.
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
-                p.
-                  Prism.js's autoload feature dynamically loads only the language components needed for a specific page, optimizing performance by reducing initial file size and improving load times. Instead of including all supported languages at once, the autoload plugin detects the language specified in the class attribute of a <code>&lt;code&gt;</code> block (e.g., language-js or language-csharp) and fetches the corresponding language component asynchronously from the server.
-                p.
-                  This is particularly useful for websites that support multiple languages but may not use all of them on every page. To enable this feature, you include the autoloader plugin script in your project, and Prism.js will handle the rest by loading languages as they are required, ensuring your site loads quickly while still supporting syntax highlighting for all necessary languages.
-          .accordion-item
-            h2.accordion-header#themingHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#themingCollapse') Theming with Prism.js
-            .accordion-collapse.collapse#themingCollapse
-              .accordion-body
-                p.
-                  Theming with Prism.js allows bloggers to align the appearance of their code samples with the overall design and branding of their site. Customizing how code looks enhances both the visual appeal and readability, which can improve user experience and engagement. Prism.js provides a variety of out-of-the-box themes, such as Coy, Okaidia, and Solarized Light, that make it easy to integrate beautiful syntax highlighting with minimal effort.
-                p.
-                  However, bloggers often want more control over the colors and styles used for keywords, strings, comments, and other code elements. Prism.js supports a "roll your own" approach, enabling full customization of themes through CSS overrides. This flexibility allows bloggers to tailor code snippets to match their site’s style, making the presentation of technical content both consistent and aesthetically pleasing.
-                ul
-                  li Coy
-                  li Okaidia
-                  li Solarized Light
-                  li Twilight
-                  li Funky
-                  li Dark
-                p.
-                  Each theme provides a different look and feel, giving flexibility in matching your site’s design. To switch between themes, simply replace the theme’s CSS file in your HTML with the new one. For example:
-                pre.language-html.line-numbers
-                  code.language-html.
-                    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-twilight.min.css" rel="stylesheet" />
-                p.
-                  If the available themes don’t match your style, you can create a custom theme by overriding Prism.js’s default CSS. Here’s a simple guide to writing your own theme:
-                pre.language-css.line-numbers
-                  code.language-css.
-                    /* Customizing the color for keywords */
-                    .token.keyword {
-                      color: #ff79c6;
-                    }
-                    /* Changing the background color of code blocks */
-                    pre {
-                      background-color: #282a36;
-                      color: #f8f8f2;
-                    }
-                    /* Customize string tokens */
-                    .token.string {
-                      color: #50fa7b;
-                    }
-                p.
-                  You can override any token type supported by Prism.js. Common token types include <code>.token.keyword</code>, <code>.token.string</code>, <code>.token.comment</code>, and <code>.token.function</code>. Once your CSS is ready, include it in your project to apply the new styles:
-                pre.language-html.line-numbers
-                  code.language-html.
-                    <link rel="stylesheet" href="/path/to/your/custom-theme.css" />
-                p.
-                  Writing your own theme allows you to fully control the appearance of code snippets and seamlessly integrate them into your site's design.
-          .accordion-item
-            h2.accordion-header#markdownHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#markdownCollapse') Embedding Code in Markdown Blogs
-            .accordion-collapse.collapse#markdownCollapse
-              .accordion-body
-                p If your blog uses Markdown, you can still use Prism.js for syntax highlighting by specifying the language after the opening backticks. Here's how to add different language code blocks in Markdown:
-                pre.language-markdown.line-numbers
-                  code.language-markdown.
-                    ```xml
-                    <rss version="2.0">
-                      <channel>
-                        <title>Latest Blog Posts</title>
-                        <link>https://markhazleton.com</link>
-                      </channel>
-                    ```
-                    ```pug
-                    html
-                      head
-                        title Prism.js Highlight Example
-                      body
-                        h1 This is a PUG template
-                    ```
-                p After generating your Markdown content, Prism.js will automatically highlight the code samples according to the specified language when rendered on your site.
-          .accordion-item
-            h2.accordion-header#copyHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#copyCollapse') Adding Copy-to-Clipboard Functionality
-            .accordion-collapse.collapse#copyCollapse
-              .accordion-body
-                p Prism.js offers a plugin to add a "copy to clipboard" button for each code block. Simply add the following script to enable this functionality:
-                pre.language-html.line-numbers
-                  code.language-html.
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
-                p Once included, the "copy" button will automatically appear in each code block, making it easy for your readers to copy code snippets with one click.
-          .accordion-item
-            h2.accordion-header#lineNumbersHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#lineNumbersCollapse') Adding Line Numbers to Code Blocks
-            .accordion-collapse.collapse#lineNumbersCollapse
-              .accordion-body
-                p If you want to display line numbers alongside your code, Prism.js has a line-number plugin. Include the plugin with the following CDN:
-                pre.language-html.line-numbers
-                  code.language-html.
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
-                    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
-                p To apply line numbers, add the <code>line-numbers</code> class to your <code>pre</code> tags.
-          .accordion-item
-            h2.accordion-header#seoHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#seoCollapse') SEO Considerations for Code Samples
-            .accordion-collapse.collapse#seoCollapse
-              .accordion-body
-                p Code samples can impact SEO if not optimized properly. Here are a few tips:
-                ul
-                  li Use <code>&lt;pre&gt;</code> tags appropriately to indicate that it's source code.
-                  li Ensure code snippets are properly formatted and not too long to avoid readability issues.
-                  li Add descriptive titles and meta tags to help search engines understand your content.
-          .accordion-item
-            h2.accordion-header#collapseHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseCollapse') Collapsible Code Blocks for Large Samples
-            .accordion-collapse.collapse#collapseCollapse
-              .accordion-body
-                p For long code snippets, you can make the block collapsible to keep your blog post more readable. Here’s an example using Bootstrap's collapse component:
-                pre.language-html.line-numbers
-                  code.language-html.
-                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#codeBlock" aria-expanded="false" aria-controls="codeBlock">
-                      Show/Hide Code
-                    </button>
-                    <div class="collapse" id="codeBlock">
-                    </div>
-          .accordion-item
-            h2.accordion-header#responsiveHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#responsiveCollapse') Making Code Blocks Mobile Responsive
-            .accordion-collapse.collapse#responsiveCollapse
-              .accordion-body
-                p To ensure code snippets are readable on mobile devices, you can add responsive styles. Prism.js by default handles code wrapping, but you can ensure better readability by adding custom CSS:
-                pre.language-css.line-numbers
-                  code.language-css.
-                    pre {
-                      white-space: pre-wrap;
-                      word-wrap: break-word;
-                    }
-          .accordion-item
-            h2.accordion-header#gistHeading
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#gistCollapse') Embedding Code from GitHub Gists
-            .accordion-collapse.collapse#gistCollapse
-              .accordion-body
-                p Another option for sharing code snippets is embedding them directly from GitHub Gists. To do this, simply paste the script URL from the Gist into your HTML:
-                pre.language-html.line-numbers
-                  code.language-html.
-                    <script src="https://gist.github.com/username/gist-id.js"></script>
-                p This will automatically render the Gist’s code in your blog post, allowing readers to view and copy it.
+      // Other Considerations Section
+      h2#other-considerations.mt-5.mb-3 Other Considerations
+      .accordion#otherConsiderationsAccordion.mb-4
+        .accordion-item
+          h3.accordion-header#performanceHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#performanceCollapse') Optimizing Performance with Prism.js
+          .accordion-collapse.collapse#performanceCollapse
+            .accordion-body
+              p To optimize performance, consider using Prism.js’s autoloader to load only the necessary languages at runtime. Add the autoloader script like this:
+              pre.language-html.line-numbers
+                code.language-html.
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+              p.
+                Prism.js's autoload feature dynamically loads only the language components needed for a specific page, optimizing performance by reducing initial file size and improving load times. Instead of including all supported languages at once, the autoload plugin detects the language specified in the class attribute of a <code>&lt;code&gt;</code> block (e.g., language-js or language-csharp) and fetches the corresponding language component asynchronously from the server.
+              p.
+                This is particularly useful for websites that support multiple languages but may not use all of them on every page. To enable this feature, you include the autoloader plugin script in your project, and Prism.js will handle the rest by loading languages as they are required, ensuring your site loads quickly while still supporting syntax highlighting for all necessary languages.
+        .accordion-item
+          h3.accordion-header#themingHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#themingCollapse') Theming with Prism.js
+          .accordion-collapse.collapse#themingCollapse
+            .accordion-body
+              p.
+                Theming with Prism.js allows bloggers to align the appearance of their code samples with the overall design and branding of their site. Customizing how code looks enhances both the visual appeal and readability, which can improve user experience and engagement. Prism.js provides a variety of out-of-the-box themes, such as Coy, Okaidia, and Solarized Light, that make it easy to integrate beautiful syntax highlighting with minimal effort.
+              p.
+                However, bloggers often want more control over the colors and styles used for keywords, strings, comments, and other code elements. Prism.js supports a "roll your own" approach, enabling full customization of themes through CSS overrides. This flexibility allows bloggers to tailor code snippets to match their site’s style, making the presentation of technical content both consistent and aesthetically pleasing.
+              ul
+                li Coy
+                li Okaidia
+                li Solarized Light
+                li Twilight
+                li Funky
+                li Dark
+              p.
+                Each theme provides a different look and feel, giving flexibility in matching your site’s design. To switch between themes, simply replace the theme’s CSS file in your HTML with the new one. For example:
+              pre.language-html.line-numbers
+                code.language-html.
+                  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-twilight.min.css" rel="stylesheet" />
+              p.
+                If the available themes don’t match your style, you can create a custom theme by overriding Prism.js’s default CSS. Here’s a simple guide to writing your own theme:
+              pre.language-css.line-numbers
+                code.language-css.
+                  /* Customizing the color for keywords */
+                  .token.keyword {
+                    color: #ff79c6;
+                  }
+                  /* Changing the background color of code blocks */
+                  pre {
+                    background-color: #282a36;
+                    color: #f8f8f2;
+                  }
+                  /* Customize string tokens */
+                  .token.string {
+                    color: #50fa7b;
+                  }
+              p.
+                You can override any token type supported by Prism.js. Common token types include <code>.token.keyword</code>, <code>.token.string</code>, <code>.token.comment</code>, and <code>.token.function</code>. Once your CSS is ready, include it in your project to apply the new styles:
+              pre.language-html.line-numbers
+                code.language-html.
+                  <link rel="stylesheet" href="/path/to/your/custom-theme.css" />
+              p.
+                Writing your own theme allows you to fully control the appearance of code snippets and seamlessly integrate them into your site's design.
+        .accordion-item
+          h3.accordion-header#markdownHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#markdownCollapse') Embedding Code in Markdown Blogs
+          .accordion-collapse.collapse#markdownCollapse
+            .accordion-body
+              p If your blog uses Markdown, you can still use Prism.js for syntax highlighting by specifying the language after the opening backticks. Here's how to add different language code blocks in Markdown:
+              pre.language-markdown.line-numbers
+                code.language-markdown.
+                  ```xml
+                  <rss version="2.0">
+                    <channel>
+                      <title>Latest Blog Posts</title>
+                      <link>https://markhazleton.com</link>
+                    </channel>
+                  ```
+                  ```pug
+                  html
+                    head
+                      title Prism.js Highlight Example
+                    body
+                      h1 This is a PUG template
+                  ```
+              p After generating your Markdown content, Prism.js will automatically highlight the code samples according to the specified language when rendered on your site.
+        .accordion-item
+          h3.accordion-header#copyHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#copyCollapse') Adding Copy-to-Clipboard Functionality
+          .accordion-collapse.collapse#copyCollapse
+            .accordion-body
+              p Prism.js offers a plugin to add a "copy to clipboard" button for each code block. Simply add the following script to enable this functionality:
+              pre.language-html.line-numbers
+                code.language-html.
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+              p Once included, the "copy" button will automatically appear in each code block, making it easy for your readers to copy code snippets with one click.
+        .accordion-item
+          h3.accordion-header#lineNumbersHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#lineNumbersCollapse') Adding Line Numbers to Code Blocks
+          .accordion-collapse.collapse#lineNumbersCollapse
+            .accordion-body
+              p If you want to display line numbers alongside your code, Prism.js has a line-number plugin. Include the plugin with the following CDN:
+              pre.language-html.line-numbers
+                code.language-html.
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+                  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+              p To apply line numbers, add the <code>line-numbers</code> class to your <code>pre</code> tags.
+        .accordion-item
+          h3.accordion-header#seoHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#seoCollapse') SEO Considerations for Code Samples
+          .accordion-collapse.collapse#seoCollapse
+            .accordion-body
+              p Code samples can impact SEO if not optimized properly. Here are a few tips:
+              ul
+                li Use <code>&lt;pre&gt;</code> tags appropriately to indicate that it's source code.
+                li Ensure code snippets are properly formatted and not too long to avoid readability issues.
+                li Add descriptive titles and meta tags to help search engines understand your content.
+        .accordion-item
+          h3.accordion-header#collapseHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseCollapse') Collapsible Code Blocks for Large Samples
+          .accordion-collapse.collapse#collapseCollapse
+            .accordion-body
+              p For long code snippets, you can make the block collapsible to keep your blog post more readable. Here’s an example using Bootstrap's collapse component:
+              pre.language-html.line-numbers
+                code.language-html.
+                  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#codeBlock" aria-expanded="false" aria-controls="codeBlock">
+                    Show/Hide Code
+                  </button>
+                  <div class="collapse" id="codeBlock">
+                  </div>
+        .accordion-item
+          h3.accordion-header#responsiveHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#responsiveCollapse') Making Code Blocks Mobile Responsive
+          .accordion-collapse.collapse#responsiveCollapse
+            .accordion-body
+              p To ensure code snippets are readable on mobile devices, you can add responsive styles. Prism.js by default handles code wrapping, but you can ensure better readability by adding custom CSS:
+              pre.language-css.line-numbers
+                code.language-css.
+                  pre {
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                  }
+        .accordion-item
+          h3.accordion-header#gistHeading
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#gistCollapse') Embedding Code from GitHub Gists
+          .accordion-collapse.collapse#gistCollapse
+            .accordion-body
+              p Another option for sharing code snippets is embedding them directly from GitHub Gists. To do this, simply paste the script URL from the Gist into your HTML:
+              pre.language-html.line-numbers
+                code.language-html.
+                  <script src="https://gist.github.com/username/gist-id.js"></script>
+              p This will automatically render the Gist’s code in your blog post, allowing readers to view and copy it.
 
-        a(href='#article-navigation' class='d-block mb-4 text-decoration-none')
-          i.bi.bi-arrow-up-circle.me-1(aria-hidden)
-          | Back to Top
+      a(href='#article-navigation' class='d-block mb-4 text-decoration-none')
+        i.bi.bi-arrow-up-circle.me-1(aria-hidden)
+        | Back to Top
 
-        // Glossary Section
-        h2#glossary.mt-5.mb-3 Glossary of Key Terms
-        .accordion#glossaryAccordion.mb-5
-          .accordion-item
-            h2.accordion-header#prismjsTerm
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapsePrismjs') Prism.js
-            .accordion-collapse.collapse#collapsePrismjs
-              .accordion-body
-                p Prism.js is a lightweight, extensible syntax highlighter used for displaying code snippets in web pages. It supports a wide range of programming languages and offers plugins for features like line numbers and copy-to-clipboard.
-                p
-                  | Prism.js is popular among bloggers and documentation sites for its ease of use, performance, and flexibility. Learn more on
-                  a(href='https://en.wikipedia.org/wiki/Syntax_highlighting' target='_blank' rel='noopener') Wikipedia
-          .accordion-item
-            h2.accordion-header#syntaxHighlightingTerm
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSyntaxHighlighting') Syntax Highlighting
-            .accordion-collapse.collapse#collapseSyntaxHighlighting
-              .accordion-body
-                p Syntax highlighting is the practice of displaying source code in different colors and fonts according to the category of terms. This improves code readability and helps developers quickly identify elements like keywords, variables, and comments.
-                p
-                  | Modern editors and web tools use syntax highlighting to enhance the user experience. See more on
-                  a(href='https://en.wikipedia.org/wiki/Syntax_highlighting' target='_blank' rel='noopener') Wikipedia
-          .accordion-item
-            h2.accordion-header#cdnTerm
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseCDN') CDN (Content Delivery Network)
-            .accordion-collapse.collapse#collapseCDN
-              .accordion-body
-                p A CDN is a network of servers distributed geographically to deliver web content quickly and efficiently. Using a CDN for libraries like Prism.js ensures fast load times and high availability for users worldwide.
-                p
-                  | CDNs are a best practice for modern web development, improving both performance and reliability. See more on
-                  a(href='https://en.wikipedia.org/wiki/Content_delivery_network' target='_blank' rel='noopener') Wikipedia
-          .accordion-item
-            h2.accordion-header#accessibilityTerm
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseAccessibility') Accessibility
-            .accordion-collapse.collapse#collapseAccessibility
-              .accordion-body
-                p Accessibility in web development means designing websites and tools so that people with disabilities can use them. For code samples, this includes using semantic HTML, descriptive alt text, and ensuring keyboard navigation.
-                p
-                  | Accessible code samples help all users, including those using screen readers or other assistive technologies. Learn more on
-                  a(href='https://en.wikipedia.org/wiki/Web_accessibility' target='_blank' rel='noopener') Wikipedia
-          .accordion-item
-            h2.accordion-header#seoTerm
-              button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSEO') SEO (Search Engine Optimization)
-            .accordion-collapse.collapse#collapseSEO
-              .accordion-body
-                p SEO is the process of optimizing web content to improve its visibility in search engine results. For technical blogs, this includes using descriptive meta tags, structured headings, and accessible code samples.
-                p
-                  | Good SEO practices help your articles reach a wider audience and improve discoverability. See more on
-                  a(href='https://en.wikipedia.org/wiki/Search_engine_optimization' target='_blank' rel='noopener') Wikipedia
+      // Glossary Section
+      h2#glossary.mt-5.mb-3 Glossary of Key Terms
+      .accordion#glossaryAccordion.mb-5
+        .accordion-item
+          h3.accordion-header#prismjsTerm
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapsePrismjs') Prism.js
+          .accordion-collapse.collapse#collapsePrismjs
+            .accordion-body
+              p Prism.js is a lightweight, extensible syntax highlighter used for displaying code snippets in web pages. It supports a wide range of programming languages and offers plugins for features like line numbers and copy-to-clipboard.
+              p
+                | Prism.js is popular among bloggers and documentation sites for its ease of use, performance, and flexibility. Learn more on
+                a(href='https://en.wikipedia.org/wiki/Syntax_highlighting' target='_blank' rel='noopener') Wikipedia
+        .accordion-item
+          h3.accordion-header#syntaxHighlightingTerm
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSyntaxHighlighting') Syntax Highlighting
+          .accordion-collapse.collapse#collapseSyntaxHighlighting
+            .accordion-body
+              p Syntax highlighting is the practice of displaying source code in different colors and fonts according to the category of terms. This improves code readability and helps developers quickly identify elements like keywords, variables, and comments.
+              p
+                | Modern editors and web tools use syntax highlighting to enhance the user experience. See more on
+                a(href='https://en.wikipedia.org/wiki/Syntax_highlighting' target='_blank' rel='noopener') Wikipedia
+        .accordion-item
+          h3.accordion-header#cdnTerm
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseCDN') CDN (Content Delivery Network)
+          .accordion-collapse.collapse#collapseCDN
+            .accordion-body
+              p A CDN is a network of servers distributed geographically to deliver web content quickly and efficiently. Using a CDN for libraries like Prism.js ensures fast load times and high availability for users worldwide.
+              p
+                | CDNs are a best practice for modern web development, improving both performance and reliability. See more on
+                a(href='https://en.wikipedia.org/wiki/Content_delivery_network' target='_blank' rel='noopener') Wikipedia
+        .accordion-item
+          h3.accordion-header#accessibilityTerm
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseAccessibility') Accessibility
+          .accordion-collapse.collapse#collapseAccessibility
+            .accordion-body
+              p Accessibility in web development means designing websites and tools so that people with disabilities can use them. For code samples, this includes using semantic HTML, descriptive alt text, and ensuring keyboard navigation.
+              p
+                | Accessible code samples help all users, including those using screen readers or other assistive technologies. Learn more on
+                a(href='https://en.wikipedia.org/wiki/Web_accessibility' target='_blank' rel='noopener') Wikipedia
+        .accordion-item
+          h3.accordion-header#seoTerm
+            button.accordion-button.collapsed(type='button', data-bs-toggle='collapse', data-bs-target='#collapseSEO') SEO (Search Engine Optimization)
+          .accordion-collapse.collapse#collapseSEO
+            .accordion-body
+              p SEO is the process of optimizing web content to improve its visibility in search engine results. For technical blogs, this includes using descriptive meta tags, structured headings, and accessible code samples.
+              p
+                | Good SEO practices help your articles reach a wider audience and improve discoverability. See more on
+                a(href='https://en.wikipedia.org/wiki/Search_engine_optimization' target='_blank' rel='noopener') Wikipedia
 
-        // Conclusion
-        p.mt-5.
-          In conclusion, Prism.js is a powerful tool for syntax highlighting, and by automating its integration with a custom script like <span class='fw-bold'>render-scripts.js</span>, you can streamline the process and ensure all necessary languages are supported across your site. Following best practices for SEO, accessibility, and Bootstrap 5 styling will maximize your blog’s reach and user experience.
+      // Conclusion
+      p.mt-5.
+        In conclusion, Prism.js is a powerful tool for syntax highlighting, and by automating its integration with a custom script like <span class='fw-bold'>render-scripts.js</span>, you can streamline the process and ensure all necessary languages are supported across your site. Following best practices for SEO, accessibility, and Bootstrap 5 styling will maximize your blog’s reach and user experience.

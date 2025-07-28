@@ -110,6 +110,17 @@ block layout-content
                   li.list-group-item: a.text-decoration-none(href='#future-directions') Future Directions: Beyond Worksheets
                   li.list-group-item: a.text-decoration-none(href='#conclusion') Conclusion: Technology in Service of Education
 
+          // Article metadata and sharing
+          .article-meta.text-muted.mb-4.text-center
+            time(datetime=publishedDate) #{new Date(publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            span.mx-2 •
+            span by Mark Hazleton
+            span.mx-2 •
+            span #{estimatedReadTime} min read
+
+          // LinkedIn sharing for the article
+          +articleLinkedInShare(article)
+
           // Genesis Section
           section#genesis.mb-5
             h2.h3.text-primary.mb-4
@@ -243,6 +254,9 @@ block layout-content
 
             p.
               This design captures not just the content, but the educational context and generation metadata that help teachers understand and improve their worksheet creation process.
+
+          // Inline LinkedIn sharing prompt
+          +inlineLinkedInPrompt(article)
 
           // Model Selection Section
           section#model-selection.mb-5
@@ -890,5 +904,8 @@ block layout-content
             h5.mb-2 About the Author
             p.mb-0.small
               | Mark Hazleton is a software architect and educational technology enthusiast with over two decades of experience building scalable applications. He specializes in creating practical solutions that bridge the gap between complex technology and real-world user needs. When not coding, he enjoys collaborating with educators to understand how technology can genuinely improve learning outcomes.
-          .col-md-4.text-center
+
+  // Floating LinkedIn share button for long articles
+  +floatingLinkedInShare(article)
+    .col-md-4.text-center
 

@@ -1,0 +1,183 @@
+//- LinkedIn Sharing Components
+//- Mixins for LinkedIn sharing functionality
+
+//- Basic LinkedIn Share Button
+mixin linkedinShareButton(url, title, summary, source)
+  - var currentUrl = url || (typeof seoData !== 'undefined' && seoData.canonical) || 'https://markhazleton.com'
+  - var shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`
+  if title
+    - shareUrl += `&title=${encodeURIComponent(title)}`
+  if summary
+    - shareUrl += `&summary=${encodeURIComponent(summary)}`
+  if source
+    - shareUrl += `&source=${encodeURIComponent(source)}`
+
+  a.btn.btn-linkedin.me-2(
+    href=shareUrl
+    target='_blank'
+    rel='noopener noreferrer'
+    title='Share on LinkedIn'
+    onclick='return openLinkedInShare(this.href);'
+  )
+    i.fab.fa-linkedin-in.me-2
+    | Share on LinkedIn
+
+//- LinkedIn Share Button with Custom Text
+mixin linkedinShareButtonCustom(url, title, summary, source, buttonText, buttonClass)
+  - var currentUrl = url || (typeof seoData !== 'undefined' && seoData.canonical) || 'https://markhazleton.com'
+  - var shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`
+  if title
+    - shareUrl += `&title=${encodeURIComponent(title)}`
+  if summary
+    - shareUrl += `&summary=${encodeURIComponent(summary)}`
+  if source
+    - shareUrl += `&source=${encodeURIComponent(source)}`
+
+  a(
+    class=buttonClass || 'btn btn-linkedin me-2'
+    href=shareUrl
+    target='_blank'
+    rel='noopener noreferrer'
+    title='Share on LinkedIn'
+    onclick='return openLinkedInShare(this.href);'
+  )
+    i.fab.fa-linkedin-in.me-2
+    | #{buttonText || 'Share on LinkedIn'}
+
+//- LinkedIn Share Icon Only
+mixin linkedinShareIcon(url, title, summary, source)
+  - var currentUrl = url || (typeof seoData !== 'undefined' && seoData.canonical) || 'https://markhazleton.com'
+  - var shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`
+  if title
+    - shareUrl += `&title=${encodeURIComponent(title)}`
+  if summary
+    - shareUrl += `&summary=${encodeURIComponent(summary)}`
+  if source
+    - shareUrl += `&source=${encodeURIComponent(source)}`
+
+  a.linkedin-share-icon(
+    href=shareUrl
+    target='_blank'
+    rel='noopener noreferrer'
+    title='Share on LinkedIn'
+    onclick='return openLinkedInShare(this.href);'
+  )
+    i.fab.fa-linkedin-in
+
+//- Complete Social Sharing Bar with LinkedIn Priority
+mixin socialSharingBar(url, title, summary)
+  - var currentUrl = url || (typeof seoData !== 'undefined' && seoData.canonical) || 'https://markhazleton.com'
+  - var shareTitle = title || (typeof seoData !== 'undefined' && seoData.title) || 'Mark Hazleton'
+  - var shareSummary = summary || (typeof seoData !== 'undefined' && seoData.description) || 'Technology solutions and insights'
+  .social-sharing-bar.d-flex.align-items-center.gap-3.my-4
+    .sharing-label.text-muted.fw-bold Share this:
+    .sharing-buttons.d-flex.gap-2
+      // LinkedIn - Primary sharing option
+      +linkedinShareButtonCustom(currentUrl, shareTitle, shareSummary, 'Mark Hazleton', 'LinkedIn', 'btn btn-linkedin btn-sm')
+
+      // Twitter
+      - var twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareTitle)}&via=markhazleton`
+      a.btn.btn-twitter.btn-sm(
+        href=twitterUrl
+        target='_blank'
+        rel='noopener noreferrer'
+        title='Share on Twitter'
+        onclick='return openTwitterShare(this.href);'
+      )
+        i.fab.fa-twitter.me-1
+        | Twitter
+
+      // Copy Link
+      button.btn.btn-outline-secondary.btn-sm(
+        type='button'
+        onclick=`copyToClipboard('${currentUrl}')`
+        title='Copy link'
+      )
+        i.fas.fa-link.me-1
+        | Copy Link
+
+//- Article-specific LinkedIn sharing with article metadata
+mixin articleLinkedInShare(article)
+  if article
+    - var articleUrl = `https://markhazleton.com/${article.slug}`
+    - var articleTitle = article.name || article.title
+    - var articleSummary = article.description || (article.seo && article.seo.description)
+    +socialSharingBar(articleUrl, articleTitle, articleSummary)
+  else
+    +socialSharingBar()
+
+//- Floating LinkedIn Share Button (for long articles)
+mixin floatingLinkedInShare(urlOrArticle, title, summary)
+  - var currentUrl, shareTitle, shareSummary
+
+  // Check if first parameter is an article object
+  if typeof urlOrArticle === 'object' && urlOrArticle && urlOrArticle.slug
+    - currentUrl = `https://markhazleton.com/${urlOrArticle.slug}`
+    - shareTitle = urlOrArticle.name || urlOrArticle.title
+    - shareSummary = urlOrArticle.description || (urlOrArticle.seo && urlOrArticle.seo.description)
+  else
+    // Legacy parameter format (url, title, summary)
+    - currentUrl = urlOrArticle || (typeof seoData !== 'undefined' && seoData.canonical) || 'https://markhazleton.com'
+    - shareTitle = title || (typeof seoData !== 'undefined' && seoData.title) || 'Mark Hazleton'
+    - shareSummary = summary || (typeof seoData !== 'undefined' && seoData.description) || 'Technology solutions and insights'
+
+  .floating-linkedin-share.position-fixed(style='bottom: 20px; right: 20px; z-index: 1000;')
+    a.btn.btn-linkedin.btn-lg.rounded-circle.shadow(
+      href=`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareSummary)}&source=Mark%20Hazleton`
+      target='_blank'
+      rel='noopener noreferrer'
+      title='Share on LinkedIn'
+      onclick='return openLinkedInShare(this.href);'
+    )
+      i.fab.fa-linkedin-in
+
+//- LinkedIn Follow Button
+mixin linkedinFollowButton()
+  a.btn.btn-linkedin-follow.me-2(
+    href='https://www.linkedin.com/in/markhazleton/'
+    target='_blank'
+    rel='noopener noreferrer'
+    title='Follow Mark Hazleton on LinkedIn'
+  )
+    i.fab.fa-linkedin-in.me-2
+    | Follow on LinkedIn
+
+//- Combined Article Meta and LinkedIn Sharing for easy inclusion
+mixin articleMetaAndSharing(article)
+  if article
+    // Article metadata section
+    .article-meta.text-muted.mb-4.text-center
+      time(datetime=article.publishedDate) #{new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      span.mx-2 •
+      span by #{article.author || 'Mark Hazleton'}
+      span.mx-2 •
+      span #{article.estimatedReadTime || '5'} min read
+
+    // Article LinkedIn sharing
+    +articleLinkedInShare(article)
+
+//- Inline sharing prompt for within article content
+mixin inlineLinkedInPrompt(urlOrArticle, title, summary)
+  - var currentUrl, shareTitle, shareSummary
+
+  // Check if first parameter is an article object
+  if typeof urlOrArticle === 'object' && urlOrArticle && urlOrArticle.slug
+    - currentUrl = `https://markhazleton.com/${urlOrArticle.slug}`
+    - shareTitle = urlOrArticle.name || urlOrArticle.title
+    - shareSummary = urlOrArticle.description || (urlOrArticle.seo && urlOrArticle.seo.description)
+  else
+    // Legacy parameter format (url, title, summary)
+    - currentUrl = urlOrArticle || (typeof seoData !== 'undefined' && seoData.canonical) || 'https://markhazleton.com'
+    - shareTitle = title || (typeof seoData !== 'undefined' && seoData.title) || 'Mark Hazleton'
+    - shareSummary = summary || (typeof seoData !== 'undefined' && seoData.description) || 'Technology solutions and insights'
+
+  .linkedin-sharing-prompt.border.border-primary.rounded.p-3.my-4.bg-light
+    .row.align-items-center
+      .col-md-8
+        .d-flex.align-items-center
+          i.fab.fa-linkedin-in.text-primary.fs-3.me-3
+          div
+            .fw-bold.text-primary Found this helpful?
+            .text-muted.small Share it with your LinkedIn network
+      .col-md-4.text-md-end.mt-2.mt-md-0
+        +linkedinShareButtonCustom(currentUrl, shareTitle, shareSummary, 'Mark Hazleton', 'Share Article', 'btn btn-primary btn-sm')
