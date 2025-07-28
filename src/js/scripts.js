@@ -55,6 +55,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
     // Initialize search form submission
     initializeSearchForm();
 
+    // Initialize LinkedIn sharing functionality
+    initializeLinkedInSharing();
+
     // Edge-specific polyfills and fixes
     if (navigator.userAgent.indexOf('Edge') > -1 || navigator.userAgent.indexOf('Edg') > -1) {
         // Add specific Edge compatibility fixes
@@ -366,4 +369,156 @@ function initializeSearchForm() {
             return false;
         });
     });
+}
+
+// LinkedIn Sharing Functions
+function openLinkedInShare(url) {
+    const width = 600;
+    const height = 400;
+    const left = (screen.width - width) / 2;
+    const top = (screen.height - height) / 2;
+
+    window.open(
+        url,
+        'linkedin-share',
+        `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
+    );
+
+    // Track sharing event if analytics is available
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'share', {
+            'method': 'LinkedIn',
+            'content_type': 'article',
+            'item_id': window.location.pathname
+        });
+    }
+
+    return false;
+}
+
+function openTwitterShare(url) {
+    const width = 600;
+    const height = 400;
+    const left = (screen.width - width) / 2;
+    const top = (screen.height - height) / 2;
+
+    window.open(
+        url,
+        'twitter-share',
+        `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
+    );
+
+    // Track sharing event if analytics is available
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'share', {
+            'method': 'Twitter',
+            'content_type': 'article',
+            'item_id': window.location.pathname
+        });
+    }
+
+    return false;
+}
+
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        // Use the modern clipboard API
+        navigator.clipboard.writeText(text).then(() => {
+            showCopyFeedback('Link copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            fallbackCopyToClipboard(text);
+        });
+    } else {
+        // Fallback for older browsers or non-secure contexts
+        fallbackCopyToClipboard(text);
+    }
+
+    // Track copy event if analytics is available
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'share', {
+            'method': 'Copy Link',
+            'content_type': 'article',
+            'item_id': window.location.pathname
+        });
+    }
+}
+
+function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        document.execCommand('copy');
+        showCopyFeedback('Link copied to clipboard!');
+    } catch (err) {
+        console.error('Fallback copy failed: ', err);
+        showCopyFeedback('Failed to copy link. Please copy manually.', 'error');
+    }
+
+    document.body.removeChild(textArea);
+}
+
+function showCopyFeedback(message, type = 'success') {
+    // Create and show a temporary toast/alert
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'error' ? 'danger' : 'success'} position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 200px;';
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check'} me-2"></i>
+        ${message}
+    `;
+
+    document.body.appendChild(toast);
+
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 3000);
+}
+
+// Initialize LinkedIn sharing on page load
+function initializeLinkedInSharing() {
+    // Add event listeners to LinkedIn sharing buttons
+    const linkedinButtons = document.querySelectorAll('a[onclick*="openLinkedInShare"]');
+    linkedinButtons.forEach(button => {
+        // The onclick handler is already set in the HTML, so we don't need to add another
+        // But we can add hover effects or other enhancements here if needed
+    });
+
+    // Initialize floating share button visibility on scroll (if present)
+    const floatingShare = document.querySelector('.floating-linkedin-share');
+    if (floatingShare) {
+        let isVisible = false;
+
+        function toggleFloatingShare() {
+            const scrollPosition = window.scrollY;
+            const shouldShow = scrollPosition > 500; // Show after scrolling 500px
+
+            if (shouldShow && !isVisible) {
+                floatingShare.style.opacity = '1';
+                floatingShare.style.pointerEvents = 'auto';
+                isVisible = true;
+            } else if (!shouldShow && isVisible) {
+                floatingShare.style.opacity = '0';
+                floatingShare.style.pointerEvents = 'none';
+                isVisible = false;
+            }
+        }
+
+        // Initialize as hidden
+        floatingShare.style.opacity = '0';
+        floatingShare.style.pointerEvents = 'none';
+        floatingShare.style.transition = 'opacity 0.3s ease-in-out';
+
+        window.addEventListener('scroll', toggleFloatingShare);
+    }
 }

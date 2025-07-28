@@ -1,0 +1,132 @@
+//- Article Template with LinkedIn Sharing
+//- Standard template for blog articles with integrated LinkedIn sharing
+
+mixin articleTemplate(article, content)
+  // Breadcrumb Navigation
+  .container.mt-4
+    nav.breadcrumb-modern(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles.html') Articles
+        li.breadcrumb-item.active(aria-current='page')= article ? article.name : 'Article'
+
+  // Article Content
+  article#main-article.py-5
+    .container
+      .row
+        .col-lg-8.mx-auto
+          header.mb-5
+            // GitHub link if available
+            if article && article.githubUrl
+              .alert.alert-info.text-center.mb-4
+                i.bi.bi-github.me-2
+                a.text-decoration-none.fw-bold(href=article.githubUrl, target='_blank', rel='noopener')
+                  | View the complete source code on GitHub
+                  i.bi.bi-box-arrow-up-ne.ms-1
+
+            // Article title and meta
+            h1.display-4.fw-bold#top= article ? article.name : 'Article Title'
+            if article && article.subtitle
+              .subheading.h4.text-muted.mb-4= article.subtitle
+
+            .article-meta.text-muted.mb-4
+              if article && article.publishedDate
+                time(datetime=article.publishedDate) #{new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                span.mx-2 •
+              span by #{article && article.author ? article.author : 'Mark Hazleton'}
+              if article && article.estimatedReadTime
+                span.mx-2 •
+                span #{article.estimatedReadTime} min read
+
+            // Primary LinkedIn sharing for the article
+            +articleLinkedInShare(article)
+
+          // Article content section
+          .article-content
+            if content
+              != content
+            else
+              block article-content
+
+            // Call-to-action sharing section in the middle of longer articles
+            .my-5
+              +inlineLinkedInPrompt()
+
+            // Additional content after sharing prompt
+            block additional-content
+
+          // Article footer with sharing and follow options
+          .article-footer.mt-5.pt-4.border-top
+            .row
+              .col-md-6
+                h5.mb-3 Share This Article
+                +socialSharingBar()
+              .col-md-6.text-md-end
+                h5.mb-3 Follow for More
+                +linkedinFollowButton()
+                a.btn.btn-outline-primary.ms-2(href='/articles.html')
+                  i.fas.fa-newspaper.me-2
+                  | View All Articles
+
+  // Floating LinkedIn share button for long articles
+  +floatingLinkedInShare()
+
+//- Simplified article header mixin for existing templates
+mixin articleHeader(article)
+  header.mb-5
+    if article && article.githubUrl
+      .alert.alert-info.text-center.mb-4
+        i.bi.bi-github.me-2
+        a.text-decoration-none.fw-bold(href=article.githubUrl, target='_blank', rel='noopener')
+          | View the complete source code on GitHub
+          i.bi.bi-box-arrow-up-ne.ms-1
+
+    h1.display-4.fw-bold#top= article ? article.name : 'Article Title'
+    if article && article.subtitle
+      .subheading.h4.text-muted.mb-4= article.subtitle
+
+    .article-meta.text-muted.mb-4
+      if article && article.publishedDate
+        time(datetime=article.publishedDate) #{new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        span.mx-2 •
+      span by #{article && article.author ? article.author : 'Mark Hazleton'}
+      if article && article.estimatedReadTime
+        span.mx-2 •
+        span #{article.estimatedReadTime} min read
+
+    // Primary LinkedIn sharing for the article
+    +articleLinkedInShare(article)
+
+//- Article footer mixin
+mixin articleFooter()
+  .article-footer.mt-5.pt-4.border-top
+    .row
+      .col-md-6
+        h5.mb-3 Share This Article
+        +socialSharingBar()
+      .col-md-6.text-md-end
+        h5.mb-3 Follow for More
+        +linkedinFollowButton()
+        a.btn.btn-outline-primary.ms-2(href='/articles.html')
+          i.fas.fa-newspaper.me-2
+          | View All Articles
+
+//- Related articles section with LinkedIn sharing
+mixin relatedArticles(currentArticle, articles)
+  .related-articles.mt-5.pt-4.border-top
+    .container
+      h3.mb-4 Related Articles
+      .row
+        each relatedArticle in articles.slice(0, 3)
+          if relatedArticle.slug !== (currentArticle ? currentArticle.slug : '')
+            .col-md-4.mb-4
+              .card.h-100.shadow-sm
+                .card-body
+                  h5.card-title
+                    a.text-decoration-none(href=`/${relatedArticle.slug}`)= relatedArticle.name
+                  p.card-text= relatedArticle.description ? relatedArticle.description.substring(0, 100) + '...' : ''
+                  .d-flex.justify-content-between.align-items-center.mt-3
+                    a.btn.btn-primary.btn-sm(href=`/${relatedArticle.slug}`) Read More
+                    +linkedinShareIcon(`https://markhazleton.com/${relatedArticle.slug}`, relatedArticle.name, relatedArticle.description)
