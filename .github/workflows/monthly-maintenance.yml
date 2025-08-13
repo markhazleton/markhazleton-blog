@@ -1,0 +1,131 @@
+name: Monthly Maintenance
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  SITE_URL: https://markhazleton.com
+  SITEMAP_URL: https://markhazleton.com/sitemap.xml
+
+jobs:
+  monthly:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_BLOB_CONN: ${{ secrets.AZURE_BLOB_CONN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lighthouse CI (homepage + key pages)
+        run: npm run audit:perf
+
+      - name: Link check (Lychee)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress --accept 200,226,301,302,999
+            --format json
+            --retry-wait-time 2
+            --max-retries 2
+            --include-fragments
+            --trust-anchor-markdown
+            --base ${{ env.SITE_URL }}
+            ${{ env.SITEMAP_URL }}
+          output: ./links/report.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save Lychee markdown summary
+        if: always()
+        run: |
+          mkdir -p links
+          echo "Lychee results written to links/report.json" > links/README.md
+
+      - name: Accessibility (pa11y-ci)
+        run: npm run audit:a11y
+
+      - name: npm audit (json)
+        run: |
+          mkdir -p artifacts
+          npm audit --omit=dev --json > artifacts/npm-audit.json || true
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+        continue-on-error: true
+
+      - name: ZAP Baseline (optional)
+        uses: zaproxy/action-baseline@v0.12.0
+        continue-on-error: true
+        with:
+          target: ${{ env.SITE_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          allow_issue_writing: false
+          cmd_options: '-a'
+
+      - name: SEO checks
+        run: npm run audit:seo
+
+      - name: SSL expiry
+        run: npm run audit:ssl
+
+      - name: Apply safe auto-fixes (redirects/canonical)
+        run: node tools/apply-autofixes.mjs
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monthly-artifacts
+          path: |
+            lhci
+            links
+            artifacts
+            zap*.html
+          if-no-files-found: ignore
+
+      - name: Generate monthly report
+        run: npm run report:monthly
+
+      - name: Commit monthly report via PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: add monthly maintenance report"
+          title: "Monthly maintenance report"
+          body: |
+            This PR adds the latest monthly maintenance report under maintenance/reports.
+            Includes Lighthouse, links, SEO, a11y and SSL summaries.
+          branch: maintenance/monthly-${{ github.run_id }}
+          add-paths: |
+            maintenance/reports/**
+            docs/staticwebapp.config.json
+
+      - name: Optional backup to Azure Blob
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            if [ -n "$AZURE_BLOB_CONN" ]; then
+              az storage blob upload-batch \
+                --connection-string "$AZURE_BLOB_CONN" \
+                --destination "site-backups/$(date +%Y-%m)" \
+                --source docs \
+                --no-progress
+            else
+              echo "AZURE_BLOB_CONN not set, skipping backup"
+            fi
