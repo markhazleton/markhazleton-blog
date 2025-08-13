@@ -16,6 +16,8 @@ env:
 jobs:
   monthly:
     runs-on: ubuntu-latest
+    env:
+      AZURE_BLOB_CONN: ${{ secrets.AZURE_BLOB_CONN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -115,14 +117,15 @@ jobs:
             docs/staticwebapp.config.json
 
       - name: Optional backup to Azure Blob
-        if: ${{ secrets.AZURE_BLOB_CONN }}
         uses: azure/cli@v2
         with:
           inlineScript: |
-            az storage blob upload-batch \
-              --connection-string "$AZURE_BLOB_CONN" \
-              --destination "site-backups/$(date +%Y-%m)" \
-              --source docs \
-              --no-progress
-        env:
-          AZURE_BLOB_CONN: ${{ secrets.AZURE_BLOB_CONN }}
+            if [ -n "$AZURE_BLOB_CONN" ]; then
+              az storage blob upload-batch \
+                --connection-string "$AZURE_BLOB_CONN" \
+                --destination "site-backups/$(date +%Y-%m)" \
+                --source docs \
+                --no-progress
+            else
+              echo "AZURE_BLOB_CONN not set, skipping backup"
+            fi
