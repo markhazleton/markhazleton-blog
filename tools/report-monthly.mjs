@@ -4,7 +4,7 @@ import path from 'node:path';
 import dayjs from 'dayjs';
 
 const artifactsDir = path.resolve('artifacts');
-const reportsDir = path.resolve('maintenance', 'reports');
+const reportsDir = path.resolve('reports');
 await fs.mkdir(reportsDir, { recursive: true });
 
 function safeReadJson(p) {
