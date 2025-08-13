@@ -5,7 +5,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 const ART_DIR = path.resolve("artifacts");
-await fs.mkdir(ART_DIR, { recursive: true });
 
 const siteUrl =
     process.env.SITE_URL ||
@@ -35,6 +34,8 @@ function daysUntil(dateStr: string): number {
 }
 
 (async () => {
+    // Ensure artifacts directory exists (avoid top-level await for CJS compatibility)
+    await fs.mkdir(ART_DIR, { recursive: true });
     try {
         const cert = await getCert(hostname, Number(port) || 443);
         const days = daysUntil(cert.valid_to);
