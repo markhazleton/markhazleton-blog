@@ -22,7 +22,7 @@ npm run audit:all
 ## Artifacts & reports
 
 - Workflow artifacts: `lhci/`, `links/`, `artifacts/`
-- Monthly reports: `maintenance/reports/YYYY-MM.md`
+- Monthly reports: `reports/YYYY-MM.md`
 
 ## Auto-fixes
 

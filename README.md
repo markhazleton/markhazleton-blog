@@ -313,7 +313,7 @@ npm ci
 npm run audit:all
 ```
 
-Artifacts are uploaded per run, and monthly reports are written to `maintenance/reports/YYYY-MM.md`.
+Artifacts are uploaded per run, and monthly reports are written to `reports/YYYY-MM.md`.
 
 ## Dependencies
 
