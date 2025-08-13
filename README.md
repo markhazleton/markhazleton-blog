@@ -3,6 +3,8 @@
 [Mark Hazleton Blog](https://markhazleton.com/) is Mark Hazleton's professional blog and portfolio site featuring articles on project management, web development, and technology solutions. Built with a modern static site generation system using PUG templates, Bootstrap 5, and custom build tools.
 
 [![Azure Static Web Apps CI/CD](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml/badge.svg)](https://github.com/markhazleton/markhazleton-blog/actions/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml)
+ [![Monthly Maintenance](https://github.com/markhazleton/markhazleton-blog/actions/workflows/monthly-maintenance.yml/badge.svg)](https://github.com/markhazleton/markhazleton-blog/actions/workflows/monthly-maintenance.yml)
+ [![Nightly Quick Checks](https://github.com/markhazleton/markhazleton-blog/actions/workflows/nightly-quickchecks.yml/badge.svg)](https://github.com/markhazleton/markhazleton-blog/actions/workflows/nightly-quickchecks.yml)
 
 ## Quick Links
 
@@ -296,6 +298,22 @@ The site uses automated deployment to Azure Static Web Apps through GitHub Actio
 - **Configuration**: `staticwebapp.config.json` for routing and headers
 - **Custom Domain**: Configured through Azure Static Web Apps
 - **SSL**: Automatically provided by Azure
+
+## Site Maintenance
+
+Automated monitoring and maintenance run via GitHub Actions:
+
+- Monthly Maintenance (1st @ 09:00 UTC): Lighthouse, links, a11y, SEO, SSL, and report.
+- Nightly Quick Checks (daily @ 09:00 UTC): Lighthouse homepage, links (sample), SSL.
+
+Run locally:
+
+```bash
+npm ci
+npm run audit:all
+```
+
+Artifacts are uploaded per run, and monthly reports are written to `maintenance/reports/YYYY-MM.md`.
 
 ## Dependencies
 

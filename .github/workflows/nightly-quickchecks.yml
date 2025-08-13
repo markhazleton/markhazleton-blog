@@ -1,0 +1,59 @@
+name: Nightly Quick Checks
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+env:
+  SITE_URL: https://markhazleton.com
+  SITEMAP_URL: https://markhazleton.com/sitemap.xml
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lighthouse CI (homepage)
+        run: npx lhci autorun --collect.url=${{ env.SITE_URL }}/ --collect.numberOfRuns=1 --upload.target=filesystem --upload.outputDir=lhci
+
+      - name: Link check (Lychee - sample limit)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress --accept 200,226,301,302,999
+            --max-requests 5
+            --max-retries 1
+            --limit 200
+            ${{ env.SITEMAP_URL }}
+          output: ./links/report.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: SSL expiry
+        run: npm run audit:ssl
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-artifacts
+          path: |
+            lhci
+            links
+            artifacts/ssl.json
+          if-no-files-found: ignore
