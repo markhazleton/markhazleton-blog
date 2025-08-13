@@ -38,12 +38,17 @@ doctype html
       var videoId = '';
       try {
         var url = new URL(article.youtubeUrl);
-        if (url.hostname.includes('youtube.com')) {
-          videoId = new URLSearchParams(url.search).get('v') || '';
+        // Prefer explicit path patterns first (e.g., /embed/), then host-specific rules
+        if (url.pathname.includes('/embed/')) {
+          videoId = url.pathname.split('/embed/')[1].split('?')[0];
         } else if (url.hostname.includes('youtu.be')) {
           videoId = url.pathname.substring(1);
-        } else if (url.pathname.includes('/embed/')) {
-          videoId = url.pathname.split('/embed/')[1];
+        } else if (url.hostname.includes('youtube.com')) {
+          videoId = new URLSearchParams(url.search).get('v') || '';
+          // Handle YouTube Shorts or other path-based IDs as a fallback
+          if (!videoId && url.pathname.startsWith('/shorts/')) {
+            videoId = url.pathname.split('/shorts/')[1].split('?')[0];
+          }
         }
       } catch (e) {
         // Handle invalid URL
