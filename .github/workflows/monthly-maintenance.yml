@@ -5,6 +5,10 @@ on:
         - cron: "0 9 1 * *"
     workflow_dispatch: {}
 
+concurrency:
+    group: monthly-maintenance-${{ github.ref }}
+    cancel-in-progress: true
+
 permissions:
     contents: write
     pull-requests: write
@@ -27,10 +31,13 @@ jobs:
                   cache: "npm"
 
             - name: Install dependencies
-              run: npm install
+              run: npm ci
 
             - name: Lighthouse CI (homepage + key pages)
               run: npm run audit:perf
+
+            - name: Prepare link-check output dir
+              run: mkdir -p links
 
             - name: Link check (Lychee)
               uses: lycheeverse/lychee-action@v2
@@ -38,7 +45,6 @@ jobs:
                   args: >-
                       --no-progress --accept 200,226,301,302,999
                       --format json
-                      --retry-wait-time 2
                       --max-retries 2
                       --include-fragments
                       --base ${{ env.SITE_URL }}
@@ -98,9 +104,11 @@ jobs:
                   if-no-files-found: ignore
 
             - name: Generate monthly report
+              if: always()
               run: npm run report:monthly
 
             - name: Commit monthly report via PR
+              if: always()
               uses: peter-evans/create-pull-request@v6
               with:
                   commit-message: "chore: add monthly maintenance report"
