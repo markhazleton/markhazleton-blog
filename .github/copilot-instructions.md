@@ -144,6 +144,15 @@ Implement category and tag filtering functionality.
 
 Support various content lengths and media types (text, images, code snippets).
 
+## Generated Documentation Management
+
+**IMPORTANT**: All Copilot-generated .md files (reports, documentation, summaries, etc.) must be placed in `/copilot/session-{date}/` directory structure.
+
+- Use format: `/copilot/session-YYYY-MM-DD/filename.md`
+- Example: `/copilot/session-2025-08-31/BUILD_OPTIMIZATION_REPORT.md`
+- This keeps generated documentation organized and separate from core project files
+- Date should reflect when the session/analysis was performed
+
 ## Example Code Patterns
 
 When generating PUG templates, follow this structure:
