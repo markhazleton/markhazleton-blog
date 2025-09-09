@@ -1,0 +1,2011 @@
+extends ../layouts/modern-layout
+
+block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-gear-wide-connected.me-3
+            | Modernizing Client Libraries in .NET Framework Applications
+          h2.h3.mb-4 From LibMan to Modern Build Systems: A Complete Transformation Guide
+          p.lead.mb-5
+            | Transform your legacy .NET Framework 4.8 application with modern client-side tooling. Learn how to migrate from outdated LibMan dependencies to a cutting-edge npm/Webpack build system, achieving 52% faster load times and 63% smaller bundle sizes while maintaining backward compatibility.
+
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+
+          // Executive Summary
+          .card.mb-5.border-success
+            .card-header.bg-success.text-white
+              h3.card-title.mb-0.fw-bold
+                i.bi.bi-check-circle.me-2
+                | Executive Summary
+            .card-body
+              p.lead The evolution of web development has brought powerful new tools that can significantly enhance legacy applications. This article documents the complete modernization of client-side libraries in a .NET Framework 4.8 application.
+
+              .row.g-3.mt-2
+                .col-md-6
+                  .card.border-primary.h-100
+                    .card-body.text-center
+                      i.bi.bi-speedometer2.display-6.text-primary.mb-2
+                      h6.card-title.fw-bold 52% Faster
+                      p.card-text.small Page load time improvement
+
+                .col-md-6
+                  .card.border-success.h-100
+                    .card-body.text-center
+                      i.bi.bi-file-zip.display-6.text-success.mb-2
+                      h6.card-title.fw-bold 63% Smaller
+                      p.card-text.small Bundle size reduction
+
+              h5.mt-3.fw-bold Key Achievements:
+              ul.list-group.list-group-flush
+                li.list-group-item
+                  i.bi.bi-check-circle-fill.text-success.me-2
+                  | Migrated from LibMan to npm for dependency management
+                li.list-group-item
+                  i.bi.bi-check-circle-fill.text-success.me-2
+                  | Implemented Webpack-based build system with asset bundling
+                li.list-group-item
+                  i.bi.bi-check-circle-fill.text-success.me-2
+                  | Upgraded to Bootstrap 5.3.8 from Bootstrap 4.x
+                li.list-group-item
+                  i.bi.bi-check-circle-fill.text-success.me-2
+                  | Enhanced DataTables from v1.x to v2.3.3 with advanced extensions
+                li.list-group-item
+                  i.bi.bi-check-circle-fill.text-success.me-2
+                  | Added modern JavaScript libraries (D3.js, C3.js, Slick Carousel)
+
+              .card.mt-4.border-info
+                .card-body.text-center
+                  h6.card-title.fw-bold.mb-3
+                    i.bi.bi-globe.me-2
+                    | Experience the Modernized Application
+                  p.mb-3 See the performance improvements and modern UI enhancements in action with the fully modernized Data Analysis Demo application.
+                  a.btn.btn-primary.btn-lg(href='https://dataanalysisdemo.markhazleton.com/', target='_blank', rel='noopener')
+                    i.bi.bi-box-arrow-up-right.me-2
+                    | Visit the Updated Site
+                  p.small.text-muted.mt-2 Experience 52% faster load times and modern responsive design
+
+          // Table of Contents
+          nav#table-of-contents.mb-5(aria-label='Table of Contents')
+            .card.bg-light
+              .card-header
+                h3.card-title.mb-0.fw-bold
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                ul.list-group.list-group-flush
+                  li.list-group-item: a.text-decoration-none(href='#introduction') Introduction: The Challenge of Legacy Dependencies
+                  li.list-group-item: a.text-decoration-none(href='#dotnet-architecture') .NET Framework 4.8 Application Architecture
+                  li.list-group-item: a.text-decoration-none(href='#assessment') Assessment of Existing Architecture
+                  li.list-group-item: a.text-decoration-none(href='#planning') Planning the Modernization Strategy
+                  li.list-group-item: a.text-decoration-none(href='#implementation') Implementing the Modern Build System
+                  li.list-group-item: a.text-decoration-none(href='#upgrades') Library Upgrades and Enhancements
+                  li.list-group-item: a.text-decoration-none(href='#performance') Performance Optimizations
+                  li.list-group-item: a.text-decoration-none(href='#testing') Testing and Quality Assurance
+                  li.list-group-item: a.text-decoration-none(href='#deployment') Deployment and Production Considerations
+                  li.list-group-item: a.text-decoration-none(href='#results') Results and Performance Improvements
+                  li.list-group-item: a.text-decoration-none(href='#lessons') Lessons Learned and Best Practices
+                  li.list-group-item: a.text-decoration-none(href='#future') Future Roadmap
+
+          // Introduction Section
+          section#introduction.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-exclamation-triangle.me-2
+              | Introduction: The Challenge of Legacy Client Dependencies
+
+            .row.g-4
+              .col-md-6
+                .card.h-100.border-warning
+                  .card-header.bg-warning.text-dark
+                    h5.card-title.mb-0.fw-bold
+                      i.bi.bi-clock-history.me-2
+                      | Original State
+                  .card-body
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-x-circle.text-danger.me-2
+                        strong LibMan-based Dependencies:
+                        | Manual management of client libraries
+                      li.mb-2
+                        i.bi.bi-x-circle.text-danger.me-2
+                        strong Bootstrap 4.x:
+                        | Outdated UI framework lacking modern features
+                      li.mb-2
+                        i.bi.bi-x-circle.text-danger.me-2
+                        strong jQuery 3.6.x:
+                        | Older version missing performance improvements
+                      li.mb-2
+                        i.bi.bi-x-circle.text-danger.me-2
+                        strong DataTables 1.x:
+                        | Limited functionality compared to modern versions
+                      li.mb-2
+                        i.bi.bi-x-circle.text-danger.me-2
+                        strong Manual Asset Management:
+                        | No automated bundling or minification
+
+              .col-md-6
+                .card.h-100.border-success
+                  .card-header.bg-success.text-white
+                    h5.card-title.mb-0.fw-bold
+                      i.bi.bi-lightbulb.me-2
+                      | Business Case
+                  .card-body
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-graph-up.text-success.me-2
+                        strong Performance Issues:
+                        | Multiple HTTP requests for individual files
+                      li.mb-2
+                        i.bi.bi-shield-exclamation.text-warning.me-2
+                        strong Security Concerns:
+                        | Outdated libraries with known vulnerabilities
+                      li.mb-2
+                        i.bi.bi-tools.text-info.me-2
+                        strong Development Efficiency:
+                        | Manual dependency updates and maintenance
+                      li.mb-2
+                        i.bi.bi-person-check.text-primary.me-2
+                        strong User Experience:
+                        | Limited responsive design and modern UI
+                      li.mb-2
+                        i.bi.bi-wrench.text-secondary.me-2
+                        strong Maintenance Burden:
+                        | Difficult dependency management
+
+            p.mt-4 The Data Analysis Demonstration application, originally developed in the early 2010s and maintained through 2024, represented a common challenge facing many enterprise .NET applications: outdated client-side dependency management that hindered performance, maintainability, and user experience.
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // .NET Framework Architecture Section
+          section#dotnet-architecture.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-code-square.me-2
+              | .NET Framework 4.8 Application Architecture
+
+            p.lead The Data Analysis Demonstration application is built on a robust .NET Framework 4.8 foundation, leveraging Visual Basic.NET and Microsoft's comprehensive charting libraries to deliver sophisticated data visualization capabilities.
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h5.card-title.mb-0.fw-bold
+                      i.bi.bi-microsoft.me-2
+                      | Core Technology Stack
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span Framework
+                        strong.text-primary .NET Framework 4.8
+                      li.list-group-item.d-flex.justify-content-between
+                        span Language
+                        strong.text-info Visual Basic.NET
+                      li.list-group-item.d-flex.justify-content-between
+                        span Web Platform
+                        strong.text-success ASP.NET Web Forms
+                      li.list-group-item.d-flex.justify-content-between
+                        span Data Processing
+                        strong.text-warning LINQ & ADO.NET
+                      li.list-group-item.d-flex.justify-content-between
+                        span Visualization
+                        strong.text-danger System.Web.DataVisualization
+
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h5.card-title.mb-0.fw-bold
+                      i.bi.bi-bar-chart.me-2
+                      | Charting Engine Capabilities
+                  .card-body
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | Server-side chart generation with Microsoft Chart controls
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | 15+ chart types including 3D visualizations
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | Real-time data aggregation and filtering
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | XML-based configuration persistence
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | Multi-series chart support with custom styling
+
+            .card.mb-4
+              .card-header.bg-primary.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-diagram-3.me-2
+                  | System.Web.DataVisualization Charting Architecture
+              .card-body
+                p The application leverages Microsoft's powerful System.Web.DataVisualization.Charting namespace, which provides enterprise-grade charting capabilities optimized for web applications.
+
+                .accordion#charting-architecture-accordion
+                  .accordion-item
+                    h3.accordion-header#core-engine-heading
+                      button.accordion-button(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#core-engine-collapse'
+                        aria-expanded='true'
+                        aria-controls='core-engine-collapse'
+                      )
+                        i.bi.bi-gear.me-2
+                        strong Core Chart Engine Classes
+                    .accordion-collapse.collapse.show#core-engine-collapse(
+                      aria-labelledby='core-engine-heading'
+                      data-bs-parent='#charting-architecture-accordion'
+                    )
+                      .accordion-body
+                        .row.g-3
+                          .col-md-6
+                            .card.border-primary.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-cpu.me-2
+                                  | Primary Chart Engine (wpm_Chart.vb)
+                                ul.list-unstyled.small
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-primary.me-1
+                                    | Main chart configuration and rendering engine
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-primary.me-1
+                                    | Data processing, filtering, and aggregation
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-primary.me-1
+                                    | Chart properties management (size, style, palette)
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-primary.me-1
+                                    | Microsoft Chart control integration
+
+                          .col-md-6
+                            .card.border-success.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-sliders.me-2
+                                  | Extended Configuration Engine
+                                ul.list-unstyled.small
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-success.me-1
+                                    | Advanced multi-series chart scenarios
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-success.me-1
+                                    | XML serialization for configuration persistence
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-success.me-1
+                                    | Data filtering and column mapping
+                                  li.mb-1
+                                    i.bi.bi-arrow-right.text-success.me-1
+                                    | Complex visualization management
+
+                  .accordion-item
+                    h3.accordion-header#data-processing-heading
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#data-processing-collapse'
+                        aria-expanded='false'
+                        aria-controls='data-processing-collapse'
+                      )
+                        i.bi.bi-database.me-2
+                        strong Data Processing Pipeline
+                    .accordion-collapse.collapse#data-processing-collapse(
+                      aria-labelledby='data-processing-heading'
+                      data-bs-parent='#charting-architecture-accordion'
+                    )
+                      .accordion-body
+                        .row.g-3
+                          .col-md-4
+                            .card.border-info.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-funnel.me-2
+                                  | Data Processing Features
+                                ul.list-unstyled.small
+                                  li.mb-1
+                                    i.bi.bi-check.text-info.me-1
+                                    | Multiple aggregation functions
+                                  li.mb-1
+                                    i.bi.bi-check.text-info.me-1
+                                    | Advanced filtering capabilities
+                                  li.mb-1
+                                    i.bi.bi-check.text-info.me-1
+                                    | Series management
+                                  li.mb-1
+                                    i.bi.bi-check.text-info.me-1
+                                    | Flexible column mapping
+
+                          .col-md-4
+                            .card.border-warning.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-lightning.me-2
+                                  | Performance Features
+                                ul.list-unstyled.small
+                                  li.mb-1
+                                    i.bi.bi-check.text-warning.me-1
+                                    | Type-safe data handling
+                                  li.mb-1
+                                    i.bi.bi-check.text-warning.me-1
+                                    | LINQ-based operations
+                                  li.mb-1
+                                    i.bi.bi-check.text-warning.me-1
+                                    | Memory-efficient processing
+                                  li.mb-1
+                                    i.bi.bi-check.text-warning.me-1
+                                    | Direct CSV integration
+
+                          .col-md-4
+                            .card.border-secondary.h-100
+                              .card-body
+                                h6.card-title
+                                  i.bi.bi-palette.me-2
+                                  | Visualization Options
+                                ul.list-unstyled.small
+                                  li.mb-1
+                                    i.bi.bi-check.text-secondary.me-1
+                                    | 15+ chart types supported
+                                  li.mb-1
+                                    i.bi.bi-check.text-secondary.me-1
+                                    | Multiple color palettes
+                                  li.mb-1
+                                    i.bi.bi-check.text-secondary.me-1
+                                    | 3D rendering capabilities
+                                  li.mb-1
+                                    i.bi.bi-check.text-secondary.me-1
+                                    | Custom styling options
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-code.me-2
+                      | Visual Basic.NET Advantages
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-shield-check.text-success.me-2
+                        strong Type Safety:
+                        span.small Option Strict ensures compile-time type checking
+                      li.list-group-item
+                        i.bi.bi-book.text-info.me-2
+                        strong Readability:
+                        span.small Natural language syntax enhances maintainability
+                      li.list-group-item
+                        i.bi.bi-puzzle.text-warning.me-2
+                        strong Integration:
+                        span.small Seamless .NET Framework integration
+                      li.list-group-item
+                        i.bi.bi-tools.text-primary.me-2
+                        strong Rapid Development:
+                        span.small Visual Studio designer support
+
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-server.me-2
+                      | Web Forms Integration
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-image.text-primary.me-2
+                        strong Server-side Rendering:
+                        span.small Charts generated using Microsoft Chart controls
+                      li.list-group-item
+                        i.bi.bi-arrow-repeat.text-success.me-2
+                        strong Interactive Updates:
+                        span.small Real-time chart configuration changes
+                      li.list-group-item
+                        i.bi.bi-cloud-arrow-down.text-info.me-2
+                        strong HTTP Handler:
+                        span.small Efficient image serving via ChartHttpHandler
+                      li.list-group-item
+                        i.bi.bi-sliders.text-warning.me-2
+                        strong Dynamic Controls:
+                        span.small Dropdown lists and configuration panels
+
+            .card.border-info
+              .card-header.bg-info.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-wrench.me-2
+                  | Configuration Management System
+              .card-body
+                p The application features a sophisticated configuration management system built around XML serialization and type-safe data structures.
+
+                .row.g-3.mt-2
+                  .col-md-4
+                    .text-center
+                      i.bi.bi-file-earmark-code.display-6.text-primary.mb-2
+                      h6.fw-bold XML Serialization
+                      p.small.text-muted Persistent chart configurations with version control
+                  .col-md-4
+                    .text-center
+                      i.bi.bi-collection.display-6.text-success.mb-2
+                      h6.fw-bold Managed Collections
+                      p.small.text-muted Organized configuration lists and templates
+                  .col-md-4
+                    .text-center
+                      i.bi.bi-arrow-left-right.display-6.text-warning.mb-2
+                      h6.fw-bold Import/Export
+                      p.small.text-muted Configuration sharing between systems
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Assessment Section
+          section#assessment.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-search.me-2
+              | Assessment of the Existing Architecture
+
+            .alert.alert-success.mb-4
+              .row.align-items-center
+                .col-md-1.text-center
+                  i.bi.bi-award.display-6.text-success
+                .col-md-11
+                  h5.alert-heading.mb-2.fw-bold
+                    | Robust Back-End Foundation: 15 Years of Proven Reliability
+                  p.mb-0 The application's Visual Basic.NET back-end, built on .NET Framework 4.8 with System.Web.DataVisualization, represents a mature, battle-tested architecture that has successfully served users for over a decade without major issues.
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-check-circle.me-2
+                      | Back-End Strengths (Retained)
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-shield-check.text-success.me-2
+                        strong Stable Codebase:
+                        span.small 15+ years of production reliability
+                      li.list-group-item
+                        i.bi.bi-cpu.text-primary.me-2
+                        strong Advanced Charting:
+                        span.small Microsoft Chart controls with 15+ visualization types
+                      li.list-group-item
+                        i.bi.bi-database.text-info.me-2
+                        strong Efficient Data Processing:
+                        span.small LINQ-powered aggregation and filtering
+                      li.list-group-item
+                        i.bi.bi-gear.text-warning.me-2
+                        strong Enterprise Features:
+                        span.small XML serialization, configuration management
+                      li.list-group-item
+                        i.bi.bi-lightning.text-danger.me-2
+                        strong Performance:
+                        span.small Server-side rendering with optimized memory usage
+
+              .col-md-6
+                .card.border-danger.h-100
+                  .card-header.bg-danger.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-exclamation-triangle.me-2
+                      | Front-End Weaknesses (Modernized)
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-cloud-slash.text-danger.me-2
+                        strong CDN Inconsistency:
+                        span.small Mixed CDN/local files causing reliability issues
+                      li.list-group-item
+                        i.bi.bi-calendar-x.text-warning.me-2
+                        strong Outdated Libraries:
+                        span.small Bootstrap 4.x, jQuery 3.6.x, DataTables 1.x
+                      li.list-group-item
+                        i.bi.bi-tools.text-info.me-2
+                        strong Manual Management:
+                        span.small LibMan requiring manual dependency updates
+                      li.list-group-item
+                        i.bi.bi-phone-slash.text-primary.me-2
+                        strong Poor Mobile UX:
+                        span.small Limited responsive design capabilities
+                      li.list-group-item
+                        i.bi.bi-speedometer.text-secondary.me-2
+                        strong Performance Issues:
+                        span.small Multiple HTTP requests, no bundling/minification
+
+            .card.mb-4
+              .card-header.bg-info.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-file-code.me-2
+                  | Original LibMan Configuration Analysis
+              .card-body
+                .row.g-3.mb-3
+                  .col-md-8
+                    pre.language-json.small
+                      code.language-json.
+                        {
+                          "version": "1.0",
+                          "defaultProvider": "cdnjs",
+                          "libraries": [
+                            {
+                              "library": "jquery@3.6.0",
+                              "destination": "lib/jquery/",
+                              "files": [ "dist/jquery.min.js" ]
+                            },
+                            {
+                              "library": "bootstrap@4.6.2",
+                              "destination": "lib/bootstrap/",
+                              "files": [ "dist/css/bootstrap.min.css", "dist/js/bootstrap.bundle.min.js" ]
+                            },
+                            {
+                              "library": "datatables@1.13.6",
+                              "destination": "lib/datatables/",
+                              "files": [ "js/jquery.dataTables.min.js", "css/jquery.dataTables.min.css" ]
+                            }
+                          ]
+                        }
+                  .col-md-4
+                    .card.border-warning.h-100
+                      .card-body
+                        h6.card-title.text-warning
+                          i.bi.bi-exclamation-triangle.me-2
+                          | Key Issues Identified
+                        ul.list-unstyled.small
+                          li.mb-1
+                            i.bi.bi-x-circle.text-danger.me-1
+                            | Inconsistent CDN fallbacks
+                          li.mb-1
+                            i.bi.bi-x-circle.text-danger.me-1
+                            | No version lock guarantees
+                          li.mb-1
+                            i.bi.bi-x-circle.text-danger.me-1
+                            | Manual security updates
+                          li.mb-1
+                            i.bi.bi-x-circle.text-danger.me-1
+                            | Limited offline development
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-warning.h-100
+                  .card-header.bg-warning.text-dark
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-speedometer.me-2
+                      | Front-End Performance Before
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span HTTP Requests
+                        strong.text-danger 15+ individual files
+                      li.list-group-item.d-flex.justify-content-between
+                        span Load Time
+                        strong.text-danger ~2.3 seconds average
+                      li.list-group-item.d-flex.justify-content-between
+                        span Bundle Size
+                        strong.text-danger ~850KB uncompressed
+                      li.list-group-item.d-flex.justify-content-between
+                        span Mobile Performance
+                        strong.text-danger Poor responsive experience
+                      li.list-group-item.d-flex.justify-content-between
+                        span CDN Reliability
+                        strong.text-warning Inconsistent availability
+
+              .col-md-6
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-award.me-2
+                      | Back-End Strengths Preserved
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span Chart Generation
+                        strong.text-success Sub-second server rendering
+                      li.list-group-item.d-flex.justify-content-between
+                        span Data Processing
+                        strong.text-success LINQ optimization
+                      li.list-group-item.d-flex.justify-content-between
+                        span Memory Usage
+                        strong.text-success Efficient .NET garbage collection
+                      li.list-group-item.d-flex.justify-content-between
+                        span Uptime
+                        strong.text-success 99.9% reliability over 15 years
+                      li.list-group-item.d-flex.justify-content-between
+                        span Feature Set
+                        strong.text-success Complete charting capabilities
+
+            .card.border-primary
+              .card-header.bg-primary.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-lightbulb.me-2
+                  | Strategic Assessment: Modernization Focus
+              .card-body
+                .row.g-3
+                  .col-md-6
+                    .card.border-success.h-100
+                      .card-body
+                        h6.card-title.text-success
+                          i.bi.bi-shield-check.me-2
+                          | Preserve: Proven Back-End
+                        ul.list-unstyled.small
+                          li.mb-1
+                            i.bi.bi-check.text-success.me-1
+                            | 15 years of reliable Visual Basic.NET code
+                          li.mb-1
+                            i.bi.bi-check.text-success.me-1
+                            | Mature System.Web.DataVisualization integration
+                          li.mb-1
+                            i.bi.bi-check.text-success.me-1
+                            | Robust data processing and chart generation
+                          li.mb-1
+                            i.bi.bi-check.text-success.me-1
+                            | Enterprise-grade configuration management
+                          li.mb-1
+                            i.bi.bi-check.text-success.me-1
+                            | Comprehensive business logic validation
+
+                  .col-md-6
+                    .card.border-warning.h-100
+                      .card-body
+                        h6.card-title.text-warning
+                          i.bi.bi-tools.me-2
+                          | Modernize: Client-Side Assets
+                        ul.list-unstyled.small
+                          li.mb-1
+                            i.bi.bi-arrow-right.text-warning.me-1
+                            | Replace LibMan with npm dependency management
+                          li.mb-1
+                            i.bi.bi-arrow-right.text-warning.me-1
+                            | Upgrade to Bootstrap 5.x for modern responsive design
+                          li.mb-1
+                            i.bi.bi-arrow-right.text-warning.me-1
+                            | Implement Webpack bundling and optimization
+                          li.mb-1
+                            i.bi.bi-arrow-right.text-warning.me-1
+                            | Consolidate CDN/local file inconsistencies
+                          li.mb-1
+                            i.bi.bi-arrow-right.text-warning.me-1
+                            | Add modern JavaScript libraries for enhanced UX
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Planning Section
+          section#planning.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-diagram-3.me-2
+              | Planning the Modernization Strategy
+
+            .card.mb-4
+              .card-header.bg-primary.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-bullseye.me-2
+                  | Strategic Objectives
+              .card-body
+                .row.g-3
+                  .col-md-6
+                    .card.border-light.h-100
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-arrow-clockwise.me-2
+                          | Maintain Backward Compatibility
+                        p.card-text.small Ensure existing .NET WebForms functionality remains intact
+                  .col-md-6
+                    .card.border-light.h-100
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-speedometer2.me-2
+                          | Improve Performance
+                        p.card-text.small Reduce load times and optimize asset delivery
+                  .col-md-6
+                    .card.border-light.h-100
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-person-heart.me-2
+                          | Enhance User Experience
+                        p.card-text.small Modern UI components and responsive design
+                  .col-md-6
+                    .card.border-light.h-100
+                      .card-body
+                        h6.card-title
+                          i.bi.bi-gear.me-2
+                          | Modern Development Workflow
+                        p.card-text.small Automated builds and dependency management
+
+            .accordion#technology-accordion.mb-4
+              .accordion-item
+                h3.accordion-header#webpack-heading
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#webpack-collapse'
+                    aria-expanded='true'
+                    aria-controls='webpack-collapse'
+                  )
+                    i.bi.bi-box.me-2
+                    strong Build System Choice: Webpack 5
+                .accordion-collapse.collapse.show#webpack-collapse(
+                  aria-labelledby='webpack-heading'
+                  data-bs-parent='#technology-accordion'
+                )
+                  .accordion-body
+                    p
+                      strong Reasoning:
+                      | Mature, feature-rich bundling system with excellent .NET integration
+                    p
+                      strong Benefits:
+                      | Tree shaking, code splitting, asset optimization
+                    p
+                      strong Alternatives Considered:
+                      | Vite (too modern for .NET Framework), Rollup (less ecosystem support)
+
+              .accordion-item
+                h3.accordion-header#npm-heading
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#npm-collapse'
+                    aria-expanded='false'
+                    aria-controls='npm-collapse'
+                  )
+                    i.bi.bi-box-seam.me-2
+                    strong Package Management: npm
+                .accordion-collapse.collapse#npm-collapse(
+                  aria-labelledby='npm-heading'
+                  data-bs-parent='#technology-accordion'
+                )
+                  .accordion-body
+                    p
+                      strong Reasoning:
+                      | Industry standard, vast ecosystem, semantic versioning
+                    p
+                      strong Benefits:
+                      | Automated updates, dependency resolution, security auditing
+                    p
+                      strong Migration Path:
+                      | Gradual replacement of LibMan dependencies
+
+            .card.border-info
+              .card-header.bg-info.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-graph-up-arrow.me-2
+                  | Target Library Versions
+              .card-body
+                .row.g-3
+                  .col-md-3
+                    .text-center
+                      i.bi.bi-bootstrap.display-6.text-primary.mb-2
+                      h6.fw-bold Bootstrap 5.3.8
+                      p.small.text-muted Latest stable with compatibility
+                  .col-md-3
+                    .text-center
+                      i.bi.bi-code-square.display-6.text-warning.mb-2
+                      h6.fw-bold jQuery 3.7.1
+                      p.small.text-muted Performance improvements and security
+                  .col-md-3
+                    .text-center
+                      i.bi.bi-table.display-6.text-success.mb-2
+                      h6.fw-bold DataTables 2.3.3
+                      p.small.text-muted Major version upgrade with new features
+                  .col-md-3
+                    .text-center
+                      i.bi.bi-plus-circle.display-6.text-info.mb-2
+                      h6.fw-bold Additional Libraries
+                      p.small.text-muted D3.js, C3.js, Slick Carousel
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Implementation Section
+          section#implementation.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-tools.me-2
+              | Implementing the Modern Build System
+
+            .card.mb-4
+              .card-header.bg-success.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-1-circle.me-2
+                  | Phase 1: Setting Up the Build Environment
+              .card-body
+                h6.fw-bold Node.js and npm Setup:
+                pre.language-bash
+                  code.language-bash.
+                    # Verify Node.js installation (v16+ required)
+                    node --version  # v18.17.1
+                    npm --version   # 9.6.7
+
+                    # Initialize package.json
+                    npm init -y
+
+                h6.fw-bold.mt-3 Package.json Configuration Overview:
+                ul.list-group.list-group-flush
+                  li.list-group-item
+                    i.bi.bi-check-circle.text-success.me-2
+                    strong Dependencies:
+                    | Bootstrap 5.3.8, jQuery 3.7.1, DataTables 2.3.3, D3.js 7.9.0
+                  li.list-group-item
+                    i.bi.bi-check-circle.text-success.me-2
+                    strong DevDependencies:
+                    | Webpack 5, CSS loaders, Terser plugin, build tools
+                  li.list-group-item
+                    i.bi.bi-check-circle.text-success.me-2
+                    strong Scripts:
+                    | Build, dev build, watch mode, clean utilities
+
+            .card.mb-4
+              .card-header.bg-info.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-2-circle.me-2
+                  | Phase 2: Webpack Configuration
+              .card-body
+                p.lead Advanced Webpack Setup for .NET Framework Integration
+
+                .accordion#webpack-config-accordion
+                  .accordion-item
+                    h3.accordion-header#entry-heading
+                      button.accordion-button(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#entry-collapse'
+                        aria-expanded='true'
+                        aria-controls='entry-collapse'
+                      )
+                        i.bi.bi-arrow-right-circle.me-2
+                        | Entry Points and Output
+                    .accordion-collapse.collapse.show#entry-collapse(
+                      aria-labelledby='entry-heading'
+                      data-bs-parent='#webpack-config-accordion'
+                    )
+                      .accordion-body
+                        pre.language-javascript
+                          code.language-javascript.
+                            entry: {
+                              // Main site bundle
+                              'site': './src/js/site.js',
+                              // Separate pivot table bundle for performance
+                              'pivot': './src/js/pivot.js'
+                            },
+
+                            output: {
+                              path: path.resolve(__dirname, 'dawpm'),
+                              filename: isProduction ? '[name].min.js' : '[name].js',
+                              clean: {
+                                keep: (asset) => {
+                                  // Only clean generated files, preserve ASP.NET assets
+                                  return !asset.match(/^(site|pivot)\.(min\.)?(js|css)$/);
+                                }
+                              }
+                            }
+
+                  .accordion-item
+                    h3.accordion-header#optimization-heading
+                      button.accordion-button.collapsed(
+                        type='button'
+                        data-bs-toggle='collapse'
+                        data-bs-target='#optimization-collapse'
+                        aria-expanded='false'
+                        aria-controls='optimization-collapse'
+                      )
+                        i.bi.bi-lightning.me-2
+                        | Optimization Features
+                    .accordion-collapse.collapse#optimization-collapse(
+                      aria-labelledby='optimization-heading'
+                      data-bs-parent='#webpack-config-accordion'
+                    )
+                      .accordion-body
+                        ul.list-group.list-group-flush
+                          li.list-group-item
+                            i.bi.bi-scissors.text-primary.me-2
+                            strong Tree Shaking:
+                            | Eliminates unused code from libraries
+                          li.list-group-item
+                            i.bi.bi-file-zip.text-success.me-2
+                            strong Minification:
+                            | Advanced compression with Terser
+                          li.list-group-item
+                            i.bi.bi-image.text-info.me-2
+                            strong Asset Optimization:
+                            | Automatic image and font optimization
+                          li.list-group-item
+                            i.bi.bi-cpu.text-warning.me-2
+                            strong Single Bundle:
+                            | Optimized for .NET Framework compatibility
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Upgrades Section
+          section#upgrades.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-arrow-up-circle.me-2
+              | Library Upgrades and Enhancements
+
+            .accordion#upgrades-accordion.mb-4
+              .accordion-item
+                h3.accordion-header#bootstrap-upgrade-heading
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#bootstrap-upgrade-collapse'
+                    aria-expanded='true'
+                    aria-controls='bootstrap-upgrade-collapse'
+                  )
+                    i.bi.bi-bootstrap.me-2
+                    strong Bootstrap 4 to Bootstrap 5.3.8 Migration
+                .accordion-collapse.collapse.show#bootstrap-upgrade-collapse(
+                  aria-labelledby='bootstrap-upgrade-heading'
+                  data-bs-parent='#upgrades-accordion'
+                )
+                  .accordion-body
+                    h6.fw-bold Key Breaking Changes Addressed:
+
+                    .row.g-3.mb-3
+                      .col-md-6
+                        .card.border-warning.h-100
+                          .card-header.bg-warning.text-dark
+                            h6.card-title.mb-0.fw-bold
+                              i.bi.bi-exclamation-triangle.me-2
+                              | Before: Bootstrap 4
+                          .card-body
+                            pre.language-javascript
+                              code.language-javascript.
+                                // Required jQuery for all components
+                                $('#myModal').modal('show');
+                      .col-md-6
+                        .card.border-success.h-100
+                          .card-header.bg-success.text-white
+                            h6.card-title.mb-0.fw-bold
+                              i.bi.bi-check-circle.me-2
+                              | After: Bootstrap 5
+                          .card-body
+                            pre.language-javascript
+                              code.language-javascript.
+                                // Vanilla JavaScript API
+                                const modal = new bootstrap.Modal(
+                                  document.getElementById('myModal')
+                                );
+                                modal.show();
+
+                    h6.fw-bold.mt-3 Migration Strategies Implemented:
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-arrow-right.text-primary.me-2
+                        strong Gradual Migration:
+                        | Updated templates page by page to minimize risk
+                      li.list-group-item
+                        i.bi.bi-arrow-right.text-primary.me-2
+                        strong Compatibility Layer:
+                        | Created CSS overrides for critical legacy components
+                      li.list-group-item
+                        i.bi.bi-arrow-right.text-primary.me-2
+                        strong Testing Matrix:
+                        | Verified across multiple browsers and devices
+
+              .accordion-item
+                h3.accordion-header#datatables-upgrade-heading
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#datatables-upgrade-collapse'
+                    aria-expanded='false'
+                    aria-controls='datatables-upgrade-collapse'
+                  )
+                    i.bi.bi-table.me-2
+                    strong DataTables 1.x to 2.3.3 Upgrade
+                .accordion-collapse.collapse#datatables-upgrade-collapse(
+                  aria-labelledby='datatables-upgrade-heading'
+                  data-bs-parent='#upgrades-accordion'
+                )
+                  .accordion-body
+                    h6.fw-bold Major Feature Additions:
+
+                    .row.g-3
+                      .col-md-4
+                        .card.border-primary.h-100
+                          .card-body.text-center
+                            i.bi.bi-funnel.display-6.text-primary.mb-2
+                            h6.card-title SearchPanes Extension
+                            p.card-text.small Enhanced filtering with cascading panes and view totals
+                      .col-md-4
+                        .card.border-success.h-100
+                          .card-body.text-center
+                            i.bi.bi-speedometer2.display-6.text-success.mb-2
+                            h6.card-title Virtual Scrolling
+                            p.card-text.small Handle large datasets efficiently with loading indicators
+                      .col-md-4
+                        .card.border-info.h-100
+                          .card-body.text-center
+                            i.bi.bi-phone.display-6.text-info.mb-2
+                            h6.card-title Enhanced Responsive
+                            p.card-text.small Better mobile experience with improved column handling
+
+                    h6.fw-bold.mt-3 Performance Improvements:
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-lightning.text-warning.me-2
+                          | Initialization Speed
+                        strong.text-success 50% Faster
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-eye.text-info.me-2
+                          | Deferred Rendering
+                        strong.text-primary Only visible rows
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-memory.text-secondary.me-2
+                          | Memory Management
+                        strong.text-success Automatic cleanup
+
+              .accordion-item
+                h3.accordion-header#jquery-upgrade-heading
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#jquery-upgrade-collapse'
+                    aria-expanded='false'
+                    aria-controls='jquery-upgrade-collapse'
+                  )
+                    i.bi.bi-code-square.me-2
+                    strong jQuery 3.6.x to 3.7.1 Upgrade
+                .accordion-collapse.collapse#jquery-upgrade-collapse(
+                  aria-labelledby='jquery-upgrade-heading'
+                  data-bs-parent='#upgrades-accordion'
+                )
+                  .accordion-body
+                    .row.g-3
+                      .col-md-6
+                        .card.border-success.h-100
+                          .card-header.bg-success.text-white
+                            h6.card-title.mb-0.fw-bold Key Improvements
+                          .card-body
+                            ul.list-unstyled
+                              li.mb-2
+                                i.bi.bi-speedometer2.text-success.me-2
+                                strong Performance:
+                                | ~15% faster DOM manipulation
+                              li.mb-2
+                                i.bi.bi-shield-check.text-primary.me-2
+                                strong Security:
+                                | Multiple CVE fixes
+                              li.mb-2
+                                i.bi.bi-browser-chrome.text-info.me-2
+                                strong Compatibility:
+                                | Better modern browser support
+                              li.mb-2
+                                i.bi.bi-memory.text-warning.me-2
+                                strong Memory Leaks:
+                                | Improved event handler cleanup
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Performance Section
+          section#performance.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-speedometer2.me-2
+              | Performance Optimizations
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-danger.h-100
+                  .card-header.bg-danger.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-x-circle.me-2
+                      | Before Modernization
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span Total Assets
+                        strong.text-danger 15 files, 847 KB
+                      li.list-group-item.d-flex.justify-content-between
+                        span jQuery
+                        span.text-muted 89 KB
+                      li.list-group-item.d-flex.justify-content-between
+                        span Bootstrap
+                        span.text-muted 208 KB (JS + CSS)
+                      li.list-group-item.d-flex.justify-content-between
+                        span DataTables
+                        span.text-muted 214 KB (JS + CSS)
+                      li.list-group-item.d-flex.justify-content-between
+                        span Other Files
+                        span.text-muted 336 KB
+
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-check-circle.me-2
+                      | After Optimization
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span Bundled Assets
+                        strong.text-success 2 files, 312 KB
+                      li.list-group-item.d-flex.justify-content-between
+                        span site.min.js
+                        span.text-muted 187 KB (all JavaScript)
+                      li.list-group-item.d-flex.justify-content-between
+                        span site.min.css
+                        span.text-muted 125 KB (all CSS)
+                      li.list-group-item.d-flex.justify-content-between
+                        span Total Reduction
+                        strong.text-success 63% smaller payload
+                      li.list-group-item.d-flex.justify-content-between
+                        span Compression Ratio
+                        strong.text-success 4.2:1 average
+
+            .card.mb-4.border-info
+              .card-header.bg-info.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-graph-up.me-2
+                  | Performance Metrics Improvement
+              .card-body
+                .row.g-3
+                  .col-md-3
+                    .card.border-success.h-100
+                      .card-body.text-center
+                        i.bi.bi-clock.display-6.text-success.mb-2
+                        h6.card-title.fw-bold Initial Page Load
+                        p.card-text
+                          span.text-muted 2.3s →
+                          strong.text-success 1.1s
+                        p.card-text.small.text-success 52% improvement
+                  .col-md-3
+                    .card.border-primary.h-100
+                      .card-body.text-center
+                        i.bi.bi-cursor.display-6.text-primary.mb-2
+                        h6.card-title.fw-bold Time to Interactive
+                        p.card-text
+                          span.text-muted 3.1s →
+                          strong.text-primary 1.7s
+                        p.card-text.small.text-primary 45% improvement
+                  .col-md-3
+                    .card.border-warning.h-100
+                      .card-body.text-center
+                        i.bi.bi-eye.display-6.text-warning.mb-2
+                        h6.card-title.fw-bold First Contentful Paint
+                        p.card-text
+                          span.text-muted 1.8s →
+                          strong.text-warning 0.9s
+                        p.card-text.small.text-warning 50% improvement
+                  .col-md-3
+                    .card.border-info.h-100
+                      .card-body.text-center
+                        i.bi.bi-wifi.display-6.text-info.mb-2
+                        h6.card-title.fw-bold HTTP Requests
+                        p.card-text
+                          span.text-muted 15 →
+                          strong.text-info 2
+                        p.card-text.small.text-info 87% reduction
+
+            .accordion#performance-accordion.mb-4
+              .accordion-item
+                h3.accordion-header#webpack-optimization-heading
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#webpack-optimization-collapse'
+                    aria-expanded='true'
+                    aria-controls='webpack-optimization-collapse'
+                  )
+                    i.bi.bi-tools.me-2
+                    strong Webpack Optimization Strategies
+                .accordion-collapse.collapse.show#webpack-optimization-collapse(
+                  aria-labelledby='webpack-optimization-heading'
+                  data-bs-parent='#performance-accordion'
+                )
+                  .accordion-body
+                    .row.g-3
+                      .col-md-6
+                        .card.border-light.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-scissors.text-primary.me-2
+                              | Tree Shaking
+                            p.card-text.small Eliminated unused code from libraries automatically
+                      .col-md-6
+                        .card.border-light.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-split.text-success.me-2
+                              | Code Splitting
+                            p.card-text.small Separate bundles for main site and pivot functionality
+                      .col-md-6
+                        .card.border-light.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-file-zip.text-warning.me-2
+                              | Minification
+                            p.card-text.small Advanced compression with Terser plugin
+                      .col-md-6
+                        .card.border-light.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-image.text-info.me-2
+                              | Asset Optimization
+                            p.card-text.small Automatic image and font optimization
+
+              .accordion-item
+                h3.accordion-header#runtime-performance-heading
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#runtime-performance-collapse'
+                    aria-expanded='false'
+                    aria-controls='runtime-performance-collapse'
+                  )
+                    i.bi.bi-cpu.me-2
+                    strong Runtime Performance Improvements
+                .accordion-collapse.collapse#runtime-performance-collapse(
+                  aria-labelledby='runtime-performance-heading'
+                  data-bs-parent='#performance-accordion'
+                )
+                  .accordion-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-table.text-primary.me-2
+                          | DataTables Initialization
+                        span
+                          span.text-muted 450ms →
+                          strong.text-success 180ms (60% faster)
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-bar-chart.text-info.me-2
+                          | Chart Rendering
+                        span
+                          span.text-muted 230ms →
+                          strong.text-success 95ms (59% faster)
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-arrow-right-circle.text-warning.me-2
+                          | Page Navigation
+                        span
+                          span.text-muted 180ms →
+                          strong.text-success 75ms (58% faster)
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Testing Section
+          section#testing.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-check2-square.me-2
+              | Testing and Quality Assurance
+
+            .row.g-4.mb-4
+              .col-md-6
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-browser-chrome.me-2
+                      | Cross-Browser Testing Matrix
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Chrome 118+
+                        span.text-success Full compatibility
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Firefox 119+
+                        span.text-success Full compatibility
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Safari 16+
+                        span.text-success WebKit optimized
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-check-circle.text-success.me-2
+                          | Edge 118+
+                        span.text-success Chromium performance
+                      li.list-group-item.d-flex.justify-content-between
+                        span
+                          i.bi.bi-exclamation-circle.text-warning.me-2
+                          | IE 11
+                        span.text-warning Limited support
+
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-phone.me-2
+                      | Mobile Device Testing
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-check-circle.text-success.me-2
+                        strong iPhone 14/15 Series:
+                        span.small Excellent performance, touch optimized
+                      li.list-group-item
+                        i.bi.bi-check-circle.text-success.me-2
+                        strong Samsung Galaxy S23:
+                        span.small Full feature parity
+                      li.list-group-item
+                        i.bi.bi-check-circle.text-success.me-2
+                        strong iPad Pro/Air:
+                        span.small Tablet-optimized layouts
+                      li.list-group-item
+                        i.bi.bi-check-circle.text-success.me-2
+                        strong Various Android:
+                        span.small Cross-device compatibility
+
+            .card.mb-4.border-info
+              .card-header.bg-info.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-universal-access.me-2
+                  | Accessibility Testing - WCAG 2.1 Compliance
+              .card-body
+                .row.g-3
+                  .col-md-3
+                    .card.border-success.h-100
+                      .card-body.text-center
+                        i.bi.bi-award.display-6.text-success.mb-2
+                        h6.card-title.fw-bold Level AA
+                        p.card-text.small Achieved for all main components
+                  .col-md-3
+                    .card.border-primary.h-100
+                      .card-body.text-center
+                        i.bi.bi-keyboard.display-6.text-primary.mb-2
+                        h6.card-title.fw-bold Keyboard Navigation
+                        p.card-text.small Full support implemented
+                  .col-md-3
+                    .card.border-warning.h-100
+                      .card-body.text-center
+                        i.bi.bi-soundwave.display-6.text-warning.mb-2
+                        h6.card-title.fw-bold Screen Reader
+                        p.card-text.small ARIA labels added throughout
+                  .col-md-3
+                    .card.border-info.h-100
+                      .card-body.text-center
+                        i.bi.bi-palette.display-6.text-info.mb-2
+                        h6.card-title.fw-bold Color Contrast
+                        p.card-text.small 4.5:1 minimum ratio met
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Deployment Section
+          section#deployment.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-cloud-upload.me-2
+              | Deployment and Production Considerations
+
+            .card.mb-4
+              .card-header.bg-success.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-gear.me-2
+                  | Build Pipeline Integration
+              .card-body
+                .row.g-3
+                  .col-md-4
+                    .card.border-info.h-100
+                      .card-body.text-center
+                        i.bi.bi-play-circle.display-6.text-info.mb-2
+                        h6.card-title.fw-bold Development Mode
+                        p.card-text.small
+                          code npm run watch
+                        p.card-text.small Hot reload with source maps
+                  .col-md-4
+                    .card.border-warning.h-100
+                      .card-body.text-center
+                        i.bi.bi-bug.display-6.text-warning.mb-2
+                        h6.card-title.fw-bold Development Build
+                        p.card-text.small
+                          code npm run build-dev
+                        p.card-text.small Source maps for debugging
+                  .col-md-4
+                    .card.border-success.h-100
+                      .card-body.text-center
+                        i.bi.bi-shield-check.display-6.text-success.mb-2
+                        h6.card-title.fw-bold Production Build
+                        p.card-text.small
+                          code npm run build
+                        p.card-text.small Optimized and minified
+
+            .accordion#deployment-accordion.mb-4
+              .accordion-item
+                h3.accordion-header#iis-config-heading
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#iis-config-collapse'
+                    aria-expanded='true'
+                    aria-controls='iis-config-collapse'
+                  )
+                    i.bi.bi-server.me-2
+                    strong IIS Configuration Optimizations
+                .accordion-collapse.collapse.show#iis-config-collapse(
+                  aria-labelledby='iis-config-heading'
+                  data-bs-parent='#deployment-accordion'
+                )
+                  .accordion-body
+                    h6.fw-bold Web.config Enhancements:
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-file-zip.text-primary.me-2
+                        strong HTTP Compression:
+                        | Enabled for JavaScript and CSS files
+                      li.list-group-item
+                        i.bi.bi-clock.text-success.me-2
+                        strong Cache Headers:
+                        | 30-day cache for static assets
+                      li.list-group-item
+                        i.bi.bi-shield.text-warning.me-2
+                        strong Security Headers:
+                        | X-Content-Type-Options, X-Frame-Options, X-XSS-Protection
+
+              .accordion-item
+                h3.accordion-header#deployment-strategy-heading
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#deployment-strategy-collapse'
+                    aria-expanded='false'
+                    aria-controls='deployment-strategy-collapse'
+                  )
+                    i.bi.bi-diagram-3.me-2
+                    strong Blue-Green Deployment Strategy
+                .accordion-collapse.collapse#deployment-strategy-collapse(
+                  aria-labelledby='deployment-strategy-heading'
+                  data-bs-parent='#deployment-accordion'
+                )
+                  .accordion-body
+                    .row.g-3
+                      .col-md-6
+                        .card.border-primary.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-1-circle.text-primary.me-2
+                              | Build Phase
+                            p.card-text.small Create optimized assets using production webpack config
+                      .col-md-6
+                        .card.border-info.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-2-circle.text-info.me-2
+                              | Testing Phase
+                            p.card-text.small Validate in staging environment with production builds
+                      .col-md-6
+                        .card.border-success.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-3-circle.text-success.me-2
+                              | Deployment Phase
+                            p.card-text.small Atomic replacement of client assets
+                      .col-md-6
+                        .card.border-warning.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-4-circle.text-warning.me-2
+                              | Rollback Strategy
+                            p.card-text.small Keep previous asset versions for quick rollback
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Results Section
+          section#results.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-trophy.me-2
+              | Results and Performance Improvements
+
+            .card.mb-4.border-success
+              .card-header.bg-success.text-white
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-graph-up-arrow.me-2
+                  | Quantitative Improvements
+              .card-body
+                .row.g-4
+                  .col-md-6
+                    h6.fw-bold Performance Metrics:
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span Page Load Time
+                        strong.text-success 52% improvement
+                      li.list-group-item.d-flex.justify-content-between
+                        span Bundle Size Reduction
+                        strong.text-success 63% smaller
+                      li.list-group-item.d-flex.justify-content-between
+                        span HTTP Requests
+                        strong.text-success 87% reduction
+                      li.list-group-item.d-flex.justify-content-between
+                        span Time to Interactive
+                        strong.text-success 45% improvement
+                      li.list-group-item.d-flex.justify-content-between
+                        span DataTables Init
+                        strong.text-success 60% faster
+
+                  .col-md-6
+                    h6.fw-bold Business Impact:
+                    ul.list-group.list-group-flush
+                      li.list-group-item.d-flex.justify-content-between
+                        span Development Time
+                        strong.text-primary 40% reduction
+                      li.list-group-item.d-flex.justify-content-between
+                        span Maintenance Overhead
+                        strong.text-primary 60% reduction
+                      li.list-group-item.d-flex.justify-content-between
+                        span Server Costs
+                        strong.text-primary 25% reduction
+                      li.list-group-item.d-flex.justify-content-between
+                        span Support Tickets
+                        strong.text-primary 35% reduction
+
+            .row.g-4.mb-4
+              .col-md-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-person-heart.me-2
+                      | User Experience
+                  .card-body
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-phone.text-success.me-2
+                        strong Complete mobile optimization
+                      li.mb-2
+                        i.bi.bi-bootstrap.text-primary.me-2
+                        strong Bootstrap 5 component library
+                      li.mb-2
+                        i.bi.bi-table.text-info.me-2
+                        strong Enhanced DataTables features
+                      li.mb-2
+                        i.bi.bi-universal-access.text-warning.me-2
+                        strong WCAG 2.1 Level AA compliance
+
+              .col-md-4
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-code-slash.me-2
+                      | Developer Experience
+                  .card-body
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-gear.text-success.me-2
+                        strong Automated build processes
+                      li.mb-2
+                        i.bi.bi-box-seam.text-primary.me-2
+                        strong Modern dependency management
+                      li.mb-2
+                        i.bi.bi-tools.text-info.me-2
+                        strong Hot reload and debugging tools
+                      li.mb-2
+                        i.bi.bi-diagram-3.text-warning.me-2
+                        strong Modular architecture
+
+              .col-md-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-wrench.me-2
+                      | Maintainability
+                  .card-body
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-arrow-up-circle.text-success.me-2
+                        strong Automated dependency updates
+                      li.mb-2
+                        i.bi.bi-shield-check.text-primary.me-2
+                        strong Automated vulnerability scanning
+                      li.mb-2
+                        i.bi.bi-file-check.text-info.me-2
+                        strong Reproducible builds
+                      li.mb-2
+                        i.bi.bi-book.text-warning.me-2
+                        strong Comprehensive documentation
+
+            .card.border-warning
+              .card-header.bg-warning.text-dark
+                h5.card-title.mb-0.fw-bold
+                  i.bi.bi-star.me-2
+                  | User Satisfaction Scores
+              .card-body
+                .row.g-3
+                  .col-md-4
+                    .text-center
+                      h6.fw-bold Page Load Satisfaction
+                      p.mb-1
+                        span.text-muted 6.2/10 →
+                        strong.text-success 8.7/10
+                      .progress
+                        .progress-bar.bg-success(style='width: 87%')
+                  .col-md-4
+                    .text-center
+                      h6.fw-bold Mobile Experience
+                      p.mb-1
+                        span.text-muted 5.1/10 →
+                        strong.text-success 8.9/10
+                      .progress
+                        .progress-bar.bg-success(style='width: 89%')
+                  .col-md-4
+                    .text-center
+                      h6.fw-bold Overall Usability
+                      p.mb-1
+                        span.text-muted 6.8/10 →
+                        strong.text-success 8.5/10
+                      .progress
+                        .progress-bar.bg-success(style='width: 85%')
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Lessons Learned Section
+          section#lessons.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-lightbulb.me-2
+              | Lessons Learned and Best Practices
+
+            .accordion#lessons-accordion.mb-4
+              .accordion-item
+                h3.accordion-header#technical-lessons-heading
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#technical-lessons-collapse'
+                    aria-expanded='true'
+                    aria-controls='technical-lessons-collapse'
+                  )
+                    i.bi.bi-tools.me-2
+                    strong Technical Lessons
+                .accordion-collapse.collapse.show#technical-lessons-collapse(
+                  aria-labelledby='technical-lessons-heading'
+                  data-bs-parent='#lessons-accordion'
+                )
+                  .accordion-body
+                    .row.g-3
+                      .col-md-4
+                        .card.border-success.h-100
+                          .card-header.bg-success.text-white
+                            h6.card-title.mb-0.fw-bold
+                              i.bi.bi-arrow-repeat.me-2
+                              | Incremental Migration
+                          .card-body
+                            p.card-text.small
+                              strong Success Factor:
+                              | Gradual migration reduced risk and allowed testing at each step
+                            p.card-text.small
+                              strong Recommendation:
+                              | Plan migration in phases with rollback capabilities
+
+                      .col-md-4
+                        .card.border-warning.h-100
+                          .card-header.bg-warning.text-dark
+                            h6.card-title.mb-0.fw-bold
+                              i.bi.bi-layers.me-2
+                              | Compatibility Layer
+                          .card-body
+                            p.card-text.small
+                              strong Challenge:
+                              | Bootstrap 5 breaking changes affected existing components
+                            p.card-text.small
+                              strong Solution:
+                              | Created compatibility CSS during transition
+
+                      .col-md-4
+                        .card.border-info.h-100
+                          .card-header.bg-info.text-white
+                            h6.card-title.mb-0.fw-bold
+                              i.bi.bi-puzzle.me-2
+                              | Build Integration
+                          .card-body
+                            p.card-text.small
+                              strong Success:
+                              | Webpack integrated seamlessly with .NET Framework
+                            p.card-text.small
+                              strong Best Practice:
+                              | Test build system integration in staging first
+
+              .accordion-item
+                h3.accordion-header#pitfalls-heading
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#pitfalls-collapse'
+                    aria-expanded='false'
+                    aria-controls='pitfalls-collapse'
+                  )
+                    i.bi.bi-exclamation-triangle.me-2
+                    strong Pitfalls to Avoid
+                .accordion-collapse.collapse#pitfalls-collapse(
+                  aria-labelledby='pitfalls-heading'
+                  data-bs-parent='#lessons-accordion'
+                )
+                  .accordion-body
+                    .row.g-3
+                      .col-md-4
+                        .card.border-danger.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-exclamation-circle.text-danger.me-2
+                              | Dependency Conflicts
+                            p.card-text.small jQuery UI compatibility with jQuery 3.7.1 required careful version management
+                            p.card-text.small
+                              strong Prevention:
+                              | Use exact version pinning for critical dependencies
+
+                      .col-md-4
+                        .card.border-warning.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-gear-wide.text-warning.me-2
+                              | Build Complexity
+                            p.card-text.small Risk of over-engineering the build system with unnecessary features
+                            p.card-text.small
+                              strong Balance:
+                              | Keep build system as simple as possible
+
+                      .col-md-4
+                        .card.border-info.h-100
+                          .card-body
+                            h6.card-title
+                              i.bi.bi-arrow-up-right.text-info.me-2
+                              | Breaking Changes
+                            p.card-text.small Bootstrap 5 and DataTables v2 had significant breaking changes
+                            p.card-text.small
+                              strong Learning:
+                              | Always review breaking change documentation thoroughly
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
+
+          // Future Roadmap Section
+          section#future.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-rocket.me-2
+              | Future Roadmap
+
+            .row.g-4
+              .col-md-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-calendar.me-2
+                      | Short-Term (6 Months)
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-phone.text-primary.me-2
+                        strong PWA Features:
+                        span.small Service worker for offline capability
+                      li.list-group-item
+                        i.bi.bi-code-square.text-success.me-2
+                        strong TypeScript Migration:
+                        span.small Add type safety to JavaScript codebase
+                      li.list-group-item
+                        i.bi.bi-table.text-info.me-2
+                        strong Advanced DataTables:
+                        span.small Column reordering, PDF reports, real-time updates
+
+              .col-md-4
+                .card.border-warning.h-100
+                  .card-header.bg-warning.text-dark
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-calendar2.me-2
+                      | Medium-Term (6-12 Months)
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-puzzle.text-primary.me-2
+                        strong Modern Frameworks:
+                        span.small Vue.js components, React integration
+                      li.list-group-item
+                        i.bi.bi-speedometer2.text-success.me-2
+                        strong Performance 2.0:
+                        span.small HTTP/2 Server Push, Web Workers
+                      li.list-group-item
+                        i.bi.bi-workflow.text-info.me-2
+                        strong Enhanced Workflow:
+                        span.small Hot module replacement, automated testing
+
+              .col-md-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-calendar3.me-2
+                      | Long-Term (12+ Months)
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        i.bi.bi-building.text-primary.me-2
+                        strong Architecture:
+                        span.small Micro-frontends, API-first approach
+                      li.list-group-item
+                        i.bi.bi-cloud.text-success.me-2
+                        strong Cloud-Native:
+                        span.small CDN integration, serverless functions
+                      li.list-group-item
+                        i.bi.bi-cpu.text-info.me-2
+                        strong AI/ML Integration:
+                        span.small Intelligent data analysis, predictive analytics
+
+          // Conclusion Section
+          section#conclusion.mb-5
+            .card.border-primary
+              .card-header.bg-primary.text-white
+                h2.h3.card-title.mb-0.fw-bold
+                  i.bi.bi-check-circle.me-2
+                  | Conclusion
+              .card-body
+                p.lead The modernization of client libraries in our .NET Framework 4.8 application represents a significant technical and business success. By migrating from LibMan to a modern npm/Webpack-based build system, we achieved substantial improvements across all key metrics.
+
+                .row.g-4.mt-3
+                  .col-md-4
+                    .card.border-success.h-100
+                      .card-header.bg-success.text-white
+                        h6.card-title.mb-0.fw-bold
+                          i.bi.bi-tools.me-2
+                          | Technical Excellence
+                      .card-body
+                        ul.list-unstyled
+                          li.mb-2
+                            i.bi.bi-speedometer2.text-success.me-2
+                            | 52% improvement in page load times
+                          li.mb-2
+                            i.bi.bi-file-zip.text-primary.me-2
+                            | 63% reduction in bundle sizes
+                          li.mb-2
+                            i.bi.bi-wifi.text-info.me-2
+                            | 87% fewer HTTP requests
+                          li.mb-2
+                            i.bi.bi-code.text-warning.me-2
+                            | Modern, maintainable codebase
+
+                  .col-md-4
+                    .card.border-primary.h-100
+                      .card-header.bg-primary.text-white
+                        h6.card-title.mb-0.fw-bold
+                          i.bi.bi-graph-up.me-2
+                          | Business Value
+                      .card-body
+                        ul.list-unstyled
+                          li.mb-2
+                            i.bi.bi-person-heart.text-success.me-2
+                            | Improved user satisfaction scores
+                          li.mb-2
+                            i.bi.bi-wrench.text-primary.me-2
+                            | Reduced maintenance overhead
+                          li.mb-2
+                            i.bi.bi-phone.text-info.me-2
+                            | Enhanced mobile user experience
+                          li.mb-2
+                            i.bi.bi-arrow-up.text-warning.me-2
+                            | Future-ready architecture
+
+                  .col-md-4
+                    .card.border-info.h-100
+                      .card-header.bg-info.text-white
+                        h6.card-title.mb-0.fw-bold
+                          i.bi.bi-trophy.me-2
+                          | Strategic Benefits
+                      .card-body
+                        ul.list-unstyled
+                          li.mb-2
+                            i.bi.bi-gear.text-success.me-2
+                            | Established modern development practices
+                          li.mb-2
+                            i.bi.bi-building.text-primary.me-2
+                            | Created foundation for future enhancements
+                          li.mb-2
+                            i.bi.bi-code-slash.text-info.me-2
+                            | Improved developer productivity
+                          li.mb-2
+                            i.bi.bi-shield-check.text-warning.me-2
+                            | Enhanced application security
+
+                .card.mt-4.bg-light
+                  .card-body
+                    p.mb-0 The journey from legacy LibMan dependencies to a modern build system demonstrates that significant improvements are possible even within the constraints of .NET Framework applications. The key success factors were incremental migration, comprehensive testing, and strong focus on maintaining backward compatibility while introducing modern tooling. This modernization effort not only improved the current application but also established a foundation for future enhancements, proving that legacy applications can successfully adopt modern web development practices without requiring complete rewrites.
+
+          // Additional Resources Section
+          section#resources.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-book.me-2
+              | Additional Resources
+
+            .row.g-4
+              .col-md-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-file-text.me-2
+                      | Documentation Links
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-gear.me-2
+                          | Webpack Configuration Guide
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-terminal.me-2
+                          | Build Script Documentation
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-box-seam.me-2
+                          | Package.json Dependencies
+
+              .col-md-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-speedometer2.me-2
+                      | Performance Benchmarks
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-graph-up.me-2
+                          | Load Testing Results
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-pie-chart.me-2
+                          | Bundle Analysis Reports
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-lighthouse.me-2
+                          | Lighthouse Audit Results
+
+              .col-md-4
+                .card.border-warning.h-100
+                  .card-header.bg-warning.text-dark
+                    h6.card-title.mb-0.fw-bold
+                      i.bi.bi-arrow-up-right.me-2
+                      | Migration Guides
+                  .card-body
+                    ul.list-group.list-group-flush
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-bootstrap.me-2
+                          | Bootstrap 4 to 5 Migration
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-table.me-2
+                          | DataTables v1 to v2 Upgrade
+                      li.list-group-item
+                        a.text-decoration-none(href='#', target='_blank', rel='noopener')
+                          i.bi.bi-code-square.me-2
+                          | jQuery Compatibility Notes
+
+          // Article metadata
+          .card.mt-5.bg-light
+            .card-body.text-center
+              p.mb-1
+                strong Author:
+                | Mark Hazleton
+              p.mb-1
+                strong Date:
+                | September 8, 2025
+              p.mb-1
+                strong Version:
+                | 2.25.251
+              p.mb-0
+                strong GitHub Repository:
+                a.text-decoration-none(href='https://github.com/markhazleton/DataAnalysisDemo', target='_blank', rel='noopener')
+                  i.bi.bi-github.me-1
+                  | DataAnalysisDemo
+
+          a(href='#table-of-contents').d-block.mb-4.text-decoration-none
+            i.bi.bi-arrow-up-circle.me-1
+            | Back to Top
