@@ -1,89 +1,352 @@
 extends ../layouts/modern-layout
 
 block layout-content
+  br
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-people-fill.me-3
+            | The Balanced Equation: Crafting the Perfect Project Team Mix
+          h2.h3.mb-4 Achieving Project Success with a Balanced Team
+          p.lead.mb-5.
+            Learn how to create the perfect project team by combining the strengths
+            of internal employees and external consultants for optimal success.
 
-  article#post.projectmechanics-section.projectmechanics-section-background
-    .projectmechanics-section-content
-      h1
-        i.bi.bi-people-fill.me-2.text-primary
-        | The Balanced Team
-      .subheading Building the Best Team for Your Project
-      p.lead Learn how to create the perfect team for your project by combining the strengths of your own staff and outside experts.
-      section
-        h2 What Makes a Great Team Member
-        dl
-          dt
-            i.bi.bi-lightbulb.me-2.text-warning
-            | Change Makers
-          dd
+  // Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
 
-            p People or groups that help bring about change. They introduce new ideas and ways to do things.
-            ul
-              li Spot what needs to get better or change.
-              li Suggest and put in place new ways or ideas.
-              li Question old methods and inspire new thinking.
-              li Help everyone adapt to new ways.
-          dt
-            i.bi.bi-shield-check.me-2.text-success
-            | Stability Keepers
-          dd
-            p People who make sure things stay steady and reliable. They keep the core of what the company is about the same.
-            ul
-              li Stick to the company's main goals and values.
-              li Make sure changes fit with long-term plans.
-              li Keep things stable for everyone in the company.
-              li Handle risks so the company can grow safely.
+          // Article metadata and sharing
+          .article-meta.text-muted.mb-4.text-center
+            time(datetime=article ? article.publishedDate : '2024-01-29') #{article && article.publishedDate ? new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'January 29, 2024'}
+            span.mx-2 •
+            span by Mark Hazleton
+            span.mx-2 •
+            span #{article && article.estimatedReadTime ? article.estimatedReadTime : 5} min read
 
-      section
-        h2 When Consultants Take Over
-        dl
-          dt Goals Not Matching
-          dd
-            p Consultants might focus more on making money than finding cost-effective ways for the client.
-          dt Too Much Dependence
-          dd
-            p Relying a lot on consultants can make a company too dependent on outside help.
-          dt Not Fitting In
-          dd
-            p Consultants might not mesh well with your company's way of doing things, which can affect how well their solutions work in the long run.
-          dt High Costs
-          dd
-            p Having consultants run everything can get really expensive, especially if things take longer than planned.
-          dt Losing Know-How
-          dd
-            p Consultants might leave and take their valuable insights and skills with them if there's no good way to share what they know with the company.
+          // Table of Contents
+          nav#table-of-contents.mb-5(aria-label='Table of Contents')
+            .card.bg-light
+              .card-header
+                h3.card-title.mb-0.fw-bold
+                  i.bi.bi-list-ul.me-2
+                  | Table of Contents
+              .card-body
+                ul.list-group.list-group-flush
+                  li.list-group-item: a.text-decoration-none(href='#team-member-types') What Makes a Great Team Member
+                  li.list-group-item: a.text-decoration-none(href='#consultant-risks') When Consultants Take Over
+                  li.list-group-item: a.text-decoration-none(href='#collaboration-power') The Power of Working Together
+                  li.list-group-item: a.text-decoration-none(href='#internal-team') The Heart of the Company: Your Team
+                  li.list-group-item: a.text-decoration-none(href='#external-consultants') Bringing in Fresh Ideas: Consultants
+                  li.list-group-item: a.text-decoration-none(href='#creating-right-team') How to Create the Right Team
+          // Article Content Section
+          section#team-member-types.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-star.me-2
+              | What Makes a Great Team Member
+            p.mb-4.
+              Understanding the different types of team members helps build stronger,
+              more effective project teams.
 
-        p To avoid these issues, make clear goals, manage things well, work together, limit how much you rely on consultants, and regularly check that everything is on track with the company's main goals.
+            .row.g-4.mb-4
+              .col-md-6
+                .card.h-100.border-warning
+                  .card-header.bg-warning.text-dark
+                    h4.card-title.mb-0
+                      i.bi.bi-lightbulb.me-2
+                      | Change Makers
+                  .card-body
+                    p.card-text.mb-3.
+                      People or groups that help bring about change. They introduce new ideas
+                      and ways to do things.
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-check-circle.text-warning.me-2
+                        | Spot what needs to get better or change
+                      li.mb-2
+                        i.bi.bi-check-circle.text-warning.me-2
+                        | Suggest and put in place new ways or ideas
+                      li.mb-2
+                        i.bi.bi-check-circle.text-warning.me-2
+                        | Question old methods and inspire new thinking
+                      li.mb-2
+                        i.bi.bi-check-circle.text-warning.me-2
+                        | Help everyone adapt to new ways
 
-      section
-        h2
-          i.bi.bi-people.me-2.text-info
-          | The Power of Working Together
-        p Working well together is key to a great project team. This happens when everyone's work adds up to more than what they could do alone. This mix is really strong when it combines people who like to shake things up with those who keep things steady. Consultants bring in new ideas and ways to challenge the usual. But it's important that these new ideas fit with what the company is all about and its long-term plans. This mix makes sure new ideas work well and last.
+              .col-md-6
+                .card.h-100.border-success
+                  .card-header.bg-success.text-white
+                    h4.card-title.mb-0
+                      i.bi.bi-shield-check.me-2
+                      | Stability Keepers
+                  .card-body
+                    p.card-text.mb-3.
+                      People who make sure things stay steady and reliable. They keep the core
+                      of what the company is about the same.
+                    ul.list-unstyled
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | Stick to the company's main goals and values
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | Make sure changes fit with long-term plans
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | Keep things stable for everyone in the company
+                      li.mb-2
+                        i.bi.bi-check-circle.text-success.me-2
+                        | Handle risks so the company can grow safely
 
-      section
-        h2 The Heart of the Company: Your Team
-        p Your team members are much more than just employees; they are the essence of your company's identity and the way things are accomplished. Their daily actions, decisions, and interactions shape the workplace culture, making it a living, breathing entity. They are the keepers of your company's traditions, the champions of its values, and the architects of its future.
-        p Beyond just keeping projects on track, your staff embodies the collective memory of your organization. They remember past challenges and successes, which inform current projects and decisions. This institutional knowledge is invaluable, guiding the company through new endeavors and helping to avoid previous pitfalls.
-        p Moreover, your team's engagement and commitment are the driving forces behind innovation and efficiency. When they believe in the company's mission and feel a part of its success, they're more likely to go above and beyond, leading to breakthroughs and sustained growth. Their adaptability and resilience are crucial, especially in times of change or uncertainty.
-        p In nurturing this vital component of your company, fostering a positive, inclusive, and empowering work environment is essential. Recognizing achievements, encouraging professional growth, and ensuring that every voice is heard are key to maintaining the vibrancy and health of your company's heart.
-        p In conclusion, your employees are not just the backbone of your company; they are its heart and soul. Their collective energy, wisdom, and spirit not only define your organizational culture but also drive your company's success. By investing in their well-being and development, you're investing in the very essence of your company's future.
-      section
-        h2 Bringing in Fresh Ideas: Consultants
-        p Consultants are like a breath of fresh air for your projects, bringing with them a wealth of specialized knowledge and a fresh perspective that can be just what's needed to overcome challenges and seize new opportunities. Their expertise, honed across diverse industries and situations, allows them to introduce novel ideas and methods that might not have been considered within the confines of your company's existing framework.
-        p The role of consultants extends beyond just providing advice; they act as catalysts for change, challenging the status quo and encouraging your team to think outside the box. Their external viewpoint helps in identifying blind spots or inefficiencies in current processes that internal team members, often too close to the day-to-day operations, might overlook.
-        p Additionally, consultants can play a key role in transferring knowledge and skills to your internal team. This collaborative approach not only solves immediate project needs but also builds your team's capabilities for the future, ensuring that the benefits of their involvement have a lasting impact on your organization.
-        p However, to truly leverage the potential of consultants, it's crucial to ensure a good fit with your company's culture and to clearly define the scope and objectives of their engagement. This alignment maximizes the effectiveness of their contributions and ensures that their innovative solutions are integrated smoothly and sustainably within your company's operations.
-        p In essence, consultants are not just external hires; they are partners in your company's journey towards innovation and excellence. By welcoming their fresh perspectives and specialized expertise, you open the door to groundbreaking ideas and methodologies that can propel your projects and your company forward.
+          section#consultant-risks.mb-5
+            h2.h3.text-danger.mb-4
+              i.bi.bi-exclamation-triangle.me-2
+              | When Consultants Take Over
+            p.mb-4.
+              While consultants bring valuable expertise, over-reliance can create risks
+              that need careful management.
 
-      section
-        h2 How to Create the Right Team
-        ul
-          li What the project needs to achieve
-          li What skills are missing
-          li How well the team works together
-          li Sharing what's learned
-          li Being able to change and grow
-          li How to check how things are going and make adjustments
+            .accordion#consultantRisks.mb-4
+              .accordion-item
+                h4.accordion-header#headingGoals
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseGoals'
+                    aria-expanded='true'
+                    aria-controls='collapseGoals'
+                  )
+                    i.bi.bi-bullseye.me-2
+                    | Goals Not Matching
+                .accordion-collapse.collapse.show#collapseGoals(
+                  aria-labelledby='headingGoals'
+                  data-bs-parent='#consultantRisks'
+                )
+                  .accordion-body
+                    p.
+                      Consultants might focus more on making money than finding
+                      cost-effective ways for the client.
 
-        p Choosing the right mix for your project team can lead to better results, more creative solutions, and make sure everything fits with the long-term goals of your company.
+              .accordion-item
+                h4.accordion-header#headingDependence
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseDependence'
+                    aria-expanded='false'
+                    aria-controls='collapseDependence'
+                  )
+                    i.bi.bi-link.me-2
+                    | Too Much Dependence
+                .accordion-collapse.collapse#collapseDependence(
+                  aria-labelledby='headingDependence'
+                  data-bs-parent='#consultantRisks'
+                )
+                  .accordion-body
+                    p.
+                      Relying a lot on consultants can make a company too dependent
+                      on outside help.
+
+              .accordion-item
+                h4.accordion-header#headingFit
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseFit'
+                    aria-expanded='false'
+                    aria-controls='collapseFit'
+                  )
+                    i.bi.bi-puzzle.me-2
+                    | Not Fitting In
+                .accordion-collapse.collapse#collapseFit(
+                  aria-labelledby='headingFit'
+                  data-bs-parent='#consultantRisks'
+                )
+                  .accordion-body
+                    p.
+                      Consultants might not mesh well with your company's way of doing things,
+                      which can affect how well their solutions work in the long run.
+
+              .accordion-item
+                h4.accordion-header#headingCosts
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseCosts'
+                    aria-expanded='false'
+                    aria-controls='collapseCosts'
+                  )
+                    i.bi.bi-currency-dollar.me-2
+                    | High Costs
+                .accordion-collapse.collapse#collapseCosts(
+                  aria-labelledby='headingCosts'
+                  data-bs-parent='#consultantRisks'
+                )
+                  .accordion-body
+                    p.
+                      Having consultants run everything can get really expensive, especially
+                      if things take longer than planned.
+
+              .accordion-item
+                h4.accordion-header#headingKnowledge
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseKnowledge'
+                    aria-expanded='false'
+                    aria-controls='collapseKnowledge'
+                  )
+                    i.bi.bi-brain.me-2
+                    | Losing Know-How
+                .accordion-collapse.collapse#collapseKnowledge(
+                  aria-labelledby='headingKnowledge'
+                  data-bs-parent='#consultantRisks'
+                )
+                  .accordion-body
+                    p.
+                      Consultants might leave and take their valuable insights and skills with them
+                      if there's no good way to share what they know with the company.
+
+            .alert.alert-warning.border-0.shadow-sm.mb-4
+              .d-flex.align-items-start
+                i.bi.bi-shield-check.text-warning.me-3.fs-4
+                div
+                  h5.alert-heading.mb-2 Prevention Strategy
+                  p.mb-0.
+                    To avoid these issues, make clear goals, manage things well, work together,
+                    limit how much you rely on consultants, and regularly check that everything
+                    is on track with the company's main goals.
+
+          section#collaboration-power.mb-5
+            h2.h3.text-info.mb-4
+              i.bi.bi-people.me-2
+              | The Power of Working Together
+            p.mb-4.
+              Working well together is key to a great project team. This happens when everyone's
+              work adds up to more than what they could do alone. This mix is really strong when
+              it combines people who like to shake things up with those who keep things steady.
+
+            p.mb-4.
+              Consultants bring in new ideas and ways to challenge the usual. But it's important
+              that these new ideas fit with what the company is all about and its long-term plans.
+              This mix makes sure new ideas work well and last.
+
+          section#internal-team.mb-5
+            h2.h3.text-primary.mb-4
+              i.bi.bi-heart.me-2
+              | The Heart of the Company: Your Team
+
+            p.mb-4.
+              Your team members are much more than just employees; they are the essence of your
+              company's identity and the way things are accomplished. Their daily actions, decisions,
+              and interactions shape the workplace culture, making it a living, breathing entity.
+
+            .row.g-4.mb-4
+              .col-lg-4
+                .card.text-center.border-primary.h-100
+                  .card-body
+                    i.bi.bi-memory.display-6.text-primary.mb-3
+                    h5.card-title Institutional Memory
+                    p.card-text.small Beyond just keeping projects on track, your staff embodies the collective memory of your organization.
+              .col-lg-4
+                .card.text-center.border-success.h-100
+                  .card-body
+                    i.bi.bi-rocket.display-6.text-success.mb-3
+                    h5.card-title Innovation Driver
+                    p.card-text.small Their engagement and commitment are the driving forces behind innovation and efficiency.
+              .col-lg-4
+                .card.text-center.border-info.h-100
+                  .card-body
+                    i.bi.bi-shield.display-6.text-info.mb-3
+                    h5.card-title Resilience & Adaptability
+                    p.card-text.small Their adaptability and resilience are crucial, especially in times of change or uncertainty.
+
+            p.mb-4.
+              In nurturing this vital component of your company, fostering a positive, inclusive,
+              and empowering work environment is essential. Recognizing achievements, encouraging
+              professional growth, and ensuring that every voice is heard are key to maintaining
+              the vibrancy and health of your company's heart.
+
+          section#external-consultants.mb-5
+            h2.h3.text-success.mb-4
+              i.bi.bi-lightbulb.me-2
+              | Bringing in Fresh Ideas: Consultants
+
+            p.mb-4.
+              Consultants are like a breath of fresh air for your projects, bringing with them
+              a wealth of specialized knowledge and a fresh perspective that can be just what's
+              needed to overcome challenges and seize new opportunities.
+
+            .alert.alert-info.border-0.shadow-sm.mb-4
+              .d-flex.align-items-start
+                i.bi.bi-info-circle.text-info.me-3.fs-4
+                div
+                  h5.alert-heading.mb-2 Key Benefits
+                  p.mb-0.
+                    Their expertise, honed across diverse industries and situations, allows them
+                    to introduce novel ideas and methods that might not have been considered within
+                    the confines of your company's existing framework.
+
+            p.mb-4.
+              The role of consultants extends beyond just providing advice; they act as catalysts
+              for change, challenging the status quo and encouraging your team to think outside the box.
+              Their external viewpoint helps in identifying blind spots or inefficiencies in current processes.
+
+            p.mb-4.
+              However, to truly leverage the potential of consultants, it's crucial to ensure a good fit
+              with your company's culture and to clearly define the scope and objectives of their engagement.
+
+          section#creating-right-team.mb-5
+            h2.h3.text-dark.mb-4
+              i.bi.bi-gear.me-2
+              | How to Create the Right Team
+
+            p.mb-4.
+              Creating the perfect team balance requires careful consideration of multiple factors
+              and continuous evaluation.
+
+            .card.border-primary.shadow-sm
+              .card-header.bg-primary.text-white
+                h5.card-title.mb-0
+                  i.bi.bi-checklist.me-2
+                  | Key Considerations
+              .card-body
+                .row.g-3
+                  .col-md-6
+                    .d-flex.align-items-center.mb-2
+                      i.bi.bi-target.me-2.text-primary
+                      strong What the project needs to achieve
+                  .col-md-6
+                    .d-flex.align-items-center.mb-2
+                      i.bi.bi-puzzle-fill.me-2.text-warning
+                      strong What skills are missing
+                  .col-md-6
+                    .d-flex.align-items-center.mb-2
+                      i.bi.bi-people-fill.me-2.text-success
+                      strong How well the team works together
+                  .col-md-6
+                    .d-flex.align-items-center.mb-2
+                      i.bi.bi-share.me-2.text-info
+                      strong Sharing what's learned
+                  .col-md-6
+                    .d-flex.align-items-center.mb-2
+                      i.bi.bi-arrow-repeat.me-2.text-secondary
+                      strong Being able to change and grow
+                  .col-md-6
+                    .d-flex.align-items-center.mb-2
+                      i.bi.bi-graph-up.me-2.text-dark
+                      strong How to check progress and adjust
+
+            p.mt-4.mb-4.
+              Choosing the right mix for your project team can lead to better results, more creative
+              solutions, and make sure everything fits with the long-term goals of your company.
+
+          // Back to Top link
+          .text-center.mb-4
+            a(href='#table-of-contents' class='btn btn-outline-primary')
+              i.bi.bi-arrow-up-circle.me-2
+              | Back to Top
