@@ -1,5 +1,9 @@
 extends ../layouts/modern-layout
-//- Article Template Stub for Mark Hazleton Blog
+
+//- Import standardized article mixins
+include ../modules/article-mixins
+
+//- Article Template Stub for Mark Hazleton Blog - UPDATED WITH STANDARDIZATION
 //-
 //- USAGE:
 //- 1. Copy this file and rename it to your article slug (e.g., my-new-article.pug)
@@ -8,68 +12,89 @@ extends ../layouts/modern-layout
 //- 4. SEO metadata (title, description, keywords, Open Graph, etc.) will be
 //-    automatically generated from articles.json by the modern-layout
 //- 5. Build with: npm run build:pug
-
-
-//- SEO metadata is now handled automatically by modern-layout using articles.json
-//- Just add your article data to articles.json and focus on content structure below
+//- 6. Use the standardized mixins for consistent formatting
 
 block layout-content
   br
-  // Hero Section
-  section.bg-gradient-primary.py-5
-    .container
-      .row.align-items-center
-        .col-lg-10.mx-auto.text-center
-          h1.display-4.fw-bold.mb-3
-            i.bi.bi-lightbulb.me-3
-            | Article Title Here
-          h2.h3.mb-4 Article Subtitle Here
-          p.lead.mb-5
-            | Brief article summary or introduction paragraph goes here.
 
-  // Main Article Content
+  //- Use standardized hero section
+  +articleHero(
+    'Article Title Here',
+    'Article Subtitle Here',
+    'Brief article summary or introduction paragraph goes here.',
+    'bi.bi-lightbulb'
+  )
+
+  //- Main Article Content
   article#main-article
     .container
       .row
         .col-lg-8.mx-auto
-          // Article Content Section
-          section#article-content.mb-5
-            .card.shadow-sm.border-0
-              .card-header.bg-success.text-white
-                h2.h3.mb-0
-                  i.bi.bi-graph-up-arrow.me-2
-                  | Main Section Title
-              .card-body
-                p.mb-4
-                  | Main article content goes here. This is where you'll write your detailed content.
 
-          // Additional Sections (add as needed)
-          // section#additional-section.mb-5
-          //   h2.h3.text-primary.mb-4
-          //     i.bi.bi-diagram-3.me-2
-          //     | Additional Section Title
-          //   p.lead.mb-4
-          //     | Additional section content goes here.
+          //- Use standardized article header
+          +articleHeader(article, {
+            title: 'Article Title Here',
+            subtitle: 'Article Subtitle Here',
+            publishedDate: new Date().toISOString(),
+            author: 'Mark Hazleton',
+            readTime: '5'
+          })
 
-        // Sidebar or extra content can be added here if needed
+          //- Optional: Add table of contents for longer articles
+          //- +tableOfContents([
+          //-   { href: '#main-section', text: 'Main Section Title' },
+          //-   { href: '#additional-section', text: 'Additional Section Title' },
+          //-   { href: '#conclusion', text: 'Conclusion' }
+          //- ])
 
-  // Conclusion Section
-  section#conclusion.mb-5
-    .card.border-primary.shadow-sm
-      .card-header.bg-primary.text-white
-        h2.h3.mb-0
-          i.bi.bi-trophy.me-2
-          | Conclusion
-      .card-body
-        p.lead.mb-4
-          | Summary of key points from the article.
-        .alert.alert-success.border-0.shadow-sm.mb-4
-          .d-flex.align-items-start
-            i.bi.bi-star-fill.text-success.me-3.fs-4
-            div
-              h4.alert-heading.h6.mb-2 Key Takeaway
-              p.mb-0
-                | Main insight or actionable takeaway from the article.
-        p.mb-0
-          | Final thoughts and call to action or next steps.
+          //- Article Content Section using standardized section mixin
+          +articleSection('main-section', 'Main Section Title', 'bi.bi-graph-up-arrow', 'success')
+            p.mb-4
+              | Main article content goes here. This is where you'll write your detailed content.
+
+            //- Example of using other standardized components:
+
+            //- External link example
+            //- +externalLinkButton('https://example.com', 'External Resource Title')
+
+            //- Image with caption example
+            //- +articleImage('/assets/img/example.png', 'Alt text', 'Image caption')
+
+            //- Alert box example
+            //- +alertBox('info', 'Important Note', 'This is important information for readers.')
+
+          //- Additional sections can be added using the mixin pattern
+          //- +articleSection('additional-section', 'Additional Section Title', 'bi.bi-diagram-3', 'info')
+          //-   p.lead.mb-4
+          //-     | Additional section content goes here.
+
+        //- Sidebar or extra content can be added here if needed
+
+  //- Use standardized conclusion section
+  +conclusionSection('Conclusion', 'bi.bi-trophy')
+    p.lead.mb-4
+      | Summary of key points from the article.
+
+    //- Use key takeaway mixin
+    +keyTakeaway('Key Takeaway', 'Main insight or actionable takeaway from the article.')
+
+    //- Use feature cards for highlights
+    +featureCards([
+      {
+        icon: 'bi.bi-code-slash',
+        title: 'Technical Excellence',
+        content: 'Description of technical aspects covered in the article.'
+      },
+      {
+        icon: 'bi.bi-clock-history',
+        title: 'Best Practices',
+        content: 'Description of best practices and recommendations.'
+      }
+    ])
+
+    p.mb-0
+      | Final thoughts and call to action or next steps.
+
+  //- Optional: Back to top button for long articles
+  //- +backToTopButton()
 

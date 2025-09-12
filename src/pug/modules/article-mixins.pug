@@ -1,0 +1,249 @@
+//- Article Standardization Mixins for Mark Hazleton Blog
+//- Provides consistent components for article templates
+//- Follows Bootstrap 5 and PUG best practices per copilot instructions
+
+//- Standardized article breadcrumb navigation
+mixin articleBreadcrumb(articleTitle)
+  .container.mt-4
+    nav.breadcrumb-modern(aria-label='breadcrumb')
+      ol.breadcrumb
+        li.breadcrumb-item
+          a.text-decoration-none(href='/') Home
+        li.breadcrumb-item
+          a.text-decoration-none(href='/articles.html') Articles
+        li.breadcrumb-item.active(aria-current='page')= articleTitle || 'Article'
+
+//- Standardized hero section for articles
+mixin articleHero(title, subtitle, description, iconClass)
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            if iconClass
+              i(class=iconClass).me-3
+            = title
+          if subtitle
+            h2.h3.mb-4= subtitle
+          if description
+            p.lead.mb-5= description
+
+//- Standardized article header with metadata
+mixin articleHeader(article, options = {})
+  header.mb-5
+    if article && article.githubUrl
+      .alert.alert-info.text-center.mb-4
+        i.bi.bi-github.me-2
+        a.text-decoration-none.fw-bold(href=article.githubUrl, target='_blank', rel='noopener')
+          | View the complete source code on GitHub
+          i.bi.bi-box-arrow-up-ne.ms-1
+
+    h1.display-4.fw-bold#top= article ? article.name : (options.title || 'Article Title')
+
+    if article && article.subtitle
+      .subheading.h4.text-muted.mb-4= article.subtitle
+    else if options.subtitle
+      .subheading.h4.text-muted.mb-4= options.subtitle
+
+    .article-meta.text-muted.mb-4
+      if article && article.publishedDate
+        time(datetime=article.publishedDate) #{new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        span.mx-2 •
+      else if options.publishedDate
+        time(datetime=options.publishedDate) #{new Date(options.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        span.mx-2 •
+
+      span by #{article && article.author ? article.author : (options.author || 'Mark Hazleton')}
+
+      if article && article.estimatedReadTime
+        span.mx-2 •
+        span #{article.estimatedReadTime} min read
+      else if options.readTime
+        span.mx-2 •
+        span #{options.readTime} min read
+
+    // LinkedIn sharing integration if available
+    if typeof articleLinkedInShare === 'function'
+      +articleLinkedInShare(article)
+
+//- Standardized table of contents
+mixin tableOfContents(items, title = 'Table of Contents')
+  nav#table-of-contents.mb-5(aria-label='Table of Contents')
+    .card.bg-light
+      .card-header
+        h3.card-title.mb-0.fw-bold
+          i.bi.bi-list-ul.me-2
+          = title
+      .card-body
+        ul.list-group.list-group-flush
+          each item in items
+            li.list-group-item
+              a.text-decoration-none(href=item.href)= item.text
+
+//- Standardized section with card wrapper
+mixin articleSection(id, title, iconClass, variant = 'primary')
+  section(id=id).mb-5
+    .card.shadow-sm.border-0
+      .card-header(class=`bg-${variant} text-white`)
+        h2.h3.mb-0
+          if iconClass
+            i(class=iconClass).me-2
+          = title
+      .card-body
+        block
+
+//- Standardized conclusion section
+mixin conclusionSection(title = 'Conclusion', iconClass = 'bi.bi-trophy')
+  section#conclusion.mb-5
+    .card.border-primary.shadow-sm
+      .card-header.bg-primary.text-white
+        h2.h3.mb-0
+          if iconClass
+            i(class=iconClass).me-2
+          = title
+      .card-body
+        block
+
+//- Key takeaway alert box
+mixin keyTakeaway(title, content)
+  .alert.alert-success.border-0.shadow-sm.mb-4
+    .d-flex.align-items-start
+      i.bi.bi-star-fill.text-success.me-3.fs-4
+      div
+        h4.alert-heading.h6.mb-2= title
+        p.mb-0= content
+
+//- Two-column feature cards
+mixin featureCards(cards)
+  .row.g-4.mb-4
+    each card in cards
+      .col-md-6
+        .card.h-100.border-0.shadow-sm
+          .card-body
+            h5.card-title.text-primary
+              if card.icon
+                i(class=card.icon).me-2
+              = card.title
+            p.card-text= card.content
+
+//- External link button
+mixin externalLinkButton(url, title, iconClass = 'bi.bi-link-45deg', variant = 'primary')
+  .alert(class=`alert-${variant === 'primary' ? 'info' : variant}`).border-0.shadow-sm.mb-4
+    .d-flex.align-items-center
+      i(class=`${iconClass} text-${variant === 'primary' ? 'info' : variant} me-3 fs-4`)
+      div
+        h4.alert-heading.h6.mb-2= title
+        a.text-decoration-none.fw-bold(href=url, target='_blank', rel='noopener', title=title)= url
+
+//- GitHub repository link
+mixin githubRepoLink(repoUrl, description = 'View the complete source code on GitHub')
+  .alert.alert-info.text-center.mb-4
+    i.bi.bi-github.me-2
+    a.text-decoration-none.fw-bold(href=repoUrl, target='_blank', rel='noopener')
+      = description
+      i.bi.bi-box-arrow-up-ne.ms-1
+
+//- Live demo link
+mixin liveDemoLink(demoUrl, title = 'Live Demo')
+  .alert.alert-info.border-0.shadow-sm.mb-4
+    .d-flex.align-items-center
+      i.bi.bi-link-45deg.text-info.me-3.fs-4
+      div
+        h4.alert-heading.h6.mb-2= title
+        a.text-decoration-none.fw-bold(href=demoUrl, target='_blank', rel='noopener', title=title)= demoUrl
+
+//- Responsive image with caption
+mixin articleImage(src, alt, caption, className = 'img-fluid rounded')
+  figure.mb-4
+    img(class=className, src=src, alt=alt, loading='lazy', title=alt)
+    if caption
+      figcaption.text-muted.mt-2.small= caption
+
+//- Article footer with social sharing
+mixin articleFooter(showSharing = true, showRelated = true)
+  .article-footer.mt-5.pt-4.border-top
+    .row
+      if showSharing
+        .col-md-6
+          h5.mb-3 Share This Article
+          if typeof socialSharingBar === 'function'
+            +socialSharingBar()
+      .col-md-6(class=showSharing ? 'text-md-end' : '')
+        h5.mb-3 Follow for More
+        if typeof linkedinFollowButton === 'function'
+          +linkedinFollowButton()
+        a.btn.btn-outline-primary(class=showSharing ? 'ms-2' : '', href='/articles.html')
+          i.fas.fa-newspaper.me-2
+          | View All Articles
+
+//- PDF download link
+mixin pdfDownloadLink(pdfUrl, title = 'Download PDF')
+  .card.mb-4
+    .card-body
+      a.btn.btn-primary.d-inline-flex.align-items-center(href=pdfUrl, target='_blank', rel='noopener', title=title)
+        i.bi.bi-file-earmark-pdf.me-2
+        = title
+
+//- YouTube video embed
+mixin youtubeEmbed(videoId, title = 'Video')
+  .ratio.ratio-16x9.mb-4
+    iframe(
+      src=`https://www.youtube.com/embed/${videoId}`,
+      title=title,
+      allowfullscreen,
+      loading='lazy'
+    )
+
+//- Code snippet with syntax highlighting
+mixin codeBlock(code, language = 'javascript', title)
+  if title
+    h5.mt-4.mb-2= title
+  pre
+    code(class=`language-${language}`)= code
+
+//- Warning/Info/Success alert boxes
+mixin alertBox(type = 'info', title, content, iconClass)
+  .alert(class=`alert-${type}`).border-0.shadow-sm.mb-4
+    .d-flex.align-items-start
+      if iconClass
+        i(class=`${iconClass} text-${type} me-3 fs-4`)
+      else
+        case type
+          when 'warning'
+            i.bi.bi-exclamation-triangle-fill.text-warning.me-3.fs-4
+          when 'success'
+            i.bi.bi-check-circle-fill.text-success.me-3.fs-4
+          when 'danger'
+            i.bi.bi-x-circle-fill.text-danger.me-3.fs-4
+          default
+            i.bi.bi-info-circle-fill.text-info.me-3.fs-4
+      div
+        if title
+          h4.alert-heading.h6.mb-2= title
+        p.mb-0= content
+
+//- Numbered list with cards
+mixin numberedCards(items)
+  each item, index in items
+    .card.mb-3.border-start.border-4(class=`border-${item.color || 'primary'}`)
+      .card-body
+        .d-flex.align-items-start
+          .badge(class=`bg-${item.color || 'primary'}`).rounded-circle.me-3.fs-6= index + 1
+          div
+            h5.card-title.mb-2= item.title
+            p.card-text.mb-0= item.content
+
+//- Tag/keyword display
+mixin articleTags(tags, title = 'Tags')
+  if tags && tags.length > 0
+    .mt-4
+      h6= title
+      .d-flex.flex-wrap.gap-2
+        each tag in tags
+          span.badge.bg-secondary= tag
+
+//- Back to top button
+mixin backToTopButton()
+  .fixed-bottom.text-end.p-4
+    a.btn.btn-primary.rounded-circle(href='#top', aria-label='Back to top')
+      i.bi.bi-arrow-up

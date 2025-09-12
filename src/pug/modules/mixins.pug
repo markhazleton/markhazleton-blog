@@ -1,3 +1,6 @@
+//- Include standardized article mixins
+include article-mixins
+
 mixin renderFooter(links)
   - let groupedLinks = {}
   each link in links
@@ -29,8 +32,8 @@ mixin relatedDocuments(articles, currentSlug, lastModified)
     // Extract and clean currentKeywords
     - let currentKeywords = [];
     - if (currentArticle.keywords && currentArticle.keywords.trim())
-        - let rawKeywords = currentArticle.keywords.split(',');
-        - currentKeywords = rawKeywords.map(keyword => keyword.trim().toLowerCase()).filter(keyword => keyword);
+      - let rawKeywords = currentArticle.keywords.split(',');
+      - currentKeywords = rawKeywords.map(keyword => keyword.trim().toLowerCase()).filter(keyword => keyword);
 
     // Only check for related articles if there are valid keywords
     if currentKeywords.length > 0
@@ -73,7 +76,6 @@ mixin relatedDocuments(articles, currentSlug, lastModified)
       p.text-white
   else
     p.text-muted
-
 
 mixin displayArticleInfo(article)
   if article

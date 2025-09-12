@@ -1,163 +1,130 @@
 extends layouts/modern-layout
 
-block layout-content
-  // Hero Section
-  section.bg-gradient-primary.py-5
-    .container
-      .row.align-items-center
-        .col-lg-10.mx-auto.text-center
-          h1.display-4.fw-bold.mb-3
-            i.bi.bi-bar-chart-line.me-3
-            | Data Analysis Demonstration
-          h2.h3.mb-4 Visualizing Data with .NET and PivotTable.js
-          p.lead.mb-5
-            | Discover how .NET and PivotTable.js empower users to analyze and visualize CSV data with interactive charts and pivot tables. Explore the full source code and try the live demo.
+//- Import standardized article mixins
+include modules/article-mixins
 
-  // Main Article Content
+block layout-content
+  //- Use standardized hero section
+  +articleHero(
+    'Data Analysis Demonstration',
+    'Visualizing Data with .NET and PivotTable.js',
+    'Discover how .NET and PivotTable.js empower users to analyze and visualize CSV data with interactive charts and pivot tables. Explore the full source code and try the live demo.',
+    'bi.bi-bar-chart-line'
+  )
+
+  //- Main Article Content
   article#main-article
     .container
       .row
         .col-lg-8.mx-auto
           .article-content
-            .alert.alert-primary.border-0.shadow-sm.mb-4
-              .d-flex.align-items-center
-                i.bi.bi-github.text-primary.me-3.fs-4
-                div
-                  h4.alert-heading.h6.mb-2 Source Code on GitHub
-                  a.text-decoration-none.fw-bold(href='https://github.com/markhazleton/DataAnalysisDemo/' target='_blank' rel='noopener' title='The full source code for the Data Analysis Demo is available on GitHub')
-                    | The full source code for the Data Analysis Demo is available on GitHub
+            //- Use standardized GitHub link
+            +githubRepoLink('https://github.com/markhazleton/DataAnalysisDemo/', 'The full source code for the Data Analysis Demo is available on GitHub')
 
-            section.mb-5
-              h2.h3.mb-4 Introduction
+            //- Introduction section using standardized mixin
+            +articleSection('introduction', 'Introduction', 'bi.bi-info-circle', 'primary')
               p.lead
                 | The Data Analysis Demonstration, written by Mark Hazleton in the early 2010s, is a powerful tool that showcases how .NET tools can be used to analyze data in the Comma Separated Variable (CSV) file format. While many software applications may become outdated over time, the Data Analysis Demo continues to be a relevant demonstration of data visualization in .NET web applications.
+
               p
                 | Data analysis and visualization are critical components of any business or research project. Understanding complex data sets can be a daunting task, but visualizing the data can make it easier to identify patterns, trends, and relationships. The Data Analysis Demonstration is a web application that simplifies the process of data visualization and analysis by providing users with powerful charting and pivoting functionality.
-              .alert.alert-info.border-0.shadow-sm.mb-4
-                .d-flex.align-items-center
-                  i.bi.bi-link-45deg.text-info.me-3.fs-4
-                  div
-                    h4.alert-heading.h6.mb-2 Live Demo
-                    a.text-decoration-none.fw-bold(href='https://dataanalysisdemo.markhazleton.com' target='_blank' rel='noopener' title='Data Analysis Demonstration')
-                      | https://dataanalysisdemo.markhazleton.com
 
-            nav.mb-5(aria-label='Table of Contents')
-              .card
-                .card-header.bg-primary.text-white
-                  h3.mb-0
-                    i.bi.bi-list-ul.me-2
-                    | Contents
-                .card-body
-                  ol.list-group.list-group-numbered.list-group-flush
-                    li.list-group-item
-                      a.text-decoration-none(href='#csv-analysis') CSV File Analysis
-                    li.list-group-item
-                      a.text-decoration-none(href='#pivoting') Pivoting Functionality
-                    li.list-group-item
-                      a.text-decoration-none(href='#charting') Charting Functionality
-                    li.list-group-item
-                      a.text-decoration-none(href='#timeless-utility') Timeless Utility
+              //- Use standardized live demo link
+              +liveDemoLink('https://dataanalysisdemo.markhazleton.com', 'Data Analysis Demonstration')
 
-            section#csv-analysis.mb-5
-              .card.shadow-sm.border-0
-                .card-header.bg-success.text-white
-                  h2.h3.mb-0
-                    i.bi.bi-filetype-csv.me-2
-                    | CSV File Analysis
-                .card-body
-                  p.mb-4
-                    | Users can select from a list of CSV files and analyze them in depth. The application provides an analysis of how many columns with basic attributes such as Min Value, Max Value, Unique Values, Most Common Value, Least Common Value, number of rows, and index position for each column.
-                  figure.mb-4
-                    img.img-fluid.rounded(src='assets/img/MarkHazleton-DataAnalysisDemo-SelectCSV.png' alt='Select CSV File for Analysis' loading='lazy' title='Select CSV File for Analysis')
-                    figcaption.text-muted.mt-2.small Select CSV File for Analysis
-                  hr
-                  p.mb-4
-                    | Once a CSV file is selected, users can explore the data by creating custom charts and pivot tables. With the ability to save chart configurations, users can easily reproduce their work or share their findings with others.
-                  figure.mb-4
-                    img.img-fluid.rounded(src='assets/img/MarkHazleton-DataAnalysisDemo-AnalyzeCSV.png' alt='Analyze CSV File' loading='lazy' title='Analyze CSV File')
-                    figcaption.text-muted.mt-2.small Analyze CSV File
+            //- Use standardized table of contents
+            +tableOfContents([
+              { href: '#csv-analysis', text: 'CSV File Analysis' },
+              { href: '#pivoting', text: 'Pivoting Functionality' },
+              { href: '#charting', text: 'Charting Functionality' },
+              { href: '#timeless-utility', text: 'Timeless Utility' }
+            ])
 
-            section#pivoting.mb-5
-              .card.shadow-sm.border-0
-                .card-header.bg-info.text-white
-                  h2.h3.mb-0
-                    i.bi.bi-table.me-2
-                    | Pivoting Functionality
-                .card-body
-                  p.mb-4
-                    | In addition to charting, the Data Analysis Demo leverages PivotTable.js, an open-source JavaScript library that enables users to explore and analyze data by turning a data set into a summary table. With drag-and-drop functionality, PivotTable.js makes it easy to manipulate the summary table, turning it into a pivot table or pivot chart that provides valuable insights into the data.
-                  figure.mb-4
-                    img.img-fluid.rounded(src='assets/img/MarkHazleton-DataAnalysisDemo-CreatePivot.png' alt='Create Pivot Table' loading='lazy' title='Create Pivot Table')
-                    figcaption.text-muted.mt-2.small Create Pivot Table
-                  p.mb-0
-                    | PivotTable.js' basic function is to enable data exploration and analysis by turning a data set into a summary table and then optionally adding a true 2-d drag-drop UI to allow a user to manipulate this summary table, turning it into a pivot table, very similar to the one found in older versions of Microsoft Excel with a bunch of extra developer-oriented features and some visualization effects. With optional add-ons, the summary table can be rendered as various kinds of charts, turning the pivot table into a pivot chart.
+            //- CSV Analysis section
+            +articleSection('csv-analysis', 'CSV File Analysis', 'bi.bi-filetype-csv', 'success')
+              p.mb-4
+                | Users can select from a list of CSV files and analyze them in depth. The application provides an analysis of how many columns with basic attributes such as Min Value, Max Value, Unique Values, Most Common Value, Least Common Value, number of rows, and index position for each column.
 
-            section#charting.mb-5
-              .card.shadow-sm.border-0
-                .card-header.bg-warning.text-dark
-                  h2.h3.mb-0
-                    i.bi.bi-bar-chart.me-2
-                    | Charting Functionality
-                .card-body
-                  p.mb-4
-                    | The Data Analysis Demo's charting functionality uses the System.Web.UI.DataVisualization.Charting library from Microsoft. This customizable library provides a wide range of chart types, including line charts, bar charts, pie charts, and more. Users can save their chart configurations for future use, making it easy to reproduce their work or share their findings with others.
-                  figure.mb-4
-                    img.img-fluid.rounded(src='assets/img/MarkHazleton-DataAnalysisDemo-ChartConfiguration.png' alt='Chart Configuration' loading='lazy' title='Chart Configuration')
-                    figcaption.text-muted.mt-2.small Chart Configuration
-                  p.mb-4
-                    | The Data Analysis Demonstration's powerful charting and pivoting functionality make it an ideal tool for anyone who needs to analyze and visualize data. Whether you're a business analyst, researcher, or developer, the application provides a user-friendly interface for exploring data and extracting valuable insights. With its customizable charting library and intuitive pivot table functionality, the Data Analysis Demonstration is a must-have tool for anyone who works with data.
-                  p.mb-0
-                    | The Data Analysis Demonstration's charting functionality uses the System.Web.UI.DataVisualization.Charting library from Microsoft. This library provides a wide range of chart types, including line charts, bar charts, pie charts, and more. The charting library is highly customizable, enabling users to tailor their charts to meet their specific needs. Users can also save their chart configurations for future use, making it easy to reproduce their work or share their findings with others.
+              +articleImage(
+                'assets/img/MarkHazleton-DataAnalysisDemo-SelectCSV.png',
+                'Select CSV File for Analysis',
+                'Select CSV File for Analysis'
+              )
 
-            section#timeless-utility.mb-5
-              .card.shadow-sm.border-0
-                .card-header.bg-secondary.text-white
-                  h2.h3.mb-0
-                    i.bi.bi-infinity.me-2
-                    | Timeless Utility
-                .card-body
-                  p.mb-4
-                    | The Data Analysis Demo's powerful charting and pivoting functionality make it an ideal tool for anyone who needs to analyze and visualize data. Whether you're a business analyst, researcher, or developer, the application provides a user-friendly interface for exploring data and extracting valuable insights.
-                  p.mb-0
-                    | This is an old demonstration that has been updated to run on Microsoft Asp.Net Framework 4.8. While the application is old, it is still a relevant demonstration of data visualization in .NET web applications. It is nice to see that the application has aged well and continues to be a useful tool for data analysis.          // Conclusion Section
-          section#conclusion.mb-5
-            .card.border-primary.shadow-sm
-              .card-header.bg-primary.text-white
-                h2.h3.mb-0
-                  i.bi.bi-trophy.me-2
-                  | The Enduring Value of Data Analysis
-              .card-body
-                p.lead.mb-4
-                  | The Data Analysis Demonstration stands as a testament to the enduring value of well-designed data tools. By combining .NET's robust charting with the flexibility of PivotTable.js, it empowers users to extract insights and visualize data with ease.
+              hr
 
-                .alert.alert-success.border-0.shadow-sm.mb-4
-                  .d-flex.align-items-start
-                    i.bi.bi-star-fill.text-success.me-3.fs-4
-                    div
-                      h4.alert-heading.h6.mb-2 Transformative Impact
-                      p.mb-0
-                        | Well-designed data tools enable better decisions, deeper insights, and lasting value for users.
+              p.mb-4
+                | Once a CSV file is selected, users can explore the data by creating custom charts and pivot tables. With the ability to save chart configurations, users can easily reproduce their work or share their findings with others.
 
-                .row.g-4.mb-4
-                  .col-md-6
-                    .card.h-100.border-0.shadow-sm
-                      .card-body
-                        h5.card-title.text-primary
-                          i.bi.bi-code-slash.me-2
-                          | Technical Excellence
-                        p.card-text
-                          | The demonstration showcases how .NET's System.Web.UI.DataVisualization.Charting library creates powerful, customizable visualizations while PivotTable.js provides intuitive data exploration capabilities.
+              +articleImage(
+                'assets/img/MarkHazleton-DataAnalysisDemo-AnalyzeCSV.png',
+                'Analyze CSV File',
+                'Analyze CSV File'
+              )
 
-                  .col-md-6
-                    .card.h-100.border-0.shadow-sm
-                      .card-body
-                        h5.card-title.text-primary
-                          i.bi.bi-clock-history.me-2
-                          | Timeless Architecture
-                        p.card-text
-                          | Built on .NET Framework 4.8, this application demonstrates how solid architectural choices enable long-term sustainability and continued relevance in modern web development.
+            //- Pivoting section
+            +articleSection('pivoting', 'Pivoting Functionality', 'bi.bi-table', 'info')
+              p.mb-4
+                | In addition to charting, the Data Analysis Demo leverages PivotTable.js, an open-source JavaScript library that enables users to explore and analyze data by turning a data set into a summary table. With drag-and-drop functionality, PivotTable.js makes it easy to manipulate the summary table, turning it into a pivot table or pivot chart that provides valuable insights into the data.
 
-                p.mb-0
-                  | Explore the demo, review the code, and see how classic .NET web applications can still deliver modern, impactful data analysis experiences.
+              +articleImage(
+                'assets/img/MarkHazleton-DataAnalysisDemo-CreatePivot.png',
+                'Create Pivot Table',
+                'Create Pivot Table'
+              )
+
+              p.mb-0
+                | PivotTable.js' basic function is to enable data exploration and analysis by turning a data set into a summary table and then optionally adding a true 2-d drag-drop UI to allow a user to manipulate this summary table, turning it into a pivot table, very similar to the one found in older versions of Microsoft Excel with a bunch of extra developer-oriented features and some visualization effects. With optional add-ons, the summary table can be rendered as various kinds of charts, turning the pivot table into a pivot chart.
+
+            //- Charting section
+            +articleSection('charting', 'Charting Functionality', 'bi.bi-bar-chart', 'warning')
+              p.mb-4
+                | The Data Analysis Demo's charting functionality uses the System.Web.UI.DataVisualization.Charting library from Microsoft. This customizable library provides a wide range of chart types, including line charts, bar charts, pie charts, and more. Users can save their chart configurations for future use, making it easy to reproduce their work or share their findings with others.
+
+              +articleImage(
+                'assets/img/MarkHazleton-DataAnalysisDemo-ChartConfiguration.png',
+                'Chart Configuration',
+                'Chart Configuration'
+              )
+
+              p.mb-4
+                | The Data Analysis Demonstration's powerful charting and pivoting functionality make it an ideal tool for anyone who needs to analyze and visualize data. Whether you're a business analyst, researcher, or developer, the application provides a user-friendly interface for exploring data and extracting valuable insights. With its customizable charting library and intuitive pivot table functionality, the Data Analysis Demonstration is a must-have tool for anyone who works with data.
+
+              p.mb-0
+                | The Data Analysis Demonstration's charting functionality uses the System.Web.UI.DataVisualization.Charting library from Microsoft. This library provides a wide range of chart types, including line charts, bar charts, pie charts, and more. The charting library is highly customizable, enabling users to tailor their charts to meet their specific needs. Users can also save their chart configurations for future use, making it easy to reproduce their work or share their findings with others.
+
+            //- Timeless Utility section
+            +articleSection('timeless-utility', 'Timeless Utility', 'bi.bi-infinity', 'secondary')
+              p.mb-4
+                | The Data Analysis Demo's powerful charting and pivoting functionality make it an ideal tool for anyone who needs to analyze and visualize data. Whether you're a business analyst, researcher, or developer, the application provides a user-friendly interface for exploring data and extracting valuable insights.
+
+              p.mb-0
+                | This is an old demonstration that has been updated to run on Microsoft Asp.Net Framework 4.8. While the application is old, it is still a relevant demonstration of data visualization in .NET web applications. It is nice to see that the application has aged well and continues to be a useful tool for data analysis.
+
+          //- Use standardized conclusion section
+          +conclusionSection('The Enduring Value of Data Analysis', 'bi.bi-trophy')
+            p.lead.mb-4
+              | The Data Analysis Demonstration stands as a testament to the enduring value of well-designed data tools. By combining .NET's robust charting with the flexibility of PivotTable.js, it empowers users to extract insights and visualize data with ease.
+
+            +keyTakeaway(
+              'Transformative Impact',
+              'Well-designed data tools enable better decisions, deeper insights, and lasting value for users.'
+            )
+
+            +featureCards([
+              {
+                icon: 'bi.bi-code-slash',
+                title: 'Technical Excellence',
+                content: 'The demonstration showcases how .NET\'s System.Web.UI.DataVisualization.Charting library creates powerful, customizable visualizations while PivotTable.js provides intuitive data exploration capabilities.'
+              },
+              {
+                icon: 'bi.bi-clock-history',
+                title: 'Timeless Architecture',
+                content: 'Built on .NET Framework 4.8, this application demonstrates how solid architectural choices enable long-term sustainability and continued relevance in modern web development.'
+              }
+            ])
+
+            p.mb-0
+              | Explore the demo, review the code, and see how classic .NET web applications can still deliver modern, impactful data analysis experiences.
 
 
