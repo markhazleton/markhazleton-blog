@@ -1,77 +1,42 @@
-//- Article Template with LinkedIn Sharing
-//- Standard template for blog articles with integrated LinkedIn sharing
+//- Enhanced Article Template with Standardization
+//- Uses standardized mixins for consistent article structure
+//- Includes LinkedIn sharing and follows Bootstrap 5 best practices
 
-mixin articleTemplate(article, content)
-  // Breadcrumb Navigation
-  .container.mt-4
-    nav.breadcrumb-modern(aria-label='breadcrumb')
-      ol.breadcrumb
-        li.breadcrumb-item
-          a.text-decoration-none(href='/') Home
-        li.breadcrumb-item
-          a.text-decoration-none(href='/articles.html') Articles
-        li.breadcrumb-item.active(aria-current='page')= article ? article.name : 'Article'
+include article-mixins
 
-  // Article Content
+mixin articleTemplate(article, content, options = {})
+  //- Use standardized breadcrumb
+  +articleBreadcrumb(article ? article.name : (options.title || 'Article'))
+
+  //- Article Content Container
   article#main-article.py-5
     .container
       .row
         .col-lg-8.mx-auto
-          header.mb-5
-            // GitHub link if available
-            if article && article.githubUrl
-              .alert.alert-info.text-center.mb-4
-                i.bi.bi-github.me-2
-                a.text-decoration-none.fw-bold(href=article.githubUrl, target='_blank', rel='noopener')
-                  | View the complete source code on GitHub
-                  i.bi.bi-box-arrow-up-ne.ms-1
+          //- Use standardized header
+          +articleHeader(article, options)
 
-            // Article title and meta
-            h1.display-4.fw-bold#top= article ? article.name : 'Article Title'
-            if article && article.subtitle
-              .subheading.h4.text-muted.mb-4= article.subtitle
-
-            .article-meta.text-muted.mb-4
-              if article && article.publishedDate
-                time(datetime=article.publishedDate) #{new Date(article.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                span.mx-2 •
-              span by #{article && article.author ? article.author : 'Mark Hazleton'}
-              if article && article.estimatedReadTime
-                span.mx-2 •
-                span #{article.estimatedReadTime} min read
-
-            // Primary LinkedIn sharing for the article
-            +articleLinkedInShare(article)
-
-          // Article content section
+          //- Article content section
           .article-content
             if content
               != content
             else
               block article-content
 
-            // Call-to-action sharing section in the middle of longer articles
-            .my-5
-              +inlineLinkedInPrompt()
+            //- Call-to-action sharing section for longer articles
+            if typeof inlineLinkedInPrompt === 'function'
+              .my-5
+                +inlineLinkedInPrompt()
 
-            // Additional content after sharing prompt
+            //- Additional content block
             block additional-content
 
-          // Article footer with sharing and follow options
-          .article-footer.mt-5.pt-4.border-top
-            .row
-              .col-md-6
-                h5.mb-3 Share This Article
-                +socialSharingBar()
-              .col-md-6.text-md-end
-                h5.mb-3 Follow for More
-                +linkedinFollowButton()
-                a.btn.btn-outline-primary.ms-2(href='/articles.html')
-                  i.fas.fa-newspaper.me-2
-                  | View All Articles
+          //- Use standardized footer
+          +articleFooter()
 
-  // Floating LinkedIn share button for long articles
-  +floatingLinkedInShare()
+  //- Floating LinkedIn share for long articles
+  if typeof floatingLinkedInShare === 'function'
+    +floatingLinkedInShare(article)
 
 //- Simplified article header mixin for existing templates
 mixin articleHeader(article)

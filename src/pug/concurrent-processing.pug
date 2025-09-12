@@ -1,30 +1,24 @@
 extends layouts/modern-layout
 
-block layout-content
-  // Breadcrumb Navigation
-  .container.mt-4
-    nav.breadcrumb-modern(aria-label='breadcrumb')
-      ol.breadcrumb
-        li.breadcrumb-item
-          a.text-decoration-none(href='/') Home
-        li.breadcrumb-item
-          a.text-decoration-none(href='/articles.html') Articles
-        li.breadcrumb-item.active(aria-current='page') Concurrent Processing
+//- Import standardized article mixins
+include modules/article-mixins
 
-  // Article Content
+block layout-content
+  //- Use standardized breadcrumb
+  +articleBreadcrumb('Concurrent Processing')
+
+  //- Article Content
   article#main-article.py-5
     .container
       .row
         .col-lg-8.mx-auto
+          //- Use standardized header with GitHub link
           header.mb-5
-            .alert.alert-info.text-center.mb-4
-              i.bi.bi-github.me-2
-              a.text-decoration-none.fw-bold(href='https://github.com/markhazleton/concurrentprocessing/', target='_blank', rel='noopener')
-                | View the complete source code on GitHub
-                i.bi.bi-box-arrow-up-ne.ms-1
+            +githubRepoLink('https://github.com/markhazleton/concurrentprocessing/', 'View the complete source code on GitHub')
 
             h1.display-4.fw-bold#top Concurrent Processing in C#
             .subheading.h4.text-muted.mb-4 Learning Concurrent Processing Through Code
+
             .article-meta.text-muted.mb-4
               time(datetime=publishedDate) #{new Date(publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
               span.mx-2 •
@@ -33,21 +27,22 @@ block layout-content
               span #{estimatedReadTime} min read
 
             // LinkedIn sharing for the article
-            +articleLinkedInShare(article)
+            if typeof articleLinkedInShare === 'function'
+              +articleLinkedInShare(article)
 
           .article-content
-            p.lead.
-              As a developer, one of the most exciting aspects of programming is the
-              opportunity to learn new concepts and techniques.
-              Recently, I embarked on a journey to understand concurrent processing better,
-              and I'm excited to share my experience with you.
+            p.lead
+              | As a developer, one of the most exciting aspects of programming is the
+              | opportunity to learn new concepts and techniques.
+              | Recently, I embarked on a journey to understand concurrent processing better,
+              | and I'm excited to share my experience with you.
 
-            p.mb-4.
-              The idea of managing multiple tasks simultaneously has always fascinated me.
-              However, it can be a complex challenge, requiring synchronization
-              and careful management to avoid issues like race conditions and deadlocks.
-              To dive into this topic, I decided to develop a C# console application
-              that would allow me to experiment and learn practically.
+            p.mb-4
+              | The idea of managing multiple tasks simultaneously has always fascinated me.
+              | However, it can be a complex challenge, requiring synchronization
+              | and careful management to avoid issues like race conditions and deadlocks.
+              | To dive into this topic, I decided to develop a C# console application
+              | that would allow me to experiment and learn practically.
 
             section.mb-5
               h2.h3.mb-4

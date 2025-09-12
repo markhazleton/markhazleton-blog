@@ -1,0 +1,242 @@
+//- ProjectMechanics Mixins Library
+//- Specialized mixins for consistent projectmechanics template structure
+//- Created: September 12, 2025
+//- Purpose: Standardize projectmechanics content presentation
+
+//- Main section wrapper for projectmechanics content
+mixin projectSection(title, subtitle, iconClass = 'bi-gear-fill')
+  .projectmechanics-section-content
+    if title
+      h1= title
+    if subtitle
+      .subheading.mb-3= subtitle
+    block
+
+//- Secondary section within projectmechanics content
+mixin projectSubsection(title, iconClass = 'bi-arrow-right-circle')
+  h2.mt-5.mb-4
+    if iconClass
+      i(class='bi ' + iconClass + ' me-2 text-primary')
+    = title
+  block
+
+//- Tertiary section within projectmechanics content
+mixin projectSubsubsection(title, iconClass = 'bi-dot')
+  h3.mt-4.mb-3
+    if iconClass
+      i(class='bi ' + iconClass + ' me-2 text-secondary')
+    = title
+  block
+
+//- Bootstrap card component for projectmechanics
+mixin projectCard(title, headerClass = 'bg-primary', iconClass = null)
+  .card.mb-4.shadow-sm
+    .card-header(class=headerClass + ' text-white')
+      h5.card-title.mb-0
+        if iconClass
+          i(class='bi ' + iconClass + ' me-2')
+        = title
+    .card-body
+      block
+
+//- Info card variant for highlights
+mixin projectInfoCard(title, iconClass = 'bi-info-circle')
+  .card.mb-4.border-info
+    .card-header.bg-info.text-white
+      h5.card-title.mb-0
+        i(class='bi ' + iconClass + ' me-2')
+        = title
+    .card-body
+      block
+
+//- Warning card variant for important notes
+mixin projectWarningCard(title, iconClass = 'bi-exclamation-triangle')
+  .card.mb-4.border-warning
+    .card-header.bg-warning.text-dark
+      h5.card-title.mb-0
+        i(class='bi ' + iconClass + ' me-2')
+        = title
+    .card-body
+      block
+
+//- Success card variant for best practices
+mixin projectSuccessCard(title, iconClass = 'bi-check-circle')
+  .card.mb-4.border-success
+    .card-header.bg-success.text-white
+      h5.card-title.mb-0
+        i(class='bi ' + iconClass + ' me-2')
+        = title
+    .card-body
+      block
+
+//- Definition list with Bootstrap row structure
+mixin projectDefinitionList()
+  dl.row.gy-3
+    block
+
+//- Definition term and description pair
+mixin projectDefinitionItem(term)
+  dt.col-sm-3.fw-bold.text-primary= term
+  dd.col-sm-9
+    block
+
+//- Ordered list with consistent styling
+mixin projectOrderedList(listClass = 'list-group-numbered')
+  ol(class=listClass)
+    block
+
+//- Unordered list with consistent styling
+mixin projectUnorderedList(listClass = 'list-unstyled')
+  ul(class=listClass)
+    block
+
+//- List item with consistent styling
+mixin projectListItem(iconClass = null)
+  li.mb-2
+    if iconClass
+      i(class='bi ' + iconClass + ' me-2 text-primary')
+    block
+
+//- Table wrapper with Bootstrap styling
+mixin projectTable(tableClass = 'table table-striped table-hover')
+  .table-responsive.mb-4
+    table(class=tableClass)
+      block
+
+//- Table header
+mixin projectTableHeader()
+  thead.table-dark
+    block
+
+//- Table body
+mixin projectTableBody()
+  tbody
+    block
+
+//- Video embed with responsive wrapper
+mixin projectVideoEmbed(src, title, allowFullscreen = true)
+  .card.mb-4
+    .card-header.bg-dark.text-white
+      h5.card-title.mb-0
+        i.bi.bi-play-circle.me-2
+        = title
+    .card-body.p-0
+      .ratio.ratio-16x9
+        iframe(
+          src=src
+          title=title
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen=allowFullscreen
+        )
+
+//- Lead paragraph for introductory content
+mixin projectLead()
+  p.lead.mb-4
+    block
+
+//- Highlighted text box
+mixin projectHighlight(bgClass = 'bg-light')
+  .p-4.mb-4.rounded(class=bgClass)
+    block
+
+//- Call-to-action box
+mixin projectCallout(title, variant = 'primary')
+  .alert(class='alert-' + variant + ' d-flex align-items-center mb-4' role='alert')
+    .flex-shrink-0.me-3
+      i(class='bi bi-info-circle-fill' style='font-size: 1.5rem;')
+    div
+      if title
+        h6.alert-heading.mb-1= title
+      block
+
+//- Progress indicator
+mixin projectProgress(label, percentage, variant = 'primary')
+  .mb-3
+    if label
+      .d-flex.justify-content-between.mb-1
+        span.small.fw-medium= label
+        span.small= percentage + '%'
+    .progress(style='height: 8px;')
+      .progress-bar(
+        class='bg-' + variant
+        role='progressbar'
+        style='width: ' + percentage + '%'
+        aria-valuenow=percentage
+        aria-valuemin='0'
+        aria-valuemax='100'
+      )
+
+//- Badge with consistent styling
+mixin projectBadge(text, variant = 'primary')
+  span.badge(class='bg-' + variant)= text
+
+//- Navigation breadcrumb
+mixin projectBreadcrumb()
+  nav(aria-label='breadcrumb')
+    ol.breadcrumb.mb-4
+      block
+
+//- Breadcrumb item
+mixin projectBreadcrumbItem(href = null, active = false)
+  li.breadcrumb-item(class=active ? 'active' : null, aria-current=active ? 'page' : null)
+    if href && !active
+      a.text-decoration-none(href=href)
+        block
+    else
+      block
+
+//- Button group
+mixin projectButtonGroup()
+  .btn-group.mb-3(role='group')
+    block
+
+//- Standard button
+mixin projectButton(href = null, variant = 'primary', size = null)
+  - var classes = 'btn btn-' + variant
+  - if (size) classes += ' btn-' + size
+  if href
+    a(href=href class=classes role='button')
+      block
+  else
+    button(type='button' class=classes)
+      block
+
+//- Accordion wrapper
+mixin projectAccordion(id)
+  .accordion.mb-4(id=id)
+    block
+
+//- Accordion item
+mixin projectAccordionItem(id, parentId, title, expanded = false)
+  .accordion-item
+    h2.accordion-header(id='heading' + id)
+      button.accordion-button(
+        class=expanded ? '' : 'collapsed'
+        type='button'
+        data-bs-toggle='collapse'
+        data-bs-target='#collapse' + id
+        aria-expanded=expanded ? 'true' : 'false'
+        aria-controls='collapse' + id
+      )= title
+    div.accordion-collapse.collapse(
+      id='collapse' + id
+      class=expanded ? 'show' : ''
+      aria-labelledby='heading' + id
+      data-bs-parent='#' + parentId
+    )
+      .accordion-body
+        block
+
+//- Quote/blockquote styling
+mixin projectQuote(author = null, source = null)
+  blockquote.blockquote.mb-4.p-4.bg-light.border-start.border-primary.border-4
+    p.mb-2
+      block
+    if author || source
+      footer.blockquote-footer.mt-2
+        if author
+          cite= author
+        if source
+          | in
+          cite= source
