@@ -4,6 +4,46 @@
 
 This file provides custom instructions for GitHub Copilot when working on Mark Hazleton's personal article site project.
 
+## ⚠️ CRITICAL RULE: ARTICLE META TAGS
+
+**🚨 NEVER ADD META TAGS TO ARTICLE .PUG FILES! 🚨**
+
+**META TAGS ARE AUTOMATICALLY GENERATED FROM THE BUILD PROCESS USING `articles.json` DATA**
+
+### ❌ DO NOT DO THIS in article .pug files:
+
+```pug
+block pagehead
+  title Article Title
+  meta(name='description', content='...')
+  meta(name='keywords', content='...')
+
+block canonical
+  link(rel='canonical', href='...')
+
+block og_overrides
+  meta(property='og:title', content='...')
+
+block twitter_overrides
+  meta(name='twitter:title', content='...')
+```
+
+### ✅ CORRECT ARTICLE .PUG STRUCTURE:
+
+```pug
+extends ../layouts/modern-layout
+
+block layout-content
+  br
+  // Article content starts here
+  section.bg-gradient-primary.py-5
+    // Content only - NO meta tags!
+```
+
+**WHY**: The build system automatically generates all SEO meta tags, canonical links, Open Graph tags, and Twitter Card tags from the metadata in `src/articles.json`. Adding them to .pug files creates duplicates and conflicts.
+
+**REMEMBER**: Article metadata (title, description, keywords, etc.) belongs in `src/articles.json`, NOT in .pug files!
+
 ## Technology Stack Preferences
 
 Use PUG template engine for all HTML templating, with proper indentation (2 spaces) and semantic structure.
@@ -116,7 +156,9 @@ Design layouts that showcase technical expertise and project management credenti
 
 ## SEO and Performance
 
-Generate proper meta tag structure in PUG templates using mixins.
+**🚨 CRITICAL: Article meta tags are NEVER added to .pug files! They are automatically generated from `articles.json` during the build process.**
+
+Generate proper meta tag structure in PUG templates using mixins **ONLY for non-article pages**.
 
 Use semantic HTML5 elements for better search engine understanding.
 
