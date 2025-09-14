@@ -9,8 +9,8 @@ class ArticleSearchEngine {
         this.currentResults = [];
         this.currentPage = 1;
         this.itemsPerPage = 10;
-        this.currentQuery = '';
-        this.currentCategory = '';
+        this.currentQuery = "";
+        this.currentCategory = "";
     }
 
     // Initialize the search engine
@@ -21,16 +21,20 @@ class ArticleSearchEngine {
             this.setupEventListeners();
             this.handleUrlParameters();
             this.isLoaded = true;
-            console.log('Search engine initialized with', this.articles.length, 'articles');
+            console.log(
+                "Search engine initialized with",
+                this.articles.length,
+                "articles",
+            );
         } catch (error) {
-            console.error('Failed to initialize search engine:', error);
-            this.showError('Failed to load articles. Please try again.');
+            console.error("Failed to initialize search engine:", error);
+            this.showError("Failed to load articles. Please try again.");
         }
     }
 
     // Load articles from JSON
     async loadArticles() {
-        const response = await fetch('/articles.json');
+        const response = await fetch("/articles.json");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -45,13 +49,15 @@ class ArticleSearchEngine {
                 article.description,
                 article.keywords,
                 article.Section,
-                article.slug
-            ].join(' ').toLowerCase();
+                article.slug,
+            ]
+                .join(" ")
+                .toLowerCase();
 
             // Create word index
             const words = searchableText.split(/\s+/);
-            words.forEach(word => {
-                word = word.replace(/[^\w]/g, '');
+            words.forEach((word) => {
+                word = word.replace(/[^\w]/g, "");
                 if (word.length > 2) {
                     if (!this.searchIndex.has(word)) {
                         this.searchIndex.set(word, new Set());
@@ -64,25 +70,25 @@ class ArticleSearchEngine {
 
     // Setup event listeners
     setupEventListeners() {
-        const searchForm = document.getElementById('searchForm');
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilter = document.getElementById('categoryFilter');
+        const searchForm = document.getElementById("searchForm");
+        const searchInput = document.getElementById("searchInput");
+        const categoryFilter = document.getElementById("categoryFilter");
 
         if (searchForm) {
-            searchForm.addEventListener('submit', (e) => this.handleSearch(e));
+            searchForm.addEventListener("submit", (e) => this.handleSearch(e));
         }
 
         if (searchInput) {
             // Real-time search suggestions
             let timeoutId;
-            searchInput.addEventListener('input', () => {
+            searchInput.addEventListener("input", () => {
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(() => this.showSuggestions(), 300);
             });
 
             // Handle Enter key
-            searchInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
+            searchInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
                     e.preventDefault();
                     this.performSearch();
                 }
@@ -90,7 +96,7 @@ class ArticleSearchEngine {
         }
 
         if (categoryFilter) {
-            categoryFilter.addEventListener('change', () => {
+            categoryFilter.addEventListener("change", () => {
                 if (this.currentQuery) {
                     this.performSearch();
                 }
@@ -101,11 +107,11 @@ class ArticleSearchEngine {
     // Handle URL parameters for direct search links
     handleUrlParameters() {
         const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get('q');
-        const category = urlParams.get('category');
+        const query = urlParams.get("q");
+        const category = urlParams.get("category");
 
         if (query) {
-            const searchInput = document.getElementById('searchInput');
+            const searchInput = document.getElementById("searchInput");
             if (searchInput) {
                 searchInput.value = query;
             }
@@ -113,7 +119,7 @@ class ArticleSearchEngine {
         }
 
         if (category) {
-            const categoryFilter = document.getElementById('categoryFilter');
+            const categoryFilter = document.getElementById("categoryFilter");
             if (categoryFilter) {
                 categoryFilter.value = category;
             }
@@ -139,18 +145,21 @@ class ArticleSearchEngine {
     performSearch() {
         const startTime = performance.now();
 
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilter = document.getElementById('categoryFilter');
+        const searchInput = document.getElementById("searchInput");
+        const categoryFilter = document.getElementById("categoryFilter");
 
-        this.currentQuery = searchInput ? searchInput.value.trim() : '';
-        this.currentCategory = categoryFilter ? categoryFilter.value : '';
+        this.currentQuery = searchInput ? searchInput.value.trim() : "";
+        this.currentCategory = categoryFilter ? categoryFilter.value : "";
         this.currentPage = 1;
 
         // Update URL without reload
         this.updateUrl();
 
         // Get search results
-        this.currentResults = this.searchArticles(this.currentQuery, this.currentCategory);
+        this.currentResults = this.searchArticles(
+            this.currentQuery,
+            this.currentCategory,
+        );
 
         // Display results
         this.displayResults();
@@ -163,34 +172,41 @@ class ArticleSearchEngine {
     }
 
     // Core search algorithm
-    searchArticles(query, category = '') {
+    searchArticles(query, category = "") {
         let results = [...this.articles];
 
         // Filter by category first
         if (category) {
-            results = results.filter(article => article.Section === category);
+            results = results.filter((article) => article.Section === category);
         }
 
         // If no query, return category-filtered results
         if (!query) {
-            return results.sort((a, b) => new Date(b.publishedDate) - new Date(a.publishedDate));
+            return results.sort(
+                (a, b) => new Date(b.publishedDate) - new Date(a.publishedDate),
+            );
         }
 
         // Search scoring
-        const queryTerms = query.toLowerCase().split(/\s+/).filter(term => term.length > 0);
+        const queryTerms = query
+            .toLowerCase()
+            .split(/\s+/)
+            .filter((term) => term.length > 0);
         const scoredResults = [];
 
-        results.forEach(article => {
+        results.forEach((article) => {
             let score = 0;
             const searchableText = [
                 article.name,
                 article.description,
                 article.keywords,
-                article.Section
-            ].join(' ').toLowerCase();
+                article.Section,
+            ]
+                .join(" ")
+                .toLowerCase();
 
             // Calculate relevance score
-            queryTerms.forEach(term => {
+            queryTerms.forEach((term) => {
                 // Exact title match (highest score)
                 if (article.name.toLowerCase().includes(term)) {
                     score += 10;
@@ -234,21 +250,21 @@ class ArticleSearchEngine {
 
     // Display search results
     displayResults() {
-        const resultsContainer = document.getElementById('searchResults');
-        const loadingElement = document.getElementById('loadingResults');
-        const noResultsElement = document.getElementById('noResults');
+        const resultsContainer = document.getElementById("searchResults");
+        const loadingElement = document.getElementById("loadingResults");
+        const noResultsElement = document.getElementById("noResults");
 
         if (!resultsContainer) return;
 
         // Hide loading
-        if (loadingElement) loadingElement.classList.add('d-none');
+        if (loadingElement) loadingElement.classList.add("d-none");
 
         // Clear previous results
-        resultsContainer.innerHTML = '';
+        resultsContainer.innerHTML = "";
 
         if (this.currentResults.length === 0) {
             if (noResultsElement) {
-                noResultsElement.classList.remove('d-none');
+                noResultsElement.classList.remove("d-none");
             }
             this.hidePagination();
             return;
@@ -256,7 +272,7 @@ class ArticleSearchEngine {
 
         // Hide no results message
         if (noResultsElement) {
-            noResultsElement.classList.add('d-none');
+            noResultsElement.classList.add("d-none");
         }
 
         // Calculate pagination
@@ -265,9 +281,9 @@ class ArticleSearchEngine {
         const pageResults = this.currentResults.slice(startIndex, endIndex);
 
         // Display results
-        pageResults.forEach(article => {
+        pageResults.forEach((article) => {
             const resultHtml = this.createResultCard(article);
-            resultsContainer.insertAdjacentHTML('beforeend', resultHtml);
+            resultsContainer.insertAdjacentHTML("beforeend", resultHtml);
         });
 
         // Update pagination
@@ -276,12 +292,20 @@ class ArticleSearchEngine {
 
     // Create individual result card
     createResultCard(article) {
-        const highlightedName = this.highlightSearchTerms(article.name, this.currentQuery);
-        const highlightedDescription = this.highlightSearchTerms(article.description, this.currentQuery);
-        const publishedDate = new Date(article.publishedDate).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+        const highlightedName = this.highlightSearchTerms(
+            article.name,
+            this.currentQuery,
+        );
+        const highlightedDescription = this.highlightSearchTerms(
+            article.description,
+            this.currentQuery,
+        );
+        const publishedDate = new Date(
+            article.publishedDate,
+        ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
         });
 
         return `
@@ -301,7 +325,7 @@ class ArticleSearchEngine {
                                     <i class="fas fa-calendar-alt me-1"></i>
                                     ${publishedDate}
                                 </small>
-                                ${article.searchScore ? `<small class="text-success mb-1">Relevance: ${article.searchScore}</small>` : ''}
+                                ${article.searchScore ? `<small class="text-success mb-1">Relevance: ${article.searchScore}</small>` : ""}
                             </div>
                         </div>
                         <div class="col-md-4 text-md-end">
@@ -320,12 +344,15 @@ class ArticleSearchEngine {
     highlightSearchTerms(text, query) {
         if (!query) return text;
 
-        const terms = query.split(/\s+/).filter(term => term.length > 0);
+        const terms = query.split(/\s+/).filter((term) => term.length > 0);
         let highlightedText = text;
 
-        terms.forEach(term => {
-            const regex = new RegExp(`(${this.escapeRegex(term)})`, 'gi');
-            highlightedText = highlightedText.replace(regex, '<mark class="search-highlight">$1</mark>');
+        terms.forEach((term) => {
+            const regex = new RegExp(`(${this.escapeRegex(term)})`, "gi");
+            highlightedText = highlightedText.replace(
+                regex,
+                '<mark class="search-highlight">$1</mark>',
+            );
         });
 
         return highlightedText;
@@ -333,12 +360,12 @@ class ArticleSearchEngine {
 
     // Escape regex special characters
     escapeRegex(string) {
-        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     }
 
     // Show search suggestions (typeahead)
     showSuggestions() {
-        const searchInput = document.getElementById('searchInput');
+        const searchInput = document.getElementById("searchInput");
         if (!searchInput) return;
 
         const query = searchInput.value.trim();
@@ -350,8 +377,9 @@ class ArticleSearchEngine {
         const suggestions = this.getSuggestions(query, 5);
         if (suggestions.length === 0) return;
 
-        let suggestionsHtml = '<div id="searchSuggestions" class="position-absolute bg-white border rounded shadow-sm mt-1 w-100" style="z-index: 1050;">';
-        suggestions.forEach(suggestion => {
+        let suggestionsHtml =
+            '<div id="searchSuggestions" class="position-absolute bg-white border rounded shadow-sm mt-1 w-100" style="z-index: 1050;">';
+        suggestions.forEach((suggestion) => {
             suggestionsHtml += `
                 <div class="suggestion-item p-3 border-bottom" onclick="searchEngine.selectSuggestion('${suggestion.text}')" style="cursor: pointer;">
                     <div class="fw-bold">${this.highlightSearchTerms(suggestion.text, query)}</div>
@@ -359,16 +387,17 @@ class ArticleSearchEngine {
                 </div>
             `;
         });
-        suggestionsHtml += '</div>';
+        suggestionsHtml += "</div>";
 
         // Remove existing suggestions
         this.hideSuggestions();
 
         // Add to search container
-        const searchContainer = searchInput.closest('.input-group').parentElement;
+        const searchContainer =
+            searchInput.closest(".input-group").parentElement;
         if (searchContainer) {
-            searchContainer.style.position = 'relative';
-            searchContainer.insertAdjacentHTML('beforeend', suggestionsHtml);
+            searchContainer.style.position = "relative";
+            searchContainer.insertAdjacentHTML("beforeend", suggestionsHtml);
         }
     }
 
@@ -379,26 +408,34 @@ class ArticleSearchEngine {
         const lowercaseQuery = query.toLowerCase();
 
         // Title suggestions
-        this.articles.forEach(article => {
-            if (article.name.toLowerCase().includes(lowercaseQuery) && !added.has(article.name)) {
+        this.articles.forEach((article) => {
+            if (
+                article.name.toLowerCase().includes(lowercaseQuery) &&
+                !added.has(article.name)
+            ) {
                 suggestions.push({
                     text: article.name,
-                    type: 'Article',
-                    count: 1
+                    type: "Article",
+                    count: 1,
                 });
                 added.add(article.name);
             }
         });
 
         // Category suggestions
-        const categories = [...new Set(this.articles.map(a => a.Section))];
-        categories.forEach(category => {
-            if (category.toLowerCase().includes(lowercaseQuery) && !added.has(category)) {
-                const count = this.articles.filter(a => a.Section === category).length;
+        const categories = [...new Set(this.articles.map((a) => a.Section))];
+        categories.forEach((category) => {
+            if (
+                category.toLowerCase().includes(lowercaseQuery) &&
+                !added.has(category)
+            ) {
+                const count = this.articles.filter(
+                    (a) => a.Section === category,
+                ).length;
                 suggestions.push({
                     text: category,
-                    type: 'Category',
-                    count: count
+                    type: "Category",
+                    count: count,
                 });
                 added.add(category);
             }
@@ -409,7 +446,7 @@ class ArticleSearchEngine {
 
     // Select a suggestion
     selectSuggestion(text) {
-        const searchInput = document.getElementById('searchInput');
+        const searchInput = document.getElementById("searchInput");
         if (searchInput) {
             searchInput.value = text;
             this.hideSuggestions();
@@ -419,7 +456,7 @@ class ArticleSearchEngine {
 
     // Hide suggestions
     hideSuggestions() {
-        const suggestions = document.getElementById('searchSuggestions');
+        const suggestions = document.getElementById("searchSuggestions");
         if (suggestions) {
             suggestions.remove();
         }
@@ -427,14 +464,14 @@ class ArticleSearchEngine {
 
     // Update search statistics
     updateSearchStats(resultCount, searchTime) {
-        const statsElement = document.getElementById('searchStats');
-        const statsText = document.getElementById('statsText');
-        const searchTimeElement = document.getElementById('searchTime');
+        const statsElement = document.getElementById("searchStats");
+        const statsText = document.getElementById("statsText");
+        const searchTimeElement = document.getElementById("searchTime");
 
         if (statsElement && statsText && searchTimeElement) {
-            statsElement.classList.remove('d-none');
+            statsElement.classList.remove("d-none");
 
-            let statsMessage = `Found ${resultCount} article${resultCount !== 1 ? 's' : ''}`;
+            let statsMessage = `Found ${resultCount} article${resultCount !== 1 ? "s" : ""}`;
             if (this.currentQuery) {
                 statsMessage += ` for "${this.currentQuery}"`;
             }
@@ -449,23 +486,26 @@ class ArticleSearchEngine {
 
     // Update pagination
     updatePagination() {
-        const paginationContainer = document.getElementById('searchPagination');
+        const paginationContainer = document.getElementById("searchPagination");
         if (!paginationContainer) return;
 
-        const totalPages = Math.ceil(this.currentResults.length / this.itemsPerPage);
+        const totalPages = Math.ceil(
+            this.currentResults.length / this.itemsPerPage,
+        );
 
         if (totalPages <= 1) {
-            paginationContainer.classList.add('d-none');
+            paginationContainer.classList.add("d-none");
             return;
         }
 
-        paginationContainer.classList.remove('d-none');
+        paginationContainer.classList.remove("d-none");
 
-        let paginationHtml = '<nav aria-label="Search results pagination"><ul class="pagination justify-content-center">';
+        let paginationHtml =
+            '<nav aria-label="Search results pagination"><ul class="pagination justify-content-center">';
 
         // Previous button
         paginationHtml += `
-            <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
+            <li class="page-item ${this.currentPage === 1 ? "disabled" : ""}">
                 <a class="page-link" href="#" onclick="searchEngine.goToPage(${this.currentPage - 1}); return false;" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -478,7 +518,7 @@ class ArticleSearchEngine {
 
         for (let i = startPage; i <= endPage; i++) {
             paginationHtml += `
-                <li class="page-item ${i === this.currentPage ? 'active' : ''}">
+                <li class="page-item ${i === this.currentPage ? "active" : ""}">
                     <a class="page-link" href="#" onclick="searchEngine.goToPage(${i}); return false;">${i}</a>
                 </li>
             `;
@@ -486,37 +526,42 @@ class ArticleSearchEngine {
 
         // Next button
         paginationHtml += `
-            <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
+            <li class="page-item ${this.currentPage === totalPages ? "disabled" : ""}">
                 <a class="page-link" href="#" onclick="searchEngine.goToPage(${this.currentPage + 1}); return false;" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         `;
 
-        paginationHtml += '</ul></nav>';
+        paginationHtml += "</ul></nav>";
         paginationContainer.innerHTML = paginationHtml;
     }
 
     // Go to specific page
     goToPage(page) {
-        const totalPages = Math.ceil(this.currentResults.length / this.itemsPerPage);
+        const totalPages = Math.ceil(
+            this.currentResults.length / this.itemsPerPage,
+        );
         if (page < 1 || page > totalPages) return;
 
         this.currentPage = page;
         this.displayResults();
 
         // Scroll to top of results
-        const resultsContainer = document.getElementById('searchResults');
+        const resultsContainer = document.getElementById("searchResults");
         if (resultsContainer) {
-            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            resultsContainer.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
         }
     }
 
     // Hide pagination
     hidePagination() {
-        const paginationContainer = document.getElementById('searchPagination');
+        const paginationContainer = document.getElementById("searchPagination");
         if (paginationContainer) {
-            paginationContainer.classList.add('d-none');
+            paginationContainer.classList.add("d-none");
         }
     }
 
@@ -525,20 +570,20 @@ class ArticleSearchEngine {
         const params = new URLSearchParams();
 
         if (this.currentQuery) {
-            params.set('q', this.currentQuery);
+            params.set("q", this.currentQuery);
         }
 
         if (this.currentCategory) {
-            params.set('category', this.currentCategory);
+            params.set("category", this.currentCategory);
         }
 
-        const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
-        window.history.replaceState({}, '', newUrl);
+        const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+        window.history.replaceState({}, "", newUrl);
     }
 
     // Show error message
     showError(message) {
-        const container = document.querySelector('.container');
+        const container = document.querySelector(".container");
         if (container) {
             const errorHtml = `
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -547,7 +592,7 @@ class ArticleSearchEngine {
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `;
-            container.insertAdjacentHTML('afterbegin', errorHtml);
+            container.insertAdjacentHTML("afterbegin", errorHtml);
         }
     }
 }
@@ -556,7 +601,7 @@ class ArticleSearchEngine {
 let searchEngine;
 
 // Global functions for search form and page interactions
-window.performSearch = function(event) {
+window.performSearch = function (event) {
     if (event) event.preventDefault();
     if (searchEngine) {
         searchEngine.performSearch();
@@ -565,17 +610,17 @@ window.performSearch = function(event) {
 };
 
 // Initialize search engine when DOM is loaded
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener("DOMContentLoaded", async function () {
     // Only initialize if we're on the search page
-    if (document.getElementById('searchForm')) {
+    if (document.getElementById("searchForm")) {
         searchEngine = new ArticleSearchEngine();
         await searchEngine.init();
     }
 });
 
 // Handle clicks outside suggestions to hide them
-document.addEventListener('click', function(e) {
-    if (searchEngine && !e.target.closest('.input-group')) {
+document.addEventListener("click", function (e) {
+    if (searchEngine && !e.target.closest(".input-group")) {
         searchEngine.hideSuggestions();
     }
 });

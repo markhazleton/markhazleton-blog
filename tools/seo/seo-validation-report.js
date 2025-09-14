@@ -11,7 +11,7 @@ const path = require('path');
 const cheerio = require('cheerio');
 
 // Load articles data
-const articlesPath = path.join(__dirname, '../src/articles.json');
+const articlesPath = path.join(__dirname, '../../src/articles.json');
 const articles = JSON.parse(fs.readFileSync(articlesPath, 'utf8'));
 
 // Create articles lookup by slug
@@ -24,19 +24,19 @@ articles.forEach(article => {
  * Map HTML file path to corresponding PUG source file
  */
 function mapHtmlToPugFile(htmlFilePath) {
-    const relativePath = path.relative(path.join(__dirname, '../docs'), htmlFilePath);
+    const relativePath = path.relative(path.join(__dirname, '../../docs'), htmlFilePath);
     const htmlFileName = path.basename(htmlFilePath, '.html');
 
     // Handle root level files
     if (!relativePath.includes('/')) {
-        const pugPath = path.join(__dirname, '../src/pug', htmlFileName + '.pug');
+        const pugPath = path.join(__dirname, '../../src/pug', htmlFileName + '.pug');
         if (fs.existsSync(pugPath)) {
             return path.relative(process.cwd(), pugPath);
         }
     }
 
     // Handle files in subdirectories (like articles/)
-    const pugPath = path.join(__dirname, '../src/pug', relativePath.replace('.html', '.pug'));
+    const pugPath = path.join(__dirname, '../../src/pug', relativePath.replace('.html', '.pug'));
     if (fs.existsSync(pugPath)) {
         return path.relative(process.cwd(), pugPath);
     }
@@ -244,7 +244,7 @@ function generateReport() {
     console.log('🔍 COMPREHENSIVE SEO VALIDATION REPORT');
     console.log('=====================================\n');
 
-    const docsPath = path.join(__dirname, '../docs');
+    const docsPath = path.join(__dirname, '../../docs');
     const pugFileIssues = new Map(); // Group issues by PUG file
     const summary = {
         htmlFiles: 0,
