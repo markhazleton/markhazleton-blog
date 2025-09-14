@@ -5,13 +5,13 @@ const fs = require('fs');
 console.log('🚀 Starting Mark Hazleton Blog Development Server...');
 
 // Check if docs directory exists
-const docsDir = path.join(__dirname, '..', 'docs');
+const docsDir = path.join(__dirname, '..', '..', 'docs');
 if (!fs.existsSync(docsDir)) {
     console.error('📁 docs directory not found! Building site first...');
 
     try {
         console.log('🔨 Running build process...');
-        execSync('npm run build', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
+        execSync('npm run build', { stdio: 'inherit', cwd: path.join(__dirname, '..', '..') });
         console.log('✅ Build completed successfully');
     } catch (error) {
         console.error('❌ Build failed:', error.message);
@@ -28,7 +28,7 @@ if (watchMode) {
 
     // Import and start the watcher
     const BlogBuilder = require('./build');
-    const DevelopmentWatcher = require('../build/utils/development-watcher');
+    const DevelopmentWatcher = require('./development-watcher');
 
     try {
         const builder = new BlogBuilder({ noCache: false });
@@ -85,7 +85,7 @@ try {
         console.log('💡 Use "npm start -- --watch" for automatic rebuilds');
     }
 
-    // Start browser-sync
+    // Start browser-sync with shell for Windows PowerShell compatibility
     const browserSync = spawn(command, args, {
         stdio: 'inherit',
         shell: true

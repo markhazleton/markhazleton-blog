@@ -48,7 +48,7 @@ param(
     [int]$Days = 10,
 
     [Parameter()]
-    [string]$OutputPath = ".",
+    [string]$OutputPath = ".\temp\reports",
 
     [Parameter()]
     [ValidateSet("HTML", "JSON", "Console")]

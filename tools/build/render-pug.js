@@ -15,7 +15,7 @@ const articles = require('./../../src/articles.json');
 const projects = require('./../../src/projects.json');
 
 // Import SEO Helper
-const SEOHelper = require('../utils/seo-helper');
+const SEOHelper = require('./seo-helper');
 const seoHelper = new SEOHelper(articles, {
     logWarnings: true,
     logErrors: true,
@@ -26,10 +26,10 @@ const seoHelper = new SEOHelper(articles, {
 
 module.exports = async function renderPug(filePath) {
     const destPath = filePath.replace(/src\/pug\//, 'docs/').replace(/\.pug$/, '.html');
-    const srcPath = upath.resolve(upath.dirname(__filename), '../src');
+    const srcPath = upath.resolve(upath.dirname(__filename), '../../src');
 
     // Derive the currentSlug
-    const relativePath = upath.relative(upath.resolve(__dirname, '../src/pug'), filePath);
+    const relativePath = upath.relative(upath.resolve(__dirname, '../../src/pug'), filePath);
     const currentSlug = relativePath.replace(/\.pug$/, '.html');
 
     // Get the last modified date of the file

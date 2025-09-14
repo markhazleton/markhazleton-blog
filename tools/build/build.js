@@ -11,21 +11,21 @@ const path = require('path');
 const fs = require('fs');
 
 // Import all render functions
-const renderPug = require('../build/renderers/render-pug');
-const { renderSCSS, renderModernSCSS } = require('../build/renderers/scss-renderer');
-const renderScripts = require('../build/renderers/render-scripts');
-const renderAssets = require('../build/renderers/render-assets');
+const renderPug = require('./render-pug');
+const { renderSCSS, renderModernSCSS } = require('./scss-renderer');
+const renderScripts = require('./render-scripts');
+const renderAssets = require('./render-assets');
 
 // Import utility functions
-const updateRSS = require('../build/utils/update-rss');
-const updateSitemap = require('../build/utils/update-sitemap');
-const updateSectionsWithArticles = require('../build/utils/update-sections');
+const updateRSS = require('./update-rss');
+const updateSitemap = require('./update-sitemap');
+const updateSectionsWithArticles = require('./update-sections');
 
 // Import optimization utilities
-const BuildCache = require('../build/utils/cache-manager');
-const PerformanceTracker = require('../build/utils/performance-tracker');
-const ErrorRecovery = require('../build/utils/error-recovery');
-const buildConfig = require('../build/config/build-config');
+const BuildCache = require('./cache-manager');
+const PerformanceTracker = require('./performance-tracker');
+const ErrorRecovery = require('./error-recovery');
+const buildConfig = require('./build-config');
 
 const sh = require('shelljs');
 const upath = require('upath');
@@ -33,7 +33,7 @@ const upath = require('upath');
 class BlogBuilder {
     constructor(options = {}) {
         this.config = buildConfig.getConfig();
-        this.srcPath = upath.resolve(upath.dirname(__filename), '../src');
+        this.srcPath = upath.resolve(upath.dirname(__filename), '../../src');
 
         // Initialize optimization components
         this.cache = new BuildCache({
