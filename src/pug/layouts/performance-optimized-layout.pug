@@ -1,0 +1,398 @@
+block variables
+  // Performance-Optimized Modern Layout
+  // Critical CSS inline, non-critical CSS deferred
+  // Uses articles.json data to automatically populate title, description, keywords
+
+doctype html
+-
+  // Initialize SEO data based on article or custom data
+  var seoData = {};
+  if (typeof article !== 'undefined' && article) {
+    // Article page - use article data with optimizations
+    var title = article.seo?.title || article.name;
+    var titleSuffix = article.seo?.titleSuffix !== undefined ? article.seo.titleSuffix : ' | Mark Hazleton';
+    seoData.title = title + titleSuffix;
+
+    // Optimize description length (120-160 chars)
+    var description = article.seo?.description || article.description || '';
+    if (description.length > 160) {
+      seoData.description = description.substring(0, 157) + '...';
+    } else {
+      seoData.description = description;
+    }
+
+    seoData.keywords = article.seo?.keywords || article.keywords || '';
+    seoData.canonical = article.seo?.canonical || `https://markhazleton.com/${article.slug}`;
+    seoData.author = article.author || 'Mark Hazleton';
+    seoData.robots = article.seo?.robots || 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+
+    // Open Graph data
+    seoData.ogTitle = article.og?.title || seoData.title;
+    seoData.ogDescription = article.og?.description || seoData.description;
+    seoData.ogType = article.og?.type || 'article';
+    var imageUrl = article.og?.image || article.img_src || '/assets/img/MarkHazleton.jpg';
+    seoData.ogImage = imageUrl.startsWith('http') ? imageUrl : 'https://markhazleton.com/' + imageUrl.replace(/^\/+/, '');
+    seoData.ogImageAlt = article.og?.imageAlt || (article.name + ' - Mark Hazleton');
+
+    // YouTube video support for Open Graph
+    if (article.youtubeUrl) {
+      var videoId = '';
+      try {
+        var url = new URL(article.youtubeUrl);
+        // Prefer explicit path patterns first (e.g., /embed/), then host-specific rules
+        if (url.pathname.includes('/embed/')) {
+          videoId = url.pathname.split('/embed/')[1].split('?')[0];
+        } else if (url.hostname.includes('youtu.be')) {
+          videoId = url.pathname.substring(1);
+        } else if (url.hostname.includes('youtube.com')) {
+          videoId = new URLSearchParams(url.search).get('v') || '';
+          // Handle YouTube Shorts or other path-based IDs as a fallback
+          if (!videoId && url.pathname.startsWith('/shorts/')) {
+            videoId = url.pathname.split('/shorts/')[1].split('?')[0];
+          }
+        }
+      } catch (e) {
+        // Handle invalid URL
+      }
+
+      if (videoId) {
+        seoData.ogVideo = `https://www.youtube.com/embed/${videoId}`;
+        seoData.ogVideoType = 'text/html';
+        seoData.ogVideoWidth = '560';
+        seoData.ogVideoHeight = '315';
+        seoData.ogVideoSecureUrl = `https://www.youtube.com/embed/${videoId}`;
+        // Use YouTube thumbnail as image if no custom image provided
+        if (!article.og?.image && !article.img_src) {
+          seoData.ogImage = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+          seoData.ogImageAlt = (article.youtubeTitle || article.name) + ' - Video thumbnail';
+        }
+      }
+    }
+
+    // Twitter Card data
+    seoData.twitterTitle = article.twitter?.title || seoData.title;
+    seoData.twitterDescription = article.twitter?.description || seoData.description;
+    var twitterImageUrl = article.twitter?.image || seoData.ogImage;
+    seoData.twitterImage = twitterImageUrl.startsWith('http') ? twitterImageUrl : 'https://markhazleton.com/' + twitterImageUrl.replace(/^\/+/, '');
+    seoData.twitterImageAlt = article.twitter?.imageAlt || seoData.ogImageAlt;
+
+    // YouTube video support for Twitter Card
+    if (article.youtubeUrl && seoData.ogVideo) {
+      seoData.twitterCard = 'player';
+      seoData.twitterPlayer = seoData.ogVideo;
+      seoData.twitterPlayerWidth = '560';
+      seoData.twitterPlayerHeight = '315';
+    }
+
+  } else {
+    // Default page data (can be overridden in page-specific blocks)
+    seoData.title = pageTitle || 'Mark Hazleton - Solutions Architect & Technology Leader';
+    seoData.description = pageDescription || 'Mark Hazleton - Solutions Architect specializing in .NET, Azure, and project management. 25+ years experience bridging technology with business goals.';
+    seoData.keywords = pageKeywords || 'Mark Hazleton, Solutions Architect, .NET Developer, Azure Cloud, Project Management, ASP.NET Core, Software Engineering, Technology Consultant, Web Development, Dallas Texas';
+    seoData.canonical = pageCanonical || 'https://markhazleton.com/';
+    seoData.author = 'Mark Hazleton';
+    seoData.robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+
+    // Default Open Graph
+    seoData.ogTitle = pageOgTitle || seoData.title;
+    seoData.ogDescription = pageOgDescription || seoData.description;
+    seoData.ogType = 'website';
+    seoData.ogImage = pageOgImage || '/assets/img/MarkHazleton.jpg';
+    seoData.ogImageAlt = 'Mark Hazleton - Solutions Architect';
+
+    // Default Twitter Card
+    seoData.twitterTitle = pageTwitterTitle || seoData.title;
+    seoData.twitterDescription = pageTwitterDescription || seoData.description;
+    seoData.twitterImage = pageTwitterImage || seoData.ogImage;
+    seoData.twitterImageAlt = seoData.ogImageAlt;
+  }
+
+- var today = new Date();
+- var yyyy = today.getFullYear();
+- var mm = ('0' + (today.getMonth() + 1)).slice(-2);
+- var dd = ('0' + today.getDate()).slice(-2);
+- var dateString = '' + yyyy + mm + dd;
+html(lang='en')
+  head
+    // Essential Meta Tags
+    meta(charset="UTF-8")
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='color-scheme', content='light dark')
+    // Theme color for supported browsers (Chrome, Safari, Edge)
+    meta(name='theme-color', content='#2c3e50', media='(prefers-color-scheme: light)')
+    meta(name='theme-color', content='#34495e', media='(prefers-color-scheme: dark)')
+
+    // Dynamic SEO Meta Tags from articles.json
+    title= seoData.title
+    meta(name='description', content=seoData.description)
+    meta(name='keywords', content=seoData.keywords)
+    meta(name='author', content=seoData.author)
+    meta(name='robots', content=seoData.robots)
+
+    // Page-specific metadata block (optional overrides)
+    block pagehead
+
+    // Canonical URL
+    link(rel='canonical', href=seoData.canonical)
+
+    // Default canonical override block (for backward compatibility)
+    block canonical
+
+    // Open Graph Meta Tags - Optimized for LinkedIn Sharing
+    meta(property='og:title', content=seoData.ogTitle)
+    meta(property='og:description', content=seoData.ogDescription)
+    meta(property='og:type', content=seoData.ogType)
+    meta(property='og:url', content=seoData.canonical)
+    meta(property='og:image', content=seoData.ogImage)
+    meta(property='og:image:width', content='1200')
+    meta(property='og:image:height', content='630')
+    meta(property='og:image:alt', content=seoData.ogImageAlt)
+    meta(property='og:site_name', content='Mark Hazleton')
+    meta(property='og:locale', content='en_US')
+
+    // LinkedIn-specific optimizations
+    meta(property='article:author', content='Mark Hazleton')
+    if article && article.publishedDate
+      meta(property='article:published_time', content=article.publishedDate)
+    if article && article.keywords
+      each keyword in article.keywords.split(',')
+        meta(property='article:tag', content=keyword.trim())
+
+    // YouTube video Open Graph tags
+    if seoData.ogVideo
+      meta(property='og:video', content=seoData.ogVideo)
+      meta(property='og:video:type', content=seoData.ogVideoType)
+      meta(property='og:video:width', content=seoData.ogVideoWidth)
+      meta(property='og:video:height', content=seoData.ogVideoHeight)
+      meta(property='og:video:url', content=seoData.ogVideo)
+      meta(property='og:video:secure_url', content=seoData.ogVideoSecureUrl)
+
+    // Additional Open Graph overrides (for backward compatibility)
+    block og_overrides
+
+    // Twitter Card Meta Tags
+    if seoData.twitterCard
+      meta(name='twitter:card', content=seoData.twitterCard)
+    else
+      meta(name='twitter:card', content='summary_large_image')
+    meta(name='twitter:site', content='@markhazleton')
+    meta(name='twitter:creator', content='@markhazleton')
+    meta(name='twitter:title', content=seoData.twitterTitle)
+    meta(name='twitter:description', content=seoData.twitterDescription)
+    meta(name='twitter:image', content=seoData.twitterImage)
+    meta(name='twitter:image:alt', content=seoData.twitterImageAlt)
+
+    // YouTube video Twitter Card tags
+    if seoData.twitterPlayer
+      meta(name='twitter:player', content=seoData.twitterPlayer)
+      meta(name='twitter:player:width', content=seoData.twitterPlayerWidth)
+      meta(name='twitter:player:height', content=seoData.twitterPlayerHeight)
+
+    // Additional Twitter Card overrides (for backward compatibility)
+    block twitter_overrides
+
+    // Favicon and app icons
+    link(rel="shortcut icon", href="/assets/img/favicon.ico")
+    link(rel='icon', type='image/x-icon', href='/assets/img/favicon.ico')
+    link(rel='apple-touch-icon', sizes='180x180', href='/apple-touch-icon.png')
+    link(rel='icon', type='image/png', sizes='32x32', href='/favicon-32x32.png')
+    link(rel='icon', type='image/png', sizes='16x16', href='/favicon-16x16.png')
+    link(rel='manifest', href='/site.webmanifest')
+
+    // ⚡ PERFORMANCE OPTIMIZED CSS LOADING ⚡
+    // Critical CSS inlined for immediate render
+    style#critical-css.
+      /* Critical CSS will be injected here during build */
+      .navbar{position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;padding-top:.5rem;padding-bottom:.5rem}.navbar>.container,.navbar>.container-fluid,.navbar>.container-lg,.navbar>.container-md,.navbar>.container-sm,.navbar>.container-xl,.navbar>.container-xxl{display:flex;flex-wrap:inherit;align-items:center;justify-content:space-between}.navbar-brand{padding-top:.3125rem;padding-bottom:.3125rem;margin-right:1rem;font-size:1.25rem;text-decoration:none;white-space:nowrap}.navbar-nav{display:flex;flex-direction:column;padding-left:0;margin-bottom:0;list-style:none}.navbar-nav .nav-link{padding-right:0;padding-left:0}.navbar-nav .dropdown-menu{position:static}.navbar-text{padding-top:.5rem;padding-bottom:.5rem}.navbar-collapse{flex-basis:100%;flex-grow:1;align-items:center}.navbar-toggler{padding:.25rem .75rem;font-size:1.25rem;line-height:1;background-color:transparent;border:1px solid transparent;border-radius:.375rem;transition:box-shadow .15s ease-in-out}.navbar-toggler:hover{text-decoration:none}.navbar-toggler:focus{text-decoration:none;outline:0;box-shadow:0 0 0 .25rem}.navbar-toggler-icon{display:inline-block;width:1.5em;height:1.5em;vertical-align:middle;background-repeat:no-repeat;background-position:center;background-size:100%}.navbar-expand{flex-wrap:nowrap;justify-content:flex-start}.navbar-expand .navbar-nav{flex-direction:row}.navbar-expand .navbar-nav .dropdown-menu{position:absolute}.navbar-expand .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand .navbar-collapse{display:flex!important;flex-basis:auto}.navbar-expand .navbar-toggler{display:none}@media (min-width:576px){.navbar-expand-sm{flex-wrap:nowrap;justify-content:flex-start}.navbar-expand-sm .navbar-nav{flex-direction:row}.navbar-expand-sm .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-sm .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-sm .navbar-collapse{display:flex!important;flex-basis:auto}.navbar-expand-sm .navbar-toggler{display:none}}@media (min-width:768px){.navbar-expand-md{flex-wrap:nowrap;justify-content:flex-start}.navbar-expand-md .navbar-nav{flex-direction:row}.navbar-expand-md .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-md .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-md .navbar-collapse{display:flex!important;flex-basis:auto}.navbar-expand-md .navbar-toggler{display:none}}@media (min-width:992px){.navbar-expand-lg{flex-wrap:nowrap;justify-content:flex-start}.navbar-expand-lg .navbar-nav{flex-direction:row}.navbar-expand-lg .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-lg .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-lg .navbar-collapse{display:flex!important;flex-basis:auto}.navbar-expand-lg .navbar-toggler{display:none}}@media (min-width:1200px){.navbar-expand-xl{flex-wrap:nowrap;justify-content:flex-start}.navbar-expand-xl .navbar-nav{flex-direction:row}.navbar-expand-xl .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-xl .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-xl .navbar-collapse{display:flex!important;flex-basis:auto}.navbar-expand-xl .navbar-toggler{display:none}}@media (min-width:1400px){.navbar-expand-xxl{flex-wrap:nowrap;justify-content:flex-start}.navbar-expand-xxl .navbar-nav{flex-direction:row}.navbar-expand-xxl .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-xxl .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-xxl .navbar-collapse{display:flex!important;flex-basis:auto}.navbar-expand-xxl .navbar-toggler{display:none}}.fixed-top{position:fixed;top:0;right:0;left:0;z-index:1030}.container,.container-fluid{width:100%;padding-right:var(--bs-gutter-x,.75rem);padding-left:var(--bs-gutter-x,.75rem);margin-right:auto;margin-left:auto}@media (min-width:576px){.container{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container{max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}@media (min-width:1400px){.container{max-width:1320px}}.row{--bs-gutter-x:1.5rem;--bs-gutter-y:0;display:flex;flex-wrap:wrap;margin-top:calc(-1 * var(--bs-gutter-y));margin-right:calc(-.5 * var(--bs-gutter-x));margin-left:calc(-.5 * var(--bs-gutter-x))}.row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x) * .5);padding-left:calc(var(--bs-gutter-x) * .5);margin-top:var(--bs-gutter-y)}.bg-primary{--bs-bg-opacity:1;background-color:rgba(var(--bs-primary-rgb),var(--bs-bg-opacity))!important}.bg-dark{--bs-bg-opacity:1;background-color:rgba(var(--bs-dark-rgb),var(--bs-bg-opacity))!important}.text-white{--bs-text-opacity:1;color:rgba(var(--bs-white-rgb),var(--bs-text-opacity))!important}.text-primary{--bs-text-opacity:1;color:rgba(var(--bs-primary-rgb),var(--bs-text-opacity))!important}.btn{display:inline-block;font-weight:400;line-height:1.5;color:#212529;text-align:center;text-decoration:none;vertical-align:middle;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;user-select:none;background-color:transparent;border:1px solid transparent;padding:.375rem .75rem;font-size:1rem;border-radius:.375rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.btn:hover{color:#212529}.btn-primary{color:#fff;background-color:#0d6efd;border-color:#0d6efd}.btn-primary:hover{color:#fff;background-color:#0b5ed7;border-color:#0a58ca}.d-flex{display:flex!important}
+
+    // Non-critical CSS (deferred to prevent render blocking)
+    link(rel='preload', href='/css/non-critical.css', as='style', onload="this.onload=null;this.rel='stylesheet'")
+    noscript: link(rel='stylesheet', href='/css/non-critical.css')
+
+    // Font optimization - display swap prevents invisible text
+    style.
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    // Fallback for browsers that don't support preload
+    script.
+      (function() {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/css/non-critical.css';
+        var supportsPreload = link.relList && link.relList.supports && link.relList.supports('preload');
+        if (!supportsPreload) {
+          document.head.appendChild(link);
+        }
+      })();
+
+    // Enhanced JSON-LD Structured Data for SEO
+    script(type="application/ld+json").
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mark Hazleton",
+        "givenName": "Mark",
+        "familyName": "Hazleton",
+        "jobTitle": "Solutions Architect",
+        "description": "Solutions Architect passionate for solutions which make technology work for business",
+        "url": "https://markhazleton.com",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+          "width": 400,
+          "height": 400
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/markhazleton/",
+          "https://github.com/markhazleton/",
+          "https://twitter.com/markhazleton/",
+          "https://www.youtube.com/@MarkHazleton"
+        ],
+        "knowsAbout": [
+          ".NET Framework",
+          "ASP.NET Core",
+          "Microsoft Azure",
+          "Project Management",
+          "Web Development",
+          "Solution Architecture",
+          "Software Engineering",
+          "Cloud Computing",
+          "Artificial Intelligence",
+          "Machine Learning"
+        ],
+        "alumniOf": {
+          "@type": "Organization",
+          "name": "University of North Texas"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Wichita",
+          "addressRegion": "KS",
+          "addressCountry": "US"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://markhazleton.com/"
+        }
+      }
+
+    // Additional structured data for specific pages
+    block additional_structured_data
+
+    // Additional page-specific CSS
+    block additional_css
+
+    // Include LinkedIn sharing mixins
+    include ../modules/linkedin-sharing
+
+    // Deferred Google Analytics to prevent render blocking
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-L8GVZNDH0B');
+
+      // Load gtag.js after page load
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B';
+        script.async = true;
+        document.head.appendChild(script);
+      });
+
+  body
+    // Navigation
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top(role='navigation', aria-label='Main navigation')
+      .container-fluid
+        a.navbar-brand(href='/#', aria-label='Mark Hazleton homepage') Mark Hazleton
+
+        button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav',
+          aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+
+        #navbarNav.collapse.navbar-collapse
+          ul.navbar-nav.me-auto
+            li.nav-item
+              a.nav-link.active(href='/#about', aria-current='page') About Mark
+            li.nav-item
+              a.nav-link(href='/#experience') Experience & Credentials
+            li.nav-item
+              a.nav-link(href='/#projects') Solutions & Tools
+            li.nav-item
+              a.nav-link(href='/articles.html') Insights & Articles
+            li.nav-item
+              a.nav-link(href='/#contact') Contact
+
+          // Search Box - Inside collapsible navbar
+          form.d-flex.me-3.my-2.my-lg-0(onsubmit='return searchArticles(event)')
+            .input-group.search-box
+              input#headerSearchInput.form-control(
+                type='search'
+                placeholder='Search articles...'
+                aria-label='Search articles'
+                autocomplete='off'
+              )
+              button.btn.btn-outline-light(type='submit', aria-label='Search')
+                i.fas.fa-search
+
+          // Social Icons - Inside collapsible navbar
+          .d-flex.social-icons
+            a(href='https://www.linkedin.com/in/markhazleton/', target='_blank', rel='noopener noreferrer', title='LinkedIn')
+              i.fab.fa-linkedin-in
+            a(href='https://github.com/markhazleton/', target='_blank', rel='noopener noreferrer', title='GitHub')
+              i.fab.fa-github
+            a(href='https://www.youtube.com/@MarkHazleton', target='_blank', rel='noopener noreferrer', title='YouTube')
+              i.fab.fa-youtube
+    br
+    block layout-content
+
+    // Auto-include floating LinkedIn share for article pages
+    if typeof article !== 'undefined' && article
+      +floatingLinkedInShare(article)
+
+    // Footer
+    footer
+      .container
+        .row
+          .col-md-6.mb-4
+            h5.mb-3 Mark Hazleton
+            p.text-light Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.
+            .social-icons
+              a(href='https://www.linkedin.com/in/markhazleton/', target='_blank', rel='noopener noreferrer', aria-label='LinkedIn')
+                i.fab.fa-linkedin-in
+              a(href='https://github.com/markhazleton/', target='_blank', rel='noopener noreferrer', aria-label='GitHub')
+                i.fab.fa-github
+              a(href='https://www.youtube.com/@MarkHazleton', target='_blank', rel='noopener noreferrer', aria-label='YouTube')
+                i.fab.fa-youtube
+          .col-md-3.mb-4
+            h6.mb-3 Quick Links
+            ul.list-unstyled.footer-links
+              li: a(href='/#about') About
+              li: a(href='/#experience') Experience
+              li: a(href='/#projects') Projects
+              li: a(href='/articles.html') Articles
+              li: a(href='/#contact') Contact
+          .col-md-3.mb-4
+            h6.mb-3 Resources
+            ul.list-unstyled.footer-links
+              li: a(href='/projectmechanics/') Project Mechanics
+              li: a(href='https://webspark.markhazleton.com') WebSpark
+              li: a(href='/rss.xml') RSS Feed
+              li: a(href='/sitemap.xml') Sitemap
+
+        hr.my-4
+        .row
+          .col-12.text-center
+            p.mb-0 &copy; #{new Date().getFullYear()} Mark Hazleton. All rights reserved.
+
+    // Deferred JavaScript loading
+    script.
+      // Load main scripts after page load to prevent blocking
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.src = '/js/scripts.js';
+        document.body.appendChild(script);
+      });
+
+    //- Additional page-specific JavaScript
+    block additional_js
