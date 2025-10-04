@@ -876,14 +876,14 @@ public class SeoValidationService
     /// <returns>Validation result</returns>
     public ValidationResult ValidateComponent<T>(string componentName, T input)
     {
-        if (typeof(T) == typeof(string) && _stringValidators.TryGetValue(componentName, out var stringValidator))
+        if (input is string strInput && _stringValidators.TryGetValue(componentName, out var stringValidator))
         {
-            return stringValidator.Validate(input as string);
+            return stringValidator.Validate(strInput);
         }
 
-        if (typeof(T) == typeof(ArticleModel) && _articleValidators.TryGetValue(componentName, out var articleValidator))
+        if (input is ArticleModel articleInput && _articleValidators.TryGetValue(componentName, out var articleValidator))
         {
-            return articleValidator.Validate(input as ArticleModel);
+            return articleValidator.Validate(articleInput);
         }
 
         throw new ArgumentException($"No validator found for component '{componentName}' with input type '{typeof(T).Name}'");
