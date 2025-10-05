@@ -67,29 +67,31 @@ function updateSitemap() {
     // Define file paths
     const srcPath = upath.resolve(__dirname, '../../src');
     const articlesJsonPath = path.join(srcPath, 'articles.json');
+    const projectsJsonPath = path.join(srcPath, 'projects.json');
     const sitemapXmlPath = path.join(srcPath, 'sitemap.xml');
 
     try {
-        // Load articles.json
         const articlesData = fs.readFileSync(articlesJsonPath, 'utf8');
+        const projectsData = fs.readFileSync(projectsJsonPath, 'utf8');
         const articles = JSON.parse(articlesData);
+        const projects = JSON.parse(projectsData);
 
-        // Sort articles by date (newest first)
-        articles.sort((a, b) => {
-            return new Date(b.lastmod) - new Date(a.lastmod);
+        articles.sort((a, b) => new Date(b.lastmod) - new Date(a.lastmod));
+        projects.sort((a, b) => {
+            const aDate = new Date(a.promotion?.lastPromotedOn || a.updatedOn || a.lastModified || 0);
+            const bDate = new Date(b.promotion?.lastPromotedOn || b.updatedOn || b.lastModified || 0);
+            return bDate - aDate;
         });
 
-        // Start building the sitemap XML content
         let sitemapContent = `<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 `;
-
-        // Add homepage as the first entry (always highest priority)
         const now = new Date();
         const formattedNow = formatSitemapDate(now);
+        let urlCount = 0;
 
         sitemapContent += `  <url>
     <loc>https://markhazleton.com/</loc>
@@ -98,26 +100,43 @@ function updateSitemap() {
     <priority>1.0</priority>
   </url>
 `;
+        urlCount++;
 
-        // Process all articles
+        const latestProjectDate = projects.reduce((latest, project) => {
+            const candidate = project.promotion?.lastPromotedOn || project.updatedOn || project.lastModified;
+            const candidateDate = candidate ? new Date(candidate) : null;
+            if (candidateDate && !Number.isNaN(candidateDate.getTime())) {
+                if (!latest || candidateDate > latest) {
+                    return candidateDate;
+                }
+            }
+            return latest;
+        }, null);
+
+        const projectsListingLastMod = formatSitemapDate(latestProjectDate || now);
+        sitemapContent += `  <url>
+    <loc>https://markhazleton.com/projects.html</loc>
+    <lastmod>${projectsListingLastMod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+        urlCount++;
+
         articles.forEach(article => {
             const fullLink = `https://markhazleton.com/${article.slug}`;
             const articleDate = new Date(article.lastmod);
             const lastmod = formatSitemapDate(article.lastmod);
             const changefreq = getChangeFrequency(articleDate);
 
-            // Determine priority based on age (newer articles get higher priority)
             const diffTime = Math.abs(now - articleDate);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            // Calculate priority (newer = higher priority)
-            // Priority values range from 0.0 to 1.0
-            let priority = 0.5; // Default priority
-
+            let priority = 0.5;
             if (diffDays < 30) {
-                priority = 0.8; // Recent articles (less than a month old)
+                priority = 0.8;
             } else if (diffDays < 90) {
-                priority = 0.6; // Articles 1-3 months old
+                priority = 0.6;
             }
 
             sitemapContent += `  <url>
@@ -127,19 +146,50 @@ function updateSitemap() {
     <priority>${priority.toFixed(1)}</priority>
   </url>
 `;
+            urlCount++;
         });
 
-        // Close sitemap tag
-        sitemapContent += `</urlset>`;
+        projects.forEach(project => {
+            if (!project || !project.slug) {
+                return;
+            }
 
-        // Write the updated sitemap XML to file
+            const projectUrl = `https://markhazleton.com/projects/${project.slug}/`;
+            const projectDateRaw = project.promotion?.lastPromotedOn || project.updatedOn || project.lastModified || now.toISOString();
+            const projectDateObj = new Date(projectDateRaw);
+            const validProjectDate = Number.isNaN(projectDateObj.getTime()) ? now : projectDateObj;
+            const lastmod = formatSitemapDate(validProjectDate);
+            const changefreq = getChangeFrequency(validProjectDate);
+
+            const diffTime = Math.abs(now - validProjectDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            let priority = 0.5;
+            if (diffDays < 30) {
+                priority = 0.7;
+            } else if (diffDays < 90) {
+                priority = 0.6;
+            }
+
+            sitemapContent += `  <url>
+    <loc>${escapeXml(projectUrl)}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority.toFixed(1)}</priority>
+  </url>
+`;
+            urlCount++;
+        });
+
+        sitemapContent += `</urlset>`;
         fs.writeFileSync(sitemapXmlPath, sitemapContent);
 
-        console.log(`Sitemap updated successfully with ${articles.length + 1} URLs.`);
+        console.log(`Sitemap updated successfully with ${urlCount} URLs.`);
     } catch (error) {
         console.error('Error updating sitemap:', error);
     }
 }
+
 
 // Execute the function if called directly
 if (require.main === module) {

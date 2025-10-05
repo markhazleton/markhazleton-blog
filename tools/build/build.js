@@ -15,6 +15,7 @@ const renderPug = require('./render-pug');
 const { renderSCSS, renderModernSCSS } = require('./scss-renderer');
 const renderScripts = require('./render-scripts');
 const renderAssets = require('./render-assets');
+const renderProjectPage = require('./render-project-pages');
 
 // Import utility functions
 const updateRSS = require('./update-rss');
@@ -58,6 +59,7 @@ class BlogBuilder {
         this.tasks = {
             sections: this.buildSections.bind(this),
             pug: this.buildPug.bind(this),
+            projectPages: this.buildProjectPages.bind(this),
             scss: this.buildSCSS.bind(this),
             scripts: this.buildScripts.bind(this),
             assets: this.buildAssets.bind(this),
@@ -117,7 +119,8 @@ class BlogBuilder {
                 !filePath.match(/include/) &&
                 !filePath.match(/mixin/) &&
                 !filePath.match(/\/pug\/layouts\//) &&
-                !filePath.match(/\/pug\/modules\//)
+                !filePath.match(/\/pug\/modules\//) &&
+                !filePath.match(/\/pug\/projects\/templates\//)
             );
 
         let processedCount = 0;
@@ -133,6 +136,7 @@ class BlogBuilder {
                 ...sh.find(upath.join(this.srcPath, 'pug', 'layouts')).filter(f => f.endsWith('.pug')),
                 ...sh.find(upath.join(this.srcPath, 'pug', 'modules')).filter(f => f.endsWith('.pug')),
                 upath.join(this.srcPath, 'articles.json'),
+                upath.join(this.srcPath, 'projects.json'),
                 upath.join(this.srcPath, 'sections.json')
             ].filter(f => fs.existsSync(f));
 
@@ -153,6 +157,90 @@ class BlogBuilder {
         }
 
         console.log(`✅ PUG templates built (${processedCount} processed, ${cachedCount} cached)`);
+        this.performance.end(taskName);
+    }
+
+    /**
+     * Build project detail pages from projects.json data
+     */
+    async buildProjectPages() {
+        const taskName = 'projectPages';
+        this.performance.start(taskName);
+
+        const templatePath = upath.join(this.srcPath, 'pug', 'projects', 'templates', 'project-detail.pug');
+
+        if (!fs.existsSync(templatePath)) {
+            this.performance.markCached(taskName);
+            console.warn('⚠️ Project detail template not found. Skipping project page generation.');
+            return;
+        }
+
+        const projectsFile = upath.join(this.srcPath, 'projects.json');
+        if (!fs.existsSync(projectsFile)) {
+            this.performance.markCached(taskName);
+            console.warn('⚠️ projects.json not found. Skipping project page generation.');
+            return;
+        }
+
+        let projectsData;
+        try {
+            projectsData = JSON.parse(fs.readFileSync(projectsFile, 'utf8'));
+        } catch (error) {
+            this.performance.markCached(taskName);
+            console.error('? Failed to read projects.json:', error.message);
+            return;
+        }
+
+        if (!Array.isArray(projectsData) || projectsData.length === 0) {
+            this.performance.markCached(taskName);
+            console.warn('⚠️ No project entries found in projects.json.');
+            return;
+        }
+
+        console.log('?? Building project detail pages...');
+
+        const dependencies = [
+            templatePath,
+            ...sh.find(upath.join(this.srcPath, 'pug', 'layouts')).filter(f => f.endsWith('.pug')),
+            ...sh.find(upath.join(this.srcPath, 'pug', 'modules')).filter(f => f.endsWith('.pug')),
+            projectsFile
+        ].filter(f => fs.existsSync(f));
+
+        let processedCount = 0;
+        let cachedCount = 0;
+
+        for (const project of projectsData) {
+            if (!project || !project.slug) {
+                console.warn('⚠️ Skipping project entry without a slug.');
+                continue;
+            }
+
+            const destPath = upath.join('docs', 'projects', project.slug, 'index.html');
+            const currentSlug = `projects/${project.slug}/index.html`;
+
+            if (!this.cache.shouldRebuild(templatePath, destPath, dependencies)) {
+                cachedCount++;
+                continue;
+            }
+
+            await this.errorRecovery.retryTask(`projectPages:${project.slug}`, async () => {
+                await renderProjectPage({
+                    templatePath,
+                    project,
+                    destPath,
+                    currentSlug
+                });
+                this.cache.markBuilt(templatePath, destPath, dependencies);
+                processedCount++;
+            });
+        }
+
+        if (cachedCount > 0) {
+            console.log(`?? ${cachedCount} project pages used from cache`);
+        }
+
+        console.log(`? Project detail pages built (${processedCount} processed, ${cachedCount} cached)`);
+
         this.performance.end(taskName);
     }
 
@@ -469,6 +557,7 @@ if (require.main === module) {
         console.log('  --assets    Build assets');
         console.log('  --sitemap   Build sitemap');
         console.log('  --rss       Build RSS feed');
+        console.log('  --projectPages Build project detail pages');
         console.log('');
         console.log('Options:');
         console.log('  --no-cache    Disable build caching');

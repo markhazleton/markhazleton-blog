@@ -72,6 +72,7 @@ module.exports = {
         sitemap: ['sections', 'pug'],
         rss: ['sections'],
         pug: ['sections'],
+        projectPages: ['sections'],
         scripts: [],
         scss: [],
         assets: [],
@@ -81,7 +82,7 @@ module.exports = {
     // Parallel execution groups
     parallelGroups: {
         phase1: ['sections'], // Must run first
-        phase2: ['pug', 'scss', 'scripts', 'assets'], // Can run in parallel
+        phase2: ['pug', 'projectPages', 'scss', 'scripts', 'assets'], // Can run in parallel
         phase3: ['sitemap', 'rss'] // Depend on phase2 completion
     },
 

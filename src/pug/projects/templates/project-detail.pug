@@ -1,0 +1,189 @@
+extends ../../layouts/modern-layout.pug
+
+block layout-content
+  - var projectData = project || {};
+  - var projectTitle = projectData.p || projectData.name || 'Project Overview';
+  - var projectImage = projectData.image ? '/' + projectData.image.replace(/^\/+/g, '') : '/assets/img/MarkHazleton.jpg';
+  - var heroStyle = projectData.image ? "background-image: linear-gradient(180deg, rgba(20,28,45,0.85), rgba(20,28,45,0.65)), url('" + projectImage + "');" : '';
+  - var pipelineName = projectData.promotion && projectData.promotion.pipeline ? projectData.promotion.pipeline : 'Portfolio';
+  - var projectStage = projectData.promotion && projectData.promotion.currentStage ? projectData.promotion.currentStage : null;
+  - var lastUpdated = projectData.promotion && projectData.promotion.lastPromotedOn ? projectData.promotion.lastPromotedOn : projectData.updatedOn;
+
+  section.project-hero.py-5.text-white(style=heroStyle)
+    .container
+      .row
+        .col-lg-9
+          nav.mb-3(aria-label='breadcrumb')
+            ol.breadcrumb.breadcrumb-dark
+              li.breadcrumb-item
+                a.text-white-50(href='/projects.html') Projects
+              li.breadcrumb-item.active(aria-current='page') #{projectTitle}
+          h1.display-4.fw-bold.mb-3 #{projectTitle}
+          if projectData.summary
+            p.lead.mb-4 #{projectData.summary}
+          else if projectData.d
+            p.lead.mb-4 #{projectData.d}
+          .d-flex.flex-wrap.gap-3
+            span.badge.bg-light.text-dark.px-3.py-2
+              i.fas.fa-stream.me-2
+              | #{pipelineName}
+            if projectStage
+              span.badge.bg-info.text-dark.px-3.py-2
+                i.fas.fa-rocket.me-2
+                | #{projectStage}
+            if lastUpdated
+              - var updatedDate = new Date(lastUpdated);
+              span.badge.bg-secondary.px-3.py-2
+                i.fas.fa-clock.me-2
+                | Updated #{Number.isNaN(updatedDate.getTime()) ? 'Recently' : updatedDate.toLocaleDateString()}
+
+          .mt-4.d-flex.flex-wrap.gap-3
+            if projectData.h
+              a.btn.btn-primary.btn-lg(href=projectData.h, target='_blank', rel='noopener')
+                i.fas.fa-external-link-alt.me-2
+                | Launch Experience
+            if projectData.repository && projectData.repository.url
+              a.btn.btn-outline-light.btn-lg(href=projectData.repository.url, target='_blank', rel='noopener')
+                i.fab.fa-github.me-2
+                | View Repository
+
+  section.py-5
+    .container
+      .row.g-4
+        .col-lg-8
+          .card.shadow-sm
+            .card-body
+              h2.h4.fw-bold.mb-3 About This Project
+              if projectData.summary && projectData.d && projectData.summary !== projectData.d
+                p.lead.text-dark.mb-4 #{projectData.summary}
+              if projectData.d
+                p.text-muted #{projectData.d}
+              if projectData.keywords
+                hr
+                h3.h6.text-uppercase.text-muted.mb-3 Capabilities & Keywords
+                ul.list-inline.mb-0
+                  each keyword in projectData.keywords.split(',')
+                    li.list-inline-item.mb-2
+                      span.badge.bg-light.text-dark #{keyword.trim()}
+
+          if projectData.repository
+            .card.shadow-sm.mt-4
+              .card-body
+                h2.h5.fw-bold.mb-3 Repository Snapshot
+                p.text-muted.mb-3 Explore how the solution is organized and maintained.
+                dl.row.mb-0
+                  if projectData.repository.provider
+                    dt.col-sm-4 Provider
+                    dd.col-sm-8 #{projectData.repository.provider}
+                  if projectData.repository.name
+                    dt.col-sm-4 Repository
+                    dd.col-sm-8
+                      if projectData.repository.url
+                        a(href=projectData.repository.url, target='_blank', rel='noopener') #{projectData.repository.name}
+                      else
+                        | #{projectData.repository.name}
+                  if projectData.repository.branch
+                    dt.col-sm-4 Default Branch
+                    dd.col-sm-8 #{projectData.repository.branch}
+                  if projectData.repository.visibility
+                    dt.col-sm-4 Visibility
+                    dd.col-sm-8 #{projectData.repository.visibility}
+                  if projectData.repository.notes
+                    dt.col-sm-4 Notes
+                    dd.col-sm-8.text-muted #{projectData.repository.notes}
+
+        .col-lg-4
+          .card.shadow-sm.mb-4
+            .card-body
+              h2.h5.fw-bold.mb-3 Project Snapshot
+              ul.list-unstyled.mb-0
+                li.d-flex.align-items-start.mb-2
+                  i.fas.fa-sitemap.text-primary.me-2
+                  span
+                    strong Initiative:
+                    |  #{pipelineName}
+                if projectStage
+                  li.d-flex.align-items-start.mb-2
+                    i.fas.fa-flag-checkered.text-primary.me-2
+                    span
+                      strong Stage:
+                      |  #{projectStage}
+                if lastUpdated
+                  - var metadataDate = new Date(lastUpdated);
+                  li.d-flex.align-items-start.mb-2
+                    i.fas.fa-calendar-day.text-primary.me-2
+                    span
+                      strong Updated:
+                      |  #{Number.isNaN(metadataDate.getTime()) ? 'Recently' : metadataDate.toLocaleDateString()}
+                if projectData.twitter && projectData.twitter.title
+                  li.d-flex.align-items-start.mb-2
+                    i.fab.fa-twitter.text-primary.me-2
+                    span
+                      strong Social Story:
+                      |  #{projectData.twitter.title}
+              if projectData.h
+                hr
+                a.btn.btn-outline-primary.btn-sm.w-100.mb-2(href=projectData.h, target='_blank', rel='noopener')
+                  i.fas.fa-external-link-alt.me-2
+                  | Visit Live Site
+              if projectData.repository && projectData.repository.url
+                a.btn.btn-primary.btn-sm.w-100(href=projectData.repository.url, target='_blank', rel='noopener')
+                  i.fab.fa-github.me-2
+                  | Source Code
+
+          if projectData.promotion && projectData.promotion.notes
+            .card.shadow-sm
+              .card-body
+                h2.h6.text-uppercase.text-muted.mb-2 Release Notes
+                p.text-muted.mb-0 #{projectData.promotion.notes}
+
+      if projectData.promotion && projectData.promotion.environments && projectData.promotion.environments.length
+        .row.mt-5
+          .col-12
+            h2.h4.fw-bold.mb-4 Deployment Environments
+          each environment in projectData.promotion.environments
+            .col-md-6.col-lg-4.mb-4
+              .card.h-100.shadow-sm
+                .card-body.d-flex.flex-column
+                  h3.h5.fw-bold #{environment.name}
+                  if environment.status
+                    span.badge.bg-success.align-self-start.mb-2 #{environment.status}
+                  if environment.url
+                    p.text-muted.small.mb-2
+                      strong URL:
+                      |  
+                      a(href=environment.url, target='_blank', rel='noopener') #{environment.url}
+                  if environment.version
+                    p.text-muted.small.mb-2
+                      strong Version:
+                      |  #{environment.version}
+                  if environment.lastPromotedOn
+                    p.text-muted.small.mb-2
+                      strong Last Updated:
+                      |  #{environment.lastPromotedOn}
+                  if environment.notes
+                    p.text-muted.small.mt-auto #{environment.notes}
+
+block additional_css
+  style.
+    .project-hero {
+      background-color: #14203b;
+      background-size: cover;
+      background-position: center;
+      border-radius: 0 0 1.5rem 1.5rem;
+    }
+    .project-hero .breadcrumb-dark .breadcrumb-item + .breadcrumb-item::before {
+      color: rgba(255,255,255,0.6);
+    }
+    .project-hero .breadcrumb-dark .breadcrumb-item a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+    }
+    .project-hero .breadcrumb-dark .breadcrumb-item.active {
+      color: #fff;
+    }
+    @media (max-width: 767.98px) {
+      .project-hero {
+        border-radius: 0;
+      }
+    }

@@ -1,93 +1,99 @@
-//- Modern Projects Module
-//- Designed to match the style and UI of modern-index.pug
+//- Modern Projects Section - Summary with link to dedicated projects page
 
-//- Mixin for individual project card
-mixin modern-project-card(project)
-  .col-lg-4.col-md-6.mb-4
-    .card.project-card.h-100
-      img.card-img-top.project-image(
-        src=project.image,
-        alt=project.p,
-        title=project.p,
-        onerror=`this.src='https://via.placeholder.com/400x200?text=${encodeURIComponent(project.p)}'`
-      )
-      .card-body.d-flex.flex-column
-        h5.card-title= project.p
-        p.card-text.flex-grow-1= project.d
-        .mt-auto
-          a.btn.btn-primary.btn-sm(
-            href=project.h,
-            target='_blank',
-            rel='noopener noreferrer',
-            title=`Visit ${project.p}`
-          )
-            i.bi.bi-arrow-up-right.me-2
-            | View Project
-
-//- Mixin for featured project card (larger display)
-mixin modern-featured-project-card(project)
-  .col-lg-6.col-md-12.mb-4
-    .card.project-card.h-100
-      .row.g-0
-        .col-md-5
-          img.img-fluid.project-image.h-100(
-            src=project.image,
-            alt=project.p,
-            title=project.p,
-            style="object-fit: cover;",
-            onerror=`this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(project.p)}'`
-          )
-        .col-md-7
-          .card-body.d-flex.flex-column.h-100
-            h4.card-title= project.p
-            p.card-text.flex-grow-1= project.d
-            .mt-auto
-              a.btn.btn-primary(
-                href=project.h,
-                target='_blank',
-                rel='noopener noreferrer',
-                title=`Visit ${project.p}`
-              )
-                i.bi.bi-arrow-up-right.me-2
-                | View Project
-
-//- Main projects section
 section.py-5.bg-light#projects
   .container
     .row.mb-5
       .col-12.text-center
-        h2.section-title Featured Projects
-        p.lead.text-muted Showcasing innovative solutions and modern web development
+        h2.section-title Portfolio Projects
+        p.lead.text-muted Explore production launches, lab experiments, and platform accelerators
 
-    //- Featured Projects (first 2 projects displayed prominently)
-    if projects && projects.length > 0
-      .row.mb-5
-        each project, index in projects.slice(0, 2)
-          +modern-featured-project-card(project)
+    .row.justify-content-center
+      .col-lg-8
+        .bg-white.p-5.rounded.shadow-sm.text-center
+          .row.mb-4
+            .col-md-4.mb-3.mb-md-0
+              .d-flex.flex-column.align-items-center
+                i.fas.fa-project-diagram.fa-3x.text-primary.mb-3
+                h4.fw-bold 13+
+                p.text-muted.mb-0 Active Projects
+            .col-md-4.mb-3.mb-md-0
+              .d-flex.flex-column.align-items-center
+                i.fas.fa-code-branch.fa-3x.text-success.mb-3
+                h4.fw-bold 5+
+                p.text-muted.mb-0 Platforms
+            .col-md-4
+              .d-flex.flex-column.align-items-center
+                i.fas.fa-rocket.fa-3x.text-warning.mb-3
+                h4.fw-bold 100%
+                p.text-muted.mb-0 Open Source
 
-    //- Regular Project Grid
-    if projects && projects.length > 2
-      .row.mb-4
-        .col-12
-          h3.text-center.mb-4 All Projects
-      .row.g-4
-        each project in projects.slice(2)
-          +modern-project-card(project)
+          .row.mb-4
+            .col-12
+              h4.mb-3 Featured Technologies
+              .d-flex.justify-content-center.gap-2.flex-wrap
+                span.badge.bg-primary.px-3.py-2 .NET & Azure
+                span.badge.bg-success.px-3.py-2 AI Experiences
+                span.badge.bg-warning.text-dark.px-3.py-2 WebSpark Platform
+                span.badge.bg-info.px-3.py-2 React & Bootstrap
 
-    //- GitHub CTA Section
-    .row.mt-5
-      .col-12.text-center
-        .bg-white.p-4.rounded.shadow-sm
-          h4.mb-3 Explore More on GitHub
-          p.text-muted.mb-4
-            | View source code, documentation, and additional projects on my GitHub profile
-          a.btn.btn-outline-primary.btn-lg(
-            href='https://github.com/markhazleton',
-            target='_blank',
-            rel='noopener noreferrer'
+          .row
+            .col-12
+              p.lead.mb-4
+                | From enterprise solutions to experimental AI demos, discover the diverse range of applications
+                | I've built across .NET, Azure, and modern web stacks.
+
+              a.btn.btn-primary.btn-lg.me-3(href='/projects.html')
+                i.fas.fa-eye.me-2
+                | View All Projects
+              a.btn.btn-outline-primary.btn-lg(
+                href='https://github.com/markhazleton',
+                target='_blank',
+                rel='noopener noreferrer'
+              )
+                i.fab.fa-github.me-2
+                | GitHub Profile
+
+    // Featured Project Highlights
+    .row.mt-5.g-4
+      .col-md-4.text-center
+        .bg-white.p-4.rounded.shadow-sm.h-100
+          img.img-fluid.rounded.mb-3(
+            src='/assets/img/frogsfolly.png',
+            alt='Frogsfolly',
+            style='height: 120px; width: 120px; object-fit: cover;'
           )
-            i.fab.fa-github.me-2
-            | Visit GitHub Profile
+          h5 Frogsfolly
+          p.text-muted.small My first website - a 'Kitchen Sink' of demos and test ideas built with Web Project Mechanics.
+          a.btn.btn-sm.btn-outline-primary(href='https://frogsfolly.com', target='_blank', rel='noopener')
+            i.fas.fa-external-link-alt.me-1
+            | Live Demo
+
+      .col-md-4.text-center
+        .bg-white.p-4.rounded.shadow-sm.h-100
+          img.img-fluid.rounded.mb-3(
+            src='/assets/img/webspark.png',
+            alt='WebSpark Platform',
+            style='height: 120px; width: 120px; object-fit: cover;'
+          )
+          h5 WebSpark Platform
+          p.text-muted.small A comprehensive collection of tools and accelerators for modern web development projects.
+          a.btn.btn-sm.btn-outline-primary(href='/projects.html#webspark')
+            i.fas.fa-info-circle.me-1
+            | Learn More
+
+      .col-md-4.text-center
+        .bg-white.p-4.rounded.shadow-sm.h-100
+          img.img-fluid.rounded.mb-3(
+            src='/assets/img/ai-demo.png',
+            alt='AI Experiences',
+            style='height: 120px; width: 120px; object-fit: cover;',
+            onerror="this.src='https://via.placeholder.com/120x120?text=AI'"
+          )
+          h5 AI Experiences
+          p.text-muted.small Experimental AI-powered applications demonstrating practical implementations of modern AI technologies.
+          a.btn.btn-sm.btn-outline-primary(href='/projects.html#ai')
+            i.fas.fa-brain.me-1
+            | Explore AI
 
 //- Technology Stack section
 section.py-5#tech-stack
@@ -143,7 +149,7 @@ section.py-5#tech-stack
               h5 Git
               p.small Version control & collaboration
 
-//- Custom styles (these would typically be in the CSS file)
+//- Custom styles
 style.
   .tech-stack-item {
     transition: transform 0.3s ease, box-shadow 0.3s ease;

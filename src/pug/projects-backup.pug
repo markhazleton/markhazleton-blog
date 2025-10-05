@@ -1,0 +1,380 @@
+extends layouts/modern-layout.pug
+
+block variables
+  - var pageTitle = 'Projects Portfolio | Mark Hazleton';
+  - var pageDescription = 'Explore Mark Hazleton\'s curated portfolio of applications, experiments, and learning accelerators built across .NET, Azure, and modern web stacks.';
+  - var pageCanonical = 'https://markhazleton.com/projects.html';
+  - var pageKeywords = 'Mark Hazleton projects, portfolio, WebSpark, Frogsfolly, Azure, .NET, AI solutions';
+
+block layout-content
+  section.bg-gradient-primary.text-white.py-5
+    .container
+      .row.align-items-center
+        .col-lg-8
+          br
+          h1.display-4.fw-bold.mb-3 Projects & Experiments
+          p.lead.mb-4 Explore production launches, lab experiments, and platform accelerators that demonstrate practical engineering patterns and modern AI-assisted solutions.
+          .d-flex.flex-wrap.gap-2.mb-4
+            span.badge.bg-light.text-dark.px-3.py-2 .NET & Azure
+            span.badge.bg-light.text-dark.px-3.py-2 AI Experiences
+            span.badge.bg-light.text-dark.px-3.py-2 Portfolio Accelerators
+            span.badge.bg-light.text-dark.px-3.py-2 WebSpark Platform
+        .col-lg-4.text-center
+          i.fas.fa-project-diagram.display-1.mb-3.opacity-75
+
+  section.py-5
+    .container
+      .text-center.mb-5
+        h2.display-5.fw-bold.mb-3 Discover the Project Library
+        p.lead.text-muted Filter by initiative, search by capability, and open detailed write-ups for each build.
+
+      .row
+        .col-lg-3.mb-4
+          .card.sticky-top(style='top: 20px;')
+            .card-header.bg-primary.text-white
+              h5.mb-0
+                i.fas.fa-filter.me-2
+                | Initiative Filters
+            .card-body
+              #pipelineStats
+              hr
+              button.btn.btn-outline-secondary.btn-sm.w-100(type='button', onclick='resetFilters()')
+                i.fas.fa-redo-alt.me-2
+                | Reset Filters
+        .col-lg-9
+          .row.justify-content-center
+            .col-lg-10
+              .card.shadow-sm.mb-4
+                .card-body
+                  .row.g-3
+                    .col-md-8
+                      .input-group
+                        span.input-group-text
+                          i.fas.fa-search
+                        input#projectSearchInput.form-control(type='text', placeholder='Search projects by title, summary, or keywords...')
+                    .col-md-4
+                      select#pipelineFilter.form-select
+                        option(value='') All Initiatives
+                  #projectSearchStats.text-muted.small.mt-2
+          #projectsContainer
+            // Projects rendered by JavaScript
+
+      nav.mt-4(aria-label='Projects pagination')
+        #projectPagination.d-flex.justify-content-center
+
+  section.bg-light.py-5
+    .container
+      .row.align-items-center
+        .col-lg-8
+          h2.display-6.fw-bold.mb-3 Build With Confidence
+          p.lead.text-muted.mb-4 From early prototypes to production rollouts, each project captures implementation notes, architectural decisions, and links to working experiences.
+        .col-lg-4.text-center
+          a.btn.btn-primary.btn-lg(href='https://github.com/markhazleton', target='_blank', rel='noopener')
+            i.fab.fa-github.me-2
+            | Explore GitHub Repositories
+
+block additional_js
+  script.
+    window.__PROJECTS__ = !{JSON.stringify(projects || [])};
+
+    const rawProjects = Array.isArray(window.__PROJECTS__) ? window.__PROJECTS__ : [];
+    let projectsData = [];
+    let filteredProjects = [];
+    let currentPage = 1;
+    const projectsPerPage = 9;
+
+    function initializeProjects() {
+      console.log('Initializing projects...', rawProjects.length, 'projects found');
+
+      if (!Array.isArray(rawProjects) || rawProjects.length === 0) {
+        console.log('No projects found or invalid data');
+        const container = document.getElementById('projectsContainer');
+        if (container) {
+          container.innerHTML = '<div class="alert alert-info">Projects are being curated and will be published soon.</div>';
+        }
+        return;
+      }
+
+      projectsData = rawProjects.slice().sort((a, b) => {
+        const aDate = new Date((a.promotion && a.promotion.lastPromotedOn) || a.updatedOn || a.lastModified || '2000-01-01');
+        const bDate = new Date((b.promotion && b.promotion.lastPromotedOn) || b.updatedOn || b.lastModified || '2000-01-01');
+        return bDate - aDate;
+      });
+
+      filteredProjects = [...projectsData];
+
+      displayPipelineStats();
+      displayProjects();
+      updateSearchStats();
+
+      const searchInput = document.getElementById('projectSearchInput');
+      const pipelineFilter = document.getElementById('pipelineFilter');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          currentPage = 1;
+          applyFilters();
+        });
+      }
+
+      if (pipelineFilter) {
+        pipelineFilter.addEventListener('change', () => {
+          currentPage = 1;
+          applyFilters();
+        });
+      }
+    }
+
+    function applyFilters() {
+      const query = (document.getElementById('projectSearchInput')?.value || '').toLowerCase();
+      const pipeline = (document.getElementById('pipelineFilter') && document.getElementById('pipelineFilter').value) || '';
+
+      filteredProjects = projectsData.filter(project => {
+        const projectPipeline = ((project.promotion && project.promotion.pipeline) || 'Portfolio').toLowerCase();
+        const haystack = [
+          project.p || '',
+          project.summary || '',
+          project.d || '',
+          project.keywords || ''
+        ].join(' ').toLowerCase();
+
+        const matchesPipeline = pipeline ? projectPipeline === pipeline.toLowerCase() : true;
+        const matchesQuery = haystack.includes(query);
+
+        return matchesPipeline && matchesQuery;
+      });
+
+      displayProjects();
+      updateSearchStats();
+    }
+
+    function displayPipelineStats() {
+      const statsContainer = document.getElementById('pipelineStats');
+      const selectElement = document.getElementById('pipelineFilter');
+
+      if (!statsContainer || !selectElement) {
+        return;
+      }
+
+      const pipelines = {};
+
+      projectsData.forEach(project => {
+        const pipeline = (project.promotion && project.promotion.pipeline) || 'Portfolio';
+        pipelines[pipeline] = (pipelines[pipeline] || 0) + 1;
+      });
+
+      const entries = Object.entries(pipelines).sort(([, a], [, b]) => b - a);
+
+      statsContainer.innerHTML = entries.map(([pipeline, count]) => `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <button class="btn btn-sm btn-outline-primary text-start flex-grow-1"
+            onclick="filterByPipeline('${pipeline.replace(/'/g, "\\'")}')">
+            ${pipeline}
+          </button>
+          <span class="badge bg-secondary ms-2">${count}</span>
+        </div>
+      `).join('') || '<p class="text-muted small mb-0">Projects organized by initiative as they are published.</p>';
+
+      selectElement.innerHTML = '<option value="">All Initiatives</option>' + entries.map(([pipeline]) =>
+        `<option value="${pipeline}">${pipeline}</option>`
+      ).join('');
+    }
+
+    function filterByPipeline(pipeline) {
+      const selectElement = document.getElementById('pipelineFilter');
+      if (selectElement) {
+        selectElement.value = pipeline;
+      }
+      currentPage = 1;
+      applyFilters();
+    }
+
+    function resetFilters() {
+      const searchInput = document.getElementById('projectSearchInput');
+      const selectElement = document.getElementById('pipelineFilter');
+
+      if (searchInput) {
+        searchInput.value = '';
+      }
+      if (selectElement) {
+        selectElement.value = '';
+      }
+
+      currentPage = 1;
+      applyFilters();
+    }
+
+    function displayProjects() {
+      const container = document.getElementById('projectsContainer');
+      if (!container) {
+        return;
+      }
+
+      if (filteredProjects.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5">
+            <i class="fas fa-search display-1 text-muted mb-3"></i>
+            <h3 class="text-muted">No projects found</h3>
+            <p class="text-muted">Try adjusting your search or filter criteria.</p>
+          </div>
+        `;
+        document.getElementById('projectPagination').innerHTML = '';
+        return;
+      }
+
+      const startIndex = (currentPage - 1) * projectsPerPage;
+      const pageProjects = filteredProjects.slice(startIndex, startIndex + projectsPerPage);
+
+      container.innerHTML = `
+        <div class="row g-4">
+          ${pageProjects.map(project => `
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 shadow-sm hover-card">
+                <img src="${project.image ? '/' + project.image.replace(/^\\//, '') : 'https://via.placeholder.com/600x340?text=' + encodeURIComponent(project.p)}"
+                  class="card-img-top"
+                  alt="${project.p}"
+                  onerror="this.src='https://via.placeholder.com/600x340?text=' + encodeURIComponent(this.alt)">>
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2 d-flex justify-content-between align-items-center">
+                    <span class="badge bg-secondary">${(project.promotion && project.promotion.pipeline) || 'Portfolio'}</span>
+                    <small class="text-muted">${formatProjectDate(project)}</small>
+                  </div>
+                  <h5 class="card-title">${project.p}</h5>
+                  <p class="card-text text-muted small flex-grow-1">${truncateText(project.summary || project.d || '', 110)}</p>
+                  <div class="mt-3 d-grid gap-2">
+                    <a href="/projects/${project.slug}/" class="btn btn-outline-primary btn-sm">
+                      <i class="fas fa-info-circle me-2"></i>Project Overview
+                    </a>
+                    ${project.h ? '<a href="' + project.h + '" class="btn btn-primary btn-sm" target="_blank" rel="noopener"><i class="fas fa-external-link-alt me-2"></i>Open Experience</a>' : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      displayPagination();
+    }
+
+    function displayPagination() {
+      const paginationContainer = document.getElementById('projectPagination');
+      if (!paginationContainer) {
+        return;
+      }
+
+      const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+      if (totalPages <= 1) {
+        paginationContainer.innerHTML = '';
+        return;
+      }
+
+      let paginationHTML = '<ul class="pagination">';
+
+      paginationHTML += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+          <button class="page-link" onclick="changeProjectPage(${currentPage - 1})" aria-label="Previous" ${currentPage === 1 ? 'disabled' : ''}>
+            <span aria-hidden="true">&laquo;</span>
+          </button>
+        </li>
+      `;
+
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
+
+      if (startPage > 1) {
+        paginationHTML += `<li class="page-item"><button class="page-link" onclick="changeProjectPage(1)">1</button></li>`;
+        if (startPage > 2) {
+          paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+        }
+      }
+
+      for (let page = startPage; page <= endPage; page++) {
+        paginationHTML += `
+          <li class="page-item ${page === currentPage ? 'active' : ''}">
+            <button class="page-link" onclick="changeProjectPage(${page})">${page}</button>
+          </li>
+        `;
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+        }
+        paginationHTML += `<li class="page-item"><button class="page-link" onclick="changeProjectPage(${totalPages})">${totalPages}</button></li>`;
+      }
+
+      paginationHTML += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+          <button class="page-link" onclick="changeProjectPage(${currentPage + 1})" aria-label="Next" ${currentPage === totalPages ? 'disabled' : ''}>
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+      `;
+
+      paginationHTML += '</ul>';
+      paginationContainer.innerHTML = paginationHTML;
+    }
+
+    function changeProjectPage(page) {
+      const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+      if (page < 1 || page > totalPages) {
+        return;
+      }
+      currentPage = page;
+      displayProjects();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function formatProjectDate(project) {
+      const source = (project.promotion && project.promotion.lastPromotedOn) || project.lastModified || project.updatedOn;
+      if (!source) {
+        return 'In progress';
+      }
+      const date = new Date(source);
+      if (Number.isNaN(date.getTime())) {
+        return 'Recently updated';
+      }
+      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short' });
+    }
+
+    function truncateText(text, maxLength) {
+      if (!text) {
+        return '';
+      }
+      return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
+    }
+
+    function updateSearchStats() {
+      const statsElement = document.getElementById('projectSearchStats');
+      if (!statsElement) {
+        return;
+      }
+
+      const query = document.getElementById('projectSearchInput')?.value || '';
+      const pipeline = document.getElementById('pipelineFilter')?.value || '';
+
+      const pieces = [];
+      if (query) {
+        pieces.push(`matching "${query}"`);
+      }
+      if (pipeline) {
+        pieces.push(`pipeline: ${pipeline}`);
+      }
+
+      const total = filteredProjects.length;
+      if (pieces.length === 0) {
+        statsElement.textContent = `Showing ${total} project${total === 1 ? '' : 's'}.`;
+      } else {
+        statsElement.textContent = `Showing ${total} project${total === 1 ? '' : 's'} ${pieces.join(' & ')}.`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeProjects);
+
+    // If DOM is already loaded, initialize immediately
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeProjects);
+    } else {
+      initializeProjects();
+    }

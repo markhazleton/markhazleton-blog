@@ -23,6 +23,79 @@ const seoHelper = new SEOHelper(articles, {
     logScores: false,
     logBuild: false
 });
+function buildProjectSEO(project) {
+    if (!project) {
+        return seoHelper.getDefaultSEO();
+    }
+
+    const projectSeo = project.seo || {};
+    const baseTitle = projectSeo.title || project.p || project.name || 'Project';
+    const suffix = Object.prototype.hasOwnProperty.call(projectSeo, 'titleSuffix') ? projectSeo.titleSuffix : '';
+    const title = `${baseTitle}${suffix}`;
+
+    let description = projectSeo.description || project.summary || project.d || '';
+    if (description.length > 160) {
+        description = `${description.substring(0, 157)}...`;
+    }
+
+    const canonical = projectSeo.canonical || `https://markhazleton.com/projects/${project.slug}`;
+    const keywords = projectSeo.keywords || project.keywords || '';
+    const robots = projectSeo.robots || 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+
+    const imagePath = (project.og && project.og.image) || project.image || '/assets/img/MarkHazleton.jpg';
+    const normalizedImage = imagePath.startsWith('http') ? imagePath : `https://markhazleton.com/${imagePath.replace(/^\/+/, '')}`;
+
+    const ogTitle = (project.og && project.og.title) || title;
+    const ogDescription = (project.og && project.og.description) || description;
+    const ogType = (project.og && project.og.type) || 'website';
+    const ogImageAlt = (project.og && project.og.imageAlt) || `${baseTitle} - Project preview`;
+
+    const twitterImagePath = (project.twitter && project.twitter.image) || normalizedImage;
+    const twitterImage = twitterImagePath.startsWith('http') ? twitterImagePath : `https://markhazleton.com/${twitterImagePath.replace(/^\/+/, '')}`;
+    const twitterTitle = (project.twitter && project.twitter.title) || title;
+    const twitterDescription = (project.twitter && project.twitter.description) || description;
+    const twitterImageAlt = (project.twitter && project.twitter.imageAlt) || ogImageAlt;
+
+    return {
+        title,
+        description,
+        keywords,
+        canonical,
+        robots,
+        author: project.author || 'Mark Hazleton',
+        og: {
+            title: ogTitle,
+            description: ogDescription,
+            type: ogType,
+            url: canonical,
+            image: normalizedImage,
+            imageWidth: 1200,
+            imageHeight: 630,
+            imageAlt: ogImageAlt,
+            siteName: 'Mark Hazleton',
+            locale: 'en_US'
+        },
+        twitter: {
+            card: 'summary_large_image',
+            site: '@markhazleton',
+            creator: '@markhazleton',
+            title: twitterTitle,
+            description: twitterDescription,
+            image: twitterImage,
+            imageAlt: twitterImageAlt
+        },
+        structuredData: {
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: baseTitle,
+            description,
+            url: canonical,
+            image: normalizedImage,
+            keywords
+        }
+    };
+}
+
 
 module.exports = async function renderPug(filePath) {
     const destPath = filePath.replace(/src\/pug\//, 'docs/').replace(/\.pug$/, '.html');
@@ -44,6 +117,20 @@ module.exports = async function renderPug(filePath) {
         article = articles.find(article => article.slug === folderSlug);
     }
 
+    let project = null;
+    const normalizedSlug = currentSlug.replace(/\\/g, '/');
+    if (!article && normalizedSlug.startsWith('projects/')) {
+        const projectSlugCandidate = normalizedSlug
+            .replace(/^projects\//, '')
+            .replace(/index\.html$/, '')
+            .replace(/\.html$/, '')
+            .replace(/\/$/, '');
+
+        if (projectSlugCandidate) {
+            project = projects.find(item => item.slug === projectSlugCandidate) || null;
+        }
+    }
+
     // Use Git to retrieve the last commit date for the file
     let lastModified;
     try {
@@ -57,7 +144,8 @@ module.exports = async function renderPug(filePath) {
 
     // Log build info if enabled
     if (seoHelper.defaultConfig.logBuild) {
-        console.log(`[BUILD] Rendering: ${currentSlug} ${article ? `(Article ID: ${article.id})` : '(No article data)'}`);
+        const buildLabel = article ? `(Article ID: ${article.id})` : project ? `(Project: ${project.slug})` : '(No content data)';
+        console.log(`[BUILD] Rendering: ${currentSlug} ${buildLabel}`);
     }
 
     // Build source context for SEO validation
@@ -68,7 +156,14 @@ module.exports = async function renderPug(filePath) {
     };
 
     // Get SEO data for this article/page
-    const seoData = article ? seoHelper.getArticleSEO(currentSlug, sourceContext) : seoHelper.getDefaultSEO();
+    let seoData;
+    if (article) {
+        seoData = seoHelper.getArticleSEO(currentSlug, sourceContext);
+    } else if (project) {
+        seoData = buildProjectSEO(project);
+    } else {
+        seoData = seoHelper.getDefaultSEO();
+    }
 
     const html = pug.renderFile(filePath, {
         doctype: 'html',
@@ -79,12 +174,13 @@ module.exports = async function renderPug(filePath) {
         currentSlug: currentSlug,
         lastModified: formattedLastModified,
         article: article,
+        project: project,
         seoData: seoData,
         seoHelper: seoHelper,
-        // Article properties for template compatibility
-        publishedDate: article ? article.publishedDate : null,
-        pageAuthor: article ? article.author : 'Mark Hazleton',
-        estimatedReadTime: article ? article.estimatedReadTime : 5
+        // Article / project properties for template compatibility
+        publishedDate: article ? article.publishedDate : (project ? (project.promotion && project.promotion.lastPromotedOn) || project.updatedOn || project.lastModified || null : null),
+        pageAuthor: article ? article.author : (project && project.author ? project.author : 'Mark Hazleton'),
+        estimatedReadTime: article ? article.estimatedReadTime : (project ? 3 : 5)
     });
 
 
