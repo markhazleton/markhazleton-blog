@@ -1,10 +1,10 @@
 @page
 @model mwhWebAdmin.Pages.ProjectsModel
+@using System
 @{
     ViewData["Title"] = "Projects";
 }
 
-<!-- Page Header -->
 <div class="page-header fade-in-up">
     <div class="d-flex justify-content-between align-items-center">
         <div>
@@ -32,7 +32,6 @@
 }
 else
 {
-    <!-- Projects Table -->
     <div class="admin-table fade-in-up">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
             <div>
@@ -41,12 +40,10 @@ else
             </div>
             <div class="d-flex align-items-center">
                 <div class="me-3">
-                    <input type="text" class="form-control table-search" placeholder="Search projects..."
-                        style="width: 250px;">
+                    <input type="text" class="form-control table-search" placeholder="Search projects..." style="width: 250px;">
                 </div>
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
-                        data-bs-toggle="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-filter me-1"></i>Filter
                     </button>
                     <ul class="dropdown-menu">
@@ -59,91 +56,226 @@ else
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover mb-0">
+            <table class="table table-hover align-middle mb-0">
                 <thead>
                     <tr>
                         <th style="width: 80px;">Image</th>
-                        <th>Project Details</th>
-                        <th style="width: 150px;">Link</th>
+                        <th style="min-width: 240px;">Project Details</th>
+                        <th style="min-width: 200px;">Repository</th>
+                        <th style="min-width: 230px;">Promotion</th>
+                        <th style="width: 160px;">Live Site</th>
                         <th style="width: 120px;" class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var project in Model.Projects)
-                    {
-                        <tr data-project-id="@project.Id">
-                            <td>
-                                <div class="project-image-thumb">
-                                    @if (!string.IsNullOrEmpty(project.Image))
-                                    {
-                                        <img src="/@project.Image" alt="@project.Title" class="img-thumbnail"
-                                            style="width: 60px; height: 60px; object-fit: cover;"
-                                            onerror="this.src='/img/placeholder.svg';" />
-                                    }
-                                    else
-                                    {
-                                        <div class="bg-light border rounded d-flex align-items-center justify-content-center"
-                                            style="width: 60px; height: 60px;">
-                                            <i class="fas fa-image text-muted"></i>
-                                        </div>
-                                    }
-                                </div>
-                            </td>
-                            <td>
-                                <div class="project-details">
-                                    <h6 class="mb-1 fw-bold">@project.Title</h6>
-                                    <p class="mb-1 text-muted small">@project.Description</p>
-                                    <div class="project-meta">
-                                        <span class="badge bg-primary me-1">ID: @project.Id</span>
-                                        @if (!string.IsNullOrEmpty(project.Image))
-                                        {
-                                            <span class="badge bg-success me-1">
-                                                <i class="fas fa-image me-1"></i>Has Image
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                @if (!string.IsNullOrEmpty(project.Link))
+                @foreach (var project in Model.Projects)
+                {
+                    <tr data-project-id="@project.Id">
+                        <td>
+                            <div class="project-image-thumb">
+                                @if (!string.IsNullOrEmpty(project.Image))
                                 {
-                                    <a href="@project.Link" target="_blank" rel="noopener noreferrer"
-                                        class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-external-link-alt me-1"></i>View
-                                    </a>
+                                    <img src="/@project.Image" alt="@project.Title" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.src='/img/placeholder.svg';" />
                                 }
                                 else
                                 {
-                                    <span class="text-muted small">No link</span>
+                                    <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
                                 }
-                            </td>
-                            <td class="text-center">
-                                <div class="action-buttons">
-                                    <a asp-page="./ProjectEdit" asp-route-id="@project.Id"
-                                        class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" title="Edit Project">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-
-                                    <form method="post" asp-page-handler="Delete" asp-route-id="@project.Id" class="d-inline"
-                                        data-delete-id="@project.Id">
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip"
-                                            title="Delete Project" onclick="deleteItem(@project.Id, 'project')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="project-details">
+                                <h6 class="mb-1 fw-bold">@project.Title</h6>
+                                <p class="mb-1 text-muted small">@project.Description</p>
+                                @if (!string.IsNullOrWhiteSpace(project.Summary))
+                                {
+                                    <p class="mb-1 text-muted small fst-italic">@project.Summary</p>
+                                }
+                                <div class="project-meta d-flex flex-wrap gap-1">
+                                    <span class="badge bg-primary">ID: @project.Id</span>
+                                    @if (!string.IsNullOrEmpty(project.Image))
+                                    {
+                                        <span class="badge bg-success"><i class="fas fa-image me-1"></i>Has Image</span>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(project.Slug))
+                                    {
+                                        <span class="badge bg-secondary"><i class="fas fa-link me-1"></i>@project.Slug</span>
+                                    }
+                                    @if (project.Seo != null)
+                                    {
+                                        <span class="badge bg-info text-dark" title="SEO metadata configured"><i class="fas fa-search me-1"></i>SEO</span>
+                                    }
+                                    @if (project.OpenGraph != null)
+                                    {
+                                        <span class="badge bg-warning text-dark" title="Open Graph metadata configured"><i class="fas fa-share-alt me-1"></i>OG</span>
+                                    }
+                                    @if (project.TwitterCard != null)
+                                    {
+                                        <span class="badge bg-primary" title="Twitter card metadata configured"><i class="fab fa-twitter me-1"></i>Twitter</span>
+                                    }
                                 </div>
-                            </td>
-                        </tr>
-                    }
+                                @if (!string.IsNullOrWhiteSpace(project.Keywords))
+                                {
+                                    <div class="text-muted small mt-1"><i class="fas fa-tags me-1"></i>@project.Keywords</div>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            @{
+                                var repository = project.Repository;
+                                var hasRepository = repository != null && (
+                                    !string.IsNullOrWhiteSpace(repository.Url) ||
+                                    !string.IsNullOrWhiteSpace(repository.Name) ||
+                                    !string.IsNullOrWhiteSpace(repository.Provider));
+                            }
+                            @if (hasRepository)
+                            {
+                                if (!string.IsNullOrWhiteSpace(repository?.Url))
+                                {
+                                    <a href="@repository!.Url" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm mb-2">
+                                        <i class="fas fa-code-branch me-1"></i>Open Repository
+                                    </a>
+                                }
+                                <div class="small text-muted">
+                                    @if (!string.IsNullOrWhiteSpace(repository?.Provider))
+                                    {
+                                        <div><strong>Provider:</strong> @repository!.Provider</div>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(repository?.Name))
+                                    {
+                                        <div><strong>Name:</strong> @repository!.Name</div>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(repository?.Branch) || !string.IsNullOrWhiteSpace(repository?.Visibility))
+                                    {
+                                        <div>
+                                            @if (!string.IsNullOrWhiteSpace(repository?.Branch))
+                                            {
+                                                <span><strong>Branch:</strong> @repository!.Branch</span>
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(repository?.Visibility))
+                                            {
+                                                <span class="ms-2"><strong>Visibility:</strong> @repository!.Visibility</span>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                                @if (!string.IsNullOrWhiteSpace(repository?.Notes))
+                                {
+                                    <div class="small text-muted fst-italic mt-1">@repository!.Notes</div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted small">No repository data</span>
+                            }
+                        </td>
+                        <td>
+                            @if (project.Promotion is { } promotion)
+                            {
+                                <div class="d-flex flex-wrap align-items-center gap-1 mb-2">
+                                    @if (!string.IsNullOrWhiteSpace(promotion.CurrentStage))
+                                    {
+                                        <span class="badge bg-info text-dark">@promotion.CurrentStage</span>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(promotion.Status))
+                                    {
+                                        <span class="badge bg-light text-dark border">@promotion.Status</span>
+                                    }
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(promotion.Pipeline))
+                                {
+                                    <div class="small"><strong>Pipeline:</strong> @promotion.Pipeline</div>
+                                }
+
+                                @if (promotion.LastPromotedOn.HasValue)
+                                {
+                                    <div class="small text-muted">Last promoted @promotion.LastPromotedOn.Value.ToString("MMM dd, yyyy")</div>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(promotion.Notes))
+                                {
+                                    <div class="small text-muted mt-1">@promotion.Notes</div>
+                                }
+
+                                @if (promotion.Environments != null && promotion.Environments.Count > 0)
+                                {
+                                    <div class="mt-2 d-flex flex-wrap gap-1">
+                                        @foreach (var environment in promotion.Environments)
+                                        {
+                                            if (environment == null)
+                                            {
+                                                continue;
+                                            }
+
+                                            var hasName = !string.IsNullOrWhiteSpace(environment.Name);
+                                            var hasStatus = !string.IsNullOrWhiteSpace(environment.Status);
+
+                                            if (!hasName && !hasStatus)
+                                            {
+                                                continue;
+                                            }
+
+                                            var normalizedStatus = environment.Status?.Trim().ToLowerInvariant();
+                                            var badgeClass = normalizedStatus switch
+                                            {
+                                                "active" or "online" => "bg-success",
+                                                "blocked" or "offline" => "bg-danger",
+                                                "staging" or "qa" or "testing" => "bg-warning text-dark",
+                                                _ => "bg-secondary"
+                                            };
+
+                                            <span class="badge @badgeClass">
+                                                @(hasName ? environment.Name : "Environment")
+                                                @if (hasStatus)
+                                                {
+                                                    <text> (@environment.Status)</text>
+                                                }
+                                            </span>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted small">No promotion data</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(project.Link))
+                            {
+                                <a href="@project.Link" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-external-link-alt me-1"></i>Open Site
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">No link</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="action-buttons">
+                                <a asp-page="./ProjectEdit" asp-route-id="@project.Id" class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" title="Edit Project">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@project.Id" class="d-inline" data-delete-id="@project.Id">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" title="Delete Project" onclick="deleteItem(@project.Id, 'project')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>
 
         <div class="card-footer bg-light">
             <div class="d-flex justify-content-between align-items-center">
-                <small class="text-muted">
-                    Showing @Model.Projects.Count of @Model.Projects.Count projects
-                </small>
+                <small class="text-muted">Showing @Model.Projects.Count of @Model.Projects.Count projects</small>
                 <div>
                     <a asp-page="./ProjectAdd" class="btn btn-admin-primary btn-sm">
                         <i class="fas fa-plus me-1"></i>Add Project
@@ -156,17 +288,12 @@ else
 
 @section Scripts {
     <script>
-        function filterProjects(filter)
-        {
+        function filterProjects(filter) {
             const rows = document.querySelectorAll('tbody tr');
-            rows.forEach(row =>
-            {
-                if (filter === 'all')
-                {
+            rows.forEach(row => {
+                if (filter === 'all') {
                     row.style.display = '';
-                } else
-                {
-                    // Add your filtering logic here
+                } else {
                     row.style.display = '';
                 }
             });

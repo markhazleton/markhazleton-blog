@@ -16,10 +16,13 @@ public class ProjectEditModel : BasePageModel
         _projectService = projectService;
         _webHostEnvironment = webHostEnvironment;
     }
+
     [BindProperty]
     public ProjectModel Project { get; set; } = new();
 
-    public List<string> AvailableImages { get; set; } = new(); public IActionResult OnGet(int id)
+    public List<string> AvailableImages { get; set; } = new();
+
+    public IActionResult OnGet(int id)
     {
         try
         {
@@ -31,28 +34,33 @@ public class ProjectEditModel : BasePageModel
             }
 
             Project = project;
+            EnsureProjectAdvancedFields(Project);
             LoadAvailableImages();
             return Page();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // Log the exception here if you have logging
+            _baseLogger.LogError(ex, "Failed to load project {ProjectId}", id);
             ModelState.AddModelError(string.Empty, "An error occurred while loading the project.");
+            EnsureProjectAdvancedFields(Project);
+            LoadAvailableImages();
             return Page();
         }
     }
+
     public IActionResult OnPost()
     {
-        // Debug: Check if ID is being preserved
         if (Project.Id == 0)
         {
             ModelState.AddModelError(string.Empty, "Project ID was not preserved during form submission. Please try again.");
+            EnsureProjectAdvancedFields(Project);
             LoadAvailableImages();
             return Page();
         }
 
         if (!ModelState.IsValid)
         {
+            EnsureProjectAdvancedFields(Project);
             LoadAvailableImages();
             return Page();
         }
@@ -66,6 +74,7 @@ public class ProjectEditModel : BasePageModel
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, $"An error occurred while updating the project: {ex.Message}");
+            EnsureProjectAdvancedFields(Project);
             LoadAvailableImages();
             return Page();
         }
@@ -103,4 +112,27 @@ public class ProjectEditModel : BasePageModel
         var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp" };
         return imageExtensions.Contains(Path.GetExtension(fileName).ToLowerInvariant());
     }
+
+    private static void EnsureProjectAdvancedFields(ProjectModel project)
+    {
+        if (project == null)
+        {
+            return;
+        }
+
+        project.Repository ??= new ProjectRepository();
+
+        project.Promotion ??= new ProjectPromotion();
+        project.Promotion.Environments ??= new List<PromotionEnvironment>();
+
+        while (project.Promotion.Environments.Count < 3)
+        {
+            project.Promotion.Environments.Add(new PromotionEnvironment());
+        }
+
+        project.Seo ??= new SeoModel();
+        project.OpenGraph ??= new OpenGraphModel();
+        project.TwitterCard ??= new TwitterCardModel();
+    }
 }
+

@@ -1,19 +1,21 @@
 @page "/ProjectEdit/{id:int}"
 @model ProjectEditModel
+@using System
+@using System.Collections.Generic
 @using System.IO
+@using mwhWebAdmin.Project
 @{
     ViewData["Title"] = "Edit Project";
 }
 
-<!-- Page Header -->
 <div class="page-header fade-in-up">
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <h1><i class="fas fa-edit me-3"></i>@ViewData["Title"]</h1>
-            <p class="lead mb-0">Update project information</p>
+            <p class="lead mb-0">Update project information and SEO metadata</p>
         </div>
-        <div>
-            <a asp-page="./Projects" class="btn btn-outline-secondary me-2">
+        <div class="d-flex gap-2">
+            <a asp-page="./Projects" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i>Back to Projects
             </a>
             <a asp-page="./ProjectAdd" class="btn btn-admin-primary">
@@ -42,109 +44,388 @@
     </div>
 }
 
-<<!-- Project Form -->
 <div class="admin-form fade-in-up">
     <form method="post">
         <input asp-for="Project.Id" type="hidden" />
 
         <div class="row">
-            <div class="col-md-8">
-                <div class="card">
+            <div class="col-lg-8">
+                <div class="card mb-3">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Project Information</h5>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="Project.Title" class="form-label fw-bold"></label>
-                            <input asp-for="Project.Title" class="form-control" placeholder="Enter project title..." />
-                            <span asp-validation-for="Project.Title" class="text-danger"></span>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label asp-for="Project.Title" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Title" class="form-control" placeholder="Enter project title..." />
+                                <span asp-validation-for="Project.Title" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Project.Slug" class="form-label fw-bold"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">/projects/</span>
+                                    <input asp-for="Project.Slug" class="form-control" placeholder="my-project" />
+                                </div>
+                                <div class="form-text">Lowercase letters, numbers, and hyphens only.</div>
+                                <span asp-validation-for="Project.Slug" class="text-danger"></span>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 mt-3">
                             <label asp-for="Project.Description" class="form-label fw-bold"></label>
-                            <textarea asp-for="Project.Description" class="form-control" rows="4" placeholder="Describe your project..."></textarea>
+                            <textarea asp-for="Project.Description" class="form-control" rows="3" placeholder="Describe your project..."></textarea>
                             <span asp-validation-for="Project.Description" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Project.Link" class="form-label fw-bold"></label>
-                            <input asp-for="Project.Link" class="form-control" type="url" placeholder="https://example.com" />
-                            <span asp-validation-for="Project.Link" class="text-danger"></span>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label asp-for="Project.Link" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Link" class="form-control" type="url" placeholder="https://example.com" />
+                                <span asp-validation-for="Project.Link" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Project.Keywords" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Keywords" class="form-control" placeholder="portfolio, web app, azure" />
+                                <div class="form-text">Comma-separated keyword phrases.</div>
+                                <span asp-validation-for="Project.Keywords" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <label asp-for="Project.Summary" class="form-label fw-bold"></label>
+                            <textarea asp-for="Project.Summary" class="form-control" rows="2" placeholder="Concise overview used for meta descriptions and social sharing."></textarea>
+                            <span asp-validation-for="Project.Summary" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-code-branch me-2"></i>Source Repository</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Project.Repository!.Provider" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Repository!.Provider" class="form-control" placeholder="GitHub, Azure DevOps, GitLab..." />
+                                <span asp-validation-for="Project.Repository!.Provider" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Project.Repository!.Name" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Repository!.Name" class="form-control" placeholder="markhazleton/webspark" />
+                                <span asp-validation-for="Project.Repository!.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-8">
+                                <label asp-for="Project.Repository!.Url" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Repository!.Url" class="form-control" type="url" placeholder="https://github.com/markhazleton/..." />
+                                <span asp-validation-for="Project.Repository!.Url" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Project.Repository!.Branch" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Repository!.Branch" class="form-control" placeholder="main" />
+                                <span asp-validation-for="Project.Repository!.Branch" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-6">
+                                <label asp-for="Project.Repository!.Visibility" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Repository!.Visibility" class="form-control" placeholder="Public, Private" />
+                                <span asp-validation-for="Project.Repository!.Visibility" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Project.Repository!.Notes" class="form-label fw-bold"></label>
+                                <textarea asp-for="Project.Repository!.Notes" class="form-control" rows="2" placeholder="Key repository notes or credentials handled elsewhere."></textarea>
+                                <span asp-validation-for="Project.Repository!.Notes" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-rocket me-2"></i>Promotion Pipeline</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label asp-for="Project.Promotion!.Pipeline" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Promotion!.Pipeline" class="form-control" placeholder="Pipeline name" />
+                                <span asp-validation-for="Project.Promotion!.Pipeline" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Project.Promotion!.CurrentStage" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Promotion!.CurrentStage" class="form-control" placeholder="Development, QA, Production" />
+                                <span asp-validation-for="Project.Promotion!.CurrentStage" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Project.Promotion!.Status" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Promotion!.Status" class="form-control" placeholder="Active, Blocked, Scheduled" />
+                                <span asp-validation-for="Project.Promotion!.Status" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-4">
+                                <label asp-for="Project.Promotion!.LastPromotedOn" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Promotion!.LastPromotedOn" class="form-control" type="date" />
+                                <span asp-validation-for="Project.Promotion!.LastPromotedOn" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <label asp-for="Project.Promotion!.Notes" class="form-label fw-bold"></label>
+                                <textarea asp-for="Project.Promotion!.Notes" class="form-control" rows="2" placeholder="Add deployment notes, blockers, or next steps."></textarea>
+                                <span asp-validation-for="Project.Promotion!.Notes" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0 d-flex align-items-center"><i class="fas fa-layer-group me-2"></i>Promotion Environments</h6>
+                            <span class="text-muted small">Leave an environment blank to exclude it when saving.</span>
+                        </div>
+
+                        @{
+                            var environments = Model.Project.Promotion?.Environments ?? new List<PromotionEnvironment>();
+                            var environmentPlaceholders = new[] { "Development", "Staging", "Production" };
+                        }
+
+                        @if (environments.Count == 0)
+                        {
+                            <p class="text-muted mb-0">No environments configured. Add promotion details above to begin tracking environments.</p>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>URL</th>
+                                            <th>Status</th>
+                                            <th>Version</th>
+                                            <th>Last Promoted</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @for (var i = 0; i < environments.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input asp-for="Project.Promotion!.Environments[i].Name" class="form-control form-control-sm" placeholder="@(i < environmentPlaceholders.Length ? environmentPlaceholders[i] : "Environment name")" />
+                                                <span asp-validation-for="Project.Promotion!.Environments[i].Name" class="text-danger small"></span>
+                                            </td>
+                                            <td>
+                                                <input asp-for="Project.Promotion!.Environments[i].Url" class="form-control form-control-sm" type="url" placeholder="https://app-dev.example.com" />
+                                                <span asp-validation-for="Project.Promotion!.Environments[i].Url" class="text-danger small"></span>
+                                            </td>
+                                            <td>
+                                                <input asp-for="Project.Promotion!.Environments[i].Status" class="form-control form-control-sm" placeholder="Active, Offline" />
+                                                <span asp-validation-for="Project.Promotion!.Environments[i].Status" class="text-danger small"></span>
+                                            </td>
+                                            <td>
+                                                <input asp-for="Project.Promotion!.Environments[i].Version" class="form-control form-control-sm" placeholder="v1.0.0" />
+                                                <span asp-validation-for="Project.Promotion!.Environments[i].Version" class="text-danger small"></span>
+                                            </td>
+                                            <td>
+                                                <input asp-for="Project.Promotion!.Environments[i].LastPromotedOn" class="form-control form-control-sm" type="date" />
+                                                <span asp-validation-for="Project.Promotion!.Environments[i].LastPromotedOn" class="text-danger small"></span>
+                                            </td>
+                                            <td>
+                                                <input asp-for="Project.Promotion!.Environments[i].Notes" class="form-control form-control-sm" placeholder="Key notes" />
+                                                <span asp-validation-for="Project.Promotion!.Environments[i].Notes" class="text-danger small"></span>
+                                            </td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-search me-2"></i>Search Engine Metadata</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Project.Seo!.Title" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Seo!.Title" class="form-control" placeholder="SEO page title" />
+                                <span asp-validation-for="Project.Seo!.Title" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Project.Seo!.TitleSuffix" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Seo!.TitleSuffix" class="form-control" placeholder=" | Mark Hazleton Projects" />
+                                <span asp-validation-for="Project.Seo!.TitleSuffix" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-8">
+                                <label asp-for="Project.Seo!.Description" class="form-label fw-bold"></label>
+                                <textarea asp-for="Project.Seo!.Description" class="form-control" rows="2" placeholder="Concise meta description (120-160 characters recommended)."></textarea>
+                                <span asp-validation-for="Project.Seo!.Description" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Project.Seo!.Keywords" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Seo!.Keywords" class="form-control" placeholder="project, technology, stack" />
+                                <span asp-validation-for="Project.Seo!.Keywords" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-8">
+                                <label asp-for="Project.Seo!.Canonical" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Seo!.Canonical" class="form-control" type="url" placeholder="https://markhazleton.com/projects/slug" />
+                                <span asp-validation-for="Project.Seo!.Canonical" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Project.Seo!.Robots" class="form-label fw-bold"></label>
+                                <input asp-for="Project.Seo!.Robots" class="form-control" placeholder="index, follow" />
+                                <span asp-validation-for="Project.Seo!.Robots" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0"><i class="fas fa-share-alt me-2"></i>Social Sharing Metadata</h5>
+                        <span class="text-muted small">Used for Open Graph (Facebook, LinkedIn) and Twitter cards.</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-lg-6">
+                                <div class="border rounded p-3 h-100">
+                                    <h6 class="text-uppercase text-muted fw-bold">Open Graph</h6>
+                                    <div class="mb-3">
+                                        <label asp-for="Project.OpenGraph!.Title" class="form-label fw-bold"></label>
+                                        <input asp-for="Project.OpenGraph!.Title" class="form-control" placeholder="Open Graph title" />
+                                        <span asp-validation-for="Project.OpenGraph!.Title" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Project.OpenGraph!.Description" class="form-label fw-bold"></label>
+                                        <textarea asp-for="Project.OpenGraph!.Description" class="form-control" rows="2" placeholder="Social sharing description"></textarea>
+                                        <span asp-validation-for="Project.OpenGraph!.Description" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Project.OpenGraph!.Image" class="form-label fw-bold"></label>
+                                        <input asp-for="Project.OpenGraph!.Image" class="form-control" placeholder="/assets/img/project-card.png" />
+                                        <span asp-validation-for="Project.OpenGraph!.Image" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Project.OpenGraph!.ImageAlt" class="form-label fw-bold"></label>
+                                        <input asp-for="Project.OpenGraph!.ImageAlt" class="form-control" placeholder="Accessible alt text" />
+                                        <span asp-validation-for="Project.OpenGraph!.ImageAlt" class="text-danger"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="Project.OpenGraph!.Type" class="form-label fw-bold"></label>
+                                        <input asp-for="Project.OpenGraph!.Type" class="form-control" placeholder="website" />
+                                        <span asp-validation-for="Project.OpenGraph!.Type" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="border rounded p-3 h-100">
+                                    <h6 class="text-uppercase text-muted fw-bold">Twitter Card</h6>
+                                    <div class="mb-3">
+                                        <label asp-for="Project.TwitterCard!.Title" class="form-label fw-bold"></label>
+                                        <input asp-for="Project.TwitterCard!.Title" class="form-control" placeholder="Twitter card title" />
+                                        <span asp-validation-for="Project.TwitterCard!.Title" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Project.TwitterCard!.Description" class="form-label fw-bold"></label>
+                                        <textarea asp-for="Project.TwitterCard!.Description" class="form-control" rows="2" placeholder="Twitter description"></textarea>
+                                        <span asp-validation-for="Project.TwitterCard!.Description" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Project.TwitterCard!.Image" class="form-label fw-bold"></label>
+                                        <input asp-for="Project.TwitterCard!.Image" class="form-control" placeholder="/assets/img/twitter-card.png" />
+                                        <span asp-validation-for="Project.TwitterCard!.Image" class="text-danger"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="Project.TwitterCard!.ImageAlt" class="form-label fw-bold"></label>
+                                        <input asp-for="Project.TwitterCard!.ImageAlt" class="form-control" placeholder="Accessible alt text" />
+                                        <span asp-validation-for="Project.TwitterCard!.ImageAlt" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="card">
+            <div class="col-lg-4">
+                <div class="card mb-3">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-image me-2"></i>Project Image</h5>
                     </div>
                     <div class="card-body">
-                        <!-- Current/Selected Image Preview -->
                         <div class="mb-3">
                             <div class="image-preview-container text-center">
                                 @{
-                                    string imageUrl = !string.IsNullOrEmpty(Model.Project.Image) ? "/" + Model.Project.Image : "/assets/img/placeholder.svg";
-                                    string imageName = !string.IsNullOrEmpty(Model.Project.Image) ? Model.Project.Image : "No image selected";
+                                    var imageUrl = !string.IsNullOrWhiteSpace(Model.Project.Image) ? "/" + Model.Project.Image : "/assets/img/placeholder.svg";
+                                    var imageName = !string.IsNullOrWhiteSpace(Model.Project.Image) ? Model.Project.Image : "No image selected";
                                 }
                                 <img id="selectedImagePreview"
                                      src="@imageUrl"
                                      alt="@imageName"
                                      class="img-fluid rounded border"
                                      style="max-height: 200px; object-fit: cover; width: 100%;"
-                                     onerror="this.src='/assets/img/placeholder.svg'; this.alt='No image selected';" />
+                                     onerror="this.src='/assets/img/placeholder.svg'; this.alt='Image not available';" />
                                 <div class="mt-2">
                                     <small id="selectedImageName" class="text-muted">@imageName</small>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Hidden input for form submission -->
                         <input asp-for="Project.Image" type="hidden" id="selectedImageInput" />
                         <span asp-validation-for="Project.Image" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
-        </div>        <!-- Image Selection Grid -->
-        <div class="mt-4">
-            <div class="card">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="fas fa-images me-2"></i>Choose an Image</h6>
-                </div>
-                <div class="card-body">
-                    <div class="image-grid">
-                        <!-- No Image Option -->
-                        <div class="image-option @(string.IsNullOrEmpty(Model.Project.Image) ? "border-primary selected" : "")" data-image-path="">
-                            <div class="image-option-content">
-                                <div class="image-placeholder">
-                                    <i class="fas fa-ban text-muted"></i>
-                                </div>
-                                <small class="image-name">No Image</small>
-                            </div>
-                        </div>
 
-                        <!-- Available Images -->
-                        @foreach (var imagePath in Model.AvailableImages)
-                        {
-                            <div class="image-option @(imagePath == Model.Project.Image ? "border-primary selected" : "")" data-image-path="@imagePath">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-images me-2"></i>Choose an Image</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="image-grid">
+                            <div class="image-option @(string.IsNullOrEmpty(Model.Project.Image) ? "selected" : string.Empty)" data-image-path="">
                                 <div class="image-option-content">
-                                    <img src="/@imagePath"
-                                         alt="@System.IO.Path.GetFileName(imagePath)"
-                                         class="image-thumbnail"
-                                         onerror="this.parentElement.innerHTML='<div class=\'image-error\'><i class=\'fas fa-exclamation-triangle\'></i></div>';" />
-                                    <small class="image-name" title="@imagePath">
-                                        @System.IO.Path.GetFileName(imagePath)
-                                    </small>
+                                    <div class="image-placeholder">
+                                        <i class="fas fa-ban text-muted"></i>
+                                    </div>
+                                    <small class="image-name">No Image</small>
                                 </div>
                             </div>
-                        }
+
+                            @foreach (var imagePath in Model.AvailableImages)
+                            {
+                                var isSelected = string.Equals(Model.Project.Image, imagePath, StringComparison.OrdinalIgnoreCase);
+                                <div class="image-option @(isSelected ? "selected" : string.Empty)" data-image-path="@imagePath">
+                                    <div class="image-option-content">
+                                        <img src="/@imagePath"
+                                             alt="@System.IO.Path.GetFileName(imagePath)"
+                                             class="image-thumbnail"
+                                             onerror="this.parentElement.innerHTML='<div class=\'image-error\'><i class=\'fas fa-exclamation-triangle\'></i></div>';" />
+                                        <small class="image-name" title="@imagePath">
+                                            @System.IO.Path.GetFileName(imagePath)
+                                        </small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Form Actions -->
         <div class="row mt-4">
             <div class="col-12">
                 <div class="d-flex justify-content-between">
@@ -162,104 +443,48 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const imageOptions = document.querySelectorAll('.image-option');
             const selectedImageInput = document.getElementById('selectedImageInput');
             const selectedImagePreview = document.getElementById('selectedImagePreview');
             const selectedImageName = document.getElementById('selectedImageName');
 
-            imageOptions.forEach(function(option) {
-                option.addEventListener('click', function() {
-                    // Remove selected class from all options
+            const updatePreview = (imagePath) => {
+                if (imagePath) {
+                    selectedImagePreview.src = '/' + imagePath;
+                    selectedImagePreview.alt = 'Selected Image: ' + imagePath;
+                    selectedImageName.textContent = imagePath;
+                } else {
+                    selectedImagePreview.src = '/assets/img/placeholder.svg';
+                    selectedImagePreview.alt = 'No image selected';
+                    selectedImageName.textContent = 'No image selected';
+                }
+            };
+
+            imageOptions.forEach(option => {
+                option.addEventListener('click', () => {
                     imageOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
 
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-
-                    // Get the image path
-                    const imagePath = this.getAttribute('data-image-path');
-
-                    // Update hidden input
+                    const imagePath = option.getAttribute('data-image-path') ?? '';
                     selectedImageInput.value = imagePath;
-
-                    // Update preview
-                    if (imagePath) {
-                        selectedImagePreview.src = '/' + imagePath;
-                        selectedImagePreview.alt = 'Selected Image: ' + imagePath;
-                        selectedImageName.textContent = imagePath;
-                    } else {
-                        selectedImagePreview.src = '/assets/img/placeholder.svg';
-                        selectedImagePreview.alt = 'No image selected';
-                        selectedImageName.textContent = 'No image selected';
-                    }
-
-                    // Handle image load errors
-                    selectedImagePreview.onerror = function() {
-                        this.src = '/assets/img/placeholder.svg';
-                        this.alt = 'Image not found';
-                        selectedImageName.textContent = imagePath ? imagePath + ' (not found)' : 'No image selected';
-                    };
+                    updatePreview(imagePath);
                 });
+
+                const optionPath = option.getAttribute('data-image-path') ?? '';
+                if (optionPath === (selectedImageInput.value ?? '')) {
+                    option.classList.add('selected');
+                }
             });
+
+            updatePreview(selectedImageInput.value ?? '');
+
+            selectedImagePreview.onerror = function () {
+                this.src = '/assets/img/placeholder.svg';
+                this.alt = 'Image not available';
+            };
         });
     </script>
 }
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
 
-        .image-option {
-            position: relative;
-        }
-    </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageOptions = document.querySelectorAll('.image-option');
-            const selectedImageInput = document.getElementById('selectedImageInput');
-            const selectedImagePreview = document.getElementById('selectedImagePreview');
-            const selectedImageName = document.getElementById('selectedImageName');
-
-            imageOptions.forEach(function(option) {
-                option.addEventListener('click', function() {
-                    // Remove selected class from all options
-                    imageOptions.forEach(opt => opt.classList.remove('selected'));
-
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-
-                    // Get the image path
-                    const imagePath = this.getAttribute('data-image-path');
-
-                    // Update hidden input
-                    selectedImageInput.value = imagePath;
-                      // Update preview
-                    if (imagePath) {
-                        selectedImagePreview.src = '/' + imagePath;
-                        selectedImagePreview.alt = 'Selected Image: ' + imagePath;
-                        selectedImageName.textContent = imagePath;
-                    } else {
-                        selectedImagePreview.src = '/assets/img/placeholder.svg';
-                        selectedImagePreview.alt = 'No image selected';
-                        selectedImageName.textContent = 'No image selected';
-                    }
-
-                    // Handle image load errors
-                    selectedImagePreview.onerror = function() {
-                        this.src = '/assets/img/placeholder.svg';
-                        this.alt = 'Image not found';
-                        selectedImageName.textContent = imagePath ? imagePath + ' (not found)' : 'No image selected';
-                    };
-                });
-            });
-        });
-    </script>
-}

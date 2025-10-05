@@ -24,6 +24,7 @@ public class ProjectAddModel : BasePageModel
 
     public IActionResult OnGet()
     {
+        EnsureProjectAdvancedFields(Project);
         LoadAvailableImages();
         return Page();
     }
@@ -32,6 +33,7 @@ public class ProjectAddModel : BasePageModel
     {
         if (!ModelState.IsValid)
         {
+            EnsureProjectAdvancedFields(Project);
             LoadAvailableImages();
             return Page();
         }
@@ -45,6 +47,7 @@ public class ProjectAddModel : BasePageModel
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, $"An error occurred while adding the project: {ex.Message}");
+            EnsureProjectAdvancedFields(Project);
             LoadAvailableImages();
             return Page();
         }
@@ -82,4 +85,27 @@ public class ProjectAddModel : BasePageModel
         var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp" };
         return imageExtensions.Contains(Path.GetExtension(fileName).ToLowerInvariant());
     }
+
+    private static void EnsureProjectAdvancedFields(ProjectModel project)
+    {
+        if (project == null)
+        {
+            return;
+        }
+
+        project.Repository ??= new ProjectRepository();
+
+        project.Promotion ??= new ProjectPromotion();
+        project.Promotion.Environments ??= new List<PromotionEnvironment>();
+
+        while (project.Promotion.Environments.Count < 3)
+        {
+            project.Promotion.Environments.Add(new PromotionEnvironment());
+        }
+
+        project.Seo ??= new SeoModel();
+        project.OpenGraph ??= new OpenGraphModel();
+        project.TwitterCard ??= new TwitterCardModel();
+    }
 }
+
