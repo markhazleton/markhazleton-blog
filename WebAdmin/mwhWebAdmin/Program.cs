@@ -36,6 +36,9 @@ builder.Services.AddLogging(configure => configure.AddConsole());
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 
+// GitHub Integration Service - changed to Singleton to match ProjectService lifetime
+builder.Services.AddSingleton<GitHubIntegrationService>();
+
 // Article and Project Services with configuration
 builder.Services.AddSingleton<ArticleService>(provider =>
 {
@@ -47,7 +50,11 @@ builder.Services.AddSingleton<ArticleService>(provider =>
 
 builder.Services.AddSingleton<ProjectService>(provider =>
 {
-    return new ProjectService(projectsPath);
+    var config = provider.GetRequiredService<IConfiguration>();
+    var logger = provider.GetRequiredService<ILogger<ProjectService>>();
+    var factory = provider.GetRequiredService<IHttpClientFactory>();
+    var gitHubService = provider.GetRequiredService<GitHubIntegrationService>();
+    return new ProjectService(projectsPath, logger, factory, config, gitHubService);
 });
 
 // SEO Validation Service

@@ -32,15 +32,52 @@
     </div>
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show fade-in-up" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show fade-in-up" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        @TempData["WarningMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show fade-in-up" role="alert">
+        <i class="fas fa-times-circle me-2"></i>
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div class="admin-form fade-in-up">
     <form method="post">
         <div class="row">
             <div class="col-lg-8">
                 <div class="card mb-3">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Project Information</h5>
+                        <button type="submit" asp-page-handler="GenerateAiContent" class="btn btn-outline-primary btn-sm" title="Generate comprehensive project data using AI and GitHub repository analysis">
+                            <i class="fas fa-robot me-2"></i>Generate AI Content
+                        </button>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-info mb-3">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <strong>AI Enhancement Available:</strong> 
+                            Provide a project title, description, or GitHub repository URL, then click "Generate AI Content" to automatically populate SEO metadata, 
+                            repository details, and deployment pipeline information.
+                        </div>
+
                         <div class="row g-3">
                             <div class="col-md-8">
                                 <label asp-for="Project.Title" class="form-label fw-bold"></label>
@@ -91,6 +128,13 @@
                         <h5 class="mb-0"><i class="fas fa-code-branch me-2"></i>Source Repository</h5>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-success mb-3">
+                            <i class="fas fa-github me-2"></i>
+                            <strong>GitHub Integration:</strong> 
+                            Enter a GitHub repository URL above and use "Generate AI Content" to automatically analyze the repository, 
+                            extract README content, detect tech stack, and populate repository metadata.
+                        </div>
+
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label asp-for="Project.Repository!.Provider" class="form-label fw-bold"></label>
@@ -108,6 +152,10 @@
                             <div class="col-md-8">
                                 <label asp-for="Project.Repository!.Url" class="form-label fw-bold"></label>
                                 <input asp-for="Project.Repository!.Url" class="form-control" type="url" placeholder="https://github.com/markhazleton/..." />
+                                <div class="form-text">
+                                    <i class="fas fa-magic me-1"></i>
+                                    Paste a GitHub repository URL here and use "Generate AI Content" to auto-populate project details
+                                </div>
                                 <span asp-validation-for="Project.Repository!.Url" class="text-danger"></span>
                             </div>
                             <div class="col-md-4">
@@ -431,6 +479,7 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Image selection functionality
             const imageOptions = document.querySelectorAll('.image-option');
             const selectedImageInput = document.getElementById('selectedImageInput');
             const selectedImagePreview = document.getElementById('selectedImagePreview');
@@ -470,7 +519,133 @@
                 this.src = '/assets/img/placeholder.svg';
                 this.alt = 'Image not available';
             };
+
+            // AI Content Generation functionality
+            const aiGenerateButton = document.querySelector('button[asp-page-handler="GenerateAiContent"]');
+            if (aiGenerateButton) {
+                aiGenerateButton.addEventListener('click', function(e) {
+                    // Get current values to check if we have enough data
+                    const title = document.querySelector('input[name="Project.Title"]').value;
+                    const description = document.querySelector('textarea[name="Project.Description"]').value;
+                    const repositoryUrl = document.querySelector('input[name="Project.Repository.Url"]').value;
+
+                    if (!title.trim() && !description.trim() && !repositoryUrl.trim()) {
+                        e.preventDefault();
+                        alert('Please provide at least a project title, description, or repository URL before generating AI content.');
+                        return;
+                    }
+
+                    // Show loading state
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating AI Content...';
+                    this.disabled = true;
+
+                    // The form will submit naturally, no need to prevent default
+                    // The loading state will persist until page reload with results
+                });
+            }
+
+            // Highlight AI-updated fields function
+            function highlightAiUpdatedFields() {
+                // Check if we have a success message indicating AI updates
+                const successAlert = document.querySelector('.alert-success');
+                if (!successAlert || !successAlert.textContent.includes('AI content generated successfully')) {
+                    return;
+                }
+
+                // Fields that AI typically updates
+                const fieldsToHighlight = [
+                    'input[name="Project.Title"]',
+                    'textarea[name="Project.Description"]',
+                    'textarea[name="Project.Summary"]',
+                    'input[name="Project.Keywords"]',
+                    'input[name="Project.Seo.Title"]',
+                    'textarea[name="Project.Seo.Description"]',
+                    'input[name="Project.Seo.Keywords"]',
+                    'input[name="Project.OpenGraph.Title"]',
+                    'textarea[name="Project.OpenGraph.Description"]',
+                    'input[name="Project.TwitterCard.Title"]',
+                    'textarea[name="Project.TwitterCard.Description"]',
+                    'input[name="Project.Repository.Provider"]',
+                    'input[name="Project.Repository.Visibility"]',
+                    'textarea[name="Project.Repository.Notes"]',
+                    'input[name="Project.Promotion.Pipeline"]',
+                    'input[name="Project.Promotion.CurrentStage"]',
+                    'input[name="Project.Promotion.Status"]',
+                    'textarea[name="Project.Promotion.Notes"]'
+                ];
+
+                fieldsToHighlight.forEach(selector => {
+                    const field = document.querySelector(selector);
+                    if (field && field.value.trim()) {
+                        field.style.backgroundColor = '#d4edda';
+                        field.style.borderColor = '#c3e6cb';
+                        field.style.transition = 'all 0.3s ease';
+
+                        // Remove highlight after 10 seconds
+                        setTimeout(() => {
+                            field.style.backgroundColor = '';
+                            field.style.borderColor = '';
+                        }, 10000);
+                    }
+                });
+
+                // Also highlight environment fields that may have been populated
+                const environmentInputs = document.querySelectorAll('input[name*="Project.Promotion.Environments"]');
+                environmentInputs.forEach(input => {
+                    if (input.value.trim()) {
+                        input.style.backgroundColor = '#d4edda';
+                        input.style.borderColor = '#c3e6cb';
+                        input.style.transition = 'all 0.3s ease';
+
+                        setTimeout(() => {
+                            input.style.backgroundColor = '';
+                            input.style.borderColor = '';
+                        }, 10000);
+                    }
+                });
+            }
+
+            // Auto-fill repository name from URL
+            const repositoryUrlInput = document.querySelector('input[name="Project.Repository.Url"]');
+            const repositoryNameInput = document.querySelector('input[name="Project.Repository.Name"]');
+            
+            if (repositoryUrlInput && repositoryNameInput) {
+                repositoryUrlInput.addEventListener('blur', function() {
+                    if (this.value && !repositoryNameInput.value) {
+                        // Extract owner/repo from GitHub URL
+                        const match = this.value.match(/github\.com[\/:]([^\/]+)\/([^\/\s]+)/);
+                        if (match) {
+                            repositoryNameInput.value = `${match[1]}/${match[2].replace('.git', '')}`;
+                        }
+                    }
+                });
+            }
+
+            // Auto-generate slug from title
+            const titleInput = document.querySelector('input[name="Project.Title"]');
+            const slugInput = document.querySelector('input[name="Project.Slug"]');
+            
+            if (titleInput && slugInput) {
+                titleInput.addEventListener('blur', function() {
+                    if (this.value && !slugInput.value) {
+                        // Generate slug from title
+                        const slug = this.value
+                            .toLowerCase()
+                            .replace(/[^a-z0-9\s-]/g, '')
+                            .replace(/\s+/g, '-')
+                            .replace(/-+/g, '-')
+                            .replace(/^-|-$/g, '');
+                        slugInput.value = slug;
+                    }
+                });
+            }
+
+            // Run highlight function on page load
+            highlightAiUpdatedFields();
         });
     </script>
 }
+
+
 

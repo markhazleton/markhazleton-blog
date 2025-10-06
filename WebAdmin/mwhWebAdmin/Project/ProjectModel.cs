@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations;
 using mwhWebAdmin.Article;
+using mwhWebAdmin.Configuration;
+using mwhWebAdmin.Services;
 
 namespace mwhWebAdmin.Project;
 
@@ -14,11 +16,410 @@ public class ProjectService
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
     private List<ProjectModel> _projects = new();
+    private readonly ILogger<ProjectService> _logger;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _configuration;
+    private readonly GitHubIntegrationService? _gitHubService;
 
-    public ProjectService(string jsonFilePath)
+    public ProjectService(string jsonFilePath, ILogger<ProjectService> logger, IHttpClientFactory httpClientFactory, IConfiguration configuration, GitHubIntegrationService? gitHubService = null)
     {
         _jsonFilePath = jsonFilePath ?? throw new ArgumentNullException(nameof(jsonFilePath));
+        _logger = logger;
+        _httpClientFactory = httpClientFactory;
+        _configuration = configuration;
+        _gitHubService = gitHubService;
         LoadProjects();
+    }
+
+    /// <summary>
+    /// Auto-generates comprehensive project data using AI and GitHub repository analysis
+    /// </summary>
+    /// <param name="project">The project to enhance with AI-generated content</param>
+    public async Task AutoGenerateProjectDataAsync(ProjectModel project)
+    {
+        _logger.LogInformation("[ProjectService] AutoGenerateProjectDataAsync called for project: {ProjectTitle}", project.Title);
+
+        try
+        {
+            // Initialize project fields if needed
+            InitializeProjectSeoFields(project);
+
+            // Analyze GitHub repository if URL is provided
+            GitHubRepositoryAnalysis? repositoryAnalysis = null;
+            if (!string.IsNullOrEmpty(project.Repository?.Url))
+            {
+                _logger.LogInformation("[ProjectService] Analyzing GitHub repository: {RepositoryUrl}", project.Repository.Url);
+                
+                if (_gitHubService != null)
+                {
+                    repositoryAnalysis = await _gitHubService.AnalyzeRepositoryAsync(project.Repository.Url);
+                    _logger.LogInformation("[ProjectService] GitHub repository analysis completed");
+                }
+                else
+                {
+                    _logger.LogWarning("[ProjectService] GitHubIntegrationService not available, skipping repository analysis");
+                }
+            }
+
+            // Generate AI-powered project data
+            if (repositoryAnalysis != null || !string.IsNullOrEmpty(project.Title) || !string.IsNullOrEmpty(project.Description))
+            {
+                _logger.LogInformation("[ProjectService] Generating AI-powered project data");
+                var projectSeoData = await GenerateProjectSeoDataAsync(project, repositoryAnalysis);
+
+                // Update project with AI-generated data
+                ApplyGeneratedDataToProject(project, projectSeoData, repositoryAnalysis);
+                _logger.LogInformation("[ProjectService] AI-generated project data applied successfully");
+            }
+            else
+            {
+                _logger.LogWarning("[ProjectService] Insufficient data for AI generation - no repository URL, title, or description provided");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[ProjectService] Error in AutoGenerateProjectDataAsync for project: {ProjectTitle}", project.Title);
+        }
+    }
+
+    /// <summary>
+    /// Generates SEO-optimized project data using OpenAI
+    /// </summary>
+    private async Task<ProjectSeoGenerationResult> GenerateProjectSeoDataAsync(ProjectModel project, GitHubRepositoryAnalysis? repositoryAnalysis)
+    {
+        try
+        {
+            _logger.LogInformation("[ProjectService] GenerateProjectSeoDataAsync called");
+
+            var openAiApiKey = _configuration["OPENAI_API_KEY"];
+            var openAiApiUrl = "https://api.openai.com/v1/chat/completions";
+
+            if (string.IsNullOrEmpty(openAiApiKey))
+            {
+                _logger.LogError("[ProjectService] OpenAI API key not configured");
+                return new ProjectSeoGenerationResult();
+            }
+
+            using var httpClient = _httpClientFactory.CreateClient();
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", openAiApiKey);
+
+            var systemPrompt = ProjectSeoLlmPromptConfig.GetProjectSeoGenerationPrompt(
+                project.Title ?? "New Project",
+                repositoryAnalysis ?? new GitHubRepositoryAnalysis());
+
+            var userContent = PrepareUserContentForAnalysis(project, repositoryAnalysis);
+
+            // Use simple JSON format for better compatibility
+            return await GenerateWithSimpleJson(httpClient, openAiApiUrl, systemPrompt, userContent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[ProjectService] Failed to generate project SEO data using OpenAI API");
+            return new ProjectSeoGenerationResult();
+        }
+    }
+
+    /// <summary>
+    /// Generate using simple JSON format
+    /// </summary>
+    private async Task<ProjectSeoGenerationResult> GenerateWithSimpleJson(HttpClient httpClient, string apiUrl, string systemPrompt, string userContent)
+    {
+        var enhancedPrompt = systemPrompt + @"
+
+IMPORTANT: Return ONLY a valid JSON object with the following structure (no markdown formatting):
+{
+  ""projectTitle"": ""string"",
+  ""projectDescription"": ""string"",
+  ""projectSummary"": ""string"",
+  ""keywords"": ""string"",
+  ""seoTitle"": ""string"",
+  ""metaDescription"": ""string"",
+  ""ogTitle"": ""string"",
+  ""ogDescription"": ""string"",
+  ""twitterTitle"": ""string"",
+  ""twitterDescription"": ""string"",
+  ""repositoryProvider"": ""string"",
+  ""repositoryVisibility"": ""string"",
+  ""promotionPipeline"": ""string"",
+  ""promotionCurrentStage"": ""string"",
+  ""promotionStatus"": ""string""
+}";
+
+        var requestBody = new
+        {
+            model = "gpt-4o",
+            messages = new[]
+            {
+                new { role = "system", content = enhancedPrompt },
+                new { role = "user", content = userContent }
+            },
+            max_tokens = 2000,
+            temperature = 0.3
+        };
+
+        var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
+        var response = await httpClient.PostAsync(apiUrl, jsonContent);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorContent = await response.Content.ReadAsStringAsync();
+            _logger.LogError("[ProjectService] OpenAI API error: {StatusCode} - {Error}", response.StatusCode, errorContent);
+            return new ProjectSeoGenerationResult();
+        }
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseData = JsonDocument.Parse(responseContent);
+
+        var aiResponse = responseData.RootElement
+            .GetProperty("choices")[0]
+            .GetProperty("message")
+            .GetProperty("content")
+            .GetString();
+
+        if (string.IsNullOrEmpty(aiResponse))
+        {
+            return new ProjectSeoGenerationResult();
+        }
+
+        // Clean up the response in case it has markdown formatting
+        var cleanedResponse = aiResponse.Trim();
+        if (cleanedResponse.StartsWith("```json"))
+        {
+            cleanedResponse = cleanedResponse.Substring(7);
+        }
+        if (cleanedResponse.StartsWith("```"))
+        {
+            cleanedResponse = cleanedResponse.Substring(3);
+        }
+        if (cleanedResponse.EndsWith("```"))
+        {
+            cleanedResponse = cleanedResponse.Substring(0, cleanedResponse.Length - 3);
+        }
+        cleanedResponse = cleanedResponse.Trim();
+
+        return JsonSerializer.Deserialize<ProjectSeoGenerationResult>(cleanedResponse) ?? new ProjectSeoGenerationResult();
+    }
+
+    /// <summary>
+    /// Initializes project SEO fields if they don't exist
+    /// </summary>
+    private void InitializeProjectSeoFields(ProjectModel project)
+    {
+        project.Seo ??= new SeoModel();
+        project.OpenGraph ??= new OpenGraphModel();
+        project.TwitterCard ??= new TwitterCardModel();
+        project.Repository ??= new ProjectRepository();
+        project.Promotion ??= new ProjectPromotion();
+        project.Promotion.Environments ??= new List<PromotionEnvironment>();
+
+        // Ensure we have at least 3 environment slots
+        while (project.Promotion.Environments.Count < 3)
+        {
+            project.Promotion.Environments.Add(new PromotionEnvironment());
+        }
+    }
+
+    /// <summary>
+    /// Prepares user content for AI analysis
+    /// </summary>
+    private string PrepareUserContentForAnalysis(ProjectModel project, GitHubRepositoryAnalysis? repositoryAnalysis)
+    {
+        var contentParts = new List<string>();
+
+        // Add existing project information
+        if (!string.IsNullOrEmpty(project.Title))
+            contentParts.Add($"Current Title: {project.Title}");
+
+        if (!string.IsNullOrEmpty(project.Description))
+            contentParts.Add($"Current Description: {project.Description}");
+
+        if (!string.IsNullOrEmpty(project.Link))
+            contentParts.Add($"Project URL: {project.Link}");
+
+        if (!string.IsNullOrEmpty(project.Keywords))
+            contentParts.Add($"Current Keywords: {project.Keywords}");
+
+        // Add repository information if available
+        if (repositoryAnalysis != null)
+        {
+            contentParts.Add("=== REPOSITORY ANALYSIS ===");
+            
+            if (!string.IsNullOrEmpty(repositoryAnalysis.Description))
+                contentParts.Add($"Repository Description: {repositoryAnalysis.Description}");
+
+            if (!string.IsNullOrEmpty(repositoryAnalysis.Language))
+                contentParts.Add($"Primary Language: {repositoryAnalysis.Language}");
+
+            if (repositoryAnalysis.Topics.Any())
+                contentParts.Add($"Repository Topics: {string.Join(", ", repositoryAnalysis.Topics)}");
+
+            if (repositoryAnalysis.PackageInfo != null)
+            {
+                contentParts.Add($"Package Manager: {repositoryAnalysis.PackageInfo.PackageManager}");
+                contentParts.Add($"Framework: {repositoryAnalysis.PackageInfo.Framework}");
+                contentParts.Add($"Runtime: {repositoryAnalysis.PackageInfo.Runtime}");
+                
+                if (repositoryAnalysis.PackageInfo.Dependencies.Any())
+                    contentParts.Add($"Key Dependencies: {string.Join(", ", repositoryAnalysis.PackageInfo.Dependencies.Take(5))}");
+            }
+
+            if (repositoryAnalysis.Workflows.Any())
+            {
+                var activeWorkflows = repositoryAnalysis.Workflows
+                    .Where(w => w.State == "active")
+                    .Select(w => w.Name)
+                    .ToList();
+                    
+                if (activeWorkflows.Any())
+                    contentParts.Add($"CI/CD Workflows: {string.Join(", ", activeWorkflows)}");
+            }
+
+            if (!string.IsNullOrEmpty(repositoryAnalysis.ReadmeContent))
+            {
+                contentParts.Add("=== README CONTENT ===");
+                // Limit README content to prevent token overflow
+                var readmeContent = repositoryAnalysis.ReadmeContent;
+                if (readmeContent.Length > 2000)
+                {
+                    readmeContent = readmeContent.Substring(0, 2000) + "... [content truncated]";
+                }
+                contentParts.Add(readmeContent);
+            }
+        }
+
+        return string.Join("\n\n", contentParts);
+    }
+
+    /// <summary>
+    /// Applies generated data to the project model
+    /// </summary>
+    private void ApplyGeneratedDataToProject(ProjectModel project, ProjectSeoGenerationResult seoData, GitHubRepositoryAnalysis? repositoryAnalysis)
+    {
+        // Update main project fields
+        if (!string.IsNullOrEmpty(seoData.ProjectTitle))
+            project.Title = seoData.ProjectTitle;
+
+        if (!string.IsNullOrEmpty(seoData.ProjectDescription))
+            project.Description = seoData.ProjectDescription;
+
+        if (!string.IsNullOrEmpty(seoData.ProjectSummary))
+            project.Summary = seoData.ProjectSummary;
+
+        if (!string.IsNullOrEmpty(seoData.Keywords))
+            project.Keywords = seoData.Keywords;
+
+        // Update SEO fields
+        if (project.Seo != null)
+        {
+            if (!string.IsNullOrEmpty(seoData.SeoTitle))
+                project.Seo.Title = seoData.SeoTitle;
+
+            if (!string.IsNullOrEmpty(seoData.MetaDescription))
+                project.Seo.Description = seoData.MetaDescription;
+
+            if (!string.IsNullOrEmpty(seoData.Keywords))
+                project.Seo.Keywords = seoData.Keywords;
+
+            // Auto-generate canonical URL
+            if (string.IsNullOrEmpty(project.Seo.Canonical) && !string.IsNullOrEmpty(project.Slug))
+                project.Seo.Canonical = $"https://markhazleton.com/projects/{project.Slug}";
+        }
+
+        // Update Open Graph fields
+        if (project.OpenGraph != null)
+        {
+            if (!string.IsNullOrEmpty(seoData.OpenGraphTitle))
+                project.OpenGraph.Title = seoData.OpenGraphTitle;
+
+            if (!string.IsNullOrEmpty(seoData.OpenGraphDescription))
+                project.OpenGraph.Description = seoData.OpenGraphDescription;
+
+            if (string.IsNullOrEmpty(project.OpenGraph.Type))
+                project.OpenGraph.Type = "website";
+        }
+
+        // Update Twitter Card fields
+        if (project.TwitterCard != null)
+        {
+            if (!string.IsNullOrEmpty(seoData.TwitterTitle))
+                project.TwitterCard.Title = seoData.TwitterTitle;
+
+            if (!string.IsNullOrEmpty(seoData.TwitterDescription))
+                project.TwitterCard.Description = seoData.TwitterDescription;
+        }
+
+        // Update Repository fields from AI and GitHub analysis
+        if (project.Repository != null)
+        {
+            if (!string.IsNullOrEmpty(seoData.RepositoryProvider))
+                project.Repository.Provider = seoData.RepositoryProvider;
+
+            if (!string.IsNullOrEmpty(seoData.RepositoryVisibility))
+                project.Repository.Visibility = seoData.RepositoryVisibility;
+
+            if (!string.IsNullOrEmpty(seoData.RepositoryNotes))
+                project.Repository.Notes = seoData.RepositoryNotes;
+
+            // Apply GitHub analysis data
+            if (repositoryAnalysis != null)
+            {
+                if (string.IsNullOrEmpty(project.Repository.Provider) && !string.IsNullOrEmpty(project.Repository.Url))
+                {
+                    if (project.Repository.Url.Contains("github.com"))
+                        project.Repository.Provider = "GitHub";
+                    else if (project.Repository.Url.Contains("gitlab.com"))
+                        project.Repository.Provider = "GitLab";
+                    else if (project.Repository.Url.Contains("dev.azure.com"))
+                        project.Repository.Provider = "Azure DevOps";
+                }
+
+                if (string.IsNullOrEmpty(project.Repository.Visibility))
+                    project.Repository.Visibility = repositoryAnalysis.IsPrivate ? "Private" : "Public";
+
+                if (string.IsNullOrEmpty(project.Repository.Branch))
+                    project.Repository.Branch = repositoryAnalysis.DefaultBranch ?? "main";
+            }
+        }
+
+        // Update Promotion fields
+        if (project.Promotion != null)
+        {
+            if (!string.IsNullOrEmpty(seoData.PromotionPipeline))
+                project.Promotion.Pipeline = seoData.PromotionPipeline;
+
+            if (!string.IsNullOrEmpty(seoData.PromotionCurrentStage))
+                project.Promotion.CurrentStage = seoData.PromotionCurrentStage;
+
+            if (!string.IsNullOrEmpty(seoData.PromotionStatus))
+                project.Promotion.Status = seoData.PromotionStatus;
+
+            if (!string.IsNullOrEmpty(seoData.PromotionNotes))
+                project.Promotion.Notes = seoData.PromotionNotes;
+
+            // Add suggested environments
+            if (seoData.Environments != null && seoData.Environments.Any())
+            {
+                foreach (var envSuggestion in seoData.Environments)
+                {
+                    var existingEnv = project.Promotion.Environments
+                        .FirstOrDefault(e => string.Equals(e.Name, envSuggestion.Name, StringComparison.OrdinalIgnoreCase));
+
+                    if (existingEnv == null && !string.IsNullOrEmpty(envSuggestion.Name))
+                    {
+                        project.Promotion.Environments.Add(new PromotionEnvironment
+                        {
+                            Name = envSuggestion.Name,
+                            Url = envSuggestion.Url,
+                            Status = envSuggestion.Status ?? "Active",
+                            Version = envSuggestion.Version,
+                            Notes = envSuggestion.Notes
+                        });
+                    }
+                }
+            }
+        }
+
+        _logger.LogInformation("[ProjectService] Generated data applied to project: {ProjectTitle}", project.Title);
     }
 
     private void LoadProjects()
