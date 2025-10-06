@@ -151,7 +151,7 @@ block layout-content
                   if environment.url
                     p.text-muted.small.mb-2
                       strong URL:
-                      |  
+                      |
                       a(href=environment.url, target='_blank', rel='noopener') #{environment.url}
                   if environment.version
                     p.text-muted.small.mb-2
@@ -163,6 +163,47 @@ block layout-content
                       |  #{environment.lastPromotedOn}
                   if environment.notes
                     p.text-muted.small.mt-auto #{environment.notes}
+
+block additional_structured_data
+  script(type="application/ld+json")
+    | {
+    |   "@context": "https://schema.org",
+    |   "@type": "CreativeWork",
+    |   "name": "#{project.p || project.name || 'Project Overview'}",
+    |   "description": "#{(project.summary || project.d || '').replace(/"/g, '\\"')}",
+    |   "author": {
+    |     "@type": "Person",
+    |     "name": "Mark Hazleton",
+    |     "url": "https://markhazleton.com",
+    |     "sameAs": [
+    |       "https://www.linkedin.com/in/markhazleton/",
+    |       "https://github.com/markhazleton/"
+    |     ]
+    |   },
+    |   "creator": {
+    |     "@type": "Person",
+    |     "name": "Mark Hazleton"
+    |   },
+    |   "publisher": {
+    |     "@type": "Person",
+    |     "name": "Mark Hazleton"
+    |   },
+    |   "inLanguage": "en-US",
+    |   "license": "https://opensource.org/licenses/MIT",
+    |   "copyrightHolder": {
+    |     "@type": "Person",
+    |     "name": "Mark Hazleton"
+    |   },
+    |   "isPartOf": {
+    |     "@type": "WebSite",
+    |     "name": "Mark Hazleton Portfolio",
+    |     "url": "https://markhazleton.com"
+    |   },
+    |   "mainEntityOfPage": {
+    |     "@type": "WebPage",
+    |     "@id": "https://markhazleton.com/projects/#{project.slug || ''}"
+    |   }
+    | }
 
 block additional_css
   style.

@@ -148,6 +148,10 @@ html(lang='en')
     meta(charset="UTF-8")
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='color-scheme', content='light dark')
+
+    // Content Security Policy for Google Analytics support
+    meta(http-equiv='Content-Security-Policy', content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://region1.analytics.google.com https://stats.g.doubleclick.net; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'")
+
     // Theme color for supported browsers (Chrome, Safari, Edge)
     meta(name='theme-color', content='#2c3e50', media='(prefers-color-scheme: light)')
     meta(name='theme-color', content='#34495e', media='(prefers-color-scheme: dark)')
@@ -233,6 +237,10 @@ html(lang='en')
     link(rel='icon', type='image/png', sizes='32x32', href='/favicon-32x32.png')
     link(rel='icon', type='image/png', sizes='16x16', href='/favicon-16x16.png')
     link(rel='manifest', href='/site.webmanifest')
+
+    // RSS Feeds - Articles and Projects
+    link(rel='alternate', type='application/rss+xml', title='Mark Hazleton Articles', href='/rss.xml')
+    link(rel='alternate', type='application/rss+xml', title='Mark Hazleton Projects', href='/projects-rss.xml')
 
     // Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)
     link(href='/css/modern-styles.css', rel='stylesheet')
@@ -322,8 +330,6 @@ html(lang='en')
               a.nav-link(href='/projects.html') Projects
             li.nav-item
               a.nav-link(href='/articles.html') Articles
-            li.nav-item
-              a.nav-link(href='/#contact') Contact
 
           // Search Box - Inside collapsible navbar
           form.d-flex.me-3.my-2.my-lg-0(onsubmit='return searchArticles(event)')
@@ -341,9 +347,19 @@ html(lang='en')
           .d-flex.social-icons
             a(href='https://www.linkedin.com/in/markhazleton/', target='_blank', rel='noopener noreferrer', title='LinkedIn')
               i.fab.fa-linkedin-in
+              span.visually-hidden LinkedIn Profile
             a(href='https://github.com/markhazleton/', target='_blank', rel='noopener noreferrer', title='GitHub')
               i.fab.fa-github
+              span.visually-hidden GitHub Profile
             a(href='https://www.youtube.com/@MarkHazleton', target='_blank', rel='noopener noreferrer', title='YouTube')
+              i.fab.fa-youtube
+              span.visually-hidden YouTube Channel
+            a(href='/rss.xml', target='_blank', rel='noopener noreferrer', title='Articles RSS Feed')
+              i.fas.fa-rss
+              span.visually-hidden Articles RSS Feed
+            a(href='/projects-rss.xml', target='_blank', rel='noopener noreferrer', title='Projects RSS Feed')
+              i.fas.fa-rss.text-warning
+              span.visually-hidden Projects RSS Feed
               i.fab.fa-youtube
     br
     block layout-content
@@ -362,10 +378,19 @@ html(lang='en')
             .social-icons
               a(href='https://www.linkedin.com/in/markhazleton/', target='_blank', rel='noopener noreferrer', aria-label='LinkedIn')
                 i.fab.fa-linkedin-in
+                span.visually-hidden LinkedIn Profile
               a(href='https://github.com/markhazleton/', target='_blank', rel='noopener noreferrer', aria-label='GitHub')
                 i.fab.fa-github
+                span.visually-hidden GitHub Profile
               a(href='https://www.youtube.com/@MarkHazleton', target='_blank', rel='noopener noreferrer', aria-label='YouTube')
                 i.fab.fa-youtube
+                span.visually-hidden YouTube Channel
+              a(href='/rss.xml', target='_blank', rel='noopener noreferrer', aria-label='Articles RSS Feed')
+                i.fas.fa-rss
+                span.visually-hidden Articles RSS Feed
+              a(href='/projects-rss.xml', target='_blank', rel='noopener noreferrer', aria-label='Projects RSS Feed')
+                i.fas.fa-rss
+                span.visually-hidden Projects RSS Feed.text-warning
           .col-md-3.mb-4
             h6.mb-3 Quick Links
             ul.list-unstyled.footer-links
@@ -373,13 +398,13 @@ html(lang='en')
               li: a(href='/#experience') Experience
               li: a(href='/projects.html') Projects
               li: a(href='/articles.html') Articles
-              li: a(href='/#contact') Contact
           .col-md-3.mb-4
             h6.mb-3 Resources
             ul.list-unstyled.footer-links
               li: a(href='/projectmechanics/') Project Mechanics
               li: a(href='https://webspark.markhazleton.com') WebSpark
-              li: a(href='/rss.xml') RSS Feed
+              li: a(href='/rss.xml') Articles RSS Feed
+              li: a(href='/projects-rss.xml') Projects RSS Feed
               li: a(href='/sitemap.xml') Sitemap
 
         hr.my-4

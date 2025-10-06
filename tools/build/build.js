@@ -3,7 +3,7 @@
 /**
  * Unified Build Script for Mark Hazleton Blog
  * Enhanced with caching, performance tracking, and parallel execution
- * Usage: node scripts/build.js [--pug] [--scss] [--scripts] [--assets] [--sitemap] [--rss] [--no-cache] [--no-parallel]
+ * Usage: node scripts/build.js [--pug] [--scss] [--scripts] [--assets] [--sitemap] [--rss] [--projectsRss] [--no-cache] [--no-parallel]
  */
 
 const { execSync } = require('child_process');
@@ -19,8 +19,11 @@ const renderProjectPage = require('./render-project-pages');
 
 // Import utility functions
 const updateRSS = require('./update-rss');
+const updateProjectsRSS = require('./update-projects-rss');
 const updateSitemap = require('./update-sitemap');
 const updateSectionsWithArticles = require('./update-sections');
+const PlaceholderGenerator = require('./generate-placeholders');
+const FontDownloader = require('./download-fonts');
 
 // Import optimization utilities
 const BuildCache = require('./cache-manager');
@@ -57,6 +60,8 @@ class BlogBuilder {
         this.parallel = this.config.optimization.parallel && !options.noParallel;
 
         this.tasks = {
+            fonts: this.buildFonts.bind(this),
+            placeholders: this.buildPlaceholders.bind(this),
             sections: this.buildSections.bind(this),
             pug: this.buildPug.bind(this),
             projectPages: this.buildProjectPages.bind(this),
@@ -64,7 +69,8 @@ class BlogBuilder {
             scripts: this.buildScripts.bind(this),
             assets: this.buildAssets.bind(this),
             sitemap: this.buildSitemap.bind(this),
-            rss: this.buildRSS.bind(this)
+            rss: this.buildRSS.bind(this),
+            projectsRss: this.buildProjectsRSS.bind(this)
         };
 
         // Clean expired cache on startup if enabled
@@ -74,6 +80,58 @@ class BlogBuilder {
                 console.log(`🧹 Cleaned ${cleaned} expired cache entries`);
             }
         }
+    }
+
+    /**
+     * Build local fonts
+     */
+    async buildFonts() {
+        const taskName = 'fonts';
+        this.performance.start(taskName);
+
+        const cacheKey = 'fonts';
+        const targetPath = 'docs/assets/fonts';
+
+        if (!this.cache.shouldRebuild(cacheKey, targetPath)) {
+            this.performance.markCached(taskName);
+            return;
+        }
+
+        console.log('🔤 Building local fonts...');
+
+        await this.errorRecovery.retryTask(taskName, async () => {
+            const downloader = new FontDownloader();
+            await downloader.downloadInterFont();
+            this.cache.markBuilt(cacheKey, targetPath);
+        });
+
+        this.performance.end(taskName);
+    }
+
+    /**
+     * Build placeholder images
+     */
+    async buildPlaceholders() {
+        const taskName = 'placeholders';
+        this.performance.start(taskName);
+
+        const cacheKey = 'placeholders';
+        const targetPath = 'docs/assets/img/placeholders';
+
+        if (!this.cache.shouldRebuild(cacheKey, targetPath)) {
+            this.performance.markCached(taskName);
+            return;
+        }
+
+        console.log('📷 Building placeholder images...');
+
+        await this.errorRecovery.retryTask(taskName, async () => {
+            const generator = new PlaceholderGenerator();
+            await generator.generatePlaceholders();
+            this.cache.markBuilt(cacheKey, targetPath);
+        });
+
+        this.performance.end(taskName);
     }
 
     /**
@@ -433,6 +491,32 @@ class BlogBuilder {
     }
 
     /**
+     * Build Projects RSS feed with caching
+     */
+    async buildProjectsRSS() {
+        const taskName = 'projectsRss';
+        this.performance.start(taskName);
+
+        console.log('📡 Building Projects RSS feed...');
+
+        const projectsFile = upath.join('docs', 'projects.json');
+        const targetFile = upath.join('docs', 'projects-rss.xml');
+
+        if (!this.cache.shouldRebuild(projectsFile, targetFile)) {
+            this.performance.markCached(taskName);
+            console.log('💾 Projects RSS feed (cached)');
+            return;
+        }
+
+        await this.errorRecovery.retryTask(taskName, async () => {
+            updateProjectsRSS();
+            this.cache.markBuilt(projectsFile, targetFile);
+        });
+
+        this.performance.end(taskName);
+    }
+
+    /**
      * Run specific build tasks with parallel execution support
      */
     async run(taskNames = []) {
@@ -556,7 +640,8 @@ if (require.main === module) {
         console.log('  --scripts   Build JavaScript files');
         console.log('  --assets    Build assets');
         console.log('  --sitemap   Build sitemap');
-        console.log('  --rss       Build RSS feed');
+        console.log('  --rss       Build articles RSS feed');
+        console.log('  --projectsRss Build projects RSS feed');
         console.log('  --projectPages Build project detail pages');
         console.log('');
         console.log('Options:');

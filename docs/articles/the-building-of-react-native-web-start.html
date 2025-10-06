@@ -1,0 +1,1245 @@
+<!-- Modern Layout with Dynamic SEO - Centralizes all SEO meta tag generation-->
+<!-- Uses articles.json data to automatically populate title, description, keywords-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Essential Meta Tags-->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="light dark" />
+        <!-- Content Security Policy for Google Analytics support-->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://region1.analytics.google.com https://stats.g.doubleclick.net; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+        <!-- Theme color for supported browsers (Chrome, Safari, Edge)-->
+        <meta name="theme-color" content="#2c3e50" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#34495e" media="(prefers-color-scheme: dark)" />
+        <!-- Dynamic SEO Meta Tags from articles.json-->
+        <title>Building React-native-web-start: A Developer's Guide</title>
+        <meta name="description" content="Discover how React-native-web-start was built to streamline web and mobile app development. Learn about its features and benefits today!" />
+        <meta name="keywords" content="React Native, web development, mobile apps, cross-platform, React-native-web-start, development process, app development" />
+        <meta name="author" content="Solutions Architect" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <!-- Page-specific metadata block (optional overrides)-->
+        <!-- Canonical URL-->
+        <link rel="canonical" href="https://markhazleton.com/articles/the-building-of-react-native-web-start.html" />
+        <!-- Default canonical override block (for backward compatibility)-->
+        <!-- Open Graph Meta Tags - Optimized for LinkedIn Sharing-->
+        <meta property="og:title" content="Building React-native-web-start: A Developer's Guide" />
+        <meta property="og:description" content="Explore the creation of React-native-web-start, a tool for efficient web and mobile app development. Learn about its features and benefits." />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://markhazleton.com/articles/the-building-of-react-native-web-start.html" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/ChurchWindows.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content=" - Solutions Architect" />
+        <meta property="og:site_name" content="Mark Hazleton" />
+        <meta property="og:locale" content="en_US" />
+        <!-- LinkedIn-specific optimizations-->
+        <meta property="article:author" content="Mark Hazleton" />
+        <meta property="article:published_time" content="2025-07-27" />
+        <meta property="article:tag" content="React Native" />
+        <meta property="article:tag" content="web development" />
+        <meta property="article:tag" content="mobile apps" />
+        <meta property="article:tag" content="cross-platform" />
+        <meta property="article:tag" content="React-native-web-start" />
+        <meta property="article:tag" content="development process" />
+        <meta property="article:tag" content="app development" />
+        <!-- YouTube video Open Graph tags-->
+        <!-- Additional Open Graph overrides (for backward compatibility)-->
+        <!-- Twitter Card Meta Tags-->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@markhazleton" />
+        <meta name="twitter:creator" content="@markhazleton" />
+        <meta name="twitter:title" content="Building React-native-web-start" />
+        <meta name="twitter:description" content="Discover the development of React-native-web-start, a tool for efficient web and mobile app creation. Learn about its features and benefits." />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/ChurchWindows.jpg" />
+        <meta name="twitter:image:alt" content=" - Solutions Architect" />
+        <!-- YouTube video Twitter Card tags-->
+        <!-- Additional Twitter Card overrides (for backward compatibility)-->
+        <!-- Performance optimization - No external CDN dependencies-->
+        <!-- Favicon and app icons-->
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <!-- RSS Feeds - Articles and Projects-->
+        <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Articles" href="/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Projects" href="/projects-rss.xml" />
+        <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
+        <link href="/css/modern-styles.css" rel="stylesheet" />
+        <!-- Enhanced JSON-LD Structured Data for SEO-->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "givenName": "Mark",
+                "familyName": "Hazleton",
+                "jobTitle": "Solutions Architect",
+                "description": "Solutions Architect passionate for solutions which make technology work for business",
+                "url": "https://markhazleton.com",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/@MarkHazleton"],
+                "knowsAbout": [".NET Framework", "ASP.NET Core", "Microsoft Azure", "Project Management", "Web Development", "Solution Architecture", "Software Engineering", "Cloud Computing", "Artificial Intelligence", "Machine Learning"],
+                "alumniOf": {
+                    "@type": "Organization",
+                    "name": "University of North Texas"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Wichita",
+                    "addressRegion": "KS",
+                    "addressCountry": "US"
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/"
+                }
+            }
+        </script>
+        <!-- Additional structured data for specific pages-->
+        <!-- Additional page-specific CSS-->
+        <!-- Include LinkedIn sharing mixins-->
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Main navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/#" aria-label="Mark Hazleton homepage">Mark Hazleton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/#about" aria-current="page">About Mark</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/projects.html">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
+                    </ul>
+                    <!-- Search Box - Inside collapsible navbar-->
+                    <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event)">
+                        <div class="input-group search-box">
+                            <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
+                            <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                    <!-- Social Icons - Inside collapsible navbar-->
+                    <div class="d-flex social-icons">
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span class="visually-hidden">LinkedIn Profile</span>
+                        </a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span class="visually-hidden">GitHub Profile</span>
+                        </a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                            <span class="visually-hidden">YouTube Channel</span>
+                        </a>
+                        <a href="/rss.xml" target="_blank" rel="noopener noreferrer" title="Articles RSS Feed">
+                            <i class="fas fa-rss"></i>
+                            <span class="visually-hidden">Articles RSS Feed</span>
+                        </a>
+                        <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" title="Projects RSS Feed">
+                            <i class="fas fa-rss text-warning"></i>
+                            <span class="visually-hidden">Projects RSS Feed</span>
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <br />
+        <br />
+        <!-- Hero Section-->
+        <section class="bg-gradient-primary py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-10 mx-auto text-center">
+                        <h1 class="display-4 fw-bold mb-3">
+                            <i class="bi bi-lightbulb me-3"></i>
+                            The Building of React-native-web-start
+                        </h1>
+                        <h2 class="h3 mb-4">Exploring the Development of a Cross-Platform Tool</h2>
+                        <p class="lead mb-5">React-native-web-start is designed to streamline web and mobile app development using React Native. This article explores its creation, challenges, and benefits.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Quick Start Call-to-Action-->
+        <section class="py-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <h3 class="h5 text-primary mb-3">
+                                    <i class="bi bi-rocket me-2"></i>
+                                    React-native-web-start
+                                </h3>
+                                <p class="mb-3">Production-ready cross-platform starter template with Vite, TypeScript, and automated deployment.</p>
+                                <div class="d-flex flex-wrap justify-content-center gap-2">
+                                    <a class="btn btn-primary" href="https://github.com/markhazleton/react-native-web-start" target="_blank">
+                                        <i class="bi bi-github me-2"></i>
+                                        GitHub
+                                    </a>
+                                    <a class="btn btn-success" href="https://markhazleton.github.io/react-native-web-start" target="_blank">
+                                        <i class="bi bi-eye me-2"></i>
+                                        Live Demo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Main Article Content-->
+        <article id="main-article">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <section class="mb-5" id="introduction">
+                            <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                Introduction: The Vision Behind React-native-web-start
+                            </h2>
+                            <div class="alert alert-info border-start border-4 border-info">
+                                <div class="d-flex">
+                                    <i class="bi bi-info-circle text-info me-3 fs-4"></i>
+                                    <div><p class="mb-0">As a Solutions Architect with years of experience building enterprise web applications like WebSpark, TeachSpark, ArtSpark, and PromptSpark, I've witnessed the evolution of cross-platform development firsthand.</p></div>
+                                </div>
+                            </div>
+                            <p class="lead">The challenge has always been clear: how do you build modern, performant applications that work seamlessly across web, iOS, and Android without compromising developer experience or code quality?</p>
+                            <p>React Native Web promised to solve this puzzle, so I thought I would take a shot at creating a starter template for my future projects. I wanted to have proper TypeScript integration, modern build tools, comprehensive documentation, and production-ready deployment pipelines.</p>
+                            <div class="card bg-light border-0 mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="bi bi-target me-2"></i>
+                                        Project Goals
+                                    </h5>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2">
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            <strong>Enterprise-grade foundation</strong>
+                                            - Complete TypeScript integration with strict standards
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            <strong>Modern build tools</strong>
+                                            - Vite for superior performance over Webpack
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            <strong>Comprehensive documentation</strong>
+                                            - In-depth guides and troubleshooting resources
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            <strong>Production-ready CI/CD</strong>
+                                            - Automated deployment with GitHub Actions
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p>This article chronicles the entire journey from conception to production deployment, sharing every technical decision, challenge overcome, and lesson learned along the way.</p>
+                            <!-- LinkedIn sharing for the article-->
+                            <div class="social-sharing-bar d-flex align-items-center gap-3 my-4">
+                                <div class="sharing-label text-muted fw-bold">Share this:</div>
+                                <div class="sharing-buttons d-flex gap-2">
+                                    <!-- LinkedIn - Primary sharing option-->
+                                    <a class="btn btn-linkedin btn-sm" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmarkhazleton.com%2Farticles%2Fthe-building-of-react-native-web-start.html&amp;title=The%20Building%20of%20React-native-web-start&amp;summary=Discover%20the%20development%20of%20React-native-web-start%2C%20a%20tool%20for%20efficient%20web%20and%20mobile%20app%20creation.%20Learn%20about%20its%20features%20and%20benefits.&amp;source=Mark%20Hazleton" target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onclick="return openLinkedInShare(this.href);">
+                                        <i class="fab fa-linkedin-in me-2"></i>
+                                        LinkedIn
+                                    </a>
+                                    <!-- Twitter-->
+                                    <a class="btn btn-twitter btn-sm" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmarkhazleton.com%2Farticles%2Fthe-building-of-react-native-web-start.html&amp;text=The%20Building%20of%20React-native-web-start&amp;via=markhazleton" target="_blank" rel="noopener noreferrer" title="Share on Twitter" onclick="return openTwitterShare(this.href);">
+                                        <i class="fab fa-twitter me-1"></i>
+                                        Twitter
+                                    </a>
+                                    <!-- Copy Link-->
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" onclick="copyToClipboard('https://markhazleton.com/articles/the-building-of-react-native-web-start.html')" title="Copy link">
+                                        <i class="fas fa-link me-1"></i>
+                                        Copy Link
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- Genesis Section-->
+                    <section class="mb-5" id="genesis">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-git me-2"></i>
+                            The Genesis: Creating the GitHub Repository
+                        </h2>
+                        <h4 class="h4 text-secondary mb-3">Initial Repository Setup</h4>
+                        <p>
+                            The journey began with a simple
+                            <code>git init</code>
+                            command, but the planning that preceded it was extensive. After analyzing dozens of existing React Native Web projects, I identified key gaps that needed addressing:
+                        </p>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-danger border-2">
+                                    <div class="card-header bg-danger text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-exclamation-triangle me-2"></i>
+                                            Problems Identified
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-x-circle text-danger me-2"></i>
+                                                Outdated tooling (Webpack instead of Vite)
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-x-circle text-danger me-2"></i>
+                                                Incomplete TypeScript support
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-x-circle text-danger me-2"></i>
+                                                Poor documentation quality
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-x-circle text-danger me-2"></i>
+                                                No CI/CD pipeline
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-x-circle text-danger me-2"></i>
+                                                Missing production features
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border-success border-2">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-check-circle me-2"></i>
+                                            Solutions Implemented
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Modern Vite build system
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Strict TypeScript configuration
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Comprehensive documentation
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Automated GitHub Actions
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Version tracking & SEO
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-dark text-light p-3 rounded mb-4">
+                            <h6 class="text-warning mb-3">
+                                <i class="bi bi-terminal me-2"></i>
+                                Initial Repository Creation
+                            </h6>
+                            <pre class="text-light mb-0"><code># Initial repository creation
+mkdir react-native-web-start
+cd react-native-web-start
+git init
+git remote add origin https://github.com/markhazleton/react-native-web-start.git
+</code></pre>
+                        </div>
+                        <h4 class="h4 text-secondary mb-3">Repository Structure Philosophy</h4>
+                        <p>I designed the repository structure with maintainability and scalability in mind, following enterprise patterns successfully implemented in WebSpark and other production applications:</p>
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="bg-dark text-light p-3 rounded">
+                                    <pre class="text-light mb-0"><code>react-native-web-start/
+├── documentation/          # Comprehensive project documentation
+├── src/                   # Application source code
+│   ├── components/        # Reusable UI components
+│   ├── screens/          # Screen-level components
+│   ├── services/         # API and utility services
+│   ├── types/            # TypeScript type definitions
+│   └── utils/            # Helper functions
+├── scripts/              # Build and utility scripts
+├── .github/workflows/    # GitHub Actions CI/CD
+├── public/               # Static assets for web
+└── build-info/           # Generated build metadata
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Foundation Architecture Section-->
+                    <section class="mb-5" id="foundation">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-building me-2"></i>
+                            Foundation Architecture: Choosing the Right Stack
+                        </h2>
+                        <h4 class="h4 text-secondary mb-3">Technology Stack Analysis</h4>
+                        <p>Selecting the right technology stack was crucial for long-term success. After extensive research and testing, I chose:</p>
+                        <div class="row g-4 mb-4">
+                            <div class="col-lg-4">
+                                <div class="card h-100 border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-code-square me-2"></i>
+                                            Core Framework
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <strong>React Native 0.74.0</strong>
+                                                <br />
+                                                <small class="text-muted">Latest stable version with improved performance</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>React Native Web 0.19.12</strong>
+                                                <br />
+                                                <small class="text-muted">Mature web compilation layer</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>TypeScript 5.2.2</strong>
+                                                <br />
+                                                <small class="text-muted">Strict type safety with latest features</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card h-100 border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-gear me-2"></i>
+                                            Build System
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <strong>Vite 7.0.6</strong>
+                                                <br />
+                                                <small class="text-muted">Lightning-fast development server</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>ESBuild</strong>
+                                                <br />
+                                                <small class="text-muted">Ultra-fast TypeScript compilation</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>Modern Defaults</strong>
+                                                <br />
+                                                <small class="text-muted">ES modules, tree-shaking, optimal chunking</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card h-100 border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-tools me-2"></i>
+                                            Development Tools
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <strong>ESLint & Prettier</strong>
+                                                <br />
+                                                <small class="text-muted">Code quality and formatting</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>Husky</strong>
+                                                <br />
+                                                <small class="text-muted">Git hooks for pre-commit validation</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>Jest</strong>
+                                                <br />
+                                                <small class="text-muted">Testing framework</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-warning border-start border-4 border-warning">
+                            <h5 class="alert-heading">
+                                <i class="bi bi-lightning me-2"></i>
+                                Why Vite Over Webpack?
+                            </h5>
+                            <p class="mb-3">This decision deserves special attention as it significantly impacts developer experience:</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="text-success">
+                                        <i class="bi bi-check-circle me-2"></i>
+                                        Vite Advantages
+                                    </h6>
+                                    <ul class="mb-0">
+                                        <li>Cold start performance: 10x faster than Webpack</li>
+                                        <li>Hot Module Replacement: Sub-second updates</li>
+                                        <li>Modern defaults: ES modules, tree-shaking</li>
+                                        <li>Rich plugin ecosystem with React Native Web support</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-warning">
+                                        <i class="bi bi-exclamation-circle me-2"></i>
+                                        Implementation Challenges
+                                    </h6>
+                                    <ul class="mb-0">
+                                        <li>Configuring Vite for React Native Web</li>
+                                        <li>Alias resolution for cross-platform imports</li>
+                                        <li>Global variable definitions</li>
+                                        <li>Dependency optimization</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="h5 text-secondary mb-3">Vite Configuration Implementation</h5>
+                        <div class="bg-dark text-light p-3 rounded">
+                            <h6 class="text-warning mb-3">
+                                <i class="bi bi-file-code me-2"></i>
+                                vite.config.ts - Key Configuration
+                            </h6>
+                            <pre class="text-light mb-0"><code>export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      'react-native': 'react-native-web',
+      'react-native-vector-icons': '@expo/vector-icons',
+    },
+    extensions: ['.web.js', '.web.ts', '.web.tsx', '.js', '.ts', '.tsx'],
+  },
+  define: {
+    global: 'globalThis',
+    __DEV__: process.env.NODE_ENV === 'development',
+  },
+  optimizeDeps: {
+    include: ['react-native-web'],
+  },
+});
+</code></pre>
+                            <!-- Inline LinkedIn sharing prompt-->
+                            <!-- Check if first parameter is an article object-->
+                            <div class="linkedin-sharing-prompt border border-primary rounded p-3 my-4 bg-light">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fab fa-linkedin-in text-primary fs-3 me-3"></i>
+                                            <div>
+                                                <div class="fw-bold text-primary">Found this helpful?</div>
+                                                <div class="text-muted small">Share it with your LinkedIn network</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                                        <a class="btn btn-primary btn-sm" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmarkhazleton.com%2Farticles%2Fthe-building-of-react-native-web-start.html&amp;title=The%20Building%20of%20React-native-web-start&amp;summary=Discover%20the%20development%20of%20React-native-web-start%2C%20a%20tool%20for%20efficient%20web%20and%20mobile%20app%20creation.%20Learn%20about%20its%20features%20and%20benefits.&amp;source=Mark%20Hazleton" target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onclick="return openLinkedInShare(this.href);">
+                                            <i class="fab fa-linkedin-in me-2"></i>
+                                            Share Article
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Continue with remaining sections...-->
+                    <section class="mb-5" id="development-environment">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-laptop me-2"></i>
+                            Setting Up the Development Environment
+                        </h2>
+                        <h4 class="h4 text-secondary mb-3">Package.json Configuration</h4>
+                        <p>
+                            The
+                            <code>package.json</code>
+                            file serves as the project's command center. I designed it with clear scripts for different development phases:
+                        </p>
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="bg-dark text-light p-3 rounded">
+                                    <h6 class="text-warning mb-3">
+                                        <i class="bi bi-file-code me-2"></i>
+                                        Key Package.json Scripts
+                                    </h6>
+                                    <pre class="text-light mb-0"><code>"scripts": {
+  "dev": "vite",
+  "web": "vite",
+  "generate-build-info": "node scripts/generate-build-info.js",
+  "prebuild": "node scripts/generate-build-info.js && npm run copy-docs",
+  "build": "vite build",
+  "preview": "vite preview",
+  "android": "react-native run-android",
+  "ios": "react-native run-ios",
+  "start": "react-native start"
+}
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="h4 text-secondary mb-3">TypeScript Configuration</h4>
+                        <div class="alert alert-info border-start border-4 border-info">
+                            <p class="mb-0">
+                                Type safety is non-negotiable in enterprise applications. The
+                                <code>tsconfig.json</code>
+                                enforces strict standards while maintaining compatibility with modern JavaScript features.
+                            </p>
+                        </div>
+                        <div class="bg-dark text-light p-3 rounded">
+                            <h6 class="text-warning mb-3">
+                                <i class="bi bi-file-code me-2"></i>
+                                tsconfig.json - Strict Configuration
+                            </h6>
+                            <pre class="text-light mb-0"><code>{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}
+</code></pre>
+                        </div>
+                    </section>
+                    <!-- GitHub Actions Section-->
+                    <section class="mb-5" id="github-actions">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-github me-2"></i>
+                            GitHub Actions: Automating Deployment
+                        </h2>
+                        <h4 class="h4 text-secondary mb-3">The Evolution of CI/CD Pipeline</h4>
+                        <p>The GitHub Actions workflow went through several iterations before reaching production quality. Here's the final, battle-tested version:</p>
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-workflow me-2"></i>
+                                    Production-Ready Deployment Workflow
+                                </h6>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="bg-dark text-light p-3">
+                                    <pre class="text-light mb-0"><code>name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for git info
+
+    - name: Setup Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install --legacy-peer-deps
+
+    - name: Generate build information
+      run: node scripts/generate-build-info.js
+      env:
+        NODE_ENV: production
+        GITHUB_RUN_NUMBER: ${{ github.run_number }}
+
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: production
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="h5 text-secondary mb-3">Key Deployment Challenges Solved</h5>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-warning">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-exclamation-triangle me-2"></i>
+                                            Challenges Encountered
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-1-circle text-warning me-2"></i>
+                                                <strong>Node.js Version Compatibility</strong>
+                                                <br />
+                                                <small>Initially used Node.js 18, but Vite 7.0.6 required Node.js 20</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-2-circle text-warning me-2"></i>
+                                                <strong>Dependency Resolution</strong>
+                                                <br />
+                                                <small>React Native Web's peer dependencies conflicted with React 18</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-3-circle text-warning me-2"></i>
+                                                <strong>Build Information in CI/CD</strong>
+                                                <br />
+                                                <small>Ensuring git information was available during build</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-4-circle text-warning me-2"></i>
+                                                <strong>Static Asset Handling</strong>
+                                                <br />
+                                                <small>Documentation files weren't being served properly</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-check-circle me-2"></i>
+                                            Solutions Implemented
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                <strong>Upgraded to Node.js 20</strong>
+                                                <br />
+                                                <small>For optimal Vite performance and crypto module support</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                <strong>--legacy-peer-deps Flag</strong>
+                                                <br />
+                                                <small>Used in both development and CI/CD for compatibility</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                <strong>fetch-depth: 0</strong>
+                                                <br />
+                                                <small>In checkout action for complete git history</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                <strong>Cross-Platform Scripts</strong>
+                                                <br />
+                                                <small>Node.js scripts instead of shell commands</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- SEO and Performance Section-->
+                    <section class="mb-5" id="seo-performance">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-speedometer2 me-2"></i>
+                            SEO Optimization and Performance
+                        </h2>
+                        <h4 class="h4 text-secondary mb-3">Search Engine Optimization Strategy</h4>
+                        <p>As someone who builds web applications professionally, SEO was a critical consideration. The HTML meta tags were carefully crafted for maximum search visibility:</p>
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="bg-dark text-light p-3 rounded">
+                                    <h6 class="text-warning mb-3">
+                                        <i class="bi bi-file-code me-2"></i>
+                                        SEO Meta Tags Implementation
+                                    </h6>
+                                    <pre class="text-light mb-0"><code>&lt;!-- SEO Meta Tags --&gt;
+&lt;title&gt;React Native Web Vite Starter - Cross-Platform Development Template&lt;/title&gt;
+&lt;meta name="description" content="Production-ready React Native Web starter template with Vite, TypeScript, and automated deployment." /&gt;
+&lt;meta name="keywords" content="react native web, vite, typescript, cross-platform" /&gt;
+
+&lt;!-- Open Graph Tags --&gt;
+&lt;meta property="og:title" content="React Native Web Vite Starter" /&gt;
+&lt;meta property="og:description" content="Production-ready starter template for cross-platform applications" /&gt;
+&lt;meta property="og:type" content="website" /&gt;
+</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="h4 text-secondary mb-3">Performance Optimization Strategies</h4>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-lightning me-2"></i>
+                                            Code Optimization
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-arrow-right text-info me-2"></i>
+                                                <strong>Code Splitting</strong>
+                                                <br />
+                                                <small>Lazy loading for better performance</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-arrow-right text-info me-2"></i>
+                                                <strong>Bundle Analysis</strong>
+                                                <br />
+                                                <small>Vite's built-in analyzer for optimization</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-arrow-right text-info me-2"></i>
+                                                <strong>Tree Shaking</strong>
+                                                <br />
+                                                <small>Automatic dead code elimination</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-images me-2"></i>
+                                            Asset Optimization
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-arrow-right text-success me-2"></i>
+                                                <strong>SVG Icons</strong>
+                                                <br />
+                                                <small>Vector graphics instead of raster images</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-arrow-right text-success me-2"></i>
+                                                <strong>Font Loading</strong>
+                                                <br />
+                                                <small>Optimized web font delivery</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-arrow-right text-success me-2"></i>
+                                                <strong>Intelligent Caching</strong>
+                                                <br />
+                                                <small>Documentation service caching strategy</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Lessons Learned Section-->
+                    <section class="mb-5" id="lessons-learned">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-mortarboard me-2"></i>
+                            Lessons Learned and Best Practices
+                        </h2>
+                        <h4 class="h4 text-secondary mb-3">Technical Insights</h4>
+                        <div class="row g-4 mb-4">
+                            <div class="col-lg-6">
+                                <div class="card h-100 border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-lightbulb me-2"></i>
+                                            Key Insights
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="accordion" id="insightsAccordion">
+                                            <div class="accordion-item">
+                                                <h6 class="accordion-header" id="insight1"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">1. Dependency Management is Critical</button></h6>
+                                                <div class="accordion-collapse collapse" id="collapse1" data-bs-parent="#insightsAccordion">
+                                                    <div class="accordion-body">
+                                                        <p class="small">
+                                                            Modern JavaScript ecosystems are complex. Using
+                                                            <code>--legacy-peer-deps</code>
+                                                            isn't ideal, but sometimes necessary for compatibility. Always document these decisions.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item">
+                                                <h6 class="accordion-header" id="insight2"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">2. Cross-Platform Requires Platform-Specific Thinking</button></h6>
+                                                <div class="accordion-collapse collapse" id="collapse2" data-bs-parent="#insightsAccordion">
+                                                    <div class="accordion-body"><p class="small">While "write once, run everywhere" is the goal, each platform has unique requirements. Build abstractions that handle these differences gracefully.</p></div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item">
+                                                <h6 class="accordion-header" id="insight3"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">3. CI/CD Pipelines Need Extensive Testing</button></h6>
+                                                <div class="accordion-collapse collapse" id="collapse3" data-bs-parent="#insightsAccordion">
+                                                    <div class="accordion-body"><p class="small">What works locally doesn't always work in CI/CD. Test your deployment pipeline thoroughly across different environments.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card h-100 border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-check-circle me-2"></i>
+                                            Architecture Patterns That Worked
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-3">
+                                                <strong>
+                                                    <i class="bi bi-diagram-3 text-success me-2"></i>
+                                                    Service Layer Pattern
+                                                </strong>
+                                                <br />
+                                                <small>Abstracting API calls and platform-specific logic into services made the codebase maintainable</small>
+                                            </li>
+                                            <li class="mb-3">
+                                                <strong>
+                                                    <i class="bi bi-gear text-success me-2"></i>
+                                                    Configuration-Driven Development
+                                                </strong>
+                                                <br />
+                                                <small>Using configuration objects instead of hardcoded values made the application adaptable</small>
+                                            </li>
+                                            <li class="mb-3">
+                                                <strong>
+                                                    <i class="bi bi-arrow-up text-success me-2"></i>
+                                                    Progressive Enhancement
+                                                </strong>
+                                                <br />
+                                                <small>Building core functionality first, then adding platform-specific enhancements</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger border-start border-4 border-danger">
+                            <h5 class="alert-heading">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                Mistakes to Avoid
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6 class="text-danger">
+                                        <i class="bi bi-x-circle me-2"></i>
+                                        Premature Optimization
+                                    </h6>
+                                    <p class="small">Don't optimize for performance before establishing functionality. Get it working, then make it fast.</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-danger">
+                                        <i class="bi bi-x-circle me-2"></i>
+                                        Ignoring Platform Differences
+                                    </h6>
+                                    <p class="small">Platform differences aren't just UI concerns. Navigation, file system access, and networking all vary.</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-danger">
+                                        <i class="bi bi-x-circle me-2"></i>
+                                        Insufficient Error Handling
+                                    </h6>
+                                    <p class="small">Production applications need robust error handling, especially for network requests.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Future Section-->
+                    <section class="mb-5" id="future">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-rocket me-2"></i>
+                            The Future: What's Next
+                        </h2>
+                        <h4 class="h4 text-secondary mb-3">Planned Enhancements</h4>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-phone me-2"></i>
+                                            Mobile & Testing
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-check2 text-info me-2"></i>
+                                                <strong>Mobile Platform Integration</strong>
+                                                <br />
+                                                <small>Full iOS and Android builds with native features</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check2 text-info me-2"></i>
+                                                <strong>Automated Testing Suite</strong>
+                                                <br />
+                                                <small>Jest, Playwright for comprehensive testing</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check2 text-info me-2"></i>
+                                                <strong>Performance Monitoring</strong>
+                                                <br />
+                                                <small>Real-time application performance tracking</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-layers me-2"></i>
+                                            Architecture & APIs
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-check2 text-success me-2"></i>
+                                                <strong>State Management</strong>
+                                                <br />
+                                                <small>Redux Toolkit or Zustand for complex scenarios</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check2 text-success me-2"></i>
+                                                <strong>API Integration Examples</strong>
+                                                <br />
+                                                <small>Comprehensive API integration patterns</small>
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check2 text-success me-2"></i>
+                                                <strong>Community Contributions</strong>
+                                                <br />
+                                                <small>Enhanced documentation and contribution guidelines</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="h4 text-secondary mb-3">Enterprise Adoption</h4>
+                        <div class="alert alert-info border-start border-4 border-info"><p class="mb-0">Based on patterns successful in WebSpark and other production applications, the project incorporates scalable architecture patterns, security best practices, performance optimization techniques, and comprehensive monitoring and logging.</p></div>
+                    </section>
+                    <!-- Conclusion Section-->
+                    <section class="mb-5" id="conclusion">
+                        <h2 class="h2 text-primary border-bottom border-primary pb-2 mb-4">
+                            <i class="bi bi-flag-fill me-2"></i>
+                            Conclusion
+                        </h2>
+                        <div class="card bg-light border-0 shadow-sm mb-4">
+                            <div class="card-body"><blockquote class="blockquote text-center mb-0">Building react-native-web-start was more than creating another starter template – it was about establishing enterprise-grade patterns for cross-platform development.</blockquote></div>
+                        </div>
+                        <p class="lead">The journey from initial git commit to production deployment revealed the complexities of modern web development: dependency management challenges, CI/CD pipeline intricacies, cross-platform compatibility issues, and the critical importance of comprehensive documentation.</p>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="card border-primary h-100">
+                                    <div class="card-header bg-primary text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-trophy me-2"></i>
+                                            Key Achievements
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Enterprise-grade cross-platform foundation
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Production-ready CI/CD pipeline
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Comprehensive documentation system
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-check-circle text-success me-2"></i>
+                                                Modern tooling with Vite and TypeScript
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-info h-100">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-lightbulb me-2"></i>
+                                            Knowledge Shared
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <i class="bi bi-book text-info me-2"></i>
+                                                Complete development journey documentation
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-book text-info me-2"></i>
+                                                Troubleshooting guides for common issues
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-book text-info me-2"></i>
+                                                Best practices for cross-platform development
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="bi bi-book text-info me-2"></i>
+                                                Real-world production experience insights
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p>The project demonstrates that with careful planning, proper tooling, and attention to detail, it's possible to create applications that truly work across all platforms without compromising code quality or developer experience.</p>
+                        <p>Every challenge overcome – from React dependency conflicts to GitHub Pages deployment issues – was documented not just for troubleshooting, but as knowledge for the broader development community. This transparency and attention to detail transforms a simple starter template into a valuable resource for developers worldwide.</p>
+                    </section>
+                    <div class="card border-primary border-2 bg-light mb-5">
+                        <div class="card-body text-center py-5">
+                            <h3 class="card-title text-primary mb-3">
+                                <i class="bi bi-download me-2"></i>
+                                Get Started with React-native-web-start
+                            </h3>
+                            <p class="card-text lead mb-4">Ready to build your own cross-platform application? Clone the repository and start developing today!</p>
+                            <div class="d-flex flex-wrap justify-content-center gap-3">
+                                <a class="btn btn-primary btn-lg" href="https://github.com/markhazleton/react-native-web-start" target="_blank">
+                                    <i class="bi bi-github me-2"></i>
+                                    View on GitHub
+                                </a>
+                                <a class="btn btn-success btn-lg" href="https://markhazleton.github.io/react-native-web-start" target="_blank">
+                                    <i class="bi bi-eye me-2"></i>
+                                    Live Demo
+                                </a>
+                                <a class="btn btn-outline-secondary btn-lg" href="https://github.com/markhazleton/react-native-web-start/archive/refs/heads/main.zip">
+                                    <i class="bi bi-download me-2"></i>
+                                    Download ZIP
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!-- Floating LinkedIn share button for long articles-->
+        <!-- Check if first parameter is an article object-->
+        <div class="floating-linkedin-share position-fixed" style="bottom: 20px; right: 20px; z-index: 1000">
+            <a class="btn btn-linkedin btn-lg rounded-circle shadow" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmarkhazleton.com%2Farticles%2Fthe-building-of-react-native-web-start.html&amp;title=The%20Building%20of%20React-native-web-start&amp;summary=Discover%20the%20development%20of%20React-native-web-start%2C%20a%20tool%20for%20efficient%20web%20and%20mobile%20app%20creation.%20Learn%20about%20its%20features%20and%20benefits.&amp;source=Mark%20Hazleton" target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onclick="return openLinkedInShare(this.href);"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <!-- Auto-include floating LinkedIn share for article pages-->
+        <!-- Check if first parameter is an article object-->
+        <div class="floating-linkedin-share position-fixed" style="bottom: 20px; right: 20px; z-index: 1000">
+            <a class="btn btn-linkedin btn-lg rounded-circle shadow" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmarkhazleton.com%2Farticles%2Fthe-building-of-react-native-web-start.html&amp;title=The%20Building%20of%20React-native-web-start&amp;summary=Discover%20the%20development%20of%20React-native-web-start%2C%20a%20tool%20for%20efficient%20web%20and%20mobile%20app%20creation.%20Learn%20about%20its%20features%20and%20benefits.&amp;source=Mark%20Hazleton" target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onclick="return openLinkedInShare(this.href);"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <!-- Footer-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="mb-3">Mark Hazleton</h5>
+                        <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                                <span class="visually-hidden">LinkedIn Profile</span>
+                            </a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                                <span class="visually-hidden">GitHub Profile</span>
+                            </a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                                <i class="fab fa-youtube"></i>
+                                <span class="visually-hidden">YouTube Channel</span>
+                            </a>
+                            <a href="/rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Articles RSS Feed">
+                                <i class="fas fa-rss"></i>
+                                <span class="visually-hidden">Articles RSS Feed</span>
+                            </a>
+                            <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Projects RSS Feed">
+                                <i class="fas fa-rss"></i>
+                                <span class="visually-hidden">Projects RSS Feed.text-warning</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Quick Links</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#about">About</a></li>
+                            <li><a href="/#experience">Experience</a></li>
+                            <li><a href="/projects.html">Projects</a></li>
+                            <li><a href="/articles.html">Articles</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/projectmechanics/">Project Mechanics</a></li>
+                            <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
+                            <li><a href="/rss.xml">Articles RSS Feed</a></li>
+                            <li><a href="/projects-rss.xml">Projects RSS Feed</a></li>
+                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" />
+                <div class="row">
+                    <div class="col-12 text-center"><p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p></div>
+                </div>
+            </div>
+        </footer>
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>

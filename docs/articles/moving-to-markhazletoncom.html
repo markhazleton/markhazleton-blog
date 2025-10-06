@@ -1,0 +1,1129 @@
+<!-- Modern Layout with Dynamic SEO - Centralizes all SEO meta tag generation-->
+<!-- Uses articles.json data to automatically populate title, description, keywords-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Essential Meta Tags-->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="light dark" />
+        <!-- Content Security Policy for Google Analytics support-->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://region1.analytics.google.com https://stats.g.doubleclick.net; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+        <!-- Theme color for supported browsers (Chrome, Safari, Edge)-->
+        <meta name="theme-color" content="#2c3e50" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#34495e" media="(prefers-color-scheme: dark)" />
+        <!-- Dynamic SEO Meta Tags from articles.json-->
+        <title>Migrating to MarkHazleton.com: A Guide</title>
+        <meta name="description" content="Discover the seamless process of migrating your blog to MarkHazleton.com using Azure Static Web Apps and Cloudflare DNS. Learn best practices and step-by-step" />
+        <meta name="keywords" content="Mark Hazleton, blog migration, Azure Static Web Apps, Cloudflare DNS, website hosting, domain transfer" />
+        <meta name="author" content="Mark Hazleton" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <!-- Page-specific metadata block (optional overrides)-->
+        <!-- Canonical URL-->
+        <link rel="canonical" href="https://markhazleton.com/articles/moving-to-markhazletoncom.html" />
+        <!-- Default canonical override block (for backward compatibility)-->
+        <!-- Open Graph Meta Tags - Optimized for LinkedIn Sharing-->
+        <meta property="og:title" content="Migrating to MarkHazleton.com: A Comprehensive Guide" />
+        <meta property="og:description" content="Learn how to migrate your blog to MarkHazleton.com with Azure and Cloudflare. Ensure a smooth transition with our detailed guide." />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://markhazleton.com/articles/moving-to-markhazletoncom.html" />
+        <meta property="og:image" content="https://markhazleton.com/assets/img/ArgostoliGreeceBeach.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Moving to MarkHazleton.com - Mark Hazleton" />
+        <meta property="og:site_name" content="Mark Hazleton" />
+        <meta property="og:locale" content="en_US" />
+        <!-- LinkedIn-specific optimizations-->
+        <meta property="article:author" content="Mark Hazleton" />
+        <meta property="article:published_time" content="2024-09-16" />
+        <meta property="article:tag" content="Mark Hazleton" />
+        <meta property="article:tag" content="blog migration" />
+        <meta property="article:tag" content="Azure Static Web Apps" />
+        <meta property="article:tag" content="Cloudflare DNS" />
+        <meta property="article:tag" content="SEO" />
+        <meta property="article:tag" content="domain migration" />
+        <meta property="article:tag" content="website hosting" />
+        <!-- YouTube video Open Graph tags-->
+        <meta property="og:video" content="https://www.youtube.com/embed/Rm_hziAo14A" />
+        <meta property="og:video:type" content="text/html" />
+        <meta property="og:video:width" content="560" />
+        <meta property="og:video:height" content="315" />
+        <meta property="og:video:url" content="https://www.youtube.com/embed/Rm_hziAo14A" />
+        <meta property="og:video:secure_url" content="https://www.youtube.com/embed/Rm_hziAo14A" />
+        <!-- Additional Open Graph overrides (for backward compatibility)-->
+        <!-- Twitter Card Meta Tags-->
+        <meta name="twitter:card" content="player" />
+        <meta name="twitter:site" content="@markhazleton" />
+        <meta name="twitter:creator" content="@markhazleton" />
+        <meta name="twitter:title" content="Migrating to MarkHazleton.com" />
+        <meta name="twitter:description" content="Discover the seamless process of migrating your blog to MarkHazleton.com using Azure Static Web Apps and Cloudflare DNS. Learn best practices and step-by-step" />
+        <meta name="twitter:image" content="https://markhazleton.com/assets/img/ArgostoliGreeceBeach.jpg" />
+        <meta name="twitter:image:alt" content="Moving to MarkHazleton.com - Mark Hazleton" />
+        <!-- YouTube video Twitter Card tags-->
+        <meta name="twitter:player" content="https://www.youtube.com/embed/Rm_hziAo14A" />
+        <meta name="twitter:player:width" content="560" />
+        <meta name="twitter:player:height" content="315" />
+        <!-- Additional Twitter Card overrides (for backward compatibility)-->
+        <!-- Performance optimization - No external CDN dependencies-->
+        <!-- Favicon and app icons-->
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <!-- RSS Feeds - Articles and Projects-->
+        <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Articles" href="/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Projects" href="/projects-rss.xml" />
+        <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
+        <link href="/css/modern-styles.css" rel="stylesheet" />
+        <!-- Enhanced JSON-LD Structured Data for SEO-->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Person",
+                "name": "Mark Hazleton",
+                "givenName": "Mark",
+                "familyName": "Hazleton",
+                "jobTitle": "Solutions Architect",
+                "description": "Solutions Architect passionate for solutions which make technology work for business",
+                "url": "https://markhazleton.com",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "sameAs": ["https://www.linkedin.com/in/markhazleton/", "https://github.com/markhazleton/", "https://twitter.com/markhazleton/", "https://www.youtube.com/@MarkHazleton"],
+                "knowsAbout": [".NET Framework", "ASP.NET Core", "Microsoft Azure", "Project Management", "Web Development", "Solution Architecture", "Software Engineering", "Cloud Computing", "Artificial Intelligence", "Machine Learning"],
+                "alumniOf": {
+                    "@type": "Organization",
+                    "name": "University of North Texas"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Wichita",
+                    "addressRegion": "KS",
+                    "addressCountry": "US"
+                },
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://markhazleton.com/"
+                }
+            }
+        </script>
+        <!-- Additional structured data for specific pages-->
+        <!-- Additional page-specific CSS-->
+        <!-- Include LinkedIn sharing mixins-->
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-L8GVZNDH0B" async></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-L8GVZNDH0B');
+        </script>
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" role="navigation" aria-label="Main navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/#" aria-label="Mark Hazleton homepage">Mark Hazleton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/#about" aria-current="page">About Mark</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/projects.html">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
+                    </ul>
+                    <!-- Search Box - Inside collapsible navbar-->
+                    <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event)">
+                        <div class="input-group search-box">
+                            <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
+                            <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                    <!-- Social Icons - Inside collapsible navbar-->
+                    <div class="d-flex social-icons">
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span class="visually-hidden">LinkedIn Profile</span>
+                        </a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span class="visually-hidden">GitHub Profile</span>
+                        </a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                            <span class="visually-hidden">YouTube Channel</span>
+                        </a>
+                        <a href="/rss.xml" target="_blank" rel="noopener noreferrer" title="Articles RSS Feed">
+                            <i class="fas fa-rss"></i>
+                            <span class="visually-hidden">Articles RSS Feed</span>
+                        </a>
+                        <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" title="Projects RSS Feed">
+                            <i class="fas fa-rss text-warning"></i>
+                            <span class="visually-hidden">Projects RSS Feed</span>
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <br />
+        <br />
+        <!-- Hero Section-->
+        <section class="bg-gradient-primary py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-10 mx-auto text-center">
+                        <h1 class="display-4 fw-bold mb-3">
+                            <i class="bi bi-globe me-3"></i>
+                            Moving to MarkHazleton.com
+                        </h1>
+                        <h2 class="h3 mb-4">SEO Case Study: A Domain Migration Story</h2>
+                        <p class="lead mb-5">Learn why transitioning to MarkHazleton.com was crucial for consolidating SEO efforts and improving brand authority. Discover the benefits of moving from a sub-domain to a top-level domain and how to maintain SEO rankings during migration.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Main Article Content-->
+        <article id="main-article">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- Table of Contents-->
+                        <nav class="mb-5" id="table-of-contents" aria-label="Table of Contents">
+                            <div class="card bg-light shadow-sm">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0 fw-bold">
+                                        <i class="bi bi-list-ul me-2"></i>
+                                        Table of Contents
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#introduction">Introduction & Benefits</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#seo-migration">Migrate Without Losing SEO Rankings</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#migration-steps">Step-by-Step Migration Guide</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#lessons-learned">Lessons Learned & Best Practices</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#timeline">Timeline & Considerations</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                        <!-- Introduction Section-->
+                        <section class="mb-5" id="introduction">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-primary text-white">
+                                    <h2 class="h3 mb-0">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        Introduction & Domain Benefits
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-4">For a while, my website was nestled comfortably under a sub-domain, doing its job without much fuss. However, I started to notice that having a sub-domain was limiting the potential of my brand in several ways. Search engines often treat sub-domains as separate entities, which can dilute SEO efforts and make it harder to rank consistently. Additionally, having a memorable, authoritative top-level domain carries a certain professional polish that a sub-domain just can't match.</p>
+                                    <p class="mb-4">
+                                        I discovered that the perfect domain,
+                                        <strong>MarkHazleton.com</strong>
+                                        , was available. It was an opportunity too good to pass up! Owning a top-level domain that directly matches my name not only strengthens my personal brand but also consolidates all my SEO efforts under one roof. I knew it was time to pull the trigger and make the move.
+                                    </p>
+                                    <p class="mb-4">Transitioning to MarkHazleton.com felt like a natural evolution, aligning my online presence with the professionalism and clarity I aim to project. It was more than just a domain name change; it was a strategic step forward for my brand.</p>
+                                    <div class="card mb-4 border-0 bg-light">
+                                        <div class="card-header bg-success text-white"><h3 class="h5 mb-0">Top-Level Domain Advantages</h3></div>
+                                        <div class="card-body">
+                                            <ul class="mb-0">
+                                                <li class="mb-2">
+                                                    <strong>Improved Brand Authority:</strong>
+                                                    A top-level domain (TLD) like `brand.com` builds trust and credibility with users and search engines, helping establish your brand as a recognized and authoritative entity.
+                                                </li>
+                                                <li class="mb-2">
+                                                    <strong>SEO Benefits:</strong>
+                                                    Consolidating all content under a single domain boosts domain authority, making it easier to rank higher in search engine results pages (SERPs) compared to a subdomain.
+                                                </li>
+                                                <li class="mb-2">
+                                                    <strong>Better User Experience:</strong>
+                                                    A TLD provides a more cohesive and seamless user experience, reducing confusion and making it easier for visitors to remember and navigate your site.
+                                                </li>
+                                                <li>
+                                                    <strong>Simplified Management:</strong>
+                                                    Managing SEO, analytics, and content strategy is more straightforward with a single domain, saving time and resources compared to handling multiple subdomains.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">In this article, I'll walk you through the key steps I took to ensure a smooth migration and how you can do the same for your website.</p>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- SEO Migration Section-->
+                        <section class="mb-5" id="seo-migration">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-info text-white">
+                                    <h2 class="h3 mb-0">
+                                        <i class="bi bi-graph-up me-2"></i>
+                                        Migrate Without Losing SEO Rankings
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-4">When moving your website to a new domain, it's crucial to maintain your search engine rankings to avoid losing traffic and visibility. Here are the key considerations and steps to help ensure a smooth transition while preserving your SEO.</p>
+                                    <!-- Migration Steps Accordion-->
+                                    <div class="accordion mb-3" id="migrationAccordion">
+                                        <!-- Plan the Move-->
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <i class="bi bi-calendar-check me-2"></i>
+                                                    1. Plan the Move Carefully
+                                                </button>
+                                            </h3>
+                                            <div class="accordion-collapse collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#migrationAccordion">
+                                                <div class="accordion-body">
+                                                    <p class="mb-3">When planning your move to a new domain, careful preparation is essential to minimize disruptions and preserve your SEO rankings.</p>
+                                                    <ul class="mb-0">
+                                                        <li class="mb-2">
+                                                            <strong>Analyze Your Current Traffic Patterns:</strong>
+                                                            Review analytics to understand which times of day, week, or month your site sees the least traffic. Schedule the move during these low-traffic periods to minimize disruption.
+                                                        </li>
+                                                        <li class="mb-2">
+                                                            <strong>Communicate with Stakeholders:</strong>
+                                                            Inform your team, clients, and partners about the planned move in advance. Clear communication helps manage expectations and ensures all necessary parties are prepared for potential downtime or issues.
+                                                        </li>
+                                                        <li>
+                                                            <strong>Create a Detailed Migration Checklist:</strong>
+                                                            Develop a comprehensive checklist that includes all tasks, responsibilities, and timelines. This helps keep the migration organized and ensures that nothing is overlooked during the transition.
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Audit Current Site-->
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    <i class="bi bi-search me-2"></i>
+                                                    2. Audit Your Current Site
+                                                </button>
+                                            </h3>
+                                            <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#migrationAccordion">
+                                                <div class="accordion-body">
+                                                    <p class="mb-3">Ensure you have a complete backup of your current website, including all files, databases, and settings. Use tools like Google Analytics, Google Search Console, and third-party SEO tools to understand your current performance. Document your top-performing pages, backlinks, and keywords.</p>
+                                                    <p class="mb-3">
+                                                        I am very fond of
+                                                        <a class="text-decoration-none" href="https://www.screamingfrog.co.uk/seo-spider" target="_blank">
+                                                            <i class="bi bi-box-arrow-up-right me-1"></i>
+                                                            Screaming Frog SEO Spider
+                                                        </a>
+                                                        for auditing websites. It provides a comprehensive overview of your site's structure, URLs, and SEO elements, making it easier to plan the migration.
+                                                    </p>
+                                                    <div class="ratio ratio-16x9 mb-0"><iframe src="https://www.youtube.com/embed/Rm_hziAo14A?si=0atKcItvTxAGKc7u" title="Screaming Frog SEO Spider Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Set Up 301 Redirects-->
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    <i class="bi bi-signpost-split me-2"></i>
+                                                    3. Set Up 301 Redirects
+                                                </button>
+                                            </h3>
+                                            <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#migrationAccordion">
+                                                <div class="accordion-body">
+                                                    <p class="mb-4">You want traffic to the old domain to seamlessly redirect to the new one. This is important for old links that people are using to access your site. Use 301 redirects to point old URLs to the new ones on your new domain. This tells search engines that the pages have permanently moved, preserving your SEO value.</p>
+                                                    <div class="card mb-3 border-0 bg-light">
+                                                        <div class="card-header bg-secondary text-white"><h4 class="h6 mb-0">Cloudflare 301 Redirects Using Page Rules</h4></div>
+                                                        <div class="card-body">
+                                                            <p class="mb-3">Cloudflare's Page Rules allow you to easily set up 301 redirects for your website. To create a redirect, navigate to your Cloudflare dashboard, select Page Rules, and configure a new rule with the URL pattern you want to redirect. Choose "Forwarding URL" and set the status code to "301 - Permanent Redirect."</p>
+                                                            <figure class="text-center mb-3">
+                                                                <img class="img-fluid border rounded mx-auto d-block w-75" src="/assets/img/MarkHazleton-Cloudflare-Pagerules.png" alt="Cloudflare Page Rules" title="Cloudflare Page Rules" />
+                                                                <figcaption class="text-muted small">Example of Cloudflare Page Rules configuration</figcaption>
+                                                            </figure>
+                                                            <p class="mb-0">
+                                                                <a class="text-decoration-none" href="https://developers.cloudflare.com/rules/page-rules/" target="_blank" rel="noopener noreferrer">
+                                                                    <i class="bi bi-box-arrow-up-right me-1"></i>
+                                                                    Learn more about Cloudflare Page Rules
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Update Links-->
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingFour">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                    <i class="bi bi-link me-2"></i>
+                                                    4. Update Internal & External Links
+                                                </button>
+                                            </h3>
+                                            <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#migrationAccordion">
+                                                <div class="accordion-body">
+                                                    <h4 class="h6 mb-3">Internal Links</h4>
+                                                    <ul class="mb-4">
+                                                        <li class="mb-2">
+                                                            <strong>Check Navigation Menus:</strong>
+                                                            Ensure that all navigation menu links point to the new domain to avoid broken links and improve user experience.
+                                                        </li>
+                                                        <li class="mb-2">
+                                                            <strong>Update Content Links:</strong>
+                                                            Review and update all internal links within articles and blog posts to reflect the new domain.
+                                                        </li>
+                                                        <li>
+                                                            <strong>Review Hard-Coded Links:</strong>
+                                                            Search for any hard-coded links in your source code or CMS and update them to point to the new domain.
+                                                        </li>
+                                                    </ul>
+                                                    <h4 class="h6 mb-3">External Links</h4>
+                                                    <ul class="mb-0">
+                                                        <li class="mb-2">
+                                                            <strong>Contact High-Authority Sites:</strong>
+                                                            Reach out to websites with high domain authority that link to your old domain and request an update to the new URLs.
+                                                        </li>
+                                                        <li class="mb-2">
+                                                            <strong>Update Social Media Profiles:</strong>
+                                                            Change your domain link on all social media platforms, business listings, and directories to reflect the new URL.
+                                                        </li>
+                                                        <li>
+                                                            <strong>Monitor Backlinks:</strong>
+                                                            Use tools like Google Search Console or Ahrefs to identify and update important backlinks pointing to your old domain.
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Submit to Search Engines-->
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingFive">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                                    <i class="bi bi-google me-2"></i>
+                                                    5. Submit the New Domain to Search Engines
+                                                </button>
+                                            </h3>
+                                            <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#migrationAccordion">
+                                                <div class="accordion-body">
+                                                    <p class="mb-4">Add and verify your new domain in Google Search Console. Use the "Change of Address" tool to inform Google about the domain change. Submit the new domain to Bing Webmaster Tools as well.</p>
+                                                    <div class="card mb-0 border-0 bg-light">
+                                                        <div class="card-header bg-secondary text-white"><h4 class="h6 mb-0">How to Inform Google About Your Domain Change</h4></div>
+                                                        <div class="card-body">
+                                                            <p class="mb-3">
+                                                                <a class="text-decoration-none" href="https://support.google.com/webmasters/answer/9370220" target="_blank">
+                                                                    <i class="bi bi-box-arrow-up-right me-1"></i>
+                                                                    Google Search Console Change of Address Tool
+                                                                </a>
+                                                            </p>
+                                                            <p class="mb-3">The Change of Address tool in Google Search Console helps you migrate your site from one domain to another, such as from example.com to example.org. This tool assists in transferring your Google Search results from the old site to the new one. Use it after implementing 301 redirects and completing any necessary pre-move steps.</p>
+                                                            <dl class="mb-0">
+                                                                <dt class="mb-2">When Not to Use the Change of Address Tool</dt>
+                                                                <dd class="mb-3">Avoid using this tool for moves such as HTTP to HTTPS transitions, internal site restructuring, or shifting between www and non-www domains. For these, use redirects and canonical tags instead.</dd>
+                                                                <dt class="mb-2">Best Practices for Site Moves</dt>
+                                                                <dd class="mb-3">Avoid chaining site moves and combining multiple domains into one move. Maintain the same site architecture to help Google pass ranking signals effectively. Always monitor traffic post-move and maintain redirects for at least 180 days.</dd>
+                                                                <dt class="mb-2">Requirements for Using the Tool</dt>
+                                                                <dd>You must own both the old and new properties in Search Console, and the tool can only be used for top-level domains, not specific paths. Once initiated, maintain redirects and monitor traffic for changes in Search Console.</dd>
+                                                            </dl>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Additional Important Steps-->
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingSix">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                                    <i class="bi bi-check2-circle me-2"></i>
+                                                    6. Additional Critical Steps
+                                                </button>
+                                            </h3>
+                                            <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#migrationAccordion">
+                                                <div class="accordion-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="card mb-3 h-100 border-0 bg-light">
+                                                                <div class="card-header bg-secondary text-white">
+                                                                    <h4 class="h6 mb-0">
+                                                                        <i class="bi bi-speedometer2 me-2"></i>
+                                                                        Monitor Performance
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="card-body"><p class="mb-0">Track your search engine rankings, traffic, and overall site performance closely after the move. Use Google Search Console to identify and resolve any crawl errors or issues. Pay attention to traffic fluctuations and be ready to make adjustments as needed.</p></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="card mb-3 h-100 border-0 bg-light">
+                                                                <div class="card-header bg-secondary text-white">
+                                                                    <h4 class="h6 mb-0">
+                                                                        <i class="bi bi-diagram-3 me-2"></i>
+                                                                        Update Sitemap & Robots.txt
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="card-body"><p class="mb-0">Generate a new sitemap reflecting your new domain and submit it to search engines. Update your robots.txt file if necessary to ensure it's not blocking search engines from accessing your new domain.</p></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="card mb-3 h-100 border-0 bg-light">
+                                                                <div class="card-header bg-secondary text-white">
+                                                                    <h4 class="h6 mb-0">
+                                                                        <i class="bi bi-file-earmark-text me-2"></i>
+                                                                        Preserve Content Structure
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="card-body"><p class="mb-0">Maintain the same content and site structure during migration. Significant changes to your content or site architecture can confuse search engines and negatively impact your rankings. Keep URLs, navigation, and key content elements consistent.</p></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="card mb-3 h-100 border-0 bg-light">
+                                                                <div class="card-header bg-secondary text-white">
+                                                                    <h4 class="h6 mb-0">
+                                                                        <i class="bi bi-chat-dots me-2"></i>
+                                                                        Communicate with Audience
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="card-body"><p class="mb-0">Inform your audience about the domain change through newsletters, social media, and a blog post. This helps reduce confusion and ensures they know where to find you.</p></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="card mb-3 mb-md-0 h-100 border-0 bg-light">
+                                                                <div class="card-header bg-secondary text-white">
+                                                                    <h4 class="h6 mb-0">
+                                                                        <i class="bi bi-files me-2"></i>
+                                                                        Check for Duplicate Content
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="card-body"><p class="mb-0">Ensure your old domain doesn't serve the same content as your new domain, which can confuse search engines and dilute rankings. Use canonical tags if you must keep content on both domains temporarily.</p></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="card h-100 border-0 bg-light">
+                                                                <div class="card-header bg-secondary text-white">
+                                                                    <h4 class="h6 mb-0">
+                                                                        <i class="bi bi-link-45deg me-2"></i>
+                                                                        Monitor Backlinks
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="card-body"><p class="mb-0">Use tools like Google Search Console, Ahrefs, or Moz to identify high-authority backlinks pointing to your old domain. Prioritize updating these links to the new domain for maintaining SEO authority.</p></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Migration Steps Section-->
+                        <section class="mb-5" id="migration-steps">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-success text-white">
+                                    <h2 class="h3 mb-0">
+                                        <i class="bi bi-list-check me-2"></i>
+                                        Migrating to markhazleton.com: A Step-by-Step Guide
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-4">Moving my blog from markhazleton.controlorigins.com to markhazleton.com involved several technical steps, especially since my site is hosted on Azure Static Web Apps with Cloudflare managing DNS. Here's how I navigated the process, including setting up DNS rules and routing with Cloudflare.</p>
+                                    <!-- Steps Timeline-->
+                                    <div class="card border-0 bg-light mb-4">
+                                        <div class="card-body">
+                                            <!-- Step 1-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">1</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Planning the Site Move</h3>
+                                                    <p class="mb-0">I began by thoroughly planning the move, auditing my current site using Screaming Frog to create a complete inventory of URLs. I set up markhazleton.com on Azure Static Web Apps, ensuring it was fully functional with the same content as the old domain. Verification of both domains in Google Search Console was crucial for using the Change of Address feature.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 2-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">2</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Setting Up Cloudflare DNS</h3>
+                                                    <p class="mb-0">I configured Cloudflare to handle the DNS for markhazleton.com. I added the domain to Cloudflare and changed the nameservers to point to Cloudflare. Then I configured DNS records to direct traffic to the Azure Static Web Apps endpoint, ensuring that both A and CNAME records were correctly pointing to Azure's IP addresses or endpoints.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 3-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">3</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Configuring Cloudflare Page Rules for Routing</h3>
+                                                    <p class="mb-0">To manage routing, I used Cloudflare's Page Rules to forward all traffic from markhazleton.controlorigins.com to markhazleton.com using a 301 redirect. This rule was crucial to inform search engines that the move was permanent. You must keep your DNS settings for CNAMES and A records on the old domain so the page rules work correctly. I also configured additional rules to cache static content and optimize loading times.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 4-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">4</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Updating Google Search Console with Change of Address</h3>
+                                                    <p class="mb-0">I submitted the Change of Address request in Google Search Console to notify Google about the domain change. It was important to confirm that the 301 redirects were fully operational before this step.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 5-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">5</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Updating Internal Links and Sitemaps</h3>
+                                                    <p class="mb-0">After migrating, I updated all internal links to point to the new domain. This included links within content, navigation, and footers. I also generated a new sitemap for markhazleton.com and submitted it to Google Search Console, ensuring the old domain's sitemap included 301 redirects.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 6-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">6</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Monitoring the Migration Process</h3>
+                                                    <p class="mb-0">Post-migration monitoring was essential. I regularly checked Google Search Console for crawl errors and indexing issues, and I monitored site traffic on both domains using Google Analytics. This helped me quickly address any issues that arose during the migration.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 7-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">7</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Updating External Links and Backlinks</h3>
+                                                    <p class="mb-0">I contacted webmasters of high-value backlinks to update their links to the new domain. Additionally, I updated my profiles on social media, business directories, and other platforms to reflect the domain change.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 8-->
+                                            <div class="d-flex mb-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">8</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Notifying My Audience and Updating Profiles</h3>
+                                                    <p class="mb-0">I announced the domain change to my audience via a blog post, newsletters, and social media updates. This communication was important to keep my audience informed and to maintain traffic levels during the transition.</p>
+                                                </div>
+                                            </div>
+                                            <!-- Step 9-->
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem"><span class="fw-bold">9</span></div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h3 class="h5 fw-bold">Final Checks and Ongoing Monitoring</h3>
+                                                    <p class="mb-0">For the first few months, I continued to monitor the migration's impact on search rankings and site performance. Google's "Move In Process" message remained visible in Search Console for some time but eventually disappeared once the new domain was fully indexed.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Lessons Learned Section-->
+                        <section class="mb-5" id="lessons-learned">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-warning text-dark">
+                                    <h2 class="h3 mb-0">
+                                        <i class="bi bi-lightbulb me-2"></i>
+                                        Lessons Learned and Best Practices
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-4 mb-md-0">
+                                            <div class="card h-100 border-0 bg-light">
+                                                <div class="card-header bg-secondary text-white"><h3 class="h5 mb-0">Cloudflare DNS Management</h3></div>
+                                                <div class="card-body"><p class="mb-0">Cloudflare made DNS management and routing configuration straightforward. Its Page Rules feature was particularly useful for setting up efficient and SEO-friendly redirects.</p></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-4 mb-md-0">
+                                            <div class="card h-100 border-0 bg-light">
+                                                <div class="card-header bg-secondary text-white"><h3 class="h5 mb-0">Consistent Branding</h3></div>
+                                                <div class="card-body"><p class="mb-0">Keeping branding consistent across both domains was key to ensuring a seamless transition for users. This helped maintain the trust and familiarity of my audience during the move.</p></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-0 bg-light">
+                                                <div class="card-header bg-secondary text-white"><h3 class="h5 mb-0">Proactive Monitoring</h3></div>
+                                                <div class="card-body"><p class="mb-0">Regular checks in Google Search Console and Google Analytics were crucial for identifying and addressing any issues promptly. Adjustments were made as needed based on real-time data.</p></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Timeline Section-->
+                        <section class="mb-5" id="timeline">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-danger text-white">
+                                    <h2 class="h3 mb-0">
+                                        <i class="bi bi-clock-history me-2"></i>
+                                        Expected Timeline and Considerations
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-4 mb-md-0">
+                                            <div class="card h-100 border-0 bg-light">
+                                                <div class="card-header bg-secondary text-white"><h3 class="h5 mb-0">Total Time Estimate</h3></div>
+                                                <div class="card-body"><p class="mb-0">From planning to post-migration monitoring, the process took approximately 1 to 3 months. This allowed ample time for testing and adjustments to ensure a smooth transition. The longest time was waiting for Google to update the old domain status to "Moved" in Search Console.</p></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-4 mb-md-0">
+                                            <div class="card h-100 border-0 bg-light">
+                                                <div class="card-header bg-secondary text-white"><h3 class="h5 mb-0">Managing Fluctuations</h3></div>
+                                                <div class="card-body"><p class="mb-0">Temporary fluctuations in search rankings and traffic were expected and occurred as Google processed the domain change. These fluctuations stabilized within a few weeks.</p></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-0 bg-light">
+                                                <div class="card-header bg-secondary text-white"><h3 class="h5 mb-0">Ongoing Monitoring</h3></div>
+                                                <div class="card-body"><p class="mb-0">Regular updates and monitoring of both domains in Google Search Console were critical to maintain SEO performance and quickly resolve any emerging issues.</p></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Conclusion Section-->
+                        <section class="mb-5" id="conclusion">
+                            <div class="card border-primary shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h2 class="h3 mb-0">
+                                        <i class="bi bi-trophy me-2"></i>
+                                        Conclusion
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <p class="lead mb-4">Moving my blog from markhazleton.controlorigins.com to markhazleton.com using Azure Static Web Apps and Cloudflare DNS was relatively simple but time-consuming. By following a detailed plan and leveraging the right tools, I was able to maintain SEO performance and provide a seamless experience for my users.</p>
+                                    <div class="alert alert-success border-0 shadow-sm mb-4">
+                                        <div class="d-flex align-items-start">
+                                            <i class="bi bi-star-fill text-success me-3 fs-4"></i>
+                                            <div>
+                                                <h4 class="alert-heading h6 mb-2">Key Takeaway</h4>
+                                                <p class="mb-0">A well-planned domain migration with proper 301 redirects and careful monitoring can preserve your SEO value while providing long-term branding benefits. The investment in time and effort pays off with a stronger, more cohesive online presence.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">If you're considering a similar move, I hope my experience provides a useful guide. Remember that patience is key—SEO changes take time to fully stabilize, but with proper implementation, your new domain can quickly establish itself and even surpass the performance of your old domain.</p>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Back to Top Button-->
+                        <div class="text-center mt-5">
+                            <a class="btn btn-primary" href="#table-of-contents">
+                                <i class="bi bi-arrow-up-circle me-2"></i>
+                                Back to Table of Contents
+                            </a>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Audit Your Current Site
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Ensure you have a complete backup of your current website, including all files, databases, and settings. Use tools like Google Analytics, Google Search Console, and third-party SEO tools to understand your current performance. Document your top-performing pages, backlinks, and keywords.</p>
+                                    <p>
+                                        I am very fond of
+                                        <a class="anchor" href="https://www.screamingfrog.co.uk/seo-spider" target="_blank">Screaming Frog SEO Spider</a>
+                                        for auditing websites. It provides a comprehensive overview of your site's structure, URLs, and SEO elements, making it easier to plan the migration.
+                                    </p>
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Rm_hziAo14A?si=0atKcItvTxAGKc7u" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Set Up 301 Redirects
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>You want traffic to the old domain to seamlessly redirect to the new one. This is important for old links that people are using to access your site. Use 301 redirects to point old URLs to the new ones on your new domain. This tells search engines that the pages have permanently moved, preserving your SEO value.</p>
+                                    <div class="card mb-3">
+                                        <div class="card-header">Cloudflare 301 Redirects Using Page Rules</div>
+                                        <div class="card-body">
+                                            <p>Cloudflare’s Page Rules allow you to easily set up 301 redirects for your website. To create a redirect, navigate to your Cloudflare dashboard, select Page Rules, and configure a new rule with the URL pattern you want to redirect. Choose "Forwarding URL" and set the status code to "301 - Permanent Redirect."</p>
+                                            <picture class="mb-3"><img class="img-fluid border border-4 rounded mx-auto d-block w-50" src="/assets/img/MarkHazleton-Cloudflare-Pagerules.png" alt="Cloudflare Page Rules" title="Cloudflare Page Rules" /></picture>
+                                            <p class="mb-0"><a href="https://developers.cloudflare.com/rules/page-rules/" target="_blank" rel="noopener noreferrer">Learn more about Cloudflare Page Rules</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Update Internal Links and References
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseFour" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>
+                                            <strong>Check Navigation Menus:</strong>
+                                            Ensure that all navigation menu links point to the new domain to avoid broken links and improve user experience.
+                                        </li>
+                                        <li>
+                                            <strong>Update Content Links:</strong>
+                                            Review and update all internal links within articles and blog posts to reflect the new domain.
+                                        </li>
+                                        <li>
+                                            <strong>Review Hard-Coded Links:</strong>
+                                            Search for any hard-coded links in your source code or CMS and update them to point to the new domain.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Update External Links
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseFive" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>After a domain migration, updating external links pointing to your site is crucial for maintaining SEO authority and traffic flow. Although 301 redirects help preserve SEO value, direct links to your new domain are preferable for both search engines and user experience.</p>
+                                    <ul>
+                                        <li>
+                                            <strong>Contact High-Authority Sites:</strong>
+                                            Reach out to websites with high domain authority that link to your old domain and request an update to the new URLs.
+                                        </li>
+                                        <li>
+                                            <strong>Update Social Media Profiles:</strong>
+                                            Change your domain link on all social media platforms, business listings, and directories to reflect the new URL.
+                                        </li>
+                                        <li>
+                                            <strong>Monitor Backlinks:</strong>
+                                            Use tools like Google Search Console or Ahrefs to identify and update important backlinks pointing to your old domain.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingSix">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Submit the New Domain to Search Engines
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseSix" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Add and verify your new domain in Google Search Console. Use the "Change of Address" tool to inform Google about the domain change. Submit the new domain to Bing Webmaster Tools as well.</p>
+                                    <div class="card mt-3">
+                                        <div class="card-header"><h4 class="subheading mb-3">How to Inform Google About Your Domain Change</h4></div>
+                                        <div class="card-body">
+                                            <p><a class="anchor" id="GoogleChangeAddressToolFAQ" target="_blank" href="https://support.google.com/webmasters/answer/9370220">Google Search Console Change of Address Tool</a></p>
+                                            <p>The Change of Address tool in Google Search Console helps you migrate your site from one domain to another, such as from example.com to example.org. This tool assists in transferring your Google Search results from the old site to the new one. Use it after implementing 301 redirects and completing any necessary pre-move steps.</p>
+                                            <dl>
+                                                <dt>When Not to Use the Change of Address Tool</dt>
+                                                <dd>Avoid using this tool for moves such as HTTP to HTTPS transitions, internal site restructuring, or shifting between www and non-www domains. For these, use redirects and canonical tags instead.</dd>
+                                                <dt>Best Practices for Site Moves</dt>
+                                                <dd>Avoid chaining site moves and combining multiple domains into one move. Maintain the same site architecture to help Google pass ranking signals effectively. Always monitor traffic post-move and maintain redirects for at least 180 days.</dd>
+                                                <dt>Requirements for Using the Tool</dt>
+                                                <dd>You must own both the old and new properties in Search Console, and the tool can only be used for top-level domains, not specific paths. Once initiated, maintain redirects and monitor traffic for changes in Search Console.</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingSeven">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Monitor Performance Closely
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseSeven" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Track your search engine rankings, traffic, and overall site performance closely after the move. Use Google Search Console to identify and resolve any crawl errors or issues.</p>
+                                    <p>After migrating your domain, it is essential to closely monitor the performance of your site to identify any potential issues and ensure the migration's success. Pay attention to traffic fluctuations, crawl errors, and changes in rankings, and be ready to make adjustments as needed. Regular monitoring will help you spot and address any issues promptly.</p>
+                                    <ul>
+                                        <li>
+                                            <strong>Track Key Metrics:</strong>
+                                            Use Google Analytics and Google Search Console to monitor traffic, bounce rates, and search rankings. Look for any significant drops that could indicate issues with the migration.
+                                        </li>
+                                        <li>
+                                            <strong>Identify Crawl Errors:</strong>
+                                            Regularly check for crawl errors in Google Search Console. Resolve any 404 errors or redirect issues that could impact your site's visibility.
+                                        </li>
+                                        <li>
+                                            <strong>Monitor Indexing Status:</strong>
+                                            Ensure that all your important pages are being indexed by Google. Use the "Coverage" report in Search Console to identify and fix any pages that are not being indexed properly.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingEight">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Update Your Sitemap and Robots.txt
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseEight" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Generate a new sitemap reflecting your new domain and submit it to search engines. Update your robots.txt file if necessary to ensure it's not blocking search engines from accessing your new domain.</p>
+                                    <pre class="language-plaintext"><code class="language-plaintext">| Sitemap: https://markhazleton.com/sitemap.xml
+| User-agent: *
+| Disallow:</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingNine">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Preserve Content and Structure
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseNine" aria-labelledby="headingNine" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Maintaining the same content and site structure during a domain migration is critical for preserving your SEO performance. Significant changes to your content or site architecture can confuse search engines and negatively impact your rankings. Keeping URLs, navigation, and key content elements consistent ensures that your site retains its authority and relevance.</p>
+                                    <ul>
+                                        <li>
+                                            <strong>Maintain URL Structure:</strong>
+                                            Wherever possible, keep your existing URL paths the same on the new domain. This reduces the risk of broken links and helps preserve your SEO equity.
+                                        </li>
+                                        <li>
+                                            <strong>Avoid Major Content Changes:</strong>
+                                            Do not make significant content updates or deletions during the migration. Search engines might take longer to process changes, impacting your SEO rankings.
+                                        </li>
+                                        <li>
+                                            <strong>Keep Navigation Consistent:</strong>
+                                            Maintain the same navigation menus and internal link structure. This helps search engines and users navigate your site more easily, reducing the chances of errors.
+                                        </li>
+                                    </ul>
+                                    <p>Any necessary changes to content or structure should be made gradually after the migration to minimize the impact on your site's performance.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingTen">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Communicate with Your Audience
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseTen" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Inform your audience about the domain change through newsletters, social media, and a blog post. This helps reduce confusion and ensures they know where to find you.</p>
+                                    <p>Informing your audience about a domain migration is essential for maintaining trust and traffic levels. Effective communication helps reduce confusion, ensures users know where to find you, and minimizes the impact on user experience. Announcing the move through multiple channels can also contribute to SEO by generating fresh content and potentially attracting new backlinks.</p>
+                                    <ul>
+                                        <li>
+                                            <strong>Announce the Change on Your Website:</strong>
+                                            Publish a blog post detailing the reasons for the migration and the benefits it brings. This creates a new indexed page, improving your SEO and keeping your audience informed.
+                                        </li>
+                                        <li>
+                                            <strong>Leverage Social Media:</strong>
+                                            Use your social media platforms to announce the migration. Include links to the new domain to guide followers and generate traffic. Consistent messaging across platforms helps reinforce the change.
+                                        </li>
+                                        <li>
+                                            <strong>Update Email Subscribers:</strong>
+                                            Send a newsletter to your subscribers, explaining the migration and encouraging them to visit the new site. Include a call-to-action (CTA) to explore the new domain, helping to drive traffic and engagement.
+                                        </li>
+                                    </ul>
+                                    <p>Additionally, update your contact information, email signatures, and any online profiles with the new domain to ensure consistency and reduce confusion.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingEleven">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Check for Duplicate Content Issues
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseEleven" aria-labelledby="headingEleven" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Ensure your old domain doesn't serve the same content as your new domain, which can confuse search engines and dilute rankings.</p>
+                                    <p>Duplicate content refers to identical or significantly similar content that appears on multiple URLs, either within the same domain or across different domains. This can confuse search engines and dilute your SEO efforts, as they may struggle to determine which version to rank. During a domain migration, it's essential to avoid serving the same content on both the old and new domains simultaneously.</p>
+                                    <p>Once the 301 redirects are set up and functioning correctly from your old domain to your new domain, you should no longer need to update the old site. Instead, focus on ensuring the new domain is indexed properly. Use Google Search Console to monitor for any issues with pages not being indexed or duplicate content alerts.</p>
+                                    <ul>
+                                        <li>
+                                            <strong>Use Canonical Tags:</strong>
+                                            If you must keep content on both domains temporarily, use canonical tags to indicate the preferred version to search engines, reducing the risk of duplicate content issues.
+                                        </li>
+                                        <li>
+                                            <strong>Monitor Indexing in Google Search Console:</strong>
+                                            Regularly check Google Search Console for any indexing issues or duplicate content warnings. Address any flagged pages to ensure proper indexing.
+                                        </li>
+                                        <li>
+                                            <strong>Avoid Changing Content During Migration:</strong>
+                                            Minimize content changes during the migration process to avoid confusion and ensure that search engines can properly index the new site without conflicting signals.
+                                        </li>
+                                    </ul>
+                                    <p>Taking these precautions will help maintain your SEO integrity and ensure a smooth transition without negatively impacting your search engine rankings.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingTwelve">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+                                    <i class="bi bi-caret-down-fill me-2"></i>
+                                    Monitor Backlinks
+                                </button>
+                            </h3>
+                            <div class="accordion-collapse collapse" id="collapseTwelve" aria-labelledby="headingTwelve" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Backlinks, also known as inbound links, are links from other websites pointing to your domain. They are crucial for SEO as they indicate your content's authority and relevance. After a domain migration, it's important to ensure that these backlinks are either updated to your new domain or properly redirected. In addition, updating your social media profiles with the new domain helps maintain consistency and drive traffic.</p>
+                                    <p>Make sure to update all social media profiles, including LinkedIn, Facebook, Twitter (X), Instagram, and any other platforms where your old domain is referenced. This ensures users and search engines can find your new domain easily, helping to preserve your social presence and SEO value.</p>
+                                    <ul>
+                                        <li>
+                                            <strong>Identify Key Backlinks:</strong>
+                                            Use tools like Google Search Console, Ahrefs, or Moz to identify high-authority backlinks pointing to your old domain. Prioritize updating these links to the new domain.
+                                        </li>
+                                        <li>
+                                            <strong>Update Social Media Profiles:</strong>
+                                            Update your new domain on all social media platforms, including LinkedIn, Facebook, Twitter (X), Instagram, and other relevant sites. This helps maintain brand consistency and directs followers to your updated website.
+                                        </li>
+                                        <li>
+                                            <strong>Use the Disavow Tool for Toxic Links:</strong>
+                                            If there are harmful or spammy backlinks pointing to your old domain, use Google’s Disavow Tool to prevent them from affecting your new domain’s SEO.
+                                        </li>
+                                    </ul>
+                                    <p>Regularly monitoring and managing both backlinks and social media links will help maintain your new domain’s SEO authority and ensure a smooth transition for your online presence.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="subheading mb-3">Migrating to markhazleton.com: A Step-by-Step Guide</h2>
+                    <p>Moving my blog from markhazleton.controlorigins.com to markhazleton.com involved several technical steps, especially since my site is hosted on Azure Static Web Apps with Cloudflare managing DNS. Here’s how I navigated the process, including setting up DNS rules and routing with Cloudflare.</p>
+                    <dl>
+                        <dt>Step 1: Planning the Site Move</dt>
+                        <dd><p>I began by thoroughly planning the move, auditing my current site using Screaming Frog to create a complete inventory of URLs. I set up markhazleton.com on Azure Static Web Apps, ensuring it was fully functional with the same content as the old domain. Verification of both domains in Google Search Console was crucial for using the Change of Address feature.</p></dd>
+                        <dt>Step 2: Setting Up Cloudflare DNS</dt>
+                        <dd>
+                            <p>I configured Cloudflare to handle the DNS for markhazleton.com. Here's what I did:</p>
+                            <ul>
+                                <li>Added markhazleton.com to Cloudflare and changed the domain's nameservers to point to Cloudflare.</li>
+                                <li>Configured DNS records to direct traffic to the Azure Static Web Apps endpoint.</li>
+                                <li>Ensured that both A and CNAME records were correctly pointing to Azure's IP addresses or endpoints.</li>
+                            </ul>
+                        </dd>
+                        <dt>Step 3: Configuring Cloudflare Page Rules for Routing</dt>
+                        <dd>
+                            <p>To manage routing, I used Cloudflare's Page Rules:</p>
+                            <ul>
+                                <li>Set up a page rule to forward all traffic from markhazleton.controlorigins.com to markhazleton.com using a 301 redirect. This rule was crucial to inform search engines that the move was permanent. You must keep your DNS settings for CNAMES and A records on the old domain so the page rules work correctly.</li>
+                                <li>Configured additional rules to cache static content and optimize loading times, which was beneficial given the static nature of Azure Static Web Apps.</li>
+                            </ul>
+                        </dd>
+                        <dt>Step 4: Updating Google Search Console with Change of Address</dt>
+                        <dd>I submitted the Change of Address request in Google Search Console to notify Google about the domain change. It was important to confirm that the 301 redirects were fully operational before this step.</dd>
+                        <dt>Step 5: Updating Internal Links and Sitemaps</dt>
+                        <dd>After migrating, I updated all internal links to point to the new domain. This included links within content, navigation, and footers. I also generated a new sitemap for markhazleton.com and submitted it to Google Search Console, ensuring the old domain’s sitemap included 301 redirects.</dd>
+                        <dt>Step 6: Monitoring the Migration Process</dt>
+                        <dd>Post-migration monitoring was essential. I regularly checked Google Search Console for crawl errors and indexing issues, and I monitored site traffic on both domains using Google Analytics. This helped me quickly address any issues that arose during the migration.</dd>
+                        <dt>Step 7: Updating External Links and Backlinks</dt>
+                        <dd>I contacted webmasters of high-value backlinks to update their links to the new domain. Additionally, I updated my profiles on social media, business directories, and other platforms to reflect the domain change.</dd>
+                        <dt>Step 8: Notifying My Audience and Updating Profiles</dt>
+                        <dd>I announced the domain change to my audience via a blog post, newsletters, and social media updates. This communication was important to keep my audience informed and to maintain traffic levels during the transition.</dd>
+                        <dt>Step 9: Final Checks and Ongoing Monitoring</dt>
+                        <dd>For the first few months, I continued to monitor the migration’s impact on search rankings and site performance. Google’s “Move In Process” message remained visible in Search Console for some time but eventually disappeared once the new domain was fully indexed.</dd>
+                    </dl>
+                    <h2>Lessons Learned and Best Practices</h2>
+                    <dl>
+                        <dt>Using Cloudflare DNS for Seamless Domain Management</dt>
+                        <dd>Cloudflare made DNS management and routing configuration straightforward. Its Page Rules feature was particularly useful for setting up efficient and SEO-friendly redirects.</dd>
+                        <dt>Consistent Branding and Seamless User Experience</dt>
+                        <dd>Keeping branding consistent across both domains was key to ensuring a seamless transition for users. This helped maintain the trust and familiarity of my audience during the move.</dd>
+                        <dt>Proactive Monitoring and Adjustments</dt>
+                        <dd>Regular checks in Google Search Console and Google Analytics were crucial for identifying and addressing any issues promptly. Adjustments were made as needed based on real-time data.</dd>
+                    </dl>
+                    <h2>Expected Timeline and Considerations</h2>
+                    <dl>
+                        <dt>Total Time Estimate</dt>
+                        <dd>From planning to post-migration monitoring, the process took approximately 1 to 3 months. This allowed ample time for testing and adjustments to ensure a smooth transition. The longest time was waiting for Google to update the old domain status to "Moved" in Search Console.</dd>
+                        <dt>Managing Fluctuations in Rankings and Traffic</dt>
+                        <dd>Temporary fluctuations in search rankings and traffic were expected and occurred as Google processed the domain change. These fluctuations stabilized within a few weeks.</dd>
+                        <dt>Ongoing Updates and Regular Monitoring</dt>
+                        <dd>Regular updates and monitoring of both domains in Google Search Console were critical to maintain SEO performance and quickly resolve any emerging issues.</dd>
+                    </dl>
+                    <p>Moving my blog from markhazleton.controlorigins.com to markhazleton.com using Azure Static Web Apps and Cloudflare DNS was a relativly simple but timeconsuming. By following a detailed plan and leveraging the right tools, I was able to maintain SEO performance and provide a seamless experience for my users. If you're considering a similar move, I hope my experience provides a useful guide.</p>
+                </div>
+            </div>
+        </article>
+        <!-- Auto-include floating LinkedIn share for article pages-->
+        <!-- Check if first parameter is an article object-->
+        <div class="floating-linkedin-share position-fixed" style="bottom: 20px; right: 20px; z-index: 1000">
+            <a class="btn btn-linkedin btn-lg rounded-circle shadow" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmarkhazleton.com%2Farticles%2Fmoving-to-markhazletoncom.html&amp;title=Migrating%20to%20MarkHazleton.com%3A%20A%20Comprehensive%20Guide&amp;summary=Explore%20the%20detailed%20process%20of%20migrating%20a%20blog%20to%20MarkHazleton.com%2C%20hosted%20on%20Azure%20Static%20Web%20Apps%20with%20Cloudflare%20DNS%2C%20including%20best%20practices%20and%20step-by-step%20guidance.&amp;source=Mark%20Hazleton" target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onclick="return openLinkedInShare(this.href);"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <!-- Footer-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="mb-3">Mark Hazleton</h5>
+                        <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                                <span class="visually-hidden">LinkedIn Profile</span>
+                            </a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                                <span class="visually-hidden">GitHub Profile</span>
+                            </a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                                <i class="fab fa-youtube"></i>
+                                <span class="visually-hidden">YouTube Channel</span>
+                            </a>
+                            <a href="/rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Articles RSS Feed">
+                                <i class="fas fa-rss"></i>
+                                <span class="visually-hidden">Articles RSS Feed</span>
+                            </a>
+                            <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Projects RSS Feed">
+                                <i class="fas fa-rss"></i>
+                                <span class="visually-hidden">Projects RSS Feed.text-warning</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Quick Links</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#about">About</a></li>
+                            <li><a href="/#experience">Experience</a></li>
+                            <li><a href="/projects.html">Projects</a></li>
+                            <li><a href="/articles.html">Articles</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/projectmechanics/">Project Mechanics</a></li>
+                            <li><a href="https://webspark.markhazleton.com">WebSpark</a></li>
+                            <li><a href="/rss.xml">Articles RSS Feed</a></li>
+                            <li><a href="/projects-rss.xml">Projects RSS Feed</a></li>
+                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" />
+                <div class="row">
+                    <div class="col-12 text-center"><p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p></div>
+                </div>
+            </div>
+        </footer>
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>

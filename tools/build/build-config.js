@@ -71,19 +71,22 @@ module.exports = {
     dependencies: {
         sitemap: ['sections', 'pug'],
         rss: ['sections'],
-        pug: ['sections'],
-        projectPages: ['sections'],
+        projectsRss: ['sections'],
+        pug: ['sections', 'placeholders', 'fonts'],
+        projectPages: ['sections', 'placeholders', 'fonts'],
         scripts: [],
-        scss: [],
-        assets: [],
-        sections: []
+        scss: ['fonts'],
+        assets: ['placeholders', 'fonts'],
+        sections: [],
+        placeholders: [],
+        fonts: []
     },
 
     // Parallel execution groups
     parallelGroups: {
-        phase1: ['sections'], // Must run first
+        phase1: ['fonts', 'placeholders', 'sections'], // Must run first
         phase2: ['pug', 'projectPages', 'scss', 'scripts', 'assets'], // Can run in parallel
-        phase3: ['sitemap', 'rss'] // Depend on phase2 completion
+        phase3: ['sitemap', 'rss', 'projectsRss'] // Depend on phase2 completion
     },
 
     // Error handling

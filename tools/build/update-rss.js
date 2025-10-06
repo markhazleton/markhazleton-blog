@@ -47,6 +47,7 @@ function updateRssFeed() {
     const srcPath = upath.resolve(__dirname, '../../src');
     const articlesJsonPath = path.join(srcPath, 'articles.json');
     const rssXmlPath = path.join(srcPath, 'rss.xml');
+    const articlesRssXmlPath = path.join(srcPath, 'articles-rss.xml');
 
     // Load articles.json
     try {
@@ -67,15 +68,15 @@ function updateRssFeed() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Mark Hazleton Articles</title>
-    <link>https://markhazleton.com/</link>
-    <description>Latest articles from Mark Hazleton.</description>
+    <link>https://markhazleton.com/articles.html</link>
+    <description>Latest articles and insights from Mark Hazleton.</description>
     <language>en-us</language>
     <lastBuildDate>${buildDate}</lastBuildDate>
-    <atom:link href="https://markhazleton.com/rss.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://markhazleton.com/articles-rss.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://markhazleton.com/apple-touch-icon.png</url>
       <title>Mark Hazleton Articles</title>
-      <link>https://markhazleton.com/</link>
+      <link>https://markhazleton.com/articles.html</link>
     </image>
 `;
 
@@ -117,8 +118,9 @@ function updateRssFeed() {
         rssContent += `  </channel>
 </rss>`;
 
-        // Write the updated RSS XML to file
+        // Write the updated RSS XML to files
         fs.writeFileSync(rssXmlPath, rssContent);
+        fs.writeFileSync(articlesRssXmlPath, rssContent);
 
         console.log(`RSS feed updated successfully with ${itemsToInclude.length} articles.`);
     } catch (error) {
