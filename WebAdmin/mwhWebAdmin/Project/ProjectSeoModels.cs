@@ -19,42 +19,71 @@ public class ProjectSeoGenerationResult
     [JsonPropertyName("keywords")]
     public string? Keywords { get; set; }
 
+    // SEO Fields
     [JsonPropertyName("seoTitle")]
     public string? SeoTitle { get; set; }
+
+    [JsonPropertyName("seoTitleSuffix")]
+    public string? SeoTitleSuffix { get; set; }
 
     [JsonPropertyName("metaDescription")]
     public string? MetaDescription { get; set; }
 
+    [JsonPropertyName("seoKeywords")]
+    public string? SeoKeywords { get; set; }
+
+    [JsonPropertyName("canonical")]
+    public string? Canonical { get; set; }
+
+    [JsonPropertyName("robots")]
+    public string? Robots { get; set; }
+
+    // Open Graph Fields
     [JsonPropertyName("ogTitle")]
     public string? OpenGraphTitle { get; set; }
 
     [JsonPropertyName("ogDescription")]
     public string? OpenGraphDescription { get; set; }
 
+    [JsonPropertyName("ogType")]
+    public string? OpenGraphType { get; set; }
+
+    [JsonPropertyName("ogImage")]
+    public string? OpenGraphImage { get; set; }
+
+    [JsonPropertyName("ogImageAlt")]
+    public string? OpenGraphImageAlt { get; set; }
+
+    // Twitter Card Fields
     [JsonPropertyName("twitterTitle")]
     public string? TwitterTitle { get; set; }
 
     [JsonPropertyName("twitterDescription")]
     public string? TwitterDescription { get; set; }
 
-    [JsonPropertyName("category")]
-    public string? Category { get; set; }
+    [JsonPropertyName("twitterImage")]
+    public string? TwitterImage { get; set; }
 
-    [JsonPropertyName("techStack")]
-    public string? TechStack { get; set; }
+    [JsonPropertyName("twitterImageAlt")]
+    public string? TwitterImageAlt { get; set; }
 
-    [JsonPropertyName("projectType")]
-    public string? ProjectType { get; set; }
-
+    // Repository Fields
     [JsonPropertyName("repositoryProvider")]
     public string? RepositoryProvider { get; set; }
+
+    [JsonPropertyName("repositoryName")]
+    public string? RepositoryName { get; set; }
 
     [JsonPropertyName("repositoryVisibility")]
     public string? RepositoryVisibility { get; set; }
 
+    [JsonPropertyName("repositoryBranch")]
+    public string? RepositoryBranch { get; set; }
+
     [JsonPropertyName("repositoryNotes")]
     public string? RepositoryNotes { get; set; }
 
+    // Promotion Fields
     [JsonPropertyName("promotionPipeline")]
     public string? PromotionPipeline { get; set; }
 
@@ -67,6 +96,17 @@ public class ProjectSeoGenerationResult
     [JsonPropertyName("promotionNotes")]
     public string? PromotionNotes { get; set; }
 
+    // Project Classification
+    [JsonPropertyName("category")]
+    public string? Category { get; set; }
+
+    [JsonPropertyName("techStack")]
+    public string? TechStack { get; set; }
+
+    [JsonPropertyName("projectType")]
+    public string? ProjectType { get; set; }
+
+    // Environment Suggestions
     [JsonPropertyName("environments")]
     public List<ProjectEnvironmentSuggestion>? Environments { get; set; }
 }

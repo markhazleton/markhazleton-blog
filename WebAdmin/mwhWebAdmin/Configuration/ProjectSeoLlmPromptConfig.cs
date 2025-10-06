@@ -19,7 +19,7 @@ public static class ProjectSeoLlmPromptConfig
         var workflowInfo = GetWorkflowInfo(repositoryAnalysis);
         var dependencyInfo = GetDependencyInfo(repositoryAnalysis);
 
-        return $@"You are an expert SEO specialist and technical project analyst. Your task is to analyze a GitHub repository and generate comprehensive, SEO-optimized project metadata that will help showcase this project professionally.
+        return $@"You are an expert SEO specialist and technical project analyst. Your task is to analyze a GitHub repository and generate comprehensive, SEO-optimized project metadata that will help showcase this project professionally in a developer portfolio.
 
 ## Project Context
 - Current Title: {projectTitle}
@@ -35,43 +35,73 @@ public static class ProjectSeoLlmPromptConfig
 {repositoryAnalysis.ReadmeContent ?? "No README content available"}
 
 ## Your Mission
-Generate professional, SEO-optimized project metadata that:
+Generate professional, SEO-optimized project metadata that comprehensively covers ALL aspects of project presentation:
 
-1. **SEO Requirements:**
-   - Title: 30-60 characters, keyword-rich, professional
-   - Meta Description: 120-160 characters with action words (discover, explore, learn, build)
-   - Keywords: 3-8 relevant technical and business keywords
-   - Social media optimized titles and descriptions
+### 1. **SEO OPTIMIZATION**
+- **Project Title**: Enhance to be professional and keyword-rich (30-60 chars)
+- **Meta Description**: Create compelling 120-160 character descriptions with action words
+- **Keywords**: Generate 5-8 relevant technical and business keywords
+- **SEO Title**: Optimized page title for search engines
+- **Canonical URL**: Proper canonical URL structure
+- **Robots**: Appropriate robots directive
 
-2. **Technical Analysis:**
-   - Identify and categorize the project type (Web App, API, Library, Tool, etc.)
-   - Determine the tech stack and framework
-   - Suggest appropriate project categorization
-   - Analyze CI/CD pipeline patterns from workflows
+### 2. **SOCIAL MEDIA OPTIMIZATION**
+- **Open Graph**: Complete Facebook/LinkedIn sharing metadata
+  - Title: Engaging social media title
+  - Description: Compelling social description
+  - Image suggestions: Professional project imagery
+  - Type: Appropriate content type
+- **Twitter Cards**: Complete Twitter sharing metadata
+  - Title: Concise Twitter-optimized title (≤50 chars)
+  - Description: Twitter-specific description
+  - Image suggestions: Twitter card imagery
 
-3. **Professional Presentation:**
-   - Write compelling descriptions that highlight business value
-   - Use industry-standard terminology
-   - Focus on outcomes and benefits
-   - Make it appealing to both technical and business audiences
+### 3. **TECHNICAL CLASSIFICATION**
+- **Category**: Classify project type (Web App, API, Library, Tool, Mobile App, etc.)
+- **Tech Stack**: List primary technologies and frameworks
+- **Project Type**: Specific type (SPA, REST API, CLI Tool, npm Package, etc.)
 
-4. **Repository Integration:**
-   - Auto-fill repository metadata based on GitHub analysis
-   - Suggest deployment environments based on workflow patterns
-   - Recommend promotion pipeline stages based on detected CI/CD
+### 4. **REPOSITORY INTEGRATION**
+- **Provider**: Auto-detect from URL (GitHub, GitLab, Azure DevOps)
+- **Visibility**: Analyze and determine (Public/Private)
+- **Branch**: Default branch from analysis
+- **Repository Notes**: Key technical insights from README/code analysis
 
-## Key Guidelines:
-- Write for a professional portfolio audience (potential employers, clients, collaborators)
+### 5. **DEPLOYMENT PIPELINE**
+- **Pipeline Name**: Suggest based on detected CI/CD workflows
+- **Current Stage**: Infer deployment stage from workflows
+- **Status**: Determine pipeline status
+- **Environments**: Suggest appropriate deployment environments:
+  - Development environment with dev URLs
+  - Staging/Testing environment
+  - Production environment
+  - Include realistic URLs, statuses, and version suggestions
+
+### 6. **CONTENT STRATEGY**
+- Write for professional portfolio audience (employers, clients, collaborators)
 - Emphasize practical applications and business impact
 - Use modern, current technical terminology
 - Make descriptions scannable and engaging
 - Ensure all content is factual and based on repository evidence
 - Focus on what makes this project unique and valuable
 
-## Response Format:
-Return a JSON object with all the required fields populated based on your analysis. Be thorough but concise. Every field should add value to the project's presentation.
+## Key Guidelines:
+- **Comprehensive**: Fill ALL fields with meaningful, relevant content
+- **Professional**: Portfolio-ready language and presentation
+- **SEO-Focused**: Optimize for search engines and social sharing
+- **Technical Accuracy**: Base recommendations on actual repository analysis
+- **Business Value**: Highlight practical applications and impact
+- **Modern Standards**: Use current best practices for SEO and social media
 
-Remember: This project data will be used for professional portfolio presentation, SEO optimization, and project showcase. Make it compelling and accurate.";
+## Quality Standards:
+- Titles should be clear, professional, and keyword-optimized
+- Descriptions should be engaging and informative
+- Keywords should balance technical terms with business language
+- Social media content should encourage engagement
+- Technical classifications should be accurate and specific
+- Environment suggestions should be realistic and practical
+
+Remember: This project data will be used for professional portfolio presentation, search engine optimization, and social media sharing. Every field should add value and present the project in the best possible light while remaining accurate and professional.";
     }
 
     /// <summary>
@@ -96,7 +126,8 @@ Remember: This project data will be used for professional portfolio presentation
             var majorFrameworks = new[]
             {
                 "react", "vue", "angular", "express", "django", "flask", "fastapi",
-                "spring", "asp.net", "blazor", "next.js", "nuxt", "svelte"
+                "spring", "asp.net", "blazor", "next.js", "nuxt", "svelte", "typescript",
+                "nodejs", "python", "csharp", "java", "golang", "rust"
             };
 
             foreach (var dep in analysis.PackageInfo.Dependencies)

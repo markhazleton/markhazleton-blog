@@ -1,26 +1,36 @@
-@page "/ProjectEdit/{id:int}"
-@model ProjectEditModel
+@page "/ProjectEdit/{id:int?}"
+@model mwhWebAdmin.Pages.ProjectEditModel
 @using System
 @using System.Collections.Generic
 @using System.IO
 @using mwhWebAdmin.Project
 @{
-    ViewData["Title"] = "Edit Project";
+    ViewData["Title"] = Model.IsNewProject ? "Add Project" : "Edit Project";
+    var pageTitle = Model.IsNewProject ? "Add Project" : "Edit Project";
+    var cardHeaderClass = Model.IsNewProject ? "border-primary shadow-sm" : "border-success shadow-sm";
+    var cardHeaderBg = Model.IsNewProject ? "bg-primary" : "bg-success";
+    var aiButtonText = "Generate AI Content";
+    var aiButtonIcon = Model.IsNewProject ? "fas fa-magic" : "fas fa-robot";
+    var saveButtonText = Model.IsNewProject ? "Save Project" : "Save Changes";
+    var successColor = Model.IsNewProject ? "primary" : "success";
 }
 
 <div class="page-header fade-in-up">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1><i class="fas fa-edit me-3"></i>@ViewData["Title"]</h1>
-            <p class="lead mb-0">Update project information and SEO metadata</p>
+            <h1><i class="@(Model.IsNewProject ? "fas fa-plus-circle" : "fas fa-edit") me-3"></i>@pageTitle</h1>
+            <p class="lead mb-0">@(Model.IsNewProject ? "Create a new project for your portfolio with complete SEO metadata" : "Update project information and SEO metadata")</p>
         </div>
         <div class="d-flex gap-2">
             <a asp-page="./Projects" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i>Back to Projects
             </a>
-            <a asp-page="./ProjectAdd" class="btn btn-admin-primary">
-                <i class="fas fa-plus me-2"></i>Add New
-            </a>
+            @if (!Model.IsNewProject)
+            {
+                <a asp-page="./ProjectEdit" class="btn btn-admin-primary">
+                    <i class="fas fa-plus me-2"></i>Add New
+                </a>
+            }
         </div>
     </div>
 </div>
@@ -64,82 +74,150 @@
 
 <div class="admin-form fade-in-up">
     <form method="post">
-        <input asp-for="Project.Id" type="hidden" />
+        @if (!Model.IsNewProject)
+        {
+            <input asp-for="Project.Id" type="hidden" />
+        }
+
+        <!-- TOP SECTION: Driving Fields + AI Enhancement -->
+        <div class="card mb-4 @cardHeaderClass">
+            <div class="card-header @cardHeaderBg text-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0"><i class="@aiButtonIcon me-2"></i>@(Model.IsNewProject ? "Project Quick Start" : "AI Enhancement")</h5>
+                    <small class="opacity-75">@(Model.IsNewProject ? "Provide basic information and let AI generate comprehensive project details" : "Enhance existing project data with comprehensive AI analysis")</small>
+                </div>
+                <button type="submit" asp-page-handler="GenerateAiContent" class="btn btn-light btn-lg" title="@(Model.IsNewProject ? "Generate comprehensive project data using AI and GitHub repository analysis" : "Enhance project data using AI and GitHub repository analysis")">
+                    <i class="@aiButtonIcon me-2"></i>@aiButtonText
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info border-0 bg-light mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-lightbulb text-info me-3 mt-1"></i>
+                        <div>
+                            @if (Model.IsNewProject)
+                            {
+                                <strong>AI-Powered Project Creation:</strong>
+                                <text>Fill in any combination of the fields below, then click "Generate AI Content" to automatically populate SEO metadata, social sharing tags, repository details, and deployment pipeline information.</text>
+                                <div class="mt-2">
+                                    <strong>Tip:</strong> A GitHub repository URL provides the most comprehensive analysis!
+                                </div>
+                            }
+                            else
+                            {
+                                <strong>AI Enhancement Available:</strong>
+                                <text>Click "Generate AI Content" to automatically enhance existing project descriptions, SEO metadata, repository details, and deployment pipeline information using advanced AI analysis.</text>
+                                <div class="mt-2">
+                                    <strong>Safe:</strong> AI will improve existing content without overwriting manually entered data.
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- GitHub Repository URL - Primary Driver -->
+                    <div class="col-md-12">
+                        <label asp-for="Project.Repository!.Url" class="form-label fw-bold d-flex align-items-center">
+                            <i class="fab fa-github me-2 text-dark"></i>
+                            GitHub Repository URL
+                            <span class="badge bg-@successColor ms-2">@(Model.IsNewProject ? "Recommended" : "AI Enhancement Source")</span>
+                        </label>
+                        <input asp-for="Project.Repository!.Url" class="form-control form-control-lg" type="url"
+                               placeholder="https://github.com/username/repository-name" />
+                        <div class="form-text">
+                            <i class="fas fa-star text-warning me-1"></i>
+                            @(Model.IsNewProject ? "Paste any GitHub repository URL here for automatic project analysis and metadata generation" : "Repository will be analyzed for enhanced metadata generation")
+                        </div>
+                        <span asp-validation-for="Project.Repository!.Url" class="text-danger"></span>
+                    </div>
+
+                    <!-- Project Title -->
+                    <div class="col-md-8">
+                        <label asp-for="Project.Title" class="form-label fw-bold">
+                            <i class="fas fa-heading me-2"></i>Project Title
+                        </label>
+                        <input asp-for="Project.Title" class="form-control form-control-lg" placeholder="Enter your project title..." />
+                        <span asp-validation-for="Project.Title" class="text-danger"></span>
+                    </div>
+
+                    <!-- Project Slug -->
+                    <div class="col-md-4">
+                        <label asp-for="Project.Slug" class="form-label fw-bold">
+                            <i class="fas fa-link me-2"></i>URL Slug
+                        </label>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">/projects/</span>
+                            <input asp-for="Project.Slug" class="form-control" placeholder="my-project" />
+                        </div>
+                        <div class="form-text">@(Model.IsNewProject ? "Auto-generated from title if left blank" : "Lowercase letters, numbers, and hyphens only")</div>
+                        <span asp-validation-for="Project.Slug" class="text-danger"></span>
+                    </div>
+
+                    <!-- Project Summary -->
+                    <div class="col-md-12">
+                        <label asp-for="Project.Summary" class="form-label fw-bold">
+                            <i class="fas fa-align-left me-2"></i>Project Summary
+                        </label>
+                        <textarea asp-for="Project.Summary" class="form-control" rows="3"
+                                  placeholder="Brief overview of your project - used for meta descriptions and social sharing"></textarea>
+                        <div class="form-text">Concise overview used for SEO and social media previews</div>
+                        <span asp-validation-for="Project.Summary" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center justify-content-center p-3 bg-light rounded">
+                            <div class="text-center">
+                                <i class="fas fa-arrow-up text-@successColor fa-2x mb-2"></i>
+                                <div class="fw-bold text-@successColor">Click "@aiButtonText" to @(Model.IsNewProject ? "auto-populate" : "enhance") all sections below</div>
+                                <small class="text-muted">@(Model.IsNewProject ? "SEO metadata, social sharing, repository details, and deployment pipeline" : "Improve SEO metadata, social sharing, repository details, and deployment information")</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-lg-8">
+                <!-- Project Information -->
                 <div class="card mb-3">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Project Information</h5>
-                        <button type="submit" asp-page-handler="GenerateAiContent" class="btn btn-outline-primary btn-sm" title="Enhance project data using AI and GitHub repository analysis">
-                            <i class="fas fa-robot me-2"></i>Generate AI Content
-                        </button>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-info mb-3">
-                            <i class="fas fa-lightbulb me-2"></i>
-                            <strong>AI Enhancement Available:</strong> 
-                            Click "Generate AI Content" to automatically enhance project descriptions, SEO metadata, 
-                            repository details, and deployment pipeline information using AI analysis.
-                        </div>
-
                         <div class="row g-3">
-                            <div class="col-md-8">
-                                <label asp-for="Project.Title" class="form-label fw-bold"></label>
-                                <input asp-for="Project.Title" class="form-control" placeholder="Enter project title..." />
-                                <span asp-validation-for="Project.Title" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label asp-for="Project.Slug" class="form-label fw-bold"></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">/projects/</span>
-                                    <input asp-for="Project.Slug" class="form-control" placeholder="my-project" />
-                                </div>
-                                <div class="form-text">Lowercase letters, numbers, and hyphens only.</div>
-                                <span asp-validation-for="Project.Slug" class="text-danger"></span>
+                            <div class="col-md-12">
+                                <label asp-for="Project.Description" class="form-label fw-bold"></label>
+                                <textarea asp-for="Project.Description" class="form-control" rows="4" placeholder="Detailed description of your project..."></textarea>
+                                <span asp-validation-for="Project.Description" class="text-danger"></span>
                             </div>
                         </div>
 
-                        <div class="mb-3 mt-3">
-                            <label asp-for="Project.Description" class="form-label fw-bold"></label>
-                            <textarea asp-for="Project.Description" class="form-control" rows="3" placeholder="Describe your project..."></textarea>
-                            <span asp-validation-for="Project.Description" class="text-danger"></span>
-                        </div>
-
-                        <div class="row g-3">
+                        <div class="row g-3 mt-1">
                             <div class="col-md-8">
                                 <label asp-for="Project.Link" class="form-label fw-bold"></label>
-                                <input asp-for="Project.Link" class="form-control" type="url" placeholder="https://example.com" />
+                                <input asp-for="Project.Link" class="form-control" type="url" placeholder="https://your-project-demo.com" />
                                 <span asp-validation-for="Project.Link" class="text-danger"></span>
                             </div>
                             <div class="col-md-4">
                                 <label asp-for="Project.Keywords" class="form-label fw-bold"></label>
                                 <input asp-for="Project.Keywords" class="form-control" placeholder="portfolio, web app, azure" />
-                                <div class="form-text">Comma-separated keyword phrases.</div>
+                                <div class="form-text">Comma-separated keywords</div>
                                 <span asp-validation-for="Project.Keywords" class="text-danger"></span>
                             </div>
-                        </div>
-
-                        <div class="mt-3">
-                            <label asp-for="Project.Summary" class="form-label fw-bold"></label>
-                            <textarea asp-for="Project.Summary" class="form-control" rows="2" placeholder="Concise overview used for meta descriptions and social sharing."></textarea>
-                            <span asp-validation-for="Project.Summary" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
+                <!-- Source Repository -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-code-branch me-2"></i>Source Repository</h5>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-success mb-3">
-                            <i class="fas fa-github me-2"></i>
-                            <strong>GitHub Integration:</strong> 
-                            Repository URL will be analyzed using "Generate AI Content" to automatically extract README content, 
-                            detect tech stack, and populate repository metadata and deployment pipeline information.
-                        </div>
-
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label asp-for="Project.Repository!.Provider" class="form-label fw-bold"></label>
@@ -148,52 +226,42 @@
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="Project.Repository!.Name" class="form-label fw-bold"></label>
-                                <input asp-for="Project.Repository!.Name" class="form-control" placeholder="markhazleton/webspark" />
+                                <input asp-for="Project.Repository!.Name" class="form-control" placeholder="username/repository-name" />
                                 <span asp-validation-for="Project.Repository!.Name" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="row g-3 mt-1">
-                            <div class="col-md-8">
-                                <label asp-for="Project.Repository!.Url" class="form-label fw-bold"></label>
-                                <input asp-for="Project.Repository!.Url" class="form-control" type="url" placeholder="https://github.com/markhazleton/..." />
-                                <div class="form-text">
-                                    <i class="fas fa-magic me-1"></i>
-                                    Repository URL will be analyzed for AI content generation
-                                </div>
-                                <span asp-validation-for="Project.Repository!.Url" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label asp-for="Project.Repository!.Branch" class="form-label fw-bold"></label>
                                 <input asp-for="Project.Repository!.Branch" class="form-control" placeholder="main" />
                                 <span asp-validation-for="Project.Repository!.Branch" class="text-danger"></span>
                             </div>
-                        </div>
-
-                        <div class="row g-3 mt-1">
                             <div class="col-md-6">
                                 <label asp-for="Project.Repository!.Visibility" class="form-label fw-bold"></label>
                                 <input asp-for="Project.Repository!.Visibility" class="form-control" placeholder="Public, Private" />
                                 <span asp-validation-for="Project.Repository!.Visibility" class="text-danger"></span>
                             </div>
-                            <div class="col-md-6">
-                                <label asp-for="Project.Repository!.Notes" class="form-label fw-bold"></label>
-                                <textarea asp-for="Project.Repository!.Notes" class="form-control" rows="2" placeholder="Key repository notes or credentials handled elsewhere."></textarea>
-                                <span asp-validation-for="Project.Repository!.Notes" class="text-danger"></span>
-                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <label asp-for="Project.Repository!.Notes" class="form-label fw-bold"></label>
+                            <textarea asp-for="Project.Repository!.Notes" class="form-control" rows="2" placeholder="Technical notes about the repository..."></textarea>
+                            <span asp-validation-for="Project.Repository!.Notes" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
+                <!-- Deployment Pipeline -->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-rocket me-2"></i>Promotion Pipeline</h5>
+                        <h5 class="mb-0"><i class="fas fa-rocket me-2"></i>Deployment Pipeline</h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label asp-for="Project.Promotion!.Pipeline" class="form-label fw-bold"></label>
-                                <input asp-for="Project.Promotion!.Pipeline" class="form-control" placeholder="Pipeline name" />
+                                <input asp-for="Project.Promotion!.Pipeline" class="form-control" placeholder="GitHub Actions CI/CD" />
                                 <span asp-validation-for="Project.Promotion!.Pipeline" class="text-danger"></span>
                             </div>
                             <div class="col-md-4">
@@ -216,15 +284,16 @@
                             </div>
                             <div class="col-md-8">
                                 <label asp-for="Project.Promotion!.Notes" class="form-label fw-bold"></label>
-                                <textarea asp-for="Project.Promotion!.Notes" class="form-control" rows="2" placeholder="Add deployment notes, blockers, or next steps."></textarea>
+                                <textarea asp-for="Project.Promotion!.Notes" class="form-control" rows="2" placeholder="Deployment notes, blockers, or next steps..."></textarea>
                                 <span asp-validation-for="Project.Promotion!.Notes" class="text-danger"></span>
                             </div>
                         </div>
 
+                        <!-- Environments -->
                         <hr class="my-4" />
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 d-flex align-items-center"><i class="fas fa-layer-group me-2"></i>Promotion Environments</h6>
-                            <span class="text-muted small">Leave an environment blank to exclude it when saving.</span>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0 d-flex align-items-center"><i class="fas fa-layer-group me-2"></i>Environments</h6>
+                            <span class="text-muted small">Leave blank to exclude when saving</span>
                         </div>
 
                         @{
@@ -234,7 +303,7 @@
 
                         @if (environments.Count == 0)
                         {
-                            <p class="text-muted mb-0">No environments configured. Add promotion details above to begin tracking environments.</p>
+                            <p class="text-muted mb-0">No environments configured. Use "Generate AI Content" to create suggested environments.</p>
                         }
                         else
                         {
@@ -263,7 +332,7 @@
                                                 <span asp-validation-for="Project.Promotion!.Environments[i].Url" class="text-danger small"></span>
                                             </td>
                                             <td>
-                                                <input asp-for="Project.Promotion!.Environments[i].Status" class="form-control form-control-sm" placeholder="Active, Offline" />
+                                                <input asp-for="Project.Promotion!.Environments[i].Status" class="form-control form-control-sm" placeholder="Active" />
                                                 <span asp-validation-for="Project.Promotion!.Environments[i].Status" class="text-danger small"></span>
                                             </td>
                                             <td>
@@ -275,7 +344,7 @@
                                                 <span asp-validation-for="Project.Promotion!.Environments[i].LastPromotedOn" class="text-danger small"></span>
                                             </td>
                                             <td>
-                                                <input asp-for="Project.Promotion!.Environments[i].Notes" class="form-control form-control-sm" placeholder="Key notes" />
+                                                <input asp-for="Project.Promotion!.Environments[i].Notes" class="form-control form-control-sm" placeholder="Environment notes" />
                                                 <span asp-validation-for="Project.Promotion!.Environments[i].Notes" class="text-danger small"></span>
                                             </td>
                                         </tr>
@@ -287,6 +356,7 @@
                     </div>
                 </div>
 
+                <!-- Search Engine Metadata -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-search me-2"></i>Search Engine Metadata</h5>
@@ -308,12 +378,12 @@
                         <div class="row g-3 mt-1">
                             <div class="col-md-8">
                                 <label asp-for="Project.Seo!.Description" class="form-label fw-bold"></label>
-                                <textarea asp-for="Project.Seo!.Description" class="form-control" rows="2" placeholder="Concise meta description (120-160 characters recommended)."></textarea>
+                                <textarea asp-for="Project.Seo!.Description" class="form-control" rows="2" placeholder="SEO meta description (120-160 characters)"></textarea>
                                 <span asp-validation-for="Project.Seo!.Description" class="text-danger"></span>
                             </div>
                             <div class="col-md-4">
                                 <label asp-for="Project.Seo!.Keywords" class="form-label fw-bold"></label>
-                                <input asp-for="Project.Seo!.Keywords" class="form-control" placeholder="project, technology, stack" />
+                                <input asp-for="Project.Seo!.Keywords" class="form-control" placeholder="seo, keywords" />
                                 <span asp-validation-for="Project.Seo!.Keywords" class="text-danger"></span>
                             </div>
                         </div>
@@ -333,16 +403,18 @@
                     </div>
                 </div>
 
+                <!-- Social Sharing Metadata -->
                 <div class="card mb-3">
-                    <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-share-alt me-2"></i>Social Sharing Metadata</h5>
-                        <span class="text-muted small">Used for Open Graph (Facebook, LinkedIn) and Twitter cards.</span>
                     </div>
                     <div class="card-body">
                         <div class="row g-4">
                             <div class="col-lg-6">
                                 <div class="border rounded p-3 h-100">
-                                    <h6 class="text-uppercase text-muted fw-bold">Open Graph</h6>
+                                    <h6 class="text-uppercase text-muted fw-bold mb-3">
+                                        <i class="fab fa-facebook me-2"></i>Open Graph (Facebook, LinkedIn)
+                                    </h6>
                                     <div class="mb-3">
                                         <label asp-for="Project.OpenGraph!.Title" class="form-label fw-bold"></label>
                                         <input asp-for="Project.OpenGraph!.Title" class="form-control" placeholder="Open Graph title" />
@@ -360,7 +432,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="Project.OpenGraph!.ImageAlt" class="form-label fw-bold"></label>
-                                        <input asp-for="Project.OpenGraph!.ImageAlt" class="form-control" placeholder="Accessible alt text" />
+                                        <input asp-for="Project.OpenGraph!.ImageAlt" class="form-control" placeholder="Image description" />
                                         <span asp-validation-for="Project.OpenGraph!.ImageAlt" class="text-danger"></span>
                                     </div>
                                     <div>
@@ -372,7 +444,9 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="border rounded p-3 h-100">
-                                    <h6 class="text-uppercase text-muted fw-bold">Twitter Card</h6>
+                                    <h6 class="text-uppercase text-muted fw-bold mb-3">
+                                        <i class="fab fa-twitter me-2"></i>Twitter Card
+                                    </h6>
                                     <div class="mb-3">
                                         <label asp-for="Project.TwitterCard!.Title" class="form-label fw-bold"></label>
                                         <input asp-for="Project.TwitterCard!.Title" class="form-control" placeholder="Twitter card title" />
@@ -390,7 +464,7 @@
                                     </div>
                                     <div>
                                         <label asp-for="Project.TwitterCard!.ImageAlt" class="form-label fw-bold"></label>
-                                        <input asp-for="Project.TwitterCard!.ImageAlt" class="form-control" placeholder="Accessible alt text" />
+                                        <input asp-for="Project.TwitterCard!.ImageAlt" class="form-control" placeholder="Image description" />
                                         <span asp-validation-for="Project.TwitterCard!.ImageAlt" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -400,6 +474,7 @@
                 </div>
             </div>
 
+            <!-- Sidebar: Project Image -->
             <div class="col-lg-4">
                 <div class="card mb-3">
                     <div class="card-header">
@@ -465,14 +540,15 @@
             </div>
         </div>
 
+        <!-- Action Buttons -->
         <div class="row mt-4">
             <div class="col-12">
                 <div class="d-flex justify-content-between">
-                    <a asp-page="/Projects" class="btn btn-outline-secondary">
+                    <a asp-page="/Projects" class="btn btn-outline-secondary btn-lg">
                         <i class="fas fa-times me-2"></i>Cancel
                     </a>
-                    <button type="submit" class="btn btn-admin-primary">
-                        <i class="fas fa-save me-2"></i>Save Changes
+                    <button type="submit" id="saveProjectButton" class="btn btn-admin-primary btn-lg">
+                        <i class="fas fa-save me-2"></i>@saveButtonText
                     </button>
                 </div>
             </div>
@@ -481,7 +557,6 @@
 </div>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Image selection functionality
@@ -527,14 +602,132 @@
 
             // AI Content Generation functionality
             const aiGenerateButton = document.querySelector('button[asp-page-handler="GenerateAiContent"]');
+            const saveProjectButton = document.getElementById('saveProjectButton');
+            
             if (aiGenerateButton) {
                 aiGenerateButton.addEventListener('click', function(e) {
-                    // Show loading state
+                    console.log('AI Generate button clicked - submitting to OnPostGenerateAiContentAsync()');
+                    
+                    // Get current values to check if we have enough data
+                    const title = document.querySelector('input[name="Project.Title"]').value;
+                    const summary = document.querySelector('textarea[name="Project.Summary"]').value;
+                    const repositoryUrl = document.querySelector('input[name="Project.Repository.Url"]').value;
+
+                    console.log('AI Generation validation - Title:', title, 'Summary:', summary, 'RepoUrl:', repositoryUrl);
+
+                    if (!title.trim() && !summary.trim() && !repositoryUrl.trim()) {
+                        e.preventDefault();
+                        console.log('AI Generation prevented - insufficient data');
+                        alert('Please provide at least a project title, summary, or GitHub repository URL before generating AI content.');
+                        return;
+                    }
+
+                    console.log('AI Generation validation passed - proceeding with form submission');
+                    
+                    // Show loading state for AI generation
                     const originalText = this.innerHTML;
                     this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating AI Content...';
                     this.disabled = true;
 
-                    // The form will submit naturally
+                    // The form will submit naturally with the GenerateAiContent handler
+                });
+            }
+
+            // SAVE PROJECT/CHANGES Button - Explicit handling to prevent conflicts
+            if (saveProjectButton) {
+                saveProjectButton.addEventListener('click', function(e) {
+                    console.log('Save Project button clicked - starting save process');
+                    
+                    // Determine if this is add or edit mode
+                    const isNewProject = !document.querySelector('input[name="Project.Id"]') || document.querySelector('input[name="Project.Id"]').value === '0';
+                    const actionText = isNewProject ? 'Save Project' : 'Save Changes';
+                    
+                    console.log('Save mode detected:', isNewProject ? 'NEW PROJECT' : 'EDIT PROJECT');
+                    
+                    try {
+                        // Ensure this button submits to the default OnPost() method
+                        const form = this.closest('form');
+                        if (form) {
+                            // CRITICAL FIX: Remove the handler parameter from the form action
+                            const currentAction = form.action;
+                            const url = new URL(currentAction);
+                            url.searchParams.delete('handler'); // Remove any handler parameter
+                            form.action = url.toString();
+                            
+                            console.log('BEFORE: Form action was:', currentAction);
+                            console.log('AFTER: Form action now:', form.action);
+                            
+                            // Remove any existing formaction that might redirect to AI handler
+                            this.removeAttribute('formaction');
+                            
+                            // Show saving state
+                            const originalText = this.innerHTML;
+                            this.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Saving ${isNewProject ? 'Project' : 'Changes'}...`;
+                            this.disabled = true;
+                            
+                            // Let the form submit naturally to OnPost()
+                            console.log(`${actionText} button clicked - submitting to OnPost()`);
+                            console.log('Final form action:', form.action);
+                            console.log('Form method:', form.method);
+                            
+                            // Add debug logging for form data
+                            const formData = new FormData(form);
+                            console.log('Form data being submitted:');
+                            for (let [key, value] of formData.entries()) {
+                                if (key.includes('Title') || key.includes('Description') || key.includes('Link') || key.includes('Slug')) {
+                                    console.log(`  ${key}: ${value}`);
+                                }
+                            }
+                            
+                            // CRITICAL: Trigger form submission after a brief delay to ensure all changes are applied
+                            console.log('Triggering form submission...');
+                            setTimeout(() => {
+                                form.submit();
+                            }, 100);
+                            
+                        } else {
+                            console.error('Form not found!');
+                        }
+                    } catch (error) {
+                        console.error('Error in save button handler:', error);
+                    }
+                });
+            }
+
+            // Auto-fill repository name from URL
+            const repositoryUrlInput = document.querySelector('input[name="Project.Repository.Url"]');
+            const repositoryNameInput = document.querySelector('input[name="Project.Repository.Name"]');
+            
+            if (repositoryUrlInput && repositoryNameInput) {
+                repositoryUrlInput.addEventListener('blur', function() {
+                    if (this.value && !repositoryNameInput.value) {
+                        // Extract owner/repo from GitHub URL
+                        const match = this.value.match(/github\.com[\/:]([^\/]+)\/([^\/\s]+)/);
+                        if (match) {
+                            repositoryNameInput.value = `${match[1]}/${match[2].replace('.git', '')}`;
+                        }
+                    }
+                });
+            }
+
+            // Auto-generate slug from title (only for new projects)
+            const titleInput = document.querySelector('input[name="Project.Title"]');
+            const slugInput = document.querySelector('input[name="Project.Slug"]');
+            
+            if (titleInput && slugInput) {
+                titleInput.addEventListener('blur', function() {
+                    // Only auto-generate slug for new projects
+                    const isNewProject = !document.querySelector('input[name="Project.Id"]') || document.querySelector('input[name="Project.Id"]').value === '0';
+                    if (isNewProject && this.value && !slugInput.value) {
+                        // Generate slug from title
+                        const slug = this.value
+                            .toLowerCase()
+                            .replace(/[^a-z0-9\s-]/g, '')
+                            .replace(/\s+/g, '-')
+                            .replace(/-+/g, '-')
+                            .replace(/^-|-$/g, '');
+                        slugInput.value = slug;
+                    }
                 });
             }
 
@@ -599,27 +792,8 @@
                 });
             }
 
-            // Auto-fill repository name from URL
-            const repositoryUrlInput = document.querySelector('input[name="Project.Repository.Url"]');
-            const repositoryNameInput = document.querySelector('input[name="Project.Repository.Name"]');
-            
-            if (repositoryUrlInput && repositoryNameInput) {
-                repositoryUrlInput.addEventListener('blur', function() {
-                    if (this.value && !repositoryNameInput.value) {
-                        // Extract owner/repo from GitHub URL
-                        const match = this.value.match(/github\.com[\/:]([^\/]+)\/([^\/\s]+)/);
-                        if (match) {
-                            repositoryNameInput.value = `${match[1]}/${match[2].replace('.git', '')}`;
-                        }
-                    }
-                });
-            }
-
             // Run highlight function on page load
             highlightAiUpdatedFields();
         });
     </script>
 }
-
-
-
