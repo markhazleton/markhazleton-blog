@@ -12,11 +12,11 @@ block layout-content
             | Engineering Metrics: Git Spark Story
           h2.h3.mb-4 Why Git History Tells the Wrong Story About Developer Productivity
           p.lead.mb-5.
-            After discovering how invisible AI contributions vanish in traditional metrics, I encountered
-            another measurement trap: using Git history to evaluate team performance.
-            The promise of objective data led me down a path of misleading conclusions
-            until I discovered what Git analytics actually reveal—and what they dangerously obscure.
-
+            Traditional performance metrics were not built for AI Agents.
+            They track visible outputs—commits, comments, tickets closed—but miss the
+            silent labor of agents optimizing workflows, refactoring code,
+            or triaging issues before they escalate.
+            The result? A skewed picture of productivity that obfuscates the work of AI agents.
           // Article Metadata
           .mb-4.d-flex.justify-content-center.align-items-center.gap-4
             span
@@ -43,35 +43,33 @@ block layout-content
               | When "Objective Data" Leads You Astray
 
             p.lead.mb-4.
-              Fresh off struggling to measure AI's contribution to code,
-              I thought I'd found the answer to developer productivity measurement:
-              Git history. It seemed perfect—objective, comprehensive, and already being tracked.
-              Every commit, every change, every contributor permanently recorded.
-              What could possibly go wrong?
+              After writing about
+              <a href='measuring-ais-contribution-to-code.html' target='_blank'>measuring AI's contribution to code</a>
+              , I was frustrated. I couldn't quantify how much AI agents were actually helping
+              my development process. Git history seemed like the obvious answer—objective,
+              comprehensive, and already being tracked. Every commit, every change, every
+              contributor permanently recorded. Surely, I could extract meaningful insights
+              from this data, right?
 
             p.mb-4.
-              Everything, as it turns out. Within weeks of implementing Git-based metrics,
-              I watched a high-performing team start gaming the system in ways that would have been
-              comical if they weren't so damaging. Developers began splitting logical changes into
-              multiple commits to boost their numbers. Others started making trivial formatting
-              changes to files they'd never touched before to show "broad contribution."
-              The most senior engineer—our best architect—suddenly looked like the least productive
-              because he spent his time in design documents and code reviews, neither of which
-              show up in Git history.
+              Wrong. Very wrong. That weekend, instead of just analyzing Git data, I decided
+              to build something better. I wanted to create a tool that could honestly report
+              what Git history actually contains—without the misleading "health scores" and
+              fake productivity metrics that plague existing tools. This became git-spark,
+              my first npm package.
 
             p.mb-4.
-              This is when I discovered Git Spark and, more importantly, began to understand
-              the fundamental measurement trap that Git history represents. The problem isn't
-              that Git data is wrong—it's that we're asking it questions it was never designed
-              to answer. Git tells us what changed and when, but it's silent on the why, the how,
-              and most critically, the impact.
+              I thought building the tool would give me answers. Instead, it taught me about
+              all the questions Git history simply cannot answer. But that journey—from
+              frustrated developer to package publisher—revealed something more valuable:
+              the fundamental limitations of measuring software development through commit logs.
 
             p.mb-4.
-              This article is my journey from treating Git history as gospel truth to understanding
-              its severe limitations, and ultimately discovering what it actually can tell us
-              when we ask better questions. If you're using commit counts or lines of code
-              to measure productivity, you're not just getting incomplete data—you're actively
-              damaging your team culture while convincing yourself you're being objective.
+              This is the real story of creating git-spark: a weekend project born from
+              frustration, shaped by AI agents, refined through brutal honesty, and ultimately
+              designed to admit what it doesn't know. If you're trying to measure developer
+              productivity or AI contributions through Git data, I learned the hard way
+              what you can and cannot reliably discover.
 
             // Table of Contents
             nav#table-of-contents.mb-5(aria-label='Table of Contents')
@@ -93,86 +91,103 @@ block layout-content
           section#git-spark.mb-5
             h2.h3.mb-4.text-primary.d-flex.align-items-center
               i.bi.bi-stars.me-2
-              | What Git Spark Gets Right: Transparency Over Evaluation
+              | Building Git Spark: My First npm Package
 
             p.lead.mb-4.
-              After struggling with misleading metrics and opaque "health scores,"
-              I discovered Git Spark—and realized that its real value wasn't in what
-              it measured, but in what it refused to pretend to measure.
+              That weekend, fueled by frustration and too much coffee, I decided to build
+              what I wished existed: an honest Git analytics tool. Having used npm packages
+              for years, I'd always wanted to create my own. Git-spark became that opportunity—and
+              my crash course in package development.
+
+            .card.mb-4.bg-light.border-primary
+              .card-body
+                h3.h5.fw-bold.mb-3
+                  i.bi.bi-clock-history.me-2
+                  | The Weekend Build: Expectations vs. Reality
+
+                .row.g-3
+                  .col-md-6
+                    h4.h6.text-success Saturday Morning: The Vision
+                    ul.mb-0
+                      li.mb-2 Use AI agents to generate initial code
+                      li.mb-2 Parse Git history and extract metrics
+                      li.mb-2 Create visualizations and reports
+                      li.mb-2 Publish to npm by Sunday evening
+                      li.mb-2 Finally measure AI contributions!
+
+                  .col-md-6
+                    h4.h6.text-warning Sunday Night: The Reality
+                    ul.mb-0
+                      li.mb-2 ✅ AI agents gave me a great first build
+                      li.mb-2 ⚠️ Had to revise formulas multiple times
+                      li.mb-2 ⚠️ Realized most metrics were misleading
+                      li.mb-2 ❌ Still couldn't measure AI contributions
+                      li.mb-2 ✅ But learned what honest reporting means
 
             p.mb-4.
-              Most Git analytics tools suffer from the same problem: they want to tell you
-              whether your team is "good" or "bad," "productive" or "unproductive,"
-              "healthy" or "unhealthy." They take limited data and extrapolate sweeping
-              judgments. Git Spark does something radical: it admits what it doesn't know.
+              The AI agents I used (ironically, the same ones I was trying to measure) gave
+              me an impressive initial implementation. The code worked, the visualizations
+              looked professional, and the metrics seemed authoritative. That's when I made
+              a critical mistake: I actually read the formulas behind the numbers.
+
+            .alert.alert-warning.mb-4
+              strong.d-block.mb-2
+                i.bi.bi-exclamation-triangle.me-2
+                | The Formulas Don't Lie (But They Can Mislead)
+              p.mb-2.
+                My first version calculated a "Repository Health Score" based on commit
+                frequency, author distribution, and code churn. It looked scientific.
+                It generated impressive charts. And it was complete nonsense.
+              p.mb-0.
+                The formula assigned arbitrary weights to metrics we couldn't meaningfully
+                interpret. A score of 87% health? What does that even mean? Healthy compared
+                to what? Based on whose definition of healthy?
+
+            p.mb-4.
+              This realization forced multiple rewrites. Each iteration stripped away another
+              layer of pretense, another attempt to derive meaning from data that simply
+              didn't contain it. By version 0.5, I'd removed every evaluative metric and
+              replaced them with honest observations.
 
             .card.mb-4
               .card-header.bg-success.text-white
                 h3.card-title.mb-0.fw-bold
                   i.bi.bi-shield-check.me-2
-                  | The Git Spark Differentiator: Honest Reporting
+                  | The Git Spark Philosophy: What I Learned to Value
               .card-body
-                .row.g-4
-                  .col-md-6
-                    h4.h5.mb-3 What Git Spark Reports
-                    ul.mb-0
-                      li.mb-2 Observable patterns in commit history
-                      li.mb-2 File change frequency and coupling
-                      li.mb-2 Author contribution distributions
-                      li.mb-2 Temporal patterns in development activity
-                      li.mb-2 Code structure evolution over time
+                p.mb-3.
+                  Building this tool taught me that enterprise-worthy software—something I'd
+                  want my name on—requires brutal honesty about limitations:
 
-                  .col-md-6
-                    h4.h5.mb-3 What Git Spark Refuses to Infer
-                    ul.mb-0
-                      li.mb-2 Developer "productivity" scores
-                      li.mb-2 Repository "health" ratings
-                      li.mb-2 Code quality judgments
-                      li.mb-2 Team performance evaluations
-                      li.mb-2 Anything not directly observable in Git
+                dl.mb-0
+                  dt.fw-bold.mb-2 Testing Over Assumptions
+                  dd.mb-3.
+                    Every metric needed validation against real repositories. Does this
+                    pattern actually mean what I think it means? Can I defend this formula?
+                    If I can't explain it to a developer, it doesn't belong in the tool.
+
+                  dt.fw-bold.mb-2 Transparency Over Authority
+                  dd.mb-3.
+                    Users should see exactly how metrics are calculated. No magic formulas,
+                    no proprietary algorithms, no "trust us" scoring. Show your work or
+                    don't show the score.
+
+                  dt.fw-bold.mb-2 Observation Over Evaluation
+                  dd.mb-3.
+                    Report what Git history actually contains. Don't invent productivity
+                    scores from commit counts. Don't pretend to measure code quality from
+                    line changes. State facts; let users interpret them.
+
+                  dt.fw-bold.mb-2 Limitations Over Pretense
+                  dd.mb-3.
+                    Admit what you can't measure. Git history doesn't contain deployment
+                    outcomes, code review quality, or AI assistance levels. Acknowledging
+                    these gaps builds trust; pretending they don't exist destroys it.
 
             p.mb-4.
-              This honesty is transformative. Instead of generating a dashboard that claims
-              your repository has an 87% health score (what does that even mean?), Git Spark
-              shows you that:
-
-            ul.mb-4
-              li.mb-2 42% of commits touch the authentication module
-              li.mb-2 3 developers account for 80% of changes to critical infrastructure
-              li.mb-2 Files X and Y change together in 95% of commits
-              li.mb-2 Commit frequency dropped 40% in the last quarter
-
-            p.mb-4.
-              These are facts. What they mean depends on your context. Maybe the authentication
-              churn is expected because you're actively improving security. Maybe the concentrated
-              ownership reflects deep expertise, not a problem. Git Spark gives you the data;
-              you provide the interpretation.
-
-            .alert.alert-info
-              strong.d-block.mb-2
-                i.bi.bi-lightbulb.me-2
-                | The Real Innovation
-              p.mb-0.
-                Git Spark's innovation isn't technical—it's philosophical. By refusing to
-                judge what it measures, it preserves the context and nuance that make the
-                data actionable. It treats engineering leaders as intelligent adults who
-                can interpret patterns, rather than children who need to be told whether
-                their repository is "good" or "bad."
-
-            pre.language-javascript
-              code.language-javascript.
-                // ❌ What other tools do
-                console.log(`Repository health: Excellent! 🎉`);
-                // Meaningless evaluation
-
-                // ✅ What Git Spark does
-                console.warn("Deployment status not available from Git history");
-                console.log("Observable patterns:", {
-                  commitFrequency: data.frequency,
-                  coupling: data.fileCoupling,
-                  distribution: data.authorDistribution
-                });
-                // Honest reporting with clear limitations
+              This philosophy transformed git-spark from just another analytics tool into
+              something I'm genuinely proud of: an honest reporter that respects both the
+              data and the user's intelligence.
 
           section#anti-metrics.mb-5
             h2.h3.mb-4.text-primary.d-flex.align-items-center
@@ -252,18 +267,38 @@ block layout-content
           section#missing-data.mb-5
             h2.h3.mb-4.text-primary.d-flex.align-items-center
               i.bi.bi-eye-slash.me-2
-              | What Git History Can't Tell You
+              | The Biggest Surprise: What Git History Cannot Tell You
 
             p.lead.mb-4.
-              The second revelation came when I realized that Git history's real problem
-              isn't what it tells us—it's what it leaves out. The most valuable aspects
-              of software development leave no trace in commit logs.
+              Building git-spark taught me something humbling: the most valuable aspects
+              of software development leave absolutely no trace in commit logs. This was
+              my biggest surprise and the most important lesson from the entire project.
 
             p.mb-4.
-              Remember my previous article on measuring AI contribution? We struggled because
-              the AI assistance was invisible in Git history. But that's just one example of a
-              much broader problem: Git captures the what and when, but misses almost everything
-              that matters for understanding how work actually gets done.
+              I started this journey trying to answer one specific question:
+              <strong>"How much of my code is generated by AI prompts?"</strong> After weeks
+              of analysis, creating formulas, and examining every metric Git history offers,
+              I have to admit defeat. Git simply doesn't—and cannot—record that information.
+
+            .card.mb-4.bg-light.border-warning
+              .card-body
+                h3.h5.fw-bold.mb-3.text-warning
+                  i.bi.bi-question-circle.me-2
+                  | The Original Question Remains Unanswered
+
+                p.mb-3.
+                  Despite all the interesting patterns git-spark revealed, I failed to achieve
+                  my primary goal: pinpointing AI agent contributions to my codebase. And
+                  that failure taught me more than success would have.
+
+                .alert.alert-warning.mb-0
+                  strong Why Git Can't Answer This:
+                  ul.mb-0.mt-2
+                    li Git records commits, not process
+                    li AI assistance happens before the commit
+                    li No standard way to tag AI-generated code
+                    li Human editing obscures AI origins
+                    li Pair programming (human + AI) is invisible
 
             .row.g-4.mb-4
               .col-md-6
@@ -285,25 +320,31 @@ block layout-content
                         | Timestamp of changes
                       li.mb-2
                         i.bi.bi-check-circle-fill.text-success.me-2
-                        | Commit author
+                        | Commit author (always human)
                       li.mb-2
                         i.bi.bi-check-circle-fill.text-success.me-2
-                        | Commit message
+                        | Commit message (human-written)
 
               .col-md-6
                 .card.h-100
                   .card-header.bg-warning.text-dark
                     h4.card-title.mb-0.h5
                       i.bi.bi-question-circle.me-2
-                      | What Git Misses
+                      | What I Needed (But Doesn't Exist)
                   .card-body
                     ul.list-unstyled
                       li.mb-2
                         i.bi.bi-x-circle-fill.text-danger.me-2
-                        | Code review quality and outcomes
+                        | AI assistance level per commit
                       li.mb-2
                         i.bi.bi-x-circle-fill.text-danger.me-2
-                        | Pull request discussion context
+                        | Prompt-to-code traceability
+                      li.mb-2
+                        i.bi.bi-x-circle-fill.text-danger.me-2
+                        | Human vs. AI authorship percentage
+                      li.mb-2
+                        i.bi.bi-x-circle-fill.text-danger.me-2
+                        | Code review quality and outcomes
                       li.mb-2
                         i.bi.bi-x-circle-fill.text-danger.me-2
                         | Design decisions and trade-offs
@@ -312,47 +353,69 @@ block layout-content
                         | Testing effort and coverage
                       li.mb-2
                         i.bi.bi-x-circle-fill.text-danger.me-2
-                        | Deployment success and rollbacks
+                        | Deployment success and impact
                       li.mb-2
                         i.bi.bi-x-circle-fill.text-danger.me-2
-                        | Pair programming sessions
-                      li.mb-2
-                        i.bi.bi-x-circle-fill.text-danger.me-2
-                        | Mentoring and knowledge transfer
-                      li.mb-2
-                        i.bi.bi-x-circle-fill.text-danger.me-2
-                        | AI assistance level
-                      li.mb-2
-                        i.bi.bi-x-circle-fill.text-danger.me-2
-                        | Business impact of changes
+                        | Refactoring vs. new feature work
 
             p.mb-4.
-              This hit home when I analyzed our senior architect's contribution. Git showed
-              him touching relatively few files with modest line counts. What Git couldn't show:
-              he'd spent three weeks preventing a disastrous architectural decision, reviewed
-              every critical pull request with detailed feedback, and mentored two junior
-              developers through complex implementations. By Git metrics, he looked
-              unproductive. In reality, he was our most valuable contributor.
+              This realization completely changed how I thought about developer productivity
+              measurement. Every existing tool I'd examined—the ones claiming to measure
+              "health" or "productivity"—suffered from the same fundamental flaw: they
+              measured motion, not value. They counted commits but ignored impact.
+
+            .card.mb-4.border-danger
+              .card-header.bg-danger.text-white
+                h4.card-title.mb-0
+                  i.bi.bi-exclamation-triangle.me-2
+                  | The Weakness of Existing Tools
+              .card-body
+                p.mb-3.
+                  Building git-spark made me deeply skeptical of every Git analytics tool
+                  that promises to measure productivity, code quality, or team health.
+                  Here's what I learned they're actually doing:
+
+                .row.g-3.mb-3
+                  .col-md-4
+                    .alert.alert-danger.mb-0
+                      strong.d-block.mb-2 Taking Limited Data
+                      small Commits, LOC, file changes—only what Git records
+
+                  .col-md-4
+                    .alert.alert-danger.mb-0
+                      strong.d-block.mb-2 Applying Arbitrary Weights
+                      small "We've determined that X is 3.7x more important than Y"
+
+                  .col-md-4
+                    .alert.alert-danger.mb-0
+                      strong.d-block.mb-2 Generating Fake Scores
+                      small "Your repository health is 87% (excellent!)"
+
+                p.mb-0.
+                  These tools don't measure what they claim to measure. They measure what's
+                  easy to count and pretend it correlates with what actually matters. Building
+                  git-spark taught me to recognize—and reject—that approach.
 
             pre.language-javascript
               code.language-javascript.
-                // What Git sees
-                const gitView = {
-                  commits: 12,
-                  filesChanged: 8,
-                  linesAdded: 234
+                // What I hoped to measure
+                const aiContribution = {
+                  promptsUsed: 47,
+                  linesGenerated: 2840,
+                  percentageOfCode: "42%",
+                  productivityBoost: "3.2x"
                 };
 
-                // What Git misses (the actual value)
-                const realityView = {
-                  architecturalReviews: 15,
-                  designDocuments: 3,
-                  mentoringHours: 20,
-                  productionIncidentsPrevented: 2,
-                  technicalDebtReduced: "significant",
-                  teamKnowledgeIncreased: "immeasurable"
+                // What Git actually tells me
+                const gitReality = {
+                  commits: 156,
+                  totalChanges: 6723,
+                  author: "Mark Hazleton",
+                  aiAssistance: undefined  // Git doesn't know
                 };
-                // Git metrics miss most of what matters
+
+                // The gap between what I need and what exists
+                console.warn("AI contribution: Not measurable from Git history");
 
           section#activity-index.mb-5
             h2.h3.mb-4.text-primary.d-flex.align-items-center
@@ -555,76 +618,94 @@ block layout-content
           section#try-git-spark.mb-5.bg-light.p-4.rounded-3
             h2.h3.mb-4.text-primary.d-flex.align-items-center
               i.bi.bi-rocket-takeoff.me-2
-              | Try Git Spark: My First npm Package! 🎉
+              | Try Git Spark: What I Built and Why
 
             .row.align-items-center.mb-4
               .col-lg-8
                 p.lead.mb-3.
-                  Inspired by the principles discussed in this article, I've created and published
-                  my first npm package: <strong>git-spark</strong> — an honest Git analytics tool
-                  that respects what Git history can and cannot tell us.
+                  Despite failing to measure AI contributions, I succeeded in creating something
+                  valuable: an honest Git analytics tool that respects what the data can and
+                  cannot tell us. This is <strong>git-spark</strong>, my first npm package.
 
                 p.mb-3.
-                  Unlike tools that pretend to know your team's "health score," git-spark provides
-                  transparent, actionable insights into repository activity patterns without the
-                  misleading judgments.
+                  It's early in git-spark's lifetime, and I expect it will evolve as I get
+                  feedback from peers. The real question: Have I achieved the goal of making
+                  an honest, trustworthy reporting tool that adds value without inventing
+                  scores from data that isn't there?
 
               .col-lg-4
                 .card.border-primary.shadow-sm
                   .card-body.text-center
                     i.bi.bi-box-seam.display-4.text-primary.mb-3
-                    h5.card-title npm install git-spark
+                    h5.card-title
+                      a(href='https://www.npmjs.com/package/git-spark' target='_blank' rel='noopener noreferrer' aria-label='npm install git-spark') npm install git-spark
                     p.text-muted.small My first published package!
 
             .card.mb-4.border-success
               .card-header.bg-success.text-white
                 h4.card-title.mb-0
                   i.bi.bi-star-fill.me-2
-                  | What Makes git-spark Different
+                  | The Git-Spark Promise: Honest Metrics
 
               .card-body
+                p.mb-3.
+                  After multiple rewrites and reality checks, here's what git-spark actually does:
+
                 .row.g-4
                   .col-md-6
                     h5.h6.fw-bold.mb-3
                       i.bi.bi-check-circle.text-success.me-2
-                      | What It Does
+                      | What It Reports
                     ul.list-unstyled.mb-0
                       li.mb-2
                         i.bi.bi-arrow-right-circle.text-primary.me-2
-                        | Analyzes commit patterns and frequency
+                        | Observable patterns in commit history
                       li.mb-2
                         i.bi.bi-arrow-right-circle.text-primary.me-2
-                        | Identifies file coupling and change patterns
+                        | File coupling and change frequencies
                       li.mb-2
                         i.bi.bi-arrow-right-circle.text-primary.me-2
-                        | Maps author contribution distributions
+                        | Author contribution distributions
                       li.mb-2
                         i.bi.bi-arrow-right-circle.text-primary.me-2
-                        | Reveals temporal development trends
+                        | Temporal development trends
                       li.mb-2
                         i.bi.bi-arrow-right-circle.text-primary.me-2
-                        | Exports data for custom analysis
+                        | Code structure evolution over time
 
                   .col-md-6
                     h5.h6.fw-bold.mb-3
                       i.bi.bi-shield-check.text-success.me-2
-                      | What It Doesn't Do
+                      | What It Refuses to Infer
                     ul.list-unstyled.mb-0
                       li.mb-2
                         i.bi.bi-x-circle.text-danger.me-2
-                        | Generate fake "health scores"
+                        | Fake "health scores" or "productivity ratings"
                       li.mb-2
                         i.bi.bi-x-circle.text-danger.me-2
-                        | Make productivity judgments
+                        | Developer rankings or comparisons
                       li.mb-2
                         i.bi.bi-x-circle.text-danger.me-2
-                        | Rank or compare developers
+                        | Code quality judgments from LOC
                       li.mb-2
                         i.bi.bi-x-circle.text-danger.me-2
-                        | Pretend to measure code quality
+                        | AI contribution percentages (I learned!)
                       li.mb-2
                         i.bi.bi-x-circle.text-danger.me-2
-                        | Infer what Git can't tell us
+                        | Anything not directly observable in Git
+
+            .alert.alert-info.mb-4
+              strong.d-block.mb-2
+                i.bi.bi-lightbulb.me-2
+                | What I Learned Building This
+              p.mb-2.
+                Creating an enterprise-worthy package—something I'd put my name on—taught me
+                the critical importance of testing, validation, and organization. More importantly,
+                it taught me the discipline of honest reporting.
+              p.mb-0.
+                Git-spark doesn't tell you whether your repository is "healthy" or your team
+                is "productive." Instead, it shows you patterns and lets you interpret them
+                with your domain knowledge. That's not a limitation—it's a feature.
 
             .card.mb-4.bg-gradient-primary.text-white
               .card-body
@@ -640,13 +721,14 @@ block layout-content
                     # Or use with npx (no install needed)
                     npx git-spark analyze
 
-                    # Analyze any Git repository
+                    # Analyze your repository
                     cd your-project
                     git-spark analyze --output report.json
 
                 p.mb-0.
-                  Get honest, transparent insights into your repository's activity patterns
-                  in seconds. No hidden algorithms, no subjective scores—just the facts.
+                  Get transparent insights into your repository's activity patterns
+                  in seconds. No magic formulas, no fake scores—just observable facts
+                  from your Git history.
 
             .row.g-4.mb-4
               .col-md-6
@@ -656,8 +738,8 @@ block layout-content
                       i.bi.bi-book.me-2
                       | Documentation & Examples
                     p.card-text.
-                      Comprehensive guides, API documentation, and real-world examples
-                      to help you get the most out of git-spark analytics.
+                      See how git-spark works, what metrics it calculates, and why it
+                      refuses to calculate others. Transparency starts with documentation.
                     a.btn.btn-outline-primary.btn-sm(
                       href='https://markhazleton.github.io/git-spark/',
                       target='_blank',
@@ -674,8 +756,8 @@ block layout-content
                       i.bi.bi-github.me-2
                       | Open Source on GitHub
                     p.card-text.
-                      Built in the open with community contributions welcome.
-                      Star the repo, report issues, or contribute improvements!
+                      Built in the open. See exactly how it works. Contribute improvements,
+                      report issues, or just browse the code to understand the approach.
                     a.btn.btn-outline-dark.btn-sm(
                       href='https://github.com/MarkHazleton/git-spark',
                       target='_blank',
@@ -685,44 +767,132 @@ block layout-content
                       i.bi.bi-github.me-2
                       | View on GitHub
 
-            .alert.alert-success.d-flex.align-items-start
-              i.bi.bi-lightbulb-fill.fs-4.me-3.mt-1
+            .alert.alert-warning.d-flex.align-items-start
+              i.bi.bi-info-circle-fill.fs-4.me-3.mt-1
               div
-                h5.alert-heading.mb-2 Built with the Lessons from This Article
+                h5.alert-heading.mb-2 Still Evolving
                 p.mb-0.
-                  Every design decision in git-spark reflects the hard-learned lessons about
-                  Git analytics discussed in this article. It's a tool that admits its limitations
-                  and empowers you to interpret the data in your unique context. This is what
-                  honest engineering metrics should look like.
+                  This is version 1.x—early but functional. I'm actively seeking feedback
+                  on what's valuable and what needs rework. If you try it, let me know what
+                  you discover. Does it help you understand your development patterns?
+                  Are there honest metrics I'm missing? Is there a better way to present
+                  the data without inventing meaning?
 
           section#conclusion.mb-5
             h2.h3.mb-4.text-primary.d-flex.align-items-center
               i.bi.bi-check-circle.me-2
-              | Conclusion: From Simple Answers to Better Questions
+              | Conclusion: What I Learned by Failing Successfully
 
             p.lead.mb-4.
-              The goal isn't to score productivity—it's to understand it. Great Git analysis
-              raises better questions, exposes risk, and improves team dynamics.
+              I set out to answer a simple question: "How much of my code is generated by
+              AI prompts?" I built an entire analytics tool, published my first npm package,
+              and learned more about Git internals than I ever expected. And I still can't
+              answer that question.
 
             p.mb-4.
-              Tools like Git Spark differentiate by being transparent. They refuse to infer
-              what they can't know, instead:
+              But that failure taught me something more valuable: the discipline of honest
+              measurement. Not every question has a data-driven answer. Not every metric
+              is meaningful. And tools that claim to measure everything often measure nothing
+              reliably.
 
-            ul.mb-4
-              li.mb-2 Reporting only what Git actually contains
-              li.mb-2 Avoiding evaluative labels like "excellent"
-              li.mb-2 Empowering users to interpret the data themselves
+            .card.mb-4.bg-light
+              .card-body
+                h3.h5.fw-bold.mb-3
+                  i.bi.bi-award.me-2
+                  | What This Journey Actually Produced
+
+                .row.g-4
+                  .col-md-6
+                    h4.h6.text-success.mb-3 Technical Achievements
+                    ul.mb-0
+                      li.mb-2 My first published npm package
+                      li.mb-2 Understanding of Git internals
+                      li.mb-2 Experience with testing and validation
+                      li.mb-2 Skills in package organization
+                      li.mb-2 Real-world TypeScript/JavaScript development
+
+                  .col-md-6
+                    h4.h6.text-primary.mb-3 Conceptual Insights
+                    ul.mb-0
+                      li.mb-2 Limits of Git-based metrics
+                      li.mb-2 Difference between motion and progress
+                      li.mb-2 Value of honest vs. authoritative reporting
+                      li.mb-2 Why AI contributions remain invisible
+                      li.mb-2 What makes metrics trustworthy
 
             p.mb-4.
-              Instead of asking, <em>"Are we productive?"</em>, ask,
-              <em>"Are we set up to succeed?"</em>
+              Git-spark doesn't tell you if your team is productive. It doesn't measure
+              code quality. It can't identify AI-generated code. What it does is report
+              observable patterns in your repository's history and then—crucially—shuts up.
+              No fake scores. No pretend insights. Just data and the humility to admit its
+              limitations.
 
-            pre.language-javascript
-              code.language-javascript.
-                console.warn("Deployment status not available from Git");
+            .alert.alert-info.mb-4
+              strong.d-block.mb-2
+                i.bi.bi-lightbulb.me-2
+                | The Real Question Changed
+              p.mb-2.
+                I started asking: <em>"Are we productive?"</em>
+              p.mb-2.
+                I learned to ask: <em>"Are we set up to succeed?"</em>
+              p.mb-0.
+                That second question requires context, judgment, and human interpretation—
+                things no tool can provide. Git-spark gives you the data; you bring the wisdom.
+
+            p.mb-4.
+              So yes, I failed to measure AI contributions. But I succeeded in creating
+              something I'm proud to put my name on: an honest reporter that respects both
+              the data and your intelligence. As git-spark evolves with feedback from the
+              community, that commitment to honesty remains the foundation.
+
+            .card.mb-4.border-primary
+              .card-header.bg-primary.text-white
+                h4.card-title.mb-0
+                  i.bi.bi-compass.me-2
+                  | Where to Go from Here
+              .card-body
+                p.mb-3.
+                  If you're struggling with similar questions about measuring development
+                  productivity, AI contributions, or team performance:
+
+                ol.mb-0
+                  li.mb-3
+                    strong Start with honesty:
+                    |  What can you actually observe vs. what are you inferring?
+                  li.mb-3
+                    strong Question the scores:
+                    |  Any tool claiming to measure "health" or "productivity" with a single number is oversimplifying.
+                  li.mb-3
+                    strong Try git-spark:
+                    |  See what Git history actually reveals about your development patterns.
+                  li.mb-3
+                    strong Interpret with context:
+                    |  Patterns mean different things for different teams. Your judgment matters more than any formula.
+                  li.mb-3
+                    strong Share your findings:
+                    |  I'm still learning. What patterns do you find valuable? What am I missing?
+
+            p.mb-4.
+              Building git-spark taught me that the best metrics tools don't pretend to
+              have all the answers. They provide honest data and trust you to ask better
+              questions. That's the philosophy behind every line of code in git-spark,
+              and I hope it's useful to others wrestling with these same measurement challenges.
 
             .text-center.mt-5
-              a.btn.btn-primary.btn-lg(href='/#contact', role='button', aria-label='Get in touch to discuss engineering metrics')
-                i.bi.bi-bar-chart-fill.me-2
-                | Talk Metrics
+              a.btn.btn-primary.btn-lg.me-3(
+                href='https://github.com/MarkHazleton/git-spark',
+                target='_blank',
+                rel='noopener noreferrer',
+                role='button',
+                aria-label='Try git-spark on GitHub'
+              )
+                i.bi.bi-github.me-2
+                | Try git-spark
+              a.btn.btn-outline-primary.btn-lg(
+                href='/#contact',
+                role='button',
+                aria-label='Get in touch to discuss engineering metrics'
+              )
+                i.bi.bi-chat-dots.me-2
+                | Discuss Metrics
 
