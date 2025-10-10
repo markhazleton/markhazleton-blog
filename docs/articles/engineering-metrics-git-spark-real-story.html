@@ -167,29 +167,25 @@
         </nav>
         <br />
         <br />
-        <section class="bg-gradient-primary py-5">
+        <section class="py-4">
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-10 mx-auto text-center">
-                        <h1 class="display-4 fw-bold mb-3">
-                            <i class="bi bi-graph-up-arrow me-3"></i>
-                            Engineering Metrics: Git Spark Story
-                        </h1>
-                        <h2 class="h3 mb-4">Why Git History Tells the Wrong Story About Developer Productivity</h2>
-                        <p class="lead mb-5">Traditional performance metrics were not built for AI Agents. They track visible outputs—commits, comments, tickets closed—but miss the silent labor of agents optimizing workflows, refactoring code, or triaging issues before they escalate. The result? A skewed picture of productivity that obfuscates the work of AI agents.</p>
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <h1 class="mb-3">Engineering Metrics: The Git Spark Story</h1>
+                        <p class="lead mb-4">Traditional performance metrics weren't designed for the age of AI-assisted development. They track visible outputs like commits and tickets closed, but miss the work that AI tools do behind the scenes. This is the story of trying to measure AI contributions through Git data—and why it's harder than it looks.</p>
                         <!-- Article Metadata-->
-                        <div class="mb-4 d-flex justify-content-center align-items-center gap-4">
-                            <span>
+                        <div class="mb-4 text-muted">
+                            <span class="me-3">
                                 <i class="bi bi-person me-1"></i>
                                 Mark Hazleton
                             </span>
-                            <span>
+                            <span class="me-3">
                                 <i class="bi bi-calendar me-1"></i>
                                 October 2025
                             </span>
                             <span>
                                 <i class="bi bi-tag me-1"></i>
-                                Engineering Metrics, Git Analytics, Team Performance
+                                Engineering Metrics, Git Analytics
                             </span>
                         </div>
                     </div>
@@ -204,771 +200,295 @@
                         <!-- Article Content Section-->
                         <section class="mb-5" id="article-content">
                             <!-- Opening Story-->
-                            <h2 class="h3 mb-3 text-primary d-flex align-items-center">
-                                <i class="bi bi-lightning-charge me-2"></i>
-                                When "Objective Data" Leads You Astray
-                            </h2>
-                            <p class="lead mb-4">
-                                After writing about
-                                <a href="measuring-ais-contribution-to-code.html" target="_blank">measuring AI's contribution to code</a>
-                                , I was frustrated. I couldn't quantify how much AI agents were actually helping my development process. Git history seemed like the obvious answer—objective, comprehensive, and already being tracked. Every commit, every change, every contributor permanently recorded. Surely, I could extract meaningful insights from this data, right?
-                            </p>
-                            <p class="mb-4">Wrong. Very wrong. That weekend, instead of just analyzing Git data, I decided to build something better. I wanted to create a tool that could honestly report what Git history actually contains—without the misleading "health scores" and fake productivity metrics that plague existing tools. This became git-spark, my first npm package.</p>
-                            <p class="mb-4">I thought building the tool would give me answers. Instead, it taught me about all the questions Git history simply cannot answer. But that journey—from frustrated developer to package publisher—revealed something more valuable: the fundamental limitations of measuring software development through commit logs.</p>
-                            <p class="mb-4">This is the real story of creating git-spark: a weekend project born from frustration, shaped by AI agents, refined through brutal honesty, and ultimately designed to admit what it doesn't know. If you're trying to measure developer productivity or AI contributions through Git data, I learned the hard way what you can and cannot reliably discover.</p>
+                            <h2 class="mb-3">When "Objective Data" Leads You Astray</h2>
+                            <p>After writing about measuring AI's contribution to code, I was frustrated. I couldn't quantify how much AI tools were actually helping my development process. Git history seemed like the obvious answer—objective, comprehensive, and already being tracked. Every commit, every change, every contributor permanently recorded. Surely, I could extract meaningful insights from this data, right?</p>
+                            <p>Wrong. Very wrong. That weekend, instead of just analyzing Git data, I decided to build something better. I wanted to create a tool that could honestly report what Git history actually contains—without the misleading "health scores" and fake productivity metrics that plague existing tools. This became git-spark, my first npm package.</p>
+                            <p>I thought building the tool would give me answers. Instead, it taught me about all the questions Git history simply cannot answer. But that journey—from frustrated developer to package publisher—revealed something more valuable: the fundamental limitations of measuring software development through commit logs.</p>
+                            <p>This is the real story of creating git-spark: a weekend project born from frustration, shaped by AI tools, refined through trial and error, and ultimately designed to admit what it doesn't know. If you're trying to measure developer productivity or AI contributions through Git data, here's what I learned about what you can and cannot reliably discover.</p>
                             <!-- Table of Contents-->
-                            <nav class="mb-5" id="table-of-contents" aria-label="Table of Contents">
-                                <div class="card bg-light">
-                                    <div class="card-header">
-                                        <h3 class="card-title mb-0 fw-bold">
-                                            <i class="bi bi-list-ul me-2"></i>
-                                            Table of Contents
-                                        </h3>
-                                    </div>
+                            <nav class="mb-4" id="table-of-contents" aria-label="Table of Contents">
+                                <div class="card">
+                                    <div class="card-header"><h3 class="h5 mb-0">Table of Contents</h3></div>
                                     <div class="card-body">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item"><a class="text-decoration-none" href="#anti-metrics">The Dangerous Allure of Anti-Metrics</a></li>
-                                            <li class="list-group-item"><a class="text-decoration-none" href="#missing-data">What Git History Can't Tell You</a></li>
-                                            <li class="list-group-item"><a class="text-decoration-none" href="#activity-index">From Health Scores to Honest Metrics</a></li>
-                                            <li class="list-group-item"><a class="text-decoration-none" href="#social-structure">Code as a Window Into Team Dynamics</a></li>
-                                            <li class="list-group-item"><a class="text-decoration-none" href="#git-spark">What Git Spark Gets Right</a></li>
-                                            <li class="list-group-item"><a class="text-decoration-none" href="#try-git-spark">Try Git Spark: My First npm Package</a></li>
-                                            <li class="list-group-item"><a class="text-decoration-none" href="#conclusion">Conclusion: From Simple Answers to Better Questions</a></li>
+                                        <ul class="list-unstyled">
+                                            <li class="mb-1"><a class="text-decoration-none" href="#anti-metrics">The Problem with Current Metrics</a></li>
+                                            <li class="mb-1"><a class="text-decoration-none" href="#missing-data">What Git History Can't Tell You</a></li>
+                                            <li class="mb-1"><a class="text-decoration-none" href="#activity-index">Building Honest Metrics</a></li>
+                                            <li class="mb-1"><a class="text-decoration-none" href="#social-structure">Team Patterns in Code</a></li>
+                                            <li class="mb-1"><a class="text-decoration-none" href="#git-spark">What Git Spark Does</a></li>
+                                            <li class="mb-1"><a class="text-decoration-none" href="#try-git-spark">Try It Yourself</a></li>
+                                            <li><a class="text-decoration-none" href="#conclusion">Lessons Learned</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </nav>
                         </section>
-                        <section class="mb-5" id="git-spark">
-                            <h2 class="h3 mb-4 text-primary d-flex align-items-center">
-                                <i class="bi bi-stars me-2"></i>
-                                Building Git Spark: My First npm Package
-                            </h2>
-                            <p class="lead mb-4">That weekend, fueled by frustration and too much coffee, I decided to build what I wished existed: an honest Git analytics tool. Having used npm packages for years, I'd always wanted to create my own. Git-spark became that opportunity—and my crash course in package development.</p>
-                            <div class="card mb-4 bg-light border-primary">
+                        <section class="mb-4" id="git-spark">
+                            <h2 class="mb-3">Building Git Spark: My First npm Package</h2>
+                            <p>That weekend, I decided to build what I wished existed: an honest Git analytics tool. Having used npm packages for years, I'd always wanted to create my own. Git-spark became that opportunity—and my crash course in package development.</p>
+                            <div class="card mb-4">
                                 <div class="card-body">
-                                    <h3 class="h5 fw-bold mb-3">
-                                        <i class="bi bi-clock-history me-2"></i>
-                                        The Weekend Build: Expectations vs. Reality
-                                    </h3>
-                                    <div class="row g-3">
+                                    <h3 class="h5 mb-3">The Weekend Build: Reality Check</h3>
+                                    <div class="row">
                                         <div class="col-md-6">
-                                            <h4 class="h6 text-success">Saturday Morning: The Vision</h4>
-                                            <ul class="mb-0">
-                                                <li class="mb-2">Use AI agents to generate initial code</li>
-                                                <li class="mb-2">Parse Git history and extract metrics</li>
-                                                <li class="mb-2">Create visualizations and reports</li>
-                                                <li class="mb-2">Publish to npm by Sunday evening</li>
-                                                <li class="mb-2">Finally measure AI contributions!</li>
+                                            <h4 class="h6 text-success">Saturday Morning Goals</h4>
+                                            <ul>
+                                                <li>Use AI tools to generate initial code</li>
+                                                <li>Parse Git history and extract metrics</li>
+                                                <li>Create visualizations and reports</li>
+                                                <li>Publish to npm by Sunday evening</li>
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
-                                            <h4 class="h6 text-warning">Sunday Night: The Reality</h4>
-                                            <ul class="mb-0">
-                                                <li class="mb-2">✅ AI agents gave me a great first build</li>
-                                                <li class="mb-2">⚠️ Had to revise formulas multiple times</li>
-                                                <li class="mb-2">⚠️ Realized most metrics were misleading</li>
-                                                <li class="mb-2">❌ Still couldn't measure AI contributions</li>
-                                                <li class="mb-2">✅ But learned what honest reporting means</li>
+                                            <h4 class="h6 text-warning">Sunday Night Results</h4>
+                                            <ul>
+                                                <li class="text-success">AI tools gave me a great first build</li>
+                                                <li class="text-warning">Had to revise formulas multiple times</li>
+                                                <li class="text-warning">Realized most metrics were misleading</li>
+                                                <li class="text-danger">Still couldn't measure AI contributions</li>
+                                                <li class="text-success">Learned what honest reporting means</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <p class="mb-4">The AI agents I used (ironically, the same ones I was trying to measure) gave me an impressive initial implementation. The code worked, the visualizations looked professional, and the metrics seemed authoritative. That's when I made a critical mistake: I actually read the formulas behind the numbers.</p>
-                            <div class="alert alert-warning mb-4">
-                                <strong class="d-block mb-2">
-                                    <i class="bi bi-exclamation-triangle me-2"></i>
-                                    The Formulas Don't Lie (But They Can Mislead)
-                                </strong>
+                            <p>The AI tools I used (ironically, the same ones I was trying to measure) gave me an impressive initial implementation. The code worked, the visualizations looked professional, and the metrics seemed authoritative. That's when I made a critical mistake: I actually read the formulas behind the numbers.</p>
+                            <div class="alert alert-warning">
+                                <strong>The Problem with "Health Scores"</strong>
                                 <p class="mb-2">My first version calculated a "Repository Health Score" based on commit frequency, author distribution, and code churn. It looked scientific. It generated impressive charts. And it was complete nonsense.</p>
                                 <p class="mb-0">The formula assigned arbitrary weights to metrics we couldn't meaningfully interpret. A score of 87% health? What does that even mean? Healthy compared to what? Based on whose definition of healthy?</p>
                             </div>
-                            <p class="mb-4">This realization forced multiple rewrites. Each iteration stripped away another layer of pretense, another attempt to derive meaning from data that simply didn't contain it. By version 0.5, I'd removed every evaluative metric and replaced them with honest observations.</p>
-                            <div class="card mb-4">
-                                <div class="card-header bg-success text-white">
-                                    <h3 class="card-title mb-0 fw-bold">
-                                        <i class="bi bi-shield-check me-2"></i>
-                                        The Git Spark Philosophy: What I Learned to Value
-                                    </h3>
-                                </div>
-                                <div class="card-body">
-                                    <p class="mb-3">Building this tool taught me that enterprise-worthy software—something I'd want my name on—requires brutal honesty about limitations:</p>
-                                    <dl class="mb-0">
-                                        <dt class="fw-bold mb-2">Testing Over Assumptions</dt>
-                                        <dd class="mb-3">Every metric needed validation against real repositories. Does this pattern actually mean what I think it means? Can I defend this formula? If I can't explain it to a developer, it doesn't belong in the tool.</dd>
-                                        <dt class="fw-bold mb-2">Transparency Over Authority</dt>
-                                        <dd class="mb-3">Users should see exactly how metrics are calculated. No magic formulas, no proprietary algorithms, no "trust us" scoring. Show your work or don't show the score.</dd>
-                                        <dt class="fw-bold mb-2">Observation Over Evaluation</dt>
-                                        <dd class="mb-3">Report what Git history actually contains. Don't invent productivity scores from commit counts. Don't pretend to measure code quality from line changes. State facts; let users interpret them.</dd>
-                                        <dt class="fw-bold mb-2">Limitations Over Pretense</dt>
-                                        <dd class="mb-3">Admit what you can't measure. Git history doesn't contain deployment outcomes, code review quality, or AI assistance levels. Acknowledging these gaps builds trust; pretending they don't exist destroys it.</dd>
-                                    </dl>
-                                </div>
-                            </div>
-                            <p class="mb-4">This philosophy transformed git-spark from just another analytics tool into something I'm genuinely proud of: an honest reporter that respects both the data and the user's intelligence.</p>
+                            <p>This realization forced multiple rewrites. Each iteration stripped away another layer of pretense, another attempt to derive meaning from data that simply didn't contain it. By version 0.5, I'd removed every evaluative metric and replaced them with honest observations.</p>
                         </section>
-                        <section class="mb-5" id="anti-metrics">
-                            <h2 class="h3 mb-4 text-primary d-flex align-items-center">
-                                <i class="bi bi-exclamation-triangle me-2"></i>
-                                The Dangerous Allure of Anti-Metrics
-                            </h2>
-                            <p class="lead mb-4">The most popular Git-based metrics aren't just unhelpful—they're actively harmful. I call them "anti-metrics" because they measure motion instead of progress and incentivize behaviors that damage both code quality and team culture.</p>
+                        <section class="mb-4" id="anti-metrics">
+                            <h2 class="mb-3">The Problem with Current Metrics</h2>
+                            <p>The most popular Git-based metrics aren't just unhelpful—they're actively harmful. They measure motion instead of progress and incentivize behaviors that damage both code quality and team culture.</p>
                             <div class="card mb-4">
-                                <div class="card-header bg-danger text-white">
-                                    <h3 class="card-title mb-0 fw-bold">
-                                        <i class="bi bi-x-circle me-2"></i>
-                                        The Three Deadly Anti-Metrics
-                                    </h3>
-                                </div>
+                                <div class="card-header"><h3 class="h5 mb-0">The Three Problematic Metrics</h3></div>
                                 <div class="card-body">
-                                    <div class="row g-4">
+                                    <div class="row">
                                         <div class="col-md-4">
-                                            <div class="card h-100 border-danger">
-                                                <div class="card-body">
-                                                    <h4 class="card-title h5">
-                                                        <i class="bi bi-git me-2"></i>
-                                                        Commit Count
-                                                    </h4>
-                                                    <p class="card-text">Rewards developers who split logical changes into artificially small commits. Punishes those who make well-structured, comprehensive changes.</p>
-                                                    <div class="alert alert-danger mb-0">
-                                                        <small>
-                                                            <strong>Result:</strong>
-                                                            Noisy history, meaningless granularity, and developers optimizing for metrics instead of quality.
-                                                        </small>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <h4 class="h6">Commit Count</h4>
+                                            <p>Rewards developers who split logical changes into artificially small commits. Punishes those who make well-structured, comprehensive changes.</p>
+                                            <small class="text-muted">Result: Noisy history and developers optimizing for metrics instead of quality.</small>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="card h-100 border-danger">
-                                                <div class="card-body">
-                                                    <h4 class="card-title h5">
-                                                        <i class="bi bi-code-slash me-2"></i>
-                                                        Lines of Code
-                                                    </h4>
-                                                    <p class="card-text">Measures verbosity, not value. Punishes refactoring and simplification. Rewards copy-paste programming and bloated implementations.</p>
-                                                    <div class="alert alert-danger mb-0">
-                                                        <small>
-                                                            <strong>Result:</strong>
-                                                            Growing codebases that become harder to maintain, with developers afraid to delete unnecessary code.
-                                                        </small>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <h4 class="h6">Lines of Code</h4>
+                                            <p>Measures verbosity, not value. Punishes refactoring and simplification. Rewards copy-paste programming and bloated implementations.</p>
+                                            <small class="text-muted">Result: Growing codebases that become harder to maintain.</small>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="card h-100 border-danger">
-                                                <div class="card-body">
-                                                    <h4 class="card-title h5">
-                                                        <i class="bi bi-clock me-2"></i>
-                                                        Weekend Commits
-                                                    </h4>
-                                                    <p class="card-text">Often interpreted as "dedication" when it actually signals burnout, poor work-life balance, or unrealistic deadlines.</p>
-                                                    <div class="alert alert-danger mb-0">
-                                                        <small>
-                                                            <strong>Result:</strong>
-                                                            Normalized overwork, exhausted team members, and the false impression that productivity requires sacrifice.
-                                                        </small>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <h4 class="h6">Weekend Commits</h4>
+                                            <p>Often interpreted as "dedication" when it actually signals burnout, poor work-life balance, or unrealistic deadlines.</p>
+                                            <small class="text-muted">Result: Normalized overwork and exhausted team members.</small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <p class="mb-4">I learned this lesson the hard way. Within a month of introducing commit-based metrics, our most disciplined engineer—someone who routinely made comprehensive, well-tested commits— appeared to be our least productive. Meanwhile, a junior developer who committed after every minor change topped the charts. The metrics were giving us exactly the wrong signal.</p>
-                            <pre class="language-javascript"><code class="language-javascript"><span class="token comment">// 🚫 The anti-metric trap</span>
-<span class="token keyword">const</span> productivityScore <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">commits</span><span class="token operator">:</span> developer<span class="token punctuation">.</span><span class="token property-access">commits</span><span class="token punctuation">.</span><span class="token property-access">length</span><span class="token punctuation">,</span>          <span class="token comment">// Meaningless</span>
-  <span class="token literal-property property">linesAdded</span><span class="token operator">:</span> developer<span class="token punctuation">.</span><span class="token property-access">additions</span><span class="token punctuation">,</span>            <span class="token comment">// Worse than meaningless</span>
-  <span class="token literal-property property">weekendWork</span><span class="token operator">:</span> developer<span class="token punctuation">.</span><span class="token property-access">weekendCommits</span>       <span class="token comment">// Actively harmful</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token comment">// This measures motion, not progress</span>
-</code></pre>
+                            <p>I learned this lesson the hard way. Within a month of introducing commit-based metrics, our most disciplined engineer—someone who routinely made comprehensive, well-tested commits— appeared to be our least productive. Meanwhile, a junior developer who committed after every minor change topped the charts. The metrics were giving us exactly the wrong signal.</p>
                         </section>
-                        <section class="mb-5" id="missing-data">
-                            <h2 class="h3 mb-4 text-primary d-flex align-items-center">
-                                <i class="bi bi-eye-slash me-2"></i>
-                                The Biggest Surprise: What Git History Cannot Tell You
-                            </h2>
-                            <p class="lead mb-4">Building git-spark taught me something humbling: the most valuable aspects of software development leave absolutely no trace in commit logs. This was my biggest surprise and the most important lesson from the entire project.</p>
-                            <p class="mb-4">
+                        <section class="mb-4" id="missing-data">
+                            <h2 class="mb-3">What Git History Cannot Tell You</h2>
+                            <p>Building git-spark taught me something humbling: the most valuable aspects of software development leave absolutely no trace in commit logs. This was my biggest surprise and the most important lesson from the entire project.</p>
+                            <p>
                                 I started this journey trying to answer one specific question:
                                 <strong>"How much of my code is generated by AI prompts?"</strong>
                                 After weeks of analysis, creating formulas, and examining every metric Git history offers, I have to admit defeat. Git simply doesn't—and cannot—record that information.
                             </p>
-                            <div class="card mb-4 bg-light border-warning">
-                                <div class="card-body">
-                                    <h3 class="h5 fw-bold mb-3 text-warning">
-                                        <i class="bi bi-question-circle me-2"></i>
-                                        The Original Question Remains Unanswered
-                                    </h3>
-                                    <p class="mb-3">Despite all the interesting patterns git-spark revealed, I failed to achieve my primary goal: pinpointing AI agent contributions to my codebase. And that failure taught me more than success would have.</p>
-                                    <div class="alert alert-warning mb-0">
-                                        <strong>Why Git Can't Answer This:</strong>
-                                        <ul class="mb-0 mt-2">
-                                            <li>Git records commits, not process</li>
-                                            <li>AI assistance happens before the commit</li>
-                                            <li>No standard way to tag AI-generated code</li>
-                                            <li>Human editing obscures AI origins</li>
-                                            <li>Pair programming (human + AI) is invisible</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-4 mb-4">
+                            <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div class="card h-100">
-                                        <div class="card-header bg-info text-white">
-                                            <h4 class="card-title mb-0 h5">
-                                                <i class="bi bi-search me-2"></i>
-                                                What Git Records
-                                            </h4>
-                                        </div>
+                                        <div class="card-header"><h4 class="h5 mb-0">What Git Records</h4></div>
                                         <div class="card-body">
                                             <ul class="list-unstyled">
-                                                <li class="mb-2">
-                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                                    Files changed
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                                    Lines added/removed
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                                    Timestamp of changes
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                                    Commit author (always human)
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                                    Commit message (human-written)
-                                                </li>
+                                                <li class="mb-2">Files changed</li>
+                                                <li class="mb-2">Lines added/removed</li>
+                                                <li class="mb-2">Timestamp of changes</li>
+                                                <li class="mb-2">Commit author (always human)</li>
+                                                <li>Commit message (human-written)</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card h-100">
-                                        <div class="card-header bg-warning text-dark">
-                                            <h4 class="card-title mb-0 h5">
-                                                <i class="bi bi-question-circle me-2"></i>
-                                                What I Needed (But Doesn't Exist)
-                                            </h4>
-                                        </div>
+                                        <div class="card-header"><h4 class="h5 mb-0">What I Needed (But Doesn't Exist)</h4></div>
                                         <div class="card-body">
                                             <ul class="list-unstyled">
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    AI assistance level per commit
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    Prompt-to-code traceability
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    Human vs. AI authorship percentage
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    Code review quality and outcomes
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    Design decisions and trade-offs
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    Testing effort and coverage
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    Deployment success and impact
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                                    Refactoring vs. new feature work
-                                                </li>
+                                                <li class="mb-2">AI assistance level per commit</li>
+                                                <li class="mb-2">Prompt-to-code traceability</li>
+                                                <li class="mb-2">Human vs. AI authorship percentage</li>
+                                                <li class="mb-2">Code review quality and outcomes</li>
+                                                <li class="mb-2">Design decisions and trade-offs</li>
+                                                <li class="mb-2">Testing effort and coverage</li>
+                                                <li class="mb-2">Deployment success and impact</li>
+                                                <li>Refactoring vs. new feature work</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <p class="mb-4">This realization completely changed how I thought about developer productivity measurement. Every existing tool I'd examined—the ones claiming to measure "health" or "productivity"—suffered from the same fundamental flaw: they measured motion, not value. They counted commits but ignored impact.</p>
-                            <div class="card mb-4 border-danger">
-                                <div class="card-header bg-danger text-white">
-                                    <h4 class="card-title mb-0">
-                                        <i class="bi bi-exclamation-triangle me-2"></i>
-                                        The Weakness of Existing Tools
-                                    </h4>
-                                </div>
-                                <div class="card-body">
-                                    <p class="mb-3">Building git-spark made me deeply skeptical of every Git analytics tool that promises to measure productivity, code quality, or team health. Here's what I learned they're actually doing:</p>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-4">
-                                            <div class="alert alert-danger mb-0">
-                                                <strong class="d-block mb-2">Taking Limited Data</strong>
-                                                <small>Commits, LOC, file changes—only what Git records</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="alert alert-danger mb-0">
-                                                <strong class="d-block mb-2">Applying Arbitrary Weights</strong>
-                                                <small>"We've determined that X is 3.7x more important than Y"</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="alert alert-danger mb-0">
-                                                <strong class="d-block mb-2">Generating Fake Scores</strong>
-                                                <small>"Your repository health is 87% (excellent!)"</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mb-0">These tools don't measure what they claim to measure. They measure what's easy to count and pretend it correlates with what actually matters. Building git-spark taught me to recognize—and reject—that approach.</p>
-                                </div>
-                            </div>
-                            <pre class="language-javascript"><code class="language-javascript"><span class="token comment">// What I hoped to measure</span>
-<span class="token keyword">const</span> aiContribution <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">promptsUsed</span><span class="token operator">:</span> <span class="token number">47</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">linesGenerated</span><span class="token operator">:</span> <span class="token number">2840</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">percentageOfCode</span><span class="token operator">:</span> <span class="token string">"42%"</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">productivityBoost</span><span class="token operator">:</span> <span class="token string">"3.2x"</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-
-<span class="token comment">// What Git actually tells me</span>
-<span class="token keyword">const</span> gitReality <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">commits</span><span class="token operator">:</span> <span class="token number">156</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">totalChanges</span><span class="token operator">:</span> <span class="token number">6723</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">author</span><span class="token operator">:</span> <span class="token string">"Mark Hazleton"</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">aiAssistance</span><span class="token operator">:</span> <span class="token keyword nil">undefined</span>  <span class="token comment">// Git doesn't know</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-
-<span class="token comment">// The gap between what I need and what exists</span>
-<span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">warn</span><span class="token punctuation">(</span><span class="token string">"AI contribution: Not measurable from Git history"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
+                            <p>This realization completely changed how I thought about developer productivity measurement. Every existing tool I'd examined—the ones claiming to measure "health" or "productivity"—suffered from the same fundamental flaw: they measured motion, not value. They counted commits but ignored impact.</p>
                         </section>
-                        <section class="mb-5" id="activity-index">
-                            <h2 class="h3 mb-4 text-primary d-flex align-items-center">
-                                <i class="bi bi-bar-chart-line me-2"></i>
-                                From Health Scores to Honest Metrics
-                            </h2>
-                            <p class="lead mb-4">Here's where I started to understand what Git analytics could legitimately provide. The problem wasn't using Git data—it was pretending it measured things it didn't. "Repository health" is marketing speak. "Activity patterns" is honest reporting.</p>
-                            <p class="mb-4">Many tools generate "health scores" or "productivity ratings" that sound authoritative but are fundamentally subjective. They take the limited data Git provides, apply arbitrary weights and thresholds, then package it as objective truth. It's pseudoscience wrapped in dashboards.</p>
+                        <section class="mb-4" id="activity-index">
+                            <h2 class="mb-3">Building Honest Metrics</h2>
+                            <p>Here's where I started to understand what Git analytics could legitimately provide. The problem wasn't using Git data—it was pretending it measured things it didn't. "Repository health" is marketing speak. "Activity patterns" is honest reporting.</p>
+                            <p>Many tools generate "health scores" or "productivity ratings" that sound authoritative but are fundamentally subjective. They take the limited data Git provides, apply arbitrary weights and thresholds, then package it as objective truth.</p>
                             <div class="card mb-4">
-                                <div class="card-header bg-success text-white">
-                                    <h3 class="card-title mb-0 fw-bold">
-                                        <i class="bi bi-check-circle me-2"></i>
-                                        Activity Index: What We Can Honestly Measure
-                                    </h3>
-                                </div>
+                                <div class="card-header"><h3 class="h5 mb-0">Activity Index: What We Can Honestly Measure</h3></div>
                                 <div class="card-body">
                                     <p class="mb-3">Instead of fake health scores, we can measure observable activity patterns and let humans interpret what they mean in context:</p>
                                     <dl class="mb-0">
                                         <dt class="fw-bold mb-2">Commit Frequency (Normalized)</dt>
-                                        <dd class="mb-3">
-                                            How often commits happen, adjusted for team size and project phase. Signals whether development is active, stalled, or sporadic.
-                                            <span class="text-muted">This is a fact, not a judgment.</span>
-                                        </dd>
+                                        <dd class="mb-3">How often commits happen, adjusted for team size and project phase. Signals whether development is active, stalled, or sporadic.</dd>
                                         <dt class="fw-bold mb-2">Author Participation Breadth</dt>
-                                        <dd class="mb-3">
-                                            How many team members contribute relative to total volume. Reveals whether work is distributed or concentrated.
-                                            <span class="text-muted">Shows patterns, doesn't evaluate them.</span>
-                                        </dd>
+                                        <dd class="mb-3">How many team members contribute relative to total volume. Reveals whether work is distributed or concentrated.</dd>
                                         <dt class="fw-bold mb-2">Change Size Variability</dt>
-                                        <dd class="mb-3">
-                                            Coefficient of variation in commit sizes over time. Indicates consistency in development rhythm and working style.
-                                            <span class="text-muted">Context determines if this is good or bad.</span>
-                                        </dd>
+                                        <dd class="mb-3">Coefficient of variation in commit sizes over time. Indicates consistency in development rhythm and working style.</dd>
                                         <dt class="fw-bold mb-2">File Touch Patterns</dt>
-                                        <dd class="mb-3">
-                                            Which files change together frequently and who works on them. Exposes coupling, specialization, and potential bottlenecks.
-                                            <span class="text-muted">Information, not evaluation.</span>
-                                        </dd>
+                                        <dd class="mb-3">Which files change together frequently and who works on them. Exposes coupling, specialization, and potential bottlenecks.</dd>
                                     </dl>
                                 </div>
                             </div>
-                            <pre class="language-javascript"><code class="language-javascript"><span class="token comment">// ❌ Fake health score (subjective, misleading)</span>
-<span class="token keyword">const</span> healthScore <span class="token operator">=</span> <span class="token function">calculateMagicFormula</span><span class="token punctuation">(</span>commits<span class="token punctuation">,</span> loc<span class="token punctuation">,</span> authors<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// Pretends to know what "healthy" means</span>
-
-<span class="token comment">// ✅ Activity index (objective, honest)</span>
-<span class="token keyword">const</span> activityIndex <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">frequency</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">commitsPerWeek</span><span class="token operator">:</span> <span class="token number">47</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">trend</span><span class="token operator">:</span> <span class="token string">"stable"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">normalized</span><span class="token operator">:</span> <span class="token number">0.85</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">breadth</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">activeContributors</span><span class="token operator">:</span> <span class="token number">8</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">participationRatio</span><span class="token operator">:</span> <span class="token number">0.67</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">concentration</span><span class="token operator">:</span> <span class="token string">"moderate"</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">variance</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">commitSizeCV</span><span class="token operator">:</span> <span class="token number">1.2</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">pattern</span><span class="token operator">:</span> <span class="token string">"consistent"</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">outliers</span><span class="token operator">:</span> <span class="token number">3</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token comment">// Reports facts, lets humans interpret</span>
-</code></pre>
-                            <p class="mb-4">This shift from evaluation to observation is crucial. We're not saying the team is productive or unproductive. We're saying "here are the patterns we observe; you decide what they mean for your context." That honesty is what makes the data actually useful.</p>
+                            <p>This shift from evaluation to observation is crucial. We're not saying the team is productive or unproductive. We're saying "here are the patterns we observe; you decide what they mean for your context."</p>
                         </section>
-                        <section class="mb-5" id="social-structure">
-                            <h2 class="h3 mb-4 text-primary d-flex align-items-center">
-                                <i class="bi bi-diagram-3 me-2"></i>
-                                Code as a Window Into Team Dynamics
-                            </h2>
-                            <p class="lead mb-4">This is where Git analytics gets genuinely interesting: not for measuring individual productivity, but for revealing socio-technical patterns that would otherwise remain invisible. Your code structure mirrors your team structure, and Git history exposes that relationship.</p>
-                            <p class="mb-4">Conway's Law states that organizations build systems that mirror their communication structure. Git analytics makes this visible through patterns that emerge from how developers interact with the codebase. These patterns don't tell you if your team is "good" or "bad"—they tell you how your team actually works, which is far more valuable.</p>
-                            <div class="row g-4 mb-4">
+                        <section class="mb-4" id="social-structure">
+                            <h2 class="mb-3">Team Patterns in Code</h2>
+                            <p>This is where Git analytics gets genuinely interesting: not for measuring individual productivity, but for revealing patterns that would otherwise remain invisible. Your code structure mirrors your team structure, and Git history exposes that relationship.</p>
+                            <p>Conway's Law states that organizations build systems that mirror their communication structure. Git analytics makes this visible through patterns that emerge from how developers interact with the codebase. These patterns don't tell you if your team is "good" or "bad"—they tell you how your team actually works, which is far more valuable.</p>
+                            <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <div class="card h-100 border-primary">
+                                    <div class="card h-100">
                                         <div class="card-body">
-                                            <h4 class="card-title h5">
-                                                <i class="bi bi-file-earmark-code me-2"></i>
-                                                File Specialization Index (FSI)
-                                            </h4>
-                                            <p class="card-text">Measures how concentrated code ownership is across files. High FSI means few people touch each file; low FSI means broad collaboration.</p>
-                                            <div class="alert alert-info mb-3">
-                                                <small class="fw-bold">What It Reveals:</small>
-                                                <ul class="mb-0 mt-2">
-                                                    <li>Potential knowledge bottlenecks</li>
-                                                    <li>Areas of deep expertise vs. shared ownership</li>
-                                                    <li>Bus factor risks</li>
-                                                </ul>
-                                            </div>
-                                            <pre class="language-python"><code class="language-python"><span class="token comment"># Calculate FSI per file</span>
-fsi <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">/</span> <span class="token builtin">len</span><span class="token punctuation">(</span>unique_authors_per_file<span class="token punctuation">)</span>
-
-<span class="token comment"># High FSI (0.8+): Specialist ownership</span>
-<span class="token comment"># Low FSI (0.3-): Collaborative ownership</span>
-</code></pre>
+                                            <h4 class="h5">File Specialization Index</h4>
+                                            <p>Measures how concentrated code ownership is across files. High FSI means few people touch each file; low FSI means broad collaboration.</p>
+                                            <small>What It Reveals:</small>
+                                            <ul class="mt-2">
+                                                <li>Potential knowledge bottlenecks</li>
+                                                <li>Areas of deep expertise vs. shared ownership</li>
+                                                <li>Bus factor risks</li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="card h-100 border-primary">
+                                    <div class="card h-100">
                                         <div class="card-body">
-                                            <h4 class="card-title h5">
-                                                <i class="bi bi-shuffle me-2"></i>
-                                                Ownership Entropy
-                                            </h4>
-                                            <p class="card-text">Measures how evenly contributions are distributed across authors. High entropy means balanced collaboration; low entropy means concentrated ownership.</p>
-                                            <div class="alert alert-info mb-3">
-                                                <small class="fw-bold">What It Reveals:</small>
-                                                <ul class="mb-0 mt-2">
-                                                    <li>Whether "collaboration" is real or superficial</li>
-                                                    <li>Dominant contributors vs. peripheral participants</li>
-                                                    <li>Team knowledge distribution patterns</li>
-                                                </ul>
-                                            </div>
-                                            <pre class="language-python"><code class="language-python"><span class="token comment"># Calculate entropy of contributions</span>
-<span class="token keyword">from</span> math <span class="token keyword">import</span> log
-entropy <span class="token operator">=</span> <span class="token operator">-</span><span class="token builtin">sum</span><span class="token punctuation">(</span>p <span class="token operator">*</span> log<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
-  <span class="token keyword">for</span> p <span class="token keyword">in</span> commit_shares<span class="token punctuation">)</span>
-
-<span class="token comment"># High entropy: Balanced team</span>
-<span class="token comment"># Low entropy: Concentrated ownership</span>
-</code></pre>
+                                            <h4 class="h5">Ownership Entropy</h4>
+                                            <p>Measures how evenly contributions are distributed across authors. High entropy means balanced collaboration; low entropy means concentrated ownership.</p>
+                                            <small>What It Reveals:</small>
+                                            <ul class="mt-2">
+                                                <li>Whether "collaboration" is real or superficial</li>
+                                                <li>Dominant contributors vs. peripheral participants</li>
+                                                <li>Team knowledge distribution patterns</li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card mb-4">
-                                <div class="card-header bg-primary text-white">
-                                    <h4 class="card-title mb-0 h5">
-                                        <i class="bi bi-link-45deg me-2"></i>
-                                        Co-Change Coupling: The Hidden Dependencies
-                                    </h4>
-                                </div>
+                                <div class="card-header"><h4 class="h5 mb-0">Co-Change Coupling: Hidden Dependencies</h4></div>
                                 <div class="card-body">
-                                    <p class="mb-3">Files that change together frequently reveal architectural coupling that may not be obvious from static code analysis. This is particularly valuable for identifying:</p>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <div class="alert alert-warning mb-0">
-                                                <strong class="d-block mb-2">Architecture Friction</strong>
-                                                <small>Files that shouldn't be coupled but always change together signal architectural problems or missing abstractions.</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="alert alert-warning mb-0">
-                                                <strong class="d-block mb-2">Hidden Dependencies</strong>
-                                                <small>Coupling between seemingly unrelated modules reveals technical debt and refactoring opportunities.</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="alert alert-warning mb-0">
-                                                <strong class="d-block mb-2">Team Coordination Needs</strong>
-                                                <small>Frequently co-changed files require coordination between their maintainers, indicating collaboration requirements.</small>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <p class="mb-3">Files that change together frequently reveal architectural coupling that may not be obvious from static code analysis. This helps identify:</p>
+                                    <ul>
+                                        <li>
+                                            <strong>Architecture Friction:</strong>
+                                            Files that shouldn't be coupled but always change together
+                                        </li>
+                                        <li>
+                                            <strong>Hidden Dependencies:</strong>
+                                            Coupling between seemingly unrelated modules
+                                        </li>
+                                        <li>
+                                            <strong>Team Coordination Needs:</strong>
+                                            Files requiring coordination between their maintainers
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                            <p class="mb-4">I discovered this accidentally when analyzing why certain features always took longer than estimated. Git analytics revealed that three supposedly independent modules had high co-change coupling—they couldn't be modified independently in practice, even though the architecture said they could. This explained why every "simple" change rippled through the system. The problem wasn't developer skill; it was architectural coupling that our planning hadn't accounted for.</p>
+                            <p>I discovered this accidentally when analyzing why certain features always took longer than estimated. Git analytics revealed that three supposedly independent modules had high co-change coupling—they couldn't be modified independently in practice, even though the architecture said they could. This explained why every "simple" change rippled through the system.</p>
                         </section>
-                        <section class="mb-5 bg-light p-4 rounded-3" id="try-git-spark">
-                            <h2 class="h3 mb-4 text-primary d-flex align-items-center">
-                                <i class="bi bi-rocket-takeoff me-2"></i>
-                                Try Git Spark: What I Built and Why
-                            </h2>
-                            <div class="row align-items-center mb-4">
-                                <div class="col-lg-8">
-                                    <p class="lead mb-3">
-                                        Despite failing to measure AI contributions, I succeeded in creating something valuable: an honest Git analytics tool that respects what the data can and cannot tell us. This is
-                                        <strong>git-spark</strong>
-                                        , my first npm package.
-                                    </p>
-                                    <p class="mb-3">It's early in git-spark's lifetime, and I expect it will evolve as I get feedback from peers. The real question: Have I achieved the goal of making an honest, trustworthy reporting tool that adds value without inventing scores from data that isn't there?</p>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="card border-primary shadow-sm">
-                                        <div class="card-body text-center">
-                                            <i class="bi bi-box-seam display-4 text-primary mb-3"></i>
-                                            <h5 class="card-title"><a href="https://www.npmjs.com/package/git-spark" target="_blank" rel="noopener noreferrer" aria-label="npm install git-spark">npm install git-spark</a></h5>
-                                            <p class="text-muted small">My first published package!</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-4 border-success">
-                                <div class="card-header bg-success text-white">
-                                    <h4 class="card-title mb-0">
-                                        <i class="bi bi-star-fill me-2"></i>
-                                        The Git-Spark Promise: Honest Metrics
-                                    </h4>
-                                </div>
+                        <section class="mb-4" id="try-git-spark">
+                            <h2 class="mb-3">What Git Spark Does</h2>
+                            <p>Despite failing to measure AI contributions, I succeeded in creating something useful: an honest Git analytics tool that respects what the data can and cannot tell us. This became git-spark, my first npm package.</p>
+                            <div class="card mb-4">
+                                <div class="card-header"><h4 class="h5 mb-0">The Honest Approach</h4></div>
                                 <div class="card-body">
-                                    <p class="mb-3">After multiple rewrites and reality checks, here's what git-spark actually does:</p>
-                                    <div class="row g-4">
+                                    <p class="mb-3">After multiple rewrites, here's what git-spark actually does:</p>
+                                    <div class="row">
                                         <div class="col-md-6">
-                                            <h5 class="h6 fw-bold mb-3">
-                                                <i class="bi bi-check-circle text-success me-2"></i>
-                                                What It Reports
-                                            </h5>
-                                            <ul class="list-unstyled mb-0">
-                                                <li class="mb-2">
-                                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
-                                                    Observable patterns in commit history
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
-                                                    File coupling and change frequencies
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
-                                                    Author contribution distributions
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
-                                                    Temporal development trends
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
-                                                    Code structure evolution over time
-                                                </li>
+                                            <h5 class="h6 mb-3">What It Reports</h5>
+                                            <ul>
+                                                <li>Observable patterns in commit history</li>
+                                                <li>File coupling and change frequencies</li>
+                                                <li>Author contribution distributions</li>
+                                                <li>Temporal development trends</li>
+                                                <li>Code structure evolution over time</li>
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
-                                            <h5 class="h6 fw-bold mb-3">
-                                                <i class="bi bi-shield-check text-success me-2"></i>
-                                                What It Refuses to Infer
-                                            </h5>
-                                            <ul class="list-unstyled mb-0">
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle text-danger me-2"></i>
-                                                    Fake "health scores" or "productivity ratings"
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle text-danger me-2"></i>
-                                                    Developer rankings or comparisons
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle text-danger me-2"></i>
-                                                    Code quality judgments from LOC
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle text-danger me-2"></i>
-                                                    AI contribution percentages (I learned!)
-                                                </li>
-                                                <li class="mb-2">
-                                                    <i class="bi bi-x-circle text-danger me-2"></i>
-                                                    Anything not directly observable in Git
-                                                </li>
+                                            <h5 class="h6 mb-3">What It Refuses to Infer</h5>
+                                            <ul>
+                                                <li>Fake "health scores" or "productivity ratings"</li>
+                                                <li>Developer rankings or comparisons</li>
+                                                <li>Code quality judgments from LOC</li>
+                                                <li>AI contribution percentages</li>
+                                                <li>Anything not directly observable in Git</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-info mb-4">
-                                <strong class="d-block mb-2">
-                                    <i class="bi bi-lightbulb me-2"></i>
-                                    What I Learned Building This
-                                </strong>
-                                <p class="mb-2">Creating an enterprise-worthy package—something I'd put my name on—taught me the critical importance of testing, validation, and organization. More importantly, it taught me the discipline of honest reporting.</p>
-                                <p class="mb-0">Git-spark doesn't tell you whether your repository is "healthy" or your team is "productive." Instead, it shows you patterns and lets you interpret them with your domain knowledge. That's not a limitation—it's a feature.</p>
-                            </div>
-                            <div class="card mb-4 bg-gradient-primary text-white">
+                            <p>Git-spark doesn't tell you whether your repository is "healthy" or your team is "productive." Instead, it shows you patterns and lets you interpret them with your domain knowledge.</p>
+                            <div class="card mb-4">
                                 <div class="card-body">
-                                    <h4 class="card-title mb-3">
-                                        <i class="bi bi-lightning-charge-fill me-2"></i>
-                                        Quick Start
-                                    </h4>
+                                    <h4 class="h5 mb-3">Try It Out</h4>
                                     <pre class="bg-dark text-light p-3 rounded mb-3"><code># Install globally
 npm install -g git-spark
 
-# Or use with npx (no install needed)
+# Or use with npx
 npx git-spark analyze
-
-# Analyze your repository
-cd your-project
-git-spark analyze --output report.json
 </code></pre>
-                                    <p class="mb-0">Get transparent insights into your repository's activity patterns in seconds. No magic formulas, no fake scores—just observable facts from your Git history.</p>
-                                </div>
-                            </div>
-                            <div class="row g-4 mb-4">
-                                <div class="col-md-6">
-                                    <div class="card h-100 border-info">
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                <i class="bi bi-book me-2"></i>
-                                                Documentation & Examples
-                                            </h5>
-                                            <p class="card-text">See how git-spark works, what metrics it calculates, and why it refuses to calculate others. Transparency starts with documentation.</p>
-                                            <a class="btn btn-outline-primary btn-sm" href="https://markhazleton.github.io/git-spark/" target="_blank" rel="noopener noreferrer" aria-label="View git-spark documentation">
-                                                <i class="bi bi-arrow-right-circle me-2"></i>
-                                                View Documentation
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card h-100 border-info">
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                <i class="bi bi-github me-2"></i>
-                                                Open Source on GitHub
-                                            </h5>
-                                            <p class="card-text">Built in the open. See exactly how it works. Contribute improvements, report issues, or just browse the code to understand the approach.</p>
-                                            <a class="btn btn-outline-dark btn-sm" href="https://github.com/MarkHazleton/git-spark" target="_blank" rel="noopener noreferrer" aria-label="View git-spark on GitHub">
-                                                <i class="bi bi-github me-2"></i>
-                                                View on GitHub
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="alert alert-warning d-flex align-items-start">
-                                <i class="bi bi-info-circle-fill fs-4 me-3 mt-1"></i>
-                                <div>
-                                    <h5 class="alert-heading mb-2">Still Evolving</h5>
-                                    <p class="mb-0">This is version 1.x—early but functional. I'm actively seeking feedback on what's valuable and what needs rework. If you try it, let me know what you discover. Does it help you understand your development patterns? Are there honest metrics I'm missing? Is there a better way to present the data without inventing meaning?</p>
+                                    <p class="mb-0">Get transparent insights into your repository's activity patterns. No magic formulas, no fake scores—just observable facts from your Git history.</p>
                                 </div>
                             </div>
                         </section>
-                        <section class="mb-5" id="conclusion">
-                            <h2 class="h3 mb-4 text-primary d-flex align-items-center">
-                                <i class="bi bi-check-circle me-2"></i>
-                                Conclusion: What I Learned by Failing Successfully
-                            </h2>
-                            <p class="lead mb-4">I set out to answer a simple question: "How much of my code is generated by AI prompts?" I built an entire analytics tool, published my first npm package, and learned more about Git internals than I ever expected. And I still can't answer that question.</p>
-                            <p class="mb-4">But that failure taught me something more valuable: the discipline of honest measurement. Not every question has a data-driven answer. Not every metric is meaningful. And tools that claim to measure everything often measure nothing reliably.</p>
-                            <div class="card mb-4 bg-light">
+                        <section class="mb-4" id="conclusion">
+                            <h2 class="mb-3">Lessons Learned</h2>
+                            <p>I set out to answer a simple question: "How much of my code is generated by AI prompts?" I built an entire analytics tool, published my first npm package, and learned more about Git internals than I ever expected. And I still can't answer that question.</p>
+                            <p>But that failure taught me something more valuable: the discipline of honest measurement. Not every question has a data-driven answer. Not every metric is meaningful. And tools that claim to measure everything often measure nothing reliably.</p>
+                            <div class="card mb-4">
                                 <div class="card-body">
-                                    <h3 class="h5 fw-bold mb-3">
-                                        <i class="bi bi-award me-2"></i>
-                                        What This Journey Actually Produced
-                                    </h3>
-                                    <div class="row g-4">
+                                    <h3 class="h5 mb-3">What This Journey Produced</h3>
+                                    <div class="row">
                                         <div class="col-md-6">
-                                            <h4 class="h6 text-success mb-3">Technical Achievements</h4>
-                                            <ul class="mb-0">
-                                                <li class="mb-2">My first published npm package</li>
-                                                <li class="mb-2">Understanding of Git internals</li>
-                                                <li class="mb-2">Experience with testing and validation</li>
-                                                <li class="mb-2">Skills in package organization</li>
-                                                <li class="mb-2">Real-world TypeScript/JavaScript development</li>
+                                            <h4 class="h6 mb-3">Technical Skills</h4>
+                                            <ul>
+                                                <li>My first published npm package</li>
+                                                <li>Understanding of Git internals</li>
+                                                <li>Experience with testing and validation</li>
+                                                <li>Package organization skills</li>
+                                                <li>TypeScript/JavaScript development</li>
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
-                                            <h4 class="h6 text-primary mb-3">Conceptual Insights</h4>
-                                            <ul class="mb-0">
-                                                <li class="mb-2">Limits of Git-based metrics</li>
-                                                <li class="mb-2">Difference between motion and progress</li>
-                                                <li class="mb-2">Value of honest vs. authoritative reporting</li>
-                                                <li class="mb-2">Why AI contributions remain invisible</li>
-                                                <li class="mb-2">What makes metrics trustworthy</li>
+                                            <h4 class="h6 mb-3">Important Insights</h4>
+                                            <ul>
+                                                <li>Limits of Git-based metrics</li>
+                                                <li>Difference between motion and progress</li>
+                                                <li>Value of honest vs. authoritative reporting</li>
+                                                <li>Why AI contributions remain invisible</li>
+                                                <li>What makes metrics trustworthy</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <p class="mb-4">Git-spark doesn't tell you if your team is productive. It doesn't measure code quality. It can't identify AI-generated code. What it does is report observable patterns in your repository's history and then—crucially—shuts up. No fake scores. No pretend insights. Just data and the humility to admit its limitations.</p>
-                            <div class="alert alert-info mb-4">
-                                <strong class="d-block mb-2">
-                                    <i class="bi bi-lightbulb me-2"></i>
-                                    The Real Question Changed
-                                </strong>
-                                <p class="mb-2">
-                                    I started asking:
-                                    <em>"Are we productive?"</em>
-                                </p>
-                                <p class="mb-2">
-                                    I learned to ask:
-                                    <em>"Are we set up to succeed?"</em>
-                                </p>
-                                <p class="mb-0">That second question requires context, judgment, and human interpretation— things no tool can provide. Git-spark gives you the data; you bring the wisdom.</p>
-                            </div>
-                            <p class="mb-4">So yes, I failed to measure AI contributions. But I succeeded in creating something I'm proud to put my name on: an honest reporter that respects both the data and your intelligence. As git-spark evolves with feedback from the community, that commitment to honesty remains the foundation.</p>
-                            <div class="card mb-4 border-primary">
-                                <div class="card-header bg-primary text-white">
-                                    <h4 class="card-title mb-0">
-                                        <i class="bi bi-compass me-2"></i>
-                                        Where to Go from Here
-                                    </h4>
-                                </div>
-                                <div class="card-body">
-                                    <p class="mb-3">If you're struggling with similar questions about measuring development productivity, AI contributions, or team performance:</p>
-                                    <ol class="mb-0">
-                                        <li class="mb-3">
-                                            <strong>Start with honesty:</strong>
-                                            What can you actually observe vs. what are you inferring?
-                                        </li>
-                                        <li class="mb-3">
-                                            <strong>Question the scores:</strong>
-                                            Any tool claiming to measure "health" or "productivity" with a single number is oversimplifying.
-                                        </li>
-                                        <li class="mb-3">
-                                            <strong>Try git-spark:</strong>
-                                            See what Git history actually reveals about your development patterns.
-                                        </li>
-                                        <li class="mb-3">
-                                            <strong>Interpret with context:</strong>
-                                            Patterns mean different things for different teams. Your judgment matters more than any formula.
-                                        </li>
-                                        <li class="mb-3">
-                                            <strong>Share your findings:</strong>
-                                            I'm still learning. What patterns do you find valuable? What am I missing?
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                            <p class="mb-4">Building git-spark taught me that the best metrics tools don't pretend to have all the answers. They provide honest data and trust you to ask better questions. That's the philosophy behind every line of code in git-spark, and I hope it's useful to others wrestling with these same measurement challenges.</p>
-                            <div class="text-center mt-5">
-                                <a class="btn btn-primary btn-lg me-3" href="https://github.com/MarkHazleton/git-spark" target="_blank" rel="noopener noreferrer" role="button" aria-label="Try git-spark on GitHub">
-                                    <i class="bi bi-github me-2"></i>
-                                    Try git-spark
-                                </a>
-                                <a class="btn btn-outline-primary btn-lg" href="/#contact" role="button" aria-label="Get in touch to discuss engineering metrics">
-                                    <i class="bi bi-chat-dots me-2"></i>
-                                    Discuss Metrics
-                                </a>
+                            <p>Git-spark doesn't tell you if your team is productive. It doesn't measure code quality. It can't identify AI-generated code. What it does is report observable patterns in your repository's history and then—crucially—shuts up. No fake scores. No pretend insights. Just data and the humility to admit its limitations.</p>
+                            <p>Building git-spark taught me that the best metrics tools don't pretend to have all the answers. They provide honest data and trust you to ask better questions. That's the philosophy behind every line of code in git-spark, and I hope it's useful to others wrestling with these same measurement challenges.</p>
+                            <div class="text-center mt-4">
+                                <a class="btn btn-primary me-3" href="https://github.com/MarkHazleton/git-spark" target="_blank" rel="noopener noreferrer">Try git-spark</a>
+                                <a class="btn btn-outline-primary" href="/#contact">Discuss Metrics</a>
                             </div>
                         </section>
                     </div>
