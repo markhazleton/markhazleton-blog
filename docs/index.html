@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="color-scheme" content="light dark" />
         <!-- Content Security Policy for Google Analytics support-->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://region1.analytics.google.com https://stats.g.doubleclick.net; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://region1.analytics.google.com https://stats.g.doubleclick.net; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self'; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'" />
         <!-- Theme color for supported browsers (Chrome, Safari, Edge)-->
         <meta name="theme-color" content="#2c3e50" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#34495e" media="(prefers-color-scheme: dark)" />
@@ -58,9 +58,7 @@
         <!-- RSS Feeds - Articles and Projects-->
         <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Articles" href="/rss.xml" />
         <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Projects" href="/projects-rss.xml" />
-        <!-- Font preloads for performance-->
-        <link rel="preload" href="/css/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-        <link rel="preload" href="/css/fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+        <!-- Font preloads for performance - FontAwesome removed, using Bootstrap Icons now-->
         <!-- Critical CSS (inlined for immediate rendering)-->
         <style id="critical-css">
             :root,
@@ -796,57 +794,7 @@
             }
 
             /* Critical Font Awesome base styles */
-            @font-face {
-                font-family: 'Font Awesome 6 Free';
-                font-style: normal;
-                font-weight: 900;
-                font-display: swap;
-                src: url('/css/fonts/fa-solid-900.woff2') format('woff2');
-            }
-            @font-face {
-                font-family: 'Font Awesome 6 Brands';
-                font-style: normal;
-                font-weight: 400;
-                font-display: swap;
-                src: url('/css/fonts/fa-brands-400.woff2') format('woff2');
-            }
-            .fa,
-            .fab,
-            .fad,
-            .fal,
-            .far,
-            .fas {
-                -moz-osx-font-smoothing: grayscale;
-                -webkit-font-smoothing: antialiased;
-                display: inline-block;
-                font-style: normal;
-                font-variant: normal;
-                text-rendering: auto;
-                line-height: 1;
-            }
-            .fas {
-                font-family: 'Font Awesome 6 Free';
-                font-weight: 900;
-            }
-            .fab {
-                font-family: 'Font Awesome 6 Brands';
-                font-weight: 400;
-            }
-            .fa-search:before {
-                content: '\f002';
-            }
-            .fa-linkedin-in:before {
-                content: '\f0e1';
-            }
-            .fa-github:before {
-                content: '\f09b';
-            }
-            .fa-youtube:before {
-                content: '\f167';
-            }
-            .fa-rss:before {
-                content: '\f09e';
-            }
+            /* FontAwesome removed - now using Bootstrap Icons */
 
             /* Screen reader support */
             .visually-hidden {
@@ -949,31 +897,16 @@
                     <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event)">
                         <div class="input-group search-box">
                             <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
-                            <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+                            <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
                         </div>
                     </form>
                     <!-- Social Icons - Inside collapsible navbar-->
                     <div class="d-flex social-icons">
-                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
-                            <span class="visually-hidden">LinkedIn Profile</span>
-                        </a>
-                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub">
-                            <i class="fab fa-github"></i>
-                            <span class="visually-hidden">GitHub Profile</span>
-                        </a>
-                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube">
-                            <i class="fab fa-youtube"></i>
-                            <span class="visually-hidden">YouTube Channel</span>
-                        </a>
-                        <a href="/rss.xml" target="_blank" rel="noopener noreferrer" title="Articles RSS Feed">
-                            <i class="fas fa-rss"></i>
-                            <span class="visually-hidden">Articles RSS Feed</span>
-                        </a>
-                        <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" title="Projects RSS Feed">
-                            <i class="fas fa-rss"></i>
-                            <span class="visually-hidden">Projects RSS Feed</span>
-                        </a>
+                        <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="bi bi-github"></i></a>
+                        <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="/rss.xml" target="_blank" rel="noopener noreferrer" title="Articles RSS Feed"><i class="bi bi-rss"></i></a>
+                        <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" title="Projects RSS Feed"><i class="bi bi-rss"></i></a>
                     </div>
                 </div>
             </div>
@@ -1024,7 +957,7 @@
                 <div class="row g-4 mb-4" id="latestArticles"><!-- Latest 6 articles will be populated by JavaScript--></div>
                 <div class="text-center">
                     <a class="btn btn-light btn-lg" href="articles.html">
-                        <i class="fas fa-newspaper me-2"></i>
+                        <i class="bi bi-newspaper me-2"></i>
                         Explore All 80+ Articles
                     </a>
                 </div>
@@ -1273,7 +1206,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm hover-card">
                             <div class="card-body">
-                                <i class="fab fa-microsoft fa-3x text-primary mb-3"></i>
+                                <i class="bi bi-microsoft fs-1 text-primary mb-3"></i>
                                 <h4>.NET & Azure</h4>
                                 <p class="text-muted">Enterprise solutions with Microsoft technologies, cloud architecture, and scalable applications</p>
                             </div>
@@ -1282,7 +1215,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm hover-card">
                             <div class="card-body">
-                                <i class="fas fa-project-diagram fa-3x text-success mb-3"></i>
+                                <i class="bi bi-diagram-3 fs-1 text-success mb-3"></i>
                                 <h4>Project Management</h4>
                                 <p class="text-muted">Agile methodologies, team leadership, and delivering complex technical projects on time</p>
                             </div>
@@ -1291,7 +1224,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm hover-card">
                             <div class="card-body">
-                                <i class="fas fa-brain fa-3x text-warning mb-3"></i>
+                                <i class="bi bi-cpu fs-1 text-warning mb-3"></i>
                                 <h4>AI & Innovation</h4>
                                 <p class="text-muted">Leveraging artificial intelligence and emerging technologies to solve business challenges // Projects</p>
                             </div>
@@ -1314,22 +1247,22 @@
                             <div class="row mb-4">
                                 <div class="col-md-4 mb-3 mb-md-0">
                                     <div class="d-flex flex-column align-items-center">
-                                        <i class="fas fa-project-diagram fa-3x text-primary mb-3"></i>
+                                        <i class="bi bi-diagram-3 fs-1 text-primary mb-3"></i>
                                         <h4 class="fw-bold">13+</h4>
                                         <p class="text-muted mb-0">Active Projects</p>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3 mb-md-0">
                                     <div class="d-flex flex-column align-items-center">
-                                        <i class="fas fa-code-branch fa-3x text-success mb-3"></i>
+                                        <i class="bi bi-git fs-1 text-success mb-3"></i>
                                         <h4 class="fw-bold">5+</h4>
                                         <p class="text-muted mb-0">Platforms</p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="d-flex flex-column align-items-center">
-                                        <i class="fas fa-rocket fa-3x text-warning mb-3"></i>
-                                        <h4 class="fw-bold">100%</h4>
+                                        <i class="bi bi-rocket-takeoff fs-1 text-warning mb-3"></i>
+                                        <h4 class="fw-bold">90+</h4>
                                         <p class="text-muted mb-0">Open Source</p>
                                     </div>
                                 </div>
@@ -1349,11 +1282,11 @@
                                 <div class="col-12">
                                     <p class="lead mb-4">From enterprise solutions to experimental AI demos, discover the diverse range of applications I've built across .NET, Azure, and modern web stacks.</p>
                                     <a class="btn btn-primary btn-lg me-3" href="/projects.html">
-                                        <i class="fas fa-eye me-2"></i>
+                                        <i class="bi bi-eye me-2"></i>
                                         View All Projects
                                     </a>
                                     <a class="btn btn-outline-primary btn-lg" href="https://github.com/markhazleton" target="_blank" rel="noopener noreferrer">
-                                        <i class="fab fa-github me-2"></i>
+                                        <i class="bi bi-github me-2"></i>
                                         GitHub Profile
                                     </a>
                                 </div>
@@ -1369,7 +1302,7 @@
                             <h5>Frogsfolly</h5>
                             <p class="text-muted small">My first website - a 'Kitchen Sink' of demos and test ideas built with Web Project Mechanics.</p>
                             <a class="btn btn-sm btn-outline-primary" href="https://frogsfolly.com" target="_blank" rel="noopener">
-                                <i class="fas fa-external-link-alt me-1"></i>
+                                <i class="bi bi-box-arrow-up-right me-1"></i>
                                 Live Demo
                             </a>
                         </div>
@@ -1380,7 +1313,7 @@
                             <h5>WebSpark Platform</h5>
                             <p class="text-muted small">A comprehensive collection of tools and accelerators for modern web development projects.</p>
                             <a class="btn btn-sm btn-outline-primary" href="/projects.html#webspark">
-                                <i class="fas fa-info-circle me-1"></i>
+                                <i class="bi bi-info-circle me-1"></i>
                                 Learn More
                             </a>
                         </div>
@@ -1391,7 +1324,7 @@
                             <h5>AI Experiences</h5>
                             <p class="text-muted small">Experimental AI-powered applications demonstrating practical implementations of modern AI technologies.</p>
                             <a class="btn btn-sm btn-outline-primary" href="/projects.html#ai">
-                                <i class="fas fa-brain me-1"></i>
+                                <i class="bi bi-cpu me-1"></i>
                                 Explore AI
                             </a>
                         </div>
@@ -1412,28 +1345,28 @@
                         <div class="row g-3 text-center">
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fab fa-microsoft fa-3x text-primary mb-3"></i>
+                                    <i class="bi bi-microsoft fs-1 text-primary mb-3"></i>
                                     <h5>.NET</h5>
                                     <p class="small">Modern enterprise solutions</p>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fab fa-microsoft fa-3x text-info mb-3"></i>
+                                    <i class="bi bi-microsoft fs-1 text-info mb-3"></i>
                                     <h5>Azure</h5>
                                     <p class="small">Cloud infrastructure & services</p>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fab fa-react fa-3x text-primary mb-3"></i>
+                                    <i class="bi bi-layers fs-1 text-info mb-3"></i>
                                     <h5>React</h5>
                                     <p class="small">Interactive user interfaces</p>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fab fa-bootstrap fa-3x text-purple mb-3"></i>
+                                    <i class="bi bi-bootstrap fs-1 text-purple mb-3"></i>
                                     <h5>Bootstrap</h5>
                                     <p class="small">Responsive design framework</p>
                                 </div>
@@ -1442,28 +1375,28 @@
                         <div class="row g-3 text-center mt-3">
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fab fa-node-js fa-3x text-success mb-3"></i>
+                                    <i class="bi bi-hexagon fs-1 text-success mb-3"></i>
                                     <h5>Node.js</h5>
                                     <p class="small">Server-side JavaScript</p>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fab fa-js fa-3x text-warning mb-3"></i>
+                                    <i class="bi bi-filetype-js fs-1 text-warning mb-3"></i>
                                     <h5>JavaScript</h5>
                                     <p class="small">Dynamic web applications</p>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fas fa-database fa-3x text-secondary mb-3"></i>
+                                    <i class="bi bi-database fs-1 text-secondary mb-3"></i>
                                     <h5>SQL Server</h5>
                                     <p class="small">Enterprise data management</p>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="tech-stack-item p-3">
-                                    <i class="fab fa-git-alt fa-3x text-danger mb-3"></i>
+                                    <i class="bi bi-git fs-1 text-danger mb-3"></i>
                                     <h5>Git</h5>
                                     <p class="small">Version control & collaboration</p>
                                 </div>
@@ -1605,25 +1538,25 @@
                             <div class="row justify-content-center">
                                 <div class="col-md-4 mb-3">
                                     <div class="d-flex flex-column align-items-center">
-                                        <i class="fab fa-linkedin fa-3x text-white mb-3"></i>
+                                        <i class="bi bi-linkedin fs-1 text-white mb-3"></i>
                                         <h5>LinkedIn</h5>
                                         <a class="btn btn-light btn-lg mb-2" href="https://www.linkedin.com/in/markhazleton/" target="_blank">Connect with Me</a>
                                         <a class="btn btn-outline-light btn-sm" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmarkhazleton.com&amp;title=Mark%20Hazleton%20-%20Solutions%20Architect&amp;summary=Technology%20leader%20specializing%20in%20.NET%2C%20Azure%2C%20and%20project%20management&amp;source=Mark%20Hazleton" target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onclick="return openLinkedInShare(this.href);">
-                                            <i class="fab fa-linkedin-in me-2"></i>
+                                            <i class="bi bi-linkedin me-2"></i>
                                             Share Profile
                                         </a>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <div class="d-flex flex-column align-items-center">
-                                        <i class="fab fa-github fa-3x text-white mb-3"></i>
+                                        <i class="bi bi-github fs-1 text-white mb-3"></i>
                                         <h5>GitHub</h5>
                                         <a class="btn btn-outline-light btn-lg" href="https://github.com/markhazleton/" target="_blank">View My Code</a>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <div class="d-flex flex-column align-items-center">
-                                        <i class="fab fa-youtube fa-3x text-white mb-3"></i>
+                                        <i class="bi bi-youtube fs-1 text-white mb-3"></i>
                                         <h5>YouTube</h5>
                                         <a class="btn btn-outline-light btn-lg" href="https://www.youtube.com/@MarkHazleton" target="_blank">Watch Videos</a>
                                     </div>
@@ -1643,26 +1576,11 @@
                         <h5 class="mb-3">Mark Hazleton</h5>
                         <p class="text-light">Solutions Architect passionate for solutions which make technology work for business. Lifelong learner, not sidetracked by sizzle.</p>
                         <div class="social-icons">
-                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin-in"></i>
-                                <span class="visually-hidden">LinkedIn Profile</span>
-                            </a>
-                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                                <i class="fab fa-github"></i>
-                                <span class="visually-hidden">GitHub Profile</span>
-                            </a>
-                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                                <i class="fab fa-youtube"></i>
-                                <span class="visually-hidden">YouTube Channel</span>
-                            </a>
-                            <a href="/rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Articles RSS Feed">
-                                <i class="fas fa-rss"></i>
-                                <span class="visually-hidden">Articles RSS Feed</span>
-                            </a>
-                            <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Projects RSS Feed">
-                                <i class="fas fa-rss"></i>
-                                <span class="visually-hidden">Projects RSS Feed</span>
-                            </a>
+                            <a href="https://www.linkedin.com/in/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            <a href="https://github.com/markhazleton/" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                            <a href="https://www.youtube.com/@MarkHazleton" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                            <a href="/rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Articles RSS Feed"><i class="bi bi-rss"></i></a>
+                            <a href="/projects-rss.xml" target="_blank" rel="noopener noreferrer" aria-label="Projects RSS Feed"><i class="bi bi-rss"></i></a>
                         </div>
                     </div>
                     <div class="col-md-3 mb-4">
