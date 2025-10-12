@@ -28,12 +28,14 @@
         "audit:all": "npm run audit:perf && npm run audit:seo && npm run audit:ssl",
         "audit:safe": "node tools/maintenance/audit-safe.js",
         "audit:lighthouse-fix": "node tools/maintenance/lighthouse-fix.js",
+        "test:performance-fallback": "node tools/maintenance/performance-fallback.js",
         "report:monthly": "node tools/maintenance/report-monthly.mjs",
         "report:git": "node tools/git/report-git.mjs",
         "fix:auto": "node tools/maintenance/apply-autofixes.mjs",
         "format": "prettier --write \"src/**/*.{js,json,md,scss}\" --ignore-path .gitignore",
         "format:check": "prettier --check \"src/**/*.{js,json,md,scss}\" --ignore-path .gitignore",
-        "test": "npm run build:no-cache && npm run audit:all"
+        "test": "node tools/maintenance/windows-safe-test.js",
+        "test:legacy": "npm run build:no-cache && npm run audit:all"
     },
     "description": "Mark Hazleton's Blog",
     "keywords": [
