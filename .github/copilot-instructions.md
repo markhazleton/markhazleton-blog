@@ -113,8 +113,31 @@ section#next-section.mb-5
     - Missing newlines between elements
     - Incorrectly nested structures
     - Mixed tabs and spaces
+    - Missing `.` (dot) syntax after code elements containing HTML/text content
 3. Use consistent 2-space indentation throughout
 4. Validate that all opening elements have proper closing structure
+
+### Critical Code Block Formatting Rules
+
+When including code examples in articles, follow these strict formatting rules:
+
+```pug
+// ❌ WRONG: Missing dot syntax causes build errors
+pre.language-html.bg-dark.text-light.p-3.rounded
+  code.language-html.text-light
+    <button class="btn btn-primary">
+      Button Text
+    </button>
+
+// ✅ CORRECT: Dot syntax prevents PUG from parsing HTML as markup
+pre.language-html.bg-dark.text-light.p-3.rounded
+  code.language-html.text-light.
+    <button class="btn btn-primary">
+      Button Text
+    </button>
+```
+
+**CRITICAL**: Always add `.` (dot) after `code` elements when they contain HTML, JavaScript, or other markup that could be misinterpreted by PUG as actual template code.
 
 ### Bootstrap 5 Implementation
 
@@ -153,6 +176,44 @@ Use typography hierarchy that enhances readability for technical content.
 Include integration points for LinkedIn and professional social media.
 
 Design layouts that showcase technical expertise and project management credentials.
+
+## Content Style and Visual Design Guidelines
+
+### Writing Tone and Style
+
+- **Conversational and casual**: Write in a friendly, approachable tone as if explaining to a colleague
+- **Avoid hyperbole and marketing speak**: No "revolutionary," "game-changing," or excessive superlatives
+- **Keep it practical**: Focus on real-world applications and honest assessments
+- **Be authentic**: Share genuine experiences, including challenges and limitations
+
+### Visual Design Principles
+
+- **Minimize color chaos**: Avoid using multiple bright colors that compete for attention
+- **Consistent color palette**: Stick to Bootstrap's semantic colors (primary, secondary, success, info, warning, danger) sparingly
+- **Reduce visual noise**: Limit the variety of styling elements on a single page
+- **Prioritize readability**: Content should be easy to scan and read without visual distractions
+- **Simple layouts**: Favor clean, organized layouts over complex multi-colored sections
+
+### Icon Usage Standards
+
+- **Bootstrap Icons ONLY**: Use only Bootstrap Icons (bi bi-\*) throughout the site
+- **NO other icon libraries**: Do not use Font Awesome, Material Icons, or any other icon sets
+- **Consistent icon styling**: Use `.text-primary`, `.text-muted`, or contextual colors sparingly
+- **Semantic icon selection**: Choose icons that clearly represent the content or action
+
+### Styling Constraints
+
+- **NO custom CSS**: Only use existing Bootstrap classes available through the build system
+- **NO inline styles**: Never add `style="..."` attributes to PUG elements
+- **NO new style creation**: Do not create new CSS classes or modify existing ones
+- **Build system dependency**: All styling must work with `npm run build` without additions
+
+### Content Structure Guidelines
+
+- **Avoid marketing card overload**: Limit colorful promotional cards and call-out boxes
+- **Simple comparisons**: Use basic tables or simple lists instead of complex colored comparison cards
+- **Minimal badges and labels**: Use badges sparingly and only when functionally necessary
+- **Consistent spacing**: Rely on Bootstrap's spacing utilities (mb-4, py-3, etc.) for layout
 
 ## SEO and Performance
 
@@ -222,6 +283,71 @@ When creating Bootstrap components, use utility classes:
     h5.card-title= article.title
     p.card-text.text-muted= article.excerpt
     a.btn.btn-primary(href=article.url) Read More
+```
+
+### Good vs. Bad Content Styling Examples
+
+#### ❌ BAD: Excessive colors and marketing style
+
+```pug
+// DON'T DO THIS - too many competing colors and marketing language
+.row.g-3.mb-4
+  .col-md-6
+    .card.h-100.border-danger
+      .card-header.bg-danger.text-white
+        h5.card-title.mb-0
+          i.fa.fa-exclamation-triangle.me-2  // Wrong icons!
+          | 🚨 REVOLUTIONARY Bootstrap Challenges! 🚨
+      .card-body
+        p.fw-bold.text-danger GAME-CHANGING PROBLEMS:
+  .col-md-6
+    .card.h-100.border-success
+      .card-header.bg-success.text-white
+        h5.card-title.mb-0
+          i.fa.fa-check.me-2  // Wrong icons!
+          | ✨ AMAZING Tailwind Benefits! ✨
+```
+
+#### ✅ GOOD: Clean, casual, and readable
+
+```pug
+// DO THIS - simple, conversational, consistent styling
+.row.g-3.mb-4
+  .col-lg-6
+    .card.border.h-100
+      .card-header.bg-light
+        h5.card-title.mb-0
+          i.bi.bi-exclamation-triangle.me-2.text-muted
+          | Bootstrap Challenges
+      .card-body
+        p.mb-3 Here's what I ran into while using Bootstrap:
+        ul.mb-0
+          li Design consistency issues across projects
+          li Override complexity when customizing
+  .col-lg-6
+    .card.border.h-100
+      .card-header.bg-light
+        h5.card-title.mb-0
+          i.bi.bi-check-circle.me-2.text-muted
+          | Tailwind Benefits
+      .card-body
+        p.mb-3 What I found helpful about Tailwind:
+        ul.mb-0
+          li More control over design decisions
+          li Smaller bundle sizes with purging
+```
+
+### Code Block Best Practices
+
+Always use dark backgrounds for code blocks to improve readability:
+
+```pug
+// Correct code block formatting
+pre.language-html.bg-dark.text-light.p-3.rounded
+  code.language-html.text-light.
+    <button class="btn btn-primary">
+      Click Me
+    </button>
 ```
 
 ## Content Context
@@ -296,6 +422,51 @@ npm run build
 # Clean and rebuild if caching issues
 npm run clean && npm run build
 ```
+
+### Container Structure Consistency
+
+**CRITICAL**: Maintain consistent container structure throughout articles to prevent width jumping:
+
+```pug
+// ✅ CORRECT: All sections inside consistent container
+article#main-article
+  .container
+    .row
+      .col-lg-8.mx-auto
+        // ALL article sections go here
+        section#introduction.mb-5
+          h2.h3.mb-4 Section Title
+
+        section#main-content.mb-5
+          h2.h3.mb-4 Another Section
+
+        section#conclusion.mb-5
+          h2.h3.mb-4 Final Section
+
+// ❌ WRONG: Sections breaking out of container cause width jumping
+article#main-article
+  .container
+    .row
+      .col-lg-8.mx-auto
+        section#introduction.mb-5
+          h2.h3.mb-4 Section Title
+
+// This section breaks out and causes width issues!
+section#main-content.mb-5
+  h2.h3.mb-4 Another Section
+
+  .container
+    .row
+      .col-lg-8.mx-auto
+        section#conclusion.mb-5
+          h2.h3.mb-4 Final Section
+```
+
+**Key Rules**:
+
+- Keep ALL article sections within the same `.col-lg-8.mx-auto` container
+- Never break sections out to full width unless specifically intended
+- Test on different screen sizes to ensure consistent layout
 
 ### Advanced PUG Patterns for Complex Articles
 
