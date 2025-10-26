@@ -85,10 +85,11 @@ try {
         console.log('💡 Use "npm start -- --watch" for automatic rebuilds');
     }
 
-    // Start browser-sync with shell for Windows PowerShell compatibility
+    // Start browser-sync - Use shell only on Windows for PowerShell compatibility
+    const isWindows = process.platform === 'win32';
     const browserSync = spawn(command, args, {
         stdio: 'inherit',
-        shell: true
+        shell: isWindows
     });
 
     // Handle process termination

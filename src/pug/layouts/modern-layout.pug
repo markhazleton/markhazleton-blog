@@ -81,10 +81,10 @@ doctype html
     }
 
   } else if (typeof project !== 'undefined' && project) {
-    // Project page - use project metadata
+    // Project page - use project metadata (no suffix for better SEO)
     var title = project.seo?.title || project.p || project.name || 'Project Overview';
-    var titleSuffix = project.seo?.titleSuffix !== undefined ? project.seo.titleSuffix : ' | Mark Hazleton Projects';
-    seoData.title = title + titleSuffix;
+    // Remove titleSuffix for better SEO - branding maintained through description and meta tags
+    seoData.title = title;
 
     var description = project.seo?.description || project.summary || project.d || '';
     if (description.length > 160) {
