@@ -78,6 +78,13 @@ namespace mwhWebAdmin.Article
 
                 Console.WriteLine($"[ArticleService] User content prepared, length: {userContent.Length} characters");
 
+                // Get model configuration or use default
+                var model = _configuration["OpenAI:Model"] ?? "gpt-5";
+                var maxTokens = int.Parse(_configuration["OpenAI:MaxTokensArticle"] ?? "16000");
+                var temperature = double.Parse(_configuration["OpenAI:Temperature"] ?? "0.3");
+
+                _logger.LogInformation("[ArticleService] Using OpenAI model: {Model} with max_tokens: {MaxTokens}", model, maxTokens);
+
                 // Define the JSON schema for structured outputs
                 var responseFormat = new
                 {
@@ -121,25 +128,25 @@ namespace mwhWebAdmin.Article
 
                 // Prepare the request payload with structured outputs
                 var requestBody = new
-          {
-           model = "gpt-4o-2024-08-06", // Use the model that supports structured outputs
-      messages = new[]
-         {
-          new
-          {
-             role = "system",
- content = systemPrompt
-              },
-        new
- {
-        role = "user",
-     content = userContent
-        }
-          },
-        max_tokens = 16000,  // Increased from 3000 to handle long article content
-        temperature = 0.3,
-      response_format = responseFormat
-      };
+                {
+                    model = model, // Use configured model (GPT-5 by default)
+                    messages = new[]
+                    {
+ new
+    {
+            role = "system",
+              content = systemPrompt
+    },
+ new
+  {
+ role = "user",
+                 content = userContent
+         }
+        },
+             max_tokens = maxTokens,
+     temperature = temperature,
+ response_format = responseFormat
+    };
 
                 var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
 
@@ -1195,7 +1202,13 @@ SaveArticles();
                     if (File.Exists(candidatePath) && !Directory.Exists(candidatePath))
                     {
                         // Return path in the format /src/pug/...
-                        string relativePath = Path.GetRelativePath(pugBaseDir, candidatePath).Replace('\\', '/');
+//                        string relativePath = Path.GetRelativePath(pugBaseDir, candidatePath).Replace('\\', '/');
+
+                        // Adjust for Windows development environment
+                        string relativePath = candidatePath
+                            .Replace(Path.AltDirectorySeparatorChar, '/') // Convert alt dir sep to standard
+                            .Replace(Path.DirectorySeparatorChar, '/'); // Convert standard dir sep to slash
+
                         return $"/src/pug/{relativePath}";
                     }
 
@@ -1206,7 +1219,11 @@ SaveArticles();
                         if (File.Exists(pathWithExt) && !Directory.Exists(pathWithExt))
                         {
                             // Return path in the format /src/pug/...
-                            string relativePath = Path.GetRelativePath(pugBaseDir, pathWithExt).Replace('\\', '/');
+//                            string relativePath = Path.GetRelativePath(pugBaseDir, pathWithExt).Replace('\\', '/');
+                            string relativePath = pathWithExt
+                                .Replace(Path.AltDirectorySeparatorChar, '/') // Convert alt dir sep to standard
+                                .Replace(Path.DirectorySeparatorChar, '/'); // Convert standard dir sep to slash
+
                             return $"/src/pug/{relativePath}";
                         }
                     }
