@@ -121,25 +121,25 @@ namespace mwhWebAdmin.Article
 
                 // Prepare the request payload with structured outputs
                 var requestBody = new
-                {
-                    model = "gpt-4o-2024-08-06", // Use the model that supports structured outputs
-                    messages = new[]
-                    {
-                        new
-                        {
-                            role = "system",
-                            content = systemPrompt
-                        },
-                        new
-                        {
-                            role = "user",
-                            content = userContent
-                        }
-                    },
-                    max_tokens = 3000,
-                    temperature = 0.3,
-                    response_format = responseFormat
-                };
+          {
+           model = "gpt-4o-2024-08-06", // Use the model that supports structured outputs
+      messages = new[]
+         {
+          new
+          {
+             role = "system",
+ content = systemPrompt
+              },
+        new
+ {
+        role = "user",
+     content = userContent
+        }
+          },
+        max_tokens = 16000,  // Increased from 3000 to handle long article content
+        temperature = 0.3,
+      response_format = responseFormat
+      };
 
                 var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
 
