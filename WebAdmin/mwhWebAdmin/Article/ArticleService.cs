@@ -85,6 +85,9 @@ namespace mwhWebAdmin.Article
 
                 _logger.LogInformation("[ArticleService] Using OpenAI model: {Model} with max_tokens: {MaxTokens}", model, maxTokens);
 
+                // Determine if we're using GPT-5 (which uses different parameter names)
+                bool isGpt5 = model.Contains("gpt-5", StringComparison.OrdinalIgnoreCase);
+
                 // Define the JSON schema for structured outputs
                 var responseFormat = new
                 {
@@ -127,28 +130,56 @@ namespace mwhWebAdmin.Article
                 };
 
                 // Prepare the request payload with structured outputs
-                var requestBody = new
-                {
-                    model = model, // Use configured model (GPT-5 by default)
-                    messages = new[]
-                    {
- new
-    {
-            role = "system",
-              content = systemPrompt
-    },
- new
-  {
- role = "user",
-                 content = userContent
+  // GPT-5 uses 'max_completion_tokens' instead of 'max_tokens'
+        object requestBody;
+          if (isGpt5)
+      {
+    requestBody = new
+         {
+     model = model,
+         messages = new[]
+     {
+  new
+        {
+   role = "system",
+          content = systemPrompt
+           },
+            new
+           {
+            role = "user",
+content = userContent
          }
-        },
-             max_tokens = maxTokens,
-     temperature = temperature,
- response_format = responseFormat
+  },
+    max_completion_tokens = maxTokens,  // GPT-5 parameter name
+ temperature = temperature,
+       response_format = responseFormat
     };
+    }
+    else
+    {
+       requestBody = new
+      {
+             model = model,
+     messages = new[]
+ {
+new
+  {
+           role = "system",
+   content = systemPrompt
+              },
+                new
+         {
+   role = "user",
+            content = userContent
+         }
+    },
+    max_tokens = maxTokens,  // GPT-4o parameter name
+ temperature = temperature,
+ response_format = responseFormat
+       };
+     }
 
-                var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
+   var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
 
                 _logger.LogInformation("[ArticleService] Request body prepared, making API call to OpenAI...");
                 _logger.LogInformation("[ArticleService] *** STARTING LLM API CALL ***");
