@@ -1747,64 +1747,7 @@ SaveArticles();
         /// </summary>
         /// <param name="article">The article to prepare content for</param>
         /// <returns>Combined content including PUG file structure and article metadata</returns>
-        private async Task<string> PrepareContentForSeoAnalysis(ArticleModel article)
-        {
-            Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis called for article: {article.Name}");
-
-            var contentParts = new List<string>();
-
-            // Add basic article metadata
-            if (!string.IsNullOrEmpty(article.Name))
-            {
-                contentParts.Add($"Article Title: {article.Name}");
-            }
-
-            if (!string.IsNullOrEmpty(article.Description))
-            {
-                contentParts.Add($"Current Description: {article.Description}");
-            }
-
-            if (!string.IsNullOrEmpty(article.Section))
-            {
-                contentParts.Add($"Category/Section: {article.Section}");
-            }
-
-            Console.WriteLine($"[ArticleService] Added basic metadata to content parts");
-
-            // Try to read PUG file content for additional context
-            try
-            {
-                Console.WriteLine($"[ArticleService] Attempting to read PUG file content...");
-                string pugContent = await ReadPugFileContent(article);
-                if (!string.IsNullOrEmpty(pugContent))
-                {
-                    Console.WriteLine($"[ArticleService] PUG content read successfully, length: {pugContent.Length} characters");
-                    contentParts.Add("PUG File Content Structure:");
-                    contentParts.Add(pugContent);
-                }
-                else
-                {
-                    Console.WriteLine($"[ArticleService] PUG content is empty");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ArticleService] Error reading PUG file: {ex.Message}");
-                _logger.LogWarning(ex, "Could not read PUG file for article: {ArticleName}", article.Name);
-            }
-
-            // Add existing article content if available
-            if (!string.IsNullOrEmpty(article.ArticleContent))
-            {
-                Console.WriteLine($"[ArticleService] Adding existing article content, length: {article.ArticleContent.Length} characters");
-                contentParts.Add("Existing Article Content:");
-                contentParts.Add(article.ArticleContent);
-            }
-
-            var result = string.Join("\n\n", contentParts);
-            Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis completed, final content length: {result.Length} characters");
-            return result;
-        }
+        private async Task<string> PrepareContentForSeoAnalysis(ArticleModel article){Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis called for article: {article.Name}");var contentParts=new List<string>();if(!string.IsNullOrEmpty(article.Name)){contentParts.Add($"Article Title: {article.Name}");}if(!string.IsNullOrEmpty(article.Description)){contentParts.Add($"Current Description: {article.Description}");}if(!string.IsNullOrEmpty(article.Section)){contentParts.Add($"Category/Section: {article.Section}");}Console.WriteLine($"[ArticleService] Prepared minimal content for SEO analysis (title, description, section only)");var result=string.Join("\n\n",contentParts);Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis completed, final content length: {result.Length} characters");await Task.CompletedTask;return result;}
 
         /// <summary>
         /// Reads PUG file content for an article
@@ -1867,3 +1810,4 @@ SaveArticles();
         }
     }
 }
+
