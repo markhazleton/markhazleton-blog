@@ -18,6 +18,7 @@ namespace mwhWebAdmin.Article
         private readonly ILogger<ArticleService> _logger;
         private readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ArticleContentService _contentService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ArticleService"/> class.
@@ -26,12 +27,14 @@ namespace mwhWebAdmin.Article
         /// <param name="logger">The logger instance.</param>
         /// <param name="configuration">The configuration instance.</param>
         /// <param name="httpClientFactory">The HTTP client factory.</param>
-        public ArticleService(string filePath, ILogger<ArticleService> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        /// <param name="contentService">The article content service for managing external content files.</param>
+        public ArticleService(string filePath, ILogger<ArticleService> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory, ArticleContentService contentService)
         {
             _filePath = filePath;
             _logger = logger;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
+            _contentService = contentService;
             _articlesDirectory = Path.Combine(_filePath.Replace("articles.json", string.Empty), "pug", "articles");
             LoadArticles();
         }
@@ -538,9 +541,27 @@ namespace mwhWebAdmin.Article
             {
                 string jsonContent = File.ReadAllText(_filePath);
                 _articles = JsonSerializer.Deserialize<List<ArticleModel>>(jsonContent) ?? [];
+    
+                // Load external content for articles that use it
                 foreach (var article in _articles.OrderBy(o => o.Id))
                 {
                     article.Id = _articles.IndexOf(article);
+
+                    // Load content from external file if configured
+                    if (!string.IsNullOrEmpty(article.ContentFile))
+                    {
+                        try
+                        {
+                            article.ArticleContent = _contentService.LoadContentAsync(article.ContentFile).GetAwaiter().GetResult();
+                            _logger.LogDebug("Loaded external content for article: {ArticleName} from {ContentFile}", 
+                                            article.Name, article.ContentFile);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Failed to load external content for article: {ArticleName} from {ContentFile}", 
+                                             article.Name, article.ContentFile);
+                        }
+                    }
 
                     // Calculate source file path if not already set
                     if (string.IsNullOrEmpty(article.Source))
@@ -548,7 +569,7 @@ namespace mwhWebAdmin.Article
                         article.Source = CalculateSourceFilePath(article.Slug);
                     }
                 }
-                _logger.LogInformation("Articles loaded successfully.");
+                _logger.LogInformation("Articles loaded successfully. Total: {Count}", _articles.Count);
             }
             catch (Exception ex)
             {
@@ -568,10 +589,10 @@ namespace mwhWebAdmin.Article
                 {
                     var startdate = ConvertStringToDate("2023-01-01");
                     var count = _articles.Count;
-                    // calculate days since startdate and then divide by count to get a change frequency
                     var daysSinceStart = (DateTime.Now - startdate).TotalDays;
                     var changeFrequency = (int)(daysSinceStart / count);
-                    // set the LastModified and ChangeFrequency properties for each article based on startddate and daysSinceStart to evenely distribute the articles
+                    
+                    // Process each article
                     foreach (var article in _articles.OrderBy(o => o.Id))
                     {
                         var newModifiedDate = startdate.AddDays(changeFrequency * article.Id);
@@ -579,18 +600,70 @@ namespace mwhWebAdmin.Article
 
                         article.LastModified = startdate.AddDays(changeFrequency * article.Id).ToString("yyyy-MM-dd");
                         article.ChangeFrequency = daysSinceModified < 60 ? "daily" : daysSinceModified < 120 ? "weekly" : "monthly";
+                      
+                      // Save content to external file if configured
+                      if (!string.IsNullOrEmpty(article.ContentFile) && !string.IsNullOrEmpty(article.ArticleContent))
+                      {
+                          try
+                          {
+                               _contentService.SaveContentAsync(article.ContentFile, article.ArticleContent).GetAwaiter().GetResult();
+                               _logger.LogDebug("Saved external content for article: {ArticleName} to {ContentFile}", 
+                                               article.Name, article.ContentFile);
+                          }
+                          catch (Exception ex)
+                          {
+                             _logger.LogError(ex, "Failed to save external content for article: {ArticleName} to {ContentFile}", 
+                                               article.Name, article.ContentFile);
+                          }
+                      }
                     }
-                    string jsonContent = JsonSerializer.Serialize(
-                        _articles,
-                        jsonSerializerOptions);
-                    File.WriteAllText(_filePath, jsonContent);
-                    _logger.LogInformation("Articles saved successfully.");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to save articles.");
-                }
-            }
+          
+ // Create a copy of articles for serialization with content removed for external files
+                    var articlesToSerialize = _articles.Select(a => 
+   {
+          var clone = new ArticleModel
+   {
+         Id = a.Id,
+      Section = a.Section,
+      Slug = a.Slug,
+      Name = a.Name,
+          Description = a.Description,
+     Keywords = a.Keywords,
+    ImgSrc = a.ImgSrc,
+       LastModified = a.LastModified,
+   PublishedDate = a.PublishedDate,
+                EstimatedReadTime = a.EstimatedReadTime,
+        ChangeFrequency = a.ChangeFrequency,
+      Source = a.Source,
+        Subtitle = a.Subtitle,
+              Author = a.Author,
+     Summary = a.Summary,
+        ConclusionTitle = a.ConclusionTitle,
+     ConclusionSummary = a.ConclusionSummary,
+   ConclusionKeyHeading = a.ConclusionKeyHeading,
+            ConclusionKeyText = a.ConclusionKeyText,
+              ConclusionText = a.ConclusionText,
+    Seo = a.Seo,
+      OpenGraph = a.OpenGraph,
+                   TwitterCard = a.TwitterCard,
+    YouTubeUrl = a.YouTubeUrl,
+ YouTubeTitle = a.YouTubeTitle,
+         ContentFile = a.ContentFile,
+        // Do NOT include ArticleContent - it's in external file
+         ArticleContent = string.IsNullOrEmpty(a.ContentFile) ? a.ArticleContent : null
+                 };
+        return clone;
+        }).ToList();
+      
+             string jsonContent = JsonSerializer.Serialize(articlesToSerialize, jsonSerializerOptions);
+     File.WriteAllText(_filePath, jsonContent);
+       _logger.LogInformation("Articles saved successfully.");
+           }
+    catch (Exception ex)
+    {
+     _logger.LogError(ex, "Failed to save articles.");
+    }
+    }
         }
 
         /// <summary>
@@ -639,41 +712,46 @@ namespace mwhWebAdmin.Article
         public void AddArticle(ArticleModel newArticle)
         {
             lock (_lock)
-            {
-                if (!ValidateArticle(newArticle))
-                {
-                    _logger.LogWarning("Invalid article data. Article not added.");
-                    return;
-                }
+         {
+          if (!ValidateArticle(newArticle))
+          {
+           _logger.LogWarning("Invalid article data. Article not added.");
+  return;
+       }
                 try
-                {
-                    newArticle.Slug = "articles/" + GenerateSlug(newArticle.Name) + ".html";
-                    newArticle.Id = _articles.Count != 0 ? _articles.Max(article => article.Id) + 1 : 1; // Assign a new ID
+     {
+           newArticle.Slug = "articles/" + GenerateSlug(newArticle.Name) + ".html";
+      newArticle.Id = _articles.Count != 0 ? _articles.Max(article => article.Id) + 1 : 1;
 
-                    // Calculate source file path
-                    newArticle.Source = CalculateSourceFilePath(newArticle.Slug);
+       // Set up external content file
+                newArticle.ContentFile = _contentService.GenerateContentFileName(newArticle.Slug);
+     _logger.LogInformation("Generated content filename for article: {ContentFile}", newArticle.ContentFile);
 
-                    _articles.Add(newArticle);
+      // Calculate source file path
+    newArticle.Source = CalculateSourceFilePath(newArticle.Slug);
 
-                    string pugContent = GeneratePugFileContent(newArticle);
-                    if (!string.IsNullOrEmpty(pugContent))
-                    {
-                        // Save the .pug file
-                        string pugFilePath = Path.Combine(_articlesDirectory, $"{newArticle.Slug.Replace(".html", string.Empty).Replace("articles/", string.Empty)}.pug");
-                        File.WriteAllText(pugFilePath, pugContent);
+ _articles.Add(newArticle);
 
-                        // Recalculate source path after creating the file
-                        newArticle.Source = CalculateSourceFilePath(newArticle.Slug);
-                    }
+ string pugContent = GeneratePugFileContent(newArticle);
+       if (!string.IsNullOrEmpty(pugContent))
+ {
+          // Save the .pug file
+      string pugFilePath = Path.Combine(_articlesDirectory, $"{newArticle.Slug.Replace(".html", string.Empty).Replace("articles/", string.Empty)}.pug");
+            File.WriteAllText(pugFilePath, pugContent);
 
-                    SaveArticles();
-                    _logger.LogInformation("Article '{ArticleName}' added successfully.", newArticle.Name);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to add article: {ArticleName}", newArticle.Name);
-                }
-            }
+     // Recalculate source path after creating the file
+       newArticle.Source = CalculateSourceFilePath(newArticle.Slug);
+      }
+
+SaveArticles();
+            _logger.LogInformation("Article '{ArticleName}' added successfully with content file: {ContentFile}", 
+             newArticle.Name, newArticle.ContentFile);
+    }
+    catch (Exception ex)
+    {
+  _logger.LogError(ex, "Failed to add article: {ArticleName}", newArticle.Name);
+        }
+   }
         }
 
         /// <summary>
@@ -959,27 +1037,35 @@ namespace mwhWebAdmin.Article
                 updatedArticle.Source = CalculateSourceFilePath(updatedArticle.Slug);
             }
 
-            lock (_lock)
-            {
-                if (!ValidateArticle(updatedArticle))
-                {
-                    _logger.LogWarning("Invalid article data. Article not updated.");
-                    return;
-                }
+       // Ensure content file is set
+        if (string.IsNullOrEmpty(updatedArticle.ContentFile))
+       {
+     updatedArticle.ContentFile = _contentService.GenerateContentFileName(updatedArticle.Slug);
+      _logger.LogInformation("Generated content filename for updated article: {ContentFile}", updatedArticle.ContentFile);
+       }
 
-                int index = _articles.FindIndex(article => article.Id == updatedArticle.Id);
-                if (index != -1)
-                {
-                    _articles[index] = updatedArticle;
-                    SaveArticles();
-                    _logger.LogInformation("Article '{ArticleName}' updated successfully.", updatedArticle.Name);
-                }
-                else
-                {
-                    _logger.LogWarning("Article with ID {Id} not found. Update failed.", updatedArticle.Id);
-                }
-            }
-            await Task.CompletedTask;
+ lock (_lock)
+            {
+   if (!ValidateArticle(updatedArticle))
+            {
+        _logger.LogWarning("Invalid article data. Article not updated.");
+        return;
+         }
+
+        int index = _articles.FindIndex(article => article.Id == updatedArticle.Id);
+          if (index != -1)
+         {
+    _articles[index] = updatedArticle;
+      SaveArticles();
+       _logger.LogInformation("Article '{ArticleName}' updated successfully with content file: {ContentFile}", 
+         updatedArticle.Name, updatedArticle.ContentFile);
+        }
+      else
+      {
+      _logger.LogWarning("Article with ID {Id} not found. Update failed.", updatedArticle.Id);
+        }
+    }
+ await Task.CompletedTask;
         }
 
         /// <summary>

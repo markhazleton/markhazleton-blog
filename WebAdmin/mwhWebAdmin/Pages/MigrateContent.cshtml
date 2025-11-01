@@ -1,0 +1,192 @@
+@page
+@model mwhWebAdmin.Pages.MigrateContentModel
+@{
+    ViewData["Title"] = "Migrate Content to External Files";
+}
+
+<div class="page-header fade-in-up">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+     <h1><i class="fas fa-database me-3"></i>@ViewData["Title"]</h1>
+   <p class="lead mb-0">Migrate article content from articles.json to external .md files</p>
+ </div>
+        <div>
+        <a asp-page="./Articles" class="btn btn-outline-secondary">
+  <i class="fas fa-arrow-left me-2"></i>Back to Articles
+    </a>
+  </div>
+    </div>
+</div>
+
+@* Display TempData messages *@
+@if (TempData["SuccessMessage"] != null)
+{
+ <div class="alert alert-success alert-dismissible fade show" role="alert">
+  <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["WarningMessage"] != null)
+{
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+   <i class="fas fa-exclamation-triangle me-2"></i>
+        @TempData["WarningMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+ <i class="fas fa-exclamation-circle me-2"></i>
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+ </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+ <div class="card mb-4">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Migration Information</h5>
+       </div>
+  <div class="card-body">
+    <dl class="row mb-0">
+     <dt class="col-sm-6">Total Articles:</dt>
+        <dd class="col-sm-6"><strong>@Model.TotalArticles</strong></dd>
+       
+ <dt class="col-sm-6">Articles Needing Migration:</dt>
+        <dd class="col-sm-6"><strong class="text-warning">@Model.ArticlesNeedingMigration</strong></dd>
+            
+  <dt class="col-sm-6">Content Directory:</dt>
+          <dd class="col-sm-6"><code>C:\GitHub\MarkHazleton\markhazleton-blog\src\content\</code></dd>
+    </dl>
+      </div>
+        </div>
+
+   <div class="card mb-4">
+       <div class="card-header bg-warning">
+   <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Important Information</h5>
+ </div>
+     <div class="card-body">
+        <p><strong>This migration will:</strong></p>
+        <ul class="mb-3">
+     <li>Create individual <code>.md</code> files in <code>src/content/</code> for each article</li>
+        <li>Update <code>articles.json</code> to reference external content files via <code>contentFile</code> property</li>
+       <li>Remove <code>content</code> field from <code>articles.json</code> to reduce file size</li>
+            <li>Skip articles that already use external content files</li>
+    <li>Skip articles with no content</li>
+ </ul>
+
+          <div class="alert alert-danger">
+           <h6><i class="fas fa-exclamation-circle me-2"></i>Before Proceeding:</h6>
+  <ul class="mb-0">
+              <li><strong>Backup your <code>articles.json</code> file</strong> before running migration</li>
+      <li>Ensure you're on the <code>feature/content-externalization</code> branch</li>
+          <li>This operation cannot be easily undone</li>
+        <li>Content will be saved in markdown format</li>
+              </ul>
+         </div>
+    </div>
+ </div>
+
+   <form method="post" asp-page-handler="Migrate">
+            <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary btn-lg" 
+        onclick="return confirm('Are you sure you want to migrate all article content to external files? This cannot be easily undone.');">
+     <i class="fas fa-play me-2"></i>Start Migration
+  </button>
+     </div>
+        </form>
+    </div>
+
+  <div class="col-md-4">
+   <div class="card mb-4">
+      <div class="card-header bg-success text-white">
+    <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Benefits</h5>
+      </div>
+     <div class="card-body">
+      <ul class="small mb-0">
+          <li>Smaller <code>articles.json</code> file</li>
+        <li>Better version control (individual diffs)</li>
+  <li>Easier content editing in VS Code</li>
+         <li>Better performance (load on-demand)</li>
+    <li>Cleaner separation of concerns</li>
+          <li>Professional markdown workflow</li>
+        </ul>
+            </div>
+        </div>
+
+        <div class="card">
+      <div class="card-header bg-primary text-white">
+         <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>File Format</h5>
+     </div>
+        <div class="card-body">
+  <p class="small">Content files will be named based on article slugs:</p>
+       <div class="bg-light p-2 rounded mb-2">
+       <code class="small">
+       articles/my-article.html<br/>
+       → my-article.md
+  </code>
+  </div>
+                <p class="small mb-0">Stored in: <code>src/content/</code></p>
+       </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Result != null)
+{
+ <div class="row mt-4">
+      <div class="col-12">
+       <div class="card">
+        <div class="card-header @(Model.Result.Failed == 0 ? "bg-success" : "bg-warning") text-white">
+     <h5 class="mb-0">
+  <i class="fas @(Model.Result.Failed == 0 ? "fa-check-circle" : "fa-exclamation-triangle") me-2"></i>
+          Migration @(Model.Result.Failed == 0 ? "Complete" : "Completed with Errors")
+             </h5>
+   </div>
+        <div class="card-body">
+     <dl class="row">
+      <dt class="col-sm-3">Migrated:</dt>
+     <dd class="col-sm-9 text-success"><strong>@Model.Result.Migrated</strong> articles</dd>
+     
+             <dt class="col-sm-3">Skipped:</dt>
+      <dd class="col-sm-9 text-muted">@Model.Result.Skipped articles</dd>
+          
+   <dt class="col-sm-3">Failed:</dt>
+                <dd class="col-sm-9 @(Model.Result.Failed > 0 ? "text-danger" : "text-success")">
+       <strong>@Model.Result.Failed</strong> articles
+        </dd>
+     </dl>
+            
+  @if (Model.Result.Errors.Any())
+ {
+        <div class="alert alert-danger">
+        <h6><i class="fas fa-exclamation-circle me-2"></i>Errors:</h6>
+        <ul class="mb-0">
+      @foreach (var error in Model.Result.Errors)
+  {
+      <li><small>@error</small></li>
+      }
+       </ul>
+   </div>
+        }
+       
+       @if (Model.Result.Failed == 0 && Model.Result.Migrated > 0)
+       {
+   <div class="alert alert-success">
+             <h6><i class="fas fa-check-circle me-2"></i>Next Steps:</h6>
+         <ol class="mb-0 small">
+    <li>Review the generated <code>.md</code> files in <code>src/content/</code></li>
+             <li>Check <code>articles.json</code> to confirm <code>contentFile</code> references</li>
+              <li>Test loading articles in the admin interface</li>
+      <li>Commit changes to the <code>feature/content-externalization</code> branch</li>
+   </ol>
+ </div>
+    }
+    </div>
+     </div>
+  </div>
+ </div>
+}

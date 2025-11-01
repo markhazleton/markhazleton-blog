@@ -45,7 +45,8 @@ builder.Services.AddSingleton<ArticleService>(provider =>
     var config = provider.GetRequiredService<IConfiguration>();
     var logger = provider.GetRequiredService<ILogger<ArticleService>>();
     var factory = provider.GetRequiredService<IHttpClientFactory>();
-    return new ArticleService(articlesPath, logger, config, factory);
+    var contentService = provider.GetRequiredService<ArticleContentService>();
+    return new ArticleService(articlesPath, logger, config, factory, contentService);
 });
 
 builder.Services.AddSingleton<ProjectService>(provider =>
@@ -59,6 +60,9 @@ builder.Services.AddSingleton<ProjectService>(provider =>
 
 // SEO Validation Service
 builder.Services.AddScoped<SeoValidationService>();
+
+// Article Content Service (for external content file management)
+builder.Services.AddSingleton<ArticleContentService>();
 
 var app = builder.Build();
 

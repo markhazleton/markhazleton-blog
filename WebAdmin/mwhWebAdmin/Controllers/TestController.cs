@@ -32,31 +32,31 @@ namespace mwhWebAdmin.Controllers
 
                 var response = new
                 {
-                    Success = true,
-                    GeneratedSeo = new
+                    success = true,
+                    generatedSeo = new
                     {
-                        // Main article fields
-                        ArticleTitle = testArticle.Name,
-                        ArticleDescription = testArticle.Description,
-                        ArticleContent = testArticle.ArticleContent,
-                        // SEO fields
-                        Keywords = testArticle.Keywords,
-                        SeoTitle = testArticle.Seo?.Title,
-                        SeoDescription = testArticle.Seo?.Description,
-                        OpenGraphTitle = testArticle.OpenGraph?.Title,
-                        OpenGraphDescription = testArticle.OpenGraph?.Description,
-                        TwitterTitle = testArticle.TwitterCard?.Title,
-                        TwitterDescription = testArticle.TwitterCard?.Description,
-                        CanonicalUrl = testArticle.Seo?.Canonical,
-                        // Article content fields
-                        Subtitle = testArticle.Subtitle,
-                        Summary = testArticle.Summary,
-                        // Conclusion section fields
-                        ConclusionTitle = testArticle.ConclusionTitle,
-                        ConclusionSummary = testArticle.ConclusionSummary,
-                        ConclusionKeyHeading = testArticle.ConclusionKeyHeading,
-                        ConclusionKeyText = testArticle.ConclusionKeyText,
-                        ConclusionText = testArticle.ConclusionText
+                        // Main article fields (camelCase to match JavaScript expectations)
+                        articleTitle = testArticle.Name,
+                        articleDescription = testArticle.Description,
+                        articleContent = testArticle.ArticleContent,
+                        // SEO fields (camelCase to match JavaScript expectations)
+                        keywords = testArticle.Keywords,
+                        seoTitle = testArticle.Seo?.Title,
+                        seoDescription = testArticle.Seo?.Description,
+                        openGraphTitle = testArticle.OpenGraph?.Title,
+                        openGraphDescription = testArticle.OpenGraph?.Description,
+                        twitterTitle = testArticle.TwitterCard?.Title,
+                        twitterDescription = testArticle.TwitterCard?.Description,
+                        canonicalUrl = testArticle.Seo?.Canonical,
+                        // Article content fields (camelCase to match JavaScript expectations)
+                        subtitle = testArticle.Subtitle,
+                        summary = testArticle.Summary,
+                        // Conclusion section fields (camelCase to match JavaScript expectations)
+                        conclusionTitle = testArticle.ConclusionTitle,
+                        conclusionSummary = testArticle.ConclusionSummary,
+                        conclusionKeyHeading = testArticle.ConclusionKeyHeading,
+                        conclusionKeyText = testArticle.ConclusionKeyText,
+                        conclusionText = testArticle.ConclusionText
                     }
                 };
 
@@ -64,7 +64,7 @@ namespace mwhWebAdmin.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Success = false, Error = ex.Message });
+                return BadRequest(new { success = false, error = ex.Message });
             }
         }
 
