@@ -43,8 +43,21 @@ public class ArticleModel
     /// Gets or sets the content of the article.
     /// </summary>
     [JsonPropertyName("content")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string ArticleContent { get; set; } = string.Empty;
-    ///
+
+    /// <summary>
+    /// Gets or sets the content file path (relative to src/content/)
+    /// </summary>
+    [JsonPropertyName("contentFile")]
+    public string? ContentFile { get; set; }
+
+    /// <summary>
+    /// Gets whether this article uses external content file
+    /// </summary>
+    [JsonIgnore]
+    public bool UsesExternalContent => !string.IsNullOrEmpty(ContentFile);
+
     /// <summary>
     /// Gets or sets the description of the article.
     /// </summary>
