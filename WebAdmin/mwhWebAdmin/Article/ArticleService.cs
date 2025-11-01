@@ -19,6 +19,7 @@ namespace mwhWebAdmin.Article
         private readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ArticleContentService _contentService;
+        private readonly MarkdownToPugConverter _markdownToPugConverter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ArticleService"/> class.
@@ -28,13 +29,15 @@ namespace mwhWebAdmin.Article
         /// <param name="configuration">The configuration instance.</param>
         /// <param name="httpClientFactory">The HTTP client factory.</param>
         /// <param name="contentService">The article content service for managing external content files.</param>
-        public ArticleService(string filePath, ILogger<ArticleService> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory, ArticleContentService contentService)
+        /// <param name="markdownToPugConverter">The markdown to Pug converter service.</param>
+        public ArticleService(string filePath, ILogger<ArticleService> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory, ArticleContentService contentService, MarkdownToPugConverter markdownToPugConverter)
         {
             _filePath = filePath;
             _logger = logger;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
             _contentService = contentService;
+            _markdownToPugConverter = markdownToPugConverter;
             _articlesDirectory = Path.Combine(_filePath.Replace("articles.json", string.Empty), "pug", "articles");
             LoadArticles();
         }
@@ -476,6 +479,18 @@ namespace mwhWebAdmin.Article
                 string templateFilePath = Path.Combine(_articlesDirectory, "article-stub.pug");
                 string templateContent = File.ReadAllText(templateFilePath);
 
+                // Convert markdown content to Pug format
+                string pugContentFromMarkdown = string.Empty;
+                if (!string.IsNullOrEmpty(article.ArticleContent))
+                {
+                    _logger.LogInformation("Converting markdown to Pug for article: {ArticleName}", article.Name);
+                    pugContentFromMarkdown = _markdownToPugConverter.ConvertMarkdownToPug(
+                        article.ArticleContent, 
+                        indentLevel: 8  // Indent to match template structure
+);
+                    _logger.LogInformation("Markdown conversion complete. Pug length: {Length}", pugContentFromMarkdown.Length);
+                }
+
                 // Replace placeholder content with actual article data
                 string pugContent = templateContent
                     .Replace("Article Title Here", article.Name ?? "New Article Title")
@@ -484,7 +499,7 @@ namespace mwhWebAdmin.Article
                             article.Summary ?? article.Description ?? "Brief article summary or introduction paragraph.")
                     .Replace("Main Section Title", article.Section ?? "Main Content")
                     .Replace("Main article content goes here. This is where you'll write your detailed content.",
-                            article.ArticleContent ?? "Main article content goes here. This is where you'll write your detailed content.")
+                            pugContentFromMarkdown.Length > 0 ? pugContentFromMarkdown : "Main article content goes here.")
                     .Replace("Summary of key points from the article.",
                             article.ConclusionSummary ?? "Summary of key points from the article.")
                     .Replace("Main insight or actionable takeaway from the article.",
@@ -525,7 +540,8 @@ namespace mwhWebAdmin.Article
                     }
                 }
 
-                return pugContent;
+                _logger.LogInformation("Pug file content generated successfully for article: {ArticleName}", article.Name);
+              return pugContent;
             }
             catch (Exception ex)
             {
@@ -1139,8 +1155,8 @@ SaveArticles();
 
                 // Remove any leading / from slug
                 string cleanedSlug = pugFileName.StartsWith("/")
-                    ? pugFileName.Substring(1)
-                    : pugFileName;
+          ? pugFileName.Substring(1)
+ : pugFileName;
 
                 // Extract path components
                 string[] slugParts = cleanedSlug.Split('/');

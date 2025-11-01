@@ -39,6 +39,15 @@ builder.Services.AddRazorPages();
 // GitHub Integration Service - changed to Singleton to match ProjectService lifetime
 builder.Services.AddSingleton<GitHubIntegrationService>();
 
+// SEO Validation Service
+builder.Services.AddScoped<SeoValidationService>();
+
+// Article Content Service (for external content file management)
+builder.Services.AddSingleton<ArticleContentService>();
+
+// Markdown to Pug Converter Service
+builder.Services.AddSingleton<MarkdownToPugConverter>();
+
 // Article and Project Services with configuration
 builder.Services.AddSingleton<ArticleService>(provider =>
 {
@@ -46,7 +55,8 @@ builder.Services.AddSingleton<ArticleService>(provider =>
     var logger = provider.GetRequiredService<ILogger<ArticleService>>();
     var factory = provider.GetRequiredService<IHttpClientFactory>();
     var contentService = provider.GetRequiredService<ArticleContentService>();
-    return new ArticleService(articlesPath, logger, config, factory, contentService);
+    var markdownConverter = provider.GetRequiredService<MarkdownToPugConverter>();
+    return new ArticleService(articlesPath, logger, config, factory, contentService, markdownConverter);
 });
 
 builder.Services.AddSingleton<ProjectService>(provider =>
@@ -57,12 +67,6 @@ builder.Services.AddSingleton<ProjectService>(provider =>
     var gitHubService = provider.GetRequiredService<GitHubIntegrationService>();
     return new ProjectService(projectsPath, logger, factory, config, gitHubService);
 });
-
-// SEO Validation Service
-builder.Services.AddScoped<SeoValidationService>();
-
-// Article Content Service (for external content file management)
-builder.Services.AddSingleton<ArticleContentService>();
 
 var app = builder.Build();
 
