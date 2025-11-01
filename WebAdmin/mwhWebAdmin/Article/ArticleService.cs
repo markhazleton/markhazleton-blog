@@ -1,14 +1,17 @@
 using HtmlAgilityPack;
 using System.Globalization;
+using System.Diagnostics;
 using mwhWebAdmin.Configuration;
 using mwhWebAdmin.Services;
+using mwhWebAdmin.Article.Models;
+using mwhWebAdmin.Article.Services;
 
 namespace mwhWebAdmin.Article
 {
     /// <summary>
     /// Represents a service for managing articles.
     /// </summary>
-    public class ArticleService
+    public partial class ArticleService
     {
         private List<ArticleModel> _articles = [];
         private readonly string _articlesDirectory;
@@ -1406,407 +1409,299 @@ SaveArticles();
         }
 
         /// <summary>
-        /// Auto-generates SEO fields based on article content
-        /// </summary>
-        /// <param name="article">The article to enhance</param>
-        public void AutoGenerateSeoFields(ArticleModel article)
-        {
-            // Initialize if needed
-            InitializeSeoFields(article);
-
-            // Auto-generate canonical URL
-            if (string.IsNullOrEmpty(article.Seo!.Canonical))
-            {
-                article.Seo.Canonical = $"https://markhazleton.com/{article.Slug}";
-            }
-
-            // Auto-generate Open Graph image alt text
-            if (string.IsNullOrEmpty(article.OpenGraph!.ImageAlt))
-            {
-                article.OpenGraph.ImageAlt = $"{article.Name} - Solutions Architect";
-            }
-
-            // Auto-generate Twitter image alt text
-            if (string.IsNullOrEmpty(article.TwitterCard!.ImageAlt))
-            {
-                article.TwitterCard.ImageAlt = article.OpenGraph.ImageAlt;
-            }
-        }
-
-        /// <summary>
-        /// Auto-generates SEO fields based on article content using AI
+        /// Auto-generates SEO fields based on article content using AI with multi-step approach
         /// </summary>
         /// <param name="article">The article to enhance</param>
         public async Task AutoGenerateSeoFieldsAsync(ArticleModel article)
+  {
+            var sessionStopwatch = Stopwatch.StartNew();
+ var sessionLog = new GenerationSessionLog
+     {
+       ArticleName = article.Name ?? "Untitled",
+      ArticleId = article.Id
+       };
+
+       _logger.LogInformation("[ArticleService] === STARTING MULTI-STEP AI CONTENT GENERATION ===");
+       _logger.LogInformation("[ArticleService] Article: {ArticleName}", article.Name);
+
+        // Initialize if needed
+  InitializeSeoFields(article);
+
+  try
+ {
+       // === STEP 1: Generate Comprehensive Article Content (30 seconds) ===
+     _logger.LogInformation("[ArticleService] ==> STEP 1/4: Generating Article Content");
+    var step1Stopwatch = Stopwatch.StartNew();
+            var step1Result = new StepResult { StepNumber = 1, StepName = "ContentGeneration" };
+            
+      var articleContent = await GenerateArticleContentAsync(
+        article.Name,
+   article.Description,
+           article.Section
+   );
+
+    step1Stopwatch.Stop();
+            step1Result.DurationMs = step1Stopwatch.ElapsedMilliseconds;
+
+        if (!string.IsNullOrEmpty(articleContent))
+ {
+       article.ArticleContent = articleContent;
+      article.Summary = articleContent.Length > 500
+       ? articleContent.Substring(0, 500) + "..."
+ : articleContent;
+    step1Result.Success = true;
+     step1Result.OutputLength = articleContent.Length;
+     _logger.LogInformation("[ArticleService] Step 1 SUCCESS: Generated {Length} characters of content", 
+     articleContent.Length);
+         }
+        else
+{
+            step1Result.Success = false;
+            step1Result.ErrorMessage = "No content generated";
+       _logger.LogWarning("[ArticleService] Step 1 FAILED: No content generated");
+   sessionLog.Steps.Add(step1Result);
+         sessionLog.Success = false;
+       sessionLog.ErrorMessage = "Step 1 failed: No content generated";
+          sessionStopwatch.Stop();
+           sessionLog.TotalDurationMs = sessionStopwatch.ElapsedMilliseconds;
+          
+         if (_aiLogger != null)
         {
-            _logger.LogInformation("[ArticleService] AutoGenerateSeoFieldsAsync called for article: {ArticleName}", article.Name);
+            await _aiLogger.LogGenerationSessionAsync(article.Id, article.Name ?? "Untitled", sessionLog);
+          }
+          return;
+  }
+  sessionLog.Steps.Add(step1Result);
 
-            // Initialize if needed
-            InitializeSeoFields(article);
-            _logger.LogInformation("[ArticleService] SEO fields initialized");
+      // === STEP 2: Extract SEO Metadata (10 seconds) ===
+       _logger.LogInformation("[ArticleService] ==> STEP 2/4: Extracting SEO Metadata");
+    var step2Stopwatch = Stopwatch.StartNew();
+            var step2Result = new StepResult { StepNumber = 2, StepName = "SeoMetadataExtraction" };
+        
+ var seoMetadata = await ExtractSeoMetadataAsync(articleContent, article.Name);
+            step2Stopwatch.Stop();
+         step2Result.DurationMs = step2Stopwatch.ElapsedMilliseconds;
 
-            // Prepare content for AI analysis
-            string contentForAnalysis = await PrepareContentForSeoAnalysis(article);
-            _logger.LogInformation("[ArticleService] Content prepared for analysis, length: {ContentLength} characters", contentForAnalysis?.Length);
+     if (seoMetadata != null)
+      {
+     // Update article title if generated
+        if (!string.IsNullOrEmpty(seoMetadata.ArticleTitle))
+     {
+       article.Name = seoMetadata.ArticleTitle;
+              _logger.LogInformation("[ArticleService] Updated article title: {Title}", seoMetadata.ArticleTitle);
+           }
 
-            // Generate AI-powered SEO data if content is available
-            if (!string.IsNullOrEmpty(contentForAnalysis))
-            {
-                _logger.LogInformation("[ArticleService] Calling GenerateSeoDataFromContentAsync...");
-                _logger.LogInformation("[ArticleService] About to make LLM API call to OpenAI...");
+             // Update subtitle
+         if (!string.IsNullOrEmpty(seoMetadata.Subtitle))
+       {
+   article.Subtitle = seoMetadata.Subtitle;
+    }
 
-                var seoData = await GenerateSeoDataFromContentAsync(contentForAnalysis, article.Name);
+      // Update description
+          if (!string.IsNullOrEmpty(seoMetadata.Description))
+          {
+       article.Description = seoMetadata.Description;
+  }
 
-                _logger.LogInformation("[ArticleService] LLM API call completed successfully!");
-                _logger.LogInformation("[ArticleService] SEO data generated successfully");
+      // Update keywords
+  if (!string.IsNullOrEmpty(seoMetadata.Keywords))
+     {
+            article.Keywords = seoMetadata.Keywords;
+        _logger.LogInformation("[ArticleService] Updated keywords: {Keywords}", seoMetadata.Keywords);
+          }
 
-                _logger.LogInformation("AI generated SEO data for article '{ArticleName}': Title='{SeoTitle}' ({TitleLength} chars), Description='{MetaDescription}' ({DescriptionLength} chars)",
-                    article.Name, seoData.SeoTitle, seoData.SeoTitle?.Length ?? 0, seoData.MetaDescription, seoData.MetaDescription?.Length ?? 0);
+// Update SEO fields
+if (!string.IsNullOrEmpty(seoMetadata.SeoTitle))
+      {
+article.Seo!.Title = seoMetadata.SeoTitle;
+   _logger.LogInformation("[ArticleService] Updated SEO title: '{Title}' ({Length} chars)",
+    seoMetadata.SeoTitle, seoMetadata.SeoTitle.Length);
+      }
 
-                // Always update main article fields with AI-generated data
-                if (!string.IsNullOrEmpty(seoData.ArticleTitle))
-                {
-                    _logger.LogInformation("[ArticleService] Updating article title: {ArticleTitle}", seoData.ArticleTitle);
-                    article.Name = seoData.ArticleTitle;
-                    _logger.LogInformation("Updated article title for article '{OriginalName}': '{NewTitle}'", article.Name, seoData.ArticleTitle);
-                }
+  if (!string.IsNullOrEmpty(seoMetadata.MetaDescription))
+       {
+     article.Seo!.Description = seoMetadata.MetaDescription;
+        _logger.LogInformation("[ArticleService] Updated meta description ({Length} chars)",
+    seoMetadata.MetaDescription.Length);
+  }
 
-                if (!string.IsNullOrEmpty(seoData.ArticleDescription))
-                {
-                    _logger.LogInformation("[ArticleService] Updating article description");
-                    article.Description = seoData.ArticleDescription;
-                    _logger.LogInformation("Updated article description for article '{ArticleName}'", article.Name);
-                }
+  step2Result.Success = true;
+      step2Result.OutputLength = (seoMetadata.SeoTitle?.Length ?? 0) + (seoMetadata.MetaDescription?.Length ?? 0);
+   _logger.LogInformation("[ArticleService] Step 2 SUCCESS: SEO metadata extracted");
+         }
+       else
+  {
+       step2Result.Success = false;
+      step2Result.ErrorMessage = "No SEO metadata generated";
+    _logger.LogWarning("[ArticleService] Step 2 WARNING: No SEO metadata generated");
+    }
+            sessionLog.Steps.Add(step2Result);
 
-                if (!string.IsNullOrEmpty(seoData.ArticleContent))
-                {
-                    Console.WriteLine($"[ArticleService] Updating article content, length: {seoData.ArticleContent.Length} characters");
-                    article.ArticleContent = seoData.ArticleContent;
-                    _logger.LogInformation("Updated article content for article '{ArticleName}'", article.Name);
-                }
+     // === STEP 3: Generate Social Media Fields (10 seconds) ===
+          _logger.LogInformation("[ArticleService] ==> STEP 3/4: Generating Social Media Fields");
+      var step3Stopwatch = Stopwatch.StartNew();
+       var step3Result = new StepResult { StepNumber = 3, StepName = "SocialMediaGeneration" };
+    
+     var socialMedia = await GenerateSocialMediaFieldsAsync(
+  articleContent,
+      article.Name,
+        article.Description
+           );
+    step3Stopwatch.Stop();
+     step3Result.DurationMs = step3Stopwatch.ElapsedMilliseconds;
 
-                // Always update with AI-generated SEO data
-                if (!string.IsNullOrEmpty(seoData.Keywords))
-                {
-                    Console.WriteLine($"[ArticleService] Updating keywords: {seoData.Keywords}");
-                    article.Keywords = seoData.Keywords;
-                    _logger.LogInformation("Updated keywords for article '{ArticleName}': {Keywords}", article.Name, seoData.Keywords);
-                }
-
-                // Always update SEO title with AI-generated data
-                if (!string.IsNullOrEmpty(seoData.SeoTitle))
-                {
-                    article.Seo!.Title = seoData.SeoTitle;
-                    _logger.LogInformation("Updated SEO title for article '{ArticleName}': '{SeoTitle}' ({Length} chars)", article.Name, seoData.SeoTitle, seoData.SeoTitle.Length);
-                }
-
-                // Always update meta description with AI-generated data
-                if (!string.IsNullOrEmpty(seoData.MetaDescription))
-                {
-                    article.Seo!.Description = seoData.MetaDescription;
-                }
-
-                // Always update Open Graph title with AI-generated data
-                if (!string.IsNullOrEmpty(seoData.OgTitle))
-                {
-                    article.OpenGraph!.Title = seoData.OgTitle;
-                }
-
-                // Always update Open Graph description with AI-generated data
-                if (!string.IsNullOrEmpty(seoData.OgDescription))
-                {
-                    article.OpenGraph!.Description = seoData.OgDescription;
-                }
-
-                // Always update Twitter description with AI-generated data
-                if (!string.IsNullOrEmpty(seoData.TwitterDescription))
-                {
-                    article.TwitterCard!.Description = seoData.TwitterDescription;
-                }
-
-                // Always update Twitter title with AI-generated data
-                if (!string.IsNullOrEmpty(seoData.TwitterTitle))
-                {
-                    article.TwitterCard!.Title = seoData.TwitterTitle;
-                }
-
-                // Update article content fields (always update with AI data)
-                if (!string.IsNullOrEmpty(seoData.Subtitle))
-                {
-                    Console.WriteLine($"[ArticleService] Updating subtitle: {seoData.Subtitle}");
-                    article.Subtitle = seoData.Subtitle;
-                }
-
-                if (!string.IsNullOrEmpty(seoData.Summary))
-                {
-                    Console.WriteLine($"[ArticleService] Updating summary");
-                    article.Summary = seoData.Summary;
-                }
-
-                // Update conclusion section fields (always update with AI data)
-                if (!string.IsNullOrEmpty(seoData.ConclusionTitle))
-                {
-                    Console.WriteLine($"[ArticleService] Updating conclusion title: {seoData.ConclusionTitle}");
-                    article.ConclusionTitle = seoData.ConclusionTitle;
-                }
-
-                if (!string.IsNullOrEmpty(seoData.ConclusionSummary))
-                {
-                    Console.WriteLine($"[ArticleService] Updating conclusion summary");
-                    article.ConclusionSummary = seoData.ConclusionSummary;
-                }
-
-                if (!string.IsNullOrEmpty(seoData.ConclusionKeyHeading))
-                {
-                    Console.WriteLine($"[ArticleService] Updating conclusion key heading: {seoData.ConclusionKeyHeading}");
-                    article.ConclusionKeyHeading = seoData.ConclusionKeyHeading;
-                }
-
-                if (!string.IsNullOrEmpty(seoData.ConclusionKeyText))
-                {
-                    Console.WriteLine($"[ArticleService] Updating conclusion key text");
-                    article.ConclusionKeyText = seoData.ConclusionKeyText;
-                }
-
-                if (!string.IsNullOrEmpty(seoData.ConclusionText))
-                {
-                    Console.WriteLine($"[ArticleService] Updating conclusion text");
-                    article.ConclusionText = seoData.ConclusionText;
-                }
-            }
-
-            // Auto-generate canonical URL
-            if (string.IsNullOrEmpty(article.Seo!.Canonical))
-            {
-                article.Seo.Canonical = $"https://markhazleton.com/{article.Slug}";
-            }
-
-            // Auto-generate Open Graph image alt text
-            if (string.IsNullOrEmpty(article.OpenGraph!.ImageAlt))
-            {
-                article.OpenGraph.ImageAlt = $"{article.Name} - Solutions Architect";
-            }
-
-            // Auto-generate Twitter image alt text
-            if (string.IsNullOrEmpty(article.TwitterCard!.ImageAlt))
-            {
-                article.TwitterCard.ImageAlt = article.OpenGraph.ImageAlt;
-            }
-
-            Console.WriteLine($"[ArticleService] AutoGenerateSeoFieldsAsync completed for article: {article.Name}");
+  if (socialMedia != null)
+      {
+   // Update Open Graph fields
+     if (!string.IsNullOrEmpty(socialMedia.OgTitle))
+        {
+ article.OpenGraph!.Title = socialMedia.OgTitle;
         }
 
-        /// <summary>
-        /// Gets SEO statistics for all articles
-        /// </summary>
-        /// <returns>Dictionary with SEO statistics</returns>
-        public Dictionary<string, object> GetSeoStatistics()
-        {
-            var articles = GetArticles();
-            var stats = new Dictionary<string, object>
-            {
-                ["TotalArticles"] = articles.Count,
-                ["ArticlesWithSeo"] = articles.Count(a => a.Seo != null),
-                ["ArticlesWithOpenGraph"] = articles.Count(a => a.OpenGraph != null),
-                ["ArticlesWithTwitterCard"] = articles.Count(a => a.TwitterCard != null),
-                ["TitleIssues"] = articles.Count(a => string.IsNullOrEmpty(a.EffectiveTitle) ||
-                                                     a.EffectiveTitle.Length < SeoValidationConfig.Title.MinLength ||
-                                                     a.EffectiveTitle.Length > SeoValidationConfig.Title.MaxLength),
-                ["DescriptionIssues"] = articles.Count(a => string.IsNullOrEmpty(a.EffectiveDescription) ||
-                                                            a.EffectiveDescription.Length < SeoValidationConfig.MetaDescription.MinLength ||
-                                                            a.EffectiveDescription.Length > SeoValidationConfig.MetaDescription.MaxLength),
-                ["MissingImages"] = articles.Count(a => string.IsNullOrEmpty(a.ImgSrc)),
-                ["CompleteSeoArticles"] = articles.Count(a => a.Seo != null && a.OpenGraph != null && a.TwitterCard != null),
-                // New file-based validation statistics
-                ["PugFilesFound"] = articles.Count(a => GetPugFilePathForStats(a) != null),
-                ["HtmlFilesFound"] = articles.Count(a => GetHtmlFilePathForStats(a) != null),
-                ["FilesWithValidation"] = articles.Count(a => GetPugFilePathForStats(a) != null || GetHtmlFilePathForStats(a) != null)
-            };
+   if (!string.IsNullOrEmpty(socialMedia.OgDescription))
+       {
+  article.OpenGraph!.Description = socialMedia.OgDescription;
+ }
 
-            return stats;
+   // Update Twitter Card fields
+        if (!string.IsNullOrEmpty(socialMedia.TwitterTitle))
+         {
+         article.TwitterCard!.Title = socialMedia.TwitterTitle;
+    }
+
+   if (!string.IsNullOrEmpty(socialMedia.TwitterDescription))
+ {
+      article.TwitterCard!.Description = socialMedia.TwitterDescription;
         }
 
-        /// <summary>
-        /// Gets the PUG file path for an article - helper method for statistics
-        /// </summary>
-        /// <param name="article">The article</param>
-        /// <returns>PUG file path or null if not found</returns>
-        private string? GetPugFilePathForStats(ArticleModel article)
+        step3Result.Success = true;
+          step3Result.OutputLength = (socialMedia.OgTitle?.Length ?? 0) + (socialMedia.TwitterTitle?.Length ?? 0);
+  _logger.LogInformation("[ArticleService] Step 3 SUCCESS: Social media fields generated");
+       }
+  else
+ {
+    step3Result.Success = false;
+           step3Result.ErrorMessage = "No social media fields generated";
+     _logger.LogWarning("[ArticleService] Step 3 WARNING: No social media fields generated");
+    }
+ sessionLog.Steps.Add(step3Result);
+
+       // === STEP 4: Generate Conclusion Section (10 seconds) ===
+         _logger.LogInformation("[ArticleService] ==> STEP 4/4: Creating Conclusion Section");
+            var step4Stopwatch = Stopwatch.StartNew();
+            var step4Result = new StepResult { StepNumber = 4, StepName = "ConclusionGeneration" };
+            
+       var conclusion = await GenerateConclusionSectionAsync(articleContent);
+   step4Stopwatch.Stop();
+            step4Result.DurationMs = step4Stopwatch.ElapsedMilliseconds;
+
+  if (conclusion != null)
+ {
+         // Update conclusion fields
+    if (!string.IsNullOrEmpty(conclusion.ConclusionTitle))
+          {
+      article.ConclusionTitle = conclusion.ConclusionTitle;
+     }
+
+      if (!string.IsNullOrEmpty(conclusion.ConclusionSummary))
+             {
+      article.ConclusionSummary = conclusion.ConclusionSummary;
+ }
+
+  if (!string.IsNullOrEmpty(conclusion.ConclusionKeyHeading))
         {
-            try
-            {
-                var srcPath = _configuration["SrcPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "src");
-
-                if (!string.IsNullOrEmpty(article.Source))
-                {
-                    var relativePath = article.Source.Replace("/src/pug/", "").Replace("/", Path.DirectorySeparatorChar.ToString());
-                    var fullPath = Path.Combine(srcPath, "pug", relativePath);
-                    return File.Exists(fullPath) ? fullPath : null;
-                }
-                else if (!string.IsNullOrEmpty(article.Slug))
-                {
-                    var fileName = article.Slug.Replace(".html", ".pug").Replace("articles/", "");
-                    var fullPath = Path.Combine(srcPath, "pug", "articles", fileName);
-                    return File.Exists(fullPath) ? fullPath : null;
-                }
-
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting PUG file path for article: {ArticleName}", article.Name);
-                return null;
-            }
+   article.ConclusionKeyHeading = conclusion.ConclusionKeyHeading;
         }
 
-        /// <summary>
-        /// Gets the HTML file path for an article - helper method for statistics
-        /// </summary>
-        /// <param name="article">The article</param>
-        /// <returns>HTML file path or null if not found</returns>
-        private string? GetHtmlFilePathForStats(ArticleModel article)
-        {
-            try
-            {
-                var docsPath = _configuration["DocsPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "docs");
+         if (!string.IsNullOrEmpty(conclusion.ConclusionKeyText))
+          {
+     article.ConclusionKeyText = conclusion.ConclusionKeyText;
+  }
 
-                if (!string.IsNullOrEmpty(article.Slug))
-                {
-                    var htmlFileName = article.Slug;
-
-                    // If the slug ends with /, check for index.html
-                    if (htmlFileName.EndsWith("/"))
-                    {
-                        htmlFileName += "index.html";
-                    }
-                    else if (!htmlFileName.EndsWith(".html"))
-                    {
-                        htmlFileName += ".html";
-                    }
-
-                    var fullPath = Path.Combine(docsPath, htmlFileName);
-
-                    // If file doesn't exist and slug doesn't end with /, try adding /index.html
-                    if (!File.Exists(fullPath) && !article.Slug.EndsWith("/") && !article.Slug.EndsWith(".html"))
-                    {
-                        var indexPath = Path.Combine(docsPath, article.Slug, "index.html");
-                        if (File.Exists(indexPath))
-                        {
-                            return indexPath;
-                        }
-                    }
-
-                    return File.Exists(fullPath) ? fullPath : null;
-                }
-
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting HTML file path for article: {ArticleName}", article.Name);
-                return null;
-            }
+        if (!string.IsNullOrEmpty(conclusion.ConclusionText))
+      {
+   article.ConclusionText = conclusion.ConclusionText;
         }
 
-        /// <summary>
-        /// Extracts YouTube video ID from URL
-        /// </summary>
-        /// <param name="youtubeUrl">YouTube URL</param>
-        /// <returns>Video ID or empty string if not found</returns>
-        private string ExtractYouTubeVideoId(string youtubeUrl)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(youtubeUrl))
-                    return string.Empty;
+     step4Result.Success = true;
+     step4Result.OutputLength = (conclusion.ConclusionTitle?.Length ?? 0) + (conclusion.ConclusionSummary?.Length ?? 0);
+       _logger.LogInformation("[ArticleService] Step 4 SUCCESS: Conclusion section generated");
+      }
+       else
+ {
+    step4Result.Success = false;
+   step4Result.ErrorMessage = "No conclusion section generated";
+ _logger.LogWarning("[ArticleService] Step 4 WARNING: No conclusion section generated");
+  }
+            sessionLog.Steps.Add(step4Result);
 
-                var uri = new Uri(youtubeUrl);
-                var queryParameters = System.Web.HttpUtility.ParseQueryString(uri.Query);
+     // Auto-generate remaining SEO fields
+     if (string.IsNullOrEmpty(article.Seo!.Canonical))
+      {
+         article.Seo.Canonical = $"https://markhazleton.com/{article.Slug}";
+    }
 
-                // Handle different YouTube URL formats
-                if (uri.Host.Contains("youtube.com"))
-                {
-                    return queryParameters["v"] ?? string.Empty;
-                }
-                else if (uri.Host.Contains("youtu.be"))
-                {
-                    return uri.Segments.LastOrDefault()?.TrimStart('/') ?? string.Empty;
-                }
+  if (string.IsNullOrEmpty(article.OpenGraph!.ImageAlt))
+      {
+        article.OpenGraph.ImageAlt = $"{article.Name} - Solutions Architect";
+     }
 
-                return string.Empty;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error extracting YouTube video ID from URL: {YoutubeUrl}", youtubeUrl);
-                return string.Empty;
-            }
+  if (string.IsNullOrEmpty(article.TwitterCard!.ImageAlt))
+ {
+    article.TwitterCard.ImageAlt = article.OpenGraph.ImageAlt;
         }
 
-        /// <summary>
-        /// Prepares content for SEO analysis by combining article metadata with PUG file content
-        /// </summary>
-        /// <param name="article">The article to prepare content for</param>
-        /// <returns>Combined content including PUG file structure and article metadata</returns>
-        private async Task<string> PrepareContentForSeoAnalysis(ArticleModel article){Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis called for article: {article.Name}");var contentParts=new List<string>();if(!string.IsNullOrEmpty(article.Name)){contentParts.Add($"Article Title: {article.Name}");}if(!string.IsNullOrEmpty(article.Description)){contentParts.Add($"Current Description: {article.Description}");}if(!string.IsNullOrEmpty(article.Section)){contentParts.Add($"Category/Section: {article.Section}");}Console.WriteLine($"[ArticleService] Prepared minimal content for SEO analysis (title, description, section only)");var result=string.Join("\n\n",contentParts);Console.WriteLine($"[ArticleService] PrepareContentForSeoAnalysis completed, final content length: {result.Length} characters");await Task.CompletedTask;return result;}
+     // Finalize session log
+ sessionStopwatch.Stop();
+   sessionLog.TotalDurationMs = sessionStopwatch.ElapsedMilliseconds;
+            sessionLog.Success = sessionLog.Steps.All(s => s.Success);
+            sessionLog.Metrics.StepsCompleted = sessionLog.Steps.Count(s => s.Success);
+      sessionLog.Metrics.StepsFailed = sessionLog.Steps.Count(s => !s.Success);
+            sessionLog.Metrics.TotalCharactersGenerated = article.ArticleContent?.Length ?? 0;
+      sessionLog.Metrics.TotalTokensEstimated = (article.ArticleContent?.Length ?? 0) / 4; // Rough estimate
+       sessionLog.Metrics.FieldsPopulated = new Dictionary<string, int>
+          {
+  ["ArticleContent"] = string.IsNullOrEmpty(article.ArticleContent) ? 0 : 1,
+     ["SeoTitle"] = string.IsNullOrEmpty(article.Seo?.Title) ? 0 : 1,
+      ["MetaDescription"] = string.IsNullOrEmpty(article.Seo?.Description) ? 0 : 1,
+ ["Keywords"] = string.IsNullOrEmpty(article.Keywords) ? 0 : 1,
+  ["OpenGraph"] = string.IsNullOrEmpty(article.OpenGraph?.Title) ? 0 : 1,
+          ["TwitterCard"] = string.IsNullOrEmpty(article.TwitterCard?.Title) ? 0 : 1,
+ ["Conclusion"] = string.IsNullOrEmpty(article.ConclusionTitle) ? 0 : 1
+      };
 
-        /// <summary>
-        /// Reads PUG file content for an article
-        /// </summary>
-        /// <param name="article">The article</param>
-        /// <returns>PUG file content or empty string if not found</returns>
-        private async Task<string> ReadPugFileContent(ArticleModel article)
-        {
-            try
-            {
-                Console.WriteLine($"[ArticleService] ReadPugFileContent called for article: {article.Name}");
-
-                var srcPath = _configuration["SrcPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "src");
-                Console.WriteLine($"[ArticleService] Source path: {srcPath}");
-
-                if (!string.IsNullOrEmpty(article.Source))
-                {
-                    Console.WriteLine($"[ArticleService] Using article.Source: {article.Source}");
-                    var relativePath = article.Source.Replace("/src/pug/", "").Replace("/", Path.DirectorySeparatorChar.ToString());
-                    var fullPath = Path.Combine(srcPath, "pug", relativePath);
-                    Console.WriteLine($"[ArticleService] Full path from Source: {fullPath}");
-
-                    if (File.Exists(fullPath))
-                    {
-                        Console.WriteLine($"[ArticleService] File exists, reading content...");
-                        return await File.ReadAllTextAsync(fullPath);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[ArticleService] File does not exist: {fullPath}");
-                    }
-                }
-                else if (!string.IsNullOrEmpty(article.Slug))
-                {
-                    Console.WriteLine($"[ArticleService] Using article.Slug: {article.Slug}");
-                    var fileName = article.Slug.Replace(".html", ".pug").Replace("articles/", "");
-                    var fullPath = Path.Combine(srcPath, "pug", "articles", fileName);
-                    Console.WriteLine($"[ArticleService] Full path from Slug: {fullPath}");
-
-                    if (File.Exists(fullPath))
-                    {
-                        Console.WriteLine($"[ArticleService] File exists, reading content...");
-                        return await File.ReadAllTextAsync(fullPath);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[ArticleService] File does not exist: {fullPath}");
-                    }
-                }
-
-                Console.WriteLine($"[ArticleService] No PUG file found, returning empty string");
-                return string.Empty;
+       // Log session
+     if (_aiLogger != null)
+       {
+        await _aiLogger.LogGenerationSessionAsync(article.Id, article.Name ?? "Untitled", sessionLog);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ArticleService] Exception in ReadPugFileContent: {ex.Message}");
-                _logger.LogError(ex, "Error reading PUG file for article: {ArticleName}", article.Name);
-                return string.Empty;
+
+_logger.LogInformation("[ArticleService] === ALL STEPS COMPLETE ===");
+   _logger.LogInformation("[ArticleService] Summary:");
+            _logger.LogInformation("  - Article Content: {ContentLength} characters", article.ArticleContent?.Length ?? 0);
+        _logger.LogInformation("  - SEO Title: {SeoTitle} ({Length} chars)", article.Seo.Title, article.Seo.Title?.Length ?? 0);
+    _logger.LogInformation("  - Keywords: {Keywords}", article.Keywords);
+ _logger.LogInformation("  - Open Graph: {OgStatus}", !string.IsNullOrEmpty(article.OpenGraph.Title) ? "✓" : "✗");
+  _logger.LogInformation("- Twitter Card: {TwitterStatus}", !string.IsNullOrEmpty(article.TwitterCard.Title) ? "✓" : "✗");
+   _logger.LogInformation("  - Conclusion: {ConclusionStatus}", !string.IsNullOrEmpty(article.ConclusionTitle) ? "✓" : "✗");
+            _logger.LogInformation("  - Total Duration: {Duration}ms ({Seconds}s)", sessionLog.TotalDurationMs, sessionLog.TotalDurationMs / 1000);
             }
+  catch (Exception ex)
+    {
+       sessionStopwatch.Stop();
+     sessionLog.Success = false;
+                sessionLog.ErrorMessage = ex.Message;
+                sessionLog.TotalDurationMs = sessionStopwatch.ElapsedMilliseconds;
+      
+     // Log error session
+                if (_aiLogger != null)
+    {
+   await _aiLogger.LogGenerationSessionAsync(article.Id, article.Name ?? "Untitled", sessionLog);
+          }
+     
+     _logger.LogError(ex, "[ArticleService] ERROR in multi-step AI content generation");
+       throw;
+    }
         }
     }
 }
