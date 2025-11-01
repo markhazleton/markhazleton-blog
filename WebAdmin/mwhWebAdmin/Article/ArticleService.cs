@@ -63,6 +63,7 @@ namespace mwhWebAdmin.Article
 
                 using var httpClient = _httpClientFactory.CreateClient();
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", openAiApiKey);
+                httpClient.Timeout = TimeSpan.FromMinutes(5); // Increase timeout to 5 minutes for GPT-5 content generation
 
                 Console.WriteLine($"[ArticleService] HTTP client created and authorization header set");
 
