@@ -130,56 +130,58 @@ namespace mwhWebAdmin.Article
                 };
 
                 // Prepare the request payload with structured outputs
-  // GPT-5 uses 'max_completion_tokens' instead of 'max_tokens'
-        object requestBody;
-          if (isGpt5)
-      {
-    requestBody = new
-         {
-     model = model,
-         messages = new[]
-     {
-  new
-        {
-   role = "system",
-          content = systemPrompt
-           },
-            new
-           {
-            role = "user",
-content = userContent
-         }
-  },
-    max_completion_tokens = maxTokens,  // GPT-5 parameter name
- temperature = temperature,
-       response_format = responseFormat
-    };
-    }
-    else
-    {
-       requestBody = new
-      {
-             model = model,
-     messages = new[]
- {
-new
-  {
-           role = "system",
-   content = systemPrompt
-              },
-                new
-         {
-   role = "user",
-            content = userContent
-         }
-    },
-    max_tokens = maxTokens,  // GPT-4o parameter name
- temperature = temperature,
- response_format = responseFormat
-       };
-     }
+                // GPT-5 uses 'max_completion_tokens' instead of 'max_tokens'
+                // GPT-5 also only supports temperature = 1 (default), so we omit it
+                object requestBody;
+                if (isGpt5)
+                {
+                    _logger.LogInformation("[ArticleService] GPT-5 detected - using max_completion_tokens and omitting temperature (uses default=1)");
+                    requestBody = new
+                    {
+                        model = model,
+                        messages = new[]
+                        {
+                            new
+                            {
+                                role = "system",
+                                content = systemPrompt
+                            },
+                            new
+                            {
+                                role = "user",
+                                content = userContent
+                            }
+                        },
+                        max_completion_tokens = maxTokens,  // GPT-5 parameter name
+                        // temperature omitted for GPT-5 (only supports default value of 1)
+                        response_format = responseFormat
+                    };
+                }
+                else
+                {
+                    requestBody = new
+                    {
+                        model = model,
+                        messages = new[]
+                        {
+                            new
+                            {
+                                role = "system",
+                                content = systemPrompt
+                            },
+                            new
+                            {
+                                role = "user",
+                                content = userContent
+                            }
+                        },
+                        max_tokens = maxTokens,  // GPT-4o parameter name
+                        temperature = temperature,  // GPT-4o supports custom temperature
+                        response_format = responseFormat
+                    };
+                }
 
-   var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
+                var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
 
                 _logger.LogInformation("[ArticleService] Request body prepared, making API call to OpenAI...");
                 _logger.LogInformation("[ArticleService] *** STARTING LLM API CALL ***");
@@ -192,14 +194,14 @@ new
 
                 // Log error details if the request failed
                 if (!response.IsSuccessStatusCode)
-{
-   var errorContent = await response.Content.ReadAsStringAsync();
-      _logger.LogError("[ArticleService] OpenAI API returned error {StatusCode}: {ErrorContent}", 
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("[ArticleService] OpenAI API returned error {StatusCode}: {ErrorContent}", 
   response.StatusCode, errorContent);
-    Console.WriteLine($"[ArticleService] ERROR RESPONSE: {errorContent}");
-          }
+                    Console.WriteLine($"[ArticleService] ERROR RESPONSE: {errorContent}");
+                }
 
-     response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"[ArticleService] Response content received, length: {responseContent.Length} characters");
@@ -727,19 +729,19 @@ new
      _logger.LogError(ex, "Failed to save articles.");
     }
     }
-        }
+     }
 
-        /// <summary>
-        /// Validates an article model.
-        /// </summary>
-        /// <param name="article">The article model to validate.</param>
-        /// <returns>True if the article is valid; otherwise, false.</returns>
-        private static bool ValidateArticle(ArticleModel article)
-        {
-            return !string.IsNullOrWhiteSpace(article.Name) &&
-                   !string.IsNullOrWhiteSpace(article.Section) &&
-                   !string.IsNullOrWhiteSpace(article.Slug);
-        }    /// <summary>
+     /// <summary>
+     /// Validates an article model.
+     /// </summary>
+     /// <param name="article">The article model to validate.</param>
+     /// <returns>True if the article is valid; otherwise, false.</returns>
+     private static bool ValidateArticle(ArticleModel article)
+     {
+         return !string.IsNullOrWhiteSpace(article.Name) &&
+                !string.IsNullOrWhiteSpace(article.Section) &&
+                !string.IsNullOrWhiteSpace(article.Slug);
+     }    /// <summary>
              /// Gets a list of unique keywords from all articles.
              /// </summary>
              /// <returns>A list of unique keywords.</returns>
