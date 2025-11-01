@@ -159,7 +159,16 @@ namespace mwhWebAdmin.Article
                 _logger.LogInformation("[ArticleService] *** LLM API CALL COMPLETED ***");
                 _logger.LogInformation("[ArticleService] OpenAI API response received. Status: {StatusCode}", response.StatusCode);
 
-                response.EnsureSuccessStatusCode();
+                // Log error details if the request failed
+                if (!response.IsSuccessStatusCode)
+{
+   var errorContent = await response.Content.ReadAsStringAsync();
+      _logger.LogError("[ArticleService] OpenAI API returned error {StatusCode}: {ErrorContent}", 
+  response.StatusCode, errorContent);
+    Console.WriteLine($"[ArticleService] ERROR RESPONSE: {errorContent}");
+          }
+
+     response.EnsureSuccessStatusCode();
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"[ArticleService] Response content received, length: {responseContent.Length} characters");
