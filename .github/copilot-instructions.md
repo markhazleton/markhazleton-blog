@@ -2,57 +2,119 @@
 
 ## Mark Hazleton Personal Article Site - PUG & Bootstrap 5
 
-This file provides custom instructions for GitHub Copilot when working on Mark Hazleton's personal article site project.
+Static site generator using PUG templates, Bootstrap 5, and a Node.js build system. Content is managed through JSON files (`articles.json`, `projects.json`, `sections.json`) with automatic SEO, RSS, and sitemap generation.
+
+## 🏗️ Build System Architecture
+
+### Unified Build Process
+
+All builds run through `tools/build/build.js` - a sophisticated build orchestrator with:
+- **Intelligent caching**: Tracks file dependencies and only rebuilds changed files (`.build-cache/`)
+- **Parallel execution**: Runs independent tasks concurrently for faster builds
+- **Modular renderers**: Each build step is a separate module (render-pug.js, scss-renderer.js, etc.)
+- **Performance tracking**: Records build times and generates performance reports
+
+**Key Commands:**
+```bash
+npm run build              # Full production build (all steps)
+npm run build:pug          # PUG templates only
+npm run build:scss         # SCSS compilation only
+npm start                  # Build + dev server (requires manual rebuild on changes)
+npm run clean              # Remove docs/ directory
+npm run clean:cache        # Clear build cache
+```
+
+### Build Pipeline Phases
+
+**Phase 1 - Prerequisites (Sequential):**
+1. `build:sections` - Updates sections.json with article counts from articles.json
+2. `fonts` - Downloads Inter font locally
+3. `placeholders` - Generates placeholder images
+
+**Phase 2 - Parallel Execution:**
+- `build:pug` - Compiles PUG templates to HTML (skips layouts/modules)
+- `build:projectPages` - Generates individual project pages from projects.json
+- `build:scss` - Compiles styles.scss and modern-styles.scss to CSS
+- `build:scripts` - Processes JavaScript files
+
+**Phase 3 - Final Steps (Parallel):**
+- `build:assets` - Copies static files and JSON data to docs/
+- `build:sitemap` - Generates sitemap.xml from sections + articles
+- `build:rss` - Creates RSS feed from articles.json
+- `build:projectsRss` - Creates project RSS feed
+
+### Data Flow Architecture
+
+```
+src/articles.json ──┬──> sections.json (article counts)
+                    ├──> PUG templates (modern-layout.pug reads article data)
+                    ├──> sitemap.xml (SEO)
+                    └──> rss.xml (RSS feed)
+
+src/projects.json ──┬──> PUG templates (project pages)
+                    └──> projects-rss.xml
+
+src/pug/ ──────────┬──> docs/*.html (compiled output)
+  ├─ layouts/      │    └─ modern-layout.pug: Auto-generates ALL SEO meta tags
+  ├─ modules/      │        from JSON data (title, description, og:*, twitter:*)
+  └─ articles/     └──> Individual article HTML files
+```
 
 ## ⚠️ CRITICAL RULE: ARTICLE META TAGS
 
 **🚨 NEVER ADD META TAGS TO ARTICLE .PUG FILES! 🚨**
 
-**META TAGS ARE AUTOMATICALLY GENERATED FROM THE BUILD PROCESS USING `articles.json` DATA**
+**WHY**: `modern-layout.pug` automatically generates ALL SEO meta tags from `articles.json` data during build. The layout reads article metadata and creates:
+- `<title>`, `<meta description>`, `<meta keywords>`
+- Canonical URLs
+- Open Graph tags (og:title, og:description, og:image, og:video)
+- Twitter Card tags (twitter:title, twitter:description, twitter:image)
+- Robots directives and structured data
 
-### ❌ DO NOT DO THIS in article .pug files:
-
-```pug
-block pagehead
-  title Article Title
-  meta(name='description', content='...')
-  meta(name='keywords', content='...')
-
-block canonical
-  link(rel='canonical', href='...')
-
-block og_overrides
-  meta(property='og:title', content='...')
-
-block twitter_overrides
-  meta(name='twitter:title', content='...')
-```
-
-### ✅ CORRECT ARTICLE .PUG STRUCTURE:
-
+**Article PUG Structure (Content Only):**
 ```pug
 extends ../layouts/modern-layout
 
 block layout-content
-  br
-  // Article content starts here
-  section.bg-gradient-primary.py-5
-    // Content only - NO meta tags!
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+          // All article content goes here - NO meta tags!
+          section#introduction.mb-5
+            h2.h3.mb-4 Section Title
 ```
 
-**WHY**: The build system automatically generates all SEO meta tags, canonical links, Open Graph tags, and Twitter Card tags from the metadata in `src/articles.json`. Adding them to .pug files creates duplicates and conflicts.
-
-**REMEMBER**: Article metadata (title, description, keywords, etc.) belongs in `src/articles.json`, NOT in .pug files!
+**Metadata Location:** All article metadata (title, description, keywords, SEO tags) is defined in `src/articles.json`:
+```json
+{
+  "id": 99,
+  "Section": "Development",
+  "slug": "my-article.html",
+  "name": "Article Title",
+  "description": "120-160 character description for SEO",
+  "keywords": "keyword1, keyword2, keyword3",
+  "seo": {
+    "title": "SEO-optimized title (30-60 chars)",
+    "description": "Meta description",
+    "canonical": "https://markhazleton.com/my-article.html"
+  },
+  "og": { "title": "...", "description": "..." },
+  "twitter": { "title": "...", "description": "..." }
+}
+```
 
 ## Technology Stack Preferences
 
-Use PUG template engine for all HTML templating, with proper indentation (2 spaces) and semantic structure.
+**PUG Templates** (v3.0.3): Use for all HTML with 2-space indentation, extends/block inheritance, and semantic HTML5 elements
 
-Use Bootstrap 5 utility classes and components exclusively for styling, avoiding custom CSS unless absolutely necessary.
+**Bootstrap 5** (v5.3.8): Use utility classes exclusively - avoid custom CSS unless critical
 
-All PUG templates should use extends/block inheritance pattern with a base layout template.
+**SCSS Compilation**: Dual-pipeline system (main + modern styles) with PostCSS, autoprefixer, and cssnano
 
-Implement mixins for reusable components like article cards, navigation elements, and form components.
+**Content Management**: JSON-based system (`articles.json`, `projects.json`, `sections.json`) drives all dynamic content
+
+**Bootstrap Icons**: ONLY icon library allowed - use `bi bi-*` classes (NO Font Awesome, Material Icons, etc.)
 
 ## Code Standards
 
@@ -169,83 +231,51 @@ Include professional bio sections highlighting Solutions Architect expertise.
 
 ## Professional Branding Requirements
 
-Maintain clean, professional design aesthetic suitable for business development.
+**Clean, professional design** suitable for Solutions Architect / Project Management consultant portfolio
 
-Use typography hierarchy that enhances readability for technical content.
+**Content tone**: Conversational and practical - avoid marketing hyperbole and excessive superlatives
 
-Include integration points for LinkedIn and professional social media.
+**Visual design**: Minimize color chaos - use Bootstrap semantic colors sparingly, favor muted/neutral tones
 
-Design layouts that showcase technical expertise and project management credentials.
+**Typography hierarchy**: Enhance readability for technical content with consistent spacing (mb-4, py-3, etc.)
 
 ## Content Style and Visual Design Guidelines
 
-### Writing Tone and Style
+### Writing Standards
+- **Casual and approachable**: Write as if explaining to a colleague
+- **Practical focus**: Real-world applications over theory
+- **Authentic voice**: Include challenges and limitations, not just successes
 
-- **Conversational and casual**: Write in a friendly, approachable tone as if explaining to a colleague
-- **Avoid hyperbole and marketing speak**: No "revolutionary," "game-changing," or excessive superlatives
-- **Keep it practical**: Focus on real-world applications and honest assessments
-- **Be authentic**: Share genuine experiences, including challenges and limitations
-
-### Visual Design Principles
-
-- **Minimize color chaos**: Avoid using multiple bright colors that compete for attention
-- **Consistent color palette**: Stick to Bootstrap's semantic colors (primary, secondary, success, info, warning, danger) sparingly
-- **Reduce visual noise**: Limit the variety of styling elements on a single page
-- **Prioritize readability**: Content should be easy to scan and read without visual distractions
-- **Simple layouts**: Favor clean, organized layouts over complex multi-colored sections
-
-### Icon Usage Standards
-
-- **Bootstrap Icons ONLY**: Use only Bootstrap Icons (bi bi-\*) throughout the site
-- **NO other icon libraries**: Do not use Font Awesome, Material Icons, or any other icon sets
-- **Consistent icon styling**: Use `.text-primary`, `.text-muted`, or contextual colors sparingly
-- **Semantic icon selection**: Choose icons that clearly represent the content or action
-
-### Styling Constraints
-
-- **NO custom CSS**: Only use existing Bootstrap classes available through the build system
-- **NO inline styles**: Never add `style="..."` attributes to PUG elements
-- **NO new style creation**: Do not create new CSS classes or modify existing ones
-- **Build system dependency**: All styling must work with `npm run build` without additions
-
-### Content Structure Guidelines
-
-- **Avoid marketing card overload**: Limit colorful promotional cards and call-out boxes
-- **Simple comparisons**: Use basic tables or simple lists instead of complex colored comparison cards
-- **Minimal badges and labels**: Use badges sparingly and only when functionally necessary
-- **Consistent spacing**: Rely on Bootstrap's spacing utilities (mb-4, py-3, etc.) for layout
+### Visual Constraints
+- **NO custom CSS**: Only Bootstrap classes from existing build system
+- **NO inline styles**: Never use `style="..."` attributes
+- **NO new icon libraries**: Bootstrap Icons only (bi bi-*)
+- **Simple layouts**: Clean, organized layouts over complex multi-colored sections
 
 ## SEO and Performance
 
 **🚨 CRITICAL: Article meta tags are NEVER added to .pug files! They are automatically generated from `articles.json` during the build process.**
 
-Generate proper meta tag structure in PUG templates using mixins **ONLY for non-article pages**.
+**SEO Guidelines Reference**: See `SEO.md` for complete validation rules, character limits (title: 30-60, description: 120-160, og:description: 120-160), and optimization requirements
 
-Use semantic HTML5 elements for better search engine understanding.
-
-Implement lazy loading for images and optimize Bootstrap bundle size.
-
-Create clean, descriptive URL structures for articles and categories.
-
-## Accessibility Standards
-
-Follow WCAG guidelines for color contrast and semantic markup.
-
-Implement proper heading hierarchy (h1-h6) for screen readers.
-
-Include alt text for images and proper form labels.
-
-Ensure keyboard navigation support for all interactive elements.
+**Accessibility**: Follow WCAG guidelines - proper heading hierarchy (h1-h6), alt text for images, keyboard navigation
 
 ## Article Management
 
-Design templates that support markdown content conversion to HTML.
+**Content System**: JSON-based with 101+ articles in `articles.json` organized by sections (Development, Case Studies, Project Management, AI & Machine Learning, etc.)
 
-Create consistent article card components for listing pages.
+**Article Creation Process**:
+1. Add entry to `src/articles.json` with complete metadata (see `Authoring.md`)
+2. Create `.pug` file in `src/pug/articles/` extending `modern-layout`
+3. Use article mixins from `src/pug/modules/article-mixins.pug` for consistent components
+4. Run `npm run build` to compile and generate SEO tags automatically
 
-Implement category and tag filtering functionality.
-
-Support various content lengths and media types (text, images, code snippets).
+**Available Mixins**:
+- `+articleHeader(article)` - Hero section with title/subtitle
+- `+tableOfContents(items)` - Navigation for long articles
+- `+articleSection(id, title, iconClass)` - Consistent section headers
+- `+codeBlock(code, language)` - Syntax-highlighted code blocks
+- `+alertBox(type, title, content)` - Info/warning/success alerts
 
 ## Generated Documentation Management
 
@@ -255,6 +285,41 @@ Support various content lengths and media types (text, images, code snippets).
 - Example: `/copilot/session-2025-08-31/BUILD_OPTIMIZATION_REPORT.md`
 - This keeps generated documentation organized and separate from core project files
 - Date should reflect when the session/analysis was performed
+
+## Deployment & CI/CD
+
+**GitHub Actions**: Automated deployment on push to `main` branch (`.github/workflows/azure-static-web-apps-white-stone-0f5cd1910.yml`)
+- Sets up Node.js 20 with npm caching
+- Runs `npm ci --include=dev` for all dependencies
+- Executes `npm run build` to generate production files
+- Deploys `docs/` directory to Azure Static Web Apps
+- Triggers IndexNow API for search engine indexing
+
+**Local Development**: `npm start` runs build + BrowserSync server on port 3000 (requires manual rebuild on changes)
+
+**Site Maintenance**: Automated audits via GitHub Actions
+- Monthly (1st @ 09:00 UTC): Full audit with Lighthouse, accessibility, SEO, SSL checks → `reports/YYYY-MM.md`
+- Nightly (daily @ 09:00 UTC): Quick checks including homepage audit and SSL status
+
+**Audit Commands**:
+```bash
+npm run audit:all    # Complete audit suite
+npm run audit:perf   # Lighthouse performance
+npm run audit:seo    # SEO and accessibility
+npm run audit:a11y   # pa11y-ci accessibility
+npm run audit:ssl    # SSL certificate monitoring
+```
+
+## WebAdmin - AI Content Generation
+
+**Location**: `WebAdmin/mwhWebAdmin/` - .NET Core web application for content management
+
+**AI Features**: Single-click generation of all SEO metadata using OpenAI GPT-4
+- Generates: keywords, description, summary, SEO tags, Open Graph, Twitter Card metadata
+- Provides: Real-time validation with A-F grading, character counting, live feedback
+- Integration: Direct npm build system integration for seamless content updates
+
+**Technical Stack**: ASP.NET Core with structured logging (ILogger), OpenAI structured output API
 
 ## Example Code Patterns
 
