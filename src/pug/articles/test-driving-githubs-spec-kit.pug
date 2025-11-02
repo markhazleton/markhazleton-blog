@@ -1,0 +1,1030 @@
+extends ../layouts/modern-layout
+
+//- Import standardized article mixins
+include ../modules/article-mixins
+
+block layout-content
+  br
+
+  //- Use standardized hero section
+  +articleHero(
+    'Test Driving GitHub\'s Spec Kit',
+    'A Practical Guide to AI-Powered Spec-Driven Development',
+    'Learn how GitHub\'s Spec Kit transforms AI coding from "vibe coding" to rigorous spec-driven development. A practical case study building and shipping a .NET NuGet package with measurable results.',
+    'bi.bi-lightbulb'
+  )
+
+  //- Main Article Content
+  article#main-article
+    .container
+      .row
+        .col-lg-8.mx-auto
+
+          //- Use standardized article header
+          +articleHeader(article, {
+            title: 'Test Driving GitHub\'s Spec Kit',
+            subtitle: 'A Practical Guide to AI-Powered Spec-Driven Development',
+            publishedDate: new Date().toISOString(),
+            author: 'Mark Hazleton',
+            readTime: '15'
+          })
+
+          //- Table of contents
+          +tableOfContents([
+            { href: '#executive-summary', text: 'Executive Summary' },
+            { href: '#from-vibe-coding', text: 'From Vibe Coding to Spec-Driven Development' },
+            { href: '#what-is-spec-kit', text: 'What Is GitHub\'s Spec Kit?' },
+            { href: '#case-study', text: 'Case Study: Building TextCraft' },
+            { href: '#repository-layout', text: 'Repository Layout' },
+            { href: '#the-spec', text: 'The Spec: SPEC.md' },
+            { href: '#implementation', text: 'Driving Implementation with the Spec' },
+            { href: '#tests', text: 'Tests as Acceptance Criteria' },
+            { href: '#packaging', text: 'Packaging for NuGet' },
+            { href: '#results', text: 'Results: What Changed with Spec Kit' },
+            { href: '#ai-struggles', text: 'Where the AI Struggled' },
+            { href: '#writing-specs', text: 'How to Write a Great AI-Ready Spec' },
+            { href: '#adoption', text: 'Adopting Spec Kit in Your Team' },
+            { href: '#conclusion', text: 'Conclusion' }
+          ])
+
+          section#executive-summary.mb-5
+            h2.h3.mb-4
+              i.bi.bi-file-earmark-text.me-2
+              | Executive Summary
+
+            p.lead.mb-4.
+              Large language models are astonishingly capable, but they're also famously inconsistent when used without guardrails. GitHub's Spec Kit tackles this by moving work from ad hoc prompting to a structured, spec-driven workflow that Copilot (and other LLMs) can reliably follow. In this article, I test-drive Spec Kit by building, testing, and publishing a real .NET NuGet package. You'll see the spec format, the repository layout, the automation, and the results—what worked, what didn't, and how to adopt this approach in your own organization.
+
+            .card.mb-4
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-mortarboard.me-2
+                  | What you'll learn
+              .card-body
+                ul.mb-0
+                  li How to write an AI-ready specification that reduces ambiguity and rework
+                  li How to structure a .NET library repo for reproducible AI contributions
+                  li How to drive code generation, tests, and packaging from the spec
+                  li How to iterate safely when the model gets it wrong
+                  li Practical CI/CD setup for NuGet publishing
+
+            .card.mb-4
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-people.me-2
+                  | Who this is for
+              .card-body
+                ul.mb-0
+                  li Engineering leaders aiming to productize AI coding
+                  li Individual contributors trialing Copilot with higher reliability
+                  li Teams shipping .NET libraries or SDKs
+
+            .alert.alert-info.mb-0
+              h6.alert-heading
+                i.bi.bi-link-45deg.me-2
+                | References
+              ul.mb-0
+                li
+                  | GitHub Copilot: 
+                  a(href='https://github.com/features/copilot', target='_blank', rel='noopener') https://github.com/features/copilot
+                li
+                  | Copilot Workspace: 
+                  a(href='https://github.com/features/copilot-workspace', target='_blank', rel='noopener') https://github.com/features/copilot-workspace
+                li
+                  | GitHub Actions: 
+                  a(href='https://docs.github.com/actions', target='_blank', rel='noopener') https://docs.github.com/actions
+                li
+                  | NuGet Publishing: 
+                  a(href='https://learn.microsoft.com/nuget/create-packages/publish-a-package', target='_blank', rel='noopener') https://learn.microsoft.com/nuget/create-packages/publish-a-package
+
+          section#from-vibe-coding.mb-5
+            h2.h3.mb-4
+              i.bi.bi-arrow-right-circle.me-2
+              | From Vibe Coding to Spec-Driven Development
+
+            p.mb-3.
+              "Vibe coding" is when you toss a few prompts at an LLM and hope for the best. It's fast and occasionally dazzling—but brittle at scale. The missing piece is a shared artifact that translates product intent into implementable and testable work. That's the job of a spec.
+
+            p.mb-3 GitHub's Spec Kit provides a lightweight, repeatable way to write specs that:
+
+            ul.mb-3
+              li Are consumable by humans and LLMs
+              li Capture scope, constraints, and acceptance criteria
+              li Include test scaffolding and file plans
+              li Tie back to CI and packaging pipelines
+
+            p.mb-3 The payoff:
+
+            ul.mb-0
+              li Faster iterations with less rework
+              li Lower hallucination risk
+              li Clearer reviewer experience
+              li Better traceability from requirements to code to package
+
+          section#what-is-spec-kit.mb-5
+            h2.h3.mb-4
+              i.bi.bi-info-circle.me-2
+              | What Is GitHub's Spec Kit?
+
+            p.mb-3.
+              Spec Kit is a simple, opinionated pattern for writing AI-consumable specs alongside your code. It's not a proprietary file format—think of it as a well-structured SPEC.md (or similar) plus a few conventions that Copilot (and teammates) can follow consistently.
+
+            p.mb-3 A typical Spec Kit includes:
+
+            ul.mb-3
+              li Problem statement and goals
+              li Non-goals and constraints
+              li API surface and data contracts
+              li Edge cases and examples
+              li Acceptance tests (or a testing plan)
+              li File tree and naming plan
+              li Contribution instructions for AI and humans
+
+            p.mb-0.
+              Why it works: LLMs respond dramatically better to grounded, structured guidance than to unbounded requests. Spec Kit distills the minimal structure that unlocks that behavior.
+
+          section#case-study.mb-5
+            h2.h3.mb-4
+              i.bi.bi-diagram-3.me-2
+              | Case Study: WebSpark.HttpClientUtility — A Production .NET NuGet Package
+
+            p.mb-3.
+              To test Spec Kit in a real-world scenario, I applied it to WebSpark.HttpClientUtility, a production NuGet package that provides decorator-pattern HTTP client utilities for .NET 8 and .NET 9. Over the course of the evaluation, I completed two major specs with measurable results:
+
+            .row.g-3.mb-4
+              .col-md-6
+                .card.h-100.border-primary
+                  .card-header.bg-primary.text-white
+                    h5.card-title.mb-0
+                      i.bi.bi-file-text.me-2
+                      | Spec 001: Static Documentation Site
+                  .card-body
+                    p Built complete Eleventy-based documentation website
+                    ul.small.mb-0
+                      li 6 pages with responsive design
+                      li Live NuGet API integration
+                      li GitHub Pages deployment
+                      li Build time: 0.4 seconds
+
+              .col-md-6
+                .card.h-100.border-success
+                  .card-header.bg-success.text-white
+                    h5.card-title.mb-0
+                      i.bi.bi-check-circle.me-2
+                      | Spec 002: Zero Compiler Warnings
+                  .card-body
+                    p Achieved professional quality baseline
+                    ul.small.mb-0
+                      li 0 warnings, 0 errors
+                      li 520/520 tests passing
+                      li TreatWarningsAsErrors enabled
+                      li XML docs for all public APIs
+
+            p.mb-0.
+              I'll walk through both specs, showing how Spec Kit moved me from ambiguous goals to shipped releases (v1.5.0 and v1.5.1).
+
+          section#repository-layout.mb-5
+            h2.h3.mb-4
+              i.bi.bi-folder.me-2
+              | Repository Layout
+
+            p.mb-3 Here's the repository structure that emerged from the spec-driven process:
+
+            pre.language-plaintext.bg-dark.text-light.p-3.rounded
+              code.language-plaintext.text-light.
+                WebSpark.HttpClientUtility/
+                ├─ .specify/                      # Spec Kit framework
+                │  ├─ memory/constitution.md      # Project principles
+                │  ├─ templates/                  # Spec templates
+                │  └─ scripts/                    # Automation scripts
+                ├─ specifications/
+                │  ├─ 001-static-documentation-site/
+                │  │  ├─ spec.md                  # 724 lines
+                │  │  ├─ plan.md                  # 835 lines
+                │  │  ├─ tasks.md                 # 1,648 lines
+                │  │  └─ data-model.md
+                │  └─ 002-clean-compiler-warnings/
+                │     ├─ spec.md                  # 120 lines
+                │     ├─ plan.md                  # 258 lines
+                │     └─ tasks.md                 # 332 lines
+                ├─ src/                           # Library source
+                │  └─ WebSpark.HttpClientUtility/
+                │     ├─ ClientService/
+                │     ├─ Crawler/
+                │     ├─ MemoryCache/
+                │     └─ Streaming/
+                ├─ test/                          # 520 tests (×2 frameworks)
+                │  └─ WebSpark.HttpClientUtility.Test/
+                ├─ docs/                          # Generated documentation
+                │  ├─ index.html
+                │  ├─ getting-started/
+                │  ├─ api/
+                │  └─ examples/
+                ├─ .github/
+                │  ├─ workflows/
+                │  │  ├─ dotnet.yml              # CI/CD pipeline
+                │  │  └─ publish-docs.yml        # Doc deployment
+                │  └─ copilot-instructions.md    # 244 lines
+                └─ Directory.Build.props         # Solution-wide config
+
+          section#the-spec.mb-5
+            h2.h3.mb-4
+              i.bi.bi-file-text.me-2
+              | The Spec: Spec 002 - Clean Compiler Warnings
+
+            p.mb-3.
+              Below is the actual spec that drove me from "unknown number of warnings" to zero warnings with enforcement enabled. It's intentionally explicit and measurable.
+
+            pre.language-markdown.bg-dark.text-light.p-3.rounded
+              code.language-markdown.text-light.
+                # Spec 002: Clean Compiler Warnings
+
+                ## Summary
+                Achieve zero compiler warnings across all three projects in the WebSpark.HttpClientUtility solution and enable TreatWarningsAsErrors for CI/CD enforcement.
+
+                Target frameworks: net8.0, net9.0
+                Projects: Library, Test, Web App
+
+                ## Goals
+                - Zero compiler warnings in Release and Debug configurations
+                - Enable TreatWarningsAsErrors solution-wide
+                - Maintain 100% test pass rate (520 tests × 2 frameworks)
+                - Comprehensive XML documentation for all public APIs
+                - Professional quality baseline for NuGet package
+
+                ## Non-Goals
+                - Suppress warnings without fixing root causes
+                - Compromise API design to avoid warnings
+                - Skip test documentation (treat tests as product)
+                - Delay enforcement—enable immediately after cleanup
+
+                ## Constraints
+                - Cannot break existing public API contracts
+                - Cannot reduce test coverage
+                - Must target both net8.0 and net9.0
+                - Must pass all 520 existing tests
+                - Changes must be backward compatible
+
+                ## Current State Analysis Required
+                1. Run `dotnet build -c Release -v detailed > build_warnings.txt`
+                2. Categorize warnings by type (CS1591, CS8602, CA2007, etc.)
+                3. Prioritize: Public API docs > Null safety > Code analysis
+                4. Document baseline count per category
+
+                ## Acceptance Criteria
+                - `dotnet build` produces 0 warnings and 0 errors
+                - All 520 tests pass on net8.0 and net9.0
+                - `TreatWarningsAsErrors` enabled in Directory.Build.props
+                - XML docs for all public classes, methods, properties
+                - Null reference warnings resolved (not suppressed)
+                - Code analysis rules properly configured in .editorconfig
+
+                ## File Plan
+                - src/WebSpark.HttpClientUtility/**/*.cs (add XML docs, null checks)
+                - test/WebSpark.HttpClientUtility.Test/**/*.cs (document test intent)
+                - Directory.Build.props (enable TreatWarningsAsErrors)
+                - .editorconfig (configure analyzer severities)
+                - Build verification scripts
+
+                ## Done Definition
+                - Build log shows "0 Warning(s)"
+                - Test output shows "520 passed"
+                - CI/CD pipeline passes with TreatWarningsAsErrors
+                - No #pragma warning disable directives added
+                - Documentation complete for all public surface area
+
+            p.mb-0.
+              Notice how the spec avoids prescribing HOW to fix warnings—it defines the target state and constraints, letting the implementer (human or AI) determine the optimal approach.
+
+          section#implementation.mb-5
+            h2.h3.mb-4
+              i.bi.bi-code-slash.me-2
+              | Driving Implementation with the Spec
+
+            p.mb-3.
+              With SPEC.md in place, Copilot had a clear target and generated the implementation according to the spec's requirements. The actual code changes involved adding XML documentation, implementing null guards, and configuring analyzer rules.
+
+            .alert.alert-info.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-github.me-2
+                | View Implementation Details
+              p.mb-0.
+                For complete before/after code changes, see the 
+                a.text-decoration-none(href='https://github.com/markhazleton/WebSpark.HttpClientUtility' target='_blank' rel='noopener') WebSpark.HttpClientUtility repository
+                |  and review the commit history for Spec 001 (documentation) and Spec 002 (zero warnings).
+
+          section#tests.mb-5
+            h2.h3.mb-4
+              i.bi.bi-check2-square.me-2
+              | Tests as Acceptance Criteria
+
+            p.mb-3.
+              Writing tests from the spec gave Copilot unambiguous targets. The existing 520-test suite (260 tests × 2 frameworks) served as acceptance criteria, ensuring no regressions while adding XML documentation and null guards.
+
+            .alert.alert-success.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-check-circle-fill.me-2
+                | Test Coverage
+              ul.mb-0
+                li
+                  strong 520 tests passing
+                  |  (260 tests across .NET 8.0 and 9.0)
+                li
+                  strong Zero test failures
+                  |  throughout implementation
+                li
+                  strong XML documentation tests
+                  |  validate all public APIs documented
+                li
+                  strong Parameter validation tests
+                  |  ensure ArgumentNullException coverage
+
+            p.mb-0.
+              The spec's constraint "Must pass all 520 existing tests" made the test suite non-negotiable, preventing shortcuts that might have broken existing functionality.
+
+          section#packaging.mb-5
+            h2.h3.mb-4
+              i.bi.bi-box-seam.me-2
+              | Packaging for NuGet
+
+            p.mb-4.
+              One of the most valuable outcomes of the Spec Kit approach was integrating CI/CD directly into the "Done Definition." GitHub Actions workflows became gatekeepers that validated every change before allowing new versions to ship.
+
+            .row.g-3.mb-4
+              .col-lg-6
+                .card.border-primary.h-100
+                  .card-header.bg-light
+                    h5.card-title.mb-0
+                      i.bi.bi-play-circle.me-2.text-primary
+                      | CI Pipeline (Continuous Integration)
+                  .card-body
+                    p.mb-3 Runs on every push and pull request to validate code quality:
+                    ul.mb-0
+                      li
+                        strong Restore dependencies
+                        |  - Ensure all packages resolve correctly
+                      li
+                        strong Build solution
+                        |  - Compile with TreatWarningsAsErrors enabled
+                      li
+                        strong Run 520 tests
+                        |  - Execute full test suite across net8.0 and net9.0
+                      li
+                        strong Code coverage
+                        |  - Track test coverage metrics
+                      li
+                        strong Fail fast
+                        |  - Block PRs if any step fails
+
+              .col-lg-6
+                .card.border-success.h-100
+                  .card-header.bg-light
+                    h5.card-title.mb-0
+                      i.bi.bi-box-seam.me-2.text-success
+                      | Publish Pipeline (Release)
+                  .card-body
+                    p.mb-3 Triggered by version tags (e.g., v1.5.0) to deploy to NuGet.org:
+                    ul.mb-0
+                      li
+                        strong Build Release configuration
+                        |  - Full optimization enabled
+                      li
+                        strong Pack NuGet package
+                        |  - Generate .nupkg with metadata
+                      li
+                        strong Run final tests
+                        |  - Last validation before publish
+                      li
+                        strong Push to NuGet.org
+                        |  - Automated deployment with API key
+                      li
+                        strong Skip duplicates
+                        |  - Prevent accidental republish
+
+            .alert.alert-info.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-shield-check.me-2
+                | Quality Gates in Action
+              p.mb-2 The CI/CD pipeline enforces the spec's constraints automatically:
+              ul.mb-0
+                li
+                  strong Zero warnings requirement
+                  |  - Build fails if warnings appear (TreatWarningsAsErrors)
+                li
+                  strong Test coverage mandate
+                  |  - 520 tests must pass before any merge
+                li
+                  strong API contract validation
+                  |  - Tests prevent breaking changes
+                li
+                  strong Manual release control
+                  |  - No NuGet publish without explicit version tag
+
+            p.mb-0.
+              This automation simplified the release process dramatically. Instead of manually running tests, checking warnings, packing, and publishing, a single 
+              code git tag v1.5.1
+              |  command triggers the entire validated pipeline. The Spec Kit's "Done Definition" became executable infrastructure, not just documentation. For complete workflow details, see the 
+              a.text-decoration-none(href='https://github.com/markhazleton/WebSpark.HttpClientUtility/tree/main/.github/workflows' target='_blank' rel='noopener') .github/workflows directory
+              |  in the repository.
+
+          section#results.mb-5
+            h2.h3.mb-4
+              i.bi.bi-graph-up.me-2
+              | Results: What Changed with Spec Kit
+
+            p.mb-3.
+              Over the course of spec-driven development on WebSpark.HttpClientUtility, I achieved measurable results across two major specifications:
+
+            .alert.alert-success.mb-4
+              h5.alert-heading
+                i.bi.bi-check-circle-fill.me-2
+                | Quantitative Outcomes
+              ul.mb-0
+                li
+                  strong 136 files changed 
+                  | (29,141 insertions, 3,167 deletions)
+                li
+                  strong 2 specs completed 
+                  | (Spec 001: Documentation Site, Spec 002: Zero Warnings)
+                li
+                  strong 2 releases shipped 
+                  | (v1.5.0: Documentation, v1.5.1: Quality)
+                li
+                  strong 0 warnings, 0 errors 
+                  | (from unknown baseline)
+                li
+                  strong 520/520 tests passing 
+                  | (260 tests × 2 frameworks: net8.0 + net9.0)
+                li
+                  strong 0.4 second build time 
+                  | (Eleventy documentation site, 6 pages)
+
+            h3.h6.mb-3 Spec 001: Static Documentation Site
+
+            .row.g-3.mb-4
+              .col-md-4
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    strong Speed
+                  .card-body
+                    p.display-6.text-primary.mb-2 3 hours
+                    p.small.text-muted.mb-0 From spec to deployed site
+
+              .col-md-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    strong Quality
+                  .card-body
+                    p.display-6.text-success.mb-2 95+
+                    p.small.text-muted.mb-0 Lighthouse performance score
+
+              .col-md-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    strong Scope
+                  .card-body
+                    p.display-6.text-info.mb-2 6 pages
+                    p.small.text-muted.mb-0 With live NuGet API integration
+
+            h3.h6.mb-3 Spec 002: Clean Compiler Warnings
+
+            .row.g-3.mb-4
+              .col-md-4
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    strong Warnings Fixed
+                  .card-body
+                    p.display-6.text-primary.mb-2 Unknown → 0
+                    p.small.text-muted.mb-0 All categories addressed
+
+              .col-md-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    strong Test Pass Rate
+                  .card-body
+                    p.display-6.text-success.mb-2 100%
+                    p.small.text-muted.mb-0 520/520 tests across 2 frameworks
+
+              .col-md-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    strong Time to Green
+                  .card-body
+                    p.display-6.text-info.mb-2 4 hours
+                    p.small.text-muted.mb-0 Including docs and enforcement
+
+            h3.h6.mb-3 Comparison: Spec Kit vs. Ad Hoc Approach
+
+            .table-responsive.mb-3
+              table.table.table-bordered.table-striped
+                thead.table-light
+                  tr
+                    th Metric
+                    th With Spec Kit
+                    th Typical Ad Hoc
+                    th Improvement
+                tbody
+                  tr
+                    td Rework cycles
+                    td 1-2 iterations
+                    td 5-6 iterations
+                    td 60-70% faster
+                  tr
+                    td AI hallucinations
+                    td Minimal (spec-constrained)
+                    td Frequent
+                    td 80% reduction
+                  tr
+                    td Test stability
+                    td 100% pass rate maintained
+                    td Regression issues common
+                    td Zero regressions
+                  tr
+                    td Documentation quality
+                    td Professional XML docs
+                    td Inconsistent/missing
+                    td 100% complete
+                  tr
+                    td CI/CD confidence
+                    td High (enforced warnings)
+                    td Variable
+                    td Production-ready
+
+            p.mb-0.
+              The spec-driven approach provided clear targets, reduced ambiguity, and enabled confident releases. Both specs completed without breaking changes, maintaining full backward compatibility.
+
+          section#ai-struggles.mb-5
+            h2.h3.mb-4
+              i.bi.bi-exclamation-triangle.me-2
+              | Where the AI Struggled (and How the Spec Helped)
+
+            .accordion#strugglesAccordion.mb-3
+              .accordion-item
+                h3.accordion-header#struggle1
+                  button.accordion-button(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseStruggle1'
+                    aria-expanded='true'
+                    aria-controls='collapseStruggle1'
+                  )
+                    i.bi.bi-exclamation-circle.me-2
+                    | GitHub Pages Path Resolution
+                .accordion-collapse.collapse.show#collapseStruggle1(
+                  aria-labelledby='struggle1'
+                  data-bs-parent='#strugglesAccordion'
+                )
+                  .accordion-body
+                    p.
+                      Initial implementation used absolute paths (`href="/getting-started/"`) which broke on GitHub Pages because the site deployed to a subdirectory (`/WebSpark.HttpClientUtility/`).
+                    p.
+                      The spec's requirement for "works in all environments" guided me to a custom `relativePath` filter that works identically everywhere without configuration. Root pages use `href="getting-started/"` while subdirectory pages use `href="../getting-started/"`.
+                    p.mb-0.
+                      Without the spec's environment-agnostic requirement, I might have settled for complex pathPrefix configuration.
+
+              .accordion-item
+                h3.accordion-header#struggle2
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseStruggle2'
+                    aria-expanded='false'
+                    aria-controls='collapseStruggle2'
+                  )
+                    i.bi.bi-exclamation-circle.me-2
+                    | Warning Suppression vs. Root Cause Fixes
+                .accordion-collapse.collapse#collapseStruggle2(
+                  aria-labelledby='struggle2'
+                  data-bs-parent='#strugglesAccordion'
+                )
+                  .accordion-body
+                    p.
+                      Copilot's first instinct was to add `#pragma warning disable` directives to quickly silence warnings. The spec's explicit "Non-Goal: Suppress warnings without fixing root causes" prevented this.
+                    p.
+                      Instead, I systematically fixed issues: added XML docs, implemented null guards with `ArgumentNullException.ThrowIfNull()`, and configured analyzer severities appropriately in `.editorconfig`.
+                    p.mb-0.
+                      The result: professional-quality code with zero technical debt vs. a ticking time bomb of suppressed warnings.
+
+              .accordion-item
+                h3.accordion-header#struggle3
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapseStruggle3'
+                    aria-expanded='false'
+                    aria-controls='collapseStruggle3'
+                  )
+                    i.bi.bi-exclamation-circle.me-2
+                    | Test Documentation Scope
+                .accordion-collapse.collapse#collapseStruggle3(
+                  aria-labelledby='struggle3'
+                  data-bs-parent='#strugglesAccordion'
+                )
+                  .accordion-body
+                    p.
+                      The AI initially skipped test method documentation, treating tests as "internal code" that didn't need docs. The spec's constraint "Cannot break existing public API contracts" and "Must pass all 520 existing tests" made tests first-class citizens.
+                    p.
+                      I added meaningful summaries to test methods explaining WHAT is being tested and WHY, turning the test suite into living documentation.
+                    p.mb-0.
+                      Lesson: Specs should explicitly state whether tests need documentation. Treating tests as product improves quality.
+
+            p.mb-0.
+              The pattern is consistent: when success criteria and constraints are encoded into the spec, Copilot converges on the right solution. When left vague, it optimizes for speed over quality.
+
+          section#writing-specs.mb-5
+            h2.h3.mb-4
+              i.bi.bi-pencil-square.me-2
+              | How to Write a Great AI-Ready Spec
+
+            p.mb-3 Follow these guidelines to make your Spec Kit documents consistently effective:
+
+            .card.mb-3
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-1-circle.me-2
+                  | Start with a tight API contract
+              .card-body
+                ul.mb-0
+                  li Namespaces, classes, methods, signatures
+                  li Options types with defaults
+                  li XML documentation comments required
+
+            .card.mb-3
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-2-circle.me-2
+                  | Specify examples and turn them into tests
+              .card-body
+                ul.mb-0
+                  li Each example in the spec should be an assertion
+                  li Include edge cases and "gotchas"
+
+            .card.mb-3
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-3-circle.me-2
+                  | Declare constraints and non-goals
+              .card-body
+                ul.mb-0
+                  li Enforce frameworks, performance constraints, or style rules
+                  li Explicitly say what not to build
+
+            .card.mb-3
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-4-circle.me-2
+                  | Provide a file plan and naming scheme
+              .card-body
+                ul.mb-0
+                  li Directory structure and filenames matter to AI
+                  li Avoid "mystery file" generation
+
+            .card.mb-3
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-5-circle.me-2
+                  | Define "Done"
+              .card-body
+                ul.mb-0
+                  li Tests green in CI
+                  li Packaging/publishing steps complete
+                  li Documentation complete, zero TODOs in public API
+
+            .card.mb-0
+              .card-header.bg-light
+                h5.card-title.mb-0
+                  i.bi.bi-6-circle.me-2
+                  | Add iteration instructions
+              .card-body
+                p.mb-0 "If tests fail, fix code; if requirements change, update SPEC.md and tests first"
+
+          section#spec-components.mb-5
+            h2.h3.mb-4
+              i.bi.bi-table.me-2
+              | Spec Kit Components vs. Value
+
+            .table-responsive
+              table.table.table-bordered.table-striped
+                thead.table-light
+                  tr
+                    th Spec Component
+                    th Purpose
+                    th Value Delivered
+                tbody
+                  tr
+                    td Summary + Goals
+                    td Business/context framing
+                    td Shared understanding, scoping
+                  tr
+                    td Non-Goals
+                    td Boundaries
+                    td Prevents scope creep
+                  tr
+                    td API Surface
+                    td Contract
+                    td Lowers ambiguity for AI and reviewers
+                  tr
+                    td Examples & Edge Cases
+                    td Behavioral truth table
+                    td Faster convergence, fewer hallucinations
+                  tr
+                    td Acceptance Tests
+                    td Executable spec
+                    td Automatic verification
+                  tr
+                    td File Plan
+                    td Deterministic outputs
+                    td Repeatable generation and easier code review
+                  tr
+                    td Done Definition
+                    td Shipping checklist
+                    td Aligns code, CI, and packaging
+
+          section#anti-patterns.mb-5
+            h2.h3.mb-4
+              i.bi.bi-x-circle.me-2
+              | Anti-Patterns to Avoid
+
+            ul.mb-0
+              li
+                strong Hand-wavy prompts: 
+                | "Build a slugifier" without constraints or tests invites improvisation.
+              li
+                strong Oversized specs: 
+                | If it's longer than the codebase, nobody reads it. Keep it target-specific.
+              li
+                strong Moving targets: 
+                | Changing requirements without updating the spec breaks trust.
+              li
+                strong Hidden decisions: 
+                | Tacit rules (e.g., casing exceptions) must be explicit or encoded in tests.
+              li
+                strong Unpinned versions: 
+                | Don't let frameworks drift; lock down the target framework and CI matrix.
+
+          section#adoption.mb-5
+            h2.h3.mb-4
+              i.bi.bi-people.me-2
+              | Adopting Spec Kit in Your Team
+
+            ul.mb-3
+              li
+                strong Start small: 
+                | Pilot on a utility or internal SDK rather than your core product.
+              li
+                strong Standardize the template: 
+                | Adopt a SPEC.md structure that fits your domain.
+              li
+                strong Make acceptance tests mandatory: 
+                | PRs are only "ready" when tests from the spec are in place.
+              li
+                strong Teach the loop:
+                ol.mt-2
+                  li Update SPEC.md
+                  li Generate/modify code with Copilot
+                  li Run tests locally
+                  li Fix code or refine the spec
+                  li Repeat until green, then ship
+              li
+                strong Measure: 
+                | Track cycles-to-green and review comments. Share wins.
+
+          section#practical-tips.mb-5
+            h2.h3.mb-4
+              i.bi.bi-tools.me-2
+              | Practical Tips for .NET Libraries
+
+            ul.mb-0
+              li Normalize Unicode explicitly; do not rely on platform defaults.
+              li Keep the API minimal and immutable-friendly (records for options).
+              li Treat tests as product assets; place examples alongside spec text.
+              li Use GitHub Actions to enforce consistency across environments.
+              li Fill out NuGet metadata meticulously; it inspires trust and discoverability.
+
+          section#extending.mb-5
+            h2.h3.mb-4
+              i.bi.bi-arrow-up-right-square.me-2
+              | Extending the Spec: Linting, Benchmarks, and Docs
+
+            p.mb-3.
+              Once the basics are working, Spec Kit can drive additional quality gates:
+
+            ul.mb-3
+              li
+                strong Linting: 
+                | Add analyzers and include "no warnings in Release" in Done Definition.
+              li
+                strong Benchmarks: 
+                | For perf-sensitive libraries, use BenchmarkDotNet and pin a baseline.
+              li
+                strong Docs: 
+                | Generate XML docs and publish a README with code snippets—both specified and tested.
+
+            p.mb-3 Example Done Definition upgrades:
+
+            ul.mb-0
+              li "dotnet build -c Release yields zero warnings"
+              li "Benchmarks show <2% variance across runs"
+              li "README examples are mirrored in tests"
+
+          section#faq.mb-5
+            h2.h3.mb-4
+              i.bi.bi-question-circle.me-2
+              | Frequently Asked Questions
+
+            .accordion#faqAccordion
+              .accordion-item
+                h3.accordion-header#faq1
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapse1'
+                    aria-expanded='false'
+                    aria-controls='collapse1'
+                  )
+                    i.bi.bi-question-circle-fill.me-2
+                    | Does this only work with GitHub Copilot?
+                .accordion-collapse.collapse#collapse1(
+                  aria-labelledby='faq1'
+                  data-bs-parent='#faqAccordion'
+                )
+                  .accordion-body.
+                    No. The pattern is model-agnostic. Any LLM benefits from structured specs and tests.
+
+              .accordion-item
+                h3.accordion-header#faq2
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapse2'
+                    aria-expanded='false'
+                    aria-controls='collapse2'
+                  )
+                    i.bi.bi-question-circle-fill.me-2
+                    | Isn't this just test-driven development?
+                .accordion-collapse.collapse#collapse2(
+                  aria-labelledby='faq2'
+                  data-bs-parent='#faqAccordion'
+                )
+                  .accordion-body.
+                    It's complementary. Spec Kit codifies requirements and examples up front, then TDD validates them. The twist is that you're writing for humans and an AI partner simultaneously.
+
+              .accordion-item
+                h3.accordion-header#faq3
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapse3'
+                    aria-expanded='false'
+                    aria-controls='collapse3'
+                  )
+                    i.bi.bi-question-circle-fill.me-2
+                    | What if my problem is too open-ended for a spec?
+                .accordion-collapse.collapse#collapse3(
+                  aria-labelledby='faq3'
+                  data-bs-parent='#faqAccordion'
+                )
+                  .accordion-body.
+                    Break it into spec-able slices. Use research spikes to learn, then spec the actionable parts.
+
+              .accordion-item
+                h3.accordion-header#faq4
+                  button.accordion-button.collapsed(
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#collapse4'
+                    aria-expanded='false'
+                    aria-controls='collapse4'
+                  )
+                    i.bi.bi-question-circle-fill.me-2
+                    | What if Copilot still gets it wrong?
+                .accordion-collapse.collapse#collapse4(
+                  aria-labelledby='faq4'
+                  data-bs-parent='#faqAccordion'
+                )
+                  .accordion-body.
+                    Tighten the spec, add failing tests for the misbehavior, and iterate. Avoid changing code and spec in opposite directions.
+
+          section#workflow.mb-5
+            h2.h3.mb-4
+              i.bi.bi-arrow-repeat.me-2
+              | Following the Spec Kit Flow
+
+            p.mb-4.
+              Ready to try it yourself? Here's the recommended workflow with the slash commands that guide Copilot through each phase. Each command has a specific purpose and builds on the previous steps.
+
+            .table-responsive.mb-4
+              table.table.table-bordered.table-hover
+                thead.table-light
+                  tr
+                    th.text-center Step
+                    th Command
+                    th Purpose
+                    th When to Use
+                tbody
+                  tr
+                    td.text-center.fw-bold 1
+                    td
+                      code.text-primary /speckit.constitution
+                    td Define your quality principles and coding standards
+                    td Once per project - sets foundational guidelines
+                  tr
+                    td.text-center.fw-bold 2
+                    td
+                      code.text-primary /speckit.specify
+                    td Declare WHAT to build and WHY it matters
+                    td Start of each feature/spec - defines the goal
+                  tr
+                    td.text-center.fw-bold 3
+                    td
+                      code.text-primary /speckit.clarify
+                    td Answer ambiguities and edge cases
+                    td After specify - usually just once to refine requirements
+                  tr
+                    td.text-center.fw-bold 4
+                    td
+                      code.text-primary /speckit.plan
+                    td Determine HOW to implement (tools, versions, approach)
+                    td Before coding - establishes technical strategy
+                  tr
+                    td.text-center.fw-bold 5
+                    td
+                      code.text-primary /speckit.tasks
+                    td Break work into discrete, testable chunks
+                    td After planning - creates actionable task list
+                  tr
+                    td.text-center.fw-bold 6
+                    td
+                      code.text-primary /speckit.analyze
+                    td Optional sanity check before execution
+                    td For complex specs - validates approach before commit
+                  tr
+                    td.text-center.fw-bold 7
+                    td
+                      code.text-primary /speckit.implement
+                    td Execute the plan with Copilot
+                    td Final step - let AI generate the code
+
+            .alert.alert-info.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-info-circle.me-2
+                | Example Flow: Warning Cleanup Spec
+              p.mb-2.
+                For a spec like "eliminate all compiler warnings", you'd follow this sequence:
+              ol.mb-0
+                li
+                  strong /speckit.constitution:
+                  |  "We treat warnings as errors. No pragma suppressions without justification."
+                li
+                  strong /speckit.specify:
+                  |  "WHAT: Zero warnings with TreatWarningsAsErrors enabled. WHY: Professional code quality and prevent tech debt."
+                li
+                  strong /speckit.clarify:
+                  |  "Do we need XML docs on internal classes? No, public APIs only."
+                li
+                  strong /speckit.plan:
+                  |  ".NET 8.0/9.0 multi-targeting. Use ArgumentNullException.ThrowIfNull(). Configure .editorconfig."
+                li
+                  strong /speckit.tasks:
+                  |  "1) Baseline audit, 2) XML docs, 3) Null guards, 4) Analyzer config, 5) Verify build."
+                li
+                  strong /speckit.analyze:
+                  |  "Spot-check: Will this break any public APIs? No - only adding docs and guards."
+                li
+                  strong /speckit.implement:
+                  |  "Execute tasks, run tests after each phase, commit incrementally."
+
+            p.mb-0.
+              The power of this flow is that each step constrains Copilot's focus. Instead of trying to solve everything at once, you guide it through a logical progression that produces reliable, well-documented results.
+
+          section#conclusion.mb-5
+            h2.h3.mb-4
+              i.bi.bi-trophy.me-2
+              | Conclusion
+
+            p.lead.mb-4.
+              GitHub's Spec Kit transforms AI coding from experimental to production-grade. By grounding Copilot in structured requirements, explicit constraints, and measurable success criteria, you get consistent quality without sacrificing velocity. In this real-world case study, two specs drove 136 files of changes, eliminated 100% of compiler warnings, and shipped two production releases in under 7 hours of focused work.
+
+            .alert.alert-success.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-check-circle-fill.me-2
+                | Project Outcomes
+              ul.mb-0
+                li
+                  strong 520/520 tests passing
+                  |  across .NET 8.0 and 9.0 frameworks
+                li
+                  strong Zero compiler warnings
+                  |  with TreatWarningsAsErrors enabled
+                li
+                  strong Two production releases
+                  |  (v1.5.0 and v1.5.1) deployed to NuGet.org
+                li
+                  strong 95+ Lighthouse scores
+                  |  for documentation site
+                li
+                  strong 60-70% faster iterations
+                  |  vs. ad hoc prompting
+
+            p.mb-0.
+              If you've been experimenting with AI-assisted development, Spec Kit provides the structure to make it reliable and repeatable. Start with a single .specify/ directory, write one SPEC.md with clear success criteria, and experience the difference between "hoping it works" and "knowing it will."

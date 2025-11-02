@@ -190,7 +190,7 @@ Generate:
     json_schema = new
    {
       name = "seo_metadata_result",
-       strict = true,
+  strict = false,  // Changed from true to allow partial results
   schema = new
        {
     type = "object",
@@ -200,9 +200,9 @@ Generate:
  subtitle = new { type = "string" },
         description = new { type = "string" },
   keywords = new { type = "string" },
-           seoTitle = new { type = "string" },
-      metaDescription = new { type = "string" }
-      },
+         seoTitle = new { type = "string" },
+metaDescription = new { type = "string" }
+},
      required = new[] { "articleTitle", "subtitle", "description", "keywords", "seoTitle", "metaDescription" },
 additionalProperties = false
    }
@@ -265,22 +265,43 @@ additionalProperties = false
 
         response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
-          var responseData = JsonDocument.Parse(responseContent);
+            
+   // Log the raw response for debugging
+  _logger.LogDebug("Step 2 Raw API Response: {ResponseContent}", responseContent);
+ 
+ var responseData = JsonDocument.Parse(responseContent);
 
-          var aiResponse = responseData.RootElement
+var aiResponse = responseData.RootElement
     .GetProperty("choices")[0]
    .GetProperty("message")
           .GetProperty("content")
         .GetString();
 
+       // Check if response is empty or null
+     if (string.IsNullOrWhiteSpace(aiResponse))
+{
+      _logger.LogWarning("Step 2: OpenAI returned empty response. Full API response: {Response}", responseContent);
+     
+       // Log the empty response
+                if (_aiLogger != null)
+    {
+    await _aiLogger.LogErrorAsync(0, title, 2, "SeoMetadataExtraction",
+    new Exception("OpenAI returned empty content in response"), requestBody);
+           }
+        
+   return new SeoMetadataResult();
+          }
+
+   _logger.LogDebug("Step 2 AI Response: {AiResponse}", aiResponse);
+
   var seoMetadata = JsonSerializer.Deserialize<SeoMetadataResult>(aiResponse ?? "{}") ?? new SeoMetadataResult();
      
             _logger.LogInformation("Step 2 Complete: Extracted SEO metadata");
-            
-            // Log AI interaction
-     if (_aiLogger != null)
+ 
+  // Log AI interaction
+  if (_aiLogger != null)
        {
-         await _aiLogger.LogAiInteractionAsync(
+      await _aiLogger.LogAiInteractionAsync(
         0, title, 2, "SeoMetadataExtraction", 
      requestBody, aiResponse ?? string.Empty, stopwatch.ElapsedMilliseconds);
      }
@@ -341,10 +362,10 @@ Make titles and descriptions compelling for social media sharing.";
      {
      type = "json_schema",
       json_schema = new
-            {
+   {
      name = "social_media_result",
-   strict = true,
-         schema = new
+   strict = false,  // Changed from true to allow partial results
+     schema = new
         {
   type = "object",
         properties = new
@@ -416,15 +437,36 @@ var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Syste
 
  response.EnsureSuccessStatusCode();
     var responseContent = await response.Content.ReadAsStringAsync();
-         var responseData = JsonDocument.Parse(responseContent);
+       
+   // Log the raw response for debugging
+  _logger.LogDebug("Step 3 Raw API Response: {ResponseContent}", responseContent);
+    
+      var responseData = JsonDocument.Parse(responseContent);
 
  var aiResponse = responseData.RootElement
-      .GetProperty("choices")[0]
-        .GetProperty("message")
+ .GetProperty("choices")[0]
+     .GetProperty("message")
     .GetProperty("content")
        .GetString();
 
-            var socialMedia = JsonSerializer.Deserialize<SocialMediaResult>(aiResponse ?? "{}") ?? new SocialMediaResult();
+  // Check if response is empty or null
+if (string.IsNullOrWhiteSpace(aiResponse))
+        {
+  _logger.LogWarning("Step 3: OpenAI returned empty response. Full API response: {Response}", responseContent);
+      
+ // Log the empty response
+      if (_aiLogger != null)
+      {
+     await _aiLogger.LogErrorAsync(0, title, 3, "SocialMediaGeneration",
+    new Exception("OpenAI returned empty content in response"), requestBody);
+    }
+ 
+   return new SocialMediaResult();
+ }
+
+      _logger.LogDebug("Step 3 AI Response: {AiResponse}", aiResponse);
+
+var socialMedia = JsonSerializer.Deserialize<SocialMediaResult>(aiResponse ?? "{}") ?? new SocialMediaResult();
       
   _logger.LogInformation("Step 3 Complete: Generated social media fields");
   
@@ -433,9 +475,9 @@ var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Syste
    {
        await _aiLogger.LogAiInteractionAsync(
         0, title, 3, "SocialMediaGeneration", 
-       requestBody, aiResponse ?? string.Empty, stopwatch.ElapsedMilliseconds);
+    requestBody, aiResponse ?? string.Empty, stopwatch.ElapsedMilliseconds);
             }
-         
+    
      return socialMedia;
         }
         catch (Exception ex)
