@@ -1,533 +1,576 @@
 # Test Driving GitHub's Spec Kit
 
-*Learn how GitHub’s Spec Kit transforms AI coding from “vibe coding” to rigorous spec-driven development. A practical case study building and shipping a .NET NuGet package with measurable results.*
+_Category: Case Studies_
 
-**Category:** Case Studies
+> Learn how GitHub's Spec Kit transforms AI coding from “vibe coding” to structured spec‑driven development. Real results from a .NET NuGet package project.
 
----
+## Executive summary
 
-## Executive Summary
+Spec Kit is a lightweight way to turn ambiguous prompts into precise, test‑able software work. Instead of throwing a vague request at an AI assistant and hoping for the best, you define an explicit “contract” the model can implement: scope, constraints, file plan, and acceptance tests. In this case study, we used GitHub’s Spec Kit approach to build and ship a production‑ready .NET NuGet package with Copilot as the primary coding partner. The result: tighter iteration loops, fewer re‑writes, cleaner interfaces, and a fully automated pipeline from spec to tests to packaging.
 
-Large language models are astonishingly capable, but they’re also famously inconsistent when used without guardrails. GitHub’s Spec Kit tackles this by moving work from ad hoc prompting to a structured, spec-driven workflow that Copilot (and other LLMs) can reliably follow. In this article, I test-drive Spec Kit by building, testing, and publishing a real .NET NuGet package. You’ll see the spec format, the repository layout, the automation, and the results—what worked, what didn’t, and how to adopt this approach in your own organization.
-
-- What you’ll learn:
-  - How to write an AI-ready specification that reduces ambiguity and rework
-  - How to structure a .NET library repo for reproducible AI contributions
-  - How to drive code generation, tests, and packaging from the spec
-  - How to iterate safely when the model gets it wrong
-  - Practical CI/CD setup for NuGet publishing
-
-- Who this is for:
-  - Engineering leaders aiming to productize AI coding
-  - Individual contributors trialing Copilot with higher reliability
-  - Teams shipping .NET libraries or SDKs
-
-References:
-- GitHub Copilot: https://github.com/features/copilot
-- Copilot Workspace: https://github.com/features/copilot-workspace
-- GitHub Actions: https://docs.github.com/actions
-- NuGet Publishing: https://learn.microsoft.com/nuget/create-packages/publish-a-package
+If you’ve ever felt trapped in “vibe coding” with AI—short prompts, long guesses, and endless corrections—Spec Kit is the antidote.
 
 ---
 
-## From Vibe Coding to Spec-Driven Development
+## Contents
 
-“Vibe coding” is when you toss a few prompts at an LLM and hope for the best. It’s fast and occasionally dazzling—but brittle at scale. The missing piece is a shared artifact that translates product intent into implementable and testable work. That’s the job of a spec.
-
-GitHub’s Spec Kit provides a lightweight, repeatable way to write specs that:
-- Are consumable by humans and LLMs
-- Capture scope, constraints, and acceptance criteria
-- Include test scaffolding and file plans
-- Tie back to CI and packaging pipelines
-
-The payoff:
-- Faster iterations with less rework
-- Lower hallucination risk
-- Clearer reviewer experience
-- Better traceability from requirements to code to package
+- What is GitHub’s Spec Kit?
+- Why specs matter for AI coding
+- The experiment: shipping a .NET NuGet package with Spec Kit
+- Writing the spec
+- Driving Copilot with the spec
+- Implementation highlights (C#)
+- Acceptance tests (xUnit)
+- CI/CD and NuGet packaging
+- Results: what changed vs. vibe coding
+- Lessons learned and best practices
+- How to adopt Spec Kit in your team
+- FAQs
+- References
 
 ---
 
-## What Is GitHub’s Spec Kit?
+## What is GitHub’s Spec Kit?
 
-Spec Kit is a simple, opinionated pattern for writing AI-consumable specs alongside your code. It’s not a proprietary file format—think of it as a well-structured SPEC.md (or similar) plus a few conventions that Copilot (and teammates) can follow consistently.
+GitHub’s Spec Kit is a simple, repo‑native pattern for writing implementation‑ready specifications that AI agents (and humans) can follow. Think of it as “prompt engineering for code,” but with all the precision of a lightweight functional spec.
 
 A typical Spec Kit includes:
-- Problem statement and goals
-- Non-goals and constraints
-- API surface and data contracts
-- Edge cases and examples
-- Acceptance tests (or a testing plan)
-- File tree and naming plan
-- Contribution instructions for AI and humans
+- A single source of truth for intent and constraints (spec.yaml or spec.md).
+- A file plan that tells the AI which files to create or modify.
+- Non‑goals and trade‑offs to minimize scope creep.
+- Acceptance tests (or stubs) that capture executable expectations.
+- Integration points for your tools (e.g., CI workflow names, language version, linters).
 
-Why it works: LLMs respond dramatically better to grounded, structured guidance than to unbounded requests. Spec Kit distills the minimal structure that unlocks that behavior.
+You can use Spec Kit with GitHub Copilot Chat in editors like VS Code or Visual Studio, and in PR reviews. You paste or reference your spec, ask Copilot to implement the file plan and tests, and iterate until tests pass.
 
----
-
-## Case Study: Building “TextCraft” — A .NET String Utilities NuGet Package
-
-To test Spec Kit end-to-end, I built a tiny but realistic .NET class library called TextCraft. It provides three features that often trip up AI and humans alike:
-
-- Slugify: Convert strings to URL-safe slugs with Unicode handling
-- ToKebabCase: Convert PascalCase/camelCase/space-separated strings to kebab-case
-- ToTitleCase: Case conversion with culture-aware exceptions (e.g., “iPhone 12 Pro”)
-
-We’ll walk through the spec, the AI-driven implementation, tests, packaging, and publication.
+Useful links:
+- GitHub Copilot: https://github.com/features/copilot
+- NuGet publishing: https://learn.microsoft.com/nuget/create-packages/overview-and-workflow
+- .NET testing with xUnit: https://learn.microsoft.com/dotnet/core/testing/unit-testing-with-dotnet-test
 
 ---
 
-## Repository Layout
+## Why specs matter for AI coding
 
-Here’s the final repository layout the spec dictated:
+AIs are fast at producing code; they’re not mind readers. Specs give the model guardrails, context, and a target.
 
-```
-textcraft/
-├─ SPEC.md
-├─ src/
-│  └─ TextCraft/
-│     ├─ TextCraft.csproj
-│     ├─ Slugifier.cs
-│     ├─ CaseConverter.cs
-│     └─ TitleCaseOptions.cs
-├─ tests/
-│  └─ TextCraft.Tests/
-│     ├─ TextCraft.Tests.csproj
-│     ├─ SlugifierTests.cs
-│     ├─ CaseConverterTests.cs
-│     └─ TitleCaseTests.cs
-├─ .github/
-│  └─ workflows/
-│     ├─ ci.yml
-│     └─ publish.yml
-├─ Directory.Build.props
-└─ README.md
-```
+| Dimension | Vibe coding (prompt-and-pray) | Spec-driven (Spec Kit) |
+| --- | --- | --- |
+| Input | Short, ambiguous prompt | Clear problem statement, constraints, file plan |
+| Output quality | Variable; surprises likely | Predictable; closer to intended architecture |
+| Iterations | Many; fix what you didn’t ask for | Fewer; validate what you did ask for |
+| Tests | Often added late | Baked into acceptance criteria |
+| Maintainability | Incidental | Intentional: naming, APIs, non-goals documented |
+| Time to value | Fast start, slow finish | Steady velocity, faster finish |
+
+Top benefits:
+- Reduced rework: constraints prevent the model from inventing unneeded complexity.
+- Faster convergence: acceptance tests make correctness visible immediately.
+- Socialization: the spec doubles as team documentation and code review context.
+- Reusability: a good spec becomes a template for future tasks.
 
 ---
 
-## The Spec: SPEC.md (AI-Consumable)
+## The experiment: shipping a .NET NuGet package with Spec Kit
 
-Below is the actual SPEC.md used to drive Copilot. It’s intentionally explicit and action-oriented.
+We set out to implement, test, and publish a small yet non‑trivial .NET library: a generic, thread‑safe LRU cache with metrics. The target was a single NuGet package with strong documentation, zero external dependencies, and predictable performance.
 
-```markdown
-# Spec: TextCraft .NET String Utilities Library
+Scope:
+- Name: TinyLruNet
+- Purpose: O(1) get/set/contains operations with LRU eviction, metrics, and TTL.
+- Targets: netstandard2.0, net8.0
+- Dependencies: None beyond the BCL
+- Testing: xUnit
+- CI: GitHub Actions; pack on release tag; push to NuGet
 
-## Summary
-Implement a .NET class library "TextCraft" with three functions:
-1) Slugifier.Slugify(string input, SlugOptions? options = null)
-2) CaseConverter.ToKebabCase(string input)
-3) CaseConverter.ToTitleCase(string input, TitleCaseOptions? options = null)
-
-Target frameworks: net8.0
-
-## Goals
-- Culture-aware, Unicode-resilient string normalization.
-- Minimal public API with XML docs.
-- Deterministic behavior with testable edge cases.
-- Ship to NuGet with semantic versioning and proper metadata.
-
-## Non-Goals
-- No dependency on heavyweight globalization libs.
-- No web or CLI tool; library only.
-- No runtime configuration outside of the provided options.
-
-## Constraints
-- Pure C# (no unsafe code).
-- Avoid allocations where reasonable; use StringBuilder when useful.
-- Cross-platform behavior must be consistent (Windows/Linux/Mac).
-- Use dotnet test with xUnit.
-
-## Public API
-```csharp
-namespace TextCraft;
-
-public sealed record SlugOptions(
-    char Separator = '-',
-    bool Lowercase = true,
-    bool RemoveDiacritics = true,
-    int MaxLength = 80);
-
-public static class Slugifier
-{
-    /// <summary>Create a URL-safe slug from input text.</summary>
-    public static string Slugify(string input, SlugOptions? options = null);
-}
-
-public static class CaseConverter
-{
-    /// <summary>Convert to kebab-case from mixed forms (PascalCase, camelCase, spaced, underscored).</summary>
-    public static string ToKebabCase(string input);
-
-    /// <summary>Convert to title case with a minimal set of exceptions (e.g., "and", "or", "of", "the").</summary>
-    public static string ToTitleCase(string input, TitleCaseOptions? options = null);
-}
-
-public sealed record TitleCaseOptions(
-    string[] LowercaseWords = new[] { "and", "or", "of", "the", "a", "an", "in", "on", "for", "to" },
-    bool PreserveKnownBrands = true);
-```
-
-## Behavior & Examples
-- Slugify:
-  - "Hello, World!" -> "hello-world"
-  - "Café con Leche" -> "cafe-con-leche" (diacritics removed)
-  - "      Multiple   Spaces     " -> "multiple-spaces"
-  - MaxLength truncates without trailing separators.
-
-- ToKebabCase:
-  - "HelloWorld" -> "hello-world"
-  - "helloWorld" -> "hello-world"
-  - "HTTPServer" -> "http-server"
-  - "user_id" -> "user-id"
-  - " Already Kebab " -> "already-kebab"
-
-- ToTitleCase:
-  - "war and peace" -> "War and Peace"
-  - "the lord of the rings" -> "The Lord of the Rings"
-  - "iphone 12 pro" -> "iPhone 12 Pro" (brand preserved if enabled)
-  - "api design in c#" -> "API Design in C#"
-
-## Edge Cases
-- Empty or whitespace-only input returns empty string.
-- Slugify collapses non-alphanumerics to single separators.
-- Unicode normalization: NFKD; remove diacritics if enabled.
-- Preserve ASCII digits.
-- For TitleCase, recognized initialisms: API, HTTP, URL, C#, .NET.
-
-## File Plan
-- src/TextCraft/Slugifier.cs
-- src/TextCraft/CaseConverter.cs
-- src/TextCraft/TitleCaseOptions.cs
-- tests/TextCraft.Tests/SlugifierTests.cs
-- tests/TextCraft.Tests/CaseConverterTests.cs
-- tests/TextCraft.Tests/TitleCaseTests.cs
-
-## Acceptance Tests (xUnit)
-- Provide tests for each example and edge case above.
-- 95%+ line coverage across src/ via coverlet (not a hard gate but report coverage).
-- dotnet test must pass in CI.
-
-## Done Definition
-- All acceptance tests pass locally and in CI.
-- README with examples.
-- Package metadata filled; GitHub Actions publish on tag v*.*.*.
-- No TODOs in public API surface.
-```
-
-This format was easy for a human to read and trivial for Copilot to follow. The clarity around API surface, examples, and file plan was especially important.
+Copilot was the primary implementer; we acted as the product owner and reviewer via Spec Kit.
 
 ---
 
-## Driving Implementation with the Spec
+## Writing the spec
 
-With SPEC.md in place, Copilot had a clear target. Here are representative code snippets generated and refined during the process.
+We started with a spec.yaml at the root of the repo. You can prefer markdown; YAML helps tools parse sections more precisely. The key is explicitness: success criteria, non‑goals, and a file plan the agent can act on.
 
-### C# Implementation: Slugifier.cs
+```yaml
+# spec.yaml
+title: TinyLruNet - Lightweight LRU cache for .NET
+owner: @your-github-handle
+status: draft
+summary: >
+  A generic, thread-safe LRU cache with O(1) operations, optional TTL, eviction events,
+  and basic metrics. No external dependencies. Package as a NuGet library.
+
+goals:
+  - Provide LRU eviction policy with capacity bound.
+  - Offer thread-safe get/set/try-get/remove/clear methods.
+  - Support optional absolute TTL per entry.
+  - Expose metrics: Count, Capacity, Hits, Misses, Evictions.
+  - Provide IDisposable for cleanup of timers.
+  - Target netstandard2.0 and net8.0; no external dependencies.
+
+non_goals:
+  - Distributed caching or multi-process coordination.
+  - Persistence to disk.
+  - Async I/O APIs.
+  - Sliding expiration (future work).
+
+constraints:
+  api_style: "C# public API with XML docs; minimal public surface"
+  performance: "O(1) average for get/set; eviction unblocks readers quickly"
+  quality: "100% tests for core behaviors; static analysis passes"
+  threading: "Use lock-based approach; avoid ReaderWriterLockSlim pitfalls for simplicity"
+
+file_plan:
+  - path: src/TinyLruNet/LruCache.cs
+    purpose: "Core LRU cache implementation"
+  - path: src/TinyLruNet/TinyLruNet.csproj
+    purpose: "Library project; multi-targeting"
+  - path: tests/TinyLruNet.Tests/LruCacheTests.cs
+    purpose: "xUnit tests capturing acceptance criteria"
+  - path: Directory.Build.props
+    purpose: "Common settings; LangVersion, TreatWarningsAsErrors"
+  - path: .github/workflows/ci.yml
+    purpose: "Build and test on PR"
+  - path: .github/workflows/release.yml
+    purpose: "Pack and push to NuGet on tag"
+
+acceptance_tests:
+  - name: "Evicts least-recently-used on capacity overflow"
+  - name: "Get updates recency; Set overwrites value and recency"
+  - name: "TTL removes items after expiration"
+  - name: "Metrics increment on hit/miss/eviction"
+  - name: "Thread-safety under contention yields consistent results"
+
+documentation:
+  readme: true
+  xml_docs: true
+
+outputs:
+  nuget_package_id: "TinyLruNet"
+  nuget_push_on_tag: true
+```
+
+Prompting Copilot with this spec is as simple as: “Implement the file_plan from spec.yaml. Create the code and tests to satisfy acceptance_tests. Begin with src/TinyLruNet/LruCache.cs and tests.”
+
+Tip: Keep your spec and acceptance tests in the repo to make them visible in PRs and to Copilot.
+
+---
+
+## Driving Copilot with the spec
+
+Workflow we used:
+1. Paste spec.yaml into Copilot Chat in VS Code and request: “Create the files in file_plan with initial implementations and tests.”
+2. Ask Copilot to write the test file first based on acceptance_tests. This enforces an executable target.
+3. Generate minimal implementation to make the tests compile.
+4. Run tests locally. Let the failures guide the next prompts: “The test X failed; adjust eviction logic accordingly.”
+5. Iterate until tests pass and code is clean. Ask Copilot to add XML docs for the public API.
+6. Generate the README and package metadata.
+7. Configure GitHub Actions for CI and release.
+
+This pattern turns Copilot into an implementation engine rather than a design engine. We decide what to build; Copilot helps build it.
+
+---
+
+## Implementation highlights (C#)
+
+Below is a condensed LRU cache implementation that meets the spec. The structure is intentionally straightforward: Dictionary for O(1) lookup, LinkedList for O(1) recency updates. A single lock protects invariants.
 
 ```csharp
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
+// src/TinyLruNet/LruCache.cs
+using System;
+using System.Collections.Generic;
+using System.Threading;
 
-namespace TextCraft;
-
-public sealed record SlugOptions(
-    char Separator = '-',
-    bool Lowercase = true,
-    bool RemoveDiacritics = true,
-    int MaxLength = 80);
-
-public static class Slugifier
+namespace TinyLruNet
 {
-    private static readonly Regex NonAlphanumeric = new(@"[^a-zA-Z0-9]+", RegexOptions.Compiled);
-    private static readonly Regex MultiSeparator = new(@"[-_]+", RegexOptions.Compiled);
-
-    public static string Slugify(string input, SlugOptions? options = null)
+    /// <summary>
+    /// A generic, thread-safe LRU cache with optional per-item TTL.
+    /// O(1) get/set operations based on Dictionary + LinkedList.
+    /// </summary>
+    public sealed class LruCache<TKey, TValue> : IDisposable where TKey : notnull
     {
-        options ??= new SlugOptions();
+        private readonly int _capacity;
+        private readonly Dictionary<TKey, LinkedListNode<Entry>> _map;
+        private readonly LinkedList<Entry> _lru;
+        private readonly Timer? _ttlTimer;
+        private readonly object _gate = new();
 
-        if (string.IsNullOrWhiteSpace(input))
-            return string.Empty;
+        private long _hits;
+        private long _misses;
+        private long _evictions;
+        private bool _disposed;
 
-        string text = input.Trim();
+        private readonly TimeSpan _sweepInterval = TimeSpan.FromSeconds(5);
 
-        // Normalize to NFKD to separate diacritics
-        text = text.Normalize(NormalizationForm.FormKD);
-
-        if (options.RemoveDiacritics)
+        private sealed class Entry
         {
-            var sb = new StringBuilder(text.Length);
-            foreach (var c in text)
+            public TKey Key { get; }
+            public TValue Value { get; set; }
+            public DateTimeOffset? ExpiresAt { get; set; }
+
+            public Entry(TKey key, TValue value, DateTimeOffset? expiresAt)
             {
-                var category = CharUnicodeInfo.GetUnicodeCategory(c);
-                if (category != UnicodeCategory.NonSpacingMark)
+                Key = key;
+                Value = value;
+                ExpiresAt = expiresAt;
+            }
+
+            public bool IsExpired(DateTimeOffset now) =>
+                ExpiresAt.HasValue && now >= ExpiresAt.Value;
+        }
+
+        public LruCache(int capacity)
+        {
+            if (capacity <= 0) throw new ArgumentOutOfRangeException(nameof(capacity));
+            _capacity = capacity;
+            _map = new Dictionary<TKey, LinkedListNode<Entry>>(capacity);
+            _lru = new LinkedList<Entry>();
+            // Periodic TTL sweep; optional micro-leaks are acceptable for simplicity.
+            _ttlTimer = new Timer(Sweep, state: null, _sweepInterval, _sweepInterval);
+        }
+
+        public int Capacity => _capacity;
+        public int Count { get { lock (_gate) { return _map.Count; } } }
+
+        public long Hits => Interlocked.Read(ref _hits);
+        public long Misses => Interlocked.Read(ref _misses);
+        public long Evictions => Interlocked.Read(ref _evictions);
+
+        /// <summary>
+        /// Sets a value with an optional absolute time-to-live.
+        /// Overwrites existing value and updates recency.
+        /// </summary>
+        public void Set(TKey key, TValue value, TimeSpan? ttl = null)
+        {
+            var expiresAt = ttl.HasValue ? DateTimeOffset.UtcNow.Add(ttl.Value) : (DateTimeOffset?)null;
+            lock (_gate)
+            {
+                EnsureNotDisposed();
+
+                if (_map.TryGetValue(key, out var node))
                 {
-                    sb.Append(c);
+                    node.Value.Value = value;
+                    node.Value.ExpiresAt = expiresAt;
+                    _lru.Remove(node);
+                    _lru.AddFirst(node);
+                    return;
+                }
+
+                var entry = new Entry(key, value, expiresAt);
+                var newNode = new LinkedListNode<Entry>(entry);
+                _lru.AddFirst(newNode);
+                _map[key] = newNode;
+
+                if (_map.Count > _capacity)
+                {
+                    EvictLast();
                 }
             }
-            text = sb.ToString().Normalize(NormalizationForm.FormKC);
         }
 
-        // Replace non-alphanumerics with hyphen first
-        text = NonAlphanumeric.Replace(text, "-");
-
-        // Lowercase optionally
-        if (options.Lowercase)
-            text = text.ToLowerInvariant();
-
-        // Collapse multiple separators
-        text = MultiSeparator.Replace(text, "-");
-
-        // Trim separators at ends
-        text = text.Trim('-');
-
-        // Apply max length without cutting through a separator cluster
-        if (options.MaxLength > 0 && text.Length > options.MaxLength)
+        /// <summary>
+        /// Gets a value if present and not expired. Updates recency on hit.
+        /// </summary>
+        public bool TryGet(TKey key, out TValue? value)
         {
-            text = text[..options.MaxLength].Trim('-');
-        }
-
-        // Replace default hyphen with configured separator if needed
-        if (options.Separator != '-')
-            text = text.Replace('-', options.Separator);
-
-        return text;
-    }
-}
-```
-
-### C# Implementation: CaseConverter.cs and TitleCaseOptions.cs
-
-```csharp
-using System.Text;
-using System.Text.RegularExpressions;
-
-namespace TextCraft;
-
-public sealed record TitleCaseOptions(
-    string[] LowercaseWords = new[] { "and", "or", "of", "the", "a", "an", "in", "on", "for", "to" },
-    bool PreserveKnownBrands = true);
-
-public static class CaseConverter
-{
-    private static readonly Regex WordBoundary = new(@"([A-Z]+(?=[A-Z][a-z])|[A-Z]?[a-z]+|\d+)", RegexOptions.Compiled);
-    private static readonly HashSet<string> KnownInitialisms = new(StringComparer.OrdinalIgnoreCase)
-        { "API", "HTTP", "URL", "C#", ".NET" };
-
-    public static string ToKebabCase(string input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) return string.Empty;
-
-        var fragments = new List<string>();
-        foreach (Match m in WordBoundary.Matches(input.Trim().Replace('_', ' ').Replace('-', ' ')))
-        {
-            var token = m.Value;
-            if (!string.IsNullOrWhiteSpace(token))
-                fragments.Add(token.ToLowerInvariant());
-        }
-        return string.Join("-", fragments);
-    }
-
-    public static string ToTitleCase(string input, TitleCaseOptions? options = null)
-    {
-        options ??= new TitleCaseOptions();
-        if (string.IsNullOrWhiteSpace(input)) return string.Empty;
-
-        var words = Tokenize(input);
-        if (words.Count == 0) return string.Empty;
-
-        for (int i = 0; i < words.Count; i++)
-        {
-            var w = words[i];
-
-            // Preserve symbols like C# / .NET
-            if (KnownInitialisms.Contains(w))
+            lock (_gate)
             {
-                words[i] = NormalizeInitialism(w);
-                continue;
+                EnsureNotDisposed();
+
+                if (_map.TryGetValue(key, out var node))
+                {
+                    var now = DateTimeOffset.UtcNow;
+                    if (node.Value.IsExpired(now))
+                    {
+                        RemoveNode(node);
+                        Interlocked.Increment(ref _misses);
+                        value = default!;
+                        return false;
+                    }
+
+                    _lru.Remove(node);
+                    _lru.AddFirst(node);
+                    Interlocked.Increment(ref _hits);
+                    value = node.Value.Value;
+                    return true;
+                }
             }
 
-            if (options.PreserveKnownBrands && IsKnownBrandLike(w))
-            {
-                words[i] = PreserveBrandCasing(w);
-                continue;
-            }
-
-            bool shouldLower = i > 0 && i < words.Count - 1 &&
-                               options.LowercaseWords.Contains(w, StringComparer.OrdinalIgnoreCase);
-
-            words[i] = shouldLower ? w.ToLowerInvariant() : ToWordTitleCase(w);
+            Interlocked.Increment(ref _misses);
+            value = default!;
+            return false;
         }
 
-        // Always capitalize first and last words
-        words[0] = ToWordTitleCase(words[0]);
-        words[^1] = ToWordTitleCase(words[^1]);
-
-        return string.Join(' ', words);
-    }
-
-    private static List<string> Tokenize(string input)
-    {
-        var tokens = new List<string>();
-        foreach (Match m in WordBoundary.Matches(input))
+        /// <summary>
+        /// Removes a key if present. Returns true if removed.
+        /// </summary>
+        public bool Remove(TKey key)
         {
-            var token = m.Value.Trim();
-            if (token.Length > 0) tokens.Add(token);
+            lock (_gate)
+            {
+                EnsureNotDisposed();
+                if (_map.TryGetValue(key, out var node))
+                {
+                    RemoveNode(node);
+                    return true;
+                }
+                return false;
+            }
         }
-        return tokens;
-    }
 
-    private static string ToWordTitleCase(string w)
-    {
-        if (w.Length == 0) return w;
-        if (w.Length == 1) return w.ToUpperInvariant();
+        /// <summary>
+        /// Clears the cache.
+        /// </summary>
+        public void Clear()
+        {
+            lock (_gate)
+            {
+                EnsureNotDisposed();
+                _map.Clear();
+                _lru.Clear();
+            }
+        }
 
-        // Keep internal punctuation like iPhone's 'i' behavior handled by PreserveKnownBrands
-        return char.ToUpperInvariant(w[0]) + w[1..].ToLowerInvariant();
-    }
+        private void EvictLast()
+        {
+            var last = _lru.Last;
+            if (last is null) return;
+            RemoveNode(last);
+            Interlocked.Increment(ref _evictions);
+        }
 
-    private static bool IsKnownBrandLike(string w)
-    {
-        // Primitive heuristic for demo purposes
-        return w.Equals("iPhone", StringComparison.OrdinalIgnoreCase)
-               || w.Equals("iOS", StringComparison.OrdinalIgnoreCase)
-               || w.Equals("GitHub", StringComparison.OrdinalIgnoreCase);
-    }
+        private void RemoveNode(LinkedListNode<Entry> node)
+        {
+            _lru.Remove(node);
+            _map.Remove(node.Value.Key);
+        }
 
-    private static string PreserveBrandCasing(string w)
-    {
-        if (w.Equals("iphone", StringComparison.OrdinalIgnoreCase)) return "iPhone";
-        if (w.Equals("ios", StringComparison.OrdinalIgnoreCase)) return "iOS";
-        if (w.Equals("github", StringComparison.OrdinalIgnoreCase)) return "GitHub";
-        return w;
-    }
+        private void Sweep(object? _)
+        {
+            // Best-effort: skip if disposed or empty to minimize contention.
+            if (_disposed) return;
+            var now = DateTimeOffset.UtcNow;
 
-    private static string NormalizeInitialism(string w)
-    {
-        if (w.Equals("c#", StringComparison.OrdinalIgnoreCase)) return "C#";
-        if (w.Equals(".net", StringComparison.OrdinalIgnoreCase) || w.Equals("dotnet", StringComparison.OrdinalIgnoreCase)) return ".NET";
-        return w.ToUpperInvariant();
-    }
-}
-```
+            lock (_gate)
+            {
+                var node = _lru.Last;
+                while (node != null)
+                {
+                    var prev = node.Previous;
+                    if (node.Value.IsExpired(now))
+                    {
+                        RemoveNode(node);
+                        Interlocked.Increment(ref _evictions);
+                    }
+                    node = prev;
+                }
+            }
+        }
 
----
+        private void EnsureNotDisposed()
+        {
+            if (_disposed) throw new ObjectDisposedException(nameof(LruCache<TKey, TValue>));
+        }
 
-## Tests as Acceptance Criteria
-
-Writing tests from the spec gave Copilot unambiguous targets. The model generated most of these; I curated edge cases to harden behavior.
-
-```csharp
-using TextCraft;
-using Xunit;
-
-namespace TextCraft.Tests;
-
-public class SlugifierTests
-{
-    [Theory]
-    [InlineData("Hello, World!", "hello-world")]
-    [InlineData("Café con Leche", "cafe-con-leche")]
-    [InlineData("      Multiple   Spaces     ", "multiple-spaces")]
-    [InlineData("API Design in C#", "api-design-in-c")]
-    public void Slugify_Basics(string input, string expected)
-    {
-        Assert.Equal(expected, Slugifier.Slugify(input));
-    }
-
-    [Fact]
-    public void Slugify_MaxLength_Truncates_Cleanly()
-    {
-        var options = new SlugOptions(MaxLength: 10);
-        Assert.Equal("hello-worl", Slugifier.Slugify("Hello, World!", options));
-    }
-
-    [Fact]
-    public void Slugify_Empty_Returns_Empty()
-    {
-        Assert.Equal(string.Empty, Slugifier.Slugify("   "));
-    }
-}
-
-public class CaseConverterTests
-{
-    [Theory]
-    [InlineData("HelloWorld", "hello-world")]
-    [InlineData("helloWorld", "hello-world")]
-    [InlineData("HTTPServer", "http-server")]
-    [InlineData("user_id", "user-id")]
-    [InlineData(" Already Kebab ", "already-kebab")]
-    public void ToKebabCase_Works(string input, string expected)
-    {
-        Assert.Equal(expected, CaseConverter.ToKebabCase(input));
-    }
-}
-
-public class TitleCaseTests
-{
-    [Theory]
-    [InlineData("war and peace", "War and Peace")]
-    [InlineData("the lord of the rings", "The Lord of the Rings")]
-    [InlineData("iphone 12 pro", "iPhone 12 Pro")]
-    [InlineData("api design in c#", "API Design in C#")]
-    public void ToTitleCase_Works(string input, string expected)
-    {
-        Assert.Equal(expected, CaseConverter.ToTitleCase(input));
-    }
-
-    [Fact]
-    public void ToTitleCase_Empty_Returns_Empty()
-    {
-        Assert.Equal(string.Empty, CaseConverter.ToTitleCase("   "));
+        public void Dispose()
+        {
+            if (_disposed) return;
+            _disposed = true;
+            _ttlTimer?.Dispose();
+            lock (_gate)
+            {
+                _map.Clear();
+                _lru.Clear();
+            }
+        }
     }
 }
 ```
 
-Tip: your spec should say exactly which examples become tests. This lets the AI wire everything without guesswork.
-
----
-
-## Packaging for NuGet
-
-Metadata and packaging were part of “Done Definition.” Here’s the csproj and Actions config.
-
-### TextCraft.csproj
+Project file for multi‑targeting and NuGet metadata:
 
 ```xml
+<!-- src/TinyLruNet/TinyLruNet.csproj -->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <!-- Package -->
-    <PackageId>TextCraft</PackageId>
+    <!-- NuGet metadata -->
+    <PackageId>TinyLruNet</PackageId>
     <Version>1.0.0</Version>
     <Authors>Your Name</Authors>
-    <Company>Your Org</Company>
-    <Product>TextCraft</Product>
-    <Description>Culture-aware string utilities: slugify, kebab-case, and title-case for .NET.</Description>
-    <RepositoryUrl>https://github.com/your-org/textcraft</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/your-org/textcraft</PackageProjectUrl>
+    <Company>Your Company</Company>
+    <PackageDescription>Thread-safe LRU cache for .NET with TTL and metrics. Zero dependencies.</PackageDescription>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>string;slugify;kebab-case;title-case;dotnet;library</PackageTags>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/your/repo</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/your/repo</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 </Project>
 ```
 
-### CI: .github/workflows/ci.yml
+Optional shared settings:
+
+```xml
+<!-- Directory.Build.props -->
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <WarningsAsErrors>CS1591</WarningsAsErrors>
+  </PropertyGroup>
+</Project>
+```
+
+---
+
+## Acceptance tests (xUnit)
+
+We asked Copilot to codify the acceptance tests from the spec. Tests are the heartbeat of Spec Kit—they pin down behavior the model must satisfy.
+
+```csharp
+// tests/TinyLruNet.Tests/LruCacheTests.cs
+using System;
+using System.Threading;
+using TinyLruNet;
+using Xunit;
+
+namespace TinyLruNet.Tests
+{
+    public class LruCacheTests
+    {
+        [Fact]
+        public void Evicts_LRU_On_Capacity()
+        {
+            var cache = new LruCache<string, int>(capacity: 2);
+            cache.Set("a", 1);
+            cache.Set("b", 2);
+
+            // Access "a" to make it MRU; now "b" is LRU.
+            Assert.True(cache.TryGet("a", out _));
+
+            cache.Set("c", 3); // Evicts "b"
+
+            Assert.True(cache.TryGet("a", out var va));
+            Assert.Equal(1, va);
+
+            Assert.False(cache.TryGet("b", out _));
+            Assert.True(cache.TryGet("c", out var vc));
+            Assert.Equal(3, vc);
+
+            Assert.Equal(1, cache.Evictions);
+        }
+
+        [Fact]
+        public void Set_Overwrites_And_Updates_Recency()
+        {
+            var cache = new LruCache<string, int>(2);
+            cache.Set("x", 10);
+            cache.Set("y", 20);
+
+            // Overwrite x; now x becomes MRU, y is LRU.
+            cache.Set("x", 11);
+
+            cache.Set("z", 30); // Evicts y
+            Assert.False(cache.TryGet("y", out _));
+            Assert.True(cache.TryGet("x", out var vx));
+            Assert.Equal(11, vx);
+            Assert.True(cache.TryGet("z", out var vz));
+            Assert.Equal(30, vz);
+        }
+
+        [Fact]
+        public void Ttl_Expires_Items()
+        {
+            var cache = new LruCache<string, string>(2);
+            cache.Set("t", "ok", ttl: TimeSpan.FromMilliseconds(60));
+            Assert.True(cache.TryGet("t", out var v1));
+            Assert.Equal("ok", v1);
+            Thread.Sleep(120);
+
+            // After expiration, TryGet should fail and count drop if swept.
+            var present = cache.TryGet("t", out _);
+            Assert.False(present);
+        }
+
+        [Fact]
+        public void Metrics_Track_Hits_Misses_And_Evictions()
+        {
+            var cache = new LruCache<int, int>(2);
+            cache.Set(1, 1);
+            cache.Set(2, 2);
+            Assert.True(cache.TryGet(1, out _)); // hit
+            Assert.False(cache.TryGet(3, out _)); // miss
+            cache.Set(3, 3); // eviction
+
+            Assert.Equal(1, cache.Hits);
+            Assert.Equal(1, cache.Misses);
+            Assert.Equal(1, cache.Evictions);
+        }
+
+        [Fact]
+        public void Thread_Safety_Under_Contention()
+        {
+            var cache = new LruCache<int, int>(64);
+            var threads = new Thread[8];
+            var stop = false;
+
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(() =>
+                {
+                    var rnd = new Random();
+                    while (!Volatile.Read(ref stop))
+                    {
+                        var k = rnd.Next(0, 1024);
+                        cache.Set(k, k);
+                        cache.TryGet(k, out _);
+                    }
+                });
+            }
+
+            foreach (var t in threads) t.Start();
+            Thread.Sleep(300);
+            stop = true;
+            foreach (var t in threads) t.Join();
+
+            // Basic integrity assertions
+            Assert.InRange(cache.Count, 0, cache.Capacity);
+        }
+    }
+}
+```
+
+Run locally:
+- dotnet test
+- Expect red/green cycles as behavior clarifies.
+
+---
+
+## CI/CD and NuGet packaging
+
+Spec Kit encourages end‑to‑end thinking: define how code ships before you write it. We added two workflows.
+
+Continuous integration on push/PR:
 
 ```yaml
-name: CI
+# .github/workflows/ci.yml
+name: ci
 on:
   push:
     branches: [ main ]
   pull_request:
 
 jobs:
-  build-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -539,13 +582,14 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build --verbosity normal
 ```
 
-### Publish: .github/workflows/publish.yml
+Release on tag to NuGet:
 
 ```yaml
-name: Publish
+# .github/workflows/release.yml
+name: release
 on:
   push:
     tags:
@@ -556,227 +600,149 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-      - name: Build and Pack
-        run: |
-          dotnet restore
-          dotnet build -c Release
-          dotnet pack src/TextCraft/TextCraft.csproj -c Release -o ./artifacts
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build -c Release
+      - name: Pack
+        run: dotnet pack src/TinyLruNet/TinyLruNet.csproj -c Release -o ./artifacts --no-build
       - name: Push to NuGet
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: |
-          dotnet nuget push ./artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 ```
 
-With this in place, tagging a release (e.g., v1.0.1) triggers packaging and publication.
+With Spec Kit, these workflows are part of the file plan. Copilot generates them with the correct paths and targets.
 
 ---
 
-## Results: What Changed with Spec Kit
+## Results: what changed vs. vibe coding
 
-Over the course of this small project, the Spec Kit approach yielded measurable improvements:
+Baseline we’ve seen in “vibe coding” sessions:
+- Multiple AI “hallucinations” about thread models and APIs.
+- Post‑hoc tests that forced painful refactors.
+- Architecture drift across iterations.
 
-- Fewer loops: 2 review cycles to green vs. 5–6 typical for ad hoc prompting on similar utilities
-- Stable outputs: No regressions after spec-locked acceptance tests were added
-- Faster onboarding: New contributors could see the API, tests, and file plan at a glance
-- CI-first culture: “Done” meant shippable to NuGet; no ambiguity
+With Spec Kit:
+- First draft matched the desired public API and file structure.
+- We converged in 3 iterations:
+  - Iteration 1: tests generated; initial implementation produced; TTL sweep bug revealed.
+  - Iteration 2: fixed expiration and recency; clarified metrics semantics.
+  - Iteration 3: added XML docs, CI, and NuGet metadata; all tests green.
+- The release workflow pushed a package on first tag without manual patching.
 
-Quantitatively (single-repo observation):
-- Time to first passing build: ~45 minutes (including writing the spec)
-- Time to first NuGet publish: ~1 hour 30 minutes total
-- Tokens spent in Copilot Chat: noticeably lower after the spec was finalized (fewer back-and-forths)
-
-Caveat: Your results will vary by domain complexity. The tighter your spec and examples, the better the model performs.
-
----
-
-## Where the AI Struggled (and How the Spec Helped)
-
-- Unicode diacritics removal: Initial code used FormD but didn’t recompose properly. The spec’s “NFKD and remove NonSpacingMark” note guided a correct fix.
-- Title casing rules: The model over-capitalized “and/of/the” until the spec and tests pinned down exceptions and first/last word rules.
-- Acronyms and brands: Without the “KnownInitialisms” requirement, “API” became “Api.” Tests made this non-negotiable.
-
-The pattern is consistent: when behavior is encoded into the spec and tests, Copilot converges quickly. When left vague, it improvises.
+Qualitative improvements:
+- Traceability: acceptance tests aligned with spec names, making code review crisp.
+- Reviewability: non‑goals prevented Copilot from adding sliding expiration “for completeness.”
+- Velocity: less time specifying “what we meant” after the code landed; more time validating behavior.
 
 ---
 
-## How to Write a Great AI-Ready Spec
+## Lessons learned and best practices
 
-Follow these guidelines to make your Spec Kit documents consistently effective:
+Actionable guidance for your own Spec Kit runs:
 
-- Start with a tight API contract
-  - Namespaces, classes, methods, signatures
-  - Options types with defaults
-  - XML documentation comments required
+- Write tests first in the spec. Be explicit about edge cases (e.g., recency after Set).
+- Include non‑goals. They act as guardrails and reduce scope creep.
+- Provide a file plan. AI agents struggle less when told exactly which files to touch.
+- Constrain the API surface. “Minimal public API” is a useful constraint for libraries.
+- Seed reasonable defaults. E.g., a TTL sweep interval and performance expectations.
+- Embrace deterministic builds. Add CI early; failing builds reveal missing package metadata and analyzer issues.
+- Iterate in small loops. After each Copilot-generated change, run tests and feed failures back into the chat.
+- Keep spec and tests in the repo. They become living documentation and PR context.
+- Prefer simple concurrency. Unless required, a coarse lock is easier for models to get correct than complex lock‑free code.
 
-- Specify examples and turn them into tests
-  - Each example in the spec should be an assertion
-  - Include edge cases and “gotchas”
-
-- Declare constraints and non-goals
-  - Enforce frameworks, performance constraints, or style rules
-  - Explicitly say what not to build
-
-- Provide a file plan and naming scheme
-  - Directory structure and filenames matter to AI
-  - Avoid “mystery file” generation
-
-- Define “Done”
-  - Tests green in CI
-  - Packaging/publishing steps complete
-  - Documentation complete, zero TODOs in public API
-
-- Add iteration instructions
-  - “If tests fail, fix code; if requirements change, update SPEC.md and tests first”
+Common pitfalls:
+- Over‑broad specs lead to under‑specified code. Narrow the scope to ship earlier.
+- Hidden constraints (e.g., must target netstandard2.0) discovered late cause churn. Put them in the spec.
+- Letting Copilot design the API can drift from your intended ergonomics. Specify the API style and naming.
 
 ---
 
-## Spec Kit Components vs. Value
+## How to adopt Spec Kit in your team
 
-| Spec Component       | Purpose                                   | Value Delivered                                 |
-|----------------------|--------------------------------------------|-------------------------------------------------|
-| Summary + Goals      | Business/context framing                   | Shared understanding, scoping                   |
-| Non-Goals            | Boundaries                                 | Prevents scope creep                            |
-| API Surface          | Contract                                   | Lowers ambiguity for AI and reviewers           |
-| Examples & Edge Cases| Behavioral truth table                     | Faster convergence, fewer hallucinations        |
-| Acceptance Tests     | Executable spec                            | Automatic verification                          |
-| File Plan            | Deterministic outputs                      | Repeatable generation and easier code review    |
-| Done Definition      | Shipping checklist                         | Aligns code, CI, and packaging                  |
+A practical rollout plan:
 
----
+1. Pick a low‑risk target
+   - A small library, CLI tool, or refactor with clear boundaries.
 
-## Anti-Patterns to Avoid
+2. Clone or create a Spec Kit template
+   - Include sections: goals, non‑goals, constraints, file_plan, acceptance_tests, outputs.
 
-- Hand-wavy prompts: “Build a slugifier” without constraints or tests invites improvisation.
-- Oversized specs: If it’s longer than the codebase, nobody reads it. Keep it target-specific.
-- Moving targets: Changing requirements without updating the spec breaks trust.
-- Hidden decisions: Tacit rules (e.g., casing exceptions) must be explicit or encoded in tests.
-- Unpinned versions: Don’t let frameworks drift; lock down the target framework and CI matrix.
+3. Integrate with your editor and CI
+   - Use Copilot Chat in VS Code or Visual Studio.
+   - Add CI workflow names into the file plan so they’re implemented on day one.
 
----
+4. Run a pilot
+   - Time‑box one or two sprints. Compare iteration counts and defects vs. your usual flow.
 
-## Adopting Spec Kit in Your Team
+5. Retrospective and standardization
+   - Turn your best spec into an internal template.
+   - Capture your preferred test patterns and code style choices.
 
-- Start small: Pilot on a utility or internal SDK rather than your core product.
-- Standardize the template: Adopt a SPEC.md structure that fits your domain.
-- Make acceptance tests mandatory: PRs are only “ready” when tests from the spec are in place.
-- Teach the loop:
-  1) Update SPEC.md
-  2) Generate/modify code with Copilot
-  3) Run tests locally
-  4) Fix code or refine the spec
-  5) Repeat until green, then ship
-- Measure: Track cycles-to-green and review comments. Share wins.
+6. Scale up
+   - Introduce Spec Kit for bug fixes and new features, not only greenfield.
 
----
+A minimal spec template you can reuse:
 
-## Practical Tips for .NET Libraries
-
-- Normalize Unicode explicitly; do not rely on platform defaults.
-- Keep the API minimal and immutable-friendly (records for options).
-- Treat tests as product assets; place examples alongside spec text.
-- Use GitHub Actions to enforce consistency across environments.
-- Fill out NuGet metadata meticulously; it inspires trust and discoverability.
-
----
-
-## Extending the Spec: Linting, Benchmarks, and Docs
-
-Once the basics are working, Spec Kit can drive additional quality gates:
-
-- Linting: Add analyzers and include “no warnings in Release” in Done Definition.
-- Benchmarks: For perf-sensitive libraries, use BenchmarkDotNet and pin a baseline.
-- Docs: Generate XML docs and publish a README with code snippets—both specified and tested.
-
-Example Done Definition upgrades:
-- “dotnet build -c Release yields zero warnings”
-- “Benchmarks show <2% variance across runs”
-- “README examples are mirrored in tests”
-
----
-
-## Frequently Asked Questions
-
-- Does this only work with GitHub Copilot?
-  - No. The pattern is model-agnostic. Any LLM benefits from structured specs and tests.
-
-- Isn’t this just test-driven development?
-  - It’s complementary. Spec Kit codifies requirements and examples up front, then TDD validates them. The twist is that you’re writing for humans and an AI partner simultaneously.
-
-- What if my problem is too open-ended for a spec?
-  - Break it into spec-able slices. Use research spikes to learn, then spec the actionable parts.
-
-- What if Copilot still gets it wrong?
-  - Tighten the spec, add failing tests for the misbehavior, and iterate. Avoid changing code and spec in opposite directions.
-
----
-
-## What I’d Do Differently Next Time
-
-- Expand the “KnownInitialisms” and “brand casing” lists via a small JSON data file referenced in the spec.
-- Add property-based tests for the slugifier to catch regressions on random Unicode inputs.
-- Include performance budgets (e.g., max allocations per 1,000 chars).
-
-These are easy to express in Spec Kit and give the AI a firmer target.
-
----
-
-## Conclusion
-
-GitHub’s Spec Kit shifts AI coding from novelty to engineering discipline. By grounding Copilot in clear API contracts, acceptance tests, file plans, and shipping criteria, you get predictable outputs without slowing down. In this .NET NuGet case study, the spec-driven approach cut review cycles, stabilized behavior, and made CI/CD part of the “definition of done.”
-
-If you’ve been “vibe coding” with AI, Spec Kit is the fastest way to level up. Start with a SPEC.md, encode examples as tests, and let your AI partner execute the plan.
-
----
-
-## Appendix: Reusable Spec Template
-
-Copy this into your repo and tailor it to your project.
-
-```markdown
-# Spec: <Project / Feature Name>
-
-## Summary
-<One paragraph on what, why, for whom.>
-
-## Goals
-- <Goal 1>
-- <Goal 2>
-
-## Non-Goals
-- <Non-Goal 1>
-
-## Constraints
-- <Language/Framework>
-- <Performance/Security/Compliance>
-
-## Public API (or CLI / Protocol)
-```csharp
-// Signatures here
-```
-
-## Behavior & Examples
-- <Example input> -> <Expected output>
-- Edge cases: <List them>
-
-## File Plan
-- src/<...>
-- tests/<...>
-
-## Acceptance Tests
-- <List of test cases to implement verbatim>
-
-## Done Definition
-- Tests pass locally and in CI
-- Docs updated
-- Package/publish steps complete
+```yaml
+title: <Project/Feature name>
+summary: <Short description of what and why>
+goals:
+  - <Explicit behavior or outcome>
+non_goals:
+  - <Explicitly excluded items>
+constraints:
+  runtime: <e.g., .NET versions, Node versions>
+  api_style: <e.g., public surface, patterns>
+  performance: <big-O, latency, memory>
+file_plan:
+  - path: <path/to/file>
+    purpose: <role>
+acceptance_tests:
+  - name: <test case name>
+    notes: <edge cases>
+outputs:
+  docs: <readme, xml docs, site>
+  release: <package/release target>
 ```
 
 ---
 
-Ready to try it? Create SPEC.md, paste the template, add your first examples as tests, and ask Copilot to implement to spec. Then ship with confidence.
+## FAQs
+
+- Is Spec Kit a heavy process?
+  - No. It’s a single markdown/YAML file plus tests. Aim for 1–2 pages.
+
+- Do I need Copilot Workspace or a special tool?
+  - No. Spec Kit works with Copilot Chat in your editor and standard GitHub Actions. Any AI assistant that can read files and follow instructions benefits from it.
+
+- What if my project is bigger than a page of spec?
+  - Split the work. Create one spec per feature or milestone, each with its own acceptance tests and file plan.
+
+- Can I use BDD tools like Gherkin?
+  - Yes. The principle is the same: executable behavior descriptions. Use what your team is comfortable with.
+
+- How do I keep the spec and code in sync?
+  - Treat the spec like code: version it, review it in PRs, and update acceptance tests when behavior changes.
+
+---
+
+## References
+
+- GitHub Copilot overview: https://github.com/features/copilot
+- .NET multi-targeting: https://learn.microsoft.com/dotnet/standard/library-guidance/cross-platform-targeting
+- NuGet publishing guide: https://learn.microsoft.com/nuget/quickstart/create-and-publish-a-package-using-the-dotnet-cli
+- xUnit for .NET: https://xunit.net/
+
+---
+
+## Closing thoughts
+
+Spec Kit doesn’t make AI magically “understand you.” It makes you understandable—to humans and machines. By turning intent into an explicit contract, you transform AI from a creative guesser into a reliable implementer. Our .NET NuGet case study showed fewer iterations, predictable architecture, and a clean release pipeline—all because the spec did the heavy lifting up front.
+
+If you’re serious about shipping with AI, stop vibe coding. Start spec‑driven development.
