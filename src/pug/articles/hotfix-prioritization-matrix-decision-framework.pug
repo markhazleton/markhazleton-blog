@@ -19,98 +19,55 @@ block layout-content
       // Understanding Hotfixes
       section#understanding-hotfixes.mb-5
         h2.mb-4
-          | Understanding Hotfixes in Software Development
+          | Hotfixes vs. Patches: Core Differences
+
+        .table-responsive.mb-4
+          table.table.table-bordered
+            thead.table-light
+              tr
+                th Aspect
+                th Hotfixes
+                th Patches
+            tbody
+              tr
+                td
+                  strong Purpose
+                td Address urgent, critical issues affecting live systems
+                td Scheduled updates and comprehensive improvements
+              tr
+                td
+                  strong Deployment
+                td Applied immediately to production without downtime
+                td Follow regular deployment cycles with planned downtime
+              tr
+                td
+                  strong Testing
+                td Minimal testing due to urgency
+                td Full QA testing cycle before release
+              tr
+                td
+                  strong Scope
+                td Surgical fixes for specific problems
+                td Comprehensive changes including multiple fixes and features
+              tr
+                td
+                  strong Examples
+                td Security vulnerabilities, system crashes, data loss
+                td Feature enhancements, multiple bug fixes, performance updates
 
         .alert.alert-light.border.mb-4
-          h5.mb-2 What is a Hotfix?
-          p.mb-0 In software development, a hotfix refers to swift actions taken by developers to fix critical bugs in live systems, bypassing the usual development pipeline to avoid downtime and further disruptions. It is an immediate solution to high-priority bugs in live software.
+          h5.mb-2 Why Structured Hotfix Management Matters
+          p.mb-0 Without clear criteria and structured processes, teams fall into reactive patterns that harm both system stability and development productivity. This framework provides the objective, data-driven approach needed to make consistent hotfix decisions, preventing the "everything is critical" trap while ensuring genuine emergencies receive immediate attention.
 
-        .mb-4
-          h3.mb-3 Purpose & Deployment Approach
-          p Hotfixes are designed to address critical defects that can cause severe issues such as security vulnerabilities, system crashes, and significant performance problems. They are crucial for maintaining continuous service and ensuring minimal service interruption.
-          p Unlike traditional bug fixes, hotfixes are deployed rapidly, often outside the regular development cycle. They are applied directly to a live system ("hot" environment), meaning they are implemented without taking the system offline.
+      // Core Framework
+      section#framework.mb-5
+        h2.mb-4 The Priority Scoring Framework
 
-        .mb-4
-          h3.mb-3 Key Characteristics of Hotfixes
-          .row
-            .col-md-6.mb-3
-              p
-                strong Urgency:
-                | Hotfixes are reserved for issues demanding immediate attention, typically affecting business operations or user safety.
-            .col-md-6.mb-3
-              p
-                strong No Downtime:
-                | They are applied without interrupting services, maintaining system availability during the fix.
-            .col-md-6.mb-3
-              p
-                strong Critical Fixes:
-                | They address high-impact issues, frequently related to security vulnerabilities or system stability.
-            .col-md-6.mb-3
-              p
-                strong Limited Scope:
-                | Hotfixes typically target specific issues rather than offering comprehensive solutions or feature enhancements.
-
-        .mb-4
-          h3.mb-3 Why Hotfixes are Critical
-          p In the fast-paced digital world, hotfixes are vital to prevent lost revenue, customer dissatisfaction, and damage to company reputation. For example, a hotfix could immediately close a security vulnerability in an online banking application without bringing the system down, preventing further exploitation.
-
-        .mb-4
-          h3.mb-3 Hotfixes vs. Patches: Understanding the Differences
-          p While both hotfixes and patches fix bugs, they differ significantly in their approach and implementation:
-          .row
-            .col-md-6.mb-3
-              h4.mb-2 Hotfixes
-              ul
-                li Purpose: Address urgent, critical issues
-                li Application: Applied immediately to live systems
-                li Testing: Minimal testing due to urgency
-                li Downtime: No system downtime required
-                li Scope: Surgical fixes for specific problems
-            .col-md-6.mb-3
-              h4.mb-2 Patches
-              ul
-                li Purpose: Scheduled updates and improvements
-                li Application: Follow regular deployment cycles
-                li Testing: Full testing cycle before release
-                li Downtime: May require system downtime
-                li Scope: Comprehensive fixes and features
-
-        .mb-4
-          h3.mb-3 Associated Risks and Challenges
-          p While essential, over-reliance on hotfixes can lead to several challenges:
-          ul
-            li.mb-2 Disruption of Development Workflow: Constant interruptions can derail planned development sprints and reduce team productivity
-            li.mb-2 Increased Technical Debt: Quick solutions often involve shortcuts that create maintenance burdens later
-            li.mb-2 Compounding Bugs: Rushed fixes without comprehensive testing can introduce new issues
-            li.mb-2 Resource Strain: Development teams experience burnout from frequent urgent fixes and context switching
-          p
-            strong Solution:
-            | A structured approach to hotfix management with clear criteria, proper testing protocols, and post-fix refactoring plans is essential for maintaining system health while addressing critical issues effectively.
-
-        .alert.alert-light.border
-          h6.mb-2 The Need for Structured Hotfix Management
-          p.mb-0 This is precisely why having a Hotfix Prioritization Matrix & Decision Framework is crucial. Without clear criteria and structured processes, teams can fall into reactive patterns that ultimately harm both system stability and development productivity. The framework presented in this article provides the objective, data-driven approach needed to make consistent hotfix decisions.
-
-      // Core Principles
-      section#principles.mb-5
-        h2.mb-4 Core Principles of Hotfix Prioritization
-
-        .row
-          .col-lg-4.mb-4
-            .card.h-100
-              .card-body
-                h5.card-title Business Impact First
-                p.card-text Every hotfix decision must be evaluated against business impact, not technical convenience. Revenue loss, customer satisfaction, and compliance risks take precedence over code cleanliness.
-          .col-lg-4.mb-4
-            .card.h-100
-              .card-body
-                h5.card-title Measured Risk Assessment
-                p.card-text Use objective criteria to assess both the risk of deploying the fix and the risk of not deploying it. Gut feelings are supplementary to data-driven analysis.
-          .col-lg-4.mb-4
-            .card.h-100
-              .card-body
-                h5.card-title Clear Communication Pathways
-                p.card-text All stakeholders must understand the decision process and timeline. Transparency prevents escalation and builds trust in the prioritization system.
+        .bg-light.rounded.p-4.mb-4
+          .text-center.mb-3
+            h4 Priority Formula
+            code.fs-5.fw-bold Priority Score = (Business Impact × Urgency × Scope) ÷ (Risk + Effort)
+          p.text-muted.small This formula balances business needs against implementation risks, providing objective prioritization.
 
       // Priority Calculator
       section#calculator.mb-5
@@ -539,19 +496,31 @@ block layout-content
 
         .row
           .col-lg-4.mb-3
-            .alert.alert-light.border.h-100
-              h6.fw-bold The "Everything is Critical" Trap
-              p.mb-0 When stakeholders label every issue as critical, the prioritization system breaks down. Establish objective criteria and stick to them. Use data, not emotions, to drive decisions.
+            .card.border-danger.h-100
+              .card-header.bg-danger.text-white
+                h6.mb-0
+                  i.bi.bi-exclamation-triangle.me-2
+                  | "Everything is Critical" Trap
+              .card-body
+                p.mb-0 Establish objective criteria and stick to them. Use data, not emotions, to drive decisions.
 
           .col-lg-4.mb-3
-            .alert.alert-light.border.h-100
-              h6.fw-bold Inadequate Testing Under Pressure
-              p.mb-0 Time pressure often leads to shortcuts in testing, creating bigger problems. Even for critical hotfixes, maintain minimum testing standards. Better to take an extra hour than create a worse issue.
+            .card.border-warning.h-100
+              .card-header.bg-warning
+                h6.mb-0
+                  i.bi.bi-bug.me-2
+                  | Inadequate Testing
+              .card-body
+                p.mb-0 Maintain minimum testing standards even under pressure. Better to take an extra hour than create a worse issue.
 
           .col-lg-4.mb-3
-            .alert.alert-light.border.h-100
-              h6.fw-bold Poor Communication During Crisis
-              p.mb-0 In high-pressure situations, communication often breaks down. Assign a dedicated communicator to keep stakeholders informed. Regular updates prevent panic and duplicate reporting.
+            .card.border-info.h-100
+              .card-header.bg-info.text-white
+                h6.mb-0
+                  i.bi.bi-chat-dots.me-2
+                  | Communication Breakdown
+              .card-body
+                p.mb-0 Assign a dedicated communicator during crises. Regular updates prevent panic and duplicate reporting.
 
       // Excellence Checklist
       section#checklist.mb-5
@@ -559,321 +528,88 @@ block layout-content
 
         .row
           .col-lg-4.mb-4
-            .card.h-100
-              .card-header
-                h6.mb-0 Before Every Hotfix Decision
+            .card.h-100.border-primary
+              .card-header.bg-primary.text-white
+                h6.mb-0 Before Decision
               .card-body
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check1")
-                  label.form-check-label(for="check1") Objective priority score calculated using established criteria
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check2")
-                  label.form-check-label(for="check2") Business impact validated by product owner
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check3")
-                  label.form-check-label(for="check3") Technical risk assessed by development team
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check4")
-                  label.form-check-label(for="check4") Appropriate stakeholders notified of timeline
-                .form-check
-                  input.form-check-input(type="checkbox" id="check5")
-                  label.form-check-label(for="check5") Decision documented with reasoning
+                ul.list-unstyled.mb-0
+                  li.mb-2 ✓ Priority score calculated
+                  li.mb-2 ✓ Business impact validated
+                  li.mb-2 ✓ Technical risk assessed
+                  li.mb-2 ✓ Stakeholders notified
+                  li ✓ Decision documented
 
           .col-lg-4.mb-4
-            .card.h-100
-              .card-header
-                h6.mb-0 During Hotfix Implementation
+            .card.h-100.border-warning
+              .card-header.bg-warning
+                h6.mb-0 During Implementation
               .card-body
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check6")
-                  label.form-check-label(for="check6") Minimum testing standards maintained
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check7")
-                  label.form-check-label(for="check7") Code review completed (even if abbreviated)
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check8")
-                  label.form-check-label(for="check8") Rollback plan prepared and tested
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check9")
-                  label.form-check-label(for="check9") Monitoring and alerting in place
-                .form-check
-                  input.form-check-input(type="checkbox" id="check10")
-                  label.form-check-label(for="check10") Regular status updates provided
+                ul.list-unstyled.mb-0
+                  li.mb-2 ✓ Testing standards met
+                  li.mb-2 ✓ Code review completed
+                  li.mb-2 ✓ Rollback plan ready
+                  li.mb-2 ✓ Monitoring configured
+                  li ✓ Status updates sent
 
           .col-lg-4.mb-4
-            .card.h-100
-              .card-header
-                h6.mb-0 After Hotfix Deployment
+            .card.h-100.border-success
+              .card-header.bg-success.text-white
+                h6.mb-0 After Deployment
               .card-body
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check11")
-                  label.form-check-label(for="check11") Post-deployment monitoring completed
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check12")
-                  label.form-check-label(for="check12") Stakeholders notified of resolution
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check13")
-                  label.form-check-label(for="check13") Root cause analysis scheduled
-                .form-check.mb-2
-                  input.form-check-input(type="checkbox" id="check14")
-                  label.form-check-label(for="check14") Process improvements identified
-                .form-check
-                  input.form-check-input(type="checkbox" id="check15")
-                  label.form-check-label(for="check15") Sprint impact assessed and communicated
+                ul.list-unstyled.mb-0
+                  li.mb-2 ✓ Post-deployment check
+                  li.mb-2 ✓ Stakeholders informed
+                  li.mb-2 ✓ Root cause scheduled
+                  li.mb-2 ✓ Process improvements noted
+                  li ✓ Sprint impact assessed
 
-      // Hotfix Management Systems & Approaches
-      section#management-systems.mb-5
-        h2.mb-4 Hotfix Management Systems & Approaches
+      // Additional Resources
+      section#additional-resources.mb-5
+        h2.mb-4 Additional Prioritization Methods
 
-        .alert.alert-light.border.mb-4
-          h5.mb-2 Overview of Hotfix Management
-          p.mb-0 Hotfix management and prioritization are crucial processes in software development, particularly for addressing critical issues that arise in live systems. These processes aim to ensure system stability, protect user data, and maintain a smooth user experience by swiftly resolving high-priority bugs.
+        .row
+          .col-md-6.mb-3
+            .card.border
+              .card-body
+                h6.card-title
+                  i.bi.bi-diagram-3.me-2
+                  | MoSCoW Method
+                p.card-text.small Categorizes requirements as Must-have, Should-have, Could-have, or Won't-have. Hotfixes typically fall under "Must-have" when critical.
 
-        .mb-4
-          h3.mb-3 What is Hotfix Management?
-          p Hotfix management refers to the immediate and necessary actions taken to correct specific security flaws or critical bugs that cannot await the next scheduled update. It involves a structured approach to deploy these fixes effectively, contributing to the fortification of overall application security.
+          .col-md-6.mb-3
+            .card.border
+              .card-body
+                h6.card-title
+                  i.bi.bi-graph-up.me-2
+                  | RICE Scoring
+                p.card-text.small Evaluates Reach, Impact, Confidence, and Effort to prioritize based on potential value versus implementation cost.
 
-          h4.mt-4.mb-3 Key Characteristics of Hotfixing:
-          .row
-            .col-md-3.mb-2
-              p
-                strong Urgency
-                br
-                small Reserved for issues needing immediate attention
-            .col-md-3.mb-2
-              p
-                strong No Downtime
-                br
-                small Applied to live systems without taking them offline
-            .col-md-3.mb-2
-              p
-                strong Critical Fixes
-                br
-                small Address security vulnerabilities, crashes, performance issues
-            .col-md-3.mb-2
-              p
-                strong Limited Scope
-                br
-                small Target specific issues rather than wide-ranging improvements
+          .col-md-6.mb-3
+            .card.border
+              .card-body
+                h6.card-title
+                  i.bi.bi-speedometer2.me-2
+                  | WSJF (Weighted Shortest Job First)
+                p.card-text.small Calculates Cost of Delay divided by job size, prioritizing items with highest economic value that can be completed quickly.
 
-        .mb-5
-          h3.mb-4 Approaches to Hotfix Management
-          p Several systematic approaches have been developed for managing hotfixes effectively. Here are three prominent methodologies:
-
-          h4.mb-3 1. Vulert's 5-Step Security Approach
-          p This comprehensive security-focused approach emphasizes proactive vulnerability management:
-          ol
-            li.mb-2
-              strong Proactive Vulnerability Monitoring:
-              | Pre-emptively identify security issues through real-time alerts and integrate monitoring tools with CI/CD and SIEM systems
-            li.mb-2
-              strong Prioritize and Schedule:
-              | Perform thorough risk assessment with severity scoring and craft deployment schedules for minimal disruption
-            li.mb-2
-              strong Streamlined Implementation:
-              | Deploy hotfixes swiftly using agile tools integrated into the development lifecycle
-            li.mb-2
-              strong Comprehensive Testing:
-              | Conduct rigorous assessment mimicking real-world scenarios before deployment
-            li.mb-2
-              strong Continuous Monitoring:
-              | Verify effectiveness post-deployment and establish feedback mechanisms for process refinement
-
-          h4.mb-3 2. Simplified Workflow Approach
-          p This streamlined approach focuses on rapid response through a clear 7-step process:
-          ol
-            li.mb-2
-              strong Issue Detection:
-              | Critical bug reported by users, monitoring systems, or internal discovery
-            li.mb-2
-              strong Prioritization:
-              | Classify as high-priority to prompt immediate team focus
-            li.mb-2
-              strong Root Cause Analysis:
-              | Perform quick but thorough analysis to understand the problem
-            li.mb-2
-              strong Fix Development:
-              | Develop rapid solution confined to the specific problem scope
-            li.mb-2
-              strong Limited Testing:
-              | Execute minimal but critical testing to ensure fix effectiveness
-            li.mb-2
-              strong Deployment:
-              | Deploy directly to live environment, potentially without downtime
-            li.mb-2
-              strong Monitoring:
-              | Closely observe system post-deployment for success and side effects
-
-          h4.mb-3 3. Decision Workflow Framework (This Article's Approach)
-          p This structured decision-making framework provides clear steps and timelines:
-          ol
-            li.mb-2
-              strong Initial Triage (2 minutes):
-              | Determine if it's a genuine production issue with critical business impact
-            li.mb-2
-              strong Impact Assessment (5 minutes):
-              | Evaluate number of users affected, financial impact, and compliance violations
-            li.mb-2
-              strong Risk vs. Reward Analysis (10 minutes):
-              | Assess deployment risk versus waiting, required effort, and potential workarounds
-            li.mb-2
-              strong Calculate Priority Score:
-              | Use mathematical formula to determine numerical priority for consistent decision-making
-
-        .mb-5
-          h3.mb-4 Approaches to Hotfix Prioritization
-          p Effective prioritization ensures resources focus on the most pressing issues. Here are the main approaches:
-
-          .row
-            .col-lg-6.mb-4
-              .card
-                .card-header
-                  h5.mb-0 Priority Score Calculator Method
-                .card-body
-                  .alert.alert-light.mb-3
-                    code.fw-bold Priority Score = (Business Impact × Urgency × Scope) ÷ (Risk + Effort)
-                  p.small Each factor scored 1-5:
-                  ul.small.list-unstyled
-                    li.mb-1 • Business Impact: Revenue blocking (5) to Enhancement (1)
-                    li.mb-1 • Urgency: System down (5) to Can wait weeks (1)
-                    li.mb-1 • Scope: All users (5) to Individual (1)
-                    li.mb-1 • Risk: High chance of issues (5) to Minimal risk (1)
-                    li.mb-1 • Effort: Multiple days (5) to Under an hour (1)
-
-            .col-lg-6.mb-4
-              h5.mb-3 Other Prioritization Methods
-              p While not exclusively for hotfixes, these methods can be adapted:
-              ul
-                li.mb-2
-                  strong Severity & Priority Ratings:
-                  | Assess impact on system and urgency of resolution
-                li.mb-2
-                  strong MoSCoW Method:
-                  | Hotfixes typically fall under "Must-have" category
-                li.mb-2
-                  strong RICE Scoring:
-                  | Evaluate Reach, Impact, Confidence, and Effort
-                li.mb-2
-                  strong Risk-Based Testing:
-                  | Prioritize based on potential risks and likelihood
-                li.mb-2
-                  strong Value vs. Effort Matrix:
-                  | Focus on high-value, low-effort fixes first
-                li.mb-2
-                  strong WSJF (Weighted Shortest Job First):
-                  | Calculate Cost of Delay divided by job size
-
-        .mb-5
-          h3.mb-4 Risks and Best Practices in Hotfix Management
-          .row
-            .col-lg-6.mb-4
-              h4.mb-3 Risks of Over-Reliance
-              ul
-                li.mb-2
-                  strong Development Workflow Disruption:
-                  | Constant interruptions delay feature releases and harm team productivity
-                li.mb-2
-                  strong Increased Technical Debt:
-                  | Rapid fixes often lead to messy, hard-to-maintain code
-                li.mb-2
-                  strong Compounding Bugs:
-                  | Insufficient testing can introduce new issues, destabilizing the system
-                li.mb-2
-                  strong Resource Strain:
-                  | Frequent urgent fixes lead to team burnout across development, QA, and operations
-                li.mb-2
-                  strong "Everything is Critical" Trap:
-                  | When all issues are labeled critical, the prioritization system breaks down
-                li.mb-2
-                  strong Inadequate Testing:
-                  | Time pressure leads to shortcuts that create bigger problems
-                li.mb-2
-                  strong Communication Breakdown:
-                  | Crisis situations often result in panic and duplicate reporting
-
-            .col-lg-6.mb-4
-              h4.mb-3 Best Practices for Success
-              ul
-                li.mb-2
-                  strong Set Clear Criteria:
-                  | Define what truly qualifies as a "critical" issue demanding a hotfix
-                li.mb-2
-                  strong Document Every Hotfix:
-                  | Record changes, reasons, and potential side effects for future reference
-                li.mb-2
-                  strong Limit Scope:
-                  | Keep fixes focused on specific issues to minimize risk of new bugs
-                li.mb-2
-                  strong Use Real Device Testing:
-                  | Ensure fixes work across different environments, even with limited time
-                li.mb-2
-                  strong Plan Post-Hotfix Refactoring:
-                  | Address the "quick-and-dirty" nature to maintain long-term code quality
-                li.mb-2
-                  strong Monitor in Real-Time:
-                  | Watch closely for unintended side effects after deployment
-                li.mb-2
-                  strong Use Objective Scoring:
-                  | Rely on data-driven analysis rather than emotional decision-making
-                li.mb-2
-                  strong Assign Clear Communication:
-                  | Designate a dedicated communicator to keep stakeholders informed
-
-        .mb-4
-          h3.mb-4 Hotfix vs. Patch: Understanding the Differences
-          p It's important to differentiate between hotfixes and patches, as they serve different purposes and follow different processes:
-
-          .row
-            .col-md-6.mb-3
-              h4.mb-3 Hotfixes
-              ul
-                li.mb-2 Urgent bug fixes applied directly to live systems
-                li.mb-2 No downtime during deployment process
-                li.mb-2 Target specific critical issues with limited scope
-                li.mb-2 Applied as needed, often interrupting normal development cycles
-                li.mb-2 Minimal testing due to time constraints and urgency
-
-            .col-md-6.mb-3
-              h4.mb-3 Patches
-              ul
-                li.mb-2 Scheduled updates that fix bugs or add new features
-                li.mb-2 May require downtime for proper installation and system restart
-                li.mb-2 Comprehensive changes including multiple improvements and fixes
-                li.mb-2 Regular pipeline, released on predetermined schedules
-                li.mb-2 Fully tested through complete QA cycles before release
-
-        .alert.alert-light.border
-          h6.mb-2 The Balance of Effective Hotfix Management
-          p.mb-0 Ultimately, effective hotfix management requires a balance between rapid response to critical issues and maintaining overall software health through structured processes, careful prioritization, and adherence to best practices. The framework presented in this article provides one systematic approach to achieving this balance.      // Key Takeaways
+          .col-md-6.mb-3
+            .card.border
+              .card-body
+                h6.card-title
+                  i.bi.bi-grid-3x3.me-2
+                  | Value vs. Effort Matrix
+                p.card-text.small Plots items on a 2x2 grid of value versus effort, focusing attention on high-value, low-effort opportunities first.      // Key Takeaways
       section.mb-5
         h2.mb-4 Key Takeaways
 
-        .row
-          .col-lg-6.mb-4
-            .card.h-100
-              .card-header
-                h6.mb-0 Remember the Fundamentals
-              .card-body
-                ul.list-unstyled.mb-0
-                  li.mb-2 • Business impact drives all hotfix decisions, not technical preferences
-                  li.mb-2 • Objective scoring prevents emotional decision-making
-                  li.mb-2 • Clear protocols reduce decision time and improve consistency
-                  li.mb-2 • Communication prevents stakeholder anxiety and duplicate reports
-
-          .col-lg-6.mb-4
-            .card.h-100
-              .card-header
-                h6.mb-0 Success Factors
-              .card-body
-                ul.list-unstyled.mb-0
-                  li.mb-2 • Consistent application of the priority matrix
-                  li.mb-2 • Fast but thorough impact assessment
-                  li.mb-2 • Appropriate testing for the risk level
-                  li.mb-2 • Continuous improvement of the process
-
         .alert.alert-light.border(role="alert")
-          h5.mb-2 The Ultimate Goal
-          p.mb-0 A hotfix prioritization system should provide predictable, data-driven decisions that balance business needs with development team productivity. When stakeholders trust the process, urgent requests decrease and development velocity increases.
+          h5.mb-3
+            i.bi.bi-check-circle.me-2.text-success
+            | The Ultimate Goal
+          p.mb-2 A hotfix prioritization system should provide predictable, data-driven decisions that balance business needs with development team productivity.
+          p.mb-0
+            strong Core principles:
+            | Business impact drives decisions • Objective scoring prevents emotional reactions • Clear protocols reduce decision time • Transparent communication builds trust
 
     // Back to Top Button
     button.btn.btn-secondary.position-fixed.bottom-0.end-0.m-4.rounded-circle#backToTop(title="Go to top" style="display: none; width: 50px; height: 50px; z-index: 1000;")
@@ -903,7 +639,7 @@ block layout-content
         const score = (businessImpact * urgency * scope) / (risk + effort);
         document.getElementById('calculatedScore').textContent = score.toFixed(2);
 
-        // Determine priority level and styling
+        // Determine priority level
         const scoreDisplay = document.getElementById('scoreDisplay');
         const priorityLevel = document.getElementById('priorityLevel');
         const priorityText = document.getElementById('priorityText');
@@ -927,81 +663,31 @@ block layout-content
         }
       }
 
-      // Add event listeners for calculator inputs
+      // Initialize calculator
       document.addEventListener('DOMContentLoaded', function() {
         const inputs = ['businessImpact', 'urgency', 'scope', 'risk', 'effort'];
         inputs.forEach(id => {
           document.getElementById(id).addEventListener('input', updateCalculator);
         });
-
-        // Initial calculation
         updateCalculator();
       });
 
-      // Smooth scrolling for navigation links
+      // Smooth scrolling
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
           e.preventDefault();
           const target = document.querySelector(this.getAttribute('href'));
           if (target) {
-            target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         });
       });
 
-      // Back to top button functionality
+      // Back to top button
       const backToTopButton = document.getElementById('backToTop');
-
       window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 100) {
-          backToTopButton.style.display = 'flex';
-        } else {
-          backToTopButton.style.display = 'none';
-        }
+        backToTopButton.style.display = window.pageYOffset > 100 ? 'flex' : 'none';
       });
-
       backToTopButton.addEventListener('click', function() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      });
-
-      // Checklist progress tracking
-      function updateChecklistProgress() {
-        const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
-        const checked = document.querySelectorAll('#checklist input[type="checkbox"]:checked');
-        const progress = (checked.length / checkboxes.length) * 100;
-
-        console.log(`Checklist progress: ${progress.toFixed(0)}%`);
-      }
-
-      // Add event listeners to all checkboxes
-      document.addEventListener('DOMContentLoaded', function() {
-        const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-          checkbox.addEventListener('change', updateChecklistProgress);
-        });
-      });
-
-      // Print functionality
-      function printPage() {
-        window.print();
-      }
-
-      // Add keyboard shortcuts
-      document.addEventListener('keydown', function(e) {
-        // Ctrl+P for print
-        if (e.ctrlKey && e.key === 'p') {
-          e.preventDefault();
-          printPage();
-        }
-
-        // Escape to go back to top
-        if (e.key === 'Escape') {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
