@@ -1,115 +1,197 @@
 <!--
-Sync Impact Report:
-- Version change: 1.0.0 → 1.1.0 (minor update)
-- Modified principles: I. Unified Build System Integrity (added caching requirements, updated path from scripts/ to tools/build/)
-- Added sections: VI. AI-Powered Content Generation (new principle)
-- Enhanced: Technology Standards section with build system caching details
-- Templates status: ✅ All templates remain aligned with constitution principles
-- Follow-up: No manual updates required - constitution changes are additive enhancements
+Sync Impact Report - Constitution Update
+Version Change: 1.0.0 → 1.0.1 (Alignment with copilot-instructions.md)
+Modified Principles: None (clarifications only)
+Added Sections: None
+Removed Sections: None
+Changes Made:
+  - Updated build system paths to tools/build/build.js (was scripts/build.js)
+  - Clarified modern-layout auto-generates meta tags from articles.json
+  - Added reference to article-mixins.pug for consistent components
+  - Specified copilot/session-{date}/ directory for generated docs
+  - Updated build command references to match actual npm scripts
+Templates Status:
+  ✅ plan-template.md - Compatible with constitution gates
+  ✅ spec-template.md - Aligns with content-first principles
+  ✅ tasks-template.md - Aligns with build system approach
+Follow-up TODOs: None
 -->
 
 # Mark Hazleton Blog Constitution
 
 ## Core Principles
 
-### I. Unified Build System Integrity
-Every build operation MUST use the centralized orchestrator at `tools/build/build.js` with modular renderers. Build components (PUG, SCSS, assets, content generation) MUST be independently buildable via command flags. All build processes MUST leverage intelligent caching (`.build-cache/`) to track file dependencies and avoid unnecessary rebuilds. Build processes MUST provide detailed timing and error reporting. Build artifacts MUST be reproducible across environments.
+### I. Content-First Architecture
 
-**Rationale**: Ensures consistent, maintainable, and debuggable build processes while enabling selective rebuilds and optimal performance through dependency-aware caching.
+All features MUST serve content delivery and presentation as the primary goal. The static site generator exists to transform content (articles, projects) into optimized HTML with proper SEO, accessibility, and performance.
 
-### II. SEO-First Content Standards (NON-NEGOTIABLE)
-All article content MUST validate against comprehensive SEO rules before publication. Title tags (30-60 chars), meta descriptions (120-160 chars), and keywords (3-8 count) are mandatory. Open Graph and Twitter Card metadata MUST be complete and character-compliant. All images MUST have descriptive alt text. Article meta tags are NEVER manually added to .pug files - they are automatically generated from articles.json metadata.
+**Rationale**: This is a content-focused professional blog and portfolio. Every technical decision should enhance content discoverability, readability, and impact. Features that don't directly support content delivery require explicit justification.
 
-**Rationale**: Professional blog content requires consistent search engine optimization to maintain visibility and credibility in the Solutions Architect domain.
+**Rules**:
+- Content data (articles.json, projects.json, sections.json) is the single source of truth
+- Templates (PUG) MUST extend modern-layout.pug and use semantic HTML5 elements
+- Meta tags are NEVER manually added to article .pug files - modern-layout.pug auto-generates ALL SEO meta tags from articles.json data during build
+- All content changes trigger automatic RSS, sitemap, and SEO artifact regeneration
+- Article templates use only `block layout-content` for article content - NO meta tag blocks
 
-### III. Bootstrap 5 + PUG Template Standards
-All HTML generation MUST use PUG 3.0.3 templates with proper inheritance (extends/block patterns). Bootstrap 5.3.8 utility classes are the ONLY styling mechanism - no custom CSS additions. PUG formatting MUST use 2-space indentation with proper element separation. Code blocks containing HTML MUST use dot syntax to prevent parsing conflicts. All icons MUST use Bootstrap Icons (bi bi-*) exclusively.
+### II. Build System Modularity
 
-**Rationale**: Maintains visual consistency, reduces maintenance overhead, and prevents build failures from template formatting errors.
+Build operations MUST be modular, cacheable, and independently executable. All builds run through `tools/build/build.js` - a sophisticated build orchestrator with intelligent caching, parallel execution, and modular renderers.
 
-### IV. Professional Content Quality
-Article content MUST maintain conversational but professional tone suitable for Solutions Architect audience. Avoid marketing hyperbole and excessive color usage. Content MUST be practical, authentic, and include real-world applications. Visual elements MUST enhance readability without creating distraction. All content MUST pass accessibility standards (WCAG guidelines).
+**Rationale**: Enables selective rebuilds for faster development cycles, parallel execution for performance, and clear separation of concerns. Supports incremental builds and reduces unnecessary work. Build cache (`.build-cache/`) tracks file dependencies to skip unchanged artifacts.
 
-**Rationale**: Establishes credibility and professionalism required for business development and technical leadership positioning.
+**Rules**:
+- Each renderer module handles exactly one build concern (render-pug.js, scss-renderer.js, etc.) in tools/build/
+- Build cache tracks file dependencies to skip unchanged artifacts
+- All renderers accept command-line flags for targeted execution via npm scripts
+- Phase dependencies are explicit: Phase 1 (prerequisites) → Phase 2 (parallel execution) → Phase 3 (final steps)
+- Performance tracking records build times and generates reports
 
-### V. Automated Quality Assurance
-All deployments MUST pass automated quality gates including Lighthouse performance audits, accessibility testing (pa11y-ci), SSL certificate validation, and link checking. Monthly maintenance reports MUST be generated with comprehensive site health metrics. SEO validation MUST be enforced at multiple checkpoints (PowerShell scripts, .NET services, edit forms, AI generation). Build failures MUST block deployment.
+### III. Template Consistency & Semantic HTML
 
-**Rationale**: Ensures consistent professional quality and prevents degradation of site performance and user experience.
+PUG templates MUST follow strict formatting rules with 2-space indentation, semantic HTML5 structure, and Bootstrap 5 utility classes. Custom CSS is avoided unless critical.
 
-### VI. AI-Powered Content Generation
-AI-generated content (OpenAI GPT-4 integration) MUST validate against the same SEO and quality standards as manually created content. AI generation MUST use structured output APIs for consistent field generation. All generated metadata (keywords, descriptions, social media tags) MUST pass character limit validation with A-F grading before publication. AI tools MUST integrate with the build system for seamless content updates. Human review and validation remain required for all AI-generated content.
+**Rationale**: Prevents build errors from indentation issues, ensures accessibility through semantic markup, and maintains visual consistency across all pages. Reduces maintenance burden and improves developer experience.
 
-**Rationale**: Leverages AI efficiency while maintaining professional quality standards and preventing automated content from bypassing validation gates.
+**Rules**:
+- 2-space indentation with NO tabs or mixed spacing
+- Each PUG element on its own line with proper blank line separation
+- Period continuation (`.`) requires pure HTML for links/markup
+- Bootstrap Icons ONLY (bi bi-*) - no other icon libraries
+- Test builds frequently with `npm run build:pug` to catch errors early
 
-## Technology Standards
+### IV. Professional Content Standards
 
-### Required Technology Stack
-- **Template Engine**: PUG 3.0.3 with semantic HTML5 output
-- **CSS Framework**: Bootstrap 5.3.8 with Dart Sass compilation
-- **Content Management**: JSON-based system (articles.json, projects.json, sections.json)
-- **Build System**: Unified orchestrator at `tools/build/build.js` with intelligent caching (`.build-cache/`)
-- **AI Integration**: OpenAI GPT-4 via .NET WebAdmin application (`WebAdmin/mwhWebAdmin/`)
-- **Development Server**: BrowserSync with live reload
-- **Deployment**: Azure Static Web Apps with GitHub Actions CI/CD
-- **Quality Assurance**: Lighthouse CI, pa11y-ci, monthly maintenance automation
+Content tone MUST be conversational and practical. Visual design MUST be clean with minimal color usage, favoring muted tones. Marketing hyperbole and excessive styling are prohibited.
 
-### Forbidden Practices
-- Manual CSS additions or overrides of Bootstrap classes
-- Custom icon libraries beyond Bootstrap Icons
-- Direct HTML generation bypassing PUG templates
-- Manual meta tag insertion in article PUG files
-- Build processes outside the unified `tools/build/build.js` system
-- AI-generated content published without validation gates
-- Bypassing intelligent caching system or `.build-cache/` directory
+**Rationale**: Target audience is technical professionals seeking practical insights, not marketing content. Credibility comes from authentic voice and clear presentation, not flashy design or superlatives.
 
-## Quality Assurance
+**Rules**:
+- Write as if explaining to a colleague - authentic voice including challenges
+- NO inline styles (`style="..."`) or custom CSS outside build system
+- Use Bootstrap semantic colors sparingly - default to neutral/muted tones
+- Simple card/section layouts over complex multi-colored designs
+- Code blocks MUST use dark backgrounds for readability
 
-### Content Validation Gates
-1. **SEO Validation**: All content MUST pass PowerShell audit scripts and .NET validation services
-2. **Accessibility**: All pages MUST achieve WCAG compliance via pa11y-ci testing
-3. **Performance**: All pages MUST maintain Lighthouse scores above baseline thresholds
-4. **Link Integrity**: All internal and external links MUST be validated monthly
-5. **SSL Security**: Certificate expiry MUST be monitored with 30-day advance warnings
+### V. SEO & Accessibility Standards
 
-### AI-Powered Quality Enhancement
-- OpenAI GPT-4 integration for automated SEO metadata generation via WebAdmin application
-- Real-time validation with A-F grading system for content quality
-- Character count validation with visual feedback and field highlighting
-- Structured output API for consistent field generation (keywords, descriptions, social tags)
-- Full debugging support with structured logging using ILogger
-- Direct integration with npm build system for seamless updates
+SEO metadata MUST meet validation requirements: title (30-60 chars), description (120-160 chars), Open Graph fields, Twitter Cards. WCAG accessibility guidelines MUST be followed.
+
+**Rationale**: Professional visibility depends on search engine discoverability and inclusive design. Automated validation ensures consistency and prevents regression.
+
+**Rules**:
+- All SEO metadata defined in articles.json/projects.json
+- Automatic validation via SEO.md guidelines and validation scripts
+- Proper heading hierarchy (h1-h6), alt text, keyboard navigation
+- Sitemap and RSS auto-generated from content data
+- IndexNow API triggered on deployment for immediate indexing
+
+### VI. Automated Quality Gates
+
+Deployment MUST pass automated audits: Lighthouse performance, pa11y accessibility, SEO validation, SSL certificate checks. Monthly comprehensive audits generate reports.
+
+**Rationale**: Quality is non-negotiable for professional credibility. Automated gates prevent degradation and provide continuous monitoring of site health.
+
+**Rules**:
+- GitHub Actions run audits on: monthly schedule, nightly quick checks, PR validation
+- Lighthouse CI tracks performance metrics with baseline thresholds
+- pa11y-ci validates WCAG compliance on all pages
+- SSL certificate expiry monitored with advance warnings
+- Reports stored in `reports/YYYY-MM.md` for historical tracking
+
+## Technical Stack Requirements
+
+**Mandatory Technologies**:
+- **PUG 3.0.3**: Template engine with extends/block inheritance, 2-space indentation
+- **Bootstrap 5.3.8**: CSS framework - utility classes only, NO custom CSS unless critical
+- **Bootstrap Icons**: ONLY icon library allowed (bi bi-*) - NO Font Awesome, Material Icons, etc.
+- **Node.js**: Build system runtime with modular renderers in tools/build/
+- **SCSS**: Dual compilation (styles.scss + modern-styles.scss) with PostCSS/autoprefixer/cssnano
+- **BrowserSync 3.0.4**: Development server with live reload on port 3000
+
+**Deployment Stack**:
+- **Azure Static Web Apps**: Hosting with automatic SSL
+- **GitHub Actions**: CI/CD pipeline with deployment automation
+- **docs/ directory**: Pre-built static files deployed directly
+
+**Prohibited**:
+- Custom CSS frameworks or preprocessors beyond SCSS
+- Icon libraries other than Bootstrap Icons
+- Client-side JavaScript frameworks (React, Vue, Angular) for static content
+- Any build tools outside the unified build.js system
 
 ## Development Workflow
 
-### Build Process Requirements
-1. **Development**: `npm start` launches BrowserSync after complete build
-2. **Production**: `npm run build` executes full build sequence with validation
-3. **Selective Building**: Individual components buildable via `--pug`, `--scss`, `--assets` flags
-4. **Content Updates**: RSS and sitemap generation MUST be automated on article changes
-5. **Quality Gates**: All builds MUST pass before deployment to Azure Static Web Apps
-6. **Caching**: Build system MUST utilize `.build-cache/` for dependency tracking and performance optimization
-7. **AI Content**: WebAdmin-generated content MUST trigger appropriate build steps and validation
+### Content Creation Process
 
-### Code Review Standards
-- All PUG templates MUST pass build validation before merge
-- SEO metadata changes MUST be validated against character limits
-- Bootstrap class usage MUST be reviewed for consistency
-- Content quality MUST be assessed for professional tone and accuracy
-- Build performance MUST be monitored and optimized
+1. Add metadata entry to `src/articles.json` or `src/projects.json` with complete SEO metadata
+2. Create PUG template in `src/pug/articles/` extending `modern-layout`
+3. Use article mixins from `src/pug/modules/article-mixins.pug` for consistent components:
+   - `+articleHeader(article)` - Hero section with title/subtitle
+   - `+tableOfContents(items)` - Navigation for long articles
+   - `+articleSection(id, title, iconClass)` - Consistent section headers
+   - `+codeBlock(code, language)` - Syntax-highlighted code blocks
+   - `+alertBox(type, title, content)` - Info/warning/success alerts
+4. Run `npm run build` to compile and validate (or `npm run build:pug` for templates only)
+5. Verify SEO tags auto-generated correctly in output HTML in docs/
+6. Test locally with `npm start` (BrowserSync on port 3000) before committing
 
-### Deployment Validation
-- GitHub Actions MUST complete successful build and quality checks
-- Azure Static Web Apps deployment MUST complete without errors
-- IndexNow API MUST be triggered for search engine notification
-- Post-deployment smoke testing MUST verify core functionality
+### Build Validation Gates
+
+Before committing:
+- Run `npm run build:pug` to catch template syntax errors
+- Verify all sections have complete content (no empty placeholders)
+- Check container structure consistency (keep ALL sections within `.col-lg-8.mx-auto` container to prevent width jumping)
+- Validate proper 2-space indentation with NO tabs or mixed spacing
+- Ensure proper blank line spacing between major sections
+- Ensure code blocks use dot syntax (`.`) after `code` elements when containing HTML/JS content
+- Verify each PUG element is on its own line with proper newlines
+- Check period continuation blocks (`.`) use pure HTML for links/markup, NOT PUG syntax
+
+### Deployment Pipeline
+
+1. Push to `main` branch triggers GitHub Actions workflow
+2. Node.js 20 environment setup with npm caching
+3. `npm ci --include=dev` installs all dependencies
+4. `npm run build` generates production files in `docs/`
+5. Azure Static Web Apps deployment from `docs/` directory
+6. IndexNow API notification for search engine indexing
+7. Automated audits run on schedule (monthly comprehensive, nightly quick checks)
 
 ## Governance
 
-This constitution supersedes all other development practices and standards. All pull requests and code reviews MUST verify compliance with these principles. Any complexity or exceptions MUST be explicitly justified and documented.
+This constitution supersedes all other development practices and guidelines. All code reviews, feature specifications, and implementation plans MUST verify compliance with core principles.
 
-For runtime development guidance, refer to `.github/copilot-instructions.md` which provides detailed implementation guidance aligned with these constitutional principles.
+**Amendment Process**:
+- Amendments require documented rationale and impact analysis
+- Version follows semantic versioning: MAJOR (breaking principle changes), MINOR (new principles/sections), PATCH (clarifications)
+- Sync Impact Report MUST be generated documenting affected templates and dependencies
+- All dependent artifacts (plan-template.md, spec-template.md, tasks-template.md) MUST be reviewed for consistency
 
-Amendment procedures require documentation of rationale, backward compatibility assessment, and migration plan for existing content. All amendments MUST maintain the professional quality and technical excellence standards established herein.
+**Complexity Justification**:
+When violating simplicity principles (e.g., adding new dependencies, custom build steps, non-standard patterns), provide explicit documentation:
+- What simpler alternative was considered
+- Why the simpler approach is insufficient
+- Specific problem the complexity solves
+- Impact on maintainability and future development
 
-**Version**: 1.1.0 | **Ratified**: 2025-10-26 | **Last Amended**: 2025-11-01
+**Runtime Development Guidance**:
+For detailed implementation patterns, code standards, and troubleshooting, consult `.github/copilot-instructions.md` which provides comprehensive guidance on:
+- PUG formatting rules and error prevention (2-space indentation, period continuation syntax, common errors)
+- Bootstrap 5 implementation patterns and utility class usage
+- SEO implementation and validation (see also `SEO.md` for complete validation rules)
+- Debugging workflows and emergency commands
+- Container structure consistency and advanced PUG patterns
+- Article authoring best practices (see also `Authoring.md` for step-by-step guide)
+
+**Generated Documentation Management**:
+All AI/Copilot-generated .md files (reports, documentation, summaries) MUST be placed in `/copilot/session-YYYY-MM-DD/` directory structure to keep generated documentation organized and separate from core project files.
+
+**Compliance Enforcement**:
+- All PRs MUST pass automated build validation
+- Template changes MUST pass `npm run build:pug` before merge
+- Content additions MUST include complete SEO metadata in JSON files
+- Deployment MUST pass Lighthouse and accessibility audits
+- Constitution violations in complexity require documented justification
+
+**Version**: 1.0.1 | **Ratified**: 2025-11-02 | **Last Amended**: 2025-11-02
