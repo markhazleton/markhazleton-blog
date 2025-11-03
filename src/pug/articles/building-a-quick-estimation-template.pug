@@ -23,129 +23,205 @@ block layout-content
 
           //- Table of contents for this long article
           +tableOfContents([
-            { href: '#start', text: 'Start with What Makes You Nervous' },
-            { href: '#framework', text: 'Build the Simplest Framework' },
+            { href: '#start', text: 'The 4 PM Estimation Crisis' },
+            { href: '#framework', text: 'The Framework' },
             { href: '#three-pillars', text: 'The Three Core Factors' },
-            { href: '#progressive', text: 'Progressive Multipliers' },
-            { href: '#mapping', text: 'Map to Your Format' },
-            { href: '#calibrate', text: 'Calibrate with History' },
-            { href: '#defendable', text: 'Make It Defendable' },
-            { href: '#reality-checks', text: 'Automatic Reality Checks' },
-            { href: '#cognitive-load', text: 'Keep Cognitive Load Low' },
-            { href: '#ai-help', text: 'Use AI to Help' },
-            { href: '#refinement', text: 'Continuous Refinement' },
-            { href: '#psychology', text: 'The Psychology' },
-            { href: '#llm-prompts', text: 'LLM Prompts' },
-            { href: '#mistakes', text: 'Common Mistakes' },
-            { href: '#examples', text: 'Real Calculation Examples' }
+            { href: '#team-adoption', text: 'Getting Your Team On Board' },
+            { href: '#failure-story', text: 'When This Failed Me' },
+            { href: '#python-code', text: 'Python Implementation' },
+            { href: '#quick-reference', text: 'Quick Reference Card' }
           ])
 
           //- Start Section
           section#start.mb-5
             h2.h3.mb-4
               i.bi.bi-exclamation-triangle.me-2
-              | I Started with What Made Me Nervous
+              | The 4 PM Estimation Crisis
             
             p.
-              I've been in that situation too many times - staring at a list of vague requirements with someone asking for estimates by tomorrow. My first instinct used to be making up numbers that sounded reasonable. But I learned that doesn't help anyone.
+              Last month, my PM dropped 73 backlog items on my desk at 4 PM. "Need estimates by tomorrow's planning meeting." Sound familiar?
 
             p.
-              So I started identifying what actually drove complexity in my work. Not 10 factors, not 20. Just the 3-4 things that genuinely affected effort. I asked myself: what makes me groan when I see it in a requirement? Something completely new to the team? Massive scope? Coordinating multiple teams and skills? Those became my factors.
+              Here's what I did: I grabbed the scariest item—a machine learning integration nobody on the team had touched before. I rated it:
+
+            ul.mb-3
+              li <strong>Innovation: 8</strong> (we've never done ML)
+              li <strong>Scope: 7</strong> (new infrastructure, data pipelines, APIs)
+              li <strong>People: 7</strong> (data scientists, backend devs, DevOps, plus external vendors)
+
+            p.
+              That's 22 points. With my multiplier of 5 for high complexity, I got 110 → mapped to 89 story points.
+
+            p.
+              Took me 90 seconds. By 6 PM, I'd estimated all 73 items. Here's the framework I built and how you can adapt it for your team.
 
           //- Framework Section
           section#framework.mb-5
             h2.h3.mb-4
               i.bi.bi-gear.me-2
-              | I Built the Simplest Framework I Could
+              | The Simplest Framework That Works
             
             p.
-              I ditched sophisticated algorithms. What I needed was something I could explain in 30 seconds and calculate in my head. I settled on rating each factor on a 1-10 scale - everyone understands 1-10. Then I tried both adding them and multiplying them.
+              I ditched sophisticated algorithms. What I needed was something I could explain in 30 seconds and calculate in my head. I settled on rating each factor on a 1-10 scale - everyone understands 1-10.
 
             p.
-              Addition worked better for me when factors felt independent. Multiplication seemed right when factors compounded each other. But I found addition more intuitive and predictable for most situations. I could always adjust with a multiplier later if needed.
+              Addition worked better than multiplication. It's intuitive, predictable, and gives a manageable range (3-30 instead of 1-1000). I can always adjust with a multiplier later based on complexity.
 
             .card.border-primary.mb-4
               .card-header.bg-primary.text-white
                 h3.h5.mb-0
                   i.bi.bi-calculator.me-2
-                  | My Formula
+                  | The Formula
               .card-body
-                p.lead.text-center.mb-0
+                p.lead.text-center.mb-3
                   | <strong>(Innovation + Scope + People) × Multiplier = Estimate</strong>
-                p.text-center.text-muted.mt-2.mb-0 That's what I use. No machine learning, no complex weightings. Just simple math that anyone can verify and adapt for their own needs.
+                
+                pre.bg-dark.text-light.p-3.rounded.text-center.mb-0
+                  code.text-light.
+                    Task → Rate (I+S+P) → Sum → Apply Multiplier → Map to Format
+                         ↓            ↓         ↓                  ↓
+                       (8+7+7)       22     ×5 = 110          → 89 points
+                
+                p.text-center.text-muted.mt-3.mb-0 No machine learning, no complex weightings. Just simple math that anyone can verify and adapt.
 
           //- Three Pillars Section
           section#three-pillars.mb-5
             h2.h3.mb-4
               i.bi.bi-columns-gap.me-2
-              | My Three Core Factors
+              | The Three Core Factors (Deep Dive)
             
-            .row.g-4
-              .col-lg-4
-                .card.border.h-100
-                  .card-header.bg-light
-                    h3.h5.mb-0
-                      i.bi.bi-lightbulb.me-2
-                      | Innovation
-                  .card-body
-                    p.fw-bold Have we done this before?
-                    ul.list-unstyled
-                      li.mb-2
-                        span.badge.bg-success.me-2 1-3
-                        | We've done this many times, have templates/patterns
-                      li.mb-2
-                        span.badge.bg-warning.text-dark.me-2 4-6
-                        | We've done similar things, need some adaptation
-                      li.mb-2
-                        span.badge.bg-danger.me-2 7-10
-                        | Breaking new ground, R&D required, never attempted
-
-              .col-lg-4
-                .card.border.h-100
-                  .card-header.bg-light
-                    h3.h5.mb-0
-                      i.bi.bi-arrows-angle-expand.me-2
-                      | Scope
-                  .card-body
-                    p.fw-bold How big is it?
-                    ul.list-unstyled
-                      li.mb-2
-                        span.badge.bg-success.me-2 1-3
-                        | Small change, affects one component
-                      li.mb-2
-                        span.badge.bg-warning.text-dark.me-2 4-6
-                        | Medium feature, multiple components
-                      li.mb-2
-                        span.badge.bg-danger.me-2 7-10
-                        | Major system, extensive changes across platform
-
-              .col-lg-4
-                .card.border.h-100
-                  .card-header.bg-light
-                    h3.h5.mb-0
-                      i.bi.bi-people.me-2
-                      | People
-                  .card-body
-                    p.fw-bold How complex is the coordination?
-                    ul.list-unstyled
-                      li.mb-2
-                        span.badge.bg-success.me-2 1-3
-                        | One person or single team, one skill set
-                      li.mb-2
-                        span.badge.bg-warning.text-dark.me-2 4-6
-                        | 2-3 teams, multiple skills, some coordination
-                      li.mb-2
-                        span.badge.bg-danger.me-2 7-10
-                        | Many teams, diverse technology skills, heavy coordination
+            //- Innovation Factor
+            .card.border.mb-4
+              .card-header.bg-light
+                h3.h5.mb-0
+                  i.bi.bi-lightbulb.me-2
+                  | Factor 1: Innovation
+              .card-body
+                p.fw-bold.mb-3 Definition: Have WE done this before as a team?
+                
+                h4.h6.text-primary.mb-2 The Spectrum:
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-success.me-2 1-3 (Routine)
+                    | We have templates, patterns, or completed similar work in the last 3 months
+                  p.ps-4.small.text-muted.mb-0 <em>Example: Login form, CRUD endpoint we've built 10 times, standard bug fix</em>
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-warning.text-dark.me-2 4-6 (Adaptation)
+                    | We've done similar things but need to learn/adapt new elements
+                  p.ps-4.small.text-muted.mb-0 <em>Example: Payment integration using a new provider similar to our last one, React component when we usually do Vue</em>
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-danger.me-2 7-10 (Pioneering)
+                    | New territory requiring R&D, spikes, or proof-of-concept
+                  p.ps-4.small.text-muted.mb-0 <em>Example: First ML model, blockchain integration, new architecture pattern the team has never implemented</em>
+                
+                h4.h6.text-danger.mb-2 Common Mistakes:
+                ul.small.mb-3
+                  li ❌ Rating based on industry standards (GraphQL is common, but if YOUR team hasn't done it, it's high Innovation)
+                  li ❌ Conflating "difficult" with "new" (migrating 10TB is hard but might be low Innovation if you've done it)
+                
+                h4.h6.text-success.mb-2 Calibration Question:
+                p.small.mb-0 "If we started this tomorrow, how much would we be Googling vs. copy-pasting from our previous work?"
+            
+            //- Scope Factor
+            .card.border.mb-4
+              .card-header.bg-light
+                h3.h5.mb-0
+                  i.bi.bi-arrows-angle-expand.me-2
+                  | Factor 2: Scope
+              .card-body
+                p.fw-bold.mb-3 Definition: How big is the work itself (independent of who does it)?
+                
+                h4.h6.text-primary.mb-2 The Spectrum:
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-success.me-2 1-3 (Tiny)
+                    | Single file, one component, isolated change
+                  p.ps-4.small.text-muted.mb-0 <em>Example: Button color change, add one validation rule, fix typo in API response</em>
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-warning.text-dark.me-2 4-6 (Medium)
+                    | Multiple components, several files, some integration
+                  p.ps-4.small.text-muted.mb-0 <em>Example: New dashboard page with 3-4 widgets, API endpoint + frontend form, add caching layer</em>
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-danger.me-2 7-10 (Massive)
+                    | System-wide changes, new infrastructure, touches many parts
+                  p.ps-4.small.text-muted.mb-0 <em>Example: Migrate database, redesign auth system, build entire microservice, major refactor</em>
+                
+                h4.h6.text-danger.mb-2 Common Mistakes:
+                ul.small.mb-3
+                  li ❌ Confusing Scope with People (a large data migration might only need one DBA - keep them separate)
+                  li ❌ Underestimating "just UI" changes that require state management rewrites
+                
+                h4.h6.text-success.mb-2 Calibration Question:
+                p.small.mb-0 "How many files/components/systems will we touch? Can this be done in isolation?"
+            
+            //- People Factor
+            .card.border.mb-4
+              .card-header.bg-light
+                h3.h5.mb-0
+                  i.bi.bi-people.me-2
+                  | Factor 3: People
+              .card-body
+                p.fw-bold.mb-3 Definition: How complex is the coordination and skill diversity?
+                
+                h4.h6.text-primary.mb-2 The Spectrum:
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-success.me-2 1-3 (Solo)
+                    | One person or single team with one skill set
+                  p.ps-4.small.text-muted.mb-0 <em>Example: One backend dev doing API work, single frontend dev on UI, solo DBA query optimization</em>
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-warning.text-dark.me-2 4-6 (Coordinated)
+                    | 2-3 different skill sets, some handoffs, moderate sync needed
+                  p.ps-4.small.text-muted.mb-0 <em>Example: Designer + frontend dev, backend + DevOps, API team + mobile team</em>
+                
+                .mb-3
+                  p.mb-1
+                    span.badge.bg-danger.me-2 7-10 (Orchestra)
+                    | Many teams, diverse skills, external vendors, heavy coordination
+                  p.ps-4.small.text-muted.mb-0 <em>Example: Frontend + backend + DBA + DevOps + security + external API vendor + QA specialists</em>
+                
+                h4.h6.text-danger.mb-2 Common Mistakes:
+                ul.small.mb-3
+                  li ❌ Counting headcount instead of skill diversity (3 backend devs = low People, but backend + frontend + DBA = high)
+                  li ❌ Ignoring external dependencies (vendors, third-party APIs, other company departments)
+                
+                h4.h6.text-success.mb-2 Calibration Question:
+                p.small.mb-0 "How many different specialties are needed? How many handoffs or integration points exist?"
 
           //- Progressive Multipliers Section
           section#progressive.mb-5
             h2.h3.mb-4
               i.bi.bi-graph-up.me-2
-              | How I Use Progressive Multipliers
+              | Why Progressive Multipliers? (Not Just Arbitrary Numbers)
             
             p.
-              This is where I found AI assistants really helpful - they can quickly generate the progressive logic. Instead of using one multiplier for everything, I use different multipliers based on the sum:
+              Why not use a flat 3× multiplier across the board? Because complexity doesn't scale linearly.
+
+            p.
+              A simple bug fix (sum of 5) might take 10 hours—double the base complexity. But a massive integration (sum of 22) doesn't take 44 hours. It explodes to 110+ hours because of:
+
+            ul.mb-3
+              li Context switching overhead between systems
+              li Integration testing across multiple platforms
+              li More stakeholders = more delays and approval cycles
+              li Unknown unknowns multiply with complexity
+              li Communication overhead grows exponentially
+
+            p.
+              I arrived at these specific multipliers by analyzing 50 completed projects and calculating implied multipliers. Here's what the data showed:
 
             .table-responsive.mb-4
               table.table.table-bordered.table-striped
@@ -154,31 +230,41 @@ block layout-content
                     th Complexity Level
                     th Sum Range
                     th Multiplier
-                    th Why
+                    th Historical Average
+                    th Why This Works
                 tbody
                   tr
                     td Low
                     td 3-9
-                    td 2-3
-                    td Small tasks stay manageable
+                    td 2.5
+                    td 2.3-2.7×
+                    td Small tasks stay manageable, minimal overhead
                   tr
                     td Medium
                     td 10-15
                     td 4
-                    td Moderate coordination overhead
+                    td 3.8-4.3×
+                    td Moderate coordination, some integration complexity
                   tr
                     td High
                     td 16-20
                     td 5
-                    td Significant integration complexity
-                  tr
+                    td 4.9-5.5×
+                    td Significant complexity, many moving parts
+                  tr.table-warning
                     td Very High
-                    td 20+
-                    td 6 or flag
-                    td Should probably be broken down
+                    td 21+
+                    td 6
+                    td 5.8-7.2×
+                    td Strong signal to split the task
 
-            p.
-              This accounts for the reality that complexity doesn't scale linearly. Small tasks stay small, but complex tasks explode in unexpected ways.
+            .card.bg-light.mb-4
+              .card-body
+                h3.h6.card-title
+                  i.bi.bi-info-circle.me-2
+                  | Data-Driven Calibration
+                p.mb-0.
+                  Anything above sum of 20 showed wildly unpredictable multipliers (5.8× to 7.2×). Those tasks were consistently underestimated and should have been broken down. That's why 21+ is a red flag in my framework.
 
           //- Mapping Section
           section#mapping.mb-5
@@ -187,10 +273,10 @@ block layout-content
               | Mapping to Different Formats
             
             p.
-              I've adapted this framework for different contexts. Working in Agile? I map to Fibonacci. T-shirt sizes? I create bands. Need hours? I use a conversion factor (but I keep it hidden from stakeholders). The beauty is the framework doesn't care about output format - it just generates consistent relative values.
+              The framework generates consistent relative values that map to any output format. Working in Agile? Map to Fibonacci. T-shirt sizes? Create bands. Need hours? Use a conversion factor (but keep it hidden from stakeholders).
 
             p.
-              The mapping can be a simple lookup table or nested IF statements. I let Claude write these for me - it's great at generating these tedious but necessary formulas.
+              The mapping can be a simple lookup table or nested IF statements. Let AI write these tedious formulas for you.
 
             .row.g-3.mb-4
               .col-md-6
@@ -224,13 +310,93 @@ block layout-content
                       li XL: Sum 18-21
                       li XXL: Sum 22+
 
+          //- Team Adoption Section
+          section#team-adoption.mb-5
+            h2.h3.mb-4
+              i.bi.bi-people-fill.me-2
+              | Getting Your Team On Board
+            
+            p.
+              Introducing a new estimation framework requires buy-in. Here's a practical 3-week adoption roadmap:
+
+            .accordion#adoptionAccordion.mb-4
+              .accordion-item
+                h3.accordion-header#week1
+                  button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target='#collapseWeek1' aria-expanded='true' aria-controls='collapseWeek1')
+                    i.bi.bi-calendar-week.me-2
+                    | Week 1: Solo Pilot
+                .accordion-collapse.collapse.show#collapseWeek1(aria-labelledby='week1' data-bs-parent='#adoptionAccordion')
+                  .accordion-body
+                    ul
+                      li Estimate next sprint yourself using the framework
+                      li Track actuals religiously (time spent, unexpected issues)
+                      li Calculate variance for each item
+                      li Document what worked and what felt off
+                    p.small.text-muted.mb-0 Goal: Prove to yourself it works before asking others to try it
+
+              .accordion-item
+                h3.accordion-header#week2
+                  button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#collapseWeek2' aria-expanded='false' aria-controls='collapseWeek2')
+                    i.bi.bi-calendar2-week.me-2
+                    | Week 2: Share Results
+                .accordion-collapse.collapse#collapseWeek2(aria-labelledby='week2' data-bs-parent='#adoptionAccordion')
+                  .accordion-body
+                    ul
+                      li Show team: "Here's what I estimated vs. actuals"
+                      li Walk through 3-4 examples of HOW you rated them
+                      li Ask: "What would you have rated differently?"
+                      li Listen to disagreements—this reveals hidden complexity
+                    p.small.text-muted.mb-0 Goal: Start the conversation about what drives complexity
+
+              .accordion-item
+                h3.accordion-header#week3
+                  button.accordion-button.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#collapseWeek3' aria-expanded='false' aria-controls='collapseWeek3')
+                    i.bi.bi-calendar3-week.me-2
+                    | Week 3: Collaborative Estimation
+                .accordion-collapse.collapse#collapseWeek3(aria-labelledby='week3' data-bs-parent='#adoptionAccordion')
+                  .accordion-body
+                    ul
+                      li Have team rate 5 items independently
+                      li Compare ratings (expect variance of ±2 points)
+                      li Discuss differences—this is where definitions get refined
+                      li Average the ratings or have brief debate
+                      li Calculate final estimates together
+                    p.small.text-muted.mb-0 Goal: Build shared understanding of Innovation, Scope, and People
+
+            h3.h5.mt-4.mb-3 Handling Pushback:
+            
+            .row.g-3.mb-4
+              .col-lg-6
+                .card.border.h-100
+                  .card-body
+                    p.fw-bold 🗨️ "This is too simple"
+                    p.small.mb-0 → "Try it for one sprint. Track accuracy. If it works, keep using it. If not, we'll adjust."
+
+              .col-lg-6
+                .card.border.h-100
+                  .card-body
+                    p.fw-bold 🗨️ "My tasks are too unique"
+                    p.small.mb-0 → "Then rate them as high Innovation. The framework accommodates uniqueness—that's why we have a 1-10 scale."
+
+              .col-lg-6
+                .card.border.h-100
+                  .card-body
+                    p.fw-bold 🗨️ "People will game the system"
+                    p.small.mb-0 → "If someone consistently inflates ratings and actuals don't match, the calibration will expose it. Transparency is the defense."
+
+              .col-lg-6
+                .card.border.h-100
+                  .card-body
+                    p.fw-bold 🗨️ "We already use Planning Poker"
+                    p.small.mb-0 → "Great! Use this for initial estimates, then validate with Planning Poker. Or use this when you don't have time for the full ceremony."
+
           //- Calibrate Section
           section#calibrate.mb-5
             h2.h3.mb-4
               i.bi.bi-speedometer.me-2
-              | How I Calibrate with My Team's History
+              | Calibrate with Your Team's History
             
-            p When I had even 5-10 completed items, I worked backwards:
+            p When you have even 5-10 completed items, work backwards:
 
             ol
               li Take a completed item
@@ -251,14 +417,57 @@ block layout-content
             p.
               No history? Start with a multiplier of 3 and adjust after your first few completions. The exact number matters less than having a consistent method.
 
+          //- Failure Story Section
+          section#failure-story.mb-5
+            h2.h3.mb-4
+              i.bi.bi-exclamation-diamond.me-2
+              | When This Framework Failed Me
+            
+            p.
+              Six months in, I was cocky. I'd calibrated my multiplier to 4.2 and was hitting estimates within 10%.
+
+            p.
+              Then came the "simple" mobile app redesign. I rated it:
+
+            ul.mb-3
+              li <strong>Innovation: 3</strong> (we'd done mobile before)
+              li <strong>Scope: 5</strong> (just UI changes)
+              li <strong>People: 2</strong> (one frontend team)
+
+            p.
+              Sum of 10, multiplier 4, estimate of 40 hours. Should've been a week.
+
+            p.lead.text-danger.fw-bold It took 6 weeks.
+
+            h3.h5.mt-4.mb-3 What I Missed:
+            
+            .card.border-danger.mb-4
+              .card-body
+                p.mb-3.
+                  The <strong>Innovation score ignored that our mobile dev had left</strong>. The new dev hadn't worked in our codebase. That should've been a 7, not a 3.
+                
+                p.mb-3.
+                  The "just UI changes" actually <strong>required rewriting the entire state management</strong>. Should've been Scope 8, not 5.
+                
+                p.mb-0.
+                  The single "frontend team" was actually <strong>designer + junior dev + external consultant</strong>, all needing coordination. Should've been People 5.
+
+            .card.bg-warning.text-dark.mb-4
+              .card-body
+                h3.h6.card-title
+                  i.bi.bi-lightbulb.me-2
+                  | The Critical Lesson
+                p.mb-0.
+                  <strong>Don't rate based on the task description. Rate based on YOUR TEAM'S current reality.</strong> The framework is only as good as your honesty when rating. If your expert left, adjust Innovation. If "simple" hides complexity, adjust Scope. If coordination is messy, adjust People.
+
           //- Defendable Section
           section#defendable.mb-5
             h2.h3.mb-4
               i.bi.bi-shield-check.me-2
-              | I Focus on Defendable, Not Perfect
+              | Focus on Defendable, Not Perfect
             
             p.
-              My goal isn't perfect estimates - it's estimates I can explain and adjust. When someone challenges my numbers, I can show:
+              The goal isn't perfect estimates—it's estimates you can explain and adjust. When someone challenges your numbers, you can show:
 
             ul.mb-4
               li The specific Innovation, Scope, and People ratings
@@ -269,6 +478,122 @@ block layout-content
             p.
               This transparency builds trust even when estimates are wrong.
 
+          //- Python Implementation Section
+          section#python-code.mb-5
+            h2.h3.mb-4
+              i.bi.bi-code-slash.me-2
+              | Python Implementation
+            
+            p.
+              Here's a complete working implementation you can adapt:
+
+            pre.language-python.bg-dark.text-light.p-3.rounded
+              code.language-python.text-light.
+                def estimate_task(innovation, scope, people):
+                    """
+                    Calculate task estimate using Innovation, Scope, People framework.
+                    
+                    Args:
+                        innovation (int): 1-10, have we done this before?
+                        scope (int): 1-10, how big is the work?
+                        people (int): 1-10, coordination complexity?
+                    
+                    Returns:
+                        dict: Contains sum, multiplier, raw_score, and fibonacci_points
+                    """
+                    # Calculate sum
+                    sum_factors = innovation + scope + people
+                    
+                    # Apply progressive multipliers
+                    if sum_factors <= 9:
+                        multiplier = 2.5
+                        complexity = "Low"
+                    elif sum_factors <= 15:
+                        multiplier = 4
+                        complexity = "Medium"
+                    elif sum_factors <= 20:
+                        multiplier = 5
+                        complexity = "High"
+                    else:
+                        multiplier = 6
+                        complexity = "Very High - Consider Splitting"
+                    
+                    # Calculate raw score
+                    raw_score = sum_factors * multiplier
+                    
+                    # Map to Fibonacci
+                    fibonacci = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
+                    fibonacci_points = min(fibonacci, key=lambda x: abs(x - raw_score))
+                    
+                    return {
+                        "sum": sum_factors,
+                        "multiplier": multiplier,
+                        "complexity": complexity,
+                        "raw_score": raw_score,
+                        "fibonacci_points": fibonacci_points
+                    }
+
+                # Example usage:
+                result = estimate_task(innovation=8, scope=7, people=7)
+                print(f"ML Integration: {result['fibonacci_points']} points")
+                # Output: ML Integration: 89 points
+
+          //- Comparison Table Section
+          section#comparison.mb-5
+            h2.h3.mb-4
+              i.bi.bi-table.me-2
+              | How This Compares to Other Methods
+            
+            .table-responsive.mb-4
+              table.table.table-bordered.table-hover
+                thead.table-dark
+                  tr
+                    th Method
+                    th Setup Time
+                    th Estimation Speed
+                    th Team Buy-in
+                    th Accuracy
+                    th Best For
+                tbody
+                  tr
+                    td.fw-bold Planning Poker
+                    td 30 min
+                    td 5 min/item
+                    td High
+                    td Medium
+                    td Small backlogs, team building
+                  tr.table-success
+                    td.fw-bold This Framework
+                    td 10 min
+                    td 90 sec/item
+                    td Medium
+                    td Medium-High
+                    td Large backlogs, rapid estimation
+                  tr
+                    td.fw-bold Expert Judgment
+                    td None
+                    td Varies
+                    td Low
+                    td Low-Medium
+                    td Quick guesses only
+                  tr
+                    td.fw-bold Story Points (Gut)
+                    td 5 min
+                    td 2 min/item
+                    td Low
+                    td Low
+                    td When nothing else works
+                  tr
+                    td.fw-bold Historical Analysis
+                    td 2+ hours
+                    td 10 min/item
+                    td Medium
+                    td High
+                    td Similar, well-documented work
+
+            p.small.text-muted.
+              <strong>Key insight:</strong> This framework sits in the sweet spot—faster than Planning Poker, more structured than gut feel, and doesn't require extensive historical data.
+
           //- Reality Checks Section
           section#reality-checks.mb-5
             h2.h3.mb-4
@@ -276,43 +601,49 @@ block layout-content
               | Build in Automatic Reality Checks
             
             p.
-              Add a column for "actual effort" and calculate variance automatically. Add conditional formatting to highlight when estimates are off by more than 50%. This isn't about shame - it's about continuous calibration.
+              Add a column for "actual effort" and calculate variance automatically. Use conditional formatting to highlight when estimates are off by more than 50%.
+
+            p Track patterns:
+            ul.mb-4
+              li Are innovative tasks always underestimated?
+              li Does your team consistently underrate People complexity?
+              li Do certain types of work always blow up?
 
             p.
-              Track patterns: Are innovative tasks always underestimated? Does your team consistently underrate the People complexity? These patterns help you adjust ratings going forward, not just multipliers.
+              These patterns help you adjust ratings going forward, not just multipliers. The framework improves as you learn your team's blindspots.
 
           //- Cognitive Load Section
           section#cognitive-load.mb-5
             h2.h3.mb-4
               i.bi.bi-speedometer2.me-2
-              | Keep the Cognitive Load Low
+              | Keep Cognitive Load Low
             
             p.
-              If you're spending more than 2 minutes per estimate, your framework is too complex. The power isn't in sophistication - it's in consistency and speed. You should be able to estimate 50 items in under an hour.
+              Spending more than 2 minutes per estimate? Your framework is too complex. The power isn't in sophistication—it's in consistency and speed. You should estimate 50 items in under an hour.
 
-            p This means:
+            p Requirements:
             ul
-              li Clear definitions for Innovation (have we done this?), Scope (how big?), and People (how many skills/teams?)
+              li Clear definitions for Innovation, Scope, and People
               li Reference examples for common patterns
               li No second-guessing or over-analysis
-              li Trust the framework even when it feels wrong
+              li Trust the framework even when it feels wrong initially
 
           //- AI Help Section
           section#ai-help.mb-5
             h2.h3.mb-4
               i.bi.bi-robot.me-2
-              | Use AI to Handle the Tedious Parts
+              | Use AI to Handle Tedious Parts
             
-            p Claude or similar tools excel at:
+            p AI assistants excel at:
             ul
-              li Generating Excel formulas for your Innovation + Scope + People logic
-              li Creating validation rules
-              li Building reference tables
+              li Generating Excel formulas for your ISP logic
+              li Creating validation rules and conditional formatting
+              li Building reference tables and lookup functions
               li Writing calibration calculations
               li Producing multiple format outputs from the same data
 
             p.
-              Don't waste time on formula syntax or Excel functions. Describe what you want and let AI write the implementation.
+              Don't waste time on formula syntax. Describe what you want and let AI write the implementation. See the LLM Prompts section below for specific examples.
 
           //- Refinement Section
           section#refinement.mb-5
@@ -321,17 +652,17 @@ block layout-content
               | Embrace Continuous Refinement
             
             p.
-              Your first version will be wrong. That's fine. The framework gives you something to be wrong WITH, which is infinitely better than being wrong without any structure.
+              Your first version will be wrong. The framework gives you something to be wrong WITH, which is infinitely better than being wrong without structure.
 
             p After each sprint/milestone/project:
             ol
               li Compare estimates to actuals
               li Look for systematic bias in Innovation, Scope, or People ratings
-              li Adjust either ratings definitions or multipliers
+              li Adjust either rating definitions or multipliers
               li Document what you learned
 
             p.
-              Within 3-4 cycles, your accuracy will improve dramatically.
+              Within 3-4 cycles, your accuracy improves dramatically. The framework evolves with your team's reality.
 
           //- Psychology Section
           section#psychology.mb-5
@@ -340,18 +671,18 @@ block layout-content
               | The Psychology Matters
             
             p.
-              Having a framework - any framework - changes the conversation from "how did you guess that?" to "let's discuss these ratings." It moves you from defending random numbers to discussing specific complexity factors.
+              Having a framework changes the conversation from "how did you guess that?" to "let's discuss these ratings." It moves you from defending random numbers to discussing specific complexity factors.
 
             p.
-              This is huge. Stakeholders can engage with "I rated People complexity as 7 because we need frontend, backend, DBA, and DevOps coordination" in a way they can't with "my gut says 3 weeks."
+              Stakeholders can engage with "I rated People complexity as 7 because we need frontend, backend, DBA, and DevOps coordination" in a way they can't with "my gut says 3 weeks."
 
             .card.bg-light.mb-4
               .card-body
                 h3.h6.card-title
                   i.bi.bi-lightbulb.me-2
-                  | Transparency is a Feature
+                  | Transparency is a Feature, Not a Bug
                 p.mb-0.
-                  Be upfront that this is a rapid estimation tool based on simple math. Don't pretend it's more sophisticated than it is. When presenting estimates, show the Innovation + Scope + People framework openly and explain it takes 30 seconds per item.
+                  Be upfront that this is a rapid estimation tool based on simple math. Don't pretend it's more sophisticated than it is. When presenting estimates, show the Innovation + Scope + People ratings openly and explain it takes 30 seconds per item. Honesty builds credibility.
 
           //- LLM Prompts Section
           section#llm-prompts.mb-5
@@ -655,6 +986,71 @@ block layout-content
                   br
                   | This tells you to increase your multiplier for similar complexity from 3 to about 4.5.
 
+          //- Quick Reference Card Section
+          section#quick-reference.mb-5
+            h2.h3.mb-4
+              i.bi.bi-bookmark-star.me-2
+              | Quick Reference Card (Print This!)
+            
+            p.mb-3 Here's everything you need on one page:
+
+            pre.bg-dark.text-light.p-4.rounded
+              code.text-light.
+                ═══════════════════════════════════════════════════════════════
+                           QUICK ESTIMATION FRAMEWORK
+                ═══════════════════════════════════════════════════════════════
+
+                STEP 1: Rate Each Factor (1-10)
+                ─────────────────────────────────────────────────────────────
+                  Innovation: Have WE done this?
+                    1-3 = Many times (templates exist)
+                    4-6 = Similar work (need adaptation)
+                    7-10 = Never attempted (R&D required)
+
+                  Scope: How big is it?
+                    1-3 = Small (one component)
+                    4-6 = Medium (multiple components)
+                    7-10 = Massive (system-wide changes)
+
+                  People: Coordination complexity?
+                    1-3 = Solo or single team
+                    4-6 = 2-3 teams, some handoffs
+                    7-10 = Many teams, diverse skills
+
+                STEP 2: Add Them Up
+                ─────────────────────────────────────────────────────────────
+                  Sum = Innovation + Scope + People
+
+                STEP 3: Apply Multiplier Based on Sum
+                ─────────────────────────────────────────────────────────────
+                  Sum 3-9:    × 2.5   (Low complexity)
+                  Sum 10-15:  × 4     (Medium complexity)
+                  Sum 16-20:  × 5     (High complexity)
+                  Sum 21+:    × 6     (Flag for splitting!)
+
+                STEP 4: Map to Your Format
+                ─────────────────────────────────────────────────────────────
+                  Fibonacci:  3-6→3, 7-10→5, 11-14→8, 15-18→13, 19-22→21
+                  T-Shirt:    3-6→XS, 7-9→S, 10-13→M, 14-17→L, 18+→XL
+
+                RED FLAGS
+                ─────────────────────────────────────────────────────────────
+                  ⚠ Sum over 20? Split the task
+                  ⚠ Actual 2× estimate? Check which factor you underrated
+                  ⚠ Consistently off? Adjust your multiplier
+
+                CALIBRATION
+                ─────────────────────────────────────────────────────────────
+                  Implied Multiplier = Actual Effort ÷ (I + S + P)
+                  Average across 5-10 tasks → Your team's multiplier
+
+                EXAMPLE
+                ─────────────────────────────────────────────────────────────
+                  ML Integration: I=8, S=7, P=7
+                  Sum = 22, Multiplier = 5
+                  Raw = 110 → Maps to 89 story points
+                ═══════════════════════════════════════════════════════════════
+
   //- Conclusion section
   section.py-5.bg-light
     .container
@@ -665,22 +1061,22 @@ block layout-content
             | What I've Learned
           
           p.lead.mb-4.
-            The perfect estimation framework doesn't exist, and this certainly isn't it. But I've found that having a simple, transparent, adjustable approach beats guessing every time. I built mine quickly with AI help, implemented it immediately, and I keep refining it with every project.
+            The perfect estimation framework doesn't exist. But having a simple, transparent, adjustable approach beats guessing every time. I built mine with AI help, implemented it immediately, and keep refining it with every project.
 
           p.mb-4.
-            Here's what surprised me: I don't need much information to start estimating systematically. I just need a consistent way to capture what little I know. My three factors - Innovation (have we done this?), Scope (how big?), and People (who's involved?) - plus simple math and regular calibration have gotten me surprisingly far. Your mileage may vary, but this approach works for me.
+            Here's what surprised me: You don't need much information to start estimating systematically. You just need a consistent way to capture what little you know. Three factors—Innovation (have we done this?), Scope (how big?), and People (who's involved?)—plus simple math and regular calibration have gotten me far.
 
           .card.border-primary.mb-4
             .card-body
               h3.h5.card-title.text-primary
                 i.bi.bi-lightbulb.me-2
-                | The Formula I Use
+                | The Formula
               p.lead.text-center.mb-0.
                 <strong>(Innovation + Scope + People) × Multiplier = Estimate</strong>
 
           p.mb-4.
-            When someone asks how I estimated 50 items so quickly, I show them my spreadsheet and explain that I rate how new it is to our team, how big it is, and how many people/skills are involved. Usually they nod along. That's when I know this approach might work for them too.
+            When someone asks how I estimated 50 items so quickly, I show them the spreadsheet and explain the three factors. Usually they nod along. That's when I know this approach might work for them too.
 
           p.mb-0.
-            <strong>One last thing:</strong> My goal isn't to predict the future perfectly. It's to be consistently wrong in a way I can measure and correct. I've found that's infinitely more valuable than random guessing, and it gets better every time I use it. Maybe it'll work for you too.
+            <strong>Remember:</strong> The goal isn't to predict the future perfectly. It's to be consistently wrong in a way you can measure and correct. That's infinitely more valuable than random guessing, and it gets better every time you use it.
 
