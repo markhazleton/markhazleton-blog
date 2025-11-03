@@ -27,11 +27,11 @@ block layout-content
           //- Table of contents
           +tableOfContents([
             { href: '#executive-summary', text: 'Executive Summary' },
-            { href: '#from-vibe-coding', text: 'The Problem: Specs Always Become Outdated' },
+            { href: '#documentation-drift', text: 'The Documentation Drift Problem' },
             { href: '#what-is-spec-kit', text: 'What Is GitHub Spec Kit?' },
+            { href: '#feedback-loop', text: 'The Post-Implementation Feedback Loop' },
             { href: '#case-study', text: 'Case Study: WebSpark.HttpClientUtility' },
             { href: '#results', text: 'Results: Zero Documentation Debt' },
-            { href: '#ai-struggles', text: 'The Feedback Loop in Practice' },
             { href: '#workflow', text: 'Following the Spec Kit Flow' },
             { href: '#conclusion', text: 'When to Use Spec Kit' }
           ])
@@ -42,10 +42,10 @@ block layout-content
               | Executive Summary
 
             p.lead.mb-4.
-              Every developer knows the pattern: Design document says one thing, code does another, six months later nobody knows which is correct. We tried waterfall's rigid specs and agile's no-specs approach. Both failed for the same reason—humans won't maintain documentation when it's divorced from implementation.
+              Every developer knows the pattern: Design document says one thing, code does another, six months later nobody knows which is correct. Waterfall specs died when code changed. Agile threw out specs entirely. Both failed for the same reason—humans won't maintain documentation when it's divorced from implementation.
 
             p.mb-4.
-              GitHub Spec Kit offers a third option: let AI agents maintain the feedback loop we never could. When you fix bugs or tweak implementations, you tell the agent to update the spec. Documentation evolves to match reality instead of becoming outdated fiction.
+              GitHub Spec Kit closes the feedback loop: AI agents update documentation when implementation diverges, so specs become living artifacts instead of shelf-ware. The ROI isn't faster development—it's specs that still accurately describe the codebase three months later.
 
             .card.mb-4
               .card-header.bg-light
@@ -55,20 +55,20 @@ block layout-content
               .card-body
                 ul.mb-0
                   li
-                    strong The post-implementation feedback loop:
-                    |  How AI agents keep specs synchronized with reality when you make changes
+                    strong Solving documentation drift:
+                    |  How AI agents close the feedback loop humans never could—specs stay synchronized with implementation
                   li
-                    strong Zero documentation debt:
-                    |  Why the ROI isn't speed—it's having specs that are still accurate a year later
+                    strong Institutional knowledge persistence:
+                    |  Path resolution patterns, warning remediation strategies, architectural decisions captured in markdown that survives team turnover
                   li
-                    strong When to use it:
-                    |  Libraries, APIs, multi-year projects where institutional knowledge matters
+                    strong The feedback cycle:
+                    |  AI generates → human fixes → human tells AI to update specs → knowledge persists forever
                   li
-                    strong When to skip it:
-                    |  Throwaway prototypes or solo projects you'll rewrite in 6 months
+                    strong When it matters:
+                    |  Libraries, APIs, multi-year projects where tribal knowledge creates single points of failure
                   li
                     strong Real metrics:
-                    |  Implementation time stayed the same, but documentation stayed accurate
+                    |  Implementation: 7 hours (same as always). Documentation sync: 20 minutes (vs. never). Result: Zero documentation debt.
 
             .card.mb-4
               .card-header.bg-light
@@ -111,34 +111,30 @@ block layout-content
                   | NuGet Publishing: 
                   a(href='https://learn.microsoft.com/nuget/create-packages/publish-a-package', target='_blank', rel='noopener') https://learn.microsoft.com/nuget/create-packages/publish-a-package
 
-          section#from-vibe-coding.mb-5
+          section#documentation-drift.mb-5
             h2.h3.mb-4
               i.bi.bi-arrow-right-circle.me-2
-              | The Problem: Specs Always Become Outdated
+              | The Documentation Drift Problem
 
             p.mb-3.
-              You write a detailed specification. Implementation starts. Then reality hits: edge cases appear, requirements shift, better solutions emerge. You fix the code, ship the feature, and move on. Six months later, a new developer reads your spec and wastes three hours implementing something that doesn't match what you actually built.
+              Every codebase has specs that lie. They said one thing at design time, developers changed it during implementation, and nobody updated the docs. Waterfall tried to solve this with upfront perfection—specs froze before coding started. Agile gave up entirely—"working software over comprehensive documentation."
 
             p.mb-3.
-              This isn't laziness—it's human nature. Manually keeping documentation synchronized with code requires discipline that nobody maintains under deadline pressure. Waterfall tried to solve this with rigid up-front specs. Agile gave up and said "the code is the documentation." Both approaches fail when institutional knowledge matters.
-
-            h3.h5.mb-3 The Root Cause: Humans Won't Update Docs Post-Implementation
+              Both failed for the same reason: humans won't maintain documentation when it's divorced from implementation. The feedback loop is too expensive.
 
             p.mb-3.
-              Here's the brutal truth: after you spend 7 hours implementing a feature and tweaking it until it works, you're not going back to update a spec document. You're moving to the next task. The spec becomes fiction, tribal knowledge accumulates, and the next developer repeats your mistakes.
+              I spent 8 years at EDS maintaining three-ring binders of waterfall specs. The specs were beautiful at handoff. Three months later, they were fiction. The human cost of keeping specs synchronized with code was unsustainable.
 
-            h3.h5.mb-3 The Solution: AI Agents in the Feedback Loop
-
-            p.mb-3.
-              GitHub Spec Kit doesn't eliminate iteration—it ensures iteration improves documentation instead of destroying it. After <code>/speckit.implement</code> finishes and you fix the inevitable bugs, you tell the agent: "Update SPEC.md to reflect the relativePath solution we actually shipped." Takes 20 minutes. The spec evolves to match reality.
+            h3.h5.mb-3 What If AI Could Close the Loop?
 
             p.mb-3.
-              Here's the key insight: GitHub Spec Kit value isn't faster development—it's zero documentation debt. When the next developer (or future you) reads the spec, it describes what actually works, not what you planned before reality intervened.
+              GitHub Spec Kit offers something different: AI agents that update documentation when implementation changes.
 
-            h3.h5.mb-3 What This Means in Practice
+            p.mb-3.
+              The cycle: AI generates code from spec → human fixes what's wrong → human tells AI "update the specs to match reality" → specs evolve instead of ossifying.
 
             p.mb-0.
-              I completed two production features using this approach. Implementation took the same 7 hours it always does. But updating specs to match what I actually built took 20 minutes instead of never happening. Traditional approach: 7 hours implementation, specs become outdated instantly, next developer wastes 3 hours reconciling code vs. docs. GitHub Spec Kit advantage: 7 hours implementation + 20 minutes documentation = zero documentation debt.
+              I tested this on a production NuGet package. Two features, 7 hours of work, 136 files changed. Every deviation from the original plan became a permanent improvement to the specs—not tribal knowledge that disappears when I leave. Here's what happened.
 
           section#what-is-spec-kit.mb-5
             h2.h3.mb-4
@@ -154,12 +150,53 @@ block layout-content
             p.mb-3.
               A <code>/speckit.constitution</code> file defines project-wide standards once, guiding all generation. Optional commands like <code>/speckit.clarify</code> catch ambiguities before implementation. The full toolkit is open-source (MIT) at <a href="https://github.com/github/spec-kit" target="_blank" rel="noopener">github/spec-kit</a>.
 
-            .alert.alert-info.mb-4
-              h6.alert-heading.mb-2
-                i.bi.bi-lightbulb.me-2
-                | Why This Matters for Documentation Sync
-              p.mb-0.
-                This structure solves a problem traditional specs couldn't: <strong>maintaining sync between documentation and code.</strong> My waterfall-era specs at EDS became outdated the moment developers started coding. Agile threw out specs entirely rather than maintain them. GitHub Spec Kit offers a third path—AI agents that update specs when implementation changes. Here's what happened when I tested that theory on a production NuGet package.
+          section#feedback-loop.mb-5
+            h2.h3.mb-4
+              i.bi.bi-arrow-repeat.me-2
+              | The Post-Implementation Feedback Loop: The Core Innovation
+
+            p.mb-3.
+              Here's what makes GitHub Spec Kit fundamentally different from traditional documentation: it's designed for AI agents to update specs when implementation diverges from the plan. This isn't about generating code faster—it's about maintaining knowledge that survives team turnover.
+
+            .row.g-3.mb-4
+              .col-md-6
+                .card.border-secondary.h-100
+                  .card-header.bg-light
+                    h6.card-title.mb-0
+                      i.bi.bi-x-circle.me-2.text-danger
+                      | Traditional Approach
+                  .card-body.small
+                    ol.mb-0
+                      li Write specs during planning phase
+                      li Implement feature with inevitable deviations
+                      li Ship code without updating specs
+                      li Six months later: specs are fiction
+                      li New developer wastes hours reconciling
+
+              .col-md-6
+                .card.border-success.h-100
+                  .card-header.bg-light
+                    h6.card-title.mb-0
+                      i.bi.bi-check-circle.me-2.text-success
+                      | GitHub Spec Kit Cycle
+                  .card-body.small
+                    ol.mb-0
+                      li AI generates code from SPEC.md
+                      li Human fixes what doesn't work
+                      li Human tells AI: "Update specs to match reality"
+                      li Specs evolve to document what actually works
+                      li Knowledge persists in repository
+
+            h3.h5.mb-3 Why This Matters: Path Resolution Example
+
+            p.mb-3.
+              AI generated code using pathPrefix configuration (standard Eleventy approach). It failed in GitHub Pages subdirectory deployment. I fixed it with a custom relativePath filter. Then I spent 20 minutes having AI update SPEC.md and PLAN.md to document why pathPrefix failed and what works instead.
+
+            p.mb-3.
+              Result: Next developer doesn't try pathPrefix because the spec explains the failure. That's institutional knowledge that survives my departure—not tribal knowledge that walks out the door.
+
+            p.mb-0.
+              Now let's see this pattern applied to a real production project.
 
           section#case-study.mb-5
             h2.h3.mb-4
@@ -486,98 +523,36 @@ block layout-content
           section#results.mb-5
             h2.h3.mb-4
               i.bi.bi-graph-up.me-2
-              | Results: What Changed with Spec Kit
+              | Results: Zero Documentation Debt
 
             p.mb-3.
-              Over the course of spec-driven development on WebSpark.HttpClientUtility, I achieved measurable results across two major specifications. The key insight: implementation time stayed the same, but documentation stayed accurate.
+              Over two specifications on WebSpark.HttpClientUtility, I achieved the real win: specs that still accurately describe the codebase three months later. Implementation took the same 7 hours it always does. Documentation sync took an additional 20 minutes. That 20 minutes is what traditional approaches skip—and why documentation always becomes outdated.
 
             .alert.alert-success.mb-4
               h5.alert-heading
                 i.bi.bi-check-circle-fill.me-2
-                | Quantitative Outcomes
+                | Quantitative Outcomes: What Actually Matters
               ul.mb-0
                 li
+                  strong 20 minutes to sync specs 
+                  | (vs. never updating them in traditional approach = zero documentation debt)
+                li
+                  strong Path resolution pattern documented 
+                  | (relativePath filter replaces pathPrefix—next developer won't repeat the mistake)
+                li
+                  strong Warning remediation strategy captured 
+                  | (XML docs + ArgumentNullException.ThrowIfNull() pattern now team standard)
+                li
+                  strong Test documentation philosophy formalized 
+                  | ("Tests are product documentation" principle added to constitution)
+                li
                   strong 136 files changed 
-                  | (29,141 insertions, 3,167 deletions)
-                li
-                  strong 2 specs completed 
-                  | (Spec 001: Documentation Site, Spec 002: Zero Warnings)
-                li
-                  strong 2 releases shipped 
-                  | (v1.5.0: Documentation, v1.5.1: Quality)
-                li
-                  strong 0 warnings, 0 errors 
-                  | (from unknown baseline)
+                  | (29,141 insertions, 3,167 deletions across 2 production releases)
                 li
                   strong 520/520 tests passing 
-                  | (260 tests × 2 frameworks: net8.0 + net9.0)
-                li
-                  strong 20 minutes to sync specs 
-                  | (vs. never updating them in traditional approach)
+                  | (260 tests × 2 frameworks: net8.0 + net9.0 with zero regressions)
 
-            h3.h6.mb-3 The Real ROI: Zero Documentation Debt
-
-            p.mb-3.
-              Implementation took 7 hours (3 hours for documentation site, 4 hours for warning cleanup). In a traditional approach, that would be 7 hours of implementation with specs immediately becoming outdated. With Spec Kit, I spent an additional 20 minutes having the agent update specs to match what I actually built.
-
-            p.mb-3.
-              The payoff: next developer (or future me) doesn't waste 3 hours reconciling outdated specs with actual code. They read accurate documentation that describes what actually works. Over a year with multiple developers, this compounds significantly.
-
-            h3.h6.mb-3 Spec 001: Static Documentation Site
-
-            .row.g-3.mb-4
-              .col-md-4
-                .card.border-primary.h-100
-                  .card-header.bg-primary.text-white
-                    strong Speed
-                  .card-body
-                    p.display-6.text-primary.mb-2 3 hours
-                    p.small.text-muted.mb-0 From spec to deployed site
-
-              .col-md-4
-                .card.border-success.h-100
-                  .card-header.bg-success.text-white
-                    strong Quality
-                  .card-body
-                    p.display-6.text-success.mb-2 95+
-                    p.small.text-muted.mb-0 Lighthouse performance score
-
-              .col-md-4
-                .card.border-info.h-100
-                  .card-header.bg-info.text-white
-                    strong Scope
-                  .card-body
-                    p.display-6.text-info.mb-2 6 pages
-                    p.small.text-muted.mb-0 With live NuGet API integration
-
-            h3.h6.mb-3 Spec 002: Clean Compiler Warnings
-
-            .row.g-3.mb-4
-              .col-md-4
-                .card.border-primary.h-100
-                  .card-header.bg-primary.text-white
-                    strong Warnings Fixed
-                  .card-body
-                    p.display-6.text-primary.mb-2 Unknown → 0
-                    p.small.text-muted.mb-0 All categories addressed
-
-              .col-md-4
-                .card.border-success.h-100
-                  .card-header.bg-success.text-white
-                    strong Test Pass Rate
-                  .card-body
-                    p.display-6.text-success.mb-2 100%
-                    p.small.text-muted.mb-0 520/520 tests across 2 frameworks
-
-              .col-md-4
-                .card.border-info.h-100
-                  .card-header.bg-info.text-white
-                    strong Time to Green
-                  .card-body
-                    p.display-6.text-info.mb-2 4 hours
-                    p.small.text-muted.mb-0 Including docs and enforcement
-
-            h3.h6.mb-3 Comparison: Spec Kit vs. Ad Hoc Approach
+            h3.h6.mb-3 The Long-Term Value: What Happens After You Ship
 
             .table-responsive.mb-3
               table.table.table-bordered.table-striped(aria-label='Spec Kit vs Ad Hoc comparison')
@@ -586,78 +561,51 @@ block layout-content
                     th Metric
                     th With Spec Kit
                     th Typical Ad Hoc
-                    th Long-Term Impact
+                    th Impact Over 12 Months
                 tbody
                   tr
                     td Implementation time
                     td 7 hours
                     td 7 hours
-                    td No difference
+                    td No difference initially
                   tr
-                    td Documentation sync time
+                    td Documentation sync
                     td 20 minutes (AI-assisted)
                     td Never happens
-                    td Zero debt vs. compounding confusion
+                    td × Zero technical debt accumulation
                   tr
                     td Spec accuracy after 6 months
                     td Matches implementation
-                    td Outdated fiction
-                    td New developers trust docs
+                    td Fiction
+                    td × New developers trust docs
                   tr
-                    td Onboarding cost
-                    td Read accurate specs
-                    td Reverse-engineer from code
-                    td 3 hours saved per developer
+                    td Knowledge persistence
+                    td Survives team turnover
+                    td Walks out the door
+                    td × No single points of failure
                   tr
-                    td AI hallucinations
-                    td Minimal (spec-constrained)
-                    td Frequent
-                    td 80% reduction in rework
+                    td Next feature cost
+                    td AI reads accurate patterns
+                    td Developer reinvents solutions
+                    td × Compounds with each feature
                   tr
-                    td Test stability
-                    td 100% pass rate maintained
-                    td Regression issues common
-                    td Zero regressions
+                    td Onboarding time
+                    td Read specs that match code
+                    td Reverse-engineer from codebase
+                    td × 3 hours saved per developer
 
             p.mb-0.
-              The spec-driven approach doesn't make you faster—it makes your documentation trustworthy. When you return to the codebase a year later, or when a new team member joins, the specs accurately describe what was built and why.
+              The spec-driven approach doesn't make you faster initially—it prevents knowledge decay. When you return to the codebase a year later, or when a new team member joins, the specs accurately describe what was built and why. That's institutional knowledge, not tribal knowledge.
 
-          section#ai-struggles.mb-5
+          section#feedback-examples.mb-5
             h2.h3.mb-4
               i.bi.bi-arrow-repeat.me-2
-              | The Feedback Loop in Practice: Wrong → Fix → Update → Sync
+              | The Feedback Loop in Practice
 
             p.mb-3.
-              Here's what makes GitHub Spec Kit different: when AI generates wrong code, you don't just fix the code—you update the specs to reflect what actually works.
+              Each time AI generated wrong code, I fixed it and had AI update the specs. Here's why that matters: these lessons are now permanent documentation that future developers (and AI agents) will read before making changes.
 
-            .row.g-3.mb-4
-              .col-md-6
-                .card.border-secondary.h-100
-                  .card-header.bg-light
-                    h6.card-title.mb-0
-                      i.bi.bi-x-circle.me-2.text-danger
-                      | Traditional Process
-                  .card-body.small
-                    ol.mb-0
-                      li Developer fixes bug
-                      li Knowledge lives in their head
-                      li Documentation drifts
-                      li Next developer repeats mistake
-
-              .col-md-6
-                .card.border-success.h-100
-                  .card-header.bg-light
-                    h6.card-title.mb-0
-                      i.bi.bi-check-circle.me-2.text-success
-                      | Spec Kit Process
-                  .card-body.small
-                    ol.mb-0
-                      li AI generates from spec
-                      li Human fixes code
-                      li AI updates spec/plan/tasks
-                      li Knowledge persists in repository
-
-            h3.h5.mb-3 Three Cycles That Became Institutional Knowledge
+            h3.h5.mb-3 Three Implementation Lessons That Became Institutional Knowledge
 
             .card.mb-3
               .card-header.bg-light
@@ -728,10 +676,10 @@ block layout-content
                     strong Result:
                     |  Every future spec inherits "tests need docs" standard. AI reads the constitution before generating code. The team's quality bar persists beyond individual developers.
 
-            h3.h5.mb-3 Why This Matters
+            h3.h5.mb-3 Why This Solves a 40-Year-Old Problem
 
             p.mb-0.
-              In waterfall, specs froze at design and diverged immediately. In agile, we stopped writing specs because maintaining them was impossible. GitHub Spec Kit closes the loop: when implementation teaches you something, you spend 5 minutes having AI update the specs. The path resolution lesson, the warning fix patterns, the test documentation standard—all permanent institutional knowledge, not tribal knowledge that walks out the door.
+              In waterfall, specs froze at design and diverged immediately. In agile, we stopped writing specs because maintaining them was humanly impossible. GitHub Spec Kit closes the loop: when implementation teaches you something, you spend 20 minutes having AI update the specs. The path resolution lesson, the warning fix patterns, the test documentation standard—all permanent institutional knowledge that AI agents read before generating the next feature. That's what survives team turnover.
 
           section#faq.mb-5
             h2.h3.mb-4
@@ -907,19 +855,19 @@ block layout-content
             p.mb-0.
               The power of this flow is that each step constrains Copilot's focus. Instead of trying to solve everything at once, you guide it through a logical progression that produces reliable, well-documented results.
 
-            h3.h5.mb-3.mt-4 The Post-Implementation Feedback Loop
+            h3.h5.mb-3.mt-4 The Critical Step: Close the Documentation Loop
 
             p.mb-3.
-              Here's the reality: after <code>/speckit.implement</code> completes, you're not done yet. You'll likely do some "vibe coding" to get the feature just right—tweaking edge cases, adjusting UX, fixing bugs the AI missed. This is expected and normal.
+              Here's the reality: after <code>/speckit.implement</code> completes, you'll tweak edge cases, adjust UX, and fix bugs the AI missed. This iteration is expected and normal. What's different is what you do next.
 
             .alert.alert-warning.mb-4
               h6.alert-heading.mb-2
                 i.bi.bi-exclamation-triangle-fill.me-2
-                | Critical Step: Update Your Specs
+                | THIS is Where the Value Lives
               p.mb-2.
-                When you finally get it right, <strong>tell the agent to update the spec, plan, and task documents</strong> based on your post-implementation fixes. This ensures that when you close the feature, the documentation accurately reflects what was actually shipped—not what was initially planned.
+                When you finally get it right, <strong>tell the agent to update SPEC.md, PLAN.md, and TASKS.md</strong> to reflect what you actually built. This 20-minute step is what traditional approaches skip—and why documentation always becomes outdated.
               p.mb-0.small.
-                Example: "I fixed the GitHub Pages path resolution by implementing a custom relativePath filter. Please update SPEC.md and PLAN.md to reflect this solution instead of the original pathPrefix approach."
+                Example: "I fixed the GitHub Pages path resolution by implementing a custom relativePath filter. Please update SPEC.md and PLAN.md to reflect this solution instead of the original pathPrefix approach, and explain why pathPrefix failed."
 
             .row.g-3.mb-4
               .col-lg-6
@@ -954,10 +902,10 @@ block layout-content
           section#conclusion.mb-5
             h2.h3.mb-4
               i.bi.bi-trophy.me-2
-              | Conclusion: When to Use Spec Kit
+              | Conclusion: Institutional Knowledge That Survives Team Turnover
 
             p.lead.mb-4.
-              Spec Kit doesn't eliminate iteration—it ensures iteration improves documentation instead of destroying it. The ROI isn't speed—it's having specs that are still accurate a year later.
+              The win wasn't 7-hour implementation—it was specs that still accurately describe the codebase three months later. Path resolution decisions, warning remediation strategies, test documentation standards—all captured in markdown that AI reads before generating new features. That's institutional knowledge that survives team turnover, not tribal knowledge that walks out the door.
 
             h3.h5.mb-3 Use Spec Kit When:
 
@@ -1000,23 +948,23 @@ block layout-content
             .alert.alert-success.mb-4
               h6.alert-heading.mb-2
                 i.bi.bi-check-circle-fill.me-2
-                | What This Project Delivered
+                | What This Project Delivered: Persistent Knowledge
               ul.mb-0
                 li
-                  strong 520/520 tests passing
-                  |  across .NET 8.0 and 9.0 frameworks
+                  strong Path resolution pattern:
+                  |  Custom relativePath filter documented in specs—future developers won't repeat the pathPrefix mistake
                 li
-                  strong Zero compiler warnings
-                  |  with TreatWarningsAsErrors enabled
+                  strong Warning remediation strategy:
+                  |  XML docs + ArgumentNullException.ThrowIfNull() pattern captured in PLAN.md—team inherits the standard
                 li
-                  strong Two production releases
-                  |  (v1.5.0 and v1.5.1) deployed to NuGet.org
+                  strong Test documentation philosophy:
+                  |  "Tests are product documentation" principle added to CONSTITUTION.md—applies to all future features
                 li
-                  strong Specs that match reality
-                  |  Documentation updated to reflect actual implementation
+                  strong Specs that match reality:
+                  |  Documentation updated after implementation reflects what actually works, not what was initially planned
                 li
-                  strong 20 minutes of sync time
-                  |  vs. never updating specs in traditional approach
+                  strong Zero documentation debt:
+                  |  20 minutes to sync specs vs. never updating them = institutional knowledge that survives team turnover
 
             p.mb-0.
               Start small: one .specify/ directory, one SPEC.md with clear acceptance criteria. After implementation, spend 20 minutes having the agent update the spec to match what you actually built. Six months later, you'll thank yourself for the accurate documentation.
