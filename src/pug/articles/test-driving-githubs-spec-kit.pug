@@ -5,14 +5,15 @@ include ../modules/article-mixins
 
 block layout-content
   br
-
-  //- Use standardized hero section
-  +articleHero(
-    'Test Driving GitHub\'s Spec Kit',
-    'A Practical Guide to AI-Powered Spec-Driven Development',
-    'Learn how GitHub\'s Spec Kit transforms AI coding from "vibe coding" to rigorous spec-driven development. A practical case study building and shipping a .NET NuGet package with measurable results.',
-    'bi.bi-lightbulb'
-  )
+  // Hero Section
+  section.bg-gradient-primary.py-5
+    .container
+      .row.align-items-center
+        .col-lg-10.mx-auto.text-center
+          h1.display-4.fw-bold.mb-3
+            i.bi.bi-lightbulb.me-3
+            | GitHub Spec Kit
+          h2.mb-4 Test Driving GitHub Spec Kit: From Three-Ring Binders to Living Documentation
 
   //- Main Article Content
   article#main-article
@@ -20,21 +21,15 @@ block layout-content
       .row
         .col-lg-8.mx-auto
 
-          //- Use standardized article header
-          +articleHeader(article, {
-            title: 'Test Driving GitHub\'s Spec Kit',
-            subtitle: 'A Practical Guide to AI-Powered Spec-Driven Development',
-            publishedDate: new Date().toISOString(),
-            author: 'Mark Hazleton',
-            readTime: '15'
-          })
+          p.lead.mb-4.text-center.mt-4.
+            Using structured specifications to guide AI code generation with measurable results.
 
           //- Table of contents
           +tableOfContents([
             { href: '#executive-summary', text: 'Executive Summary' },
             { href: '#from-vibe-coding', text: 'From Vibe Coding to Spec-Driven Development' },
             { href: '#what-is-spec-kit', text: 'What Is GitHub\'s Spec Kit?' },
-            { href: '#case-study', text: 'Case Study: Building TextCraft' },
+            { href: '#case-study', text: 'Case Study: WebSpark.HttpClientUtility' },
             { href: '#repository-layout', text: 'Repository Layout' },
             { href: '#the-spec', text: 'The Spec: SPEC.md' },
             { href: '#implementation', text: 'Driving Implementation with the Spec' },
@@ -53,33 +48,34 @@ block layout-content
               | Executive Summary
 
             p.lead.mb-4.
-              Remember those massive three-ring binders from waterfall's heyday? Specifications so detailed they required days of reading before writing a single line of code? They're back—but transformed. GitHub's Spec Kit resurrects the discipline of structured specifications while embracing agile's flexibility, creating living documentation that evolves alongside your code through feedback loops with AI agents.
-
-            p.mb-4.
-              This isn't about returning to waterfall. It's about escaping "vibe coding"—the frustrating cycle where AI tools generate code that looks perfect but doesn't quite work. After decades of evolution from EDS's three-ring binders to today's AI-assisted development, I've discovered that specs are the missing piece that transforms unpredictable AI outputs into reliable software engineering.
+              Waterfall specifications required days of reading before writing code. 
+              GitHub Spec Kit applies that discipline to AI-assisted development.
+            p.mb-2.
+              Spec Kit creates specifications that update alongside your code through feedback loops with AI agents. 
+              This addresses "vibe coding"—the cycle where AI generates plausible but broken code.
 
             .card.mb-4
               .card-header.bg-light
                 h5.card-title.mb-0
                   i.bi.bi-trophy.me-2
-                  | What You'll Gain
+                  | What You'll Learn
               .card-body
                 ul.mb-0
                   li
-                    strong Living Documentation:
-                    |  Specs that evolve with your code, not static documents that become outdated
+                    strong Specs that update with code:
+                    |  AI agents modify specifications based on implementation changes
                   li
-                    strong Institutional Knowledge:
-                    |  Human-readable specifications that outlive individual developers
+                    strong Documentation persistence:
+                    |  Human-readable specs that survive team turnover
                   li
-                    strong Feedback Loop Development:
-                    |  Fix bugs, update specs automatically—no change request bureaucracy
+                    strong Feedback loops:
+                    |  Fix bugs, update specs without manual sync
                   li
-                    strong Actionable Specifications:
-                    |  AI-ready formats that guide implementation, not just document intent
+                    strong Executable specifications:
+                    |  Specs that guide AI implementation directly
                   li
-                    strong Real Results:
-                    |  6 hours instead of 2-3 days on production features (documentation sites, zero warnings)
+                    strong Time savings:
+                    |  7 hours vs 2-3 days on two production features
 
             .card.mb-4
               .card-header.bg-light
@@ -100,13 +96,6 @@ block layout-content
                   li
                     strong .NET Developers:
                     |  Practical patterns for NuGet packages, documentation, and quality enforcement
-
-            .alert.alert-success.mb-4
-              h6.alert-heading.mb-2
-                i.bi.bi-lightbulb-fill.me-2
-                | The Evolution Perspective
-              p.mb-0.
-                From waterfall's methodical three-ring binders to agile's flexibility, and now to AI-assisted development—this article bridges decades of software evolution. Learn from real production work: building documentation websites, eliminating compiler warnings, and creating specifications that serve as both AI guidance and human knowledge transfer. Not theoretical frameworks, but battle-tested workflows with mistakes made and lessons learned.
 
             .alert.alert-info.mb-0
               h6.alert-heading
@@ -132,7 +121,7 @@ block layout-content
               | The Problem with "Vibe Coding"
 
             p.mb-3.
-              You describe what you want to an AI coding tool. It generates code that looks perfect. You run it, and... it doesn't quite work. Welcome to "vibe coding"—the frustrating cycle of prompt, generate, debug, repeat. I experienced this constantly while maintaining my WebSpark.HttpClientUtility NuGet package, until I discovered GitHub's Spec Kit.
+              You describe what you want to an AI coding tool. It generates code that looks perfect. You run it, and... it doesn't quite work. Welcome to "vibe coding"—the frustrating cycle of prompt, generate, debug, repeat. I experienced this constantly while maintaining my WebSpark.HttpClientUtility NuGet package, until I discovered GitHub Spec Kit.
 
             h3.h5.mb-3 An Unexpected Blast from the Past
 
@@ -142,18 +131,18 @@ block layout-content
             p.mb-3.
               Spec Kit brought back memories of those binders—but with a crucial difference. Instead of static documentation that becomes outdated the moment it's printed, Spec Kit creates actionable, living specifications that evolve through conversation with AI agents.
 
-            h3.h5.mb-3 The Feedback Loop That Changes Everything
+            h3.h5.mb-3 The Feedback Loop
 
             p.mb-3.
-              Here's what makes it revolutionary: When Claude Code finished implementing my documentation website and I discovered bugs, I didn't start a change request process. I fixed the issue, then had the agent update the spec, plan, and tasks to reflect what actually worked. When I finally merged to main, my specifications matched my implementation perfectly—automatically.
+              When Claude Code finished my documentation website and I found bugs, I fixed the code and had the agent update the spec, plan, and tasks. At merge time, specifications matched implementation.
 
             p.mb-3.
-              This isn't just specs for specs' sake. It's human-readable documentation I can show my product owner. It's institutional knowledge that outlives any individual developer. It's reference material for future features. And it all emerges naturally from taking time to iterate on specifications and plans rather than just iterating on code.
+              The specs are human-readable documentation for product owners, knowledge transfer for new developers, and reference material for future features. This happens by iterating on specs alongside code, not just iterating on code alone.
 
             h3.h5.mb-3 From Code Writer to Software Developer
 
             p.mb-0.
-              After test-driving Spec Kit on two production features—building a documentation website and eliminating all compiler warnings—I completed in 6 hours what would have taken 2-3 days manually. But the real breakthrough isn't speed. It's that spec-driven development elevates my work from writing code to doing software development. It improves my performance as a solutions architect and someone who translates business requirements into technology. I'm a big fan of Spec Kit and will continue using it. Here's my practical guide with real workflows, mistakes made, and lessons learned.
+              I completed two production features in 7 hours (3 + 4 hours) versus an estimated 2-3 days. The benefit isn't speed—it's that specs force clear requirements before implementation. Here's what I learned.
 
           section#what-is-spec-kit.mb-5
             h2.h3.mb-4
@@ -161,9 +150,7 @@ block layout-content
               | What Is GitHub's Spec Kit?
 
             p.mb-3.
-              GitHub's 
-              a(href='https://github.com/github/spec-kit' target='_blank' rel='noopener') Spec Kit
-              |  is an open-source toolkit that transforms how we build software with AI. Instead of "vibe coding" where you throw prompts at an AI and hope for the best, Spec Kit provides a structured, spec-driven development methodology where specifications become executable, directly generating working implementations.
+              GitHub's <a href="https://github.com/github/spec-kit" target="_blank" rel="noopener">Spec Kit</a> is an open-source toolkit for spec-driven AI development. Instead of iterative prompting, you write specifications that guide AI agents through a structured workflow from requirements to implementation.
 
             .alert.alert-info.mb-4
               h6.alert-heading.mb-2
@@ -174,9 +161,6 @@ block layout-content
                   strong Repository:
                   |  
                   a(href='https://github.com/github/spec-kit' target='_blank' rel='noopener') github/spec-kit
-                li
-                  strong Stars:
-                  |  44.3k+ (as of November 2025)
                 li
                   strong License:
                   |  MIT open source
@@ -192,7 +176,8 @@ block layout-content
                 li
                   strong Latest Version:
                   |  v0.0.79 (actively maintained with 79 releases)
-              p.mb-0.small.text-muted This project is heavily influenced by and based on the work and research of John Lam.
+              p.mb-0.small.text-muted.
+              This project is heavily influenced by and based on the work and research of John Lam.
 
             h3.h5.mb-3 Core Components of Spec Kit
 
@@ -240,9 +225,31 @@ block layout-content
                         code /speckit.implement
                         |  - Execute tasks
 
-            h3.h5.mb-3 The Spec-Driven Philosophy
+            .alert.alert-success.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-star-fill.me-2
+                | Optional Validation Commands
+              p.mb-2 These commands catch issues before implementation:
+              ul.mb-0
+                li
+                  code /speckit.clarify
+                  |  - Ask "What did I miss?" to identify underspecified areas (run before 
+                  code /speckit.plan
+                  | )
+                li
+                  code /speckit.analyze
+                  |  - Ask "Any conflicts between my constitution and spec?" for cross-artifact consistency (run after 
+                  code /speckit.tasks
+                  | )
+                li
+                  code /speckit.checklist
+                  |  - Generate quality checklists like "unit tests for English" to validate completeness, clarity, and consistency
+              p.mb-0.small.text-muted.
+                Run these commands to refine specs and catch ambiguities before implementation.
 
-            p.mb-3 Spec Kit represents a fundamental shift in how we think about software development:
+            h3.h5.mb-3 Spec-Driven Development Principles
+
+            p.mb-3 Core concepts:
 
             ul.mb-4
               li
@@ -262,9 +269,8 @@ block layout-content
                 |  Specs evolve with your code through AI agent conversations
 
             p.mb-0.
-              The toolkit supports three development phases: 0-to-1 greenfield development, creative exploration with parallel implementations, and iterative enhancement of brownfield systems. With 
-              a(href='https://github.com/github/spec-kit/blob/main/spec-driven.md' target='_blank' rel='noopener') comprehensive documentation
-              |  and active community support, Spec Kit has become the de facto standard for structured AI-assisted development.
+              The toolkit supports greenfield development, parallel implementation exploration, and brownfield enhancement. 
+              See <a href="https://github.com/github/spec-kit/blob/main/spec-driven.md" target="_blank" rel="noopener">official documentation</a> for details.
 
           section#case-study.mb-5
             h2.h3.mb-4
@@ -272,7 +278,7 @@ block layout-content
               | Case Study: WebSpark.HttpClientUtility — A Production .NET NuGet Package
 
             p.mb-3.
-              To test Spec Kit in a real-world scenario, I applied it to WebSpark.HttpClientUtility, a production NuGet package that provides decorator-pattern HTTP client utilities for .NET 8 and .NET 9. Over the course of the evaluation, I completed two major specs with measurable results:
+              I applied Spec Kit to WebSpark.HttpClientUtility, a .NET 8/9 NuGet package with decorator-pattern HTTP client utilities. Results from two specs:
 
             .row.g-3.mb-4
               .col-md-6
@@ -311,7 +317,26 @@ block layout-content
               i.bi.bi-folder.me-2
               | Repository Layout
 
-            p.mb-3 Here's the repository structure that emerged from the spec-driven process:
+            p.mb-3.
+              Here's the repository structure that emerged from the spec-driven process. Note the distinction between <code>.specify/</code> (Spec Kit framework and templates) and <code>specifications/</code> (your actual project specs). Each spec directory contains the complete spec-plan-tasks workflow artifacts:
+
+            .alert.alert-info.mb-3
+              h6.alert-heading.mb-2
+                i.bi.bi-info-circle.me-2
+                | Understanding the Structure
+              ul.mb-0.small
+                li
+                  strong .specify/:
+                  |  Framework files (constitution, templates, scripts)
+                li
+                  strong specifications/:
+                  |  Your actual project specs with full workflow artifacts
+                li
+                  strong Why 1,648 lines of tasks.md?
+                  |  Documentation site spec broke down into granular, testable tasks across HTML, CSS, JS, CI/CD
+                li
+                  strong copilot-instructions.md (244 lines):
+                  |  Project-specific AI guidance including coding standards, architecture decisions, and common patterns
 
             pre.language-plaintext.bg-dark.text-light.p-3.rounded
               code.language-plaintext.text-light.
@@ -416,8 +441,27 @@ block layout-content
                 - No #pragma warning disable directives added
                 - Documentation complete for all public surface area
 
-            p.mb-0.
+            p.mb-3.
               Notice how the spec avoids prescribing HOW to fix warnings—it defines the target state and constraints, letting the implementer (human or AI) determine the optimal approach.
+
+            .alert.alert-warning.mb-0
+              h6.alert-heading.mb-2
+                i.bi.bi-exclamation-triangle.me-2
+                | What I Learned: Spec Weaknesses
+              p.mb-2 This spec worked well, but I made mistakes that cost time:
+              ul.mb-0
+                li
+                  strong Too vague on "unknown baseline":
+                  |  Should have run the audit FIRST and documented exact warning counts by category
+                li
+                  strong Missing priority order:
+                  |  AI tried to fix everything simultaneously. Should have specified: "Fix CS1591 docs first, then null safety, then code analysis"
+                li
+                  strong No time estimate:
+                  |  Without "Target: 4 hours" in the spec, I lost focus during implementation
+                li
+                  strong Lesson:
+                  |  Even good specs have gaps. The feedback loop caught these issues, and I updated the spec after implementation to reflect what actually worked.
 
           section#implementation.mb-5
             h2.h3.mb-4
@@ -639,7 +683,7 @@ block layout-content
             h3.h6.mb-3 Comparison: Spec Kit vs. Ad Hoc Approach
 
             .table-responsive.mb-3
-              table.table.table-bordered.table-striped
+              table.table.table-bordered.table-striped(aria-label='Spec Kit vs Ad Hoc comparison')
                 thead.table-light
                   tr
                     th Metric
@@ -690,6 +734,7 @@ block layout-content
                     data-bs-target='#collapseStruggle1'
                     aria-expanded='true'
                     aria-controls='collapseStruggle1'
+                    aria-label='GitHub Pages Path Resolution'
                   )
                     i.bi.bi-exclamation-circle.me-2
                     | GitHub Pages Path Resolution
@@ -713,6 +758,7 @@ block layout-content
                     data-bs-target='#collapseStruggle2'
                     aria-expanded='false'
                     aria-controls='collapseStruggle2'
+                    aria-label='Warning Suppression vs Root Cause Fixes'
                   )
                     i.bi.bi-exclamation-circle.me-2
                     | Warning Suppression vs. Root Cause Fixes
@@ -736,6 +782,7 @@ block layout-content
                     data-bs-target='#collapseStruggle3'
                     aria-expanded='false'
                     aria-controls='collapseStruggle3'
+                    aria-label='Test Documentation Scope'
                   )
                     i.bi.bi-exclamation-circle.me-2
                     | Test Documentation Scope
@@ -827,7 +874,7 @@ block layout-content
               | Spec Kit Components vs. Value
 
             .table-responsive
-              table.table.table-bordered.table-striped
+              table.table.table-bordered.table-striped(aria-label='Spec Kit components and their value')
                 thead.table-light
                   tr
                     th Spec Component
@@ -964,6 +1011,7 @@ block layout-content
                     data-bs-target='#collapse1'
                     aria-expanded='false'
                     aria-controls='collapse1'
+                    aria-label='Does this only work with GitHub Copilot?'
                   )
                     i.bi.bi-question-circle-fill.me-2
                     | Does this only work with GitHub Copilot?
@@ -982,6 +1030,7 @@ block layout-content
                     data-bs-target='#collapse2'
                     aria-expanded='false'
                     aria-controls='collapse2'
+                    aria-label='Is this just test-driven development?'
                   )
                     i.bi.bi-question-circle-fill.me-2
                     | Isn't this just test-driven development?
@@ -1000,6 +1049,7 @@ block layout-content
                     data-bs-target='#collapse3'
                     aria-expanded='false'
                     aria-controls='collapse3'
+                    aria-label='What if my problem is too open-ended for a spec?'
                   )
                     i.bi.bi-question-circle-fill.me-2
                     | What if my problem is too open-ended for a spec?
@@ -1018,6 +1068,7 @@ block layout-content
                     data-bs-target='#collapse4'
                     aria-expanded='false'
                     aria-controls='collapse4'
+                    aria-label='What if Copilot still gets it wrong?'
                   )
                     i.bi.bi-question-circle-fill.me-2
                     | What if Copilot still gets it wrong?
@@ -1037,7 +1088,7 @@ block layout-content
               Ready to try it yourself? Here's the recommended workflow with the slash commands that guide Copilot through each phase. Each command has a specific purpose and builds on the previous steps.
 
             .table-responsive.mb-4
-              table.table.table-bordered.table-hover
+              table.table.table-bordered.table-hover(aria-label='Spec Kit workflow commands')
                 thead.table-light
                   tr
                     th.text-center Step
@@ -1120,13 +1171,57 @@ block layout-content
             p.mb-0.
               The power of this flow is that each step constrains Copilot's focus. Instead of trying to solve everything at once, you guide it through a logical progression that produces reliable, well-documented results.
 
+            h3.h5.mb-3.mt-4 The Post-Implementation Feedback Loop
+
+            p.mb-3.
+              Here's the reality: after <code>/speckit.implement</code> completes, you're not done yet. You'll likely do some "vibe coding" to get the feature just right—tweaking edge cases, adjusting UX, fixing bugs the AI missed. This is expected and normal.
+
+            .alert.alert-warning.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-exclamation-triangle-fill.me-2
+                | Critical Step: Update Your Specs
+              p.mb-2.
+                When you finally get it right, <strong>tell the agent to update the spec, plan, and task documents</strong> based on your post-implementation fixes. This ensures that when you close the feature, the documentation accurately reflects what was actually shipped—not what was initially planned.
+              p.mb-0.small.
+                Example: "I fixed the GitHub Pages path resolution by implementing a custom relativePath filter. Please update SPEC.md and PLAN.md to reflect this solution instead of the original pathPrefix approach."
+
+            .row.g-3.mb-4
+              .col-lg-6
+                .card.border-danger.h-100
+                  .card-header.bg-light
+                    h6.card-title.mb-0
+                      i.bi.bi-x-circle.me-2.text-danger
+                      | Without Feedback Loop
+                  .card-body
+                    ul.mb-0.small
+                      li Specs describe what you planned, not what you built
+                      li Future developers follow outdated documentation
+                      li Institutional knowledge lives only in your head
+                      li Next feature repeats the same mistakes
+
+              .col-lg-6
+                .card.border-success.h-100
+                  .card-header.bg-light
+                    h6.card-title.mb-0
+                      i.bi.bi-check-circle.me-2.text-success
+                      | With Feedback Loop
+                  .card-body
+                    ul.mb-0.small
+                      li Specs evolve to match reality (living documentation)
+                      li Future developers see what actually works
+                      li Team learns from real-world implementation
+                      li Each spec becomes more accurate over time
+
+            p.mb-0.
+              The feedback loop keeps specs synchronized with reality. Your specs document what you built and what you learned—useful for your future self and your team.
+
           section#conclusion.mb-5
             h2.h3.mb-4
               i.bi.bi-trophy.me-2
               | Conclusion
 
             p.lead.mb-4.
-              GitHub's Spec Kit transforms AI coding from experimental to production-grade. By grounding Copilot in structured requirements, explicit constraints, and measurable success criteria, you get consistent quality without sacrificing velocity. In this real-world case study, two specs drove 136 files of changes, eliminated 100% of compiler warnings, and shipped two production releases in under 7 hours of focused work.
+              Spec Kit provides structure for AI-assisted development. In this case study, two specs resulted in 136 files changed, zero compiler warnings, and two production releases in 7 hours (3 hours for documentation, 4 hours for warnings).
 
             .alert.alert-success.mb-4
               h6.alert-heading.mb-2
@@ -1150,4 +1245,4 @@ block layout-content
                   |  vs. ad hoc prompting
 
             p.mb-0.
-              If you've been experimenting with AI-assisted development, Spec Kit provides the structure to make it reliable and repeatable. Start with a single .specify/ directory, write one SPEC.md with clear success criteria, and experience the difference between "hoping it works" and "knowing it will."
+              Start with one .specify/ directory and one SPEC.md with clear acceptance criteria. See if structured specifications improve your AI development workflow.

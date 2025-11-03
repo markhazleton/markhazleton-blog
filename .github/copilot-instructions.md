@@ -134,6 +134,36 @@ block layout-content
 - **Check for missing newlines** - Especially after text content or pipe (`|`) operators
 - **Validate nested structures** - Ensure proper parent-child relationships with correct indentation
 - **Test build after major edits** - Run `npm run build:pug` frequently to catch errors early
+- **NEVER mix PUG syntax with period continuation** - When using `.` for multi-line text blocks, use pure HTML for links and markup
+
+### Period Continuation Syntax Rules
+
+**CRITICAL**: The period (`.`) continuation character creates a literal text block where PUG syntax is NOT parsed. Any markup within must be pure HTML.
+
+```pug
+// ❌ WRONG: PUG link syntax in period continuation block
+p.mb-3.
+  Visit the 
+  a(href='https://example.com' target='_blank') website
+  |  for more information.
+
+// ✅ CORRECT: Use pure HTML for links in period continuation
+p.mb-3.
+  Visit the <a href="https://example.com" target="_blank">website</a> for more information.
+
+// ✅ ALTERNATIVE: Split content to use PUG syntax
+p.mb-3
+  | Visit the 
+  a(href='https://example.com' target='_blank') website
+  |  for more information.
+```
+
+**Key Rules for Period Continuation:**
+- After `p.mb-3.` or similar, everything is treated as literal text
+- Use HTML entities: `<a href="...">`, `<strong>`, `<em>`, etc.
+- Or split the paragraph to avoid period continuation
+- NEVER try to use `a(href='...')` inside a period continuation block
+- Same applies to any PUG syntax: `strong`, `em`, `code`, etc.
 
 ### Common PUG Formatting Errors to Avoid
 
