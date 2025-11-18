@@ -1,3 +1,10 @@
+---
+title: "Effective Change Management Strategies"
+description: "Best practices for managing project changes effectively through clear communication, stakeholder involvement, and strategic planning"
+slug: "change-management-strategies"
+author: "Mark Hazleton"
+---
+
 # Effective Change Management Strategies
 
 ## Understanding Change Management

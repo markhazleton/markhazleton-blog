@@ -69,9 +69,9 @@ Browse our comprehensive guides on project management best practices:
 - [Project Life Cycle](project-life-cycle.html) - Understanding the stages of project execution
 - [Project Meetings](project-meetings.html) - Effective meeting strategies and practices
 - [Program Management Office](program-management-office.html) - Establishing PMO excellence
-- [Leadership](leadership.html) - Core leadership principles for project success
-- [Change Management](change-management.html) - Managing change effectively
-- [Conflict Management](conflict-management.html) - Resolving project conflicts
+- [Leadership Skills](leadership-skills.html) - Core leadership principles for project success
+- [Change Management Strategies](change-management-strategies.html) - Managing change effectively
+- [Conflict Management Strategies](conflict-management-strategies.html) - Resolving project conflicts
 - [Solution Architecture](solution-architect-technology-decisions-that-impact-business.html) - Technology decisions that impact business
 
 ---

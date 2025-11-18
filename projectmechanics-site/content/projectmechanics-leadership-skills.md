@@ -1,3 +1,10 @@
+---
+title: "Mastering Leadership Skills for Success"
+description: "Develop key leadership qualities and implement effective strategies to inspire and motivate your team towards success"
+slug: "leadership-skills"
+author: "Mark Hazleton"
+---
+
 # Mastering Leadership Skills for Success
 
 ## Understanding Leadership

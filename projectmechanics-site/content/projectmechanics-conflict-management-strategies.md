@@ -1,3 +1,10 @@
+---
+title: "Conflict Management for Project Managers"
+description: "Essential strategies for managing conflicts in project teams to improve dynamics, enhance productivity, and drive innovation"
+slug: "conflict-management-strategies"
+author: "Mark Hazleton"
+---
+
 # Conflict Management for Project Managers
 
 ## Understanding Conflict in Projects

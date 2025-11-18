@@ -32,10 +32,11 @@ function createTemplate(title, content, meta = {}) {
       <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
+        <li><a href="overview.html">Overview</a></li>
         <li><a href="project-life-cycle.html">Project Life Cycle</a></li>
-        <li><a href="leadership.html">Leadership</a></li>
-        <li><a href="change-management.html">Change Management</a></li>
-        <li><a href="conflict-management.html">Conflict Management</a></li>
+        <li><a href="leadership-skills.html">Leadership</a></li>
+        <li><a href="change-management-strategies.html">Change Management</a></li>
+        <li><a href="conflict-management-strategies.html">Conflict Management</a></li>
       </ul>
     </nav>
   `;
@@ -105,12 +106,30 @@ function createTemplate(title, content, meta = {}) {
 // Build homepage with cards
 function createHomepage(content, meta) {
   const contentFiles = fs.readdirSync(config.contentDir)
-    .filter(file => file.endsWith('.md') && file !== 'index.md')
+    .filter(file => 
+      file.endsWith('.md') && 
+      file !== 'index.md' && 
+      file !== 'README.md' // Exclude README from cards
+    )
     .map(file => {
       const filePath = path.join(config.contentDir, file);
       const fileContent = fs.readFileSync(filePath, 'utf-8');
       const { data } = matter(fileContent);
-      const slug = file.replace('projectmechanics-', '').replace('.md', '');
+      
+      // Determine slug from frontmatter or filename
+      let slug;
+      if (data.slug) {
+        slug = data.slug;
+      } else if (file.startsWith('projectmechanics-')) {
+        slug = file.replace('projectmechanics-', '').replace('.md', '');
+      } else {
+        slug = file.replace('.md', '');
+      }
+
+      // Skip files with invalid slugs
+      if (!slug || slug === '-' || slug.endsWith('-') || slug.includes('--')) {
+        return null;
+      }
 
       return {
         title: data.title || slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
@@ -119,7 +138,7 @@ function createHomepage(content, meta) {
         filename: slug + '.html'
       };
     })
-    .filter(item => item.title && item.slug !== '-'); // Filter out empty titles
+    .filter(item => item && item.title && item.slug); // Filter out null items and those without titles
 
   const cardsHtml = contentFiles.map(item => `
     <div class="card">
@@ -163,7 +182,10 @@ async function buildSite() {
 
   // Get all markdown files
   const contentFiles = await fs.readdir(config.contentDir);
-  const markdownFiles = contentFiles.filter(file => file.endsWith('.md'));
+  const markdownFiles = contentFiles.filter(file => 
+    file.endsWith('.md') && 
+    file !== 'README.md' // Skip README files
+  );
 
   console.log(`📄 Found ${markdownFiles.length} markdown files`);
 
@@ -182,10 +204,19 @@ async function buildSite() {
     let outputFile;
     if (file === 'index.md') {
       outputFile = 'index.html';
+    } else if (meta.slug) {
+      // Use slug from frontmatter if available
+      outputFile = meta.slug + '.html';
     } else if (file.startsWith('projectmechanics-')) {
       outputFile = file.replace('projectmechanics-', '').replace('.md', '.html');
     } else {
       outputFile = file.replace('.md', '.html');
+    }
+
+    // Skip files with invalid output names
+    if (outputFile === '.html' || outputFile === '-.html' || outputFile.includes('-.html')) {
+      console.log(`⚠️  Skipping invalid file: ${file} (would generate: ${outputFile})`);
+      continue;
     }
 
     // Create full HTML page

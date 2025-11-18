@@ -1,3 +1,10 @@
+---
+title: "Mastering Project Management Mechanics"
+description: "Understanding the art and science of project management through effective strategies that enhance both efficiency and success"
+slug: "overview"
+author: "Mark Hazleton"
+---
+
 # Mastering Project Management Mechanics
 
 ## The Art and Science of Project Management
