@@ -70,15 +70,13 @@ public class ChatHub : Hub
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
 <script>
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/chatHub")
-        .build();
+    const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
     connection.on("ReceiveMessage", function (user, message) {
         // Display message in chat
     });
 
-    connection.start().catch(err => console.error(err.toString()));
+    connection.start().catch((err) => console.error(err.toString()));
 </script>
 ```
 

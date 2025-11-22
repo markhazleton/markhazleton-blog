@@ -13,13 +13,13 @@ J-Show Builder GPT is an AI-driven application that generates trivia games in a 
 The development of J-Show Builder GPT was a collaborative effort involving AI experts, game designers, and software developers. The goal was to create a tool that could autonomously generate trivia content while maintaining a high level of engagement.
 
 - **Phase 1: Conceptualization**
-  - Initial brainstorming sessions focused on identifying the core functionalities needed for an effective trivia game generator.
+    - Initial brainstorming sessions focused on identifying the core functionalities needed for an effective trivia game generator.
 
 - **Phase 2: Design and Prototyping**
-  - The team developed prototypes to test various AI models and user interfaces.
+    - The team developed prototypes to test various AI models and user interfaces.
 
 - **Phase 3: Implementation**
-  - Finalizing the AI algorithms and integrating them into the WebSpark platform.
+    - Finalizing the AI algorithms and integrating them into the WebSpark platform.
 
 ### Features of J-Show Builder GPT
 

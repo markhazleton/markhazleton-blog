@@ -49,7 +49,7 @@ Organizing your Git repositories effectively is essential for smooth project man
 
 ## Additional Resources
 
-- [Git Branching Strategies](https://www.atlassian.com/git/tutorials/comparing-workflows)  
+- [Git Branching Strategies](https://www.atlassian.com/git/tutorials/comparing-workflows)
 - [Git Hooks Documentation](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
 
 By mastering these organizational techniques, you can ensure that your Git repositories are not only functional but also a pleasure to work with.

@@ -35,6 +35,7 @@ If you’ve ever felt trapped in “vibe coding” with AI—short prompts, long
 GitHub’s Spec Kit is a simple, repo‑native pattern for writing implementation‑ready specifications that AI agents (and humans) can follow. Think of it as “prompt engineering for code,” but with all the precision of a lightweight functional spec.
 
 A typical Spec Kit includes:
+
 - A single source of truth for intent and constraints (spec.yaml or spec.md).
 - A file plan that tells the AI which files to create or modify.
 - Non‑goals and trade‑offs to minimize scope creep.
@@ -44,6 +45,7 @@ A typical Spec Kit includes:
 You can use Spec Kit with GitHub Copilot Chat in editors like VS Code or Visual Studio, and in PR reviews. You paste or reference your spec, ask Copilot to implement the file plan and tests, and iterate until tests pass.
 
 Useful links:
+
 - GitHub Copilot: https://github.com/features/copilot
 - NuGet publishing: https://learn.microsoft.com/nuget/create-packages/overview-and-workflow
 - .NET testing with xUnit: https://learn.microsoft.com/dotnet/core/testing/unit-testing-with-dotnet-test
@@ -54,16 +56,17 @@ Useful links:
 
 AIs are fast at producing code; they’re not mind readers. Specs give the model guardrails, context, and a target.
 
-| Dimension | Vibe coding (prompt-and-pray) | Spec-driven (Spec Kit) |
-| --- | --- | --- |
-| Input | Short, ambiguous prompt | Clear problem statement, constraints, file plan |
-| Output quality | Variable; surprises likely | Predictable; closer to intended architecture |
-| Iterations | Many; fix what you didn’t ask for | Fewer; validate what you did ask for |
-| Tests | Often added late | Baked into acceptance criteria |
-| Maintainability | Incidental | Intentional: naming, APIs, non-goals documented |
-| Time to value | Fast start, slow finish | Steady velocity, faster finish |
+| Dimension       | Vibe coding (prompt-and-pray)     | Spec-driven (Spec Kit)                          |
+| --------------- | --------------------------------- | ----------------------------------------------- |
+| Input           | Short, ambiguous prompt           | Clear problem statement, constraints, file plan |
+| Output quality  | Variable; surprises likely        | Predictable; closer to intended architecture    |
+| Iterations      | Many; fix what you didn’t ask for | Fewer; validate what you did ask for            |
+| Tests           | Often added late                  | Baked into acceptance criteria                  |
+| Maintainability | Incidental                        | Intentional: naming, APIs, non-goals documented |
+| Time to value   | Fast start, slow finish           | Steady velocity, faster finish                  |
 
 Top benefits:
+
 - Reduced rework: constraints prevent the model from inventing unneeded complexity.
 - Faster convergence: acceptance tests make correctness visible immediately.
 - Socialization: the spec doubles as team documentation and code review context.
@@ -76,6 +79,7 @@ Top benefits:
 We set out to implement, test, and publish a small yet non‑trivial .NET library: a generic, thread‑safe LRU cache with metrics. The target was a single NuGet package with strong documentation, zero external dependencies, and predictable performance.
 
 Scope:
+
 - Name: TinyLruNet
 - Purpose: O(1) get/set/contains operations with LRU eviction, metrics, and TTL.
 - Targets: netstandard2.0, net8.0
@@ -159,6 +163,7 @@ Tip: Keep your spec and acceptance tests in the repo to make them visible in PRs
 ## Driving Copilot with the spec
 
 Workflow we used:
+
 1. Paste spec.yaml into Copilot Chat in VS Code and request: “Create the files in file_plan with initial implementations and tests.”
 2. Ask Copilot to write the test file first based on acceptance_tests. This enforces an executable target.
 3. Generate minimal implementation to make the tests compile.
@@ -550,6 +555,7 @@ namespace TinyLruNet.Tests
 ```
 
 Run locally:
+
 - dotnet test
 - Expect red/green cycles as behavior clarifies.
 
@@ -565,24 +571,24 @@ Continuous integration on push/PR:
 # .github/workflows/ci.yml
 name: ci
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+    push:
+        branches: [main]
+    pull_request:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-      - name: Restore
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: "8.0.x"
+            - name: Restore
+              run: dotnet restore
+            - name: Build
+              run: dotnet build --configuration Release --no-restore
+            - name: Test
+              run: dotnet test --configuration Release --no-build --verbosity normal
 ```
 
 Release on tag to NuGet:
@@ -591,29 +597,29 @@ Release on tag to NuGet:
 # .github/workflows/release.yml
 name: release
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+    push:
+        tags:
+            - "v*.*.*"
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-      - name: Restore
-        run: dotnet restore
-      - name: Build
-        run: dotnet build -c Release
-      - name: Pack
-        run: dotnet pack src/TinyLruNet/TinyLruNet.csproj -c Release -o ./artifacts --no-build
-      - name: Push to NuGet
-        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+    publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: "8.0.x"
+            - name: Restore
+              run: dotnet restore
+            - name: Build
+              run: dotnet build -c Release
+            - name: Pack
+              run: dotnet pack src/TinyLruNet/TinyLruNet.csproj -c Release -o ./artifacts --no-build
+            - name: Push to NuGet
+              run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 ```
 
 With Spec Kit, these workflows are part of the file plan. Copilot generates them with the correct paths and targets.
@@ -623,19 +629,22 @@ With Spec Kit, these workflows are part of the file plan. Copilot generates them
 ## Results: what changed vs. vibe coding
 
 Baseline we’ve seen in “vibe coding” sessions:
+
 - Multiple AI “hallucinations” about thread models and APIs.
 - Post‑hoc tests that forced painful refactors.
 - Architecture drift across iterations.
 
 With Spec Kit:
+
 - First draft matched the desired public API and file structure.
 - We converged in 3 iterations:
-  - Iteration 1: tests generated; initial implementation produced; TTL sweep bug revealed.
-  - Iteration 2: fixed expiration and recency; clarified metrics semantics.
-  - Iteration 3: added XML docs, CI, and NuGet metadata; all tests green.
+    - Iteration 1: tests generated; initial implementation produced; TTL sweep bug revealed.
+    - Iteration 2: fixed expiration and recency; clarified metrics semantics.
+    - Iteration 3: added XML docs, CI, and NuGet metadata; all tests green.
 - The release workflow pushed a package on first tag without manual patching.
 
 Qualitative improvements:
+
 - Traceability: acceptance tests aligned with spec names, making code review crisp.
 - Reviewability: non‑goals prevented Copilot from adding sliding expiration “for completeness.”
 - Velocity: less time specifying “what we meant” after the code landed; more time validating behavior.
@@ -657,6 +666,7 @@ Actionable guidance for your own Spec Kit runs:
 - Prefer simple concurrency. Unless required, a coarse lock is easier for models to get correct than complex lock‑free code.
 
 Common pitfalls:
+
 - Over‑broad specs lead to under‑specified code. Narrow the scope to ship earlier.
 - Hidden constraints (e.g., must target netstandard2.0) discovered late cause churn. Put them in the spec.
 - Letting Copilot design the API can drift from your intended ergonomics. Specify the API style and naming.
@@ -668,24 +678,24 @@ Common pitfalls:
 A practical rollout plan:
 
 1. Pick a low‑risk target
-   - A small library, CLI tool, or refactor with clear boundaries.
+    - A small library, CLI tool, or refactor with clear boundaries.
 
 2. Clone or create a Spec Kit template
-   - Include sections: goals, non‑goals, constraints, file_plan, acceptance_tests, outputs.
+    - Include sections: goals, non‑goals, constraints, file_plan, acceptance_tests, outputs.
 
 3. Integrate with your editor and CI
-   - Use Copilot Chat in VS Code or Visual Studio.
-   - Add CI workflow names into the file plan so they’re implemented on day one.
+    - Use Copilot Chat in VS Code or Visual Studio.
+    - Add CI workflow names into the file plan so they’re implemented on day one.
 
 4. Run a pilot
-   - Time‑box one or two sprints. Compare iteration counts and defects vs. your usual flow.
+    - Time‑box one or two sprints. Compare iteration counts and defects vs. your usual flow.
 
 5. Retrospective and standardization
-   - Turn your best spec into an internal template.
-   - Capture your preferred test patterns and code style choices.
+    - Turn your best spec into an internal template.
+    - Capture your preferred test patterns and code style choices.
 
 6. Scale up
-   - Introduce Spec Kit for bug fixes and new features, not only greenfield.
+    - Introduce Spec Kit for bug fixes and new features, not only greenfield.
 
 A minimal spec template you can reuse:
 
@@ -693,22 +703,22 @@ A minimal spec template you can reuse:
 title: <Project/Feature name>
 summary: <Short description of what and why>
 goals:
-  - <Explicit behavior or outcome>
+    - <Explicit behavior or outcome>
 non_goals:
-  - <Explicitly excluded items>
+    - <Explicitly excluded items>
 constraints:
-  runtime: <e.g., .NET versions, Node versions>
-  api_style: <e.g., public surface, patterns>
-  performance: <big-O, latency, memory>
+    runtime: <e.g., .NET versions, Node versions>
+    api_style: <e.g., public surface, patterns>
+    performance: <big-O, latency, memory>
 file_plan:
-  - path: <path/to/file>
-    purpose: <role>
+    - path: <path/to/file>
+      purpose: <role>
 acceptance_tests:
-  - name: <test case name>
-    notes: <edge cases>
+    - name: <test case name>
+      notes: <edge cases>
 outputs:
-  docs: <readme, xml docs, site>
-  release: <package/release target>
+    docs: <readme, xml docs, site>
+    release: <package/release target>
 ```
 
 ---
@@ -716,19 +726,19 @@ outputs:
 ## FAQs
 
 - Is Spec Kit a heavy process?
-  - No. It’s a single markdown/YAML file plus tests. Aim for 1–2 pages.
+    - No. It’s a single markdown/YAML file plus tests. Aim for 1–2 pages.
 
 - Do I need Copilot Workspace or a special tool?
-  - No. Spec Kit works with Copilot Chat in your editor and standard GitHub Actions. Any AI assistant that can read files and follow instructions benefits from it.
+    - No. Spec Kit works with Copilot Chat in your editor and standard GitHub Actions. Any AI assistant that can read files and follow instructions benefits from it.
 
 - What if my project is bigger than a page of spec?
-  - Split the work. Create one spec per feature or milestone, each with its own acceptance tests and file plan.
+    - Split the work. Create one spec per feature or milestone, each with its own acceptance tests and file plan.
 
 - Can I use BDD tools like Gherkin?
-  - Yes. The principle is the same: executable behavior descriptions. Use what your team is comfortable with.
+    - Yes. The principle is the same: executable behavior descriptions. Use what your team is comfortable with.
 
 - How do I keep the spec and code in sync?
-  - Treat the spec like code: version it, review it in PRs, and update acceptance tests when behavior changes.
+    - Treat the spec like code: version it, review it in PRs, and update acceptance tests when behavior changes.
 
 ---
 

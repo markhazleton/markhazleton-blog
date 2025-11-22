@@ -12,9 +12,9 @@ Neural networks are computational models inspired by the human brain. They consi
 
 1. **Neurons**: The basic units of a neural network, similar to the nerve cells in a human brain.
 2. **Layers**: Neural networks are composed of multiple layers:
-   - **Input Layer**: Receives the initial data.
-   - **Hidden Layers**: Perform computations and extract features.
-   - **Output Layer**: Produces the final result or prediction.
+    - **Input Layer**: Receives the initial data.
+    - **Hidden Layers**: Perform computations and extract features.
+    - **Output Layer**: Produces the final result or prediction.
 3. **Weights and Biases**: Parameters that are adjusted during training to minimize error.
 4. **Activation Functions**: Determine the output of a neuron, introducing non-linearity into the model.
 

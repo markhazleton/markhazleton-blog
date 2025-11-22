@@ -34,7 +34,7 @@ class ArticleSearchEngine {
 
     // Load articles from JSON
     async loadArticles() {
-        const response = await fetch("/articles.json");
+        const response = await fetch("/search-index.json");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

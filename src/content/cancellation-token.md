@@ -13,10 +13,10 @@ CancellationToken token = cts.Token;
 
 Task.Run(() =>
 {
-    while (!token.IsCancellationRequested)
-    {
-        // Perform a task
-    }
+while (!token.IsCancellationRequested)
+{
+// Perform a task
+}
 }, token);
 
 // To cancel the task

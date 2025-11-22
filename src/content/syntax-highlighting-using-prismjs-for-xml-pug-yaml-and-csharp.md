@@ -58,9 +58,10 @@ To automate the process of bundling and managing your scripts, consider using `r
 ### How to Use render-scripts.js
 
 1. **Install the Tool**: Ensure you have Node.js installed, then run:
-   ```bash
-   npm install render-scripts
-   ```
+
+    ```bash
+    npm install render-scripts
+    ```
 
 2. **Configure Your Scripts**: Create a configuration file to specify which scripts to bundle.
 

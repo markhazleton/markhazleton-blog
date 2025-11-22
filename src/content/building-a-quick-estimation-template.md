@@ -13,6 +13,7 @@ Forget sophisticated algorithms. You want something you can explain in 30 second
 Addition works better when factors are independent. Multiplication works when factors compound each other. Most teams find addition more intuitive and predictable. You can always adjust with a multiplier later.
 
 Your formula becomes:
+
 - (Innovation + Scope + People) × Multiplier = Estimate
 
 That's it. No machine learning, no complex weightings. Just simple math that anyone can verify.
@@ -20,16 +21,19 @@ That's it. No machine learning, no complex weightings. Just simple math that any
 ### The Three Core Factors Explained
 
 **Innovation (Have we done this before?)**
+
 - 1-3: We've done this many times, have templates/patterns
 - 4-6: We've done similar things, need some adaptation
 - 7-10: Breaking new ground, R&D required, never attempted
 
 **Scope (How big is it?)**
+
 - 1-3: Small change, affects one component
 - 4-6: Medium feature, multiple components
 - 7-10: Major system, extensive changes across platform
 
 **People (How complex is the coordination?)**
+
 - 1-3: One person or single team, one skill set
 - 4-6: 2-3 teams, multiple skills, some coordination
 - 7-10: Many teams, diverse technology skills, heavy coordination
@@ -54,6 +58,7 @@ The mapping can be a simple lookup table or nested IF statements. Let Claude wri
 ## Calibrate with Whatever History You Have
 
 Got even 5-10 completed items? Perfect. Work backwards:
+
 1. Take a completed item
 2. Rate it with your Innovation, Scope, and People factors
 3. Calculate what multiplier would have given you the actual result
@@ -65,6 +70,7 @@ No history? Start with a multiplier of 3 and adjust after your first few complet
 ## Make It Defendable, Not Perfect
 
 The goal isn't perfect estimates - it's estimates you can explain and adjust. When someone challenges a number, you can show:
+
 - The specific Innovation, Scope, and People ratings
 - Why you rated each factor that way
 - How changing any rating affects the estimate
@@ -83,6 +89,7 @@ Track patterns: Are innovative tasks always underestimated? Does your team consi
 If you're spending more than 2 minutes per estimate, your framework is too complex. The power isn't in sophistication - it's in consistency and speed. You should be able to estimate 50 items in under an hour.
 
 This means:
+
 - Clear definitions for Innovation (have we done this?), Scope (how big?), and People (how many skills/teams?)
 - Reference examples for common patterns
 - No second-guessing or over-analysis
@@ -91,6 +98,7 @@ This means:
 ## Use AI to Handle the Tedious Parts
 
 Claude or similar tools excel at:
+
 - Generating Excel formulas for your Innovation + Scope + People logic
 - Creating validation rules
 - Building reference tables
@@ -104,6 +112,7 @@ Don't waste time on formula syntax or Excel functions. Describe what you want an
 Your first version will be wrong. That's fine. The framework gives you something to be wrong WITH, which is infinitely better than being wrong without any structure.
 
 After each sprint/milestone/project:
+
 1. Compare estimates to actuals
 2. Look for systematic bias in Innovation, Scope, or People ratings
 3. Adjust either ratings definitions or multipliers
@@ -122,6 +131,7 @@ This is huge. Stakeholders can engage with "I rated People complexity as 7 becau
 Be upfront that this is a rapid estimation tool based on simple math. Don't pretend it's more sophisticated than it is. The transparency is a feature, not a bug.
 
 When presenting estimates:
+
 - Show the Innovation + Scope + People framework openly
 - Explain it takes 30 seconds per item
 - Acknowledge the uncertainty
@@ -132,6 +142,7 @@ When presenting estimates:
 Getting started with an AI assistant to build your framework? Here are proven prompts that will generate exactly what you need:
 
 ### For Creating Your Initial Framework:
+
 ```
 "I need to estimate 50 IT tasks with minimal information. Create an Excel formula that:
 - Takes 3 factors rated 1-10 (Innovation, Scope, People)
@@ -144,6 +155,7 @@ Getting started with an AI assistant to build your framework? Here are proven pr
 ```
 
 ### For Building the Spreadsheet:
+
 ```
 "Create a Python script using openpyxl that generates an Excel estimation template with:
 - Headers for task name, category, Innovation (have we done this?), Scope (how big?), People (teams/skills needed)
@@ -155,6 +167,7 @@ Getting started with an AI assistant to build your framework? Here are proven pr
 ```
 
 ### For Generating Reference Tables:
+
 ```
 "Create a reference table showing typical Innovation, Scope, and People ratings for common IT tasks:
 - Simple bug fix (done many times, small scope, one developer)
@@ -166,11 +179,12 @@ Include suggested ratings for each factor"
 ```
 
 ### For Calibration Logic:
+
 ```
 "Write an Excel formula that:
 - Takes completed story points in column A
 - Takes Innovation rating in column B
-- Takes Scope rating in column C  
+- Takes Scope rating in column C
 - Takes People rating in column D
 - Calculates the sum in column E
 - Calculates the implied multiplier in column F
@@ -178,6 +192,7 @@ Include suggested ratings for each factor"
 ```
 
 ### For Creating Validation Rules:
+
 ```
 "Generate Excel data validation rules and formulas that will:
 - Ensure Innovation, Scope, and People are between 1-10
@@ -188,6 +203,7 @@ Include suggested ratings for each factor"
 ```
 
 ### For Format Conversions:
+
 ```
 "Create nested IF statements that convert (Innovation + Scope + People) × Multiplier estimates to:
 1. Story points in Fibonacci sequence
@@ -198,6 +214,7 @@ Make it work with Innovation+Scope+People sums from 3 to 30"
 ```
 
 ### For Documentation:
+
 ```
 "Write a one-page guide explaining this estimation framework to stakeholders. Include:
 - Innovation: Have we done this before? (1=yes many times, 10=never)
@@ -211,40 +228,52 @@ Keep it non-technical and focus on the business value"
 ## Common Mistakes to Avoid
 
 ### Overcomplicating the Factors
+
 Don't split Innovation into "technical innovation" and "business innovation." Don't divide People into "internal teams" and "external vendors." Keep it simple: Have we done this? How big? How many people/skills involved?
 
 ### Confusing Scope with People
+
 Scope is about the size of the work itself. People is about coordination complexity. A large data migration (Scope=8) might only need one DBA (People=2). Keep them separate.
 
 ### Rating Innovation Based on Industry Standards
+
 Innovation means "have WE done this before?" - not whether it exists in the world. If your team has never built a REST API, that's high Innovation for you, even though it's standard in the industry.
 
 ### Ignoring Hidden People Complexity
+
 Remember to account for all the people involved: developers, testers, designers, product owners, stakeholders, deployment teams. If you're coordinating across all these groups, that's high People complexity.
 
 ### Using Raw Multiplication
+
 Multiplying Innovation × Scope × People gives you a range of 1-1000. That's too wide. Addition (Innovation + Scope + People) gives you 3-30, which is much more manageable.
 
 ### Over-Precision in Ratings
+
 The difference between Innovation=6 and Innovation=7 doesn't matter. Use rough bands:
+
 - 1-3: Low (we've done this often)
 - 4-6: Medium (we've done similar)
 - 7-9: High (this is new to us)
 - 10: Extreme (complete unknown)
 
 ### Not Considering All Skills in People Rating
+
 People complexity isn't just about headcount. Three developers with the same skills = low People complexity. Frontend + backend + DBA + DevOps = high People complexity, even if it's still just four people.
 
 ### Forgetting About Estimation Fatigue
+
 After about 20 estimates, accuracy drops. Take breaks. Or better yet, estimate in small batches across multiple sessions.
 
 ### Using the Same Multiplier for Everything
+
 A multiplier that works for innovative work might be wrong for routine tasks. Consider different multipliers for different sum ranges (progressive multipliers).
 
 ### Not Tracking Confidence
+
 Add a confidence column based on how certain you are about Innovation, Scope, and People. Low confidence items need buffer.
 
 ### Expecting Perfection Too Soon
+
 Your first 50 estimates will be wrong. That's fine. By your third iteration (150 items estimated and completed), you'll be within 20% accuracy on most items.
 
 ## Real Calculation Examples
@@ -252,6 +281,7 @@ Your first 50 estimates will be wrong. That's fine. By your third iteration (150
 Let's walk through exactly how the math works with concrete numbers:
 
 ### Example 1: Simple Bug Fix
+
 - **Innovation:** 2 (we fix similar bugs weekly)
 - **Scope:** 2 (single component affected)
 - **People:** 1 (one developer, no coordination)
@@ -261,6 +291,7 @@ Let's walk through exactly how the math works with concrete numbers:
 - **Fibonacci Mapping:** → 8 points
 
 ### Example 2: New Customer Portal Feature
+
 - **Innovation:** 5 (we've done similar portals, but this has new elements)
 - **Scope:** 6 (multiple screens, database changes, API updates)
 - **People:** 4 (frontend, backend, UX designer, product owner)
@@ -270,6 +301,7 @@ Let's walk through exactly how the math works with concrete numbers:
 - **Fibonacci Mapping:** → 55 points
 
 ### Example 3: First Machine Learning Integration
+
 - **Innovation:** 8 (we've never done ML before)
 - **Scope:** 7 (new infrastructure, training pipeline, API integration)
 - **People:** 7 (data scientists, backend, DevOps, multiple vendors)
@@ -279,6 +311,7 @@ Let's walk through exactly how the math works with concrete numbers:
 - **Fibonacci Mapping:** → 89 points (consider splitting)
 
 ### Example 4: OAuth Implementation (Your Real Example)
+
 - **Innovation:** 8 (new OAuth pattern for us)
 - **Scope:** 5 (moderate - touches authentication everywhere)
 - **People:** 6 (frontend, backend, security team, possibly PM/design)
@@ -288,7 +321,9 @@ Let's walk through exactly how the math works with concrete numbers:
 - **Actual:** 89 points ✓
 
 ### Calibration Example
+
 You estimated a task:
+
 - Innovation: 4 (we've done similar)
 - Scope: 5 (medium-sized feature)
 - People: 3 (two developers coordinating)
@@ -302,39 +337,51 @@ This tells you to increase your multiplier for similar complexity tasks from 3 t
 ## Frequently Asked Questions
 
 ### Q: How do I handle tasks that don't fit the Innovation-Scope-People framework?
+
 Spike them. If you can't rate how new it is, how big it is, or who's involved, you don't know enough to estimate. Time-box an investigation, then estimate.
 
 ### Q: What if Innovation is low but People complexity is high?
+
 That's perfectly valid. Routine work (Innovation=2) that requires coordinating five teams (People=8) is still complex overall. The addition model handles this well.
 
 ### Q: Should I rate People based on headcount or skill diversity?
+
 Skill diversity. Five backend developers working together = People:3. Frontend + backend + DBA + DevOps + QA = People:7, even though it's still five people.
 
 ### Q: How do I rate Innovation for upgrades or migrations?
+
 Consider how familiar your team is with both the old and new systems. Migrating from tech you know well to tech you've never used = high Innovation.
 
 ### Q: What if Scope keeps changing during development?
+
 Re-estimate when scope changes significantly. Track both original and revised estimates to improve your Scope rating accuracy over time.
 
 ### Q: Can this work for non-technical estimates?
+
 Absolutely. Innovation becomes "Have we done this type of project?", Scope remains size, and People covers coordination across departments/skills/stakeholders.
 
 ### Q: How do I handle dependencies between tasks?
+
 Don't. Estimate each task's Innovation, Scope, and People independently. Add buffer at the project level for integration.
 
 ### Q: What's the minimum historical data needed to calibrate?
+
 Five completed items give you a starting point. Ten give you confidence. Twenty give you reliability. But even one is better than none.
 
 ### Q: Should People complexity include the customer/end users?
+
 Only if they're actively involved during development (user testing, feedback sessions). Passive end users don't add to People complexity.
 
 ### Q: How often should I recalibrate?
+
 After every major delivery or every 20-30 completed items. As your team gains experience, Innovation ratings for similar work should decrease.
 
 ### Q: What if we've literally never done something before (Innovation=10)?
+
 Consider splitting it into a spike/proof-of-concept first. True Innovation=10 items are too uncertain for accurate estimation.
 
 ### Q: Should the People rating include management stakeholders?
+
 Yes, if they're actively involved in decisions during development. A stakeholder who just receives status updates doesn't add complexity. One who reviews every screen does.
 
 ## Template Download Section
@@ -342,6 +389,7 @@ Yes, if they're actively involved in decisions during development. A stakeholder
 Ready to implement this framework? Here's what you'll get:
 
 ### Basic Estimation Template (Excel)
+
 - Pre-built formulas for Innovation + Scope + People estimation
 - Clear column headers with descriptions
 - Progressive multipliers configured
@@ -350,6 +398,7 @@ Ready to implement this framework? Here's what you'll get:
 - Variance tracking
 
 ### Advanced Features Available:
+
 - Multiple category support with different multipliers
 - Squad planning calculations for parallel execution
 - Velocity tracking across sprints
@@ -357,6 +406,7 @@ Ready to implement this framework? Here's what you'll get:
 - Hidden hours conversion (for those who need it)
 
 ### Implementation Checklist:
+
 - [ ] Define Innovation scale for your team (what's a 3 vs 7?)
 - [ ] Define Scope scale with examples
 - [ ] Define People complexity with skill/team examples

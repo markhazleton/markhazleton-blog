@@ -24,6 +24,7 @@ const updateSitemap = require('./update-sitemap');
 const updateSectionsWithArticles = require('./update-sections');
 const PlaceholderGenerator = require('./generate-placeholders');
 const FontDownloader = require('./download-fonts');
+const generateSearchIndex = require('./generate-search-index');
 
 // Import optimization utilities
 const BuildCache = require('./cache-manager');
@@ -70,7 +71,8 @@ class BlogBuilder {
             assets: this.buildAssets.bind(this),
             sitemap: this.buildSitemap.bind(this),
             rss: this.buildRSS.bind(this),
-            projectsRss: this.buildProjectsRSS.bind(this)
+            projectsRss: this.buildProjectsRSS.bind(this),
+            searchIndex: this.buildSearchIndex.bind(this)
         };
 
         // Clean expired cache on startup if enabled
@@ -511,6 +513,32 @@ class BlogBuilder {
         await this.errorRecovery.retryTask(taskName, async () => {
             updateProjectsRSS();
             this.cache.markBuilt(projectsFile, targetFile);
+        });
+
+        this.performance.end(taskName);
+    }
+
+    /**
+     * Build Search Index with caching
+     */
+    async buildSearchIndex() {
+        const taskName = 'searchIndex';
+        this.performance.start(taskName);
+
+        console.log('🔍 Building search index...');
+
+        const articlesFile = upath.join(this.srcPath, 'articles.json');
+        const targetFile = upath.join('docs', 'search-index.json');
+
+        if (!this.cache.shouldRebuild(articlesFile, targetFile)) {
+            this.performance.markCached(taskName);
+            console.log('💾 Search index (cached)');
+            return;
+        }
+
+        await this.errorRecovery.retryTask(taskName, async () => {
+            generateSearchIndex();
+            this.cache.markBuilt(articlesFile, targetFile);
         });
 
         this.performance.end(taskName);

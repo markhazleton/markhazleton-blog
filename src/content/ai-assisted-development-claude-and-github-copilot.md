@@ -13,6 +13,7 @@ AI-assisted development refers to the use of artificial intelligence to aid in t
 Claude is an AI tool designed to assist developers by providing intelligent code suggestions and automating routine tasks. It integrates seamlessly with various development environments, enhancing productivity and reducing the time spent on mundane coding tasks.
 
 ### Key Features of Claude
+
 - **Code Suggestions**: Offers real-time code suggestions to improve coding efficiency.
 - **Automation**: Automates repetitive tasks, freeing up developers to focus on innovation.
 - **Integration**: Works with popular development environments for a smooth workflow.
@@ -22,6 +23,7 @@ Claude is an AI tool designed to assist developers by providing intelligent code
 GitHub Copilot, developed by GitHub in collaboration with OpenAI, acts as an AI pair programmer. It suggests whole lines or blocks of code as you type, based on the context of your current project.
 
 ### Benefits of Using GitHub Copilot
+
 - **Contextual Code Suggestions**: Provides relevant code suggestions based on the project context.
 - **Learning and Adaptation**: Learns from your coding style and adapts to provide more personalized suggestions.
 - **Wide Language Support**: Supports a wide range of programming languages, making it versatile for different projects.
@@ -42,5 +44,5 @@ AI-assisted development tools are not just a trend but a necessity in modern sof
 
 ## Further Reading
 
-- [Learn more about Claude](https://example.com/claude)  
+- [Learn more about Claude](https://example.com/claude)
 - [Explore GitHub Copilot](https://example.com/github-copilot)

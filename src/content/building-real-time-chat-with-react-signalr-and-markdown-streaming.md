@@ -16,14 +16,15 @@ Before we begin, ensure you have the following tools and knowledge:
 ## Setting Up the React Application
 
 1. **Create a new React app**:
-   ```bash
-   npx create-react-app real-time-chat --template typescript
-   ```
+
+    ```bash
+    npx create-react-app real-time-chat --template typescript
+    ```
 
 2. **Install necessary packages**:
-   ```bash
-   npm install @microsoft/signalr marked
-   ```
+    ```bash
+    npm install @microsoft/signalr marked
+    ```
 
 ## Integrating SignalR for Real-Time Messaging
 
@@ -32,47 +33,47 @@ SignalR is a library that simplifies adding real-time web functionality to appli
 ### Setting Up SignalR Client
 
 1. **Create a SignalR connection**:
-   ```typescript
-   import * as signalR from '@microsoft/signalr';
 
-   const connection = new signalR.HubConnectionBuilder()
-       .withUrl("/chatHub")
-       .configureLogging(signalR.LogLevel.Information)
-       .build();
-   ```
+    ```typescript
+    import * as signalR from "@microsoft/signalr";
+
+    const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").configureLogging(signalR.LogLevel.Information).build();
+    ```
 
 2. **Start the connection**:
-   ```typescript
-   connection.start().catch(err => console.error(err.toString()));
-   ```
+
+    ```typescript
+    connection.start().catch((err) => console.error(err.toString()));
+    ```
 
 3. **Handle incoming messages**:
-   ```typescript
-   connection.on("ReceiveMessage", (user, message) => {
-       const msg = document.createElement("div");
-       msg.textContent = `${user}: ${message}`;
-       document.getElementById("messagesList").appendChild(msg);
-   });
-   ```
+    ```typescript
+    connection.on("ReceiveMessage", (user, message) => {
+        const msg = document.createElement("div");
+        msg.textContent = `${user}: ${message}`;
+        document.getElementById("messagesList").appendChild(msg);
+    });
+    ```
 
 ## Implementing Markdown Streaming
 
 Markdown allows users to format text using simple syntax. We will use the `marked` library to parse and render Markdown.
 
 1. **Render Markdown messages**:
-   ```typescript
-   import { marked } from 'marked';
 
-   function renderMarkdown(message: string): string {
-       return marked(message);
-   }
-   ```
+    ```typescript
+    import { marked } from "marked";
+
+    function renderMarkdown(message: string): string {
+        return marked(message);
+    }
+    ```
 
 2. **Display Markdown in the chat**:
-   ```typescript
-   const markdownMessage = renderMarkdown(message);
-   document.getElementById("messagesList").innerHTML += `<div>${markdownMessage}</div>`;
-   ```
+    ```typescript
+    const markdownMessage = renderMarkdown(message);
+    document.getElementById("messagesList").innerHTML += `<div>${markdownMessage}</div>`;
+    ```
 
 ## Conclusion
 

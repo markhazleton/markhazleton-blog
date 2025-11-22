@@ -294,6 +294,55 @@ html(lang='en')
           "@id": "https://markhazleton.com/"
         }
       }
+    
+    if article
+      script(type="application/ld+json").
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "#{seoData.title}",
+          "image": "#{seoData.ogImage}",
+          "author": {
+            "@type": "Person",
+            "name": "#{seoData.author}"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Mark Hazleton",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+            }
+          },
+          "datePublished": "#{article.publishedDate}",
+          "dateModified": "#{article.lastmod || article.publishedDate}",
+          "description": "#{seoData.description}",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "#{seoData.canonical}"
+          }
+        }
+      script(type="application/ld+json").
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://markhazleton.com/"
+          },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Articles",
+            "item": "https://markhazleton.com/articles.html"
+          },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "#{seoData.title}",
+            "item": "#{seoData.canonical}"
+          }]
+        }
 
     // Additional structured data for specific pages
     block additional_structured_data

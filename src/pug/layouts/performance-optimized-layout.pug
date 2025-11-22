@@ -363,6 +363,55 @@ html(lang='en')
           "@id": "https://markhazleton.com/"
         }
       }
+    
+    if article
+      script(type="application/ld+json").
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "#{seoData.title}",
+          "image": "#{seoData.ogImage}",
+          "author": {
+            "@type": "Person",
+            "name": "#{seoData.author}"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Mark Hazleton",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://markhazleton.com/assets/img/MarkHazleton.jpg"
+            }
+          },
+          "datePublished": "#{article.publishedDate}",
+          "dateModified": "#{article.lastmod || article.publishedDate}",
+          "description": "#{seoData.description}",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "#{seoData.canonical}"
+          }
+        }
+      script(type="application/ld+json").
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://markhazleton.com/"
+          },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Articles",
+            "item": "https://markhazleton.com/articles.html"
+          },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "#{seoData.title}",
+            "item": "#{seoData.canonical}"
+          }]
+        }
 
     // Additional structured data for specific pages
     block additional_structured_data
@@ -477,27 +526,8 @@ html(lang='en')
           .col-12.text-center
             p.mb-0 &copy; #{new Date().getFullYear()} Mark Hazleton. All rights reserved.
 
-    // Search functionality and Bootstrap JavaScript (deferred)
-    script(defer, src='/js/bootstrap.bundle.min.js')
-    script(defer, src='/js/search.js')
-
-    // Deferred JavaScript loading
-    script.
-      // Load main scripts after page load to prevent blocking
-      window.addEventListener('load', function() {
-        var script = document.createElement('script');
-        script.src = '/js/scripts.js';
-        document.body.appendChild(script);
-
-        // Google Analytics - only load after page is fully loaded
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-146971717-1', 'auto');
-        ga('send', 'pageview');
-      });
+    // Core site script bundle (Bootstrap, Prism, custom utilities)
+    script(src='/js/scripts.js')
 
     //- Additional page-specific JavaScript
     block additional_js

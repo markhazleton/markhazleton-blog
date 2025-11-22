@@ -65,7 +65,7 @@ I created a basic server setup to handle requests and responses efficiently.
 Bootstrap was integrated to ensure responsive design and a modern look for the project. This was done by including Bootstrap's CDN in the HTML files:
 
 ```html
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
 ```
 
 ## Testing and Deployment

@@ -23,46 +23,47 @@ To get started, you will need:
 ### Step-by-Step Guide
 
 1. **Set Up Your GitHub Repository**
-   - Create a new repository or use an existing one where you want to automate updates.
+    - Create a new repository or use an existing one where you want to automate updates.
 
 2. **Create an RSS Feed**
-   - Use Node.js to generate an RSS feed of your latest blog posts.
-   - Ensure your blog platform supports RSS feeds.
+    - Use Node.js to generate an RSS feed of your latest blog posts.
+    - Ensure your blog platform supports RSS feeds.
 
 3. **Configure GitHub Actions**
-   - Navigate to the `Actions` tab in your GitHub repository.
-   - Set up a new workflow file (e.g., `.github/workflows/update-profile.yml`).
-   - Define the workflow to fetch the RSS feed and update your profile README.
+    - Navigate to the `Actions` tab in your GitHub repository.
+    - Set up a new workflow file (e.g., `.github/workflows/update-profile.yml`).
+    - Define the workflow to fetch the RSS feed and update your profile README.
 
 4. **Write the Workflow Script**
-   - Use a script to parse the RSS feed and format the content for your profile.
-   - Example script:
-     ```yaml
-     name: Update GitHub Profile
+    - Use a script to parse the RSS feed and format the content for your profile.
+    - Example script:
 
-     on:
-       schedule:
-         - cron: '0 * * * *'
+        ```yaml
+        name: Update GitHub Profile
 
-     jobs:
-       update-profile:
-         runs-on: ubuntu-latest
-         steps:
-           - name: Checkout repository
-             uses: actions/checkout@v2
+        on:
+            schedule:
+                - cron: "0 * * * *"
 
-           - name: Fetch RSS Feed
-             run: |
-               curl -s [Your RSS Feed URL] > feed.xml
+        jobs:
+            update-profile:
+                runs-on: ubuntu-latest
+                steps:
+                    - name: Checkout repository
+                      uses: actions/checkout@v2
 
-           - name: Update README
-             run: |
-               node update-readme.js
-     ```
+                    - name: Fetch RSS Feed
+                      run: |
+                          curl -s [Your RSS Feed URL] > feed.xml
+
+                    - name: Update README
+                      run: |
+                          node update-readme.js
+        ```
 
 5. **Test and Deploy**
-   - Test the workflow to ensure it updates your profile as expected.
-   - Deploy the changes and monitor for any issues.
+    - Test the workflow to ensure it updates your profile as expected.
+    - Deploy the changes and monitor for any issues.
 
 ### Best Practices
 

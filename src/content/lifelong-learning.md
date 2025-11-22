@@ -32,6 +32,6 @@ Lifelong learning is a powerful tool for personal and professional growth. By ad
 
 ## Further Reading
 
-- [The Benefits of Lifelong Learning](https://example.com/benefits)  
-- [How to Create a Personal Learning Plan](https://example.com/learning-plan)  
+- [The Benefits of Lifelong Learning](https://example.com/benefits)
+- [How to Create a Personal Learning Plan](https://example.com/learning-plan)
 - [Top Online Learning Platforms](https://example.com/online-platforms)

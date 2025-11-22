@@ -31,8 +31,8 @@ PUG's journey from Jade to its current form is a testament to its resilience and
 
 ## Additional Resources
 
-- [PUG Official Documentation](https://pugjs.org)  
-- [PUG GitHub Repository](https://github.com/pugjs/pug)  
+- [PUG Official Documentation](https://pugjs.org)
+- [PUG GitHub Repository](https://github.com/pugjs/pug)
 - [Node.js Official Site](https://nodejs.org)
 
 ---

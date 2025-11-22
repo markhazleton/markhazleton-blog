@@ -42,5 +42,5 @@ Mastering the mechanics of web projects involves a blend of strategic planning, 
 
 ## Additional Resources
 
-- [Web Project Management Guide](https://example.com)  
+- [Web Project Management Guide](https://example.com)
 - [Top Tools for Web Development](https://example.com)

@@ -62,33 +62,33 @@ Use HTML and JavaScript to create a frontend interface that interacts with your 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ChatGPT PHP Integration</title>
-</head>
-<body>
-    <h1>Chat with ChatGPT</h1>
-    <textarea id="userInput" placeholder="Type your message..."></textarea>
-    <button onclick="sendMessage()">Send</button>
-    <div id="response"></div>
+    <head>
+        <meta charset="UTF-8" />
+        <title>ChatGPT PHP Integration</title>
+    </head>
+    <body>
+        <h1>Chat with ChatGPT</h1>
+        <textarea id="userInput" placeholder="Type your message..."></textarea>
+        <button onclick="sendMessage()">Send</button>
+        <div id="response"></div>
 
-    <script>
-        function sendMessage() {
-            const userInput = document.getElementById('userInput').value;
-            fetch('your-php-script.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt: userInput })
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('response').innerText = data.choices[0].text;
-            });
-        }
-    </script>
-</body>
+        <script>
+            function sendMessage() {
+                const userInput = document.getElementById("userInput").value;
+                fetch("your-php-script.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ prompt: userInput }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        document.getElementById("response").innerText = data.choices[0].text;
+                    });
+            }
+        </script>
+    </body>
 </html>
 ```
 

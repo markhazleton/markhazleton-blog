@@ -11,26 +11,26 @@ In today's fast-paced business environment, assembling the right project team is
 Internal employees bring a wealth of company-specific knowledge and a deep understanding of the organizational culture. Their insights into internal processes and long-term strategic goals are invaluable.
 
 - **Advantages:**
-  - Familiarity with company culture
-  - Long-term commitment
-  - Deep understanding of internal processes
+    - Familiarity with company culture
+    - Long-term commitment
+    - Deep understanding of internal processes
 
 - **Challenges:**
-  - Potential for groupthink
-  - Limited exposure to external innovations
+    - Potential for groupthink
+    - Limited exposure to external innovations
 
 ### External Consultants
 
 External consultants offer fresh perspectives and specialized expertise that can drive innovation and efficiency. They can introduce new methodologies and technologies that internal teams may not be aware of.
 
 - **Advantages:**
-  - Specialized expertise
-  - Fresh perspectives
-  - Access to cutting-edge technologies
+    - Specialized expertise
+    - Fresh perspectives
+    - Access to cutting-edge technologies
 
 - **Challenges:**
-  - Higher costs
-  - Limited understanding of company culture
+    - Higher costs
+    - Limited understanding of company culture
 
 ## Crafting the Perfect Mix
 
@@ -48,7 +48,7 @@ Creating a balanced project team involves leveraging the strengths of both inter
 
 ## Additional Resources
 
-- [How to Manage a Hybrid Team](https://example.com)  
+- [How to Manage a Hybrid Team](https://example.com)
 - [The Benefits of External Consultants](https://example.com)
 
 ---

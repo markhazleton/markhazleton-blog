@@ -34,5 +34,5 @@ K-means clustering offers a robust framework for analyzing nutritional data, pro
 
 ## Further Reading
 
-- [Understanding K-means Clustering](https://scikit-learn.org/stable/modules/clustering.html)  
+- [Understanding K-means Clustering](https://scikit-learn.org/stable/modules/clustering.html)
 - [Nutritional Data Analysis Techniques](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1234567/)
