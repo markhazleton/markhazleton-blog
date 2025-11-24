@@ -671,6 +671,7 @@ if (require.main === module) {
         console.log('  --rss       Build articles RSS feed');
         console.log('  --projectsRss Build projects RSS feed');
         console.log('  --projectPages Build project detail pages');
+        console.log('  --searchIndex Build search index');
         console.log('');
         console.log('Options:');
         console.log('  --no-cache    Disable build caching');
