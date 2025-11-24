@@ -355,8 +355,12 @@
                     const response = await fetch('search-index.json');
                     articlesData = await response.json();
 
-                    // Sort by lastmod date (newest first)
-                    articlesData.sort((a, b) => new Date(b.lastmod) - new Date(a.lastmod));
+                    // Sort by lastmod date (newest first) - Safari-safe date parsing
+                    articlesData.sort((a, b) => {
+                        const dateA = new Date(a.lastmod + 'T00:00:00');
+                        const dateB = new Date(b.lastmod + 'T00:00:00');
+                        return dateB - dateA;
+                    });
 
                     filteredArticles = [...articlesData];
 
