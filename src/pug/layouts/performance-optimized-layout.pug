@@ -298,15 +298,17 @@ html(lang='en')
       .visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 
     // Non-critical CSS (deferred) - Using modern-styles.css until proper extraction is completed
-    link(rel='preload', href='/css/modern-styles.css', as='style', onload="this.onload=null;this.rel='stylesheet'")
-    noscript: link(rel='stylesheet', href='/css/modern-styles.css')
+    - var cssVersion = typeof buildVersion !== 'undefined' ? buildVersion : '1.0.0';
+    link(rel='preload', href=`/css/modern-styles.css?v=${cssVersion}`, as='style', onload="this.onload=null;this.rel='stylesheet'")
+    noscript: link(rel='stylesheet', href=`/css/modern-styles.css?v=${cssVersion}`)
 
     // Fallback for older browsers
     script.
       (function() {
+        var cssVersion = '#{cssVersion}';
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/css/modern-styles.css';
+        link.href = '/css/modern-styles.css?v=' + cssVersion;
         var supportsPreload = link.relList && link.relList.supports && link.relList.supports('preload');
         if (!supportsPreload) {
           document.head.appendChild(link);
@@ -363,7 +365,7 @@ html(lang='en')
           "@id": "https://markhazleton.com/"
         }
       }
-    
+
     if article
       script(type="application/ld+json").
         {
@@ -525,9 +527,15 @@ html(lang='en')
         .row
           .col-12.text-center
             p.mb-0 &copy; #{new Date().getFullYear()} Mark Hazleton. All rights reserved.
+            if typeof buildVersion !== 'undefined' && buildVersion
+              p.small.text-muted.mt-2.mb-0
+                | v#{buildVersion}
+                if typeof buildDate !== 'undefined' && buildDate
+                  |  • Built: #{new Date(buildDate).toLocaleDateString()}
 
     // Core site script bundle (Bootstrap, Prism, custom utilities)
-    script(src='/js/scripts.js')
+    - var jsVersion = typeof buildVersion !== 'undefined' ? buildVersion : '1.0.0';
+    script(src=`/js/scripts.js?v=${jsVersion}`)
 
     //- Additional page-specific JavaScript
     block additional_js

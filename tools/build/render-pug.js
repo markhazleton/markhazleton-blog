@@ -14,6 +14,21 @@ const { execSync } = require('child_process');
 const articles = require('./../../src/articles.json');
 const projects = require('./../../src/projects.json');
 
+// Function to load build version info (reload fresh each time)
+function getBuildVersion() {
+    try {
+        const buildVersionPath = upath.resolve(__dirname, '../../build-version.json');
+        if (fs.existsSync(buildVersionPath)) {
+            // Clear cache to get fresh data
+            delete require.cache[require.resolve('../../build-version.json')];
+            return require('../../build-version.json');
+        }
+    } catch (error) {
+        console.warn('⚠️ Could not load build version:', error.message);
+    }
+    return { version: '1.0.0', buildDate: '', buildNumber: 0 };
+}
+
 // Import SEO Helper
 const SEOHelper = require('./seo-helper');
 const seoHelper = new SEOHelper(articles, {
@@ -165,6 +180,9 @@ module.exports = async function renderPug(filePath) {
         seoData = seoHelper.getDefaultSEO();
     }
 
+    // Get fresh build version data for this render
+    const buildVersion = getBuildVersion();
+
     const html = pug.renderFile(filePath, {
         doctype: 'html',
         filename: filePath,
@@ -177,6 +195,9 @@ module.exports = async function renderPug(filePath) {
         project: project,
         seoData: seoData,
         seoHelper: seoHelper,
+        buildVersion: buildVersion.version,
+        buildDate: buildVersion.buildDate,
+        buildNumber: buildVersion.buildNumber,
         // Article / project properties for template compatibility
         publishedDate: article ? article.publishedDate : (project ? (project.promotion && project.promotion.lastPromotedOn) || project.updatedOn || project.lastModified || null : null),
         pageAuthor: article ? article.author : (project && project.author ? project.author : 'Mark Hazleton'),

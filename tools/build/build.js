@@ -25,6 +25,7 @@ const updateSectionsWithArticles = require('./update-sections');
 const PlaceholderGenerator = require('./generate-placeholders');
 const FontDownloader = require('./download-fonts');
 const generateSearchIndex = require('./generate-search-index');
+const incrementVersion = require('./increment-version');
 
 // Import optimization utilities
 const BuildCache = require('./cache-manager');
@@ -548,6 +549,13 @@ class BlogBuilder {
      * Run specific build tasks with parallel execution support
      */
     async run(taskNames = []) {
+        // Increment version at the start of every build
+        try {
+            incrementVersion();
+        } catch (error) {
+            console.warn('⚠️ Failed to increment version:', error.message);
+        }
+
         console.log('🚀 Mark Hazleton Blog - Enhanced Build Process');
         console.log('===============================================');
 
