@@ -381,7 +381,7 @@ class ArticleSearchEngine {
             '<div id="searchSuggestions" class="position-absolute bg-white border rounded shadow-sm mt-1 w-100" style="z-index: 1050;">';
         suggestions.forEach((suggestion) => {
             suggestionsHtml += `
-                <div class="suggestion-item p-3 border-bottom" onclick="searchEngine.selectSuggestion('${suggestion.text}')" style="cursor: pointer;">
+                <div class="suggestion-item p-3 border-bottom" onclick="window.searchEngine.selectSuggestion('${suggestion.text.replace(/'/g, "\\'")}')" style="cursor: pointer;">
                     <div class="fw-bold">${this.highlightSearchTerms(suggestion.text, query)}</div>
                     <small class="text-muted">${suggestion.type} • ${suggestion.count} articles</small>
                 </div>
@@ -597,14 +597,14 @@ class ArticleSearchEngine {
     }
 }
 
-// Global search engine instance
-let searchEngine;
+// Global search engine instance - explicitly attached to window for inline event handlers
+window.searchEngine = null;
 
 // Global functions for search form and page interactions
 window.performSearch = function (event) {
     if (event) event.preventDefault();
-    if (searchEngine) {
-        searchEngine.performSearch();
+    if (window.searchEngine) {
+        window.searchEngine.performSearch();
     }
     return false;
 };
@@ -613,14 +613,14 @@ window.performSearch = function (event) {
 document.addEventListener("DOMContentLoaded", async function () {
     // Only initialize if we're on the search page
     if (document.getElementById("searchForm")) {
-        searchEngine = new ArticleSearchEngine();
-        await searchEngine.init();
+        window.searchEngine = new ArticleSearchEngine();
+        await window.searchEngine.init();
     }
 });
 
 // Handle clicks outside suggestions to hide them
 document.addEventListener("click", function (e) {
-    if (searchEngine && !e.target.closest(".input-group")) {
-        searchEngine.hideSuggestions();
+    if (window.searchEngine && !e.target.closest(".input-group")) {
+        window.searchEngine.hideSuggestions();
     }
 });
