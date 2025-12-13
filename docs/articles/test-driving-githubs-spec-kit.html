@@ -70,7 +70,7 @@
         <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Articles" href="/rss.xml" />
         <link rel="alternate" type="application/rss+xml" title="Mark Hazleton Projects" href="/projects-rss.xml" />
         <!-- Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)-->
-        <link href="/css/modern-styles.css?v=1.0.10" rel="stylesheet" />
+        <link href="/css/modern-styles.css?v=1.0.15" rel="stylesheet" />
         <!-- Enhanced JSON-LD Structured Data for SEO-->
         <script type="application/ld+json">
             {
@@ -186,7 +186,7 @@
                         <li class="nav-item"><a class="nav-link" href="/articles.html">Articles</a></li>
                     </ul>
                     <!-- Search Box - Inside collapsible navbar-->
-                    <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event)">
+                    <form class="d-flex me-3 my-2 my-lg-0" onsubmit="return searchArticles(event);">
                         <div class="input-group search-box">
                             <input class="form-control" id="headerSearchInput" type="search" placeholder="Search articles..." aria-label="Search articles" autocomplete="off" />
                             <button class="btn btn-outline-light" type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
@@ -222,7 +222,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
-                        <p class="lead mb-4 text-center mt-4">Using structured specifications to guide AI code generation with measurable results.</p>
+                        <p class="lead mb-4 text-center mt-4">I was skeptical. After years of dealing with outdated documentation, the promise of "living documentation" sounded like another attempt to solve an age-old problem. Then I tried it on a production NuGet package. Here's what actually happened.</p>
                         <nav class="mb-5" id="table-of-contents" aria-label="Table of Contents">
                             <div class="card bg-light">
                                 <div class="card-header">
@@ -235,12 +235,11 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item"><a class="text-decoration-none" href="#executive-summary">Executive Summary</a></li>
                                         <li class="list-group-item"><a class="text-decoration-none" href="#documentation-drift">The Documentation Drift Problem</a></li>
-                                        <li class="list-group-item"><a class="text-decoration-none" href="#what-is-spec-kit">What Is GitHub Spec Kit?</a></li>
-                                        <li class="list-group-item"><a class="text-decoration-none" href="#feedback-loop">The Post-Implementation Feedback Loop</a></li>
-                                        <li class="list-group-item"><a class="text-decoration-none" href="#case-study">Case Study: WebSpark.HttpClientUtility</a></li>
-                                        <li class="list-group-item"><a class="text-decoration-none" href="#results">Results: Zero Documentation Debt</a></li>
-                                        <li class="list-group-item"><a class="text-decoration-none" href="#workflow">Following the Spec Kit Flow</a></li>
-                                        <li class="list-group-item"><a class="text-decoration-none" href="#conclusion">When to Use Spec Kit</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#what-is-spec-kit">What Is Spec Kit?</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#my-experiment">My Experiment: Two Real Specs</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#feedback-examples">What Surprised Me: The Feedback Loop</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#results">Three Months Later</a></li>
+                                        <li class="list-group-item"><a class="text-decoration-none" href="#conclusion">Should You Try It?</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -250,7 +249,7 @@
                                 <i class="bi bi-file-earmark-text me-2"></i>
                                 Executive Summary
                             </h2>
-                            <p class="lead mb-4">Every developer knows the pattern: Design document says one thing, code does another, six months later nobody knows which is correct. Waterfall specs died when code changed. Agile threw out specs entirely. Both failed for the same reason—humans won't maintain documentation when it's divorced from implementation.</p>
+                            <p class="lead mb-4">Every developer knows the pattern: Design document says one thing, code does another, six months later nobody knows which is correct. Waterfall specs died when code changed. Agile seems to have thrown out specs entirely and instead focused on incremental changes with little updates to the full feature set documentation. Both failed for the same reason—humans won't maintain documentation when it's divorced from implementation.</p>
                             <p class="mb-4">GitHub Spec Kit closes the feedback loop: AI agents update documentation when implementation diverges, so specs become living artifacts instead of shelf-ware. The ROI isn't faster development—it's specs that still accurately describe the codebase three months later.</p>
                             <div class="card mb-4">
                                 <div class="card-header bg-light">
@@ -357,454 +356,69 @@
                         <section class="mb-5" id="what-is-spec-kit">
                             <h2 class="h3 mb-4">
                                 <i class="bi bi-info-circle me-2"></i>
-                                What Is GitHub Spec Kit?
+                                What Is Spec Kit?
                             </h2>
                             <p class="mb-3">
-                                GitHub Spec Kit structures AI development into phases that generate persistent documentation. Instead of prompting until code works, you run commands that create markdown artifacts:
+                                GitHub Spec Kit is a framework that creates markdown artifacts during development: SPEC.md for requirements, PLAN.md for technical approach, TASKS.md for implementation steps. You use slash commands in Copilot (
                                 <code>/speckit.specify</code>
-                                captures requirements in SPEC.md,
+                                ,
                                 <code>/speckit.plan</code>
-                                determines technical approach in PLAN.md,
-                                <code>/speckit.tasks</code>
-                                breaks work into TASKS.md, and
-                                <code>/speckit.implement</code>
-                                generates code.
+                                , etc.) to generate these files.
                             </p>
-                            <p class="mb-3">
-                                These files live alongside your code in
-                                <code>specifications/001-feature-name/</code>
-                                . The structure forces you to think before coding—but more importantly, the files become living documentation. When implementation deviates from the plan (and it always does), you tell the AI to update the specs to match reality.
-                            </p>
-                            <p class="mb-3">
-                                A
-                                <code>/speckit.constitution</code>
-                                file defines project-wide standards once, guiding all generation. Optional commands like
-                                <code>/speckit.clarify</code>
-                                catch ambiguities before implementation. The full toolkit is open-source (MIT) at
-                                <a href="https://github.com/github/spec-kit" target="_blank" rel="noopener">github/spec-kit</a>
-                                .
-                            </p>
+                            <p class="mb-0">The pitch: When implementation inevitably deviates from the plan, you tell the AI to update the specs. Instead of specs rotting immediately, they evolve to match reality. That's the theory. I tested it on a real project to see if it actually works.</p>
                         </section>
-                        <section class="mb-5" id="feedback-loop">
-                            <h2 class="h3 mb-4">
-                                <i class="bi bi-arrow-repeat me-2"></i>
-                                The Post-Implementation Feedback Loop: The Core Innovation
-                            </h2>
-                            <p class="mb-3">Here's what makes GitHub Spec Kit fundamentally different from traditional documentation: it's designed for AI agents to update specs when implementation diverges from the plan. This isn't about generating code faster—it's about maintaining knowledge that survives team turnover.</p>
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-6">
-                                    <div class="card border-secondary h-100">
-                                        <div class="card-header bg-light">
-                                            <h6 class="card-title mb-0">
-                                                <i class="bi bi-x-circle me-2 text-danger"></i>
-                                                Traditional Approach
-                                            </h6>
-                                        </div>
-                                        <div class="card-body small">
-                                            <ol class="mb-0">
-                                                <li>Write specs during planning phase</li>
-                                                <li>Implement feature with inevitable deviations</li>
-                                                <li>Ship code without updating specs</li>
-                                                <li>Six months later: specs are fiction</li>
-                                                <li>New developer wastes hours reconciling</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card border-success h-100">
-                                        <div class="card-header bg-light">
-                                            <h6 class="card-title mb-0">
-                                                <i class="bi bi-check-circle me-2 text-success"></i>
-                                                GitHub Spec Kit Cycle
-                                            </h6>
-                                        </div>
-                                        <div class="card-body small">
-                                            <ol class="mb-0">
-                                                <li>AI generates code from SPEC.md</li>
-                                                <li>Human fixes what doesn't work</li>
-                                                <li>Human tells AI: "Update specs to match reality"</li>
-                                                <li>Specs evolve to document what actually works</li>
-                                                <li>Knowledge persists in repository</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 class="h5 mb-3">Why This Matters: Path Resolution Example</h3>
-                            <p class="mb-3">AI generated code using pathPrefix configuration (standard Eleventy approach). It failed in GitHub Pages subdirectory deployment. I fixed it with a custom relativePath filter. Then I spent 20 minutes having AI update SPEC.md and PLAN.md to document why pathPrefix failed and what works instead.</p>
-                            <p class="mb-3">Result: Next developer doesn't try pathPrefix because the spec explains the failure. That's institutional knowledge that survives my departure—not tribal knowledge that walks out the door.</p>
-                            <p class="mb-0">Now let's see this pattern applied to a real production project.</p>
-                        </section>
-                        <section class="mb-5" id="case-study">
+                        <section class="mb-5" id="my-experiment">
                             <h2 class="h3 mb-4">
                                 <i class="bi bi-diagram-3 me-2"></i>
-                                Case Study: WebSpark.HttpClientUtility — A Production .NET NuGet Package
+                                My Experiment: Two Real Specs
                             </h2>
-                            <p class="mb-3">I applied Spec Kit to WebSpark.HttpClientUtility, a .NET 8/9 NuGet package with decorator-pattern HTTP client utilities. Results from two specs:</p>
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-6">
-                                    <div class="card h-100 border-primary">
-                                        <div class="card-header bg-primary text-white">
-                                            <h5 class="card-title mb-0">
-                                                <i class="bi bi-file-text me-2"></i>
-                                                Spec 001: Static Documentation Site
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>Built complete Eleventy-based documentation website</p>
-                                            <ul class="small mb-0">
-                                                <li>6 pages with responsive design</li>
-                                                <li>Live NuGet API integration</li>
-                                                <li>GitHub Pages deployment</li>
-                                                <li>Build time: 0.4 seconds</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card h-100 border-success">
-                                        <div class="card-header bg-success text-white">
-                                            <h5 class="card-title mb-0">
-                                                <i class="bi bi-check-circle me-2"></i>
-                                                Spec 002: Zero Compiler Warnings
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>Achieved professional quality baseline</p>
-                                            <ul class="small mb-0">
-                                                <li>0 warnings, 0 errors</li>
-                                                <li>520/520 tests passing</li>
-                                                <li>TreatWarningsAsErrors enabled</li>
-                                                <li>XML docs for all public APIs</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mb-0">I'll walk through both specs, showing how Spec Kit moved me from ambiguous goals to shipped releases (v1.5.0 and v1.5.1).</p>
-                        </section>
-                        <section class="mb-5" id="repository-layout">
-                            <h2 class="h3 mb-4">
-                                <i class="bi bi-folder me-2"></i>
-                                Repository Layout
-                            </h2>
+                            <p class="mb-3">I picked WebSpark.HttpClientUtility, a production .NET NuGet package I maintain. Two features I'd been postponing: a documentation website and cleaning up compiler warnings. Perfect test cases—one creative, one tedious.</p>
                             <p class="mb-3">
-                                Here's the repository structure that emerged from the spec-driven process. Note the distinction between
-                                <code>.specify/</code>
-                                (Spec Kit framework and templates) and
-                                <code>specifications/</code>
-                                (your actual project specs). Each spec directory contains the complete spec-plan-tasks workflow artifacts:
+                                <strong>Spec 001: Build a documentation site.</strong>
+                                AI generated an Eleventy-based static site with 6 pages, NuGet API integration, and GitHub Pages deployment. It looked great. Then it broke in production because of path resolution issues.
                             </p>
-                            <div class="alert alert-info mb-3">
-                                <h6 class="alert-heading mb-2">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    Understanding the Structure
-                                </h6>
-                                <ul class="mb-0 small">
-                                    <li>
-                                        <strong>.specify/:</strong>
-                                        Framework files (constitution, templates, scripts)
-                                    </li>
-                                    <li>
-                                        <strong>specifications/:</strong>
-                                        Your actual project specs with full workflow artifacts
-                                    </li>
-                                    <li>
-                                        <strong>Why 1,648 lines of tasks.md?</strong>
-                                        Documentation site spec broke down into granular, testable tasks across HTML, CSS, JS, CI/CD
-                                    </li>
-                                    <li>
-                                        <strong>copilot-instructions.md (244 lines):</strong>
-                                        Project-specific AI guidance including coding standards, architecture decisions, and common patterns
-                                    </li>
-                                </ul>
-                            </div>
-                            <pre class="language-plaintext bg-dark text-light p-3 rounded"><code class="language-plaintext text-light">WebSpark.HttpClientUtility/
-├─ .specify/                      # Spec Kit framework
-│  ├─ memory/constitution.md      # Project principles
-│  ├─ templates/                  # Spec templates
-│  └─ scripts/                    # Automation scripts
-├─ spec/
-│  ├─ 001-static-documentation-site/
-│  │  ├─ spec.md                  # 724 lines
-│  │  ├─ plan.md                  # 835 lines
-│  │  ├─ tasks.md                 # 1,648 lines
-│  └─ 002-clean-compiler-warnings/
-│     ├─ spec.md                  # 120 lines
-│     ├─ plan.md                  # 258 lines
-│     └─ tasks.md                 # 332 lines
-├─ src/                           # Library source
-│  └─ WebSpark.HttpClientUtility/
-│     ├─ ClientService/
-│     ├─ Crawler/
-│     ├─ MemoryCache/
-│     └─ Streaming/
-├─ test/                          # 520 tests (×2 frameworks)
-│  └─ WebSpark.HttpClientUtility.Test/
-├─ docs/                          # Generated documentation
-│  ├─ index.html
-│  ├─ getting-started/
-│  ├─ api/
-│  └─ examples/
-├─ .github/
-│  ├─ workflows/
-│  │  ├─ dotnet.yml              # CI/CD pipeline
-│  │  └─ publish-docs.yml        # Doc deployment
-│  └─ copilot-instructions.md    # 244 lines
-└─ Directory.Build.props         # Solution-wide config
-</code></pre>
+                            <p class="mb-0">
+                                <strong>Spec 002: Zero compiler warnings.</strong>
+                                Started with an unknown number of warnings. Goal: 0 warnings with TreatWarningsAsErrors enforced. AI tried to use
+                                <code>#pragma warning disable</code>
+                                suppressions. I rejected that and made it fix things properly with XML docs and null guards.
+                            </p>
                         </section>
-                        <section class="mb-5" id="the-spec">
+                        <section class="mb-5" id="what-i-learned">
                             <h2 class="h3 mb-4">
-                                <i class="bi bi-file-text me-2"></i>
-                                The Spec: Spec 002 - Clean Compiler Warnings
+                                <i class="bi bi-lightbulb me-2"></i>
+                                What I Learned Writing the Specs
                             </h2>
-                            <p class="mb-3">Below is the actual spec that drove me from "unknown number of warnings" to zero warnings with enforcement enabled. It's intentionally explicit and measurable.</p>
-                            <pre class="language-markdown bg-dark text-light p-3 rounded"><code class="language-markdown text-light"># Spec 002: Clean Compiler Warnings
-
-## Summary
-Achieve zero compiler warnings across all three projects in the WebSpark.HttpClientUtility solution and enable TreatWarningsAsErrors for CI/CD enforcement.
-
-Target frameworks: net8.0, net9.0
-Projects: Library, Test, Web App
-
-## Goals
-- Zero compiler warnings in Release and Debug configurations
-- Enable TreatWarningsAsErrors solution-wide
-- Maintain 100% test pass rate (520 tests × 2 frameworks)
-- Comprehensive XML documentation for all public APIs
-- Professional quality baseline for NuGet package
-
-## Non-Goals
-- Suppress warnings without fixing root causes
-- Compromise API design to avoid warnings
-- Skip test documentation (treat tests as product)
-- Delay enforcement—enable immediately after cleanup
-
-## Constraints
-- Cannot break existing public API contracts
-- Cannot reduce test coverage
-- Must target both net8.0 and net9.0
-- Must pass all 520 existing tests
-- Changes must be backward compatible
-
-## Current State Analysis Required
-1. Run `dotnet build -c Release -v detailed > build_warnings.txt`
-2. Categorize warnings by type (CS1591, CS8602, CA2007, etc.)
-3. Prioritize: Public API docs > Null safety > Code analysis
-4. Document baseline count per category
-
-## Acceptance Criteria
-- `dotnet build` produces 0 warnings and 0 errors
-- All 520 tests pass on net8.0 and net9.0
-- `TreatWarningsAsErrors` enabled in Directory.Build.props
-- XML docs for all public classes, methods, properties
-- Null reference warnings resolved (not suppressed)
-- Code analysis rules properly configured in .editorconfig
-
-## File Plan
-- src/WebSpark.HttpClientUtility/**/*.cs (add XML docs, null checks)
-- test/WebSpark.HttpClientUtility.Test/**/*.cs (document test intent)
-- Directory.Build.props (enable TreatWarningsAsErrors)
-- .editorconfig (configure analyzer severities)
-- Build verification scripts
-
-## Done Definition
-- Build log shows "0 Warning(s)"
-- Test output shows "520 passed"
-- CI/CD pipeline passes with TreatWarningsAsErrors
-- No #pragma warning disable directives added
-- Documentation complete for all public surface area
-</code></pre>
-                            <p class="mb-3">Notice how the spec avoids prescribing HOW to fix warnings—it defines the target state and constraints, letting the implementer (human or AI) determine the optimal approach.</p>
-                            <div class="alert alert-warning mb-0">
+                            <p class="mb-3">The specs forced me to think more precisely than I usually do. For the warning cleanup, I had to define "done" upfront: zero warnings, TreatWarningsAsErrors enabled, 520 tests still passing, no pragma suppressions allowed.</p>
+                            <div class="alert alert-warning mb-4">
                                 <h6 class="alert-heading mb-2">
                                     <i class="bi bi-exclamation-triangle me-2"></i>
-                                    What I Learned: Spec Weaknesses
+                                    Mistakes I Made
                                 </h6>
-                                <p class="mb-2">This spec worked well, but I made mistakes that cost time:</p>
                                 <ul class="mb-0">
                                     <li>
-                                        <strong>Too vague on "unknown baseline":</strong>
-                                        Should have run the audit FIRST and documented exact warning counts by category
+                                        <strong>Too vague on baseline:</strong>
+                                        I said "unknown number of warnings" instead of auditing first. AI wasted time figuring out what to fix.
                                     </li>
                                     <li>
                                         <strong>Missing priority order:</strong>
-                                        AI tried to fix everything simultaneously. Should have specified: "Fix CS1591 docs first, then null safety, then code analysis"
+                                        AI tried to fix everything simultaneously. Should have said: "Fix XML docs first, then null safety, then analyzers."
                                     </li>
                                     <li>
                                         <strong>No time estimate:</strong>
-                                        Without "Target: 4 hours" in the spec, I lost focus during implementation
-                                    </li>
-                                    <li>
-                                        <strong>Lesson:</strong>
-                                        Even good specs have gaps. The feedback loop caught these issues, and I updated the spec after implementation to reflect what actually worked.
+                                        Without "Target: 4 hours" I lost focus during implementation.
                                     </li>
                                 </ul>
                             </div>
-                        </section>
-                        <section class="mb-5" id="implementation">
-                            <h2 class="h3 mb-4">
-                                <i class="bi bi-code-slash me-2"></i>
-                                Driving Implementation with the Spec
-                            </h2>
-                            <p class="mb-3">With SPEC.md in place, Copilot had a clear target and generated the implementation according to the spec's requirements. The actual code changes involved adding XML documentation, implementing null guards, and configuring analyzer rules.</p>
-                            <div class="alert alert-info mb-4">
-                                <h6 class="alert-heading mb-2">
-                                    <i class="bi bi-github me-2"></i>
-                                    View Implementation Details
-                                </h6>
-                                <p class="mb-0">
-                                    For complete before/after code changes, see the
-                                    <a class="text-decoration-none" href="https://github.com/markhazleton/WebSpark.HttpClientUtility" target="_blank" rel="noopener">WebSpark.HttpClientUtility repository</a>
-                                    and review the commit history for Spec 001 (documentation) and Spec 002 (zero warnings).
-                                </p>
-                            </div>
-                        </section>
-                        <section class="mb-5" id="tests">
-                            <h2 class="h3 mb-4">
-                                <i class="bi bi-check2-square me-2"></i>
-                                Tests as Acceptance Criteria
-                            </h2>
-                            <p class="mb-3">Writing tests from the spec gave Copilot unambiguous targets. The existing 520-test suite (260 tests × 2 frameworks) served as acceptance criteria, ensuring no regressions while adding XML documentation and null guards.</p>
-                            <div class="alert alert-success mb-4">
-                                <h6 class="alert-heading mb-2">
-                                    <i class="bi bi-check-circle-fill me-2"></i>
-                                    Test Coverage
-                                </h6>
-                                <ul class="mb-0">
-                                    <li>
-                                        <strong>520 tests passing</strong>
-                                        (260 tests across .NET 8.0 and 9.0)
-                                    </li>
-                                    <li>
-                                        <strong>Zero test failures</strong>
-                                        throughout implementation
-                                    </li>
-                                    <li>
-                                        <strong>XML documentation tests</strong>
-                                        validate all public APIs documented
-                                    </li>
-                                    <li>
-                                        <strong>Parameter validation tests</strong>
-                                        ensure ArgumentNullException coverage
-                                    </li>
-                                </ul>
-                            </div>
-                            <p class="mb-0">The spec's constraint "Must pass all 520 existing tests" made the test suite non-negotiable, preventing shortcuts that might have broken existing functionality.</p>
-                        </section>
-                        <section class="mb-5" id="packaging">
-                            <h2 class="h3 mb-4">
-                                <i class="bi bi-box-seam me-2"></i>
-                                Packaging for NuGet
-                            </h2>
-                            <p class="mb-4">One of the most valuable outcomes of the Spec Kit approach was integrating CI/CD directly into the "Done Definition." GitHub Actions workflows became gatekeepers that validated every change before allowing new versions to ship.</p>
-                            <div class="row g-3 mb-4">
-                                <div class="col-lg-6">
-                                    <div class="card border-primary h-100">
-                                        <div class="card-header bg-light">
-                                            <h5 class="card-title mb-0">
-                                                <i class="bi bi-play-circle me-2 text-primary"></i>
-                                                CI Pipeline (Continuous Integration)
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p class="mb-3">Runs on every push and pull request to validate code quality:</p>
-                                            <ul class="mb-0">
-                                                <li>
-                                                    <strong>Restore dependencies</strong>
-                                                    - Ensure all packages resolve correctly
-                                                </li>
-                                                <li>
-                                                    <strong>Build solution</strong>
-                                                    - Compile with TreatWarningsAsErrors enabled
-                                                </li>
-                                                <li>
-                                                    <strong>Run 520 tests</strong>
-                                                    - Execute full test suite across net8.0 and net9.0
-                                                </li>
-                                                <li>
-                                                    <strong>Code coverage</strong>
-                                                    - Track test coverage metrics
-                                                </li>
-                                                <li>
-                                                    <strong>Fail fast</strong>
-                                                    - Block PRs if any step fails
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="card border-success h-100">
-                                        <div class="card-header bg-light">
-                                            <h5 class="card-title mb-0">
-                                                <i class="bi bi-box-seam me-2 text-success"></i>
-                                                Publish Pipeline (Release)
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p class="mb-3">Triggered by version tags (e.g., v1.5.0) to deploy to NuGet.org:</p>
-                                            <ul class="mb-0">
-                                                <li>
-                                                    <strong>Build Release configuration</strong>
-                                                    - Full optimization enabled
-                                                </li>
-                                                <li>
-                                                    <strong>Pack NuGet package</strong>
-                                                    - Generate .nupkg with metadata
-                                                </li>
-                                                <li>
-                                                    <strong>Run final tests</strong>
-                                                    - Last validation before publish
-                                                </li>
-                                                <li>
-                                                    <strong>Push to NuGet.org</strong>
-                                                    - Automated deployment with API key
-                                                </li>
-                                                <li>
-                                                    <strong>Skip duplicates</strong>
-                                                    - Prevent accidental republish
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="alert alert-info mb-4">
-                                <h6 class="alert-heading mb-2">
-                                    <i class="bi bi-shield-check me-2"></i>
-                                    Quality Gates in Action
-                                </h6>
-                                <p class="mb-2">The CI/CD pipeline enforces the spec's constraints automatically:</p>
-                                <ul class="mb-0">
-                                    <li>
-                                        <strong>Zero warnings requirement</strong>
-                                        - Build fails if warnings appear (TreatWarningsAsErrors)
-                                    </li>
-                                    <li>
-                                        <strong>Test coverage mandate</strong>
-                                        - 520 tests must pass before any merge
-                                    </li>
-                                    <li>
-                                        <strong>API contract validation</strong>
-                                        - Tests prevent breaking changes
-                                    </li>
-                                    <li>
-                                        <strong>Manual release control</strong>
-                                        - No NuGet publish without explicit version tag
-                                    </li>
-                                </ul>
-                            </div>
-                            <p class="mb-0">This automation simplified the release process dramatically. Instead of manually running tests, checking warnings, packing, and publishing, a single code git tag v1.5.1 | command triggers the entire validated pipeline. The GitHub Spec Kit "Done Definition" became executable infrastructure, not just documentation. For complete workflow details, see the a.text-decoration-none(href='https://github.com/markhazleton/WebSpark.HttpClientUtility/tree/main/.github/workflows' target='_blank' rel='noopener') .github/workflows directory | in the repository.</p>
+                            <p class="mb-0">Here's what surprised me: these mistakes became permanent improvements to the specs. After implementation, I spent 20 minutes having AI update SPEC.md to reflect what actually worked. Future features inherit those lessons.</p>
                         </section>
                         <section class="mb-5" id="results">
                             <h2 class="h3 mb-4">
                                 <i class="bi bi-graph-up me-2"></i>
-                                Results: Zero Documentation Debt
+                                Three Months Later: Zero Documentation Debt
                             </h2>
-                            <p class="mb-3">Over two specifications on WebSpark.HttpClientUtility, I achieved the real win: specs that still accurately describe the codebase three months later. Implementation took the same 7 hours it always does. Documentation sync took an additional 20 minutes. That 20 minutes is what traditional approaches skip—and why documentation always becomes outdated.</p>
+                            <p class="mb-3">I'm writing this three months after shipping those features. The real test: do the specs still match reality? I just re-read them. They do. Every constraint, every decision, every "why we don't use pathPrefix" rationale—all accurate.</p>
+                            <p class="mb-3">Implementation took 7 hours (same as always). Documentation sync took an extra 20 minutes (updating specs after I fixed AI's mistakes). That 20-minute investment is what traditional approaches skip—and why their docs rot immediately.</p>
                             <div class="alert alert-success mb-4">
                                 <h5 class="alert-heading">
                                     <i class="bi bi-check-circle-fill me-2"></i>
@@ -1044,107 +658,12 @@ Projects: Library, Test, Web App
                                 </div>
                             </div>
                         </section>
-                        <section class="mb-5" id="workflow">
+                        <section class="mb-5" id="the-awkward-part">
                             <h2 class="h3 mb-4">
                                 <i class="bi bi-arrow-repeat me-2"></i>
-                                Following the Spec Kit Flow
+                                The Awkward Part: Updating Specs After Implementation
                             </h2>
-                            <p class="mb-4">Ready to try it yourself? Here's the recommended workflow with the slash commands that guide Copilot through each phase. Each command has a specific purpose and builds on the previous steps.</p>
-                            <div class="table-responsive mb-4">
-                                <table class="table table-bordered table-hover" aria-label="Spec Kit workflow commands">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th class="text-center">Step</th>
-                                            <th>Command</th>
-                                            <th>Purpose</th>
-                                            <th>When to Use</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-center fw-bold">1</td>
-                                            <td><code class="text-primary">/speckit.constitution</code></td>
-                                            <td>Define your quality principles and coding standards</td>
-                                            <td>Once per project - sets foundational guidelines</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fw-bold">2</td>
-                                            <td><code class="text-primary">/speckit.specify</code></td>
-                                            <td>Declare WHAT to build and WHY it matters</td>
-                                            <td>Start of each feature/spec - defines the goal</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fw-bold">3</td>
-                                            <td><code class="text-primary">/speckit.clarify</code></td>
-                                            <td>Answer ambiguities and edge cases</td>
-                                            <td>After specify - usually just once to refine requirements</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fw-bold">4</td>
-                                            <td><code class="text-primary">/speckit.plan</code></td>
-                                            <td>Determine HOW to implement (tools, versions, approach)</td>
-                                            <td>Before coding - establishes technical strategy</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fw-bold">5</td>
-                                            <td><code class="text-primary">/speckit.tasks</code></td>
-                                            <td>Break work into discrete, testable chunks</td>
-                                            <td>After planning - creates actionable task list</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fw-bold">6</td>
-                                            <td><code class="text-primary">/speckit.analyze</code></td>
-                                            <td>Optional sanity check before execution</td>
-                                            <td>For complex specs - validates approach before commit</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fw-bold">7</td>
-                                            <td><code class="text-primary">/speckit.implement</code></td>
-                                            <td>Execute the plan with Copilot</td>
-                                            <td>Final step - let AI generate the code</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="alert alert-info mb-4">
-                                <h6 class="alert-heading mb-2">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    Example Flow: Warning Cleanup Spec
-                                </h6>
-                                <p class="mb-2">For a spec like "eliminate all compiler warnings", you'd follow this sequence:</p>
-                                <ol class="mb-0">
-                                    <li>
-                                        <strong>/speckit.constitution:</strong>
-                                        "We treat warnings as errors. No pragma suppressions without justification."
-                                    </li>
-                                    <li>
-                                        <strong>/speckit.specify:</strong>
-                                        "WHAT: Zero warnings with TreatWarningsAsErrors enabled. WHY: Professional code quality and prevent tech debt."
-                                    </li>
-                                    <li>
-                                        <strong>/speckit.clarify:</strong>
-                                        "Do we need XML docs on internal classes? No, public APIs only."
-                                    </li>
-                                    <li>
-                                        <strong>/speckit.plan:</strong>
-                                        ".NET 8.0/9.0 multi-targeting. Use ArgumentNullException.ThrowIfNull(). Configure .editorconfig."
-                                    </li>
-                                    <li>
-                                        <strong>/speckit.tasks:</strong>
-                                        "1) Baseline audit, 2) XML docs, 3) Null guards, 4) Analyzer config, 5) Verify build."
-                                    </li>
-                                    <li>
-                                        <strong>/speckit.analyze:</strong>
-                                        "Spot-check: Will this break any public APIs? No - only adding docs and guards."
-                                    </li>
-                                    <li>
-                                        <strong>/speckit.implement:</strong>
-                                        "Execute tasks, run tests after each phase, commit incrementally."
-                                    </li>
-                                </ol>
-                            </div>
-                            <p class="mb-0">The power of this flow is that each step constrains Copilot's focus. Instead of trying to solve everything at once, you guide it through a logical progression that produces reliable, well-documented results.</p>
-                            <h3 class="h5 mb-3 mt-4">The Critical Step: Close the Documentation Loop</h3>
+                            <h3 class="h5 mb-3">The Critical Step Everyone Skips</h3>
                             <p class="mb-3">
                                 Here's the reality: after
                                 <code>/speckit.implement</code>
@@ -1205,54 +724,22 @@ Projects: Library, Test, Web App
                         <section class="mb-5" id="conclusion">
                             <h2 class="h3 mb-4">
                                 <i class="bi bi-trophy me-2"></i>
-                                Conclusion: Institutional Knowledge That Survives Team Turnover
+                                Should You Try It?
                             </h2>
-                            <p class="lead mb-4">The win wasn't 7-hour implementation—it was specs that still accurately describe the codebase three months later. Path resolution decisions, warning remediation strategies, test documentation standards—all captured in markdown that AI reads before generating new features. That's institutional knowledge that survives team turnover, not tribal knowledge that walks out the door.</p>
-                            <h3 class="h5 mb-3">Use Spec Kit When:</h3>
+                            <p class="lead mb-4">Spec Kit won't make you ship faster initially. What it does: gives you documentation that still matches reality three months later. That's worth something if you maintain long-lived codebases or work on teams where knowledge walks out the door.</p>
+                            <h3 class="h5 mb-3">Try it if:</h3>
                             <ul class="mb-4">
-                                <li>
-                                    <strong>Institutional knowledge matters:</strong>
-                                    Libraries, APIs, multi-year projects where team turnover is inevitable
-                                </li>
-                                <li>
-                                    <strong>Multiple developers:</strong>
-                                    When onboarding cost of inaccurate documentation compounds over time
-                                </li>
-                                <li>
-                                    <strong>Long-term maintenance:</strong>
-                                    Projects that will be maintained beyond the original author
-                                </li>
-                                <li>
-                                    <strong>Compliance requirements:</strong>
-                                    When you need audit trails and documented decision rationale
-                                </li>
-                                <li>
-                                    <strong>Complex domain logic:</strong>
-                                    When tribal knowledge creates single points of failure
-                                </li>
+                                <li>You maintain libraries or APIs where documentation debt is expensive</li>
+                                <li>You work on teams where "ask Bob" isn't a sustainable knowledge strategy</li>
+                                <li>You inherit codebases and wish the previous developer had explained their decisions</li>
+                                <li>You're building something that will outlive your involvement</li>
                             </ul>
-                            <h3 class="h5 mb-3">Skip Spec Kit When:</h3>
+                            <h3 class="h5 mb-3">Skip it if:</h3>
                             <ul class="mb-4">
-                                <li>
-                                    <strong>Throwaway prototypes:</strong>
-                                    POCs you'll rewrite from scratch if successful
-                                </li>
-                                <li>
-                                    <strong>Solo projects with short lifespans:</strong>
-                                    Personal tools you'll maintain alone for 6 months
-                                </li>
-                                <li>
-                                    <strong>Exploratory work:</strong>
-                                    Research spikes where requirements are genuinely unknown
-                                </li>
-                                <li>
-                                    <strong>Trivial features:</strong>
-                                    Single-file utilities that don't need coordination
-                                </li>
-                                <li>
-                                    <strong>Time-critical emergencies:</strong>
-                                    Production fires where documentation can wait
-                                </li>
+                                <li>You're prototyping and will throw away the code</li>
+                                <li>You're solo and have no knowledge transfer problem</li>
+                                <li>You're exploring and don't know what you're building yet</li>
+                                <li>You're fixing a production fire and documentation can wait</li>
                             </ul>
                             <div class="alert alert-success mb-4">
                                 <h6 class="alert-heading mb-2">
@@ -1282,7 +769,7 @@ Projects: Library, Test, Web App
                                     </li>
                                 </ul>
                             </div>
-                            <p class="mb-0">Start small: one .specify/ directory, one SPEC.md with clear acceptance criteria. After implementation, spend 20 minutes having the agent update the spec to match what you actually built. Six months later, you'll thank yourself for the accurate documentation.</p>
+                            <p class="mb-0">My verdict: Spec Kit solved a problem I've had for 20 years—documentation that matches reality months later. The trade-off is 20 minutes per feature updating specs after you fix what AI got wrong. If you maintain code beyond the initial sprint, that's a bargain.</p>
                         </section>
                     </div>
                 </div>
@@ -1332,11 +819,11 @@ Projects: Library, Test, Web App
                 <div class="row">
                     <div class="col-12 text-center">
                         <p class="mb-0">&copy; 2025 Mark Hazleton. All rights reserved.</p>
-                        <p class="small text-muted mt-2 mb-0">v1.0.10 • Built: 11/25/2025</p>
+                        <p class="small text-muted mt-2 mb-0">v1.0.15 • Built: 12/12/2025</p>
                     </div>
                 </div>
             </div>
         </footer>
-        <script src="/js/scripts.js?v=1.0.10"></script>
+        <script src="/js/scripts.js?v=1.0.15"></script>
     </body>
 </html>
