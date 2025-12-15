@@ -243,7 +243,8 @@ html(lang='en')
     link(rel='alternate', type='application/rss+xml', title='Mark Hazleton Projects', href='/projects-rss.xml')
 
     // Modern Layout Styles (includes Bootstrap 5, Bootstrap Icons, Font Awesome, PrismJS)
-    link(href='/css/modern-styles.css', rel='stylesheet')
+    - var cssVersion = typeof buildVersion !== 'undefined' ? buildVersion : '1.0.0';
+    link(href=`/css/modern-styles.css?v=${cssVersion}`, rel='stylesheet')
 
     // Enhanced JSON-LD Structured Data for SEO
     script(type="application/ld+json").
@@ -294,7 +295,7 @@ html(lang='en')
           "@id": "https://markhazleton.com/"
         }
       }
-    
+
     if article
       script(type="application/ld+json").
         {
@@ -449,7 +450,13 @@ html(lang='en')
         .row
           .col-12.text-center
             p.mb-0 &copy; #{new Date().getFullYear()} Mark Hazleton. All rights reserved.
-    script(src='/js/scripts.js')
+            if typeof buildVersion !== 'undefined' && buildVersion
+              p.small.text-muted.mt-2.mb-0
+                | v#{buildVersion}
+                if typeof buildDate !== 'undefined' && buildDate
+                  |  • Built: #{new Date(buildDate).toLocaleDateString()}
+    - var jsVersion = typeof buildVersion !== 'undefined' ? buildVersion : '1.0.0';
+    script(src=`/js/scripts.js?v=${jsVersion}`)
 
     //- Additional page-specific JavaScript
     block additional_js

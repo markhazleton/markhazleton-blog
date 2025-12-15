@@ -79,14 +79,15 @@ module.exports = {
         assets: ['placeholders', 'fonts'],
         sections: [],
         placeholders: [],
-        fonts: []
+        fonts: [],
+        searchIndex: ['sections']
     },
 
     // Parallel execution groups
     parallelGroups: {
         phase1: ['fonts', 'placeholders', 'sections'], // Must run first
         phase2: ['pug', 'projectPages', 'scss', 'scripts', 'assets'], // Can run in parallel
-        phase3: ['sitemap', 'rss', 'projectsRss'] // Depend on phase2 completion
+        phase3: ['sitemap', 'rss', 'projectsRss', 'searchIndex'] // Depend on phase2 completion
     },
 
     // Error handling

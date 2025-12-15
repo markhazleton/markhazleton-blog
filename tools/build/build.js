@@ -25,6 +25,7 @@ const updateSectionsWithArticles = require('./update-sections');
 const PlaceholderGenerator = require('./generate-placeholders');
 const FontDownloader = require('./download-fonts');
 const generateSearchIndex = require('./generate-search-index');
+const incrementVersion = require('./increment-version');
 
 // Import optimization utilities
 const BuildCache = require('./cache-manager');
@@ -548,6 +549,13 @@ class BlogBuilder {
      * Run specific build tasks with parallel execution support
      */
     async run(taskNames = []) {
+        // Increment version at the start of every build
+        try {
+            incrementVersion();
+        } catch (error) {
+            console.warn('⚠️ Failed to increment version:', error.message);
+        }
+
         console.log('🚀 Mark Hazleton Blog - Enhanced Build Process');
         console.log('===============================================');
 
@@ -671,6 +679,7 @@ if (require.main === module) {
         console.log('  --rss       Build articles RSS feed');
         console.log('  --projectsRss Build projects RSS feed');
         console.log('  --projectPages Build project detail pages');
+        console.log('  --searchIndex Build search index');
         console.log('');
         console.log('Options:');
         console.log('  --no-cache    Disable build caching');
