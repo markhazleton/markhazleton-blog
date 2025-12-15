@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const versionFilePath = path.resolve(__dirname, '../../build-version.json');
+const packageJsonPath = path.resolve(__dirname, '../../package.json');
 
 function incrementVersion() {
     try {
@@ -39,6 +40,17 @@ function incrementVersion() {
 
         // Write updated version back to file
         fs.writeFileSync(versionFilePath, JSON.stringify(versionData, null, 2), 'utf8');
+
+        // Also update package.json version to keep them in sync
+        try {
+            const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+            const oldPackageVersion = packageJson.version;
+            packageJson.version = versionData.version;
+            fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 4) + '\n', 'utf8');
+            console.log(`📦 package.json version: ${oldPackageVersion} → ${versionData.version}`);
+        } catch (pkgError) {
+            console.warn('⚠️ Could not update package.json version:', pkgError.message);
+        }
 
         console.log(`✅ Version incremented to v${versionData.version} (Build #${versionData.buildNumber})`);
         console.log(`📅 Build date: ${new Date(versionData.buildDate).toLocaleString()}`);
