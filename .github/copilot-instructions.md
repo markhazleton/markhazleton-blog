@@ -445,6 +445,122 @@ pre.language-html.bg-dark.text-light.p-3.rounded
     </button>
 ```
 
+## YouTube Embed Best Practices
+
+### ⚠️ Critical Configuration Requirements
+
+**X-Frame-Options Header**: MUST be `SAMEORIGIN` (NOT `DENY`)
+- `X-Frame-Options: DENY` blocks ALL iframes including YouTube embeds
+- Changed in `staticwebapp.config.json` from DENY to SAMEORIGIN
+- This is the #1 cause of "Video player configuration error" (Error 153)
+
+### Required CSP Directives for YouTube
+
+All three configuration files must have identical CSP directives:
+- `src/staticwebapp.config.json` (deployed to Azure)
+- `src/pug/layouts/modern-layout.pug` (local development)
+- `src/pug/layouts/performance-optimized-layout.pug` (optimized pages)
+
+**Complete YouTube CSP Requirements:**
+```http
+default-src 'self' data:;
+script-src 'self' 'unsafe-inline' 'unsafe-eval' data: https://www.youtube.com https://s.ytimg.com https://*.youtube.com;
+connect-src 'self' data: https://www.youtube.com https://www.youtube.com/youtubei/v1/ https://*.youtube.com https://*.googlevideo.com https://*.ytimg.com;
+img-src 'self' data: https://i.ytimg.com https://*.ytimg.com https://*.youtube.com https://*.googlevideo.com https://*.ggpht.com;
+media-src 'self' data: https://*.googlevideo.com https://*.youtube.com blob:;
+frame-src 'self' data: https://www.youtube.com https://www.youtube-nocookie.com;
+worker-src 'self' blob:;
+child-src 'self' data: https://www.youtube.com https://www.youtube-nocookie.com;
+```
+
+**Key CSP Elements:**
+- `https://*.ggpht.com` in img-src - Required for YouTube thumbnails (Google Photos CDN)
+- `https://www.youtube.com/youtubei/v1/` in connect-src - YouTube API endpoint
+- `blob:` in media-src and worker-src - Required for video playback
+- `data:` scheme across multiple directives - Required for YouTube player internal data URLs
+- `'unsafe-eval'` in script-src - Required for YouTube player JavaScript
+
+### Standard YouTube iframe Pattern
+
+**ALWAYS use this exact pattern for ALL YouTube embeds:**
+
+```pug
+.ratio.ratio-16x9
+  iframe(
+    src="https://www.youtube.com/embed/VIDEO_ID"
+    title="Descriptive Video Title"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  )
+```
+
+**Critical Requirements:**
+- ✅ `referrerpolicy="strict-origin-when-cross-origin"` - Modern security best practice
+- ✅ `allow` attribute with full permissions list
+- ✅ Descriptive `title` attribute (not "YouTube video player")
+- ✅ `allowfullscreen` boolean attribute (no value needed)
+- ❌ NO `frameborder` attribute (deprecated in HTML5)
+- ❌ NO `sandbox` attribute (breaks YouTube functionality)
+
+### YouTube Domain Options
+
+**youtube.com vs youtube-nocookie.com:**
+- `youtube.com` - Full tracking, immediate cookies, all features
+- `youtube-nocookie.com` - GDPR-friendly, delayed cookies, reduced tracking
+
+**Use youtube-nocookie.com for:**
+- European audience (GDPR compliance)
+- Privacy-conscious implementations
+- Cookie consent requirements
+
+### Common YouTube Embed Issues
+
+**Error 153 - Video player configuration error:**
+- Caused by: X-Frame-Options: DENY blocking iframe
+- Caused by: Missing CSP directives
+- Caused by: Incorrect referrer policy
+- Fixed by: Setting X-Frame-Options: SAMEORIGIN + complete CSP
+
+**Tracking/API failures (ERR_BLOCKED_BY_CLIENT):**
+- Often caused by browser ad blockers (not CSP)
+- May show as failed www.youtube.com/youtubei/v1/log_event requests
+- Does not affect video playback if CSP is correct
+- Users with ad blockers may see these errors (expected behavior)
+
+### iframe Attributes Reference
+
+**Required Attributes:**
+```pug
+src="https://www.youtube.com/embed/VIDEO_ID"              // Video URL
+title="Descriptive title for accessibility"               // Screen reader support
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+referrerpolicy="strict-origin-when-cross-origin"          // Security best practice
+allowfullscreen                                            // Enable fullscreen mode
+```
+
+**Deprecated/Forbidden:**
+- ❌ `frameborder="0"` - Use CSS border instead
+- ❌ `sandbox` - Breaks YouTube player unless carefully configured
+- ❌ Generic titles like "YouTube video player"
+
+### Bootstrap Responsive Wrapper
+
+**Always wrap YouTube iframes in Bootstrap ratio containers:**
+
+```pug
+.ratio.ratio-16x9    // 16:9 aspect ratio (standard)
+  iframe(...)
+  
+.ratio.ratio-4x3     // 4:3 aspect ratio (legacy)
+  iframe(...)
+  
+.ratio.ratio-1x1     // Square video
+  iframe(...)
+```
+
+This maintains aspect ratio across all screen sizes and prevents layout shift.
+
 ## Content Context
 
 This is a professional website for Mark Hazleton, a Solutions Architect and Project Management consultant.
