@@ -1,4 +1,8 @@
 window.addEventListener("DOMContentLoaded", (event) => {
+    console.log('[Typeahead] DOMContentLoaded event fired');
+    console.log('[Typeahead] Current URL:', window.location.href);
+    console.log('[Typeahead] User Agent:', navigator.userAgent);
+    
     // Activate Bootstrap scrollspy on the main nav element
     const sideNav = document.body.querySelector("#sideNav");
     if (sideNav) {
@@ -63,20 +67,28 @@ window.addEventListener("DOMContentLoaded", (event) => {
         navigator.userAgent.indexOf("Edg") > -1
     ) {
         // Add specific Edge compatibility fixes
-        console.log("Microsoft Edge detected, applying compatibility fixes");
+        console.log("[Typeahead] Microsoft Edge detected, applying compatibility fixes");
 
         // Ensure articles cache is preloaded for Edge
         setTimeout(function () {
+            console.log('[Typeahead] Edge preload timer fired');
             if (!window.articlesCache) {
+                console.log('[Typeahead] Preloading articles cache for Edge...');
                 fetch("/articles.json")
-                    .then((response) => response.json())
+                    .then((response) => {
+                        console.log('[Typeahead] Edge preload fetch response:', response.status);
+                        return response.json();
+                    })
                     .then((data) => {
                         window.articlesCache = data;
-                        console.log("Articles cache preloaded for Edge");
+                        console.log("[Typeahead] Articles cache preloaded for Edge:", data.length, 'articles');
                     })
-                    .catch((error) =>
-                        console.error("Error preloading articles:", error),
-                    );
+                    .catch((error) => {
+                        console.error("[Typeahead] Error preloading articles for Edge:", error);
+                        console.error('[Typeahead] Error details:', error.message, error.stack);
+                    });
+            } else {
+                console.log('[Typeahead] Articles cache already loaded, skipping Edge preload');
             }
         }, 500);
     }
@@ -99,8 +111,13 @@ window.searchArticles = function (event) {
 
 // Header search functionality
 function initializeHeaderSearch() {
+    console.log('[Typeahead] Initializing header search...');
     const headerSearchInput = document.getElementById("headerSearchInput");
-    if (!headerSearchInput) return;
+    if (!headerSearchInput) {
+        console.warn('[Typeahead] headerSearchInput element not found');
+        return;
+    }
+    console.log('[Typeahead] headerSearchInput element found');
 
     // Handle Enter key for quick search
     headerSearchInput.addEventListener("keypress", function (e) {
@@ -117,12 +134,15 @@ function initializeHeaderSearch() {
     function handleSearchInput() {
         clearTimeout(timeoutId);
         const query = this.value.trim();
+        console.log('[Typeahead] Input event fired, query:', query);
 
         if (query.length >= 2) {
+            console.log('[Typeahead] Query length >= 2, scheduling suggestions');
             timeoutId = setTimeout(() => {
                 showHeaderSuggestions(query);
             }, 300);
         } else {
+            console.log('[Typeahead] Query too short, hiding suggestions');
             hideHeaderSuggestions();
         }
     }
@@ -173,21 +193,46 @@ function performHeaderSearch() {
 
 // Show header search suggestions (lightweight version)
 async function showHeaderSuggestions(query) {
+    console.log('[Typeahead] showHeaderSuggestions called with query:', query);
     try {
         // Only load articles if not already loaded
         if (!window.articlesCache) {
+            console.log('[Typeahead] Articles cache not found, fetching /articles.json...');
+            const fetchStart = performance.now();
             const response = await fetch("/articles.json");
+            const fetchEnd = performance.now();
+            console.log(`[Typeahead] Fetch completed in ${(fetchEnd - fetchStart).toFixed(2)}ms`);
+            console.log('[Typeahead] Response status:', response.status);
+            console.log('[Typeahead] Response headers:', {
+                contentType: response.headers.get('Content-Type'),
+                cacheControl: response.headers.get('Cache-Control'),
+                contentLength: response.headers.get('Content-Length')
+            });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            const parseStart = performance.now();
             window.articlesCache = await response.json();
+            const parseEnd = performance.now();
+            console.log(`[Typeahead] JSON parsed in ${(parseEnd - parseStart).toFixed(2)}ms`);
+            console.log('[Typeahead] Articles cache loaded:', window.articlesCache.length, 'articles');
+        } else {
+            console.log('[Typeahead] Using cached articles:', window.articlesCache.length, 'articles');
         }
 
         const suggestions = getHeaderQuickMatches(query, 5);
-        if (suggestions.length === 0) return;
+        console.log('[Typeahead] Found', suggestions.length, 'matching suggestions');
+        if (suggestions.length === 0) {
+            console.log('[Typeahead] No suggestions found, exiting');
+            return;
+        }
 
         const searchContainer = document.querySelector(".search-box");
-        if (!searchContainer) return;
+        if (!searchContainer) {
+            console.warn('[Typeahead] .search-box container not found');
+            return;
+        }
+        console.log('[Typeahead] Search container found, displaying suggestions');
 
         searchContainer.classList.add("header-search-container");
         searchContainer.style.position = "relative";
@@ -217,8 +262,14 @@ async function showHeaderSuggestions(query) {
 
         // Add keyboard navigation support
         addKeyboardNavigation();
+        console.log('[Typeahead] Suggestions displayed successfully');
     } catch (error) {
-        console.error("Error loading search suggestions:", error);
+        console.error('[Typeahead] Error loading search suggestions:', error);
+        console.error('[Typeahead] Error type:', error.name);
+        console.error('[Typeahead] Error message:', error.message);
+        console.error('[Typeahead] Error stack:', error.stack);
+        console.error('[Typeahead] Current URL:', window.location.href);
+        console.error('[Typeahead] articlesCache state:', window.articlesCache ? 'loaded' : 'not loaded');
         // Fallback: still allow search to work without suggestions
     }
 }
@@ -231,10 +282,15 @@ function hideHeaderSuggestions() {
 
 // Get quick matches for header suggestions
 function getHeaderQuickMatches(query, limit) {
-    if (!window.articlesCache) return [];
+    console.log('[Typeahead] getHeaderQuickMatches called:', { query, limit });
+    if (!window.articlesCache) {
+        console.warn('[Typeahead] articlesCache not available in getHeaderQuickMatches');
+        return [];
+    }
 
     try {
         const lowercaseQuery = query.toLowerCase();
+        console.log('[Typeahead] Filtering', window.articlesCache.length, 'articles with query:', lowercaseQuery);
         return window.articlesCache
             .filter((article) => {
                 // More robust filtering with null checks
@@ -252,7 +308,8 @@ function getHeaderQuickMatches(query, limit) {
             })
             .slice(0, limit);
     } catch (error) {
-        console.error("Error filtering articles:", error);
+        console.error('[Typeahead] Error filtering articles:', error);
+        console.error('[Typeahead] Error details:', error.message);
         return [];
     }
 }
