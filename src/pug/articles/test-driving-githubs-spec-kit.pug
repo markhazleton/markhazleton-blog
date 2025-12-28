@@ -32,8 +32,11 @@ block layout-content
             { href: '#documentation-drift', text: 'The Documentation Drift Problem' },
             { href: '#what-is-spec-kit', text: 'What Is Spec Kit?' },
             { href: '#my-experiment', text: 'My Experiment: Two Real Specs' },
-            { href: '#feedback-examples', text: 'What Surprised Me: The Feedback Loop' },
-            { href: '#results', text: 'Three Months Later' },
+            { href: '#github-stats-spark', text: 'Deep Dive: GitHub Stats Spark' },
+            { href: '#what-i-learned', text: 'What I Learned Writing Specs' },
+            { href: '#feedback-examples', text: 'The Feedback Loop in Practice' },
+            { href: '#faq', text: 'Frequently Asked Questions' },
+            { href: '#the-awkward-part', text: 'The Awkward Part' },
             { href: '#conclusion', text: 'Should You Try It?' }
           ])
 
@@ -112,7 +115,10 @@ block layout-content
                   a(href='https://github.com/features/copilot', target='_blank', rel='noopener') https://github.com/features/copilot
                 li
                   | WebSpark.HttpClientUtility Repository: 
-                  a(href='https://github.com/markhazleton/WebSpark.HttpClientUtility', target='_blank', rel='noopener') Real-world example project
+                  a(href='https://github.com/markhazleton/WebSpark.HttpClientUtility', target='_blank', rel='noopener') .NET NuGet package example
+                li
+                  | GitHub Stats Spark Repository: 
+                  a(href='https://github.com/markhazleton/github-stats-spark', target='_blank', rel='noopener') Complete SpecKit + Claude + Copilot workflow
                 li
                   | GitHub Actions: 
                   a(href='https://docs.github.com/actions', target='_blank', rel='noopener') https://docs.github.com/actions
@@ -171,7 +177,274 @@ block layout-content
 
             p.mb-0.
               <strong>Spec 002: Zero compiler warnings.</strong> Started with an unknown number of warnings. Goal: 0 warnings with TreatWarningsAsErrors enforced. AI tried to use <code>#pragma warning disable</code> suppressions. I rejected that and made it fix things properly with XML docs and null guards.
+            p.mb-0.
+              Those experiments taught me the fundamentals. But the real test came later with a Sunday morning thought experiment that turned into a complete production system in just half a day.
 
+          section#github-stats-spark.mb-5
+            h2.h3.mb-4
+              i.bi.bi-stars.me-2
+              | Deep Dive: Creating GitHub Stats Spark
+
+            p.lead.mb-4.
+              Stats Spark started as a deceptively simple idea—"illuminate my GitHub profile with automated SVG stats"—and grew into a rigorously planned system that blends GitHub SpecKit, Claude-powered planning, and GitHub Copilot-assisted iteration. Here's how a Sunday morning thought experiment became a production-ready automation pipeline in just half a day.
+
+            h3.h5.mb-3 The Starting Point: A Simple Idea
+
+            p.mb-3.
+              I wanted automated SVG badges for my GitHub profile showing activity stats, contribution patterns, and a custom "Spark Score" that reflected consistency, volume, and collaboration. The goal wasn't just pretty graphics—I wanted a system that could regenerate stats daily and capture my development patterns over time.
+
+            p.mb-0.
+              Instead of jumping into code, I started with SpecKit. That decision shaped everything that followed.
+
+            h3.h5.mb-3 Phase 1: Spec-First North Star
+
+            .card.mb-4
+              .card-header.bg-light
+                h6.card-title.mb-0
+                  i.bi.bi-file-text.me-2
+                  | The Foundation: SPEC.md
+              .card-body
+                p.mb-3.
+                  The spec captured everything: 6 user stories, 28 functional requirements (FR-001 through FR-028), measurable success criteria, and edge cases. Most importantly, it codified the Spark Score formula itself:
+
+                pre.bg-dark.text-light.p-3.rounded.mb-3
+                  code.text-light.
+                    SparkScore = 0.40 × C_consistency + 0.35 × C_volume + 0.25 × C_collaboration
+
+                p.mb-3.
+                  This mathematical definition in the spec meant every downstream artifact—plan, tasks, implementation—inherited the same weighting. No ambiguity about priorities.
+
+                .alert.alert-info.mb-0
+                  p.mb-2.
+                    <strong>What the spec defined:</strong>
+                  ul.mb-0.small
+                    li Six visualizations: activity calendar, language breakdown, repository stats, contribution timeline, collaboration network, streak tracker
+                    li Scoring algorithm with explicit coefficients for consistency (40%), volume (35%), collaboration (25%)
+                    li Success metrics: 6 SVG files, daily refresh, < 30s generation time
+                    li Edge cases: API rate limits, timezone handling, private repo filtering
+                    li Quality gates: YAML config validation, GitHub Actions integration
+
+            h3.h5.mb-3 Phase 2: Claude + SpecKit Blueprint
+
+            p.mb-3.
+              After the spec, I ran <code>/speckit.plan</code> which generated PLAN.md—a complete architectural blueprint that read like a Claude playbook. This wasn't generic boilerplate; it was a detailed technical roadmap.
+
+            .card.mb-4
+              .card-header.bg-light
+                h6.card-title.mb-0
+                  i.bi.bi-diagram-3.me-2
+                  | PLAN.md: The Connective Tissue
+              .card-body
+                p.mb-3.
+                  PLAN.md bridged vision and implementation with:
+
+                ul.mb-3
+                  li
+                    strong Constitution checks:
+                    |  Design principles that would govern all decisions
+                  li
+                    strong Phase gates:
+                    |  Four phases (Setup, Core, Integration, Polish) with clear dependencies
+                  li
+                    strong Technology bets:
+                    |  PyGithub for API access, svgwrite for graphics, YAML for config, GitHub Actions for automation
+                  li
+                    strong Module contracts:
+                    |  Named every module (GitHubFetcher, StatsCalculator, StatisticsVisualizer) with input/output specifications
+                  li
+                    strong Dependency graph:
+                    |  Explicit call-outs of what depends on what, enabling parallel development
+
+                p.mb-0.small.text-muted.
+                  This level of detail is what makes the difference. It's not a vague "use Python and GitHub API"—it's "here's exactly how the pieces fit together and why we chose each technology."
+
+            h3.h5.mb-3 Phase 3: Actionable Backlog
+
+            p.mb-3.
+              <code>/speckit.tasks</code> generated TASKS.md—127 traceable tasks with user story tags (US1–US6), parallelization hints, and checkpoints. This is where the spec becomes executable.
+
+            .row.g-3.mb-4
+              .col-md-6
+                .card.border.h-100
+                  .card-header.bg-light
+                    h6.card-title.mb-0
+                      i.bi.bi-list-check.me-2
+                      | Task Breakdown Pattern
+                  .card-body
+                    pre.bg-dark.text-light.p-3.rounded.mb-0.small
+                      code.text-light.
+                        [US1] Daily Stats Update
+                        ├─ Task 001: Setup GitHub Actions workflow
+                        ├─ Task 002: Configure cron schedule  
+                        ├─ Task 003: Implement stats fetcher
+                        ├─ Task 004: Generate SVG outputs
+                        └─ Task 005: Commit artifacts back to repo
+
+              .col-md-6
+                .card.border.h-100
+                  .card-header.bg-light
+                    h6.card-title.mb-0
+                      i.bi.bi-shield-check.me-2
+                      | Quality Gates
+                  .card-body
+                    ul.mb-0.small
+                      li YAML config passes validation
+                      li All SVGs render without errors
+                      li GitHub Actions workflow succeeds
+                      li Generation completes in < 30 seconds
+                      li Artifacts committed to correct paths
+
+            p.mb-0.
+              Pairing PLAN.md with TASKS.md creates the "spec before code" discipline. You can't implement what you haven't defined, and you can't define it without thinking through dependencies.
+
+            h3.h5.mb-3 Phase 4: The Claude-to-Copilot Handoff
+
+            p.mb-3.
+              The git commit history tells the implementation story. It shows three distinct phases that perfectly illustrate how SpecKit, Claude, and Copilot work together:
+
+            .card.mb-4
+              .card-header.bg-light
+                h6.card-title.mb-0
+                  i.bi.bi-git.me-2
+                  | Git History as Build Log
+              .card-body
+                p.mb-3.
+                  <strong>Phase 1: Specification Capture</strong>
+
+                ul.mb-3.small
+                  li Commit 73e83d2: Specification remediation—tightened requirements, added edge cases
+                  li Commit 76d2ead: Implemented SpecKit command suite—committed generated SPEC.md, PLAN.md, TASKS.md
+
+                p.mb-3.
+                  <strong>Phase 2: Claude-Powered Scaffolding</strong>
+
+                ul.mb-3.small
+                  li Commit ceb52c5: Core modules landed—GitHubFetcher, StatsCalculator, StatisticsVisualizer
+                  li Commit 282b378: Logging framework with structured output
+                  li Commit 107985e: Theme system for visual consistency
+
+                p.mb-3.
+                  <strong>Phase 3: Copilot-Assisted Refinement</strong>
+
+                ul.mb-0.small
+                  li Commit e9e55ae: Fixed SVG spacing in commit heatmap
+                  li Commit 1328888: Adjusted fun-stat layouts for mobile
+                  li Commit ddf2df9: Tweaked coefficient-of-variation for consistency scoring
+                  li Commit 2e28b21: Added release-cadence visualization
+
+            p.mb-3.
+              The pattern is clear: Claude owns the architecture and module scaffolding (the "what" and "how"), while Copilot handles surgical refinements (the "tweak" and "polish"). Heavy lifting up front, iteration at the edges.
+
+            p.mb-0.
+              This is exactly what the repo documents: SpecKit/Claude for structure, Copilot to sand the edges.
+
+            h3.h5.mb-3 Phase 5: Automation Feedback Loop
+
+            p.mb-3.
+              The system wasn't done until it was self-sustaining. User Story 1 required daily automated updates, which meant GitHub Actions had to regenerate SVGs and commit them back to the repo.
+
+            .card.mb-4
+              .card-header.bg-light
+                h6.card-title.mb-0
+                  i.bi.bi-arrow-repeat.me-2
+                  | Closed-Loop Automation
+              .card-body
+                p.mb-3.
+                  Every manual push triggered <code>github-actions[bot]</code> commits that ran the scheduled workflow:
+
+                ul.mb-3.small
+                  li Commit b927634: Bot regenerated all SVGs after manual update
+                  li Commit 3ad76d2: Daily scheduled run at 09:00 UTC
+                  li Commit 88ae324: Artifacts committed back to repo automatically
+
+                p.mb-0.
+                  This proves the daily-job requirement from the spec was wired before feature development finished. The automation wasn't bolted on at the end—it was part of the architecture from PLAN.md forward.
+
+            h3.h5.mb-3 What Made This Work: The Three-Tool Symphony
+
+            .row.g-3.mb-4
+              .col-lg-4
+                .card.border-primary.h-100
+                  .card-header.bg-primary.text-white
+                    h6.card-title.mb-0
+                      i.bi.bi-file-earmark-text.me-2
+                      | SpecKit
+                  .card-body
+                    p.small.mb-2.
+                      <strong>Role:</strong> Capture requirements, define success
+                    p.small.mb-2.
+                      <strong>Artifacts:</strong> SPEC.md, PLAN.md, TASKS.md
+                    p.small.mb-0.
+                      <strong>Value:</strong> Forces precision before coding, creates institutional knowledge
+
+              .col-lg-4
+                .card.border-success.h-100
+                  .card-header.bg-success.text-white
+                    h6.card-title.mb-0
+                      i.bi.bi-lightning.me-2
+                      | Claude
+                  .card-body
+                    p.small.mb-2.
+                      <strong>Role:</strong> Architectural scaffolding, module design
+                    p.small.mb-2.
+                      <strong>Artifacts:</strong> Core classes, logging, themes
+                    p.small.mb-0.
+                      <strong>Value:</strong> Handles complexity, reads specs, owns the "how"
+
+              .col-lg-4
+                .card.border-info.h-100
+                  .card-header.bg-info.text-white
+                    h6.card-title.mb-0
+                      i.bi.bi-stars.me-2
+                      | Copilot
+                  .card-body
+                    p.small.mb-2.
+                      <strong>Role:</strong> Iterative refinement, visual polish
+                    p.small.mb-2.
+                      <strong>Artifacts:</strong> Layout tweaks, spacing fixes, edge cases
+                    p.small.mb-0.
+                      <strong>Value:</strong> Rapid iteration, sands rough edges
+
+            h3.h5.mb-3 The Half-Day Result
+
+            .alert.alert-success.mb-4
+              h6.alert-heading.mb-2
+                i.bi.bi-check-circle-fill.me-2
+                | What Got Built in Half a Day
+              ul.mb-0
+                li Six SVG visualizations (activity calendar, language breakdown, repo stats, timeline, collaboration, streaks)
+                li Spark Score calculation with documented coefficients
+                li GitHub Actions workflow with daily regeneration
+                li YAML configuration system with validation
+                li Complete logging and error handling
+                li Theme system for visual consistency
+                li Automated artifact commits back to repository
+
+            .card.mb-4
+              .card-header.bg-light
+                h6.card-title.mb-0
+                  i.bi.bi-eye.me-2
+                  | Live Example: GitHub Stats Overview
+              .card-body
+                p.mb-3.
+                  Here's what the system generates automatically. This SVG updates daily via GitHub Actions, showing real-time stats from my GitHub profile:
+
+                .text-center.mb-3
+                  img.img-fluid.rounded.border(src='https://raw.githubusercontent.com/markhazleton/github-stats-spark/main/output/overview.svg' alt='GitHub Stats Spark Overview' loading='lazy')
+
+                p.mb-0.small.text-muted.
+                  View the <a href="https://github.com/markhazleton" target="_blank" rel="noopener">complete GitHub profile</a> or explore the <a href="https://github.com/markhazleton/github-stats-spark" target="_blank" rel="noopener">Stats Spark repository</a> to see all visualizations and implementation details.
+
+            p.mb-3.
+              More importantly: every architectural decision, every algorithm choice, every "why we did it this way" is captured in the SpecKit artifacts. The repository documents its own creation.
+
+            h3.h5.mb-3 The Living Documentation Payoff
+
+            p.mb-3.
+              Here's where it matters: if I need to extend Stats Spark in six months, or if someone else picks it up, the specs tell the whole story. Why those specific coefficient weights? It's in SPEC.md with the research citations. Why svgwrite instead of PIL for graphics? PLAN.md explains the decision criteria. What order should features be implemented? TASKS.md has the dependency graph.
+
+            p.mb-0.
+              That's institutional knowledge, not tribal knowledge. And it took an extra 30 minutes to update the specs after implementation—capturing what worked, what didn't, and why the final solution differs from the initial plan.
           section#what-i-learned.mb-5
             h2.h3.mb-4
               i.bi.bi-lightbulb.me-2
@@ -197,86 +470,6 @@ block layout-content
 
             p.mb-0.
               Here's what surprised me: these mistakes became permanent improvements to the specs. After implementation, I spent 20 minutes having AI update SPEC.md to reflect what actually worked. Future features inherit those lessons.
-
-          section#results.mb-5
-            h2.h3.mb-4
-              i.bi.bi-graph-up.me-2
-              | Three Months Later: Zero Documentation Debt
-
-            p.mb-3.
-              I'm writing this three months after shipping those features. The real test: do the specs still match reality? I just re-read them. They do. Every constraint, every decision, every "why we don't use pathPrefix" rationale—all accurate.
-
-            p.mb-3.
-              Implementation took 7 hours (same as always). Documentation sync took an extra 20 minutes (updating specs after I fixed AI's mistakes). That 20-minute investment is what traditional approaches skip—and why their docs rot immediately.
-
-            .alert.alert-success.mb-4
-              h5.alert-heading
-                i.bi.bi-check-circle-fill.me-2
-                | Quantitative Outcomes: What Actually Matters
-              ul.mb-0
-                li
-                  strong 20 minutes to sync specs 
-                  | (vs. never updating them in traditional approach = zero documentation debt)
-                li
-                  strong Path resolution pattern documented 
-                  | (relativePath filter replaces pathPrefix—next developer won't repeat the mistake)
-                li
-                  strong Warning remediation strategy captured 
-                  | (XML docs + ArgumentNullException.ThrowIfNull() pattern now team standard)
-                li
-                  strong Test documentation philosophy formalized 
-                  | ("Tests are product documentation" principle added to constitution)
-                li
-                  strong 136 files changed 
-                  | (29,141 insertions, 3,167 deletions across 2 production releases)
-                li
-                  strong 520/520 tests passing 
-                  | (260 tests × 2 frameworks: net8.0 + net9.0 with zero regressions)
-
-            h3.h6.mb-3 The Long-Term Value: What Happens After You Ship
-
-            .table-responsive.mb-3
-              table.table.table-bordered.table-striped(aria-label='Spec Kit vs Ad Hoc comparison')
-                thead.table-light
-                  tr
-                    th Metric
-                    th With Spec Kit
-                    th Typical Ad Hoc
-                    th Impact Over 12 Months
-                tbody
-                  tr
-                    td Implementation time
-                    td 7 hours
-                    td 7 hours
-                    td No difference initially
-                  tr
-                    td Documentation sync
-                    td 20 minutes (AI-assisted)
-                    td Never happens
-                    td × Zero technical debt accumulation
-                  tr
-                    td Spec accuracy after 6 months
-                    td Matches implementation
-                    td Fiction
-                    td × New developers trust docs
-                  tr
-                    td Knowledge persistence
-                    td Survives team turnover
-                    td Walks out the door
-                    td × No single points of failure
-                  tr
-                    td Next feature cost
-                    td AI reads accurate patterns
-                    td Developer reinvents solutions
-                    td × Compounds with each feature
-                  tr
-                    td Onboarding time
-                    td Read specs that match code
-                    td Reverse-engineer from codebase
-                    td × 3 hours saved per developer
-
-            p.mb-0.
-              The spec-driven approach doesn't make you faster initially—it prevents knowledge decay. When you return to the codebase a year later, or when a new team member joins, the specs accurately describe what was built and why. That's institutional knowledge, not tribal knowledge.
 
           section#feedback-examples.mb-5
             h2.h3.mb-4
