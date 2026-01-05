@@ -1,6 +1,6 @@
 /*!
-* Start Bootstrap - Mark Hazleton Blog v9.0.39 (https://github.com/markhazleton/markhazleton-blog)
-* Copyright 2013-2025 Mark Hazleton (https://markhazleton.com)
+* Start Bootstrap - Mark Hazleton Blog v9.0.40 (https://github.com/markhazleton/markhazleton-blog)
+* Copyright 2013-2026 Mark Hazleton (https://markhazleton.com)
 * Licensed under MIT (https://github.com/StartBootstrap/markhazleton-blog/blob/master/LICENSE)
 */
 /*!
