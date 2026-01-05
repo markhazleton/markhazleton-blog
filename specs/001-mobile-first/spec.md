@@ -98,7 +98,7 @@ All visitors, regardless of device, experience consistent, readable typography w
 ### Functional Requirements
 
 - **FR-001**: Site MUST implement mobile-first responsive design methodology where base styles target mobile devices and are progressively enhanced for larger screens
-- **FR-002**: All interactive elements (buttons, links, form inputs) MUST have minimum touch target size of 44x44 pixels on mobile devices per WCAG 2.1 guidelines
+- **FR-002**: All interactive elements (buttons, links, form inputs) MUST have minimum touch target size of 44x44 pixels with minimum 8px spacing between adjacent targets on mobile devices per WCAG 2.1 guidelines (WCAG 2.5.8)
 - **FR-003**: Viewport meta tag MUST be configured to prevent unwanted zooming and ensure proper scaling across all devices
 - **FR-004**: Base body text font size MUST be minimum 16px to ensure readability without zooming on mobile devices
 - **FR-005**: Line height for body text MUST be between 1.5 and 1.6 to meet WCAG readability standards
@@ -107,17 +107,17 @@ All visitors, regardless of device, experience consistent, readable typography w
 - **FR-008**: Layout MUST prevent horizontal scrolling on any device width, with content flowing vertically
 - **FR-009**: Images and media MUST scale responsively using max-width properties to prevent overflow on smaller screens, with all below-the-fold images lazy loaded (only hero/featured images load immediately) to optimize mobile performance
 - **FR-010**: Content containers MUST use fluid widths with appropriate breakpoints at common device sizes (375px, 768px, 1024px, 1200px+)
-- **FR-010a**: Mobile homepage above-the-fold content MUST prioritize identity (brief profile), one featured article card, and primary CTA to maximize engagement within first 600px viewport height
-- **FR-011**: Navigation MUST be accessible and usable on mobile devices with touch-friendly interaction patterns using a bottom sticky navigation bar with 4-5 key links always visible for one-handed thumb reach
-- **FR-012**: Text line length MUST be optimized for readability with 35-60 characters per line on mobile devices (under 768px) and 45-75 characters per line on tablet and desktop breakpoints
-- **FR-013**: Code blocks and pre-formatted text MUST handle overflow gracefully with horizontal scroll within the container only
-- **FR-014**: Tables MUST either be responsive (stack on mobile) or scroll horizontally within their container without affecting page layout
-- **FR-015**: Critical content and styles MUST load first to ensure fast First Contentful Paint on mobile devices
-- **FR-016**: Font files MUST be optimized for web delivery using modern formats (WOFF2) with appropriate fallbacks
-- **FR-017**: Site MUST support text resize up to 200% without loss of functionality or horizontal scrolling per WCAG requirements
-- **FR-018**: Spacing and padding MUST be proportional and adequate for touch interaction on mobile devices
-- **FR-019**: All form inputs MUST be sized and spaced appropriately for mobile keyboard interaction
-- **FR-020**: Site MUST function without JavaScript for core content access (progressive enhancement principle)
+- **FR-011**: Mobile homepage above-the-fold content MUST prioritize identity (brief profile), one featured article card, and primary CTA to maximize engagement within first 600px viewport height
+- **FR-012**: Navigation MUST be accessible and usable on mobile devices with touch-friendly interaction patterns using a bottom sticky navigation bar with 5 key links (Home, Articles, Projects, About, Contact) always visible for one-handed thumb reach
+- **FR-013**: Text line length MUST be optimized for readability with 35-60 characters per line on mobile devices (under 768px) and 45-75 characters per line on tablet and desktop breakpoints
+- **FR-014**: Code blocks and pre-formatted text MUST handle overflow gracefully with horizontal scroll within the container only
+- **FR-015**: Tables MUST either be responsive (stack on mobile) or scroll horizontally within their container without affecting page layout
+- **FR-016**: Critical content and styles MUST load first to ensure fast First Contentful Paint on mobile devices
+- **FR-017**: Font files MUST be optimized for web delivery using modern formats (WOFF2) with appropriate fallbacks
+- **FR-018**: Site MUST support text resize up to 200% without loss of functionality or horizontal scrolling per WCAG requirements
+- **FR-019**: Spacing and padding MUST be proportional and adequate for touch interaction on mobile devices
+- **FR-020**: All form inputs MUST be sized and spaced appropriately for mobile keyboard interaction
+- **FR-021**: Site MUST function without JavaScript for core content access (articles, navigation, project listings, contact information) ensuring progressive enhancement principle compliance
 
 ### Key Entities *(included as feature involves layout and typography data)*
 

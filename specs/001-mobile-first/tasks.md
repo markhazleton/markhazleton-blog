@@ -201,8 +201,8 @@ description: "Task list for Mobile-First Website Optimization feature implementa
 - [ ] T088 Validate keyboard navigation: all interactive elements reachable via Tab, activated via Enter/Space
 - [ ] T089 Test with high contrast mode: verify content remains visible and usable
 - [ ] T090 Run Google Mobile-Friendly Test: verify 100% passing score
-- [ ] T091 Validate heading hierarchy: proper h1-h6 structure without skipping levels
-- [ ] T092 Verify all images have meaningful alt text attributes
+- [ ] T091 Validate heading hierarchy: proper h1-h6 structure without skipping levels- [ ] T090 [P] Test responsive tables across breakpoints: verify stacking on mobile or horizontal scroll within containers (FR-015)
+- [ ] T091 Test site functionality with JavaScript disabled: verify articles load, navigation works, content accessible (FR-021)- [ ] T092 Verify all images have meaningful alt text attributes
 
 **Checkpoint**: WCAG 2.1 AA compliance validated, accessibility standards met
 
@@ -212,16 +212,16 @@ description: "Task list for Mobile-First Website Optimization feature implementa
 
 **Purpose**: Final performance testing and optimization to meet success criteria
 
-- [ ] T093 Run Lighthouse CI performance audit: verify Mobile Performance score 90+
-- [ ] T094 Verify First Contentful Paint < 1.5s on 4G connection simulation
-- [ ] T095 Verify Largest Contentful Paint < 2.5s on mobile
-- [ ] T096 Verify Cumulative Layout Shift < 0.1 (images have width/height attributes)
-- [ ] T097 Test page load on throttled 3G connection: verify critical content renders within 3 seconds
-- [ ] T098 Verify font loading performance: fonts load within 2 seconds on 3G
-- [ ] T099 Audit CSS bundle size: identify and remove unused styles if needed
-- [ ] T100 Test lazy loading effectiveness: verify below-fold images don't load until scrolled into view
-- [ ] T101 Run full audit suite with npm run audit:all and document baseline metrics
-- [ ] T102 Compare performance metrics with pre-optimization baseline (if available)
+- [ ] T094 Run Lighthouse CI performance audit: verify Mobile Performance score 90+
+- [ ] T095 Verify First Contentful Paint < 1.5s on 4G connection simulation
+- [ ] T096 Verify Largest Contentful Paint < 2.5s on mobile
+- [ ] T097 Verify Cumulative Layout Shift < 0.1 (images have width/height attributes)
+- [ ] T098 Test page load on throttled 3G connection: verify critical content renders within 3 seconds
+- [ ] T099 Verify font loading performance: fonts load within 2 seconds on 3G
+- [ ] T100 Audit CSS bundle size: identify and remove unused styles if needed
+- [ ] T101 Test lazy loading effectiveness: verify below-fold images don't load until scrolled into view
+- [ ] T102 Run full audit suite with npm run audit:all and document baseline metrics
+- [ ] T103 Compare performance metrics with pre-optimization baseline (if available)
 
 **Checkpoint**: Performance targets achieved, optimization validated
 
@@ -231,16 +231,16 @@ description: "Task list for Mobile-First Website Optimization feature implementa
 
 **Purpose**: Final documentation, code cleanup, and validation
 
-- [ ] T103 [P] Update quickstart.md with any implementation changes or lessons learned
-- [ ] T104 [P] Document any deviations from original plan in research.md
-- [ ] T105 [P] Create before/after screenshot comparison for documentation
-- [ ] T106 Review all SCSS files for code quality and consistency
-- [ ] T107 Review all PUG template files for proper indentation and structure
-- [ ] T108 Remove any debug code, console.logs, or temporary comments
-- [ ] T109 Validate all tasks in this tasks.md are complete and checked off
-- [ ] T110 Run final build with npm run build and verify no errors or warnings
-- [ ] T111 Test deployed site on staging environment (if available)
-- [ ] T112 Create pull request with comprehensive description of changes
+- [ ] T104 [P] Update quickstart.md with any implementation changes or lessons learned
+- [ ] T105 [P] Document any deviations from original plan in research.md
+- [ ] T106 [P] Create before/after screenshot comparison for documentation
+- [ ] T107 Review all SCSS files for code quality and consistency
+- [ ] T108 Review all PUG template files for proper indentation and structure
+- [ ] T109 Remove any debug code, console.logs, or temporary comments
+- [ ] T110 Validate all tasks in this tasks.md are complete and checked off
+- [ ] T111 Run final build with npm run build and verify no errors or warnings
+- [ ] T112 Test deployed site on staging environment (if available)
+- [ ] T113 Create pull request with comprehensive description of changes
 
 **Checkpoint**: Implementation complete, documented, and ready for review
 
@@ -390,7 +390,7 @@ After completing all tasks, verify these success criteria from spec.md:
 - **Build frequently**: Run `npm run build:scss` and `npm run build:pug` after each major change
 - **Validation**: Run audits frequently, not just at end
 
-**Total Task Count**: 112 tasks  
+**Total Task Count**: 113 tasks
 **Task Count by Phase**:
 - Setup: 10 tasks
 - Foundational: 8 tasks (BLOCKING)
@@ -400,8 +400,8 @@ After completing all tasks, verify these success criteria from spec.md:
 - User Story 3 (P3 - Desktop): 10 tasks
 - Content Hierarchy: 11 tasks
 - Cross-Browser Testing: 11 tasks
-- Accessibility: 10 tasks
+- Accessibility: 12 tasks (added table/JS-disabled testing)
 - Performance: 10 tasks
 - Documentation: 10 tasks
 
-**Estimated Implementation Time**: 40-60 hours (5-7.5 work days for single developer)
+**Estimated Implementation Time**: 41-61 hours (5-7.5 work days for single developer)

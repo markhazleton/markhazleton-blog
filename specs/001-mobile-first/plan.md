@@ -21,6 +21,28 @@ Optimize the Mark Hazleton blog for mobile-first experience by implementing resp
 **Constraints**: Must work within existing PUG/Bootstrap 5 framework, NO custom CSS frameworks, Bootstrap Icons only, maintain semantic HTML5 structure, WCAG 2.1 AA compliance (4.5:1 contrast, 44x44px touch targets)  
 **Scale/Scope**: 100+ articles, multiple project pages, homepage, navigation system - all responsive across mobile/tablet/desktop breakpoints
 
+## Error Handling & Rollback Strategy
+
+**Build Failures**:
+- SCSS compilation errors: Check syntax, validate variable references, clear build cache with `npm run clean:cache`
+- PUG template errors: Verify 2-space indentation, check for missing newlines, validate proper nesting
+- Recovery steps: `npm run clean:cache && npm ci --include=dev && npm run build`
+
+**Development Issues**:
+- Responsive layout breaks: Test at all breakpoints (375px, 768px, 1024px, 1200px) using browser devtools
+- Typography scale issues: Verify CSS custom properties in src/scss/_variables.scss
+- Touch target failures: Audit with pa11y-ci, adjust mixin in src/scss/_responsive.scss
+
+**Deployment Rollback**:
+- GitHub: Revert commit with `git revert <commit-hash>` and push to trigger redeployment
+- Azure Static Web Apps: Previous deployment remains available in Azure portal for immediate rollback
+- Emergency rollback: Use Azure portal to swap to previous production deployment slot
+
+**Testing Failures**:
+- Lighthouse audit failures: Review specific metrics, optimize images, adjust critical CSS
+- Accessibility failures: Run pa11y-ci with `npm run audit:a11y`, fix specific WCAG violations
+- Cross-browser issues: Test locally with BrowserSync, validate on real devices before deployment
+
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
