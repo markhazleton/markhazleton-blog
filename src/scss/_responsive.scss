@@ -1,0 +1,299 @@
+//
+// Mobile-First Responsive Utilities
+// Feature: 001-mobile-first
+//
+
+// Touch targets
+// Ensures 44x44px minimum on mobile and tablet (T046: verified for 768-991px tablet range)
+@mixin touch-target {
+  @media (max-width: 991px) {
+    min-height: var(--touch-target-min); // 44px minimum
+    min-width: var(--touch-target-min);  // 44px minimum
+    padding: var(--spacing-sm);
+    margin: var(--touch-target-spacing);
+  }
+}
+
+.btn,
+.form-control,
+.form-select {
+  @include touch-target;
+}
+
+// Responsive images
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+// Mobile content spacing
+.mb-mobile {
+  margin-bottom: var(--spacing-md);
+  
+  @media (min-width: 768px) {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  @media (min-width: 1200px) {
+    margin-bottom: var(--spacing-xl);
+  }
+}
+
+// Hide on mobile
+.hide-mobile {
+  @media (max-width: 767px) {
+    display: none !important;
+  }
+}
+
+// Show only on mobile
+.show-mobile {
+  @media (min-width: 768px) {
+    display: none !important;
+  }
+}
+
+// Homepage Hero Layout
+.homepage-hero {
+  display: flex;
+  flex-direction: column;
+  
+  &__identity {
+    order: 1;
+    margin-bottom: 1.5rem;
+  }
+  
+  &__featured {
+    order: 2;
+    margin-bottom: 1.5rem;
+  }
+  
+  &__cta {
+    order: 3;
+    margin-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    &__identity {
+      flex: 0 0 100%;
+      order: 1;
+    }
+    
+    &__featured {
+      flex: 0 0 60%;
+      order: 2;
+    }
+    
+    &__cta {
+      flex: 0 0 40%;
+      order: 3;
+    }
+  }
+}
+
+// Tablet Grid Layouts (768px-1023px)
+// User Story 2: Tablet and Medium Device Experience
+@media (min-width: 768px) and (max-width: 1023px) {
+  // Articles page - 2 column grid
+  #articlesContainer .row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    
+    > div[class*="col-"] {
+      grid-column: span 1;
+      max-width: 100%;
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  
+  // Projects page - 2 column grid
+  #projectsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    
+    > .project-card-container {
+      grid-column: span 1;
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  
+  // Latest articles on homepage - 2 column grid
+  #latestArticles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    
+    > div[class*="col-"] {
+      grid-column: span 1;
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  
+  // Optimize tablet container width - keep cards closer
+  .bg-gradient-primary .container-fluid,
+  section.py-5 > .container-fluid {
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  // Sidebar stays sticky on tablet
+  .card.sticky-top {
+    position: sticky;
+    top: 80px;
+  }
+}
+
+// Desktop Grid Layouts (1024px-1439px)
+@media (min-width: 1024px) {
+  // Articles page - 3 column grid
+  #articlesContainer .row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    
+    > div[class*="col-"] {
+      grid-column: span 1;
+      max-width: 100%;
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  
+  // Projects page - 3 column grid
+  #projectsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    
+    > .project-card-container {
+      grid-column: span 1;
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  
+  // Latest articles on homepage - 3 column grid
+  // Override Bootstrap row display
+  .bg-gradient-primary .container-fluid,
+  section.py-5 > .container-fluid {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  #latestArticles.row {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    
+    > div[class*="col-"] {
+      grid-column: span 1;
+      max-width: 100%;
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+// Large Desktop Grid Layouts (1440px+)
+// User Story 3: Desktop Progressive Enhancement
+@media (min-width: 1440px) {
+  // Articles page - 4 column grid
+  #articlesContainer .row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  // Projects page - 4 column grid
+  #projectsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  .bg-gradient-primary .container-fluid,
+  section.py-5 > .container-fluid {
+    max-width: 1600px;
+  }
+  
+  // Homepage keeps 3 columns for better card sizing
+  #latestArticles.row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+// Desktop Hover States and Interactive Enhancements
+// User Story 3: Desktop Progressive Enhancement
+@media (min-width: 1024px) {
+  // Button hover states
+  .btn {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  // Card hover states
+  .card {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-4px);
+    }
+  }
+  
+  // Link hover states
+  a:not(.btn):not(.nav-link) {
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: var(--bs-primary, #0d6efd);
+    }
+  }
+  
+  // Form control focus states
+  .form-control,
+  .form-select {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+}
+
+// Tablet-specific utilities
+.hide-tablet {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    display: none !important;
+  }
+}
+
+.show-tablet {
+  display: none;
+  
+  @media (min-width: 768px) and (max-width: 1023px) {
+    display: block !important;
+  }
+}

@@ -18,16 +18,18 @@ block layout-content
           i.bi.bi-diagram-3.display-1.mb-3.opacity-75
 
   section.py-5
-    .container
+    .container-fluid.px-4.px-lg-5
       // Simple search and filter
       .row.mb-4
         .col-md-6
+          label.visually-hidden(for='searchInput') Search projects
           .input-group
-            input#searchInput.form-control(type='text', placeholder='Search projects...', oninput='filterProjects()')
-            button.btn.btn-outline-secondary(type='button', onclick='clearSearch()')
+            input#searchInput.form-control(type='text', placeholder='Search projects...', oninput='filterProjects()', aria-label='Search projects by title or keywords')
+            button.btn.btn-outline-secondary(type='button', onclick='clearSearch()', aria-label='Clear search')
               i.bi.bi-x
         .col-md-6
-          select#pipelineFilter.form-select(onchange='filterProjects()')
+          label.visually-hidden(for='pipelineFilter') Filter projects by category
+          select#pipelineFilter.form-select(onchange='filterProjects()', aria-label='Filter projects by category')
             option(value='') All Categories
 
       .row.mb-3

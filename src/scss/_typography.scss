@@ -1,0 +1,116 @@
+//
+// Mobile-First Typography System
+// Feature: 001-mobile-first
+//
+
+// Typography Scale - 1.200 ratio (Minor Third)
+// Mobile base: 16px, Tablet: 17px, Desktop: 18px
+:root {
+  // Base and scale
+  --font-size-base: 16px;
+  --scale-ratio: 1.200;
+  
+  // Calculated scale
+  --font-size-body: var(--font-size-base);
+  --font-size-h6: calc(var(--font-size-base) * var(--scale-ratio));
+  --font-size-h5: calc(var(--font-size-h6) * var(--scale-ratio));
+  --font-size-h4: calc(var(--font-size-h5) * var(--scale-ratio));
+  --font-size-h3: calc(var(--font-size-h4) * var(--scale-ratio));
+  --font-size-h2: calc(var(--font-size-h3) * var(--scale-ratio));
+  --font-size-h1: calc(var(--font-size-h2) * var(--scale-ratio));
+  
+  // Line heights
+  --line-height-body: 1.6;
+  --line-height-heading: 1.3;
+  
+  // Spacing
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  // Touch targets
+  --touch-target-min: 44px;
+  --touch-target-spacing: 0.25rem;
+  
+  // Breakpoint adjustments
+  @media (min-width: 768px) {
+    --font-size-base: 17px;
+  }
+  
+  @media (min-width: 1200px) {
+    --font-size-base: 18px;
+  }
+}
+
+// Mobile-First Typography System
+body {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-heading);
+  font-weight: 600;
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+h5 { font-size: var(--font-size-h5); }
+h6 { font-size: var(--font-size-h6); }
+
+// Line length control
+.article-content,
+.content-container {
+  max-width: 60ch;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  
+  @media (min-width: 768px) {
+    max-width: 75ch;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  @media (min-width: 1200px) {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+  
+  // Ultra-wide display constraints
+  // User Story 3: Desktop Progressive Enhancement
+  @media (min-width: 2560px) {
+    max-width: 75ch;
+    font-size: calc(var(--font-size-base) * 1.1);
+  }
+  
+  // Typography within article content
+  p, ul, ol {
+    margin-bottom: 1.5rem;
+  }
+  
+  h2, h3, h4, h5, h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+// Container max-width for ultra-wide displays
+// User Story 3: Desktop Progressive Enhancement
+@media (min-width: 2560px) {
+  .container {
+    max-width: 1920px;
+  }
+  
+  .container-fluid {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}

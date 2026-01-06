@@ -1,0 +1,25 @@
+//
+// Navigation Module
+// Feature: 001-mobile-first
+//
+
+//- Bottom Navigation Mixin
+//- @param {array} items - Navigation items [{url, icon, label}]
+//- @param {string} currentPath - Current page path for active state
+//- @example
+//-   +bottomNav([
+//-     {url: '/', icon: 'house', label: 'Home'},
+//-     {url: '/articles.html', icon: 'file-text', label: 'Articles'}
+//-   ], currentPath)
+mixin bottomNav(items, currentPath)
+  nav.bottom-nav(role='navigation' aria-label='Primary Navigation')
+    ul.bottom-nav__list
+      each item in items
+        li.bottom-nav__item
+          a.bottom-nav__link(
+            href=item.url
+            class=currentPath === item.url ? 'active' : ''
+            aria-current=currentPath === item.url ? 'page' : undefined
+          )
+            i.bi(class=`bi-${item.icon}`).bottom-nav__icon
+            span.bottom-nav__label= item.label

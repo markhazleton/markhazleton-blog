@@ -1,0 +1,127 @@
+//
+// Bottom Sticky Navigation (Mobile)
+// Feature: 001-mobile-first
+//
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding-bottom: env(safe-area-inset-bottom);
+  
+  @media (min-width: 768px) {
+    position: static;
+    border-top: none;
+    box-shadow: none;
+    padding-bottom: 0;
+  }
+  
+  // Hide completely on desktop
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+.bottom-nav__list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 60px;
+  
+  @media (min-width: 768px) {
+    height: auto;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+}
+
+.bottom-nav__item {
+  flex: 1;
+  max-width: 80px;
+  
+  @media (min-width: 768px) {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+}
+
+.bottom-nav__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  padding: var(--spacing-sm);
+  text-decoration: none;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  
+  &:hover,
+  &:focus {
+    background: rgba(0, 0, 0, 0.05);
+    color: #212529;
+  }
+  
+  &.active {
+    color: var(--bs-primary, #0d6efd);
+  }
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  
+  // Enhanced desktop hover states
+  @media (min-width: 1024px) {
+    border-radius: 0.25rem;
+    
+    &:hover {
+      background: rgba(13, 110, 253, 0.1);
+      color: var(--bs-primary, #0d6efd);
+      transform: translateY(-1px);
+    }
+    
+    &:focus {
+      outline: 2px solid var(--bs-primary, #0d6efd);
+      outline-offset: 2px;
+    }
+    
+    &.active {
+      background: rgba(13, 110, 253, 0.15);
+      font-weight: 600;
+    }
+  }
+}
+
+.bottom-nav__icon {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+  
+  @media (min-width: 768px) {
+    margin-bottom: 0;
+  }
+}
+
+.bottom-nav__label {
+  font-size: 0.75rem;
+  
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+// Add bottom padding to body to prevent content from being hidden
+body {
+  @media (max-width: 767px) {
+    padding-bottom: 60px;
+  }
+}

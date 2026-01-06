@@ -159,6 +159,25 @@ mixin articleImage(src, alt, caption, className = 'img-fluid rounded')
     if caption
       figcaption.text-muted.mt-2.small= caption
 
+//- Responsive image mixin (Feature: 001-mobile-first)
+//- @param {string} src - Image source path
+//- @param {string} alt - Alternative text
+//- @param {string} loading - 'eager' or 'lazy'
+//- @param {object} sizes - Optional width/height
+//- @example
+//-   +responsiveImage('/assets/hero.jpg', 'Hero image', 'eager', {width: 1200, height: 630})
+mixin responsiveImage(src, alt, loading, sizes)
+  - var width = sizes && sizes.width || ''
+  - var height = sizes && sizes.height || ''
+  - var loadingAttr = loading || 'lazy'
+  img.img-fluid(
+    src=src
+    alt=alt
+    loading=loadingAttr
+    width=width
+    height=height
+  )
+
 //- Article footer with social sharing
 mixin articleFooter(showSharing = true, showRelated = true)
   .article-footer.mt-5.pt-4.border-top
